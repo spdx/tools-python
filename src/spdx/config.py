@@ -36,7 +36,7 @@ def load_license_list():
 
 
 LICENSE_MAP = load_license_list()
-
+LICENSE_LIST_VERSION = '1.19'
 
 
 
