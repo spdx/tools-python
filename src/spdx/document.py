@@ -13,6 +13,7 @@
 #    limitations under the License.
 import config
 from creationinfo import CreationInfo
+from package import Package
 class Version(object):
     """Spec version, has Major and Minor number"""
     def __init__(self, major=1, minor=2):
@@ -54,9 +55,10 @@ class License(object):
 class Document(object):
     """Represents an SPDX document."""
     def __init__(self, version, data_license, comment=None, 
-                creation_info=CreationInfo()):
+                creation_info=CreationInfo(), package=None):
         super(Document, self).__init__()
         self.version = version
         self.data_license = data_license
         self.comment = comment
         self.creation_info = creation_info
+        self.package = package
