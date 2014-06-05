@@ -2,6 +2,7 @@ Python SPDX Parser Library.
 ===========================
 
 Official repository: http://git.spdx.org/?p=spdx-tools-python.git
+
 GitHub mirror: https://github.com/ah450/sdpx-tools-python
 
 
