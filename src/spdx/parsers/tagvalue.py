@@ -65,7 +65,8 @@ class Lexer(object):
      'LicenseComment' : 'LICS_COMMENT',
      # Common 
      'NOASSERTION' : 'NO_ASSERT',
-     'UNKNOWN' : 'UN_KNOWN'
+     'UNKNOWN' : 'UN_KNOWN',
+     'NONE' : 'NONE',
     }
 
     tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE',
@@ -90,7 +91,7 @@ class Lexer(object):
     def t_VALUE(self, t):
         r'.+'
         return t
-        
+
     def t_newline(self, t):
         r'\n+'
         t.lexer.lineno += len(t.value)
