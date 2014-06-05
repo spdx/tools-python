@@ -14,7 +14,10 @@
 import config
 from datetime import datetime
 class Creator(object):
-    """docstring for Creator"""
+    """Creator enity.
+        Fields:
+        name: creator's name/identifier
+    """
     def __init__(self, name):
         super(Creator, self).__init__()
         self.name = name
@@ -22,7 +25,11 @@ class Creator(object):
         return self.name == other.name
 
 class Organization(Creator):
-    """docstring for Organization"""
+    """Organization entity.
+        Fields:
+        name: Org's name/identifier. Mandatory. Type: str.
+        email: Org's email address. Optional. Type: str.
+    """
     def __init__(self, name, email):
         super(Organization, self).__init__(name)
         self.email = email
@@ -32,7 +39,11 @@ class Organization(Creator):
         else:
             return (self.name + self.email) == (other.name + other.email)
 class Person(Creator):
-    """docstring for Person"""
+    """Person entity.
+        Fields:
+        name: person's name/identifier. Mandatory. Type: str.
+        email: person's email address. Optional. Type: str.
+    """
     def __init__(self, name, email):
         super(Person, self).__init__(name)
         self.email = email
@@ -43,12 +54,23 @@ class Person(Creator):
             return (self.name + self.email) == (other.name + other.email)
 
 class Tool(Creator):
-    """docstring for Tool"""
+    """Tool entity.
+        Fields: 
+        name: tool identifier, with version. Type: str.
+    """
     def __init__(self, name):
         super(Tool, self).__init__(name)
 
 class CreationInfo(object):
-    """ """
+    """Represents a document's creation info.
+        Fields:
+        creators: List of creators. At least one required. 
+            Type: Creator.
+        comment: Creation comment, optional. Type: str.
+        license_list_version: version of SPDX license used in creation of SPDX
+            document. One, optional. Type: spdx.version.Version
+
+    """
     def __init__(self, created=None, comment=None, 
             license_list_version = config.LICENSE_LIST_VERSION):
         super(CreationInfo, self).__init__()

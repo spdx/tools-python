@@ -13,7 +13,7 @@
 #    limitations under the License.
 import csv
 import os
-
+from version import Version
 
 class TwoWayDict(dict):
     def __setitem__(self, key, value):
@@ -36,7 +36,7 @@ def load_license_list():
 
 
 LICENSE_MAP = load_license_list()
-LICENSE_LIST_VERSION = '1.19'
+LICENSE_LIST_VERSION = Version(major=1, minor=19)
 
 
 

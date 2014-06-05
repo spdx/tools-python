@@ -14,19 +14,6 @@
 import config
 from creationinfo import CreationInfo
 from package import Package
-class Version(object):
-    """Spec version, has Major and Minor number"""
-    def __init__(self, major=1, minor=2):
-        super(Version, self).__init__()
-        self.major = major
-        self.minor = minor
-    def __cmp__(self, other):
-        if self.major == other.major:
-            return self.minor - other.minor
-        elif self.major < other.major:
-            return -1
-        else:
-            return 1
 
 
 class License(object):
@@ -64,7 +51,7 @@ class Document(object):
         files: List of files referenced by this SPDX document. atleast one mandatory.
         reviews: SPDX document review information, Optional zero or more. 
             Type: ReviewInformation
-        
+
     """
     def __init__(self, version, data_license, comment=None, 
                 creation_info=CreationInfo(), package=None):
