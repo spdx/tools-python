@@ -12,7 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import nose
-from spdx.document import Version
+from spdx.version import Version
 from spdx.document import Document
 from spdx.document import License
 from spdx.config import LICENSE_MAP

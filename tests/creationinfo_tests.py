@@ -18,6 +18,7 @@ from spdx.creationinfo import CreationInfo
 from spdx.creationinfo import Tool
 from spdx.creationinfo import Organization
 from spdx.creationinfo import Person
+from spdx.version import Version
 from datetime import datetime
 
 
@@ -61,5 +62,6 @@ class TestCreationInfo(object):
     def test_license_list_version(self):
         ci = CreationInfo()
         assert ci.license_list_version == config.LICENSE_LIST_VERSION
-        ci = CreationInfo(license_list_version = '1.0')
-        assert ci.license_list_version == '1.0'
+        ci = CreationInfo(license_list_version = Version(major =1, minor=0))
+        assert ci.license_list_version == Version(major =1, minor=0)
+        assert not ci.license_list_version == Version(major =1, minor=2)
