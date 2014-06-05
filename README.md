@@ -12,9 +12,11 @@ How to use:
 How to run tests:
 =================
 From the project root directory.
+
 run: `nosetests` 
 
 Dependencies:
 =============
 nose : https://pypi.python.org/pypi/nose/1.3.3
+
 PLY : https://pypi.python.org/pypi/ply/3.4
