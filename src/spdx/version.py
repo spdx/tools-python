@@ -12,7 +12,11 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 class Version(object):
-    """Version number composed of major and minor"""
+    """Version number composed of major and minor.
+       Fields:
+       major: Major number, int.
+       minor: Minor number, int.
+    """
     def __init__(self, major=1, minor=2):
         super(Version, self).__init__()
         self.major = major
