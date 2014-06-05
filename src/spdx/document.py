@@ -51,9 +51,21 @@ class License(object):
     def identifier(self):
         return self._identifier
 
-
 class Document(object):
-    """Represents an SPDX document."""
+    """Represents an SPDX document.
+        Fields: 
+        version: Spec version. Mandatory, one - Type: Version.
+        data_license: SPDX-Metadata license. Mandatory, one. Type: License.
+        comment: Comments on the SPDX file, optional one. Type: str
+        creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
+        package: Package described by this document. Mandatory, one. Type: Package
+        extracted_licenses: List of licenses extracted that are not part of the
+            SPDX license list. Optional, many. Type: License.
+        files: List of files referenced by this SPDX document. atleast one mandatory.
+        reviews: SPDX document review information, Optional zero or more. 
+            Type: ReviewInformation
+        
+    """
     def __init__(self, version, data_license, comment=None, 
                 creation_info=CreationInfo(), package=None):
         super(Document, self).__init__()
@@ -62,3 +74,4 @@ class Document(object):
         self.comment = comment
         self.creation_info = creation_info
         self.package = package
+        self.extracted_licenses = []
