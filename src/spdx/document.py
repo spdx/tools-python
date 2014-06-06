@@ -50,7 +50,7 @@ class Document(object):
             SPDX license list. Optional, many. Type: License.
         files: List of files referenced by this SPDX document. atleast one mandatory.
         reviews: SPDX document review information, Optional zero or more. 
-            Type: ReviewInformation
+            Type: Review.
 
     """
     def __init__(self, version, data_license, comment=None, 
@@ -62,3 +62,4 @@ class Document(object):
         self.creation_info = creation_info
         self.package = package
         self.extracted_licenses = []
+        self.reviews = []
