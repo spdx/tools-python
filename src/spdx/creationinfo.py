@@ -13,6 +13,7 @@
 #    limitations under the License.
 import config
 from datetime import datetime
+from utils import datetime_iso_format
 class Creator(object):
     """Creator enity.
         Fields:
@@ -69,7 +70,7 @@ class CreationInfo(object):
         comment: Creation comment, optional. Type: str.
         license_list_version: version of SPDX license used in creation of SPDX
             document. One, optional. Type: spdx.version.Version
-
+        created: Creation date. Mandatory one. Type: datetime.
     """
     def __init__(self, created=None, comment=None, 
             license_list_version = config.LICENSE_LIST_VERSION):
@@ -89,6 +90,4 @@ class CreationInfo(object):
         self.created = datetime.utcnow()
     @property
     def created_iso_format(self):
-        return "{0:0>4}-{1:0>2}-{2:0>2}T{3:0>2}:{4:0>2}:{5:0>2}Z".format(
-                self.created.year, self.created.month, self.created.day,
-                self.created.hour, self.created.minute, self.created.second)
+        return datetime_iso_format(self.created)
