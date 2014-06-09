@@ -14,6 +14,7 @@
 import config
 from datetime import datetime
 from utils import datetime_iso_format
+
 class Creator(object):
     """Creator enity.
         Fields:
@@ -22,8 +23,10 @@ class Creator(object):
     def __init__(self, name):
         super(Creator, self).__init__()
         self.name = name
+
     def __eq__(self, other):
         return self.name == other.name
+
 
 class Organization(Creator):
     """Organization entity.
@@ -34,11 +37,14 @@ class Organization(Creator):
     def __init__(self, name, email):
         super(Organization, self).__init__(name)
         self.email = email
+
     def __eq__(self, other):
         if type(other) is not Organization:
             return False
         else:
             return (self.name + self.email) == (other.name + other.email)
+
+
 class Person(Creator):
     """Person entity.
         Fields:
@@ -48,11 +54,13 @@ class Person(Creator):
     def __init__(self, name, email):
         super(Person, self).__init__(name)
         self.email = email
+
     def __eq__(self, other):
         if type(other) is not Person:
             return False
         else:
             return (self.name + self.email) == (other.name + other.email)
+
 
 class Tool(Creator):
     """Tool entity.
@@ -61,6 +69,7 @@ class Tool(Creator):
     """
     def __init__(self, name):
         super(Tool, self).__init__(name)
+
 
 class CreationInfo(object):
     """Represents a document's creation info.
@@ -82,12 +91,16 @@ class CreationInfo(object):
             self.created = created
         self.comment = comment
         self.license_list_version = license_list_version
+
     def add_creator(self, creator):
         self.creators.append(creator)
+
     def remove_creator(self, creator):
         self.creators.remove(creator)
+
     def set_created_now(self):
         self.created = datetime.utcnow()
+        
     @property
     def created_iso_format(self):
         return datetime_iso_format(self.created)
