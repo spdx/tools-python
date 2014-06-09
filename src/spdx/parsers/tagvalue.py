@@ -70,28 +70,47 @@ class Lexer(object):
     }
 
     tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE',
-    'ORG_VALUE', 'PERSON_VALUE', 'DATE', 'VALUE'] + list(reserved.values())
+    'ORG_VALUE', 'PERSON_VALUE', 'DATE', 'LINE'] + list(reserved.values())
 
     t_TOOL_VALUE = r'Tool:.*'
     t_ORG_VALUE = r'Organization:.*'
     t_PERSON_VALUE = r'Person:.*'
     t_DATE = r'\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ'
 
+   
+
     def t_COMMENT(self, t):
         r'\#.*'
-        pass
-
-    def t_TEXT(self, t):
-        r'<text>((\n|.)+)</text>'
-        t.value = t.lexer.lexmatch.group(1)
-        # Count new lines
-        t.lexer.lineno += t.value.count(r'\n')
-        return t
-
-    def t_VALUE(self, t):
-        r'.+'
-        return t
+        pass         
 
     def t_newline(self, t):
         r'\n+'
         t.lexer.lineno += len(t.value)
+
+    def t_TEXT(self, t):
+        r'<text>(.|\n)+</text>'
+        t.lexer.lineno += t.value.count('\n')
+        return t
+
+    def t_whitespace(self, t):
+        r'(\s|\t)+'
+        pass
+
+    def t_KEYWORD(self, t):
+        r'[a-zA-Z]+'
+        t.type = self.reserved.get(t.value,'ID')
+        return t
+
+    def t_LINE(self, t):
+       r':.+'
+       t.value = t.value[1:]  
+       return t
+
+    def build(self, **kwargs):
+        self.lexer = lex.lex(module=self, **kwargs)
+        
+    def token(self):
+        return self.lexer.token()
+    
+    def read(self, data):
+        self.lexer.input(data)
