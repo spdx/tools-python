@@ -13,6 +13,7 @@
 #    limitations under the License.
 from datetime import datetime
 from util import datetime_iso_format
+
 class Review(object):
     """Document review information.
         Fields:
@@ -29,8 +30,10 @@ class Review(object):
         else:
             self.review_date = review_date
         self.comment = comment
+
     def set_review_date_now(self):
         self.review_date = datetime.utcnow()
+        
     @property
     def review_date_iso_format(self):
         datetime_iso_format(self.review_date)

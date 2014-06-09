@@ -23,7 +23,7 @@ class TwoWayDict(dict):
         dict.__delitem__(self, self[key])
         dict.__delitem__(self, key)
             
-
+            
 def load_license_list():
     FILE_NAME = os.path.join(os.path.dirname(__file__), 'spdx_licenselist_v1.19.csv')
     with open(FILE_NAME, 'rb') as file:

@@ -21,6 +21,7 @@ class Version(object):
         super(Version, self).__init__()
         self.major = major
         self.minor = minor
+        
     def __cmp__(self, other):
         if self.major == other.major:
             return self.minor - other.minor

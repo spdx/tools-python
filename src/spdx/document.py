@@ -15,25 +15,29 @@ import config
 from creationinfo import CreationInfo
 from package import Package
 
-
 class License(object):
     """Represents a License."""
     def __init__(self, full_name, identifier):
         super(License, self).__init__()
         self._full_name = full_name
         self._identifier = identifier
+
     @classmethod
     def from_identifier(cls, identifier):
         return cls(config.LICENSE_MAP[identifier], identifier)
+
     @classmethod
     def from_full_name(cls, full_name):
         return cls(full_name, config.LICENSE_MAP[full_name])
+
     @property
     def url(self):
         return "http://spdx.org/licenses/{0}".format(self.identifier)
+
     @property
     def full_name(self):
         return self._full_name
+
     @property
     def identifier(self):
         return self._identifier
@@ -51,7 +55,6 @@ class Document(object):
         files: List of files referenced by this SPDX document. atleast one mandatory.
         reviews: SPDX document review information, Optional zero or more. 
             Type: Review.
-
     """
     def __init__(self, version, data_license, comment=None, 
                 creation_info=CreationInfo(), package=None):
