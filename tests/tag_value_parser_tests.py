@@ -26,7 +26,7 @@ class TestLexer(object):
         DataLicense: CC0-1.0
         DocumentComment: <text>This is a sample spreadsheet</text>
         '''
-        self.l.read(data)
+        self.l.input(data)
         self.token_assert_helper(self.l.token(), 'DOC_VERSION', 'SPDXVersion', 2)
         self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-1.1', 2)
         self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense', 4)
@@ -44,7 +44,7 @@ class TestLexer(object):
         Created: 2010-02-03T00:00:00Z
         CreatorComment: <text>This is an example of an SPDX spreadsheet format</text>
         '''
-        self.l.read(data)
+        self.l.input(data)
         self.token_assert_helper(self.l.token(), 'CREATOR', 'Creator', 3)
         self.token_assert_helper(self.l.token(), 'PERSON_VALUE', "Person: Gary O'Neall",
             3)
@@ -66,7 +66,7 @@ class TestLexer(object):
         Some of the non-standard licenses look like they are actually 
         BSD 3 clause licenses</text>
         '''
-        self.l.read(data)
+        self.l.input(data)
         self.token_assert_helper(self.l.token(), 'REVIEWER', 'Reviewer', 2)
         self.token_assert_helper(self.l.token(), 'PERSON_VALUE', 
             "Person: Joe Reviewer", 2)
@@ -79,7 +79,24 @@ class TestLexer(object):
             '''<text>This is just an example.  
         Some of the non-standard licenses look like they are actually 
         BSD 3 clause licenses</text>''', 4)
-        
+
+
+    def test_pacakage(self):
+        data = '''
+        PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
+        PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)
+        '''
+        self.l.input(data)
+        self.token_assert_helper(self.l.token(), 'PKG_CHKSUM', 
+            'PackageChecksum', 2)
+        self.token_assert_helper(self.l.token(), 'CHKSUM', 
+            'SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12', 2)
+        self.token_assert_helper(self.l.token(), 'PKG_VERF_CODE', 
+            'PackageVerificationCode', 3)
+        self.token_assert_helper(self.l.token(), 'LINE',
+            '4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)',
+            3)
+
     def token_assert_helper(self, token, type, value, line):
         print token
         assert token.type == type
