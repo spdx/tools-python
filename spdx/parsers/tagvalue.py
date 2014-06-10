@@ -24,7 +24,6 @@ class Lexer(object):
      'Creator' : 'CREATOR',
      'Created' : 'CREATED',
      'CreatorComment' : 'CREATOR_COMMENT',
-     ':' : 'COLON',
      # Review info
      'Reviewer' : 'REVIEWER',
      'ReviewDate' : 'REVIEW_DATE',
@@ -66,18 +65,37 @@ class Lexer(object):
      # Common 
      'NOASSERTION' : 'NO_ASSERT',
      'UNKNOWN' : 'UN_KNOWN',
-     'NONE' : 'NONE',
+     'NONE' : 'NONE'
     }
 
-    tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE',
+    tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
     'ORG_VALUE', 'PERSON_VALUE', 'DATE', 'LINE'] + list(reserved.values())
 
-    t_TOOL_VALUE = r'Tool:.*'
-    t_ORG_VALUE = r'Organization:.*'
-    t_PERSON_VALUE = r'Person:.*'
-    t_DATE = r'\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ'
+    def t_TOOL_VALUE(self, t):
+        r':\s?Tool:.+'
+        t.value = t.value[1:].strip()
+        return t
 
-   
+    def t_ORG_VALUE(self, t):
+        r':\s?Organization:.+'
+        t.value = t.value[1:].strip()
+        return t
+
+    def t_PERSON_VALUE(self, t):
+        r':\sPerson:.+'
+        t.value = t.value[1:].strip()
+        return t
+
+    def t_DATE(self, t):
+        r':\s?\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ'
+        t.value = t.value[1:].strip()
+        return t
+
+    def t_TEXT(self, t):
+        r':\s?<text>(.|\n)+</text>'
+        t.lexer.lineno += t.value.count('\n')
+        t.value = t.value[1:].strip()
+        return t
 
     def t_COMMENT(self, t):
         r'\#.*'
@@ -87,23 +105,19 @@ class Lexer(object):
         r'\n+'
         t.lexer.lineno += len(t.value)
 
-    def t_TEXT(self, t):
-        r'<text>(.|\n)+</text>'
-        t.lexer.lineno += t.value.count('\n')
-        return t
-
     def t_whitespace(self, t):
         r'(\s|\t)+'
         pass
 
     def t_KEYWORD(self, t):
         r'[a-zA-Z]+'
-        t.type = self.reserved.get(t.value,'ID')
+        t.type = self.reserved.get(t.value,'UNKNOWN_TAG')
+        t.value = t.value.strip()
         return t
 
     def t_LINE(self, t):
        r':.+'
-       t.value = t.value[1:]  
+       t.value = t.value[1:].strip()
        return t
 
     def build(self, **kwargs):
