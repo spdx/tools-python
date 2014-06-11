@@ -11,8 +11,10 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-
+import re
 from ply import lex
+from ply import yacc
+from .. import version
 
 class Lexer(object):
     reserved = {
@@ -69,7 +71,13 @@ class Lexer(object):
     }
 
     tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
-    'ORG_VALUE', 'PERSON_VALUE', 'DATE', 'LINE'] + list(reserved.values())
+        'ORG_VALUE', 'PERSON_VALUE',
+         'DATE', 'LINE', 'CHKSUM'] + list(reserved.values())
+
+    def t_CHKSUM(self, t):
+        r':\s?SHA1:\s[a-f0-9]{40,40}'
+        t.value = t.value[1:].strip()
+        return t
 
     def t_TOOL_VALUE(self, t):
         r':\s?Tool:.+'
@@ -126,5 +134,93 @@ class Lexer(object):
     def token(self):
         return self.lexer.token()
     
-    def read(self, data):
+    def input(self, data):
         self.lexer.input(data)
+
+
+class Parser(object):
+    def __init__(self, builder, logger):
+        self.tokens = Lexer.tokens
+        self.builder = builder
+        self.logger = logger
+
+    def p_creation_info(self, p):
+        '''creation_info : creators created creator_comment lic_list_ver
+        '''
+        p[0] = self.builder.creation_info(creators=p[1], created=p[2],
+            comment=p[3], lic_list_ver=p[4])
+
+    def p_created_1(self, p):
+        'created : CREATED DATE'
+        p[0] = self.builder.created(date=p[2], line=p.lineno(2), 
+            column=p.lexpos(2))
+
+    def p_created_2(self, p):
+        'created : CREATED error'
+        pass
+
+    def p_created_3(self, p):
+        'created : error any_value'
+        pass
+
+    def p_creators_1(self, p):
+        'creators : creator'
+        p[0] = list(p[1])
+
+    def p_creators_2(self, p):
+        'creators : creators creator'
+        p[0] = p[1].append(p[2])
+
+    def p_creator_1(self, p):
+        'creator : CREATOR entity'
+        p[0] = p[1]
+
+    def p_creator_1(self, p):
+        'creator : CREATOR error'
+        pass
+
+    def p_entity(self, p):
+        '''entity : tool
+                  | org
+                  | person
+        '''
+        p[0] = p[1]
+
+
+    def p_tool_1(self, p):
+        'tool : TOOL_VALUE'
+        p[0] = self.build_tool(value=p[1], line=p.lineno(1), column=p.lexpos(1))
+
+    def p_org(self, p):
+        'org : ORG_VALUE'
+        p[0] = self.build_org(value=p[1], line=p.lineno(1), column=p.lexpos(1))
+
+    def p_person(self, p):
+        'person : PERSON_VALUE'
+        p[0] = self.build_person(value=p[1], line=p.lineno(1), column=p.lexpos(1))
+
+    def p_empty(self, p):
+        'empty :'
+        p[0] = None
+
+    def p_any_value(self, p):
+        '''any_value : LINE
+                     | DATE
+                     | TEXT
+                     | NO_ASSERT
+                     | UN_KNOWN
+                     | NONE
+                     | TOOL_VALUE
+                     | ORG_VALUE
+                     | PERSON_VALUE
+                     | CHKSUM
+        '''
+        p[0] = p[1]
+
+    def build(self, **kwargs):
+        self.lex = Lexer()
+        self.lex.build(reflags=re.UNICODE, method='SLR', **kwargs)
+        self.yacc = yacc(module=self, **kwargs)
+
+    def parse(self, text):
+        self.yacc.parse(text, lexer=self.lex)
