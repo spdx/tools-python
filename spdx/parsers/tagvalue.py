@@ -12,8 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import re
-from ply import lex
-from ply import yacc
+from ply import lex, yacc
 from .. import version
 
 class Lexer(object):
@@ -26,6 +25,7 @@ class Lexer(object):
      'Creator' : 'CREATOR',
      'Created' : 'CREATED',
      'CreatorComment' : 'CREATOR_COMMENT',
+     'LicenseListVersion' : 'LIC_LIST_VER',
      # Review info
      'Reviewer' : 'REVIEWER',
      'ReviewDate' : 'REVIEW_DATE',
@@ -144,11 +144,95 @@ class Parser(object):
         self.builder = builder
         self.logger = logger
 
+    
+
+    def p_reviews_1(self, p):
+        'reviews : review_info'
+        p[0] = list(p[1])
+
+    def p_reviews_2(self, p):
+        'reviews : reviews review_info'
+        p[0] = p[1].append(p[2])
+
+    def p_reviews_3(self, p):
+        'reviews : empty'
+        p[0] = None
+
+    def p_review_info_1(self, p):
+        'review_info : reviewer rev_date review_comment'
+        p[0] = self.builder.review_info(reviewers=p[1], rev_date=p[2], 
+            comment=p[3])
+
+    def p_review_info_2(self, p):
+        'review_info : empty'
+        p[0] = None
+
+    def p_reviewer_1(self, p):
+        'reviewer : REVIEWER entity'
+        p[0] = p[1]
+
+    def p_reviewer_2(self, p):
+        'reviewer : REVIEWER error'
+        pass
+
+    def p_rev_date_1(self, p):
+        'rev_date : REVIEW_DATE DATE'
+        p[0] = self.builder.rev_date(value=p[2], line=p.lineno(2),
+            column=p.lexpos(2))
+
+    def p_rev_date_2(self, p):
+        'rev_date : REVIEW_DATE error'
+        pass
+
+    def p_rev_date_3(self, p):
+        'rev_date : error any_value'
+        pass
+
+    def p_review_comment_1(self, p):
+        'review_comment : REVIEW_COMMENT TEXT'
+        p[0] = self.review_comment(text=p[2], line=p.lineno(2),
+         column=p.lexpos(2))
+
+    def p_review_comment_2(self, p):
+        'review_comment : REVIEW_COMMENT error'
+        pass
+
+    def p_review_comment_3(self, p):
+        'review_comment : empty'
+        p[0] = None
+
+
     def p_creation_info(self, p):
         '''creation_info : creators created creator_comment lic_list_ver
         '''
         p[0] = self.builder.creation_info(creators=p[1], created=p[2],
             comment=p[3], lic_list_ver=p[4])
+
+    def p_lic_list_ver_1(self, p):
+        'lic_list_ver : LIC_LIST_VER LINE'
+        p[0] = self.builder.lic_list_ver(value=p[2], line=p.lineno(2), 
+            column=p.lexpos(2))
+
+    def p_lic_list_ver_2(self, p):
+        'lic_list_ver : LIC_LIST_VER error'
+        pass
+
+    def p_lic_list_ver_3(self, p):
+        'lic_list_ver : empty'
+        p[0] = None
+
+    def p_creator_comment_1(self, p):
+        'creator_comment : CREATOR_COMMENT TEXT'
+        p[0] = self.builder.creation_comment(text=p[2], line=p.lineno(2),
+            column=p.lexpos(2))
+
+    def p_creator_comment_2(self, p):
+        'creator_comment : CREATOR_COMMENT error'
+        pass
+
+    def p_creator_comment_3(self, p):
+        'creator_comment : empty'
+        p[0] = None
 
     def p_created_1(self, p):
         'created : CREATED DATE'
@@ -175,7 +259,7 @@ class Parser(object):
         'creator : CREATOR entity'
         p[0] = p[1]
 
-    def p_creator_1(self, p):
+    def p_creator_2(self, p):
         'creator : CREATOR error'
         pass
 
@@ -219,8 +303,8 @@ class Parser(object):
 
     def build(self, **kwargs):
         self.lex = Lexer()
-        self.lex.build(reflags=re.UNICODE, method='SLR', **kwargs)
-        self.yacc = yacc(module=self, **kwargs)
+        self.lex.build(reflags=re.UNICODE)
+        self.yacc = yacc.yacc(module=self, method='SLR', **kwargs)
 
     def parse(self, text):
         self.yacc.parse(text, lexer=self.lex)
