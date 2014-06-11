@@ -25,7 +25,7 @@ class TwoWayDict(dict):
             
             
 def load_license_list():
-    FILE_NAME = os.path.join(os.path.dirname(__file__), 'spdx_licenselist_v1.19.csv')
+    FILE_NAME = os.path.join(os.path.dirname(__file__), 'spdx_licenselist.csv')
     with open(FILE_NAME, 'rb') as file:
         reader = csv.DictReader(file)
         dict = TwoWayDict()
