@@ -12,140 +12,16 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import re
-from ply import lex, yacc
+from lexers.tagvalue import Lexer
+from ply import yacc
 from .. import version
 
-class Lexer(object):
-    reserved = {
-    # Top level fields
-     'SPDXVersion' : 'DOC_VERSION',
-     'DataLicense' : 'DOC_LICENSE',
-     'DocumentComment': 'DOC_COMMENT',
-     # Creation info
-     'Creator' : 'CREATOR',
-     'Created' : 'CREATED',
-     'CreatorComment' : 'CREATOR_COMMENT',
-     'LicenseListVersion' : 'LIC_LIST_VER',
-     # Review info
-     'Reviewer' : 'REVIEWER',
-     'ReviewDate' : 'REVIEW_DATE',
-     'ReviewComment' : 'REVIEW_COMMENT',
-     # Package Fields
-     'PackageName': 'PKG_NAME',
-     'PackageVersion': 'PKG_VERSION',
-     'PackageDownloadLocation': 'PKG_DOWN',
-     'PackageSummary': 'OKG_SUM',
-     'PackageSourceInfo': 'PKG_SRC_INFO',
-     'PackageFileName' : 'PKG_FILE_NAME',
-     'PackageSupplier' : 'PKG_SUPPL',
-     'PackageOriginator' : 'PKG_ORIG',
-     'PackageChecksum' : 'PKG_CHKSUM',
-     'PackageVerificationCode' : 'PKG_VERF_CODE',
-     'PackageDescription' : 'PKG_DESC',
-     'PackageLicenseDeclared' : 'PKG_LICS_DECL',
-     'PackageLicenseConcluded' : 'PKG_LICS_CONC',
-     'PackageLicenseInfoFromFiles' : 'PKG_LICS_FFILE',
-     'PackageLicenseComments' : 'PKG_LICS_COMMENT',
-     # Files
-     'FileName' : 'FILE_NAME',
-     'FileType' : 'FILE_TYPE',
-     'FileChecksum' : 'FILE_CHKSUM',
-     'LicenseConcluded' : 'FILE_LICS_CONC',
-     'LicenseInfoInFile' : 'FILE_LICS_INFO',
-     'FileCopyrightText' : 'FILE_CR_TEXT',
-     'LicenseComments' : 'FILE_LICS_COMMENT', 
-     'FileComment' : 'FILE_COMMENT',
-     'ArtifactOfProjectName' : 'ART_PRJ_NAME',
-     'ArtifactOfProjectHomePage' : 'ART_PRJ_HOME',
-     'ArtifactOfProjectURI' : 'ART_PRJ_URI',
-     # License
-     'LicenseID' : 'LICS_ID',
-     'ExtractedText' : 'LICS_TEXT',
-     'LicenseName' : 'LICS_NAME',
-     'LicenseCrossReference' : 'LICS_CRS_REG',
-     'LicenseComment' : 'LICS_COMMENT',
-     # Common 
-     'NOASSERTION' : 'NO_ASSERT',
-     'UNKNOWN' : 'UN_KNOWN',
-     'NONE' : 'NONE'
-    }
 
-    tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
-        'ORG_VALUE', 'PERSON_VALUE',
-         'DATE', 'LINE', 'CHKSUM'] + list(reserved.values())
-
-    def t_CHKSUM(self, t):
-        r':\s?SHA1:\s[a-f0-9]{40,40}'
-        t.value = t.value[1:].strip()
-        return t
-
-    def t_TOOL_VALUE(self, t):
-        r':\s?Tool:.+'
-        t.value = t.value[1:].strip()
-        return t
-
-    def t_ORG_VALUE(self, t):
-        r':\s?Organization:.+'
-        t.value = t.value[1:].strip()
-        return t
-
-    def t_PERSON_VALUE(self, t):
-        r':\sPerson:.+'
-        t.value = t.value[1:].strip()
-        return t
-
-    def t_DATE(self, t):
-        r':\s?\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ'
-        t.value = t.value[1:].strip()
-        return t
-
-    def t_TEXT(self, t):
-        r':\s?<text>(.|\n)+</text>'
-        t.lexer.lineno += t.value.count('\n')
-        t.value = t.value[1:].strip()
-        return t
-
-    def t_COMMENT(self, t):
-        r'\#.*'
-        pass         
-
-    def t_newline(self, t):
-        r'\n+'
-        t.lexer.lineno += len(t.value)
-
-    def t_whitespace(self, t):
-        r'(\s|\t)+'
-        pass
-
-    def t_KEYWORD(self, t):
-        r'[a-zA-Z]+'
-        t.type = self.reserved.get(t.value,'UNKNOWN_TAG')
-        t.value = t.value.strip()
-        return t
-
-    def t_LINE(self, t):
-       r':.+'
-       t.value = t.value[1:].strip()
-       return t
-
-    def build(self, **kwargs):
-        self.lexer = lex.lex(module=self, **kwargs)
-        
-    def token(self):
-        return self.lexer.token()
+class ReviewsParser(object):
+    """Parser for Tag/Value format review information."""
+    def __init__(self):
+        super(ReviewsParser, self).__init__()
     
-    def input(self, data):
-        self.lexer.input(data)
-
-
-class Parser(object):
-    def __init__(self, builder, logger):
-        self.tokens = Lexer.tokens
-        self.builder = builder
-        self.logger = logger
-
-    
-
     def p_reviews_1(self, p):
         'reviews : review_info'
         p[0] = list(p[1])
@@ -154,18 +30,10 @@ class Parser(object):
         'reviews : reviews review_info'
         p[0] = p[1].append(p[2])
 
-    def p_reviews_3(self, p):
-        'reviews : empty'
-        p[0] = None
-
-    def p_review_info_1(self, p):
+    def p_review_info(self, p):
         'review_info : reviewer rev_date review_comment'
         p[0] = self.builder.review_info(reviewers=p[1], rev_date=p[2], 
             comment=p[3])
-
-    def p_review_info_2(self, p):
-        'review_info : empty'
-        p[0] = None
 
     def p_reviewer_1(self, p):
         'reviewer : REVIEWER entity'
@@ -199,53 +67,20 @@ class Parser(object):
 
     def p_review_comment_3(self, p):
         'review_comment : empty'
-        p[0] = None
+        p[0] = None 
 
+
+
+class CreationInfoParser(object):
+    """Parser for tag/value format Creation Info."""
+    def __init__(self):
+        super(CreationInfoParser, self).__init__()
 
     def p_creation_info(self, p):
         '''creation_info : creators created creator_comment lic_list_ver
         '''
         p[0] = self.builder.creation_info(creators=p[1], created=p[2],
             comment=p[3], lic_list_ver=p[4])
-
-    def p_lic_list_ver_1(self, p):
-        'lic_list_ver : LIC_LIST_VER LINE'
-        p[0] = self.builder.lic_list_ver(value=p[2], line=p.lineno(2), 
-            column=p.lexpos(2))
-
-    def p_lic_list_ver_2(self, p):
-        'lic_list_ver : LIC_LIST_VER error'
-        pass
-
-    def p_lic_list_ver_3(self, p):
-        'lic_list_ver : empty'
-        p[0] = None
-
-    def p_creator_comment_1(self, p):
-        'creator_comment : CREATOR_COMMENT TEXT'
-        p[0] = self.builder.creation_comment(text=p[2], line=p.lineno(2),
-            column=p.lexpos(2))
-
-    def p_creator_comment_2(self, p):
-        'creator_comment : CREATOR_COMMENT error'
-        pass
-
-    def p_creator_comment_3(self, p):
-        'creator_comment : empty'
-        p[0] = None
-
-    def p_created_1(self, p):
-        'created : CREATED DATE'
-        p[0] = self.builder.created(date=p[2], line=p.lineno(2), 
-            column=p.lexpos(2))
-
-    def p_created_2(self, p):
-        'created : CREATED error'
-        pass
-
-    def p_created_3(self, p):
-        'created : error any_value'
-        pass
 
     def p_creators_1(self, p):
         'creators : creator'
@@ -262,6 +97,115 @@ class Parser(object):
     def p_creator_2(self, p):
         'creator : CREATOR error'
         pass
+
+    def p_created_1(self, p):
+        'created : CREATED DATE'
+        p[0] = self.builder.created(date=p[2], line=p.lineno(2), 
+            column=p.lexpos(2))
+
+    def p_created_2(self, p):
+        'created : CREATED error'
+        pass
+
+    def p_created_3(self, p):
+        'created : error any_value'
+        pass
+
+    def p_creator_comment_1(self, p):
+        'creator_comment : CREATOR_COMMENT TEXT'
+        p[0] = self.builder.creation_comment(text=p[2], line=p.lineno(2),
+            column=p.lexpos(2))
+
+    def p_creator_comment_2(self, p):
+        'creator_comment : CREATOR_COMMENT error'
+        pass
+
+    def p_creator_comment_3(self, p):
+        'creator_comment : empty'
+        p[0] = None
+
+    def p_lic_list_ver_1(self, p):
+        'lic_list_ver : LIC_LIST_VER LINE'
+        p[0] = self.builder.lic_list_ver(value=p[2], line=p.lineno(2), 
+            column=p.lexpos(2))
+
+    def p_lic_list_ver_2(self, p):
+        'lic_list_ver : LIC_LIST_VER error'
+        pass
+
+    def p_lic_list_ver_3(self, p):
+        'lic_list_ver : empty'
+        p[0] = None
+
+
+class DocMeta(object):
+    """Parser for Tag/Value format document information."""
+
+    def __init__(self):
+        super(DocMeta, self).__init__()
+
+    def p_doc_1(self, p):
+        'doc : spdx_ver data_lic doc_comment'
+        p[0] = self.builder.doc(spdx_ver=p[1], data_lic=p[2], doc_comment=p[3])
+
+    def p_doc_2(self, p):
+        'doc : spdx_ver data_lic'
+        p[0] = self.builder.doc(spdx_ver=p[1], data_lic=p[2], doc_comment=None)
+
+    def p_data_lic_1(self, p):
+        'data_lic : DOC_LICENSE LINE'
+        p[0] = self.builder.data_lic(value=p[2], line=p.lineno(2), 
+            column=p.lexpos(2))
+
+    def p_data_lic_2(self, p):
+        'data_lic : DOC_LICENSE error'
+        pass
+
+    def p_data_lic_3(self, p):
+        'data_lic : error any_value'
+        pass
+
+    def p_doc_comment_1(self, p):
+        'doc_comment : DOC_COMMENT TEXT'
+        p[0] = self.builder.doc_comment(text=p[2], line=p.lineno(2), 
+            column=p.lexpos(2))
+
+    def p_doc_comment_2(self, p):
+        'doc_comment : DOC_COMMENT error'
+        pass
+
+    def p_spdx_ver_1(self, p):
+        'spdx_ver : DOC_VERSION LINE'
+        p[0] = self.builder.doc_version(value=p[2], line=p.lineno(2), 
+            column=p.lexpos(2))
+
+    def p_spdx_ver_2(self, p):
+        'spdx_ver : DOC_VERSION error'
+        pass
+
+    def p_spdx_ver_3(self, p):
+        'spdx_ver : error any_value'
+        pass
+
+
+class Parser(ReviewsParser, CreationInfoParser, DocMeta):
+
+    start = 'start'
+
+    def __init__(self, builder, logger):
+        super(Parser, self).__init__()
+        self.tokens = Lexer.tokens
+        self.builder = builder
+        self.logger = logger
+
+    def p_start_1(self, p):
+        '''start : doc creation_info reviews'''
+        pass        
+
+    def p_start_2(self, p):
+        '''start : doc creation_info'''
+        pass
+
 
     def p_entity(self, p):
         '''entity : tool
@@ -287,6 +231,9 @@ class Parser(object):
         'empty :'
         p[0] = None
 
+    # def p_package(self, p):
+    #     pass
+
     def p_any_value(self, p):
         '''any_value : LINE
                      | DATE
@@ -304,7 +251,7 @@ class Parser(object):
     def build(self, **kwargs):
         self.lex = Lexer()
         self.lex.build(reflags=re.UNICODE)
-        self.yacc = yacc.yacc(module=self, method='SLR', **kwargs)
+        self.yacc = yacc.yacc(module=self, **kwargs)
 
     def parse(self, text):
         self.yacc.parse(text, lexer=self.lex)
