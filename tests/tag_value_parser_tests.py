@@ -12,7 +12,8 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import nose
-from spdx.parsers.tagvalue import Lexer
+from spdx.parsers.tagvalue import Parser
+from spdx.parsers.lexers.tagvalue import Lexer
 
 class TestLexer(object):
     def __init__(self):
@@ -103,3 +104,12 @@ class TestLexer(object):
         assert token.value == value
         assert token.lineno == line
 
+
+class TestParser(object):
+    
+    def __init__(self):
+        self.p = Parser(None, None)
+        self.p.build()
+
+    def test_file(self):
+        assert 1 == 1
