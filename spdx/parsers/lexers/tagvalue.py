@@ -33,7 +33,7 @@ class Lexer(object):
      'PackageName': 'PKG_NAME',
      'PackageVersion': 'PKG_VERSION',
      'PackageDownloadLocation': 'PKG_DOWN',
-     'PackageSummary': 'OKG_SUM',
+     'PackageSummary': 'PKG_SUM',
      'PackageSourceInfo': 'PKG_SRC_INFO',
      'PackageFileName' : 'PKG_FILE_NAME',
      'PackageSupplier' : 'PKG_SUPPL',
@@ -45,6 +45,7 @@ class Lexer(object):
      'PackageLicenseConcluded' : 'PKG_LICS_CONC',
      'PackageLicenseInfoFromFiles' : 'PKG_LICS_FFILE',
      'PackageLicenseComments' : 'PKG_LICS_COMMENT',
+     'PackageCopyrightText' : 'PKG_CPY_TEXT',
      # Files
      'FileName' : 'FILE_NAME',
      'FileType' : 'FILE_TYPE',

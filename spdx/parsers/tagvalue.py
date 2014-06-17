@@ -14,239 +14,230 @@
 import re
 from lexers.tagvalue import Lexer
 from ply import yacc
-from .. import version
+from .. import document
 
+ERROR_MESSAGES = {
+    'TOOL_VALUE' : 'Invalid tool value {0} at line: {1}',
+    'ORG_VALUE' : 'Invalid organization value {0} at line: {1}',
+    'PERSON_VALUE' : 'Invalid person value {0} at line: {1}',
+    'CREATED_VALUE_TYPE' : 'Created value must be date in ISO 8601 format, line: {0}',
+    'MORE_THAN_ONE' : 'Only one {0} allowed, extra at line: {1}',
+    'CREATOR_COMMENT_VALUE_TYPE' : 'CreatorComment value must be free form text between <text></text> tags, line:{0}',
+    'DOC_LICENSE_VALUE' : 'Invalid DataLicense value \'{0}\', line:{1} must be CC0-1.0',
+    'DOC_LICENSE_VALUE_TYPE' : 'DataLicense must be CC0-1.0, line: {0}',
+    'DOC_VERSION_VALUE' : 'Invalid SPDXVersion \'{0}\' must be SPDX-M.N where M and N are numbers. Line: {1}',
+    'DOC_VERSION_VALUE_TYPE' : 'Invalid SPDXVersion value, must be SPDX-M.N where M and N are numbers. Line: {0}',
+    'DOC_COMMENT_VALUE_TYPE' : 'DocumentComment value must be free form text between <text></text> tags, line:{0}'
 
-class ReviewsParser(object):
-    """Parser for Tag/Value format review information."""
-    def __init__(self):
-        super(ReviewsParser, self).__init__()
-    
-    def p_reviews_1(self, p):
-        'reviews : review_info'
-        p[0] = list(p[1])
+}
 
-    def p_reviews_2(self, p):
-        'reviews : reviews review_info'
-        p[0] = p[1].append(p[2])
-
-    def p_review_info(self, p):
-        'review_info : reviewer rev_date review_comment'
-        p[0] = self.builder.review_info(reviewers=p[1], rev_date=p[2], 
-            comment=p[3])
-
-    def p_reviewer_1(self, p):
-        'reviewer : REVIEWER entity'
-        p[0] = p[1]
-
-    def p_reviewer_2(self, p):
-        'reviewer : REVIEWER error'
-        pass
-
-    def p_rev_date_1(self, p):
-        'rev_date : REVIEW_DATE DATE'
-        p[0] = self.builder.rev_date(value=p[2], line=p.lineno(2),
-            column=p.lexpos(2))
-
-    def p_rev_date_2(self, p):
-        'rev_date : REVIEW_DATE error'
-        pass
-
-    def p_rev_date_3(self, p):
-        'rev_date : error any_value'
-        pass
-
-    def p_review_comment_1(self, p):
-        'review_comment : REVIEW_COMMENT TEXT'
-        p[0] = self.review_comment(text=p[2], line=p.lineno(2),
-         column=p.lexpos(2))
-
-    def p_review_comment_2(self, p):
-        'review_comment : REVIEW_COMMENT error'
-        pass
-
-    def p_review_comment_3(self, p):
-        'review_comment : empty'
-        p[0] = None 
-
-
-
-class CreationInfoParser(object):
-    """Parser for tag/value format Creation Info."""
-    def __init__(self):
-        super(CreationInfoParser, self).__init__()
-
-    def p_creation_info(self, p):
-        '''creation_info : creators created creator_comment lic_list_ver
-        '''
-        p[0] = self.builder.creation_info(creators=p[1], created=p[2],
-            comment=p[3], lic_list_ver=p[4])
-
-    def p_creators_1(self, p):
-        'creators : creator'
-        p[0] = list(p[1])
-
-    def p_creators_2(self, p):
-        'creators : creators creator'
-        p[0] = p[1].append(p[2])
-
-    def p_creator_1(self, p):
-        'creator : CREATOR entity'
-        p[0] = p[1]
-
-    def p_creator_2(self, p):
-        'creator : CREATOR error'
-        pass
-
-    def p_created_1(self, p):
-        'created : CREATED DATE'
-        p[0] = self.builder.created(date=p[2], line=p.lineno(2), 
-            column=p.lexpos(2))
-
-    def p_created_2(self, p):
-        'created : CREATED error'
-        pass
-
-    def p_created_3(self, p):
-        'created : error any_value'
-        pass
-
-    def p_creator_comment_1(self, p):
-        'creator_comment : CREATOR_COMMENT TEXT'
-        p[0] = self.builder.creation_comment(text=p[2], line=p.lineno(2),
-            column=p.lexpos(2))
-
-    def p_creator_comment_2(self, p):
-        'creator_comment : CREATOR_COMMENT error'
-        pass
-
-    def p_creator_comment_3(self, p):
-        'creator_comment : empty'
-        p[0] = None
-
-    def p_lic_list_ver_1(self, p):
-        'lic_list_ver : LIC_LIST_VER LINE'
-        p[0] = self.builder.lic_list_ver(value=p[2], line=p.lineno(2), 
-            column=p.lexpos(2))
-
-    def p_lic_list_ver_2(self, p):
-        'lic_list_ver : LIC_LIST_VER error'
-        pass
-
-    def p_lic_list_ver_3(self, p):
-        'lic_list_ver : empty'
-        p[0] = None
-
-
-class DocMeta(object):
-    """Parser for Tag/Value format document information."""
-
-    def __init__(self):
-        super(DocMeta, self).__init__()
-
-    def p_doc_1(self, p):
-        'doc : spdx_ver data_lic doc_comment'
-        p[0] = self.builder.doc(spdx_ver=p[1], data_lic=p[2], doc_comment=p[3])
-
-    def p_doc_2(self, p):
-        'doc : spdx_ver data_lic'
-        p[0] = self.builder.doc(spdx_ver=p[1], data_lic=p[2], doc_comment=None)
-
-    def p_data_lic_1(self, p):
-        'data_lic : DOC_LICENSE LINE'
-        p[0] = self.builder.data_lic(value=p[2], line=p.lineno(2), 
-            column=p.lexpos(2))
-
-    def p_data_lic_2(self, p):
-        'data_lic : DOC_LICENSE error'
-        pass
-
-    def p_data_lic_3(self, p):
-        'data_lic : error any_value'
-        pass
-
-    def p_doc_comment_1(self, p):
-        'doc_comment : DOC_COMMENT TEXT'
-        p[0] = self.builder.doc_comment(text=p[2], line=p.lineno(2), 
-            column=p.lexpos(2))
-
-    def p_doc_comment_2(self, p):
-        'doc_comment : DOC_COMMENT error'
-        pass
-
-    def p_spdx_ver_1(self, p):
-        'spdx_ver : DOC_VERSION LINE'
-        p[0] = self.builder.doc_version(value=p[2], line=p.lineno(2), 
-            column=p.lexpos(2))
-
-    def p_spdx_ver_2(self, p):
-        'spdx_ver : DOC_VERSION error'
-        pass
-
-    def p_spdx_ver_3(self, p):
-        'spdx_ver : error any_value'
-        pass
-
-
-class Parser(ReviewsParser, CreationInfoParser, DocMeta):
-
-    start = 'start'
+class Parser(object):
 
     def __init__(self, builder, logger):
         super(Parser, self).__init__()
         self.tokens = Lexer.tokens
         self.builder = builder
         self.logger = logger
+        self.error = False
 
-    def p_start_1(self, p):
-        '''start : doc creation_info reviews'''
-        pass        
-
-    def p_start_2(self, p):
-        '''start : doc creation_info'''
+    def p_start(self, p):
+        'start : start attrib '    
         pass
 
+    def p_start(self, p):
+        'start : attrib '
+        pass
 
-    def p_entity(self, p):
-        '''entity : tool
-                  | org
-                  | person
+    def p_attrib(self, p):
+        '''attrib : spdx_version
+                  | data_lics
+                  | doc_comment
+                  | creator
+                  | created
+                  | creator_comment
+                  | locs_list_ver
+                  | REVIEWER
+                  | REVIEW_DATE
+                  | REVIEW_COMMENT
+                  | PKG_NAME
+                  | PKG_VERSION
+                  | PKG_DOWN
+                  | PKG_SUM
+                  | PKG_SRC_INFO
+                  | PKG_FILE_NAME
+                  | PKG_SUPPL
+                  | PKG_ORIG
+                  | PKG_CHKSUM
+                  | PKG_VERF_CODE
+                  | PKG_DESC
+                  | PKG_LICS_DECL
+                  | PKG_LICS_CONC
+                  | PKG_LICS_FFILE
+                  | PKG_LICS_COMMENT
+                  | PKG_CPY_TEXT
+                  | FILE_NAME
+                  | FILE_TYPE
+                  | FILE_CHKSUM
+                  | FILE_LICS_CONC
+                  | FILE_LICS_INFO
+                  | FILE_CR_TEXT
+                  | FILE_LICS_COMMENT
+                  | FILE_COMMENT
+                  | ART_PRJ_NAME
+                  | ART_PRJ_HOME
+                  | ART_PRJ_URI
+                  | LICS_ID
+                  | LICS_TEXT
+                  | LICS_NAME
+                  | LICS_CRS_REG
+                  | LICS_COMMENT
         '''
         p[0] = p[1]
 
+    def p_lics_list_ver(self, p):
+        '''locs_list_ver : LIC_LIST_VER LINE'''
+        try:
+            self.builder.set_lics_list_ver(doc=self.document, value=p[2])
+        except ValueError, e:
+            self.error = True
+            msg = ERROR_MESSAGES['LIC_LIST_VER_VALUE'].format(p[2], p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError, e:
+            self.error = True
+            msg = msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('LicenseListVersion', p.lineno(1))
+            self.logger.log(msg)
+    
+    def p_lics_list_ver_1(self, p):
+        '''locs_list_ver : LIC_LIST_VER error'''
+        self.error = True
+        msg = ERROR_MESSAGES['LIC_LIST_VER_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
 
-    def p_tool_1(self, p):
-        'tool : TOOL_VALUE'
-        p[0] = self.build_tool(value=p[1], line=p.lineno(1), column=p.lexpos(1))
 
-    def p_org(self, p):
-        'org : ORG_VALUE'
-        p[0] = self.build_org(value=p[1], line=p.lineno(1), column=p.lexpos(1))
+    def p_doc_comment(self, p):
+        '''doc_comment : DOC_COMMENT TEXT'''
+        try:
+            self.builder.set_doc_comment(doc=self.document, comment=p[2])
+        except CardinalityError, e:
+            self.error = True
+            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('DocumentComment', p.lineno(1))
+            self.logger.log(msg)        
 
-    def p_person(self, p):
-        'person : PERSON_VALUE'
-        p[0] = self.build_person(value=p[1], line=p.lineno(1), column=p.lexpos(1))
+    def p_doc_comment_1(self, p):
+        '''doc_comment : DOC_COMMENT error'''    
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_COMMENT_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
 
-    def p_empty(self, p):
-        'empty :'
-        p[0] = None
+    def p_data_license(self, p):
+        '''data_lics : DOC_LICENSE LINE'''
+        try:
+            self.builder.set_doc_data_lics(doc=self.document, lics=p[2])
+        except ValueError, e:
+            self.error = True
+            msg = ERROR_MESSAGES['DOC_LICENSE_VALUE'].format(p[2], p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError, e:
+            self.error = True
+            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('DataLicense', p.lineno(1))
+            self.logger.log(msg)
 
-    # def p_package(self, p):
-    #     pass
+    def p_data_license_1(self, p):
+        '''data_lics : DOC_LICENSE error'''
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_LICENSE_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
 
-    def p_any_value(self, p):
-        '''any_value : LINE
-                     | DATE
-                     | TEXT
-                     | NO_ASSERT
-                     | UN_KNOWN
-                     | NONE
-                     | TOOL_VALUE
-                     | ORG_VALUE
-                     | PERSON_VALUE
-                     | CHKSUM
+    def p_spdx_version(self, p):
+        '''spdx_version : DOC_VERSION LINE'''
+        try:
+            self.builder.set_doc_version(doc=self.document, version=p[2])
+        except CardinalityError, e:
+            self.error = True
+            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('SPDXVersion', p.lineno(1))
+            self.logger.log(msg)
+        except ValueError, e:
+            self.error = True
+            msg = ERROR_MESSAGES['DOC_VERSION_VALUE'].format(p[2], p.lineno(1))
+            self.logger.log(msg)
+        except IncompatibleVersionError, e:
+            self.error = True
+            self.logger.log('SPDXVersion must be SPDX-1.2 found {0}.'.format(value))
+            
+    def p_spdx_version(self, p):
+            '''spdx_version : DOC_VERSION error'''
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_VERSION_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_creator_comment(self, p):
+        '''creator_comment : CREATOR_COMMENT TEXT'''
+        try:
+            self.builder.set_creation_comment(doc=self.document, comment=p[2])
+        except CardinalityError, e:
+            self.error = True
+            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('CreatorComment', p.lineno(1))
+            self.logger.log(msg)
+
+    def p_creator_comment_1(self, p):
+        '''creator_comment : CREATOR_COMMENT error'''
+        self.error = True
+        msg = ERROR_MESSAGES['CREATOR_COMMENT_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_creator(self, p):
+        '''creator : CREATOR entity'''
+        ok =  self.builder.add_creator(doc=self.document, creator=p[2])
+        self.error |=  not ok 
+
+    def p_created(self, p):
+        '''created : CREATED DATE'''
+        try:
+            self.builder.set_created_date(doc=self.document, date=p[2])
+        except CardinalityError, e:
+            self.error = True
+            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('Created', p.lineno(1))
+            self.logger.log(msg)
+
+    def p_created_2(self, p):
+        '''created : CREATED error'''
+        self.error = True
+        msg = ERROR_MESSAGES['CREATED_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def entity(self, p):
+        '''entity : TOOL_VALUE
         '''
-        p[0] = p[1]
+        try:
+            p[0] = self.builder.build_tool(doc=self.document, entity=p[1])
+        except ValueError, e: 
+            msg = ERROR_MESSAGES['TOOL_VALUE'].format(p[1], p.lineno(1))
+            self.logger.log(msg)
+            self.error = True
+            p[0] = None
+        
+    def entity_2(self, p):
+        '''entity : ORG_VALUE
+        '''
+        try:
+            p[0] = self.builder.build_org(doc=self.document, entity=p[1])
+        except ValueError, e:
+            msg = ERROR_MESSAGES['ORG_VALUE'].format(p[1], p.lineno(1))
+            self.logger.log(msg)
+            self.error = True
+            p[0] = None
+        
+    
+    def entity_3(self, p):
+        '''entity : PERSON_VALUE
+        '''
+        try:
+        p[0] = self.builder.build_person(doc=self.document, entity=p[1])
+        except ValueError, e:
+            msg = ERROR_MESSAGES['PERSON_VALUE'].format(p[1], p.lineno(1))
+            self.logger.log(msg)
+            self.error = True
+            p[0] = None
 
     def build(self, **kwargs):
         self.lex = Lexer()
@@ -254,4 +245,10 @@ class Parser(ReviewsParser, CreationInfoParser, DocMeta):
         self.yacc = yacc.yacc(module=self, **kwargs)
 
     def parse(self, text):
+        self.document = document.Document()
+        self.error = False
         self.yacc.parse(text, lexer=self.lex)
+        return self.document
+
+
+

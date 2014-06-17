@@ -11,3 +11,24 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+import re
+
+
+def validate_tool_name(value, optional=False):
+    striped_value = value.strip()
+    if optional:
+        if len(striped_value) == 0:
+            return True
+        else: 
+            return False
+    else:
+        return not (len(striped_value) == 0)
+
+def validate_person_name(value, optional=False):
+    return validate_tool_name(value, optional)
+
+def validate_org_name(value, optional=False):
+    return validate_tool_name(value, optional)
+
+def validate_data_lics(value):
+    return value == 'CC0-1.0'

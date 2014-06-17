@@ -56,7 +56,7 @@ class Document(object):
         reviews: SPDX document review information, Optional zero or more. 
             Type: Review.
     """
-    def __init__(self, version, data_license, comment=None, 
+    def __init__(self, version=None, data_license=None, comment=None, 
                 creation_info=CreationInfo(), package=None):
         super(Document, self).__init__()
         self.version = version
@@ -66,3 +66,6 @@ class Document(object):
         self.package = package
         self.extracted_licenses = []
         self.reviews = []
+
+    def add_review(self, review):
+        self.reviews.append(review)
