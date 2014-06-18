@@ -428,8 +428,6 @@ class PackageBuilder(object):
         else:
             raise CardinalityError('PackageSourceInfo')
 
-    def set_
-
     def assert_package_exists(self):
         if not self.package_set:
             raise OrderError('Package')

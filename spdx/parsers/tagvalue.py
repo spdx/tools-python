@@ -53,7 +53,7 @@ class Parser(object):
         pass
 
     def p_attrib(self, p):
-        '''attrib : spdx_version
+        """attrib : spdx_version
                   | data_lics
                   | doc_comment
                   | creator
@@ -95,23 +95,23 @@ class Parser(object):
                   | LICS_NAME
                   | LICS_CRS_REG
                   | LICS_COMMENT
-        '''
+        """
         p[0] = p[1]
 
 
     def p_reviewer(self, p):
-        '''reviewer : REVIEWER entity'''
+        """reviewer : REVIEWER entity"""
         ok =  self.builder.add_creator(doc=self.document, creator=p[2])
         self.error |=  not ok 
 
     def p_reviewer_1(self, p):
-        '''reviewer : REVIEWER error'''
+        """reviewer : REVIEWER error"""
         self.error = True
         msg = ERROR_MESSAGES['REVIEWER_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_review_date(self, p):
-        '''review_date : REVIEW_DATE DATE'''
+        """review_date : REVIEW_DATE DATE"""
         try:
             self.builder.add_review_date(reviewed=p[2], doc=self.document)
         except CardinalityError, e:
@@ -125,13 +125,13 @@ class Parser(object):
             self.logger.log(msg)
 
     def p_review_date_1(self, p):
-        '''review_date : REVIEW_DATE error'''
+        """review_date : REVIEW_DATE error"""
         self.error = True
         msg = ERROR_MESSAGES['REVIEW_DATE_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_review_comment(self, p):
-        '''review_comment : REVIEW_COMMENT TEXT'''
+        """review_comment : REVIEW_COMMENT TEXT"""
         try:
             self.builder.add_review_comment(comment=p[2], doc=self.document)
         except CardinalityError, e:
@@ -145,13 +145,13 @@ class Parser(object):
             self.logger.log(msg)
 
     def p_review_comment_1(self, p):
-        '''review_comment : REVIEW_COMMENT error'''
+        """review_comment : REVIEW_COMMENT error"""
         self.error = True
         msg = ERROR_MESSAGES['REVIEW_COMMENT_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_lics_list_ver(self, p):
-        '''locs_list_ver : LIC_LIST_VER LINE'''
+        """locs_list_ver : LIC_LIST_VER LINE"""
         try:
             self.builder.set_lics_list_ver(doc=self.document, value=p[2])
         except ValueError, e:
@@ -164,14 +164,14 @@ class Parser(object):
             self.logger.log(msg)
 
     def p_lics_list_ver_1(self, p):
-        '''locs_list_ver : LIC_LIST_VER error'''
+        """locs_list_ver : LIC_LIST_VER error"""
         self.error = True
         msg = ERROR_MESSAGES['LIC_LIST_VER_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
 
     def p_doc_comment(self, p):
-        '''doc_comment : DOC_COMMENT TEXT'''
+        """doc_comment : DOC_COMMENT TEXT"""
         try:
             self.builder.set_doc_comment(doc=self.document, comment=p[2])
         except CardinalityError, e:
@@ -180,13 +180,13 @@ class Parser(object):
             self.logger.log(msg)        
 
     def p_doc_comment_1(self, p):
-        '''doc_comment : DOC_COMMENT error'''    
+        """doc_comment : DOC_COMMENT error"""    
         self.error = True
         msg = ERROR_MESSAGES['DOC_COMMENT_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_data_license(self, p):
-        '''data_lics : DOC_LICENSE LINE'''
+        """data_lics : DOC_LICENSE LINE"""
         try:
             self.builder.set_doc_data_lics(doc=self.document, lics=p[2])
         except ValueError, e:
@@ -199,13 +199,13 @@ class Parser(object):
             self.logger.log(msg)
 
     def p_data_license_1(self, p):
-        '''data_lics : DOC_LICENSE error'''
+        """data_lics : DOC_LICENSE error"""
         self.error = True
         msg = ERROR_MESSAGES['DOC_LICENSE_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_spdx_version(self, p):
-        '''spdx_version : DOC_VERSION LINE'''
+        """spdx_version : DOC_VERSION LINE"""
         try:
             self.builder.set_doc_version(doc=self.document, version=p[2])
         except CardinalityError, e:
@@ -221,13 +221,13 @@ class Parser(object):
             self.logger.log('SPDXVersion must be SPDX-1.2 found {0}.'.format(value))
             
     def p_spdx_version(self, p):
-        '''spdx_version : DOC_VERSION error'''
+        """spdx_version : DOC_VERSION error"""
         self.error = True
         msg = ERROR_MESSAGES['DOC_VERSION_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_creator_comment(self, p):
-        '''creator_comment : CREATOR_COMMENT TEXT'''
+        """creator_comment : CREATOR_COMMENT TEXT"""
         try:
             self.builder.set_creation_comment(doc=self.document, comment=p[2])
         except CardinalityError, e:
@@ -236,24 +236,24 @@ class Parser(object):
             self.logger.log(msg)
 
     def p_creator_comment_1(self, p):
-        '''creator_comment : CREATOR_COMMENT error'''
+        """creator_comment : CREATOR_COMMENT error"""
         self.error = True
         msg = ERROR_MESSAGES['CREATOR_COMMENT_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_creator(self, p):
-        '''creator : CREATOR entity'''
+        """creator : CREATOR entity"""
         ok =  self.builder.add_creator(doc=self.document, creator=p[2])
         self.error |=  not ok 
 
     def p_creator_1(self, p):
-        '''creator : CREATOR error'''
+        """creator : CREATOR error"""
         self.error = True
         msg = ERROR_MESSAGES['CREATOR_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_created(self, p):
-        '''created : CREATED DATE'''
+        """created : CREATED DATE"""
         try:
             self.builder.set_created_date(doc=self.document, date=p[2])
         except CardinalityError, e:
@@ -262,14 +262,14 @@ class Parser(object):
             self.logger.log(msg)
 
     def p_created_2(self, p):
-        '''created : CREATED error'''
+        """created : CREATED error"""
         self.error = True
         msg = ERROR_MESSAGES['CREATED_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_entity(self, p):
-        '''entity : TOOL_VALUE
-        '''
+        """entity : TOOL_VALUE
+        """
         try:
             p[0] = self.builder.build_tool(doc=self.document, entity=p[1])
         except ValueError, e: 
@@ -279,8 +279,8 @@ class Parser(object):
             p[0] = None
         
     def p_entity_2(self, p):
-        '''entity : ORG_VALUE
-        '''
+        """entity : ORG_VALUE
+        """
         try:
             p[0] = self.builder.build_org(doc=self.document, entity=p[1])
         except ValueError, e:
@@ -291,8 +291,8 @@ class Parser(object):
         
     
     def p_entity_3(self, p):
-        '''entity : PERSON_VALUE
-        '''
+        """entity : PERSON_VALUE
+        """
         try:
             p[0] = self.builder.build_person(doc=self.document, entity=p[1])
         except ValueError, e:
