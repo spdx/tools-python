@@ -38,3 +38,6 @@ def datetime_from_iso_format(string):
         return date
     else:
         return None
+
+class NoAssert(object):
+    pass
