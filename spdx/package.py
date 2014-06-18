@@ -17,9 +17,13 @@ class Package(object):
         name : Mandatory, string.
         version: Optional, string.
         file_name: Optional, string.
-        supplier: Optional, Organization or Person
+        supplier: Optional, Organization or Person or NO_ASSERTION.
         originator: Optional, Organization or Person.
         download_location: Mandatory, URL as string.
+        homepage: Optional, URL as string or None or NO_ASSERTION.
+        verif_code: Mandatory string.
+        check_sum: Optional string.
+        source_info: Optional string.
     """
     def __init__(self, name, download_location,version="", file_name="", 
             supplier=None, originator=None):
@@ -30,3 +34,7 @@ class Package(object):
         self.supplier = supplier
         self.originator = originator
         self.download_location = download_location
+        self.homepage = None
+        self.verif_code = None
+        self.check_sum = None
+        self.source_info = None

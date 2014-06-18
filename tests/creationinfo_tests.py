@@ -24,8 +24,6 @@ from datetime import datetime
 
 class TestCreationInfo(object):
     def test_timestamp(self):
-        ci_default = CreationInfo()
-        assert type(ci_default.created) is datetime
         dt = datetime(2014, 4, 8, 13, 42, 12)
         ci_time = CreationInfo(created=dt)
         assert ci_time.created == dt
@@ -33,9 +31,6 @@ class TestCreationInfo(object):
         dt = datetime(2014, 4, 8, 13, 42, 12)
         ci_time = CreationInfo(created=dt)
         assert ci_time.created_iso_format == "2014-04-08T13:42:12Z"
-        ci_default = CreationInfo()
-        regex = re.compile(r"\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ")
-        assert regex.match(ci_default.created_iso_format) is not None
     def test_comment(self):
         ci_default = CreationInfo()
         assert ci_default.comment is None

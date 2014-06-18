@@ -25,10 +25,7 @@ class Review(object):
     def __init__(self, reviewer=None, review_date=None, comment=""):
         super(Review, self).__init__()
         self.reviewer = reviewer
-        if review_date is None:
-            self.set_review_date_now()
-        else:
-            self.review_date = review_date
+        self.review_date = review_date
         self.comment = comment
 
     def set_review_date_now(self):

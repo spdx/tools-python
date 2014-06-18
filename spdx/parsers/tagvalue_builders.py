@@ -17,6 +17,7 @@ from .. import document
 from .. import creationinfo
 from .. import utils
 from .. import review
+from .. import package
 from validations import *
 
 
@@ -33,6 +34,10 @@ class CardinalityError(BuilderException):
         self.msg = msg
 
 class ValueError(BuilderException)
+    def __init__(self, msg):
+        self.msg = msg
+
+class OrderError(BuilderException)
     def __init__(self, msg):
         self.msg = msg
 
@@ -220,14 +225,227 @@ class CreationInfoBuilder(object):
 class ReviewBuilder(object):
     def __init__(self):
         super(ReviewBuilder, self).__init__()
+        self.review_date_set = False
+        self.review_comment_set = False
     
     def add_reviewer(self, reviewer, doc):
+        """Adds a reviewer to the SPDX Document.
+        Reviwer is an entity created by an EntityBuilder.
+        """
         doc.add_review(review.Review(reviewer=reviewer))
+        self.review_date_set = False
+        self.review_comment_set = False
         return True
 
-    def 
+    def add_review_date(self, reviewed, doc):
+        """Sets the review date. Raises CardinalityError if 
+        already set. OrderError if no reviewer defined before.
+        """
+        if len(doc.reviews) != 0:
+            if not self.review_date_set:
+                self.review_date_set = True
+                date = utils.datetime_from_iso_format(reviewed)
+                doc.reviews[-1].review_date = date
+                return True
+            else:
+                raise CardinalityError('ReviewDate')
+        else:
+            raise OrderError('ReviewDate')
 
-class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder):
+    def add_review_comment(self, comment, doc):
+        """Sets the review comment. Raises CardinalityError if 
+        already set. OrderError if no reviewer defined before.
+        """
+        if len(doc.reviews) != 0:
+            if not self.review_comment_set:
+                self.review_comment_set = True
+                doc.reviews[-1].comment = str_from_text(comment)
+                return True
+            else:
+                raise CardinalityError('ReviewComment')
+        else:
+            raise OrderError('ReviewComment')
+
+
+class PackageBuilder(object):
+    def __init__(self):
+        super(PackageBuilder, self).__init__()
+        self.package_set = False
+        self.package_vers_set = False
+        self.package_file_name_set = False
+        self.package_supplier_set = False
+        self.package_originator_set = False
+        self.package_down_location_set = False
+        self.package_home_set = False
+        self.package_verif_set = False
+        self.package_chk_sum_set = False
+
+    def create_package(self, doc, name):
+        """Creates a package for the SPDX Document.
+        name - any string.
+        Raises CardinalityError if package already defined.
+        """
+        if not self.package_set:
+            self.package_set = True
+            doc.package = package.Package(name=name)
+            return True
+        else:
+            raise CardinalityError('PackageName')
+
+    def set_pkg_vers(self, doc, version):
+        """Sets package version, if not already set.
+        version - Any string.
+        Raises CardinalityError if already has a version.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not package_vers_set:
+            self.package_vers_set = True
+            doc.package.version = version
+            return True
+        else:
+            raise CardinalityError('PackageVersion')
+   
+    def set_pkg_file_name(self, doc, name):
+        """Sets the package file name, if not already set.
+        name - Any string.
+        Raises CardinalityError if already has a file_name.
+        Raises OrderError if no pacakge previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_file_name_set:
+            self.package_file_name_set = True
+            doc.package.file_name = name
+            return True
+        else:
+            raise CardinalityError('PackageFileName')
+        
+    def set_pkg_supplier(self, doc, entity):
+        """Sets the package supplier, if not already set.
+        entity - Organization, Person or NoAssert.
+        Raises CardinalityError if already has a supplier.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_supplier_set:
+            self.package_supplier_set = True
+            if validate_pkg_supplier(entity):
+                doc.package.supplier = entity
+                return True
+            else:
+                raise ValueError('Package::Supplier')
+        else:
+            raise CardinalityError('PackageSupplier')
+
+    def set_pkg_originator(self, doc, entity):
+        """Sets the package originator, if not already set.
+        entity - Organization, Person or NoAssert.
+        Raises CardinalityError if already has an originator.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_originator_set:
+            self.package_originator_set = True
+            if validate_pkg_originator(entity):
+                doc.package.originator = entity
+                return True
+            else:
+                raise ValueError('Package::Supplier')
+        else:
+            raise CardinalityError('PackageSupplier')
+
+    def set_pkg_down_location(self, doc, location):
+        """Sets the package download location, if not already set.
+        location - A string
+        Raises CardinalityError if already defined.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_down_location_set:
+            self.package_down_location_set = True
+            doc.package.download_location = location
+            return True
+        else:
+            raise CardinalityError('PackageDownloadLocation')
+
+    def set_pkg_home(self, doc, location):
+        """Sets the package homepage location if not already set.
+        location - A string or None or NoAssert.
+        Raises CardinalityError if already defined.
+        Raises OrderError if no package previously defined.
+        Raises ValueError if location has incorrect value.
+        """
+        self.assert_package_exists()
+        if not self.package_home_set:
+            self.package_home_set = True
+            if validate_pkg_homepage(location):
+                doc.package.homepage = location
+                return True
+            else:
+                raise ValueError('HomePage')
+        else:
+            raise CardinalityError('PackageHomePage')
+
+    def set_pkg_verif_code(self, doc, code):
+        """Sets the package verification code, if not already set.
+        code - A string.
+        Raises CardinalityError if already defined.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_verif_set:
+            self.package_verif_set = True
+            doc.package.verif_code = code
+            return True
+        else:
+            raise CardinalityError('PackageVerificationCode')
+
+    def set_pkg_chk_sum(self, doc, chk_sum):
+        """Sets the package check sum, if not already set.
+        chk_sum - A string
+        Raises CardinalityError if already defined.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_chk_sum_set:
+            self.package_chk_sum_set = True
+            doc.package.check_sum = chk_sum
+            return True
+        else:
+            raise CardinalityError('PackageChecksum')
+
+    def set_pkg_source_info(self, doc, text):
+        """Sets the package's source information, if not already set.
+        text - Free form text.
+        Raises CardinalityError if already defined.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_source_info_set:
+            self.package_source_info_set = True
+            doc.package.source_info = str_from_text(text)
+            return True
+        else:
+            raise CardinalityError('PackageSourceInfo')
+
+    def set_
+
+    def assert_package_exists(self):
+        if not self.package_set:
+            raise OrderError('Package')
+
+class FileBuilder(object):
+    def __init__(self):
+        super(FileBuilder, self).__init__()
+
+class LicenseBuilder(object):
+    def __init__(self):
+        super(LicenseBuilder, self).__init__()
+        
+                
+
+class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder, 
+    PackageBuilder, FileBuilder, LicenseBuilder):
     """SPDX document builder."""
 
     def __init__(self):
