@@ -41,3 +41,4 @@ def datetime_from_iso_format(string):
 
 class NoAssert(object):
     pass
+

@@ -12,7 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 from datetime import datetime
-from util import datetime_iso_format
+from utils import datetime_iso_format
 
 class Review(object):
     """Document review information.

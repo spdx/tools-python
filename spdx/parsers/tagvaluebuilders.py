@@ -21,11 +21,11 @@ from .. import package
 from validations import *
 
 
-class BuilderError(Exception):
+class BuilderException(Exception):
     """Builder exception base class."""
     pass
 
-class IncompatibleVersionError(BuilderError):
+class IncompatibleVersionError(BuilderException):
     def __init__(self, msg):
         self.msg = msg
 
@@ -33,11 +33,11 @@ class CardinalityError(BuilderException):
     def __init__(self, msg):
         self.msg = msg
 
-class ValueError(BuilderException)
+class ValueError(BuilderException):
     def __init__(self, msg):
         self.msg = msg
 
-class OrderError(BuilderException)
+class OrderError(BuilderException):
     def __init__(self, msg):
         self.msg = msg
 
@@ -50,14 +50,15 @@ def str_from_text(text):
     else:
         return None
 
-class DocBuilder(object):
-   VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)')
 
-   def __init__(self):
-       super(EntityBuilder, self).__init__()
-       self.doc_version_set = False
-       self.doc_comment_set = False
-       self.doc_data_lics_set = False
+class DocBuilder(object):
+    VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)')
+
+    def __init__(self):
+        super(EntityBuilder, self).__init__()
+        self.doc_version_set = False
+        self.doc_comment_set = False
+        self.doc_data_lics_set = False
 
     def set_doc_version(self, doc, version):
         """Sets the document version. 
@@ -71,7 +72,7 @@ class DocBuilder(object):
                 raise ValueError('SPDX Version')
             else:
                 vers = version.Version(major=int(m.group(1)), minor=int(m.group(2)))
-                if vers == version.Version(major=1, minor=2)
+                if vers == version.Version(major=1, minor=2):
                     doc.version = vers
                     return True
                 else:
@@ -178,7 +179,7 @@ class CreationInfoBuilder(object):
         Returns true if creator is not none.
         Creator must be built by an EntityBuilder.
         """
-        if creator is not None
+        if creator is not None:
             doc.creation_info.add_creator(creator)
             return True 
         else:
@@ -279,6 +280,8 @@ class PackageBuilder(object):
         self.package_home_set = False
         self.package_verif_set = False
         self.package_chk_sum_set = False
+        self.package_license_declared_set = False
+        self.package_license_comment_set = False
 
     def create_package(self, doc, name):
         """Creates a package for the SPDX Document.
@@ -427,6 +430,72 @@ class PackageBuilder(object):
             return True
         else:
             raise CardinalityError('PackageSourceInfo')
+
+    def set_pkg_licenses_concluded(self, doc, licenses):
+        """Sets the package's concluded licenses.
+        text - Free form text.
+        Raises CardinalityError if already defined.
+        Raises OrderError if no package previously defined.
+        Raises ValueError if data malformed.
+        """
+        self.assert_package_exists()
+        if not self.package_conc_lics_set:
+            self.package_conc_lics_set = True
+            if validate_lics_conc(licenses):
+                doc.package.conc_lics = licenses
+                return True
+            else:
+                raise ValueError('Package::ConcludedLicenses')
+        else:
+            raise CardinalityError('PackageLicenseConcluded')
+
+    def set_pkg_license_from_file(self, doc, license):
+        """Adds a license from a file to the package.
+        Raises ValueError if data malformed.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if validate_lics_from_file(license):
+            if license == 'NO_ASSERT':
+                doc.package.licenses_from_files.append(utils.NoAssert())
+            elif license == 'NONE':
+                doc.package.licenses_from_files.append(utils.None())
+            else:
+                doc.package.licenses_from_files.append(
+                    document.License.from_identifier(license))
+            return True
+        else:
+            raise ValueError('LicensesFromFile')
+
+    def set_pkg_license_declared(self, doc, license):
+        """Sets the package's declared license.
+        Raises ValueError if data malformed.
+        Raises OrderError if no package previously defined.
+        Raises CardinalityError if already set.
+        """
+        self.assert_package_exists()
+        if not self.package_license_declared_set:
+            self.package_license_declared_set = True
+            if validate_lics_declared(license):
+                doc.package.license_declared = license
+                return True
+            else:
+                raise ValueError('Package::LicenseDeclared')
+        else:
+            raise CardinalityError('Package::LicenseDeclared')
+
+    def set_pkg_license_comment(self, doc, text):
+        """Sets the package's license comment.
+        Raises OrderError if no package previously defined.
+        Raises CardinalityError if already set.
+        """
+        self.assert_package_exists()
+        if not self.package_license_comment_set:
+            self.package_license_comment_set = True
+            doc.package.license_comment = str_from_text(text)
+            return True
+        else:
+            raise CardinalityError('Package::LicenseComment')
 
     def assert_package_exists(self):
         if not self.package_set:

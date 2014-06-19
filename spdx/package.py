@@ -24,6 +24,8 @@ class Package(object):
         verif_code: Mandatory string.
         check_sum: Optional string.
         source_info: Optional string.
+        conc_lists: Mandatory string.
+        licenses_from_files: License list, at least one.
     """
     def __init__(self, name, download_location,version="", file_name="", 
             supplier=None, originator=None):
@@ -38,3 +40,7 @@ class Package(object):
         self.verif_code = None
         self.check_sum = None
         self.source_info = None
+        self.conc_lics = None
+        self.license_declared = None
+        self.license_comment = None
+        self.licenses_from_files = []

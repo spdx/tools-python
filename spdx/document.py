@@ -24,7 +24,10 @@ class License(object):
 
     @classmethod
     def from_identifier(cls, identifier):
-        return cls(config.LICENSE_MAP[identifier], identifier)
+        if identifier in config.LICENSE_MAP.keys():
+            return cls(config.LICENSE_MAP[identifier], identifier)
+        else:
+            return cls(identifier, identifier)
 
     @classmethod
     def from_full_name(cls, full_name):
