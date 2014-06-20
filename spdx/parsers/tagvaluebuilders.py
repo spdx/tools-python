@@ -282,6 +282,8 @@ class PackageBuilder(object):
         self.package_chk_sum_set = False
         self.package_license_declared_set = False
         self.package_license_comment_set = False
+        self.package_cr_text_set = False
+        self.package_desc_set = False
 
     def create_package(self, doc, name):
         """Creates a package for the SPDX Document.
@@ -496,6 +498,58 @@ class PackageBuilder(object):
             return True
         else:
             raise CardinalityError('Package::LicenseComment')
+
+    def set_pkg_cr_text(self, doc, text):
+        """Sets the package's license comment.
+        Raises OrderError if no package previously defined.
+        Raises CardinalityError if already set.
+        Raises value error if text is not one of [None, NOASSERT, TEXT].
+        """
+        self.assert_package_exists()
+        if not self.package_cr_text_set:
+            self.package_cr_text_set = True
+            if validate_pkg_cr_text(text):
+                if type(text) is str:
+                    doc.package.cr_text = str_from_text(text)
+                else:
+                    doc.package.cr_text = text # None or NoAssert
+            else:
+                raise ValueError('Package::CopyrightText')
+        else:
+            raise CardinalityError('Package::CopyrightText')
+
+
+    def set_pkg_summary(self, doc, text):
+        """Set's the package summary.
+        Raises ValueError if text is not free form text.
+        Raises CardinalityError if summary already set.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_summary_set:
+            self.package_summary_set = True
+            if validate_pkg_summary(text):
+                doc.package.summary = str_from_text(text)
+            else:
+                raise ValueError('Package::Summary')
+        else:
+            raise CardinalityError('Package::Summary')
+
+    def set_pkg_desc(self, doc, text):
+        """Set's the package's description.
+        Raises ValueError if text is not free form text.
+        Raises CardinalityError if description already set.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_desc_set:
+            self.package_desc_set = True
+            if validate_pkg_desc(text):
+                doc.package.description = str_from_text(text)
+            else:
+                raise ValueError('Package::Description')
+        else:
+            raise CardinalityError('Package::Description')
 
     def assert_package_exists(self):
         if not self.package_set:
