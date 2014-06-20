@@ -55,12 +55,12 @@ class DocBuilder(object):
     VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)')
 
     def __init__(self):
-        super(EntityBuilder, self).__init__()
+        super(DocBuilder, self).__init__()
         self.doc_version_set = False
         self.doc_comment_set = False
         self.doc_data_lics_set = False
 
-    def set_doc_version(self, doc, version):
+    def set_doc_version(self, doc, value):
         """Sets the document version. 
         Raises value error if malformed value, CardinalityError
         if already defined, IncompatibleVersionError if not 1.2.
@@ -69,9 +69,10 @@ class DocBuilder(object):
             self.doc_version_set = True
             m = self.VERS_STR_REGEX.match(value)
             if m is None:
-                raise ValueError('SPDX Version')
+                raise ValueError('Document::Version')
             else:
-                vers = version.Version(major=int(m.group(1)), minor=int(m.group(2)))
+                vers = version.Version(major=int(m.group(1)), 
+                    minor=int(m.group(2)))
                 if vers == version.Version(major=1, minor=2):
                     doc.version = vers
                     return True
@@ -91,18 +92,22 @@ class DocBuilder(object):
                 doc.data_license = document.License.from_identifier(lics)
                 return True
             else:
-                raise ValueError('DataLicense')
+                raise ValueError('Document::DataLicense')
         else:
             raise CardinalityError('Document::DataLicense')
 
     def set_doc_comment(self, doc, comment):
         """Sets document comment, Raises CardinalityError if
         comment already set.
+        Raises ValueError if comment is not free form text.
         """
         if not self.doc_comment_set:
             self.doc_comment_set = True
-            doc.comment = str_from_text(comment)            
-            return True
+            if validate_doc_comment(comment):
+                doc.comment = str_from_text(comment)            
+                return True
+            else:
+                raise ValueError('Document::Comment')
         else:
             raise CardinalityError('Document::Comment')
 

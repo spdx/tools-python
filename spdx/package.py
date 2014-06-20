@@ -26,6 +26,10 @@ class Package(object):
         source_info: Optional string.
         conc_lists: Mandatory string.
         licenses_from_files: License list, at least one.
+        cr_text: Copyright text, string , NoAssertion or None. Mandatory.
+        summary: Optional str.
+        description: Optional str.
+        files: List of files in package, atleast one.
     """
     def __init__(self, name, download_location,version="", file_name="", 
             supplier=None, originator=None):
@@ -44,3 +48,7 @@ class Package(object):
         self.license_declared = None
         self.license_comment = None
         self.licenses_from_files = []
+        self.cr_text = None
+        self.summary = None
+        self.description = None
+        self.files = []
