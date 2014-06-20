@@ -45,6 +45,13 @@ class License(object):
     def identifier(self):
         return self._identifier
 
+    def __eq__(self, other):
+        if isinstance(other, License):
+            return  ( (self.identifier == other.identifier) & 
+                (self.full_name == other.full_name) )
+        else:
+            return False
+
 class Document(object):
     """Represents an SPDX document.
         Fields: 

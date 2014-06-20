@@ -74,3 +74,6 @@ def validate_pkg_summary(value, optional=False):
 
 def validate_pkg_desc(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
+def validate_doc_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
