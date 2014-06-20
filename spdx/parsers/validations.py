@@ -15,6 +15,13 @@ import re
 from .. import creationinfo
 from .. import utils
 
+def validate_is_free_form_text(value, optional=False):
+    TEXT_RE = re.compile(r'<text>(.|\n)+</text>', re.UNICODE)
+    if value is None:
+        return optional
+    else:
+        return TEXT_RE.match(value) is not None
+
 def validate_tool_name(value, optional=False):
     striped_value = value.strip()
     if optional:
@@ -58,3 +65,12 @@ def validate_pkg_homepage(value, optional=False):
         return True
     else:
         return False
+
+def validate_pkg_cr_text(value, optional=False):
+    assert False
+
+def validate_pkg_summary(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+def validate_pkg_desc(value, optional=False):
+    return validate_is_free_form_text(value, optional)
