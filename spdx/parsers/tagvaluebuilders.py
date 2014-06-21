@@ -114,8 +114,8 @@ class DocBuilder(object):
 class EntityBuilder(object):
 
     tool_re = re.compile(r'Tool:\s*(.+)', re.UNICODE)
-    person_re = re.compile(r'Person:\s*((\w\s?)+)\((.+)\)', re.UNICODE)
-    org_re = re.compile(r'Organization:\s*((\w\s?)+)\((.+)\)', re.UNICODE)
+    person_re = re.compile(r'Person:\s*((\w\s?)+)\((.*)\)', re.UNICODE)
+    org_re = re.compile(r'Organization:\s*((\w\s?)+)\((.*)\)', re.UNICODE)
     PERSON_NAME_GROUP = 1
     PERSON_EMAIL_GROUP = 3
     ORG_NAME_GROUP = 1
