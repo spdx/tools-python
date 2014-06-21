@@ -75,3 +75,62 @@ class TestDocumentBuilder(object):
     def test_comment_value(self):
         comment = '<text>slslss<text'
         self.builder.set_doc_comment(self.document, comment)
+
+
+class TestEntityBuilder(object):
+    def __init__(self):
+        self.builder = builders.EntityBuilder()
+        self.document = Document()
+
+    def test_tool(self):
+        tool_name = 'autoanal-2.0'
+        tool_str = 'Tool: ' + tool_name
+        tool = self.builder.build_tool(self.document, tool_str)
+        assert tool.name == tool_name
+
+    @nose.tools.raises(builders.ValueError)
+    def test_tool_value_error(self):
+        tool_str = 'tool: ll'
+        self.builder.build_tool(self.document, tool_str)
+
+    def test_org_with_email(self):
+        org_name = 'Example'
+        org_email = 'example@example.org'
+        org_str = 'Organization: {0} ( {1} )'.format(org_name, org_email)
+        org = self.builder.build_org(self.document, org_str)
+        assert org.name == org_name
+        assert org.email == org_email
+
+    def test_org(self):
+        org_name = 'Example'
+        org_str = 'Organization: {0} ()'.format(org_name)
+        org = self.builder.build_org(self.document, org_str)
+        assert org.name == org_name
+        assert org.email is None
+
+    @nose.tools.raises(builders.ValueError)
+    def test_org_value_error(self):
+        org_name = 'Example'
+        org_str = 'Organization: {0}'.format(org_name)
+        self.builder.build_org(self.document, org_str)
+
+    def test_person_with_email(self):
+        per_name = 'Bob'
+        per_email = 'bob@example.org'
+        per_str = 'Person: {0} ( {1} )'.format(per_name, per_email)
+        per = self.builder.build_person(self.document, per_str)
+        assert per.name == per_name
+        assert per.email == per_email
+
+    def test_per(self):
+        per_name = 'Bob'
+        per_str = 'Person: {0} ()'.format(per_name)
+        per = self.builder.build_person(self.document, per_str)
+        assert per.name == per_name
+        assert per.email is None
+
+    @nose.tools.raises(builders.ValueError)
+    def test_per_value_error(self):
+        per_name = 'Bob'
+        per_str = 'Person: {0}'.format(per_name)
+        self.builder.build_person(self.document, per_str)
