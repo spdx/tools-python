@@ -27,7 +27,7 @@ class Version(object):
 
     @classmethod
     def from_str(cls, value):
-        m = self.VERS_STR_REGEX.match(value)
+        m = cls.VERS_STR_REGEX.match(value)
         if m is not None:
             return cls(int(m.group(1)), int(m.group(2)))
         else:

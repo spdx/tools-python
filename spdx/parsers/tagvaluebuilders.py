@@ -177,39 +177,49 @@ class CreationInfoBuilder(object):
         super(CreationInfoBuilder, self).__init__()
         self.created_date_set = False
         self.creation_comment_set = False
-        self.lics_list_ver_set = FALSE
+        self.lics_list_ver_set = False
 
     def add_creator(self, doc, creator):
         """Adds a creator to the document's creation info.
-        Returns true if creator is not none.
+        Returns true if creator is valid.
         Creator must be built by an EntityBuilder.
+        Raises ValueError if not a creator type.
         """
-        if creator is not None:
+        if validate_creator(creator):
             doc.creation_info.add_creator(creator)
             return True 
         else:
-            return False
+            raise ValueError('CreationInfo::Creator')
 
     def set_created_date(self, doc, created):
         """Sets created date, Raises CardinalityError if 
         created date already set.
+        Raises ValueError if created is not a date.
         """
         if not self.created_date_set:
+            self.created_date_set = True
             date = utils.datetime_from_iso_format(created)
-            doc.creation_info.created = date
-            created_date_set = True
-            return True
+            if date is not None:
+                doc.creation_info.created = date
+                created_date_set = True
+                return True
+            else:
+                raise ValueError('CreationInfo::Date')
         else:
             raise CardinalityError('CreationInfo::Created')
 
     def set_creation_comment(self, doc, comment):
         """Sets creation comment, Raises CardinalityError if
         comment already set.
+        Raises ValueError if not free form text.
         """
         if not self.creation_comment_set:
-            doc.creation_info.comment = str_from_text(comment)
-            self.creation_comment_set = True
-            return True
+            if validate_creation_comment(comment):
+                doc.creation_info.comment = str_from_text(comment)
+                self.creation_comment_set = True
+                return True
+            else:
+                raise ValueError('CreationInfo::Comment')
         else:
             raise CardinalityError('CreationInfo::Comment')
 
@@ -222,8 +232,9 @@ class CreationInfoBuilder(object):
             vers = version.Version.from_str(value)
             if vers is not None:
                 doc.creation_info.license_list_version = vers
+                return True
             else:
-                raise ValueError('License List Version')
+                raise ValueError('CreationInfo::LicenseListVersion')
         else:
             raise CardinalityError('CreationInfo::LicenseListVersion') 
 
