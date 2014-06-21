@@ -77,3 +77,12 @@ def validate_pkg_desc(value, optional=False):
 
 def validate_doc_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
+def validate_creator(value, optional=False):
+    if value is None:
+        return optional
+    else:
+        return isinstance(value, creationinfo.Creator)
+
+def validate_creation_comment(value, optional=False):
+   return validate_is_free_form_text(value, optional)

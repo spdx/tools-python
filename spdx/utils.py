@@ -19,7 +19,7 @@ def datetime_iso_format(date):
                 date.year, date.month, date.day, date.hour, 
                 date.minute, date.second)
 
-DATE_ISO_REGEX = re.compile(r':(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z', 
+DATE_ISO_REGEX = re.compile(r'(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z', 
                     re.UNICODE)
 DATE_ISO_YEAR_GRP = 1
 DATE_ISO_MONTH_GRP = 2
@@ -31,10 +31,12 @@ DATE_ISO_SEC_GRP = 6
 def datetime_from_iso_format(string):
     match = DATE_ISO_REGEX.match(string)
     if match:
-        date = datetime.datetime(year=match.group(DATE_ISO_YEAR_GRP), 
-            month=match.group(DATE_ISO_MONTH_GRP), day=match.group(DATE_ISO_DAY_GRP),
-            hour=match.group(DATE_ISO_HOUR_GRP), second=match.group(DATE_ISO_SEC_GRP),
-            minute=match.group(DATE_ISO_MIN_GRP))
+        date = datetime.datetime(year=int(match.group(DATE_ISO_YEAR_GRP)), 
+            month=int(match.group(DATE_ISO_MONTH_GRP)), 
+            day=int(match.group(DATE_ISO_DAY_GRP)),
+            hour=int(match.group(DATE_ISO_HOUR_GRP)), 
+            second=int(match.group(DATE_ISO_SEC_GRP)),
+            minute=int(match.group(DATE_ISO_MIN_GRP)))
         return date
     else:
         return None

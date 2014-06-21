@@ -14,6 +14,7 @@
 import nose
 import spdx.parsers.tagvaluebuilders as builders
 from spdx.document import Document, License
+from spdx.version import Version
 
 class TestDocumentBuilder(object):
 
@@ -134,3 +135,52 @@ class TestEntityBuilder(object):
         per_name = 'Bob'
         per_str = 'Person: {0}'.format(per_name)
         self.builder.build_person(self.document, per_str)
+
+class TestCreationInfoBuilder(object):
+    def __init__(self):
+        self.document = Document()
+        self.builder = builders.CreationInfoBuilder()
+        self.entity_builder = builders.EntityBuilder()
+
+    def test_add_creator(self):
+        per_str = 'Person: Bob (bob@example.com)'
+        per = self.entity_builder.build_person(self.document, per_str)
+        assert self.builder.add_creator(self.document, per)
+        assert len(self.document.creation_info.creators) == 1
+        assert self.document.creation_info.creators[0] == per
+
+    @nose.tools.raises(builders.ValueError)
+    def test_invalid_creator_type(self):
+        self.builder.add_creator(self.document, 'hello')
+
+    def test_created(self):
+        created_str = '2010-02-03T00:00:00Z'
+        assert self.builder.set_created_date(self.document, created_str)
+
+    @nose.tools.raises(builders.CardinalityError)
+    def test_more_than_one_created(self):
+        created_str = '2010-02-03T00:00:00Z'
+        self.builder.set_created_date(self.document, created_str)
+        self.builder.set_created_date(self.document, created_str)
+
+    @nose.tools.raises(builders.ValueError)
+    def test_created_value(self):
+        created_str = '2010-02-03T00:00:00'
+        self.builder.set_created_date(self.document, created_str)
+
+    def test_license_list_vers(self):
+        vers_str = '1.2'
+        assert self.builder.set_lics_list_ver(self.document, vers_str)
+        assert  (self.document.creation_info.license_list_version == 
+            Version(1, 2))
+
+    @nose.tools.raises(builders.ValueError)
+    def test_lics_list_ver_value(self):
+        self.builder.set_lics_list_ver(self.document, '1 2')
+
+    @nose.tools.raises(builders.CardinalityError)
+    def test_lics_list_ver_card(self):
+       self.builder.set_lics_list_ver(self.document, '1.2')
+       self.builder.set_lics_list_ver(self.document, '1.3') 
+
+
