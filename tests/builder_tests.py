@@ -184,3 +184,66 @@ class TestCreationInfoBuilder(object):
        self.builder.set_lics_list_ver(self.document, '1.3') 
 
 
+class TestReviewBuilder(object):
+    def __init__(self):
+        self.entity_builder = builders.EntityBuilder()
+        self.builder = builders.ReviewBuilder()
+        self.document = Document()
+
+    @nose.tools.raises(builders.OrderError)
+    def test_reviewed_without_reviewer(self):
+        date_str = '2010-02-03T00:00:00Z'
+        self.builder.add_review_date(self.document, date_str)
+
+    @nose.tools.raises(builders.OrderError)
+    def test_comment_without_reviewer(self):
+        comment = '<text>Comment</text>'
+        self.builder.add_review_comment(self.document, comment)
+
+    @nose.tools.raises(builders.CardinalityError)
+    def test_comment_cardinality(self):
+        comment = '<text>Comment</text>'
+        self.add_reviewer()
+        assert self.builder.add_review_comment(self.document, comment)
+        self.builder.add_review_comment(self.document, comment)
+
+    @nose.tools.raises(builders.CardinalityError)
+    def test_reviewed_cardinality(self):
+        date_str = '2010-02-03T00:00:00Z'
+        self.add_reviewer()
+        assert self.builder.add_review_date(self.document, date_str)
+        self.builder.add_review_date(self.document, date_str)
+
+
+    def test_comment_reset(self):
+        comment = '<text>Comment</text>'
+        self.add_reviewer()
+        assert self.builder.add_review_comment(self.document, comment)
+        self.add_reviewer()
+        assert self.builder.add_review_comment(self.document, comment)
+
+    def test_reviewed_reset(self):
+        date_str = '2010-02-03T00:00:00Z'
+        self.add_reviewer()
+        assert self.builder.add_review_date(self.document, date_str)
+        self.add_reviewer()
+        assert self.builder.add_review_date(self.document, date_str)
+
+    @nose.tools.raises(builders.ValueError)
+    def test_date_value(self):
+        date_str = '2010-2-03T00:00:00Z'
+        self.add_reviewer()
+        self.builder.add_review_date(self.document, date_str)
+
+    @nose.tools.raises(builders.ValueError)
+    def test_comment_value(self):
+        comment = '<text>Comment<text>'
+        self.add_reviewer()
+        self.builder.add_review_comment(self.document, comment)
+
+    def add_reviewer(self):
+        per_str = 'Person: Bob (bob@example.com)'
+        per = self.entity_builder.build_person(self.document, per_str)
+        self.builder.add_reviewer(self.document, per)
+
+

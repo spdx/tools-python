@@ -86,3 +86,9 @@ def validate_creator(value, optional=False):
 
 def validate_creation_comment(value, optional=False):
    return validate_is_free_form_text(value, optional)
+
+def validate_reviewer(value, optional=False):
+    return validate_creator(value, optional)
+
+def validate_review_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
