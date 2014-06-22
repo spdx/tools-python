@@ -201,7 +201,6 @@ class CreationInfoBuilder(object):
             date = utils.datetime_from_iso_format(created)
             if date is not None:
                 doc.creation_info.created = date
-                created_date_set = True
                 return True
             else:
                 raise ValueError('CreationInfo::Date')
@@ -214,9 +213,9 @@ class CreationInfoBuilder(object):
         Raises ValueError if not free form text.
         """
         if not self.creation_comment_set:
+            self.creation_comment_set = True
             if validate_creation_comment(comment):
-                doc.creation_info.comment = str_from_text(comment)
-                self.creation_comment_set = True
+                doc.creation_info.comment = str_from_text(comment)                
                 return True
             else:
                 raise ValueError('CreationInfo::Comment')
@@ -245,39 +244,52 @@ class ReviewBuilder(object):
         self.review_date_set = False
         self.review_comment_set = False
     
-    def add_reviewer(self, reviewer, doc):
+    def add_reviewer(self, doc, reviewer):
         """Adds a reviewer to the SPDX Document.
         Reviwer is an entity created by an EntityBuilder.
+        Raises ValueError if not a valid reviewer type.
         """
-        doc.add_review(review.Review(reviewer=reviewer))
+
         self.review_date_set = False
         self.review_comment_set = False
-        return True
+        if validate_reviewer(reviewer):
+            doc.add_review(review.Review(reviewer=reviewer))
+            return True
+        else:
+            raise ValueError('Review::Reviewer')
 
-    def add_review_date(self, reviewed, doc):
+    def add_review_date(self, doc, reviewed):
         """Sets the review date. Raises CardinalityError if 
         already set. OrderError if no reviewer defined before.
+        Raises ValueError if invalid reviewed value.
         """
         if len(doc.reviews) != 0:
             if not self.review_date_set:
                 self.review_date_set = True
                 date = utils.datetime_from_iso_format(reviewed)
-                doc.reviews[-1].review_date = date
-                return True
+                if date is not None:
+                    doc.reviews[-1].review_date = date
+                    return True
+                else:
+                    raise ValueError('Review::ReviewDate')
             else:
-                raise CardinalityError('ReviewDate')
+                raise CardinalityError('Review::ReviewDate')
         else:
-            raise OrderError('ReviewDate')
+            raise OrderError('Review::ReviewDate')
 
-    def add_review_comment(self, comment, doc):
+    def add_review_comment(self, doc, comment):
         """Sets the review comment. Raises CardinalityError if 
         already set. OrderError if no reviewer defined before.
+        Raises ValueError if comment is not free form text.
         """
         if len(doc.reviews) != 0:
             if not self.review_comment_set:
-                self.review_comment_set = True
-                doc.reviews[-1].comment = str_from_text(comment)
-                return True
+                self.review_comment_set = True            
+                if validate_review_comment(comment):
+                    doc.reviews[-1].comment = str_from_text(comment)
+                    return True
+                else:
+                    raise ValueError('ReviewComment::Comment')
             else:
                 raise CardinalityError('ReviewComment')
         else:
