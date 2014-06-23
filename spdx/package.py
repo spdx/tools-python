@@ -31,7 +31,7 @@ class Package(object):
         description: Optional str.
         files: List of files in package, atleast one.
     """
-    def __init__(self, name, download_location,version="", file_name="", 
+    def __init__(self, name=None, download_location=None,version="", file_name="", 
             supplier=None, originator=None):
         super(Package, self).__init__()
         self.name = name

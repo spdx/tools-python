@@ -246,4 +246,85 @@ class TestReviewBuilder(object):
         per = self.entity_builder.build_person(self.document, per_str)
         self.builder.add_reviewer(self.document, per)
 
+class TestPackageBuilder(object):
+    def __init__(self):
+        self.builder = builders.PackageBuilder()
+        self.document = Document()
+        self.entity_builder = builders.EntityBuilder()
 
+    @nose.tools.raises(builders.CardinalityError)
+    def test_package_cardinality(self):
+        assert self.builder.create_package(self.document, 'pkg1')
+        self.builder.create_package(self.document, 'pkg2')
+
+    def make_package(self):
+        self.builder.create_package(self.document, 'pkg')
+
+    def make_person(self):
+        per_str = 'Person: Bob (bob@example.com)'
+        per = self.entity_builder.build_person(self.document, per_str)
+        return per
+
+    @nose.tools.raises(builders.OrderError)
+    def test_vers_order(self):
+        self.builder.set_pkg_vers(self.document, '1.1')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_file_name_order(self):
+        self.builder.set_pkg_file_name(self.document, 'test.jar')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_supplier_order(self):
+        self.builder.set_pkg_supplier(self.document, self.make_person())
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_originator_order(self):
+        self.builder.set_pkg_originator(self.document, self.make_person())
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_down_loc_order(self):
+        self.builder.set_pkg_down_location(self.document, 'http://example.com/pkg')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_home_order(self):
+        self.builder.set_pkg_home(self.document, 'http://example.com')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_verif_order(self):
+        self.builder.set_pkg_verif_code(self.document, 'some code')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_chksum_order(self):
+        self.builder.set_pkg_chk_sum(self.document, 'some code')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_source_info_order(self):
+        self.builder.set_pkg_source_info(self.document, 'hello')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_licenses_concluded_order(self):
+        self.builder.set_pkg_licenses_concluded(self.document, 'some license')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_lics_from_file_order(self):
+        self.builder.set_pkg_license_from_file(self.document, 'some license')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_lics_decl_order(self):
+        self.builder.set_pkg_license_declared(self.document, 'license')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_lics_comment_order(self):
+        self.builder.set_pkg_license_comment(self.document, '<text>hello</text>')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_cr_text_order(self):
+        self.builder.set_pkg_cr_text(self.document, '<text>Something</text>')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_pkg_summary_order(self):
+        self.builder.set_pkg_summary(self.document, '<text>Something</text>')
+
+    @nose.tools.raises(builders.OrderError)
+    def test_set_pkg_desc_order(self):
+        self.builder.set_pkg_desc(self.document, '<text>something</text>')
