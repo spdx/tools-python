@@ -323,7 +323,7 @@ class PackageBuilder(object):
             doc.package = package.Package(name=name)
             return True
         else:
-            raise CardinalityError('PackageName')
+            raise CardinalityError('Package::Name')
 
     def set_pkg_vers(self, doc, version):
         """Sets package version, if not already set.
@@ -337,7 +337,7 @@ class PackageBuilder(object):
             doc.package.version = version
             return True
         else:
-            raise CardinalityError('PackageVersion')
+            raise CardinalityError('Package::Version')
    
     def set_pkg_file_name(self, doc, name):
         """Sets the package file name, if not already set.
@@ -351,7 +351,7 @@ class PackageBuilder(object):
             doc.package.file_name = name
             return True
         else:
-            raise CardinalityError('PackageFileName')
+            raise CardinalityError('Package::FileName')
         
     def set_pkg_supplier(self, doc, entity):
         """Sets the package supplier, if not already set.
@@ -368,7 +368,7 @@ class PackageBuilder(object):
             else:
                 raise ValueError('Package::Supplier')
         else:
-            raise CardinalityError('PackageSupplier')
+            raise CardinalityError('Package::Supplier')
 
     def set_pkg_originator(self, doc, entity):
         """Sets the package originator, if not already set.
@@ -383,9 +383,9 @@ class PackageBuilder(object):
                 doc.package.originator = entity
                 return True
             else:
-                raise ValueError('Package::Supplier')
+                raise ValueError('Package::Originator')
         else:
-            raise CardinalityError('PackageSupplier')
+            raise CardinalityError('Package::Originator')
 
     def set_pkg_down_location(self, doc, location):
         """Sets the package download location, if not already set.
@@ -399,7 +399,7 @@ class PackageBuilder(object):
             doc.package.download_location = location
             return True
         else:
-            raise CardinalityError('PackageDownloadLocation')
+            raise CardinalityError('Package::DownloadLocation')
 
     def set_pkg_home(self, doc, location):
         """Sets the package homepage location if not already set.
@@ -415,9 +415,9 @@ class PackageBuilder(object):
                 doc.package.homepage = location
                 return True
             else:
-                raise ValueError('HomePage')
+                raise ValueError('Package::HomePage')
         else:
-            raise CardinalityError('PackageHomePage')
+            raise CardinalityError('Package::HomePage')
 
     def set_pkg_verif_code(self, doc, code):
         """Sets the package verification code, if not already set.
@@ -431,7 +431,7 @@ class PackageBuilder(object):
             doc.package.verif_code = code
             return True
         else:
-            raise CardinalityError('PackageVerificationCode')
+            raise CardinalityError('Package::VerificationCode')
 
     def set_pkg_chk_sum(self, doc, chk_sum):
         """Sets the package check sum, if not already set.
@@ -445,25 +445,29 @@ class PackageBuilder(object):
             doc.package.check_sum = chk_sum
             return True
         else:
-            raise CardinalityError('PackageChecksum')
+            raise CardinalityError('Package::CheckSum')
 
     def set_pkg_source_info(self, doc, text):
         """Sets the package's source information, if not already set.
         text - Free form text.
         Raises CardinalityError if already defined.
         Raises OrderError if no package previously defined.
+        ValueError if text is not free form text.
         """
         self.assert_package_exists()
         if not self.package_source_info_set:
             self.package_source_info_set = True
-            doc.package.source_info = str_from_text(text)
-            return True
+            if validate_pkg_src_info(text):
+                doc.package.source_info = str_from_text(text)
+                return True
+            else:
+                raise ValueError('Pacckage::SourceInfo')
         else:
-            raise CardinalityError('PackageSourceInfo')
+            raise CardinalityError('Package::SourceInfo')
 
     def set_pkg_licenses_concluded(self, doc, licenses):
         """Sets the package's concluded licenses.
-        text - Free form text.
+        licenses - License info.
         Raises CardinalityError if already defined.
         Raises OrderError if no package previously defined.
         Raises ValueError if data malformed.
@@ -477,7 +481,7 @@ class PackageBuilder(object):
             else:
                 raise ValueError('Package::ConcludedLicenses')
         else:
-            raise CardinalityError('PackageLicenseConcluded')
+            raise CardinalityError('Package::ConcludedLicenses')
 
     def set_pkg_license_from_file(self, doc, license):
         """Adds a license from a file to the package.
@@ -495,7 +499,7 @@ class PackageBuilder(object):
                     document.License.from_identifier(license))
             return True
         else:
-            raise ValueError('LicensesFromFile')
+            raise ValueError('Package::LicensesFromFile')
 
     def set_pkg_license_declared(self, doc, license):
         """Sets the package's declared license.
@@ -518,12 +522,16 @@ class PackageBuilder(object):
         """Sets the package's license comment.
         Raises OrderError if no package previously defined.
         Raises CardinalityError if already set.
+        Raises ValueError if text is not free form text.
         """
         self.assert_package_exists()
         if not self.package_license_comment_set:
             self.package_license_comment_set = True
-            doc.package.license_comment = str_from_text(text)
-            return True
+            if validate_pkg_lics_comment(text):
+                doc.package.license_comment = str_from_text(text)
+                return True
+            else:
+                raise ValueError('Package::LicenseComment')
         else:
             raise CardinalityError('Package::LicenseComment')
 

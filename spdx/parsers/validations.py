@@ -92,3 +92,15 @@ def validate_reviewer(value, optional=False):
 
 def validate_review_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
+def validate_pkg_src_info(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+def validate_pkg_lics_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+def validate_lics_conc(value, optional=False):
+    return True #TODO implement
+
+def validate_lics_declared(value, optional=False):
+    return True #TODO implement
