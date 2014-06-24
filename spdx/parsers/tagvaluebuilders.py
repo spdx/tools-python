@@ -18,6 +18,7 @@ from .. import creationinfo
 from .. import utils
 from .. import review
 from .. import package
+from .. import file
 from validations import *
 
 
@@ -594,6 +595,226 @@ class PackageBuilder(object):
 class FileBuilder(object):
     def __init__(self):
         super(FileBuilder, self).__init__()
+        self.reset_file_stat()
+
+    def set_file_name(self, doc, name):
+        """Raises OrderError if no package defined.
+        """
+        if self.has_package(doc):
+            doc.package.files.append(file.File(name))
+            self.reset_file_stat()
+            return True
+        else:
+            raise OrderError('File::Name')
+
+    def set_file_comment(self, doc, text):
+        """
+        Raises OrderError if no package or no file defined.
+        Raises CardinalityError if more than one comment set.
+        Raises ValueError if text is not free form text.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_comment_set:
+                self.file_comment_set = True
+                if validate_file_comment(text):
+                    self.file(doc).comment = str_from_text(text)
+                    return True
+                else:
+                    raise ValueError('File::Comment')
+            else:
+                raise CardinalityError('File::Comment')
+        else:
+            raise OrderError('File::Comment')
+
+    def set_file_type(self, doc, type):
+        """
+        Raises OrderError if no package or file defined.
+        Raises CardinalityError if more than one type set.
+        Raises ValueError if type is unknown.
+        """
+        type_dict = {
+        'SOURCE' : file.FileType.SOURCE,
+        'BINARY' : file.FileType.BINARY,
+        'ARCHIVE' : file.FileType.ARCHIVE,
+        'OTHER' : file.FileType.OTHER
+        }
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_type_set:
+                self.file_type_set = True
+                if type in type_dict.keys():
+                    self.file(doc).type = type_dict[type]
+                    return True
+                else:
+                    raise ValueError('File::Type')
+            else:
+                raise CardinalityError('File::Type')
+        else:
+            raise OrderError('File::Type')
+
+    def set_file_chksum(self, doc, chksum):
+        """
+        Raises OrderError if no package or file defined.
+        Raises CardinalityError if more than one chksum set.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_chksum_set:
+                self.file_chksum_set = True
+                self.file(doc).chk_sum = chksum
+                return True
+            else:
+                raise CardinalityError('File::CheckSum')
+        else:
+            raise OrderError('File::CheckSum')
+
+    def set_concluded_license(self, doc, license):
+        """
+        Raises OrderError if no package or file defined.
+        Raises CardinalityError if already set.
+        Raises ValueError if malformed.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_conc_lics_set:
+                self.file_conc_lics_set = True
+                if validate_file_lics_conc(license):
+                    self.file(doc).conc_lics = license
+                    return True
+                else:
+                    raise ValueError('File::ConcludedLicense')
+            else:
+                raise CardinalityError('File::ConcludedLicense')
+        else:
+            raise OrderError('File::ConcludedLicense')
+
+    def set_file_license_in_file(self, doc, license):
+        """
+        Raises OrderError if no package or file defined.
+        Raises ValueError if malformed value.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if validate_file_lics_in_file(license):
+                self.file(doc).licenses_in_file.append(license)
+                return True
+            else:
+                raise ValueError('File::LicenseInFile')
+        else:
+            raise OrderError('File::LicenseInFile')
+
+    def set_file_license_comment(self, doc, text):
+        """
+        Raises OrderError if no package or file defined.
+        Raises ValueError if text is not free form text.
+        Raises CardinalityError if more than one per file.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_license_comment_set:
+                self.file_license_comment_set = True
+                if validate_file_lics_comment(text):
+                    self.file(doc).license_comment = str_from_text(text)
+                else:
+                    raise ValueError('File::LicenseComment')
+            else:
+                raise CardinalityError('File::LicenseComment')
+        else:
+            raise OrderError('File::LicenseComment')
+
+
+    def set_file_copyright(self, doc, text):
+        """Raises OrderError if no package or file defined.
+        Raises ValueError if not free form text or NONE or NO_ASSERT.
+        Raises CardinalityError if more than one.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_copytext_set:
+                self.file_copytext_set = True
+                if validate_file_cpyright(text):
+                    if type(text) is str:
+                       self.file(doc).copyright = str_from_text(text)
+                    else:
+                       self.file(doc).copyright = text # None or NoAssert
+                    
+                    return True
+                else:
+                    raise ValueError('File::CopyRight')
+            else:
+                raise CardinalityError('File::CopyRight')
+        else:
+            raise OrderError('File::CopyRight')
+
+    def set_file_notice(self, doc, text):
+        """Raises OrderError if no package or file defined.
+        Raises ValueError if not free form text.
+        Raises CardinalityError if more than one.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_notice_set:
+                self.file_notice_set = True
+                if validate_file_notice(text):
+                    self.file(doc).notice = str_from_text(text)
+                else:
+                    raise ValueError('File::Notice')
+            else:
+                raise CardinalityError('File::Notice')
+        else:
+            raise OrderError('File::Notice')
+
+    def add_file_contribution(self, doc, value):
+        """Raises OrderError if no package or file defined.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            self.file(doc).contributers.append(value)
+        else:
+            raise OrderError('File::Contributor')
+
+    def add_file_dep(self, doc, value):
+        """Raises OrderError if no package or file defined.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            self.file(doc).dependencies.append(value)
+        else:
+            raise OrderError('File::Dependency')
+
+    def set_file_artifact_of_project_name(self, doc, value):
+      """Raises OrderError if no package or file defined.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            self.file(doc).artifact_of_project_name.append(value)
+        else:
+            raise OrderError('File::AoFProfjectName')
+
+    def set_file_artificat_of_project_home(self, doc, value):
+        """Raises OrderError if no package or file defined.
+          """
+          if self.has_package(doc) and self.has_file(doc):
+              self.file(doc).artifact_of_project_home.append(value)
+          else:
+              raise OrderError('File::AoFProfjectHome')
+
+    def set_file_artificat_of_project_uri(self, doc, value):
+        """Raises OrderError if no package or file defined.
+          """
+          if self.has_package(doc) and self.has_file(doc):
+              self.file(doc).artifact_of_project_uri.append(value)
+          else:
+              raise OrderError('File::AoFProfjectUri')
+
+
+    def file(doc):
+        return doc.package.files[-1]
+
+    def has_file(self, doc):
+        return len(doc.package.files) != 0
+
+    def has_package(self, doc):
+        return doc.package is not None
+
+    def reset_file_stat(self):
+        self.file_comment_set = False
+        self.file_type_set = False
+        self.file_chksum_set = False
+        self.file_conc_lics_set = False
+        self.file_license_comment_set = False
+        self.file_notice_set = False
+
 
 class LicenseBuilder(object):
     def __init__(self):
