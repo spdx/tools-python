@@ -39,7 +39,7 @@ ERROR_MESSAGES = {
     'PKG_VERSION_VALUE' : 'PackageVersion must be single line of text, line: {0}',
     'PKG_FILE_NAME_VALUE' : 'PackageFileName must be single line of text, line: {0}',
     'PKG_SUPPL_VALUE' : 'PackageSupplier must be Organization, Person or NOASSERTIONS, line: {0}',
-
+    'PKG_ORIG_VALUE' : 'PackageOriginator must be Organization, Person or NOASSERTIONS, line: {0}',
 }
 
 class Parser(object):
@@ -51,11 +51,11 @@ class Parser(object):
         self.logger = logger
         self.error = False
 
-    def p_start(self, p):
+    def p_start_1(self, p):
         'start : start attrib '    
         pass
 
-    def p_start(self, p):
+    def p_start_2(self, p):
         'start : attrib '
         pass
 
@@ -77,7 +77,7 @@ class Parser(object):
                   | PKG_SRC_INFO
                   | pkg_file_name
                   | pkg_supplier
-                  | PKG_ORIG
+                  | pkg_orig
                   | PKG_CHKSUM
                   | PKG_VERF_CODE
                   | PKG_DESC
@@ -104,6 +104,32 @@ class Parser(object):
                   | LICS_COMMENT
         """
         pass
+
+    def p_pkg_orig_1(self, p):
+        """pkg_orig : PKG_ORIG pkg_supplier_values"""
+        try:
+            self.builder.set_pkg_originator(self.document, p[2])
+        except OrderError:
+           self.error = True
+           msg = ERROR_MESSAGES['A_BEFORE_B'].format('PackageOriginator', 
+               'PackageName', p.lineno(1)) 
+           self.logger.log(msg)
+        except ValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['PKG_ORIG_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.error = True
+            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageOriginator',
+                p.lineno(1))
+            self.logger.log(msg)
+
+    def p_pkg_orig_2(self, p):
+        """pkg_orig : PKG_ORIG error"""
+        self.error = True
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_ORIG_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
 
     def p_pkg_supplier_1(self, p):
         """pkg_supplier : PKG_SUPPL pkg_supplier_values"""

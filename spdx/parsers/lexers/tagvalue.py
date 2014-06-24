@@ -72,7 +72,6 @@ class Lexer(object):
      'BINARY' : 'BINARY',
      'ARCHIVE' : 'ARCHIVE',
      'OTHER'  : 'OTHER'
-
     }
 
     tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
