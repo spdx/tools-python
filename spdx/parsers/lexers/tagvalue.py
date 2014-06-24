@@ -110,6 +110,17 @@ class Lexer(object):
         t.value = t.value[1:].strip()
         return t
 
+    def t_LINE(self, t):
+       r':.+'
+       t.value = t.value[1:].strip()
+       return t
+
+    def t_KEYWORD(self, t):
+        r'[a-zA-Z]+'
+        t.type = self.reserved.get(t.value,'UNKNOWN_TAG')
+        t.value = t.value.strip()
+        return t
+
     def t_COMMENT(self, t):
         r'\#.*'
         pass         
@@ -119,19 +130,8 @@ class Lexer(object):
         t.lexer.lineno += len(t.value)
 
     def t_whitespace(self, t):
-        r'(\s|\t)+'
+        r'\s+'
         pass
-
-    def t_KEYWORD(self, t):
-        r'[a-zA-Z]+'
-        t.type = self.reserved.get(t.value,'UNKNOWN_TAG')
-        t.value = t.value.strip()
-        return t
-
-    def t_LINE(self, t):
-       r':.+'
-       t.value = t.value[1:].strip()
-       return t
 
     def build(self, **kwargs):
         self.lexer = lex.lex(module=self, **kwargs)

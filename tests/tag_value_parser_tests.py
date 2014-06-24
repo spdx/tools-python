@@ -14,6 +14,9 @@
 import nose
 from spdx.parsers.tagvalue import Parser
 from spdx.parsers.lexers.tagvalue import Lexer
+from spdx.parsers.tagvaluebuilders import Builder
+from spdx.parsers.loggers import StandardLogger
+from spdx.version import Version
 
 class TestLexer(object):
     def __init__(self):
@@ -22,14 +25,14 @@ class TestLexer(object):
 
     def test_document(self):
         data = '''
-        SPDXVersion: SPDX-1.1
+        SPDXVersion: SPDX-1.2
         # Comment.
         DataLicense: CC0-1.0
         DocumentComment: <text>This is a sample spreadsheet</text>
         '''
         self.l.input(data)
         self.token_assert_helper(self.l.token(), 'DOC_VERSION', 'SPDXVersion', 2)
-        self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-1.1', 2)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-1.2', 2)
         self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense', 4)
         self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 4)
         self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 5)
@@ -108,8 +111,15 @@ class TestLexer(object):
 class TestParser(object):
     
     def __init__(self):
-        self.p = Parser(None, None)
+        self.p = Parser(Builder(), StandardLogger())
         self.p.build()
 
-    def test_file(self):
-        assert 1 == 1
+    def test_doc(self):
+        test_str = '\n'.join(['SPDXVersion: SPDX-1.2',
+        'DataLicense: CC0-1.0', 
+        'DocumentComment: <text>This is a sample spreadsheet</text>'
+        ])
+        document, error = self.p.parse(test_str)
+        assert document is not None
+        assert not error
+        assert document.version == Version(major=1, minor=2)

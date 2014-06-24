@@ -774,7 +774,7 @@ class FileBuilder(object):
             raise OrderError('File::Dependency')
 
     def set_file_artifact_of_project_name(self, doc, value):
-      """Raises OrderError if no package or file defined.
+        """Raises OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
             self.file(doc).artifact_of_project_name.append(value)
@@ -783,19 +783,19 @@ class FileBuilder(object):
 
     def set_file_artificat_of_project_home(self, doc, value):
         """Raises OrderError if no package or file defined.
-          """
-          if self.has_package(doc) and self.has_file(doc):
-              self.file(doc).artifact_of_project_home.append(value)
-          else:
-              raise OrderError('File::AoFProfjectHome')
+        """
+        if self.has_package(doc) and self.has_file(doc):
+          self.file(doc).artifact_of_project_home.append(value)
+        else:
+          raise OrderError('File::AoFProfjectHome')
 
     def set_file_artificat_of_project_uri(self, doc, value):
         """Raises OrderError if no package or file defined.
-          """
-          if self.has_package(doc) and self.has_file(doc):
-              self.file(doc).artifact_of_project_uri.append(value)
-          else:
-              raise OrderError('File::AoFProfjectUri')
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            self.file(doc).artifact_of_project_uri.append(value)
+        else:
+            raise OrderError('File::AoFProfjectUri')
 
 
     def file(doc):

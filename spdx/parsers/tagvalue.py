@@ -13,8 +13,10 @@
 #    limitations under the License.
 import re
 from lexers.tagvalue import Lexer
+from tagvaluebuilders import CardinalityError, OrderError, ValueError, IncompatibleVersionError
 from ply import yacc
 from .. import document
+from .. import utils
 
 ERROR_MESSAGES = {
     'TOOL_VALUE' : 'Invalid tool value {0} at line: {1}',
@@ -33,6 +35,11 @@ ERROR_MESSAGES = {
     'REVIEW_DATE_VALUE_TYPE' : 'ReviewDate value must be date in ISO 8601 format, line: {0}',
     'REVIEW_COMMENT_VALUE_TYPE' : 'ReviewComment value must be free form text between <text></text> tags, line:{0}',
     'A_BEFORE_B' : '{0} Can not appear before {1}, line: {2}',
+    'PACKAGE_NAME_VALUE' : 'PackageName must be single line of text, line: {0}',
+    'PKG_VERSION_VALUE' : 'PackageVersion must be single line of text, line: {0}',
+    'PKG_FILE_NAME_VALUE' : 'PackageFileName must be single line of text, line: {0}',
+    'PKG_SUPPL_VALUE' : 'PackageSupplier must be Organization, Person or NOASSERTIONS, line: {0}',
+
 }
 
 class Parser(object):
@@ -63,13 +70,13 @@ class Parser(object):
                   | reviewer
                   | review_date
                   | review_comment
-                  | PKG_NAME
-                  | PKG_VERSION
+                  | package_name
+                  | package_version
                   | PKG_DOWN
                   | PKG_SUM
                   | PKG_SRC_INFO
-                  | PKG_FILE_NAME
-                  | PKG_SUPPL
+                  | pkg_file_name
+                  | pkg_supplier
                   | PKG_ORIG
                   | PKG_CHKSUM
                   | PKG_VERF_CODE
@@ -96,8 +103,96 @@ class Parser(object):
                   | LICS_CRS_REG
                   | LICS_COMMENT
         """
+        pass
+
+    def p_pkg_supplier_1(self, p):
+        """pkg_supplier : PKG_SUPPL pkg_supplier_values"""
+        try:
+            self.builder.set_pkg_supplier(self.document, p[2])
+        except OrderError:
+            self.error = True
+            msg = ERROR_MESSAGES['A_BEFORE_B'].format('PackageSupplier', 
+                'PackageName', p.lineno(1)) 
+            self.logger.log(msg)
+        except CardinalityError:
+           self.error = True
+           msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageSupplier',
+               p.lineno(1))
+           self.logger.log(msg)
+        except ValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['PKG_SUPPL_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+
+    def p_pkg_supplier_2(self, p):
+        """pkg_supplier : PKG_SUPPL error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_SUPPL_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+ 
+
+    def p_pkg_supplier_values_1(self, p):
+        """pkg_supplier_values : NO_ASSERT"""
+        p[0] = utils.NoAssert()
+        
+    def p_pkg_supplier_values_2(self, p):
+        """pkg_supplier_values : entity"""
         p[0] = p[1]
 
+    def p_pkg_file_name(self, p):
+        """pkg_file_name : PKG_FILE_NAME LINE"""
+        try:
+            self.builder.set_pkg_file_name(self.document, p[2])
+        except OrderError:
+            self.error = True
+            msg = ERROR_MESSAGES['A_BEFORE_B'].format('PackageFileName', 
+                'PackageName', p.lineno(1)) 
+            self.logger.log(msg)
+        except CardinalityError:
+            self.error = True
+            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageFileName',
+                p.lineno(1))
+            self.logger.log(msg)
+
+    def p_pkg_file_name_1(self, p):
+        """pkg_file_name : PKG_FILE_NAME error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_FILE_NAME_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_package_version(self, p):
+        """package_version : PKG_VERSION LINE"""
+        try:
+            self.builder.set_pkg_vers(self.document, p[2])
+        except OrderError:
+            self.error = True
+            msg = ERROR_MESSAGES['A_BEFORE_B'].format('PackageVersion', 'PackageName', 
+                p.lineno(1))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.error = True
+            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageVersion', p.lineno(1))
+
+    def p_package_version_1(self, p):
+        """package_version : PKG_VERSION error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_VERSION_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_package_name(self, p):
+        """package_name : PKG_NAME LINE"""
+        try:
+            self.builder.create_package(self.document, p[2])
+        except CardinalityError:
+            self.error = True
+            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageName', p.lineno(1))
+            self.logger.log(msg)
+
+    def p_package_name_1(self, p):
+        """package_name : PKG_NAME error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PACKAGE_NAME_VALUE'].format(p.lineno(1))
+        self.logger.log(msg) 
 
     def p_reviewer(self, p):
         """reviewer : REVIEWER entity"""
@@ -207,7 +302,7 @@ class Parser(object):
     def p_spdx_version(self, p):
         """spdx_version : DOC_VERSION LINE"""
         try:
-            self.builder.set_doc_version(doc=self.document, version=p[2])
+            self.builder.set_doc_version(self.document, p[2])
         except CardinalityError, e:
             self.error = True
             msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('SPDXVersion', p.lineno(1))
@@ -220,8 +315,9 @@ class Parser(object):
             self.error = True
             self.logger.log('SPDXVersion must be SPDX-1.2 found {0}.'.format(value))
             
-    def p_spdx_version(self, p):
+    def p_spdx_version_1(self, p):
         """spdx_version : DOC_VERSION error"""
+        print p[2]
         self.error = True
         msg = ERROR_MESSAGES['DOC_VERSION_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
@@ -310,7 +406,7 @@ class Parser(object):
         self.document = document.Document()
         self.error = False
         self.yacc.parse(text, lexer=self.lex)
-        return self.document
+        return self.document, self.error
 
 
 
