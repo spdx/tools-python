@@ -67,7 +67,12 @@ class Lexer(object):
      # Common 
      'NOASSERTION' : 'NO_ASSERT',
      'UNKNOWN' : 'UN_KNOWN',
-     'NONE' : 'NONE'
+     'NONE' : 'NONE',
+     'SOURCE' : 'SOURCE',
+     'BINARY' : 'BINARY',
+     'ARCHIVE' : 'ARCHIVE',
+     'OTHER'  : 'OTHER'
+
     }
 
     tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',

@@ -67,7 +67,12 @@ def validate_pkg_homepage(value, optional=False):
         return False
 
 def validate_pkg_cr_text(value, optional=False):
-    assert False
+    if validate_is_free_form_text(value, optional):
+        return True
+    elif type(value) is utils.NoAssert:
+        return True
+    elif value is None:
+        return True
 
 def validate_pkg_summary(value, optional=False):
     return validate_is_free_form_text(value, optional)
@@ -99,8 +104,32 @@ def validate_pkg_src_info(value, optional=False):
 def validate_pkg_lics_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
+def validate_file_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+def validate_file_lics_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+def validate_file_cpyright(value, optional=False):
+    if validate_is_free_form_text(value, optional):
+        return True
+    elif type(value) is utils.NoAssert:
+        return True
+    elif value is None:
+        return True
+
+def validate_file_notice(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
 def validate_lics_conc(value, optional=False):
     return True #TODO implement
 
 def validate_lics_declared(value, optional=False):
     return True #TODO implement
+
+def validate_file_lics_conc(value, optional=False):
+    return True #TODO implement
+
+def validate_file_lics_in_file(value, optional=False):
+    return True #TODO implement
+
