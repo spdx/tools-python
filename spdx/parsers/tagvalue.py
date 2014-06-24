@@ -105,24 +105,32 @@ class Parser(object):
         """
         pass
 
+    def more_than_one_error(tag, line):
+        self.error = True
+        msg = ERROR_MESSAGES['MORE_THAN_ONE'].format(tag, line)
+        self.logger.log(msg)
+
+    def order_error(first_tag, second_tag, line):
+        """Reports an OrderError. Error message will say that
+        first_tag came before second_tag.
+        """
+        self.error = True
+        msg = ERROR_MESSAGES['A_BEFORE_B'].format(first_tag, 
+            second_tag, line) 
+        self.logger.log(msg)
+
     def p_pkg_orig_1(self, p):
         """pkg_orig : PKG_ORIG pkg_supplier_values"""
         try:
             self.builder.set_pkg_originator(self.document, p[2])
         except OrderError:
-           self.error = True
-           msg = ERROR_MESSAGES['A_BEFORE_B'].format('PackageOriginator', 
-               'PackageName', p.lineno(1)) 
-           self.logger.log(msg)
+           order_error('PackageOriginator', 'PackageName', line)
         except ValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_ORIG_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
         except CardinalityError:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageOriginator',
-                p.lineno(1))
-            self.logger.log(msg)
+            more_than_one_error('PackageOriginator', p.lineno(1))
 
     def p_pkg_orig_2(self, p):
         """pkg_orig : PKG_ORIG error"""
@@ -136,15 +144,9 @@ class Parser(object):
         try:
             self.builder.set_pkg_supplier(self.document, p[2])
         except OrderError:
-            self.error = True
-            msg = ERROR_MESSAGES['A_BEFORE_B'].format('PackageSupplier', 
-                'PackageName', p.lineno(1)) 
-            self.logger.log(msg)
+            order_error('PackageSupplier', 'PackageName', line)
         except CardinalityError:
-           self.error = True
-           msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageSupplier',
-               p.lineno(1))
-           self.logger.log(msg)
+           more_than_one_error('PackageSupplier', p.lineno(1))
         except ValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_SUPPL_VALUE'].format(p.lineno(1))
@@ -170,15 +172,9 @@ class Parser(object):
         try:
             self.builder.set_pkg_file_name(self.document, p[2])
         except OrderError:
-            self.error = True
-            msg = ERROR_MESSAGES['A_BEFORE_B'].format('PackageFileName', 
-                'PackageName', p.lineno(1)) 
-            self.logger.log(msg)
+            order_error('PackageFileName', 'PackageName', line)
         except CardinalityError:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageFileName',
-                p.lineno(1))
-            self.logger.log(msg)
+            more_than_one_error('PackageFileName', p.lineno(1))
 
     def p_pkg_file_name_1(self, p):
         """pkg_file_name : PKG_FILE_NAME error"""
@@ -186,20 +182,16 @@ class Parser(object):
         msg = ERROR_MESSAGES['PKG_FILE_NAME_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
-    def p_package_version(self, p):
+    def p_package_version_1(self, p):
         """package_version : PKG_VERSION LINE"""
         try:
             self.builder.set_pkg_vers(self.document, p[2])
         except OrderError:
-            self.error = True
-            msg = ERROR_MESSAGES['A_BEFORE_B'].format('PackageVersion', 'PackageName', 
-                p.lineno(1))
-            self.logger.log(msg)
+            order_error('PackageVersion', 'PackageName', line)
         except CardinalityError:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageVersion', p.lineno(1))
+          more_than_one_error('PackageVersion', p.lineno(1))
 
-    def p_package_version_1(self, p):
+    def p_package_version_2(self, p):
         """package_version : PKG_VERSION error"""
         self.error = True
         msg = ERROR_MESSAGES['PKG_VERSION_VALUE'].format(p.lineno(1))
@@ -210,9 +202,7 @@ class Parser(object):
         try:
             self.builder.create_package(self.document, p[2])
         except CardinalityError:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('PackageName', p.lineno(1))
-            self.logger.log(msg)
+           more_than_one_error('PackageName', p.lineno(1))
 
     def p_package_name_1(self, p):
         """package_name : PKG_NAME error"""
@@ -235,15 +225,10 @@ class Parser(object):
         """review_date : REVIEW_DATE DATE"""
         try:
             self.builder.add_review_date(reviewed=p[2], doc=self.document)
-        except CardinalityError, e:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('ReviewDate', p.lineno(1))
-            self.logger.log(msg)
-        except OrderError, e:
-            self.error = True
-            msg = ERROR_MESSAGES['A_BEFORE_B'].format('ReviewDate', 'Reviewer', 
-                p.lineno(1))
-            self.logger.log(msg)
+        except CardinalityError:
+            more_than_one_error('ReviewDate', p.lineno(1))
+        except OrderError:
+            order_error('ReviewDate', 'Reviewer', line)
 
     def p_review_date_1(self, p):
         """review_date : REVIEW_DATE error"""
@@ -255,15 +240,10 @@ class Parser(object):
         """review_comment : REVIEW_COMMENT TEXT"""
         try:
             self.builder.add_review_comment(comment=p[2], doc=self.document)
-        except CardinalityError, e:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('ReviewComment', p.lineno(1))
-            self.logger.log(msg)
-        except OrderError, e:
-            self.error = True
-            msg = ERROR_MESSAGES['A_BEFORE_B'].format('ReviewComment', 'Reviewer', 
-                p.lineno(1))
-            self.logger.log(msg)
+        except CardinalityError:
+            more_than_one_error('ReviewComment', p.lineno(1))
+        except OrderError:
+            order_error('ReviewComment', 'Reviewer', line)
 
     def p_review_comment_1(self, p):
         """review_comment : REVIEW_COMMENT error"""
@@ -275,14 +255,12 @@ class Parser(object):
         """locs_list_ver : LIC_LIST_VER LINE"""
         try:
             self.builder.set_lics_list_ver(doc=self.document, value=p[2])
-        except ValueError, e:
+        except ValueError:
             self.error = True
             msg = ERROR_MESSAGES['LIC_LIST_VER_VALUE'].format(p[2], p.lineno(2))
             self.logger.log(msg)
-        except CardinalityError, e:
-            self.error = True
-            msg = msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('LicenseListVersion', p.lineno(1))
-            self.logger.log(msg)
+        except CardinalityError:
+            more_than_one_error('LicenseListVersion', p.lineno(1))
 
     def p_lics_list_ver_1(self, p):
         """locs_list_ver : LIC_LIST_VER error"""
@@ -295,10 +273,8 @@ class Parser(object):
         """doc_comment : DOC_COMMENT TEXT"""
         try:
             self.builder.set_doc_comment(doc=self.document, comment=p[2])
-        except CardinalityError, e:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('DocumentComment', p.lineno(1))
-            self.logger.log(msg)        
+        except CardinalityError:
+            more_than_one_error('DocumentComment', p.lineno(1))     
 
     def p_doc_comment_1(self, p):
         """doc_comment : DOC_COMMENT error"""    
@@ -310,14 +286,12 @@ class Parser(object):
         """data_lics : DOC_LICENSE LINE"""
         try:
             self.builder.set_doc_data_lics(doc=self.document, lics=p[2])
-        except ValueError, e:
+        except ValueError:
             self.error = True
             msg = ERROR_MESSAGES['DOC_LICENSE_VALUE'].format(p[2], p.lineno(2))
             self.logger.log(msg)
-        except CardinalityError, e:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('DataLicense', p.lineno(1))
-            self.logger.log(msg)
+        except CardinalityError:
+           more_than_one_error('DataLicense', p.lineno(1))
 
     def p_data_license_1(self, p):
         """data_lics : DOC_LICENSE error"""
@@ -329,15 +303,13 @@ class Parser(object):
         """spdx_version : DOC_VERSION LINE"""
         try:
             self.builder.set_doc_version(self.document, p[2])
-        except CardinalityError, e:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('SPDXVersion', p.lineno(1))
-            self.logger.log(msg)
-        except ValueError, e:
+        except CardinalityError:
+            more_than_one_error('SPDXVersion', p.lineno(1))
+        except ValueError:
             self.error = True
             msg = ERROR_MESSAGES['DOC_VERSION_VALUE'].format(p[2], p.lineno(1))
             self.logger.log(msg)
-        except IncompatibleVersionError, e:
+        except IncompatibleVersionError:
             self.error = True
             self.logger.log('SPDXVersion must be SPDX-1.2 found {0}.'.format(value))
             
@@ -352,10 +324,8 @@ class Parser(object):
         """creator_comment : CREATOR_COMMENT TEXT"""
         try:
             self.builder.set_creation_comment(doc=self.document, comment=p[2])
-        except CardinalityError, e:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('CreatorComment', p.lineno(1))
-            self.logger.log(msg)
+        except CardinalityError:
+           more_than_one_error('CreatorComment', p.lineno(1))
 
     def p_creator_comment_1(self, p):
         """creator_comment : CREATOR_COMMENT error"""
@@ -378,10 +348,8 @@ class Parser(object):
         """created : CREATED DATE"""
         try:
             self.builder.set_created_date(doc=self.document, date=p[2])
-        except CardinalityError, e:
-            self.error = True
-            msg = ERROR_MESSAGES['MORE_THAN_ONE'].format('Created', p.lineno(1))
-            self.logger.log(msg)
+        except CardinalityError:
+           more_than_one_error('Created', p.lineno(1))
 
     def p_created_2(self, p):
         """created : CREATED error"""
@@ -394,7 +362,7 @@ class Parser(object):
         """
         try:
             p[0] = self.builder.build_tool(doc=self.document, entity=p[1])
-        except ValueError, e: 
+        except ValueError: 
             msg = ERROR_MESSAGES['TOOL_VALUE'].format(p[1], p.lineno(1))
             self.logger.log(msg)
             self.error = True
@@ -405,7 +373,7 @@ class Parser(object):
         """
         try:
             p[0] = self.builder.build_org(doc=self.document, entity=p[1])
-        except ValueError, e:
+        except ValueError:
             msg = ERROR_MESSAGES['ORG_VALUE'].format(p[1], p.lineno(1))
             self.logger.log(msg)
             self.error = True
@@ -417,7 +385,7 @@ class Parser(object):
         """
         try:
             p[0] = self.builder.build_person(doc=self.document, entity=p[1])
-        except ValueError, e:
+        except ValueError:
             msg = ERROR_MESSAGES['PERSON_VALUE'].format(p[1], p.lineno(1))
             self.logger.log(msg)
             self.error = True
