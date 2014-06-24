@@ -14,7 +14,7 @@ How to run tests:
 =================
 From the project root directory.
 
-run: `nosetests` 
+run: 'nosetests'
 
 Dependencies:
 =============
