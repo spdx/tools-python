@@ -12,16 +12,16 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-class StadnardLogger(object):
+class StandardLogger(object):
     def __init__(self):
-        super(StadnardLogger, self).__init__()
+        super(StandardLogger, self).__init__()
     
     def log(self, msg):
         print msg
 
 class FileLogger(object):
     def __init__(self, file):
-        super(StadnardLogger, self).__init__()
+        super(FileLogger, self).__init__()
         self.dest = file
 
     def log(self, msg):
