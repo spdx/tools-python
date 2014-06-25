@@ -12,6 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import config
+from version import Version
 from creationinfo import CreationInfo
 from package import Package
 
@@ -62,20 +63,72 @@ class Document(object):
         package: Package described by this document. Mandatory, one. Type: Package
         extracted_licenses: List of licenses extracted that are not part of the
             SPDX license list. Optional, many. Type: License.
-        files: List of files referenced by this SPDX document. atleast one mandatory.
         reviews: SPDX document review information, Optional zero or more. 
             Type: Review.
     """
     def __init__(self, version=None, data_license=None, comment=None, 
-                creation_info=CreationInfo(), package=None):
+                 package=None):
         super(Document, self).__init__()
         self.version = version
         self.data_license = data_license
         self.comment = comment
-        self.creation_info = creation_info
+        self.creation_info = CreationInfo()
         self.package = package
         self.extracted_licenses = []
         self.reviews = []
 
     def add_review(self, review):
         self.reviews.append(review)
+
+    def validate(self, messages=[]):
+        return ( self.validate_version(messages) 
+            & self.validate_data_lics(messages)
+            & self.validate_creation_info(messages) 
+            & self.validate_package(messages)
+            & self.validate_extracted_licenses(messages)
+            & self.validate_reviews(messages) )
+
+    def validate_version(self, messages):
+        if self.version is not None:
+            if self.version == Version(1, 2):
+                return True
+            else:
+                messages.append('SPDX Version must be 1.2')
+                return False
+        else:
+            messages.append('Document has no version.')
+            return False
+
+    def validate_data_lics(self, messages):
+        if self.data_license is not None:
+            if self.data_license.identifier == 'CC-1.0':
+                return True
+            else:
+                messages.append('Document data license must be CC-1.0.')
+                return False
+        else:
+            messages.append('Document has no data license.')
+            return False
+
+    def validate_reviews(self, messages):
+        status = True
+        for review in self.reviews:
+            status &= review.validate(messages)
+        return status
+
+    def validate_creation_info(self, messages):
+        if self.creation_info is not None:
+            return self.creation_info.validate(messages)
+        else:
+            messages.append('Document has no creation information.')
+            return False
+
+    def validate_package(self, messages):
+        if self.package is not None:
+            return self.package.validate(messages)
+        else:
+            messages.append('Document has no package.')
+            return False
+
+    def validate_extracted_licenses(self, messages):
+        return True #TODO: Implement.
