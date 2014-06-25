@@ -101,3 +101,20 @@ class CreationInfo(object):
     @property
     def created_iso_format(self):
         return datetime_iso_format(self.created)
+
+    def validate(self, messages):
+        return self.validate_creators(messages) & self.validate_created(messages)
+
+    def validate_creators(self, messages):
+        if len(self.creators) != 0:
+            return True
+        else:
+            messages.append('No creators defined, must have at least one.')
+            return False
+
+    def validate_created(self, messages):
+        if self.created is not None:
+            return True
+        else:
+            messages.append('Creation info missing created date.')
+            return False
