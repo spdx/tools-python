@@ -13,6 +13,7 @@
 #    limitations under the License.
 from datetime import datetime
 from utils import datetime_iso_format
+from creationinfo import Creator
 
 class Review(object):
     """Document review information.
@@ -35,4 +36,20 @@ class Review(object):
     def review_date_iso_format(self):
         datetime_iso_format(self.review_date)
 
+    def validate(self, messages):
+        return ( self.validate_reviewer(messages) & 
+            self.validate_review_date(messages) )
+
+    def validate_reviewer(self, messages):
+        if self.reviewer is not None:
+            return True
+        else:
+            messages.append('Review missing reviewer.')
+            return False
     
+    def validate_review_date(self, messages):
+        if self.review_date is not None:
+            return True
+        else:
+            messages.append('Review missing review date.')
+            return False
