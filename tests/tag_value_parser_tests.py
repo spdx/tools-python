@@ -151,7 +151,7 @@ class TestParser(object):
         'PackageDescription: <text>A package.</text>',
         'PackageCopyrightText: <text> Copyright 2010, 2011 Acme Inc.</text>',
         'PackageLicenseDeclared: Apache-2.0',
-        'PackageLicenseConcluded: Apache-2.0',
+        'PackageLicenseConcluded: (LicenseRef-2.0 and Apache-2.0)',
         'PackageLicenseInfoFromFiles: Apache-1.0',
         'PackageLicenseInfoFromFiles: Apache-2.0',
         'PackageLicenseComments: <text>License Comments</text>'
@@ -191,3 +191,5 @@ class TestParser(object):
         assert document.package.name == 'Test'
         assert document.package.version == 'Version 0.9.2'
         assert len(document.package.licenses_from_files) == 2
+        assert (document.package.conc_lics.identifier == 
+                 'LicenseRef-2.0 and Apache-2.0')
