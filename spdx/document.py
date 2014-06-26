@@ -16,8 +16,11 @@ from version import Version
 from creationinfo import CreationInfo
 from package import Package
 
+
 class License(object):
+
     """Represents a License."""
+
     def __init__(self, full_name, identifier):
         super(License, self).__init__()
         self._full_name = full_name
@@ -48,12 +51,14 @@ class License(object):
 
     def __eq__(self, other):
         if isinstance(other, License):
-            return  ( (self.identifier == other.identifier) & 
-                (self.full_name == other.full_name) )
+            return ((self.identifier == other.identifier) &
+                    (self.full_name == other.full_name))
         else:
             return False
 
+
 class Document(object):
+
     """Represents an SPDX document.
         Fields: 
         version: Spec version. Mandatory, one - Type: Version.
@@ -66,7 +71,8 @@ class Document(object):
         reviews: SPDX document review information, Optional zero or more. 
             Type: Review.
     """
-    def __init__(self, version=None, data_license=None, comment=None, 
+
+    def __init__(self, version=None, data_license=None, comment=None,
                  package=None):
         super(Document, self).__init__()
         self.version = version
@@ -81,12 +87,12 @@ class Document(object):
         self.reviews.append(review)
 
     def validate(self, messages=[]):
-        return ( self.validate_version(messages) 
-            & self.validate_data_lics(messages)
-            & self.validate_creation_info(messages) 
-            & self.validate_package(messages)
-            & self.validate_extracted_licenses(messages)
-            & self.validate_reviews(messages) )
+        return (self.validate_version(messages)
+                & self.validate_data_lics(messages)
+                & self.validate_creation_info(messages)
+                & self.validate_package(messages)
+                & self.validate_extracted_licenses(messages)
+                & self.validate_reviews(messages))
 
     def validate_version(self, messages):
         if self.version is not None:
@@ -131,4 +137,4 @@ class Document(object):
             return False
 
     def validate_extracted_licenses(self, messages):
-        return True #TODO: Implement.
+        return True  # TODO: Implement.
