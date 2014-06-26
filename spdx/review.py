@@ -15,7 +15,9 @@ from datetime import datetime
 from utils import datetime_iso_format
 from creationinfo import Creator
 
+
 class Review(object):
+
     """Document review information.
         Fields:
         reviewer: Person, Organization or tool that reviewed the SPDX file.
@@ -23,6 +25,7 @@ class Review(object):
         review_date: Review date, mandatory one. Type: datetime.
         comment: Review comment. Optional one. Type: str.
     """
+
     def __init__(self, reviewer=None, review_date=None, comment=""):
         super(Review, self).__init__()
         self.reviewer = reviewer
@@ -31,14 +34,14 @@ class Review(object):
 
     def set_review_date_now(self):
         self.review_date = datetime.utcnow()
-        
+
     @property
     def review_date_iso_format(self):
         datetime_iso_format(self.review_date)
 
     def validate(self, messages):
-        return ( self.validate_reviewer(messages) & 
-            self.validate_review_date(messages) )
+        return (self.validate_reviewer(messages) &
+                self.validate_review_date(messages))
 
     def validate_reviewer(self, messages):
         if self.reviewer is not None:
@@ -46,7 +49,7 @@ class Review(object):
         else:
             messages.append('Review missing reviewer.')
             return False
-    
+
     def validate_review_date(self, messages):
         if self.review_date is not None:
             return True
