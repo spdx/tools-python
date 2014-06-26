@@ -112,7 +112,7 @@ class TestEntityBuilder(object):
     @nose.tools.raises(builders.ValueError)
     def test_org_value_error(self):
         org_name = 'Example'
-        org_str = 'Organization: {0}'.format(org_name)
+        org_str = 'Organization {0}'.format(org_name)
         self.builder.build_org(self.document, org_str)
 
     def test_person_with_email(self):
@@ -133,7 +133,7 @@ class TestEntityBuilder(object):
     @nose.tools.raises(builders.ValueError)
     def test_per_value_error(self):
         per_name = 'Bob'
-        per_str = 'Person: {0}'.format(per_name)
+        per_str = 'Person {0}'.format(per_name)
         self.builder.build_person(self.document, per_str)
 
 class TestCreationInfoBuilder(object):

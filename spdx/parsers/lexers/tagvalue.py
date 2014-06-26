@@ -46,6 +46,7 @@ class Lexer(object):
      'PackageLicenseInfoFromFiles' : 'PKG_LICS_FFILE',
      'PackageLicenseComments' : 'PKG_LICS_COMMENT',
      'PackageCopyrightText' : 'PKG_CPY_TEXT',
+     'PackageHomePage' : 'PKG_HOME',
      # Files
      'FileName' : 'FILE_NAME',
      'FileType' : 'FILE_TYPE',
@@ -73,10 +74,30 @@ class Lexer(object):
      'ARCHIVE' : 'ARCHIVE',
      'OTHER'  : 'OTHER'
     }
+    states = ( ('text', 'exclusive'),  )
 
-    tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
+    tokens = [ 'COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
         'ORG_VALUE', 'PERSON_VALUE',
          'DATE', 'LINE', 'CHKSUM'] + list(reserved.values())
+
+    def t_text(self, t):
+        r':\s*<text>'
+        t.lexer.text_start = t.lexer.lexpos - len('<text>')
+        t.lexer.begin('text')
+
+    def t_text_end(self, t):
+        r'</text>\s*'
+        t.type = 'TEXT'
+        t.value = t.lexer.lexdata[t.lexer.text_start:t.lexer.lexpos+1].strip()
+        t.lexer.lineno += t.value.count('\n')
+        t.lexer.begin('INITIAL')
+        return t
+
+    def t_text_any(self, t):
+        r'.|\n'
+
+    def t_text_error(self, t):
+        print 'Lexer error in text state'
 
     def t_CHKSUM(self, t):
         r':\s?SHA1:\s[a-f0-9]{40,40}'
@@ -84,17 +105,17 @@ class Lexer(object):
         return t
 
     def t_TOOL_VALUE(self, t):
-        r':\s?Tool:.+'
+        r':\s*Tool:.+'
         t.value = t.value[1:].strip()
         return t
 
     def t_ORG_VALUE(self, t):
-        r':\s?Organization:.+'
+        r':\s*Organization:.+'
         t.value = t.value[1:].strip()
         return t
 
     def t_PERSON_VALUE(self, t):
-        r':\sPerson:.+'
+        r':\s*Person:.+'
         t.value = t.value[1:].strip()
         return t
 
@@ -103,16 +124,11 @@ class Lexer(object):
         t.value = t.value[1:].strip()
         return t
 
-    def t_TEXT(self, t):
-        r':\s?<text>(.|\n)+</text>'
-        t.lexer.lineno += t.value.count('\n')
-        t.value = t.value[1:].strip()
-        return t
-
     def t_LINE(self, t):
        r':.+'
        t.value = t.value[1:].strip()
        return t
+
 
     def t_KEYWORD(self, t):
         r'[a-zA-Z]+'
@@ -140,3 +156,6 @@ class Lexer(object):
     
     def input(self, data):
         self.lexer.input(data)
+
+    def t_error(self, t):
+        print 'Lexer error'
