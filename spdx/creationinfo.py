@@ -15,11 +15,14 @@ import config
 from datetime import datetime
 from utils import datetime_iso_format
 
+
 class Creator(object):
+
     """Creator enity.
         Fields:
         name: creator's name/identifier
     """
+
     def __init__(self, name):
         super(Creator, self).__init__()
         self.name = name
@@ -29,11 +32,13 @@ class Creator(object):
 
 
 class Organization(Creator):
+
     """Organization entity.
         Fields:
         name: Org's name/identifier. Mandatory. Type: str.
         email: Org's email address. Optional. Type: str.
     """
+
     def __init__(self, name, email):
         super(Organization, self).__init__(name)
         self.email = email
@@ -46,11 +51,13 @@ class Organization(Creator):
 
 
 class Person(Creator):
+
     """Person entity.
         Fields:
         name: person's name/identifier. Mandatory. Type: str.
         email: person's email address. Optional. Type: str.
     """
+
     def __init__(self, name, email):
         super(Person, self).__init__(name)
         self.email = email
@@ -63,15 +70,18 @@ class Person(Creator):
 
 
 class Tool(Creator):
+
     """Tool entity.
         Fields: 
         name: tool identifier, with version. Type: str.
     """
+
     def __init__(self, name):
         super(Tool, self).__init__(name)
 
 
 class CreationInfo(object):
+
     """Represents a document's creation info.
         Fields:
         creators: List of creators. At least one required. 
@@ -81,8 +91,9 @@ class CreationInfo(object):
             document. One, optional. Type: spdx.version.Version
         created: Creation date. Mandatory one. Type: datetime.
     """
-    def __init__(self, created=None, comment=None, 
-            license_list_version = config.LICENSE_LIST_VERSION):
+
+    def __init__(self, created=None, comment=None,
+                 license_list_version=config.LICENSE_LIST_VERSION):
         super(CreationInfo, self).__init__()
         self.creators = []
         self.created = created
@@ -97,13 +108,14 @@ class CreationInfo(object):
 
     def set_created_now(self):
         self.created = datetime.utcnow()
-        
+
     @property
     def created_iso_format(self):
         return datetime_iso_format(self.created)
 
     def validate(self, messages):
-        return self.validate_creators(messages) & self.validate_created(messages)
+        return (self.validate_creators(messages) &
+                self.validate_created(messages))
 
     def validate_creators(self, messages):
         if len(self.creators) != 0:
