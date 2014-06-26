@@ -13,13 +13,16 @@
 #    limitations under the License.
 import re
 
+
 class Version(object):
+
     """Version number composed of major and minor.
        Fields:
        major: Major number, int.
        minor: Minor number, int.
     """
     VERS_STR_REGEX = re.compile(r'(\d+)\.(\d+)')
+
     def __init__(self, major=1, minor=2):
         super(Version, self).__init__()
         self.major = major
@@ -32,7 +35,7 @@ class Version(object):
             return cls(int(m.group(1)), int(m.group(2)))
         else:
             return None
-        
+
     def __cmp__(self, other):
         if self.major == other.major:
             return self.minor - other.minor
