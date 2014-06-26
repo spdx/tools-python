@@ -17,6 +17,7 @@ from tagvaluebuilders import CardinalityError, OrderError, ValueError, Incompati
 from ply import yacc
 from .. import document
 from .. import utils
+from .. import config
 
 ERROR_MESSAGES = {
     'TOOL_VALUE': 'Invalid tool value {0} at line: {1}',
@@ -44,13 +45,23 @@ ERROR_MESSAGES = {
     'PKG_HOME_VALUE': 'PackageHomePage must be a url or NONE or NOASSERTION, line: {0}',
     'PKG_SRC_INFO_VALUE': 'PackageSourceInfo must be free form text, line: {0}',
     'PKG_CHKSUM_VALUE': 'PackageChecksum must be a single line of text, line: {0}',
-    'PKG_LICS_CONC_VALUE': 'PackageLicenseConcluded must be , line: {0}',
+    'PKG_LICS_CONC_VALUE': 'PackageLicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line: {0}',
     'PKG_LIC_FFILE_VALUE': 'PackageLicenseInfoFromFiles must be, line: {0}',
     'PKG_LICS_DECL_VALUE': 'PackageLicenseDeclared must be, line: {0}',
     'PKG_LICS_COMMENT_VALUE': 'PackageLicenseComments must be free form text, line: {0}',
     'PKG_SUM_VALUE': 'PackageSummary must be free form text, line: {0}',
-    'PKG_DESC_VALUE': 'PackageDescription must be free form text, line: {0}'
-
+    'PKG_DESC_VALUE': 'PackageDescription must be free form text, line: {0}',
+    'FILE_NAME_VALUE': 'FileName must be a single line of text, line: {0}',
+    'FILE_COMMENT_VALUE': 'FileComment must be free form text, line:{0}',
+    'FILE_TYPE_VALUE': 'FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}',
+    'FILE_CHKSUM_VALUE': 'FileChecksum must be a single line of text starting with \'SHA1:\', line:{0}',
+    'FILE_LICS_CONC_VALUE': 'LicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line:{0}',
+    'FILE_LICS_INFO_VALUE': 'LicenseInfoInFile must be NOASSERTION, NONE or license identifier, line: {0}',
+    'FILE_LICS_COMMENT_VALUE': 'LicenseComments must be free form lext, line: {0}',
+    'FILE_CR_TEXT_VALUE': 'FileCopyrightText must be one of NOASSERTION, NONE or free form text, line: {0}',
+    'FILE_NOTICE_VALUE': 'FileNotice must be free form text, line: {0}',
+    'FILE_CONTRIB_VALUE': 'FileContributor must be a single line, line: {0}',
+    'FILE_DEP_VALUE': 'FileDependency must be a single line, line: {0}',
 }
 
 
@@ -62,6 +73,8 @@ class Parser(object):
         self.builder = builder
         self.logger = logger
         self.error = False
+        self.license_list_parser = utils.LicenseListParser()
+        self.license_list_parser.build(write_tables=0, debug=0)
 
     def p_start_1(self, p):
         'start : start attrib '
@@ -99,14 +112,17 @@ class Parser(object):
                   | pkg_lic_ff
                   | pkg_lic_comment
                   | pkg_cr_text
-                  | FILE_NAME
-                  | FILE_TYPE
-                  | FILE_CHKSUM
-                  | FILE_LICS_CONC
-                  | FILE_LICS_INFO
-                  | FILE_CR_TEXT
-                  | FILE_LICS_COMMENT
-                  | FILE_COMMENT
+                  | file_name
+                  | file_type
+                  | file_chksum
+                  | file_conc
+                  | file_lics_info
+                  | file_cr_text
+                  | file_lics_comment
+                  | file_notice
+                  | file_comment
+                  | file_contrib
+                  | file_dp
                   | ART_PRJ_NAME
                   | ART_PRJ_HOME
                   | ART_PRJ_URI
@@ -124,13 +140,227 @@ class Parser(object):
         self.logger.log(msg)
 
     def order_error(self, first_tag, second_tag, line):
-        """Reports an OrderError. Error message will say that
+        """Reports an OrderError. Error message will state that
         first_tag came before second_tag.
         """
         self.error = True
         msg = ERROR_MESSAGES['A_BEFORE_B'].format(first_tag,
                                                   second_tag, line)
         self.logger.log(msg)
+
+    def p_file_dep_1(self, p):
+        """file_dep : FILE_DEP LINE"""
+        try:
+            self.builder.add_file_dep(self.document, p[2])
+        except OrderError:
+            self.order_error('FileDependency', 'FileName', p.lineno(1))
+
+    def p_file_dep_2(self, p):
+        """file_dp : FILE_DEP error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_DEP_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_contrib_1(self, p):
+        """file_contrib : FILE_CONTRIB LINE"""
+        try:
+            self.builder.add_file_contribution(self.document, p[2])
+        except OrderError:
+            self.order_error('FileContributor', 'FileName', p.lineno(1))
+
+    def p_file_contrib_2(self, p):
+        """file_contrib : FILE_CONTRIB error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_CONTRIB_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_notice_1(self, p):
+        """file_notice : FILE_NOTICE TEXT"""
+        try:
+            self.builder.set_file_notice(self.document, p[2])
+        except OrderError:
+            self.order_error('FileNotice', 'FileName', p.lineno(1))
+        except CardinalityError:
+            self.more_than_one_error('FileNotice', p.lineno(1))
+
+    def p_file_notice_2(self, p):
+        """file_notice : FILE_NOTICE error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_NOTICE_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_cr_text_1(self, p):
+        """file_cr_text : FILE_CR_TEXT file_cr_value"""
+        try:
+            self.builder.set_file_copyright(self.document, p[2])
+        except OrderError:
+            self.order_error('FileCopyrightText', 'FileName', p.lineno(1))
+        except CardinalityError:
+            self.more_than_one_error('FileCopyrightText', p.lineno(1))
+
+    def p_file_cr_text_2(self, p):
+        """file_cr_text : FILE_CR_TEXT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_CR_TEXT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_cr_value_1(self, p):
+        """file_cr_value : TEXT"""
+        p[0] = p[1]
+
+    def p_file_cr_value_2(self, p):
+        """file_cr_value : NONE"""
+        p[0] = None
+
+    def p_file_cr_value_3(self, p):
+        """file_cr_value : NO_ASSERT"""
+        p[0] = utils.NoAssert()
+
+    def p_file_lics_comment_1(self, p):
+        """file_lics_comment : FILE_LICS_COMMENT TEXT"""
+        try:
+            self.builder.set_file_license_comment(self.document, p[2])
+        except OrderError:
+            self.order_error('LicenseComments', 'FileName', p.lineno(1))
+        except CardinalityError:
+            self.more_than_one_error('LicenseComments', p.lineno(1))
+
+    def p_file_lics_comment_2(self, p):
+        """file_lics_comment : FILE_LICS_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_LICS_COMMENT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_lics_info_1(self, p):
+        """file_lics_info : FILE_LICS_INFO file_lic_info_value"""
+        try:
+            self.builder.set_file_license_in_file(self.document, p[2])
+        except OrderError:
+            self.order_error('LicenseInfoInFile', 'FileName', p.lineno(1))
+        except ValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['FILE_LICS_INFO_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+
+    def p_file_lics_info_2(self, p):
+        """file_lics_info : FILE_LICS_INFO error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_LICS_INFO_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_lic_info_value_1(self, p):
+        """file_lic_info_value : NONE"""
+        p[0] = None
+
+    def p_file_lic_info_value_2(self, p):
+        """file_lic_info_value : NO_ASSERT"""
+        p[0] = utils.NoAssert()
+
+    # License Identifier
+    def p_file_lic_info_value_3(self, p):
+        """file_lic_info_value : LINE"""
+        p[0] = p[1]
+
+    def p_conc_license_1(self, p):
+        """conc_license : NO_ASSERT"""
+        p[0] = utils.NoAssert()
+
+    def p_conc_license_2(self, p):
+        """conc_license : NONE"""
+        p[0] = None
+
+    def p_conc_license_3(self, p):
+        """conc_license : LINE"""
+        ref_re = re.compile('LicenseRef-.+', re.UNICODE)
+        if p[1] in config.LICENSE_MAP.keys() or (ref_re.match(p[1]) is not None):
+            p[0] = document.License.from_identifier(p[1])
+        else:
+            p[0] = self.license_list_parser.parse(p[1])
+
+    def p_file_name_1(self, p):
+        """file_name : FILE_NAME LINE"""
+        try:
+            self.builder.set_file_name(self.document, p[2])
+        except OrderError:
+            self.order_error('FileName', 'PackageName', p.lineno(1))
+
+    def p_file_name_2(self, p):
+        """file_name : FILE_NAME error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_NAME_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_comment_1(self, p):
+        """file_comment : FILE_COMMENT TEXT"""
+        try:
+            self.builder.set_file_comment(self.document, p[2])
+        except OrderError:
+            self.order_error('FileComment', 'FileName', p.lineno(1))
+        except CardinalityError:
+            self.more_than_one_error('FileComment', p.lineno(1))
+
+    def p_file_comment_2(self, p):
+        """file_comment : FILE_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_COMMENT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_type_1(self, p):
+        """file_type : FILE_TYPE file_type_value"""
+        try:
+            self.builder.set_file_type(self.document, p[2])
+        except OrderError:
+            self.order_error('FileType', 'FileName', p.lineno(1))
+        except CardinalityError:
+            self.more_than_one_error('FileType', p.lineno(1))
+
+    def p_file_type_2(self, p):
+        """file_type : FILE_TYPE error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_TYPE_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_chksum_1(self, p):
+        """file_chksum : FILE_CHKSUM CHKSUM"""
+        try:
+            self.builder.set_file_chksum(self.document, p[2])
+        except OrderError:
+            self.order_error('FileChecksum', 'FileName', p.lineno(1))
+        except CardinalityError:
+            self.more_than_one_error('FileChecksum', p.lineno(1))
+
+    def p_file_chksum_2(self, p):
+        """file_chksum : FILE_CHKSUM error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_CHKSUM_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_conc_1(self, p):
+        """file_conc : FILE_LICS_CONC conc_license"""
+        try:
+            self.builder.set_concluded_license(self.document, p[2])
+        except ValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['FILE_LICS_CONC_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+        except OrderError:
+            self.order_error('LicenseConcluded', 'FileName', p.lineno(1))
+        except CardinalityError:
+            self.more_than_one_error('LicenseConcluded', p.lineno(1))
+
+    def p_file_conc_2(self, p):
+        """file_conc : FILE_LICS_CONC error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_LICS_CONC_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_type_value(self, p):
+        """file_type_value : OTHER
+                           | SOURCE
+                           | ARCHIVE
+                           | BINARY
+        """
+        p[0] = p[1]
 
     def p_pkg_desc_1(self, p):
         """pkg_desc : PKG_DESC TEXT"""
@@ -207,7 +437,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_pkg_lic_decl_1(self, p):
-        """pkg_lic_decl : PKG_LICS_DECL pkg_lic_decl_value"""
+        """pkg_lic_decl : PKG_LICS_DECL conc_license"""
         try:
             self.builder.set_pkg_license_declared(self.document, p[2])
         except OrderError:
@@ -225,10 +455,6 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES['PKG_LICS_DECL_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
-
-    def p_pkg_lic_devl_value(self, p):
-        """pkg_lic_decl_value : pkg_lic_conc_value"""
-        p[0] = p[1]
 
     def p_pkg_lic_ff_1(self, p):
         """pkg_lic_ff : PKG_LICS_FFILE pkg_lic_ff_value"""
@@ -261,7 +487,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_pkg_lic_conc_1(self, p):
-        """pkg_lic_conc : PKG_LICS_CONC pkg_lic_conc_value"""
+        """pkg_lic_conc : PKG_LICS_CONC conc_license"""
         try:
             self.builder.set_pkg_licenses_concluded(self.document, p[2])
         except CardinalityError:
@@ -279,18 +505,6 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES['PKG_LICS_CONC_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
-
-    def p_pkg_lic_conc_value_1(self, p):
-        """pkg_lic_conc_value : LINE"""
-        p[0] = p[1]
-
-    def p_pkg_lic_conc_value_2(self, p):
-        """pkg_lic_conc_value : NO_ASSERT"""
-        p[0] = utils.NoAssert()
-
-    def p_pkg_lic_conc_value_3(self, p):
-        """pkg_lic_conc_value : NONE"""
-        p[0] = None
 
     def p_pkg_src_info_1(self, p):
         """pkg_src_info : PKG_SRC_INFO TEXT"""
