@@ -14,6 +14,7 @@
 import re
 from .. import creationinfo
 from .. import utils
+from .. import document
 
 
 def validate_is_free_form_text(value, optional=False):
@@ -158,15 +159,10 @@ def validate_file_notice(value, optional=False):
 
 
 def validate_lics_conc(value, optional=False):
-    return True  # TODO implement
-
-
-def validate_lics_declared(value, optional=False):
-    return True  # TODO implement
-
-
-def validate_file_lics_conc(value, optional=False):
-    return True  # TODO implement
+    if value is None:
+        return optional
+    else:
+        return isinstance(value, document.License)
 
 
 def validate_file_lics_in_file(value, optional=False):

@@ -528,7 +528,7 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_license_declared_set:
             self.package_license_declared_set = True
-            if validate_lics_declared(license):
+            if validate_lics_conc(license):
                 doc.package.license_declared = license
                 return True
             else:
@@ -693,7 +693,7 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_conc_lics_set:
                 self.file_conc_lics_set = True
-                if validate_file_lics_conc(license):
+                if validate_lics_conc(license):
                     self.file(doc).conc_lics = license
                     return True
                 else:
@@ -710,8 +710,14 @@ class FileBuilder(object):
         """
         if self.has_package(doc) and self.has_file(doc):
             if validate_file_lics_in_file(license):
-                self.file(doc).licenses_in_file.append(license)
-                return True
+                if ((license is None) or
+                        (type(license) is utils.NoAssert)):
+                    self.file(doc).licenses_in_file.append(license)
+                    return True
+                else:
+                    self.file(doc).licenses_in_file.append(
+                        document.License.from_identifier(license))
+                    return True
             else:
                 raise ValueError('File::LicenseInFile')
         else:
@@ -814,13 +820,18 @@ class FileBuilder(object):
         else:
             raise OrderError('File::AoFProfjectUri')
 
-    def file(doc):
+    def file(self, doc):
+        """Returns the last file in the document's package's file list."""
         return doc.package.files[-1]
 
     def has_file(self, doc):
+        """Returns true if the document's package has at least one file.
+        Does not test if the document has a package.
+        """
         return len(doc.package.files) != 0
 
     def has_package(self, doc):
+        """Returns true if the document has a package."""
         return doc.package is not None
 
     def reset_file_stat(self):
