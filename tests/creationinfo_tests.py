@@ -23,19 +23,23 @@ from datetime import datetime
 
 
 class TestCreationInfo(object):
+
     def test_timestamp(self):
         dt = datetime(2014, 4, 8, 13, 42, 12)
         ci_time = CreationInfo(created=dt)
         assert ci_time.created == dt
+
     def test_iso_format(self):
         dt = datetime(2014, 4, 8, 13, 42, 12)
         ci_time = CreationInfo(created=dt)
         assert ci_time.created_iso_format == "2014-04-08T13:42:12Z"
+
     def test_comment(self):
         ci_default = CreationInfo()
         assert ci_default.comment is None
         ci_comment = CreationInfo(comment='Hello There')
         assert ci_comment.comment == 'Hello There'
+
     def test_creators(self):
         ci = CreationInfo()
         assert len(ci.creators) == 0
@@ -53,10 +57,11 @@ class TestCreationInfo(object):
         assert len(ci.creators) == 2
         assert tool in ci.creators
         assert org in ci.creators
-        assert person not in ci.creators 
+        assert person not in ci.creators
+
     def test_license_list_version(self):
         ci = CreationInfo()
         assert ci.license_list_version == config.LICENSE_LIST_VERSION
-        ci = CreationInfo(license_list_version = Version(major =1, minor=0))
-        assert ci.license_list_version == Version(major =1, minor=0)
-        assert not ci.license_list_version == Version(major =1, minor=2)
+        ci = CreationInfo(license_list_version=Version(major=1, minor=0))
+        assert ci.license_list_version == Version(major=1, minor=0)
+        assert not ci.license_list_version == Version(major=1, minor=2)
