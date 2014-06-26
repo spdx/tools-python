@@ -23,24 +23,34 @@ from validations import *
 
 
 class BuilderException(Exception):
+
     """Builder exception base class."""
     pass
 
+
 class IncompatibleVersionError(BuilderException):
+
     def __init__(self, msg):
         self.msg = msg
+
 
 class CardinalityError(BuilderException):
+
     def __init__(self, msg):
         self.msg = msg
+
 
 class ValueError(BuilderException):
+
     def __init__(self, msg):
         self.msg = msg
 
+
 class OrderError(BuilderException):
+
     def __init__(self, msg):
         self.msg = msg
+
 
 def str_from_text(text):
     """Returns content of a free form text block as a python string."""
@@ -72,8 +82,8 @@ class DocBuilder(object):
             if m is None:
                 raise ValueError('Document::Version')
             else:
-                vers = version.Version(major=int(m.group(1)), 
-                    minor=int(m.group(2)))
+                vers = version.Version(major=int(m.group(1)),
+                                       minor=int(m.group(2)))
                 if vers == version.Version(major=1, minor=2):
                     doc.version = vers
                     return True
@@ -105,12 +115,13 @@ class DocBuilder(object):
         if not self.doc_comment_set:
             self.doc_comment_set = True
             if validate_doc_comment(comment):
-                doc.comment = str_from_text(comment)            
+                doc.comment = str_from_text(comment)
                 return True
             else:
                 raise ValueError('Document::Comment')
         else:
             raise CardinalityError('Document::Comment')
+
 
 class EntityBuilder(object):
 
@@ -137,7 +148,7 @@ class EntityBuilder(object):
             return creationinfo.Tool(name)
         else:
             raise ValueError('Failed to extract tool name')
-            
+
     def build_org(self, doc, entity):
         """Builds an organization object of of a string representation.
         Returns built organization. Raises ValueError if failed to extract
@@ -147,14 +158,12 @@ class EntityBuilder(object):
         if match and validate_org_name(match.group(self.ORG_NAME_GROUP)):
             name = match.group(self.ORG_NAME_GROUP).strip()
             email = match.group(self.ORG_EMAIL_GROUP)
-            if ( email is not None )  and (len(email) != 0):
+            if (email is not None) and (len(email) != 0):
                 return creationinfo.Organization(name=name, email=email.strip())
             else:
                 return creationinfo.Organization(name=name, email=None)
         else:
             raise ValueError('Failed to extract Organization name')
-
-
 
     def build_person(self, doc, entity):
         """Builds an organization object of of a string representation.
@@ -165,12 +174,13 @@ class EntityBuilder(object):
         if match and validate_person_name(match.group(self.PERSON_NAME_GROUP)):
             name = match.group(self.PERSON_NAME_GROUP).strip()
             email = match.group(self.PERSON_EMAIL_GROUP)
-            if (email is not None ) and ( len(email) != 0 ):
+            if (email is not None) and (len(email) != 0):
                 return creationinfo.Person(name=name, email=email.strip())
             else:
                 return creationinfo.Person(name=name, email=None)
         else:
             raise ValueError('Failed to extract person name')
+
 
 class CreationInfoBuilder(object):
 
@@ -188,7 +198,7 @@ class CreationInfoBuilder(object):
         """
         if validate_creator(creator):
             doc.creation_info.add_creator(creator)
-            return True 
+            return True
         else:
             raise ValueError('CreationInfo::Creator')
 
@@ -216,7 +226,7 @@ class CreationInfoBuilder(object):
         if not self.creation_comment_set:
             self.creation_comment_set = True
             if validate_creation_comment(comment):
-                doc.creation_info.comment = str_from_text(comment)                
+                doc.creation_info.comment = str_from_text(comment)
                 return True
             else:
                 raise ValueError('CreationInfo::Comment')
@@ -236,15 +246,16 @@ class CreationInfoBuilder(object):
             else:
                 raise ValueError('CreationInfo::LicenseListVersion')
         else:
-            raise CardinalityError('CreationInfo::LicenseListVersion') 
+            raise CardinalityError('CreationInfo::LicenseListVersion')
 
 
 class ReviewBuilder(object):
+
     def __init__(self):
         super(ReviewBuilder, self).__init__()
         self.review_date_set = False
         self.review_comment_set = False
-    
+
     def add_reviewer(self, doc, reviewer):
         """Adds a reviewer to the SPDX Document.
         Reviwer is an entity created by an EntityBuilder.
@@ -284,7 +295,7 @@ class ReviewBuilder(object):
         """
         if len(doc.reviews) != 0:
             if not self.review_comment_set:
-                self.review_comment_set = True            
+                self.review_comment_set = True
                 if validate_review_comment(comment):
                     doc.reviews[-1].comment = str_from_text(comment)
                     return True
@@ -297,27 +308,28 @@ class ReviewBuilder(object):
 
 
 class PackageBuilder(object):
+
     def __init__(self):
         super(PackageBuilder, self).__init__()
         self.reset_package()
 
     def reset_package(self):
-       self.package_set = False
-       self.package_vers_set = False
-       self.package_file_name_set = False
-       self.package_supplier_set = False
-       self.package_originator_set = False
-       self.package_down_location_set = False
-       self.package_home_set = False
-       self.package_verif_set = False
-       self.package_chk_sum_set = False
-       self.package_source_info_set = False
-       self.package_conc_lics_set = False
-       self.package_license_declared_set = False
-       self.package_license_comment_set = False
-       self.package_cr_text_set = False
-       self.package_summary_set = False
-       self.package_desc_set = False
+        self.package_set = False
+        self.package_vers_set = False
+        self.package_file_name_set = False
+        self.package_supplier_set = False
+        self.package_originator_set = False
+        self.package_down_location_set = False
+        self.package_home_set = False
+        self.package_verif_set = False
+        self.package_chk_sum_set = False
+        self.package_source_info_set = False
+        self.package_conc_lics_set = False
+        self.package_license_declared_set = False
+        self.package_license_comment_set = False
+        self.package_cr_text_set = False
+        self.package_summary_set = False
+        self.package_desc_set = False
 
     def create_package(self, doc, name):
         """Creates a package for the SPDX Document.
@@ -344,7 +356,7 @@ class PackageBuilder(object):
             return True
         else:
             raise CardinalityError('Package::Version')
-   
+
     def set_pkg_file_name(self, doc, name):
         """Sets the package file name, if not already set.
         name - Any string.
@@ -358,7 +370,7 @@ class PackageBuilder(object):
             return True
         else:
             raise CardinalityError('Package::FileName')
-        
+
     def set_pkg_supplier(self, doc, entity):
         """Sets the package supplier, if not already set.
         entity - Organization, Person or NoAssert.
@@ -554,12 +566,11 @@ class PackageBuilder(object):
                 if type(text) is str:
                     doc.package.cr_text = str_from_text(text)
                 else:
-                    doc.package.cr_text = text # None or NoAssert
+                    doc.package.cr_text = text  # None or NoAssert
             else:
                 raise ValueError('Package::CopyrightText')
         else:
             raise CardinalityError('Package::CopyrightText')
-
 
     def set_pkg_summary(self, doc, text):
         """Set's the package summary.
@@ -597,7 +608,9 @@ class PackageBuilder(object):
         if not self.package_set:
             raise OrderError('Package')
 
+
 class FileBuilder(object):
+
     def __init__(self):
         super(FileBuilder, self).__init__()
         self.reset_file_stat()
@@ -638,10 +651,10 @@ class FileBuilder(object):
         Raises ValueError if type is unknown.
         """
         type_dict = {
-        'SOURCE' : file.FileType.SOURCE,
-        'BINARY' : file.FileType.BINARY,
-        'ARCHIVE' : file.FileType.ARCHIVE,
-        'OTHER' : file.FileType.OTHER
+            'SOURCE': file.FileType.SOURCE,
+            'BINARY': file.FileType.BINARY,
+            'ARCHIVE': file.FileType.ARCHIVE,
+            'OTHER': file.FileType.OTHER
         }
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_type_set:
@@ -722,7 +735,6 @@ class FileBuilder(object):
         else:
             raise OrderError('File::LicenseComment')
 
-
     def set_file_copyright(self, doc, text):
         """Raises OrderError if no package or file defined.
         Raises ValueError if not free form text or NONE or NO_ASSERT.
@@ -733,10 +745,10 @@ class FileBuilder(object):
                 self.file_copytext_set = True
                 if validate_file_cpyright(text):
                     if type(text) is str:
-                       self.file(doc).copyright = str_from_text(text)
+                        self.file(doc).copyright = str_from_text(text)
                     else:
-                       self.file(doc).copyright = text # None or NoAssert
-                    
+                        self.file(doc).copyright = text  # None or NoAssert
+
                     return True
                 else:
                     raise ValueError('File::CopyRight')
@@ -790,9 +802,9 @@ class FileBuilder(object):
         """Raises OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-          self.file(doc).artifact_of_project_home.append(value)
+            self.file(doc).artifact_of_project_home.append(value)
         else:
-          raise OrderError('File::AoFProfjectHome')
+            raise OrderError('File::AoFProfjectHome')
 
     def set_file_artificat_of_project_uri(self, doc, value):
         """Raises OrderError if no package or file defined.
@@ -801,7 +813,6 @@ class FileBuilder(object):
             self.file(doc).artifact_of_project_uri.append(value)
         else:
             raise OrderError('File::AoFProfjectUri')
-
 
     def file(doc):
         return doc.package.files[-1]
@@ -822,15 +833,15 @@ class FileBuilder(object):
 
 
 class LicenseBuilder(object):
+
     def __init__(self):
         super(LicenseBuilder, self).__init__()
-        
-                
 
-class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder, 
-    PackageBuilder, FileBuilder, LicenseBuilder):
+
+class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
+              PackageBuilder, FileBuilder, LicenseBuilder):
+
     """SPDX document builder."""
 
     def __init__(self):
         super(Builder, self).__init__()
-
