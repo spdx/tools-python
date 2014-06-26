@@ -57,6 +57,48 @@ class License(object):
             return False
 
 
+class LicenseConjuction(License):
+
+    """A conjuction of two licenses."""
+
+    def __init__(self, license_1, license_2):
+        self.license_1 = license_1
+        self.license_2 = license_2
+        super(LicenseConjuction, self).__init__(
+            self.full_name, self.identifier)
+
+    @property
+    def full_name(self):
+        return '{0} and {1}'.format(self.license_1.full_name,
+                                    self.license_2.full_name)
+
+    @property
+    def identifier(self):
+        return '{0} and {1}'.format(self.license_1.identifier,
+                                    self.license_2.identifier)
+
+
+class LicenseDisjunction(License):
+
+    """A disjunction of two licenses."""
+
+    def __init__(self, license_1, license_2):
+        self.license_1 = license_1
+        self.license_2 = license_2
+        super(LicenseDisjunction, self).__init__(
+            self.full_name, self.identifier)
+
+    @property
+    def full_name(self):
+        return '{0} or {1}'.format(self.license_1.full_name,
+                                   self.license_2.full_name)
+
+    @property
+    def identifier(self):
+        return '{0} or {1}'.format(self.license_1.identifier,
+                                   self.license_2.identifier)
+
+
 class Document(object):
 
     """Represents an SPDX document.
