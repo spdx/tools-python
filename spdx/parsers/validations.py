@@ -15,6 +15,7 @@ import re
 from .. import creationinfo
 from .. import utils
 
+
 def validate_is_free_form_text(value, optional=False):
     TEXT_RE = re.compile(r'<text>(.|\n)+</text>', re.UNICODE)
     if value is None:
@@ -22,24 +23,29 @@ def validate_is_free_form_text(value, optional=False):
     else:
         return TEXT_RE.match(value) is not None
 
+
 def validate_tool_name(value, optional=False):
     striped_value = value.strip()
     if optional:
         if len(striped_value) == 0:
             return True
-        else: 
+        else:
             return False
     else:
         return not (len(striped_value) == 0)
 
+
 def validate_person_name(value, optional=False):
     return validate_tool_name(value, optional)
+
 
 def validate_org_name(value, optional=False):
     return validate_tool_name(value, optional)
 
+
 def validate_data_lics(value):
     return value == 'CC0-1.0'
+
 
 def validate_pkg_supplier(value, optional=False):
     if optional and value is None:
@@ -53,8 +59,10 @@ def validate_pkg_supplier(value, optional=False):
     else:
         return False
 
+
 def validate_pkg_originator(value, optional=False):
     return validate_pkg_supplier(value, optional)
+
 
 def validate_pkg_homepage(value, optional=False):
     if optional or value is None:
@@ -66,6 +74,7 @@ def validate_pkg_homepage(value, optional=False):
     else:
         return False
 
+
 def validate_pkg_cr_text(value, optional=False):
     if validate_is_free_form_text(value, optional):
         return True
@@ -74,14 +83,18 @@ def validate_pkg_cr_text(value, optional=False):
     elif value is None:
         return True
 
+
 def validate_pkg_summary(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
 
 def validate_pkg_desc(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
+
 def validate_doc_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
 
 def validate_creator(value, optional=False):
     if value is None:
@@ -89,26 +102,34 @@ def validate_creator(value, optional=False):
     else:
         return isinstance(value, creationinfo.Creator)
 
+
 def validate_creation_comment(value, optional=False):
-   return validate_is_free_form_text(value, optional)
+    return validate_is_free_form_text(value, optional)
+
 
 def validate_reviewer(value, optional=False):
     return validate_creator(value, optional)
 
+
 def validate_review_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
 
 def validate_pkg_src_info(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
+
 def validate_pkg_lics_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
 
 def validate_file_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
+
 def validate_file_lics_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
 
 def validate_file_cpyright(value, optional=False):
     if validate_is_free_form_text(value, optional):
@@ -119,6 +140,7 @@ def validate_file_cpyright(value, optional=False):
         return True
     else:
         return False
+
 
 def validate_lics_from_file(value, optional=False):
     if value is None:
@@ -134,15 +156,18 @@ def validate_lics_from_file(value, optional=False):
 def validate_file_notice(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
+
 def validate_lics_conc(value, optional=False):
-    return True #TODO implement
+    return True  # TODO implement
+
 
 def validate_lics_declared(value, optional=False):
-    return True #TODO implement
+    return True  # TODO implement
+
 
 def validate_file_lics_conc(value, optional=False):
-    return True #TODO implement
+    return True  # TODO implement
+
 
 def validate_file_lics_in_file(value, optional=False):
-    return True #TODO implement
-
+    return True  # TODO implement
