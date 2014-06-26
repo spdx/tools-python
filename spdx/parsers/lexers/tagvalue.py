@@ -14,71 +14,72 @@
 import re
 from ply import lex
 
+
 class Lexer(object):
     reserved = {
-    # Top level fields
-     'SPDXVersion' : 'DOC_VERSION',
-     'DataLicense' : 'DOC_LICENSE',
-     'DocumentComment': 'DOC_COMMENT',
-     # Creation info
-     'Creator' : 'CREATOR',
-     'Created' : 'CREATED',
-     'CreatorComment' : 'CREATOR_COMMENT',
-     'LicenseListVersion' : 'LIC_LIST_VER',
-     # Review info
-     'Reviewer' : 'REVIEWER',
-     'ReviewDate' : 'REVIEW_DATE',
-     'ReviewComment' : 'REVIEW_COMMENT',
-     # Package Fields
-     'PackageName': 'PKG_NAME',
-     'PackageVersion': 'PKG_VERSION',
-     'PackageDownloadLocation': 'PKG_DOWN',
-     'PackageSummary': 'PKG_SUM',
-     'PackageSourceInfo': 'PKG_SRC_INFO',
-     'PackageFileName' : 'PKG_FILE_NAME',
-     'PackageSupplier' : 'PKG_SUPPL',
-     'PackageOriginator' : 'PKG_ORIG',
-     'PackageChecksum' : 'PKG_CHKSUM',
-     'PackageVerificationCode' : 'PKG_VERF_CODE',
-     'PackageDescription' : 'PKG_DESC',
-     'PackageLicenseDeclared' : 'PKG_LICS_DECL',
-     'PackageLicenseConcluded' : 'PKG_LICS_CONC',
-     'PackageLicenseInfoFromFiles' : 'PKG_LICS_FFILE',
-     'PackageLicenseComments' : 'PKG_LICS_COMMENT',
-     'PackageCopyrightText' : 'PKG_CPY_TEXT',
-     'PackageHomePage' : 'PKG_HOME',
-     # Files
-     'FileName' : 'FILE_NAME',
-     'FileType' : 'FILE_TYPE',
-     'FileChecksum' : 'FILE_CHKSUM',
-     'LicenseConcluded' : 'FILE_LICS_CONC',
-     'LicenseInfoInFile' : 'FILE_LICS_INFO',
-     'FileCopyrightText' : 'FILE_CR_TEXT',
-     'LicenseComments' : 'FILE_LICS_COMMENT', 
-     'FileComment' : 'FILE_COMMENT',
-     'ArtifactOfProjectName' : 'ART_PRJ_NAME',
-     'ArtifactOfProjectHomePage' : 'ART_PRJ_HOME',
-     'ArtifactOfProjectURI' : 'ART_PRJ_URI',
-     # License
-     'LicenseID' : 'LICS_ID',
-     'ExtractedText' : 'LICS_TEXT',
-     'LicenseName' : 'LICS_NAME',
-     'LicenseCrossReference' : 'LICS_CRS_REG',
-     'LicenseComment' : 'LICS_COMMENT',
-     # Common 
-     'NOASSERTION' : 'NO_ASSERT',
-     'UNKNOWN' : 'UN_KNOWN',
-     'NONE' : 'NONE',
-     'SOURCE' : 'SOURCE',
-     'BINARY' : 'BINARY',
-     'ARCHIVE' : 'ARCHIVE',
-     'OTHER'  : 'OTHER'
+        # Top level fields
+        'SPDXVersion': 'DOC_VERSION',
+        'DataLicense': 'DOC_LICENSE',
+        'DocumentComment': 'DOC_COMMENT',
+        # Creation info
+        'Creator': 'CREATOR',
+        'Created': 'CREATED',
+        'CreatorComment': 'CREATOR_COMMENT',
+        'LicenseListVersion': 'LIC_LIST_VER',
+        # Review info
+        'Reviewer': 'REVIEWER',
+        'ReviewDate': 'REVIEW_DATE',
+        'ReviewComment': 'REVIEW_COMMENT',
+        # Package Fields
+        'PackageName': 'PKG_NAME',
+        'PackageVersion': 'PKG_VERSION',
+        'PackageDownloadLocation': 'PKG_DOWN',
+        'PackageSummary': 'PKG_SUM',
+        'PackageSourceInfo': 'PKG_SRC_INFO',
+        'PackageFileName': 'PKG_FILE_NAME',
+        'PackageSupplier': 'PKG_SUPPL',
+        'PackageOriginator': 'PKG_ORIG',
+        'PackageChecksum': 'PKG_CHKSUM',
+        'PackageVerificationCode': 'PKG_VERF_CODE',
+        'PackageDescription': 'PKG_DESC',
+        'PackageLicenseDeclared': 'PKG_LICS_DECL',
+        'PackageLicenseConcluded': 'PKG_LICS_CONC',
+        'PackageLicenseInfoFromFiles': 'PKG_LICS_FFILE',
+        'PackageLicenseComments': 'PKG_LICS_COMMENT',
+        'PackageCopyrightText': 'PKG_CPY_TEXT',
+        'PackageHomePage': 'PKG_HOME',
+        # Files
+        'FileName': 'FILE_NAME',
+        'FileType': 'FILE_TYPE',
+        'FileChecksum': 'FILE_CHKSUM',
+        'LicenseConcluded': 'FILE_LICS_CONC',
+        'LicenseInfoInFile': 'FILE_LICS_INFO',
+        'FileCopyrightText': 'FILE_CR_TEXT',
+        'LicenseComments': 'FILE_LICS_COMMENT',
+        'FileComment': 'FILE_COMMENT',
+        'ArtifactOfProjectName': 'ART_PRJ_NAME',
+        'ArtifactOfProjectHomePage': 'ART_PRJ_HOME',
+        'ArtifactOfProjectURI': 'ART_PRJ_URI',
+        # License
+        'LicenseID': 'LICS_ID',
+        'ExtractedText': 'LICS_TEXT',
+        'LicenseName': 'LICS_NAME',
+        'LicenseCrossReference': 'LICS_CRS_REG',
+        'LicenseComment': 'LICS_COMMENT',
+        # Common
+        'NOASSERTION': 'NO_ASSERT',
+        'UNKNOWN': 'UN_KNOWN',
+        'NONE': 'NONE',
+        'SOURCE': 'SOURCE',
+        'BINARY': 'BINARY',
+        'ARCHIVE': 'ARCHIVE',
+        'OTHER': 'OTHER'
     }
-    states = ( ('text', 'exclusive'),  )
+    states = (('text', 'exclusive'),)
 
-    tokens = [ 'COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
-        'ORG_VALUE', 'PERSON_VALUE',
-         'DATE', 'LINE', 'CHKSUM'] + list(reserved.values())
+    tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
+              'ORG_VALUE', 'PERSON_VALUE',
+              'DATE', 'LINE', 'CHKSUM'] + list(reserved.values())
 
     def t_text(self, t):
         r':\s*<text>'
@@ -88,7 +89,8 @@ class Lexer(object):
     def t_text_end(self, t):
         r'</text>\s*'
         t.type = 'TEXT'
-        t.value = t.lexer.lexdata[t.lexer.text_start:t.lexer.lexpos+1].strip()
+        t.value = t.lexer.lexdata[
+            t.lexer.text_start:t.lexer.lexpos + 1].strip()
         t.lexer.lineno += t.value.count('\n')
         t.lexer.begin('INITIAL')
         return t
@@ -125,20 +127,19 @@ class Lexer(object):
         return t
 
     def t_LINE(self, t):
-       r':.+'
-       t.value = t.value[1:].strip()
-       return t
-
+        r':.+'
+        t.value = t.value[1:].strip()
+        return t
 
     def t_KEYWORD(self, t):
         r'[a-zA-Z]+'
-        t.type = self.reserved.get(t.value,'UNKNOWN_TAG')
+        t.type = self.reserved.get(t.value, 'UNKNOWN_TAG')
         t.value = t.value.strip()
         return t
 
     def t_COMMENT(self, t):
         r'\#.*'
-        pass         
+        pass
 
     def t_newline(self, t):
         r'\n+'
@@ -150,10 +151,10 @@ class Lexer(object):
 
     def build(self, **kwargs):
         self.lexer = lex.lex(module=self, **kwargs)
-        
+
     def token(self):
         return self.lexer.token()
-    
+
     def input(self, data):
         self.lexer.input(data)
 
