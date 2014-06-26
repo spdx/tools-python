@@ -16,6 +16,7 @@ import spdx.parsers.tagvaluebuilders as builders
 from spdx.document import Document, License
 from spdx.version import Version
 
+
 class TestDocumentBuilder(object):
 
     def __init__(self):
@@ -25,7 +26,8 @@ class TestDocumentBuilder(object):
     def test_correct_version(self):
         version_str = 'SPDX-1.2'
         self.builder.set_doc_version(self.document, version_str)
-        assert (self.document.version.major == 1) & (self.document.version.minor == 2)
+        assert (self.document.version.major == 1) & (
+            self.document.version.minor == 2)
 
     @nose.tools.raises(builders.CardinalityError)
     def test_version_cardinality(self):
@@ -79,6 +81,7 @@ class TestDocumentBuilder(object):
 
 
 class TestEntityBuilder(object):
+
     def __init__(self):
         self.builder = builders.EntityBuilder()
         self.document = Document()
@@ -136,7 +139,9 @@ class TestEntityBuilder(object):
         per_str = 'Person {0}'.format(per_name)
         self.builder.build_person(self.document, per_str)
 
+
 class TestCreationInfoBuilder(object):
+
     def __init__(self):
         self.document = Document()
         self.builder = builders.CreationInfoBuilder()
@@ -171,8 +176,8 @@ class TestCreationInfoBuilder(object):
     def test_license_list_vers(self):
         vers_str = '1.2'
         assert self.builder.set_lics_list_ver(self.document, vers_str)
-        assert  (self.document.creation_info.license_list_version == 
-            Version(1, 2))
+        assert (self.document.creation_info.license_list_version ==
+                Version(1, 2))
 
     @nose.tools.raises(builders.ValueError)
     def test_lics_list_ver_value(self):
@@ -180,11 +185,12 @@ class TestCreationInfoBuilder(object):
 
     @nose.tools.raises(builders.CardinalityError)
     def test_lics_list_ver_card(self):
-       self.builder.set_lics_list_ver(self.document, '1.2')
-       self.builder.set_lics_list_ver(self.document, '1.3') 
+        self.builder.set_lics_list_ver(self.document, '1.2')
+        self.builder.set_lics_list_ver(self.document, '1.3')
 
 
 class TestReviewBuilder(object):
+
     def __init__(self):
         self.entity_builder = builders.EntityBuilder()
         self.builder = builders.ReviewBuilder()
@@ -213,7 +219,6 @@ class TestReviewBuilder(object):
         self.add_reviewer()
         assert self.builder.add_review_date(self.document, date_str)
         self.builder.add_review_date(self.document, date_str)
-
 
     def test_comment_reset(self):
         comment = '<text>Comment</text>'
@@ -246,7 +251,9 @@ class TestReviewBuilder(object):
         per = self.entity_builder.build_person(self.document, per_str)
         self.builder.add_reviewer(self.document, per)
 
+
 class TestPackageBuilder(object):
+
     def __init__(self):
         self.builder = builders.PackageBuilder()
         self.document = Document()
@@ -283,7 +290,8 @@ class TestPackageBuilder(object):
 
     @nose.tools.raises(builders.OrderError)
     def test_pkg_down_loc_order(self):
-        self.builder.set_pkg_down_location(self.document, 'http://example.com/pkg')
+        self.builder.set_pkg_down_location(
+            self.document, 'http://example.com/pkg')
 
     @nose.tools.raises(builders.OrderError)
     def test_pkg_home_order(self):
@@ -315,7 +323,8 @@ class TestPackageBuilder(object):
 
     @nose.tools.raises(builders.OrderError)
     def test_pkg_lics_comment_order(self):
-        self.builder.set_pkg_license_comment(self.document, '<text>hello</text>')
+        self.builder.set_pkg_license_comment(
+            self.document, '<text>hello</text>')
 
     @nose.tools.raises(builders.OrderError)
     def test_pkg_cr_text_order(self):

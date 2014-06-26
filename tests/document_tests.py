@@ -16,11 +16,15 @@ from spdx.version import Version
 from spdx.document import Document
 from spdx.document import License
 from spdx.config import LICENSE_MAP
+
+
 class TestVersion(object):
+
     def test_creation(self):
         v = Version(major=1, minor=2)
         assert v.major == 1
         assert v.minor == 2
+
     def test_comparison(self):
         v1 = Version(major=1, minor=2)
         v2 = Version(major=2, minor=1)
@@ -34,31 +38,41 @@ class TestVersion(object):
         assert not v1 < v3
         assert v1 <= v3
 
+
 class TestDocument(object):
+
     def test_creation(self):
         document = Document(version=Version(major=1, minor=2),
-                   data_license=License(full_name='Academic Free License v1.1',
-                    identifier='AFL-1.1'))
+                            data_license=License(
+                                full_name='Academic Free License v1.1',
+                                identifier='AFL-1.1'))
         assert document.comment is None
         assert document.version == Version(1, 2)
-        assert document.data_license.identifier == 'AFL-1.1' 
+        assert document.data_license.identifier == 'AFL-1.1'
 
 
 class TestLicense(object):
+
     def test_url(self):
-        license = License(full_name='Apache License 1.0', identifier='Apache-1.0')
+        license = License(
+            full_name='Apache License 1.0', identifier='Apache-1.0')
         assert license.url == 'http://spdx.org/licenses/Apache-1.0'
+
     def test_license_list(self):
         assert LICENSE_MAP['Aladdin Free Public License'] == 'Aladdin'
         assert LICENSE_MAP['Aladdin'] == 'Aladdin Free Public License'
         assert LICENSE_MAP['MIT License'] == 'MIT'
         assert LICENSE_MAP['MIT'] == 'MIT License'
-        assert LICENSE_MAP['BSD 4-clause "Original" or "Old" License'] == 'BSD-4-Clause'
-        assert LICENSE_MAP['BSD-4-Clause'] == 'BSD 4-clause "Original" or "Old" License'
+        assert LICENSE_MAP[
+            'BSD 4-clause "Original" or "Old" License'] == 'BSD-4-Clause'
+        assert LICENSE_MAP[
+            'BSD-4-Clause'] == 'BSD 4-clause "Original" or "Old" License'
+
     def test_from_full_name(self):
         mit = License.from_full_name('MIT License')
         assert mit.identifier == 'MIT'
         assert mit.url == 'http://spdx.org/licenses/MIT'
+
     def test_from_identifier(self):
         mit = License.from_identifier('MIT')
         assert mit.full_name == 'MIT License'
