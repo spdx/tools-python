@@ -37,7 +37,7 @@ class TestLexer(object):
         self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 4)
         self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 5)
         self.token_assert_helper(self.l.token(), 'TEXT', 
-            '<text>This is a sample spreadsheet</text>',5)
+            '<text>This is a sample spreadsheet</text>', 5)
 
     def test_creation_info(self):
         data = '''
@@ -102,7 +102,6 @@ class TestLexer(object):
             3)
 
     def token_assert_helper(self, token, type, value, line):
-        print token
         assert token.type == type
         assert token.value == value
         assert token.lineno == line
@@ -110,16 +109,49 @@ class TestLexer(object):
 
 class TestParser(object):
     
+    document_str = '\n'.join(['SPDXVersion: SPDX-1.2',
+        'DataLicense: CC0-1.0', 
+        'DocumentComment: <text>Sample Comment</text>'
+        ])
+
+    creation_str = '\n'.join(['Creator: Person: Bob (bob@example.com)',
+        'Creator: Organization: Acme.',
+        'Created: 2010-02-03T00:00:00Z',
+        'CreatorComment: <text>Sample Comment</text>'
+        ])
+
+    review_str = '\n'.join([
+        'Reviewer: Person: Bob the Reviewer',
+        'ReviewDate: 2010-02-10T00:00:00Z',
+        'ReviewComment: <text>Bob was Here.</text>',
+        'Reviewer: Person: Alice the Reviewer',
+        'ReviewDate: 2011-02-10T00:00:00Z',
+        'ReviewComment: <text>Alice was also here.</text>'
+        ])
+
     def __init__(self):
         self.p = Parser(Builder(), StandardLogger())
         self.p.build()
 
-    def test_doc(self):
-        test_str = '\n'.join(['SPDXVersion: SPDX-1.2',
-        'DataLicense: CC0-1.0', 
-        'DocumentComment: <text>This is a sample spreadsheet</text>'
-        ])
-        document, error = self.p.parse(test_str)
+    def test_doc(self):        
+        document, error = self.p.parse(self.document_str)
         assert document is not None
         assert not error
         assert document.version == Version(major=1, minor=2)
+        assert document.data_license.identifier == 'CC0-1.0'
+        assert document.comment == 'Sample Comment'
+
+    def test_creation_info(self):
+        document, error = self.p.parse(self.creation_str)
+        assert document is not None
+        assert not error
+        assert len(document.creation_info.creators) == 2
+        assert document.creation_info.comment == 'Sample Comment'
+        assert ( document.creation_info.created_iso_format ==
+           '2010-02-03T00:00:00Z' ) 
+
+    def test_review(self):
+        document, error = self.p.parse(self.review_str)
+        assert document is not None
+        assert not error
+        assert len(document.reviews) == 2

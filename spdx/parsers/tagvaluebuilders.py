@@ -115,12 +115,12 @@ class DocBuilder(object):
 class EntityBuilder(object):
 
     tool_re = re.compile(r'Tool:\s*(.+)', re.UNICODE)
-    person_re = re.compile(r'Person:\s*((\w\s?)+)\((.*)\)', re.UNICODE)
-    org_re = re.compile(r'Organization:\s*((\w\s?)+)\((.*)\)', re.UNICODE)
+    person_re = re.compile(r'Person:\s*((\w\s?)+)(\((.*)\))?', re.UNICODE)
+    org_re = re.compile(r'Organization:\s*((\w\s?)+)(\((.*)\))?', re.UNICODE)
     PERSON_NAME_GROUP = 1
-    PERSON_EMAIL_GROUP = 3
+    PERSON_EMAIL_GROUP = 4
     ORG_NAME_GROUP = 1
-    ORG_EMAIL_GROUP = 3
+    ORG_EMAIL_GROUP = 4
     TOOL_NAME_GROUP = 1
 
     def __init__(self):
@@ -146,9 +146,9 @@ class EntityBuilder(object):
         match = self.org_re.match(entity)
         if match and validate_org_name(match.group(self.ORG_NAME_GROUP)):
             name = match.group(self.ORG_NAME_GROUP).strip()
-            email = match.group(self.ORG_EMAIL_GROUP).strip()
-            if len(email) != 0:
-                return creationinfo.Organization(name=name, email=email)
+            email = match.group(self.ORG_EMAIL_GROUP)
+            if ( email is not None )  and (len(email) != 0):
+                return creationinfo.Organization(name=name, email=email.strip())
             else:
                 return creationinfo.Organization(name=name, email=None)
         else:
@@ -164,9 +164,9 @@ class EntityBuilder(object):
         match = self.person_re.match(entity)
         if match and validate_person_name(match.group(self.PERSON_NAME_GROUP)):
             name = match.group(self.PERSON_NAME_GROUP).strip()
-            email = match.group(self.PERSON_EMAIL_GROUP).strip()
-            if len(email) != 0:
-                return creationinfo.Person(name=name, email=email)
+            email = match.group(self.PERSON_EMAIL_GROUP)
+            if (email is not None ) and ( len(email) != 0 ):
+                return creationinfo.Person(name=name, email=email.strip())
             else:
                 return creationinfo.Person(name=name, email=None)
         else:
@@ -250,7 +250,6 @@ class ReviewBuilder(object):
         Reviwer is an entity created by an EntityBuilder.
         Raises ValueError if not a valid reviewer type.
         """
-
         self.review_date_set = False
         self.review_comment_set = False
         if validate_reviewer(reviewer):
