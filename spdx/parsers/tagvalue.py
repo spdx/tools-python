@@ -19,39 +19,40 @@ from .. import document
 from .. import utils
 
 ERROR_MESSAGES = {
-    'TOOL_VALUE' : 'Invalid tool value {0} at line: {1}',
-    'ORG_VALUE' : 'Invalid organization value {0} at line: {1}',
-    'PERSON_VALUE' : 'Invalid person value {0} at line: {1}',
-    'CREATED_VALUE_TYPE' : 'Created value must be date in ISO 8601 format, line: {0}',
-    'MORE_THAN_ONE' : 'Only one {0} allowed, extra at line: {1}',
-    'CREATOR_COMMENT_VALUE_TYPE' : 'CreatorComment value must be free form text between <text></text> tags, line:{0}',
-    'DOC_LICENSE_VALUE' : 'Invalid DataLicense value \'{0}\', line:{1} must be CC0-1.0',
-    'DOC_LICENSE_VALUE_TYPE' : 'DataLicense must be CC0-1.0, line: {0}',
-    'DOC_VERSION_VALUE' : 'Invalid SPDXVersion \'{0}\' must be SPDX-M.N where M and N are numbers. Line: {1}',
-    'DOC_VERSION_VALUE_TYPE' : 'Invalid SPDXVersion value, must be SPDX-M.N where M and N are numbers. Line: {0}',
-    'DOC_COMMENT_VALUE_TYPE' : 'DocumentComment value must be free form text between <text></text> tags, line:{0}',
-    'REVIEWER_VALUE_TYPE' : 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
-    'CREATOR_VALUE_TYPE' : 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
-    'REVIEW_DATE_VALUE_TYPE' : 'ReviewDate value must be date in ISO 8601 format, line: {0}',
-    'REVIEW_COMMENT_VALUE_TYPE' : 'ReviewComment value must be free form text between <text></text> tags, line:{0}',
-    'A_BEFORE_B' : '{0} Can not appear before {1}, line: {2}',
-    'PACKAGE_NAME_VALUE' : 'PackageName must be single line of text, line: {0}',
-    'PKG_VERSION_VALUE' : 'PackageVersion must be single line of text, line: {0}',
-    'PKG_FILE_NAME_VALUE' : 'PackageFileName must be single line of text, line: {0}',
-    'PKG_SUPPL_VALUE' : 'PackageSupplier must be Organization, Person or NOASSERTION, line: {0}',
-    'PKG_ORIG_VALUE' : 'PackageOriginator must be Organization, Person or NOASSERTION, line: {0}',
-    'PKG_DOWN_VALUE' : 'PackageDownloadLocation must be a url or NONE or NOASSERTION, line: {0}',
-    'PKG_HOME_VALUE' : 'PackageHomePage must be a url or NONE or NOASSERTION, line: {0}',
-    'PKG_SRC_INFO_VALUE' : 'PackageSourceInfo must be free form text, line: {0}',
-    'PKG_CHKSUM_VALUE' : 'PackageChecksum must be a single line of text, line: {0}',
-    'PKG_LICS_CONC_VALUE' : 'PackageLicenseConcluded must be , line: {0}',
-    'PKG_LIC_FFILE_VALUE' : 'PackageLicenseInfoFromFiles must be, line: {0}',
-    'PKG_LICS_DECL_VALUE' : 'PackageLicenseDeclared must be, line: {0}',
+    'TOOL_VALUE': 'Invalid tool value {0} at line: {1}',
+    'ORG_VALUE': 'Invalid organization value {0} at line: {1}',
+    'PERSON_VALUE': 'Invalid person value {0} at line: {1}',
+    'CREATED_VALUE_TYPE': 'Created value must be date in ISO 8601 format, line: {0}',
+    'MORE_THAN_ONE': 'Only one {0} allowed, extra at line: {1}',
+    'CREATOR_COMMENT_VALUE_TYPE': 'CreatorComment value must be free form text between <text></text> tags, line:{0}',
+    'DOC_LICENSE_VALUE': 'Invalid DataLicense value \'{0}\', line:{1} must be CC0-1.0',
+    'DOC_LICENSE_VALUE_TYPE': 'DataLicense must be CC0-1.0, line: {0}',
+    'DOC_VERSION_VALUE': 'Invalid SPDXVersion \'{0}\' must be SPDX-M.N where M and N are numbers. Line: {1}',
+    'DOC_VERSION_VALUE_TYPE': 'Invalid SPDXVersion value, must be SPDX-M.N where M and N are numbers. Line: {0}',
+    'DOC_COMMENT_VALUE_TYPE': 'DocumentComment value must be free form text between <text></text> tags, line:{0}',
+    'REVIEWER_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
+    'CREATOR_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
+    'REVIEW_DATE_VALUE_TYPE': 'ReviewDate value must be date in ISO 8601 format, line: {0}',
+    'REVIEW_COMMENT_VALUE_TYPE': 'ReviewComment value must be free form text between <text></text> tags, line:{0}',
+    'A_BEFORE_B': '{0} Can not appear before {1}, line: {2}',
+    'PACKAGE_NAME_VALUE': 'PackageName must be single line of text, line: {0}',
+    'PKG_VERSION_VALUE': 'PackageVersion must be single line of text, line: {0}',
+    'PKG_FILE_NAME_VALUE': 'PackageFileName must be single line of text, line: {0}',
+    'PKG_SUPPL_VALUE': 'PackageSupplier must be Organization, Person or NOASSERTION, line: {0}',
+    'PKG_ORIG_VALUE': 'PackageOriginator must be Organization, Person or NOASSERTION, line: {0}',
+    'PKG_DOWN_VALUE': 'PackageDownloadLocation must be a url or NONE or NOASSERTION, line: {0}',
+    'PKG_HOME_VALUE': 'PackageHomePage must be a url or NONE or NOASSERTION, line: {0}',
+    'PKG_SRC_INFO_VALUE': 'PackageSourceInfo must be free form text, line: {0}',
+    'PKG_CHKSUM_VALUE': 'PackageChecksum must be a single line of text, line: {0}',
+    'PKG_LICS_CONC_VALUE': 'PackageLicenseConcluded must be , line: {0}',
+    'PKG_LIC_FFILE_VALUE': 'PackageLicenseInfoFromFiles must be, line: {0}',
+    'PKG_LICS_DECL_VALUE': 'PackageLicenseDeclared must be, line: {0}',
     'PKG_LICS_COMMENT_VALUE': 'PackageLicenseComments must be free form text, line: {0}',
-    'PKG_SUM_VALUE' : 'PackageSummary must be free form text, line: {0}',
-    'PKG_DESC_VALUE' : 'PackageDescription must be free form text, line: {0}'
+    'PKG_SUM_VALUE': 'PackageSummary must be free form text, line: {0}',
+    'PKG_DESC_VALUE': 'PackageDescription must be free form text, line: {0}'
 
 }
+
 
 class Parser(object):
 
@@ -63,7 +64,7 @@ class Parser(object):
         self.error = False
 
     def p_start_1(self, p):
-        'start : start attrib '    
+        'start : start attrib '
         pass
 
     def p_start_2(self, p):
@@ -117,7 +118,6 @@ class Parser(object):
         """
         pass
 
-
     def more_than_one_error(self, tag, line):
         self.error = True
         msg = ERROR_MESSAGES['MORE_THAN_ONE'].format(tag, line)
@@ -128,8 +128,8 @@ class Parser(object):
         first_tag came before second_tag.
         """
         self.error = True
-        msg = ERROR_MESSAGES['A_BEFORE_B'].format(first_tag, 
-            second_tag, line) 
+        msg = ERROR_MESSAGES['A_BEFORE_B'].format(first_tag,
+                                                  second_tag, line)
         self.logger.log(msg)
 
     def p_pkg_desc_1(self, p):
@@ -140,7 +140,7 @@ class Parser(object):
             self.more_than_one_error('PackageDescription', p.lineno(1))
         except OrderError:
             self.order_error('PackageDescription', 'PackageFileName',
-                p.lineno(1))
+                             p.lineno(1))
 
     def p_pkg_desc_2(self, p):
         """pkg_desc : PKG_DESC error"""
@@ -168,8 +168,8 @@ class Parser(object):
         try:
             self.builder.set_pkg_cr_text(self.document, p[2])
         except OrderError:
-            self.order_error('PackageCopyrightText', 'PackageFileName', 
-                p.lineno(1))
+            self.order_error('PackageCopyrightText', 'PackageFileName',
+                             p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageCopyrightText', p.lineno(1))
 
@@ -195,8 +195,8 @@ class Parser(object):
         try:
             self.builder.set_pkg_license_comment(self.document, p[2])
         except OrderError:
-            self.order_error('PackageLicenseComments', 'PackageFileName', 
-                p.lineno(1))
+            self.order_error('PackageLicenseComments', 'PackageFileName',
+                             p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageLicenseComments', p.lineno(1))
 
@@ -206,13 +206,13 @@ class Parser(object):
         msg = ERROR_MESSAGES['PKG_LICS_COMMENT_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
-
     def p_pkg_lic_decl_1(self, p):
         """pkg_lic_decl : PKG_LICS_DECL pkg_lic_decl_value"""
         try:
             self.builder.set_pkg_license_declared(self.document, p[2])
         except OrderError:
-            self.order_error('PackageLicenseDeclared', 'PackageName', p.lineno(1))
+            self.order_error(
+                'PackageLicenseDeclared', 'PackageName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageLicenseDeclared', p.lineno(1))
         except ValueError:
@@ -230,19 +230,18 @@ class Parser(object):
         """pkg_lic_decl_value : pkg_lic_conc_value"""
         p[0] = p[1]
 
-
     def p_pkg_lic_ff_1(self, p):
         """pkg_lic_ff : PKG_LICS_FFILE pkg_lic_ff_value"""
         try:
             self.builder.set_pkg_license_from_file(self.document, p[2])
         except OrderError:
-            self.order_error('PackageLicenseInfoFromFiles', 'PackageName', 
-                p.lineno(1))
+            self.order_error('PackageLicenseInfoFromFiles', 'PackageName',
+                             p.lineno(1))
         except ValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_LIC_FFILE_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
-    
+
     def p_pkg_lic_ff_value_1(self, p):
         """pkg_lic_ff_value : NONE"""
         p[0] = None
@@ -268,8 +267,8 @@ class Parser(object):
         except CardinalityError:
             self.more_than_one_error('PackageLicenseConcluded', p.lineno(1))
         except OrderError:
-            self.order_error('PackageLicenseConcluded', 'PackageFileName', 
-                p.lineno(1))
+            self.order_error('PackageLicenseConcluded', 'PackageFileName',
+                             p.lineno(1))
         except ValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_LICS_CONC_VALUE'].format(p.lineno(1))
@@ -300,7 +299,8 @@ class Parser(object):
         except CardinalityError:
             self.more_than_one_error('PackageSourceInfo', p.lineno(1))
         except OrderError:
-            self.order_error('PackageSourceInfo', 'PackageFileName', p.lineno(1))
+            self.order_error(
+                'PackageSourceInfo', 'PackageFileName', p.lineno(1))
 
     def p_pkg_src_info_2(self, p):
         """pkg_src_info : PKG_SRC_INFO error"""
@@ -328,7 +328,8 @@ class Parser(object):
         try:
             self.builder.set_pkg_verif_code(self.document, p[2])
         except OrderError:
-            self.order_error('PackageVerificationCode', 'PackageName', p.lineno(1))
+            self.order_error(
+                'PackageVerificationCode', 'PackageName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageVerificationCode', p.lineno(1))
 
@@ -370,7 +371,8 @@ class Parser(object):
         try:
             self.builder.set_pkg_down_location(self.document, p[2])
         except OrderError:
-            self.order_error('PackageDownloadLocation', 'PackageName', p.lineno(1))
+            self.order_error(
+                'PackageDownloadLocation', 'PackageName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageDownloadLocation', p.lineno(1))
 
@@ -379,7 +381,6 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES['PKG_DOWN_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
-
 
     def p_pkg_down_value_1(self, p):
         """pkg_down_value : LINE """
@@ -398,7 +399,7 @@ class Parser(object):
         try:
             self.builder.set_pkg_originator(self.document, p[2])
         except OrderError:
-           self.order_error('PackageOriginator', 'PackageName', line)
+            self.order_error('PackageOriginator', 'PackageName', line)
         except ValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_ORIG_VALUE'].format(p.lineno(1))
@@ -420,7 +421,7 @@ class Parser(object):
         except OrderError:
             self.order_error('PackageSupplier', 'PackageName', p.lineno(1))
         except CardinalityError:
-           self.more_than_one_error('PackageSupplier', p.lineno(1))
+            self.more_than_one_error('PackageSupplier', p.lineno(1))
         except ValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_SUPPL_VALUE'].format(p.lineno(1))
@@ -431,12 +432,11 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES['PKG_SUPPL_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
- 
 
     def p_pkg_supplier_values_1(self, p):
         """pkg_supplier_values : NO_ASSERT"""
         p[0] = utils.NoAssert()
-        
+
     def p_pkg_supplier_values_2(self, p):
         """pkg_supplier_values : entity"""
         p[0] = p[1]
@@ -482,12 +482,11 @@ class Parser(object):
         """package_name : PKG_NAME error"""
         self.error = True
         msg = ERROR_MESSAGES['PACKAGE_NAME_VALUE'].format(p.lineno(1))
-        self.logger.log(msg) 
+        self.logger.log(msg)
 
     def p_reviewer_1(self, p):
         """reviewer : REVIEWER entity"""
         self.builder.add_reviewer(self.document, p[2])
-       
 
     def p_reviewer_2(self, p):
         """reviewer : REVIEWER error"""
@@ -531,7 +530,8 @@ class Parser(object):
             self.builder.set_lics_list_ver(self.document, p[2])
         except ValueError:
             self.error = True
-            msg = ERROR_MESSAGES['LIC_LIST_VER_VALUE'].format(p[2], p.lineno(2))
+            msg = ERROR_MESSAGES['LIC_LIST_VER_VALUE'].format(
+                p[2], p.lineno(2))
             self.logger.log(msg)
         except CardinalityError:
             self.more_than_one_error('LicenseListVersion', p.lineno(1))
@@ -542,16 +542,15 @@ class Parser(object):
         msg = ERROR_MESSAGES['LIC_LIST_VER_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
-
     def p_doc_comment_1(self, p):
         """doc_comment : DOC_COMMENT TEXT"""
         try:
             self.builder.set_doc_comment(self.document, p[2])
         except CardinalityError:
-            self.more_than_one_error('DocumentComment', p.lineno(1))     
+            self.more_than_one_error('DocumentComment', p.lineno(1))
 
     def p_doc_comment_2(self, p):
-        """doc_comment : DOC_COMMENT error"""    
+        """doc_comment : DOC_COMMENT error"""
         self.error = True
         msg = ERROR_MESSAGES['DOC_COMMENT_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
@@ -585,8 +584,9 @@ class Parser(object):
             self.logger.log(msg)
         except IncompatibleVersionError:
             self.error = True
-            self.logger.log('SPDXVersion must be SPDX-1.2 found {0}.'.format(value))
-            
+            self.logger.log(
+                'SPDXVersion must be SPDX-1.2 found {0}.'.format(value))
+
     def p_spdx_version_2(self, p):
         """spdx_version : DOC_VERSION error"""
         self.error = True
@@ -609,7 +609,6 @@ class Parser(object):
     def p_creator_1(self, p):
         """creator : CREATOR entity"""
         self.builder.add_creator(self.document, p[2])
-
 
     def p_creator_2(self, p):
         """creator : CREATOR error"""
@@ -635,12 +634,12 @@ class Parser(object):
         """
         try:
             p[0] = self.builder.build_tool(self.document, p[1])
-        except ValueError: 
+        except ValueError:
             msg = ERROR_MESSAGES['TOOL_VALUE'].format(p[1], p.lineno(1))
             self.logger.log(msg)
             self.error = True
             p[0] = None
-        
+
     def p_entity_2(self, p):
         """entity : ORG_VALUE
         """
@@ -651,8 +650,7 @@ class Parser(object):
             self.logger.log(msg)
             self.error = True
             p[0] = None
-        
-    
+
     def p_entity_3(self, p):
         """entity : PERSON_VALUE
         """
@@ -677,6 +675,3 @@ class Parser(object):
         self.error = False
         self.yacc.parse(text, lexer=self.lex)
         return self.document, self.error
-
-
-
