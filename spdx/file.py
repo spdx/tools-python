@@ -12,13 +12,16 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+
 class FileType(object):
     SOURCE = 1
     BINARY = 2
     ARCHIVE = 3
     OTHER = 4
 
+
 class File(object):
+
     """Representation of SPDX file.
     Fields:
     name - File name, str mandatory one.
@@ -35,6 +38,7 @@ class File(object):
     dependencies - list of file locations.
     artifact_of_project_name - list of project names
     """
+
     def __init__(self, name):
         super(File, self).__init__()
         self.name = name
