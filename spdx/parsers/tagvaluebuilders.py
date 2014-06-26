@@ -299,19 +299,25 @@ class ReviewBuilder(object):
 class PackageBuilder(object):
     def __init__(self):
         super(PackageBuilder, self).__init__()
-        self.package_set = False
-        self.package_vers_set = False
-        self.package_file_name_set = False
-        self.package_supplier_set = False
-        self.package_originator_set = False
-        self.package_down_location_set = False
-        self.package_home_set = False
-        self.package_verif_set = False
-        self.package_chk_sum_set = False
-        self.package_license_declared_set = False
-        self.package_license_comment_set = False
-        self.package_cr_text_set = False
-        self.package_desc_set = False
+        self.reset_package()
+
+    def reset_package(self):
+       self.package_set = False
+       self.package_vers_set = False
+       self.package_file_name_set = False
+       self.package_supplier_set = False
+       self.package_originator_set = False
+       self.package_down_location_set = False
+       self.package_home_set = False
+       self.package_verif_set = False
+       self.package_chk_sum_set = False
+       self.package_source_info_set = False
+       self.package_conc_lics_set = False
+       self.package_license_declared_set = False
+       self.package_license_comment_set = False
+       self.package_cr_text_set = False
+       self.package_summary_set = False
+       self.package_desc_set = False
 
     def create_package(self, doc, name):
         """Creates a package for the SPDX Document.
@@ -332,7 +338,7 @@ class PackageBuilder(object):
         Raises OrderError if no package previously defined.
         """
         self.assert_package_exists()
-        if not package_vers_set:
+        if not self.package_vers_set:
             self.package_vers_set = True
             doc.package.version = version
             return True

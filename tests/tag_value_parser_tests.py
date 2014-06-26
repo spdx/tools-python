@@ -129,6 +129,26 @@ class TestParser(object):
         'ReviewComment: <text>Alice was also here.</text>'
         ])
 
+    package_str = '\n'.join([
+        'PackageName: Test',
+        'PackageVersion: Version 0.9.2',
+        'PackageDownloadLocation: http://example.com/test',
+        'PackageSummary: <text>Test package</text>',
+        'PackageSourceInfo: <text>Version 1.0 of test</text>',
+        'PackageFileName: test-1.0.zip',
+        'PackageSupplier: Organization:ACME',
+        'PackageOriginator: Organization:ACME',
+        'PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12',
+        'PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (something.rdf, something.txt)',
+        'PackageDescription: <text>A package.</text>',
+        'PackageCopyrightText: <text> Copyright 2010, 2011 Acme Inc.</text>',
+        'PackageLicenseDeclared: Apache-2.0',
+        'PackageLicenseConcluded: Apache-2.0',
+        'PackageLicenseInfoFromFiles: Apache-1.0',
+        'PackageLicenseInfoFromFiles: Apache-2.0',
+        'PackageLicenseComments: <text>License Comments</text>'
+        ])
+
     def __init__(self):
         self.p = Parser(Builder(), StandardLogger())
         self.p.build()
@@ -155,3 +175,11 @@ class TestParser(object):
         assert document is not None
         assert not error
         assert len(document.reviews) == 2
+
+    def test_package(self):
+        document, error = self.p.parse(self.package_str)
+        assert document is not None
+        assert not error
+        assert document.package.name == 'Test'
+        assert document.package.version == 'Version 0.9.2'
+        assert len(document.package.licenses_from_files) == 2

@@ -23,7 +23,7 @@ PackageName: SPDX Translator
 PackageVersion: Version 0.9.2
 PackageDownloadLocation: http://www.spdx.org/tools
 PackageSummary: <text>SPDX Translator utility</text>
-PackageSourceInfo: Version 1.0 of the SPDX Translator application
+PackageSourceInfo: <text>Version 1.0 of the SPDX Translator application</text>
 PackageFileName: spdxtranslator-1.0.zip
 PackageSupplier: Organization:Linux Foundation
 PackageOriginator: Organization:SPDX
