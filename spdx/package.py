@@ -11,7 +11,10 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
+
+
 class Package(object):
+
     """Represents an analyzed Package.
     Fields:
         name : Mandatory, string.
@@ -31,8 +34,9 @@ class Package(object):
         description: Optional str.
         files: List of files in package, atleast one.
     """
-    def __init__(self, name=None, download_location=None,version="", file_name="", 
-            supplier=None, originator=None):
+
+    def __init__(self, name=None, download_location=None, version="", file_name="",
+                 supplier=None, originator=None):
         super(Package, self).__init__()
         self.name = name
         self.version = version
