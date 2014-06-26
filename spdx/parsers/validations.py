@@ -117,6 +117,19 @@ def validate_file_cpyright(value, optional=False):
         return True
     elif value is None:
         return True
+    else:
+        return False
+
+def validate_lics_from_file(value, optional=False):
+    if value is None:
+        return True
+    elif type(value) is utils.NoAssert:
+        return True
+    elif type(value) is str:
+        return True
+    else:
+        return False
+
 
 def validate_file_notice(value, optional=False):
     return validate_is_free_form_text(value, optional)

@@ -49,6 +49,7 @@ ERROR_MESSAGES = {
     'PKG_LICS_DECL_VALUE' : 'PackageLicenseDeclared must be, line: {0}',
     'PKG_LICS_COMMENT_VALUE': 'PackageLicenseComments must be free form text, line: {0}',
     'PKG_SUM_VALUE' : 'PackageSummary must be free form text, line: {0}',
+    'PKG_DESC_VALUE' : 'PackageDescription must be free form text, line: {0}'
 
 }
 
@@ -91,7 +92,7 @@ class Parser(object):
                   | pkg_orig
                   | pkg_chksum
                   | pkg_verif
-                  | PKG_DESC
+                  | pkg_desc
                   | pkg_lic_decl
                   | pkg_lic_conc
                   | pkg_lic_ff
@@ -129,6 +130,22 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES['A_BEFORE_B'].format(first_tag, 
             second_tag, line) 
+        self.logger.log(msg)
+
+    def p_pkg_desc_1(self, p):
+        """pkg_desc : PKG_DESC TEXT"""
+        try:
+            self.builder.set_pkg_desc(self.document, p[2])
+        except CardinalityError:
+            self.more_than_one_error('PackageDescription', p.lineno(1))
+        except OrderError:
+            self.order_error('PackageDescription', 'PackageFileName',
+                p.lineno(1))
+
+    def p_pkg_desc_2(self, p):
+        """pkg_desc : PKG_DESC error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_DESC_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_pkg_summary_1(self, p):
