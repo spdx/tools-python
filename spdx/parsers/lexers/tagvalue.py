@@ -129,15 +129,19 @@ class Lexer(object):
         t.value = t.value[1:].strip()
         return t
 
-    def t_LINE(self, t):
-        r':.+'
-        t.value = t.value[1:].strip()
-        return t
-
-    def t_KEYWORD(self, t):
+    def t_KEYWORD_AS_TAG(self, t):
         r'[a-zA-Z]+'
         t.type = self.reserved.get(t.value, 'UNKNOWN_TAG')
         t.value = t.value.strip()
+        return t
+
+    def t_LINE_OR_KEYWORD_VALUE(self, t):
+        r':.+'
+        t.value = t.value[1:].strip()
+        if t.value in self.reserved.keys():
+            t.type = self.reserved[t.value]
+        else:
+            t.type = 'LINE'
         return t
 
     def t_comment(self, t):
