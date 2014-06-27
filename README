@@ -35,6 +35,10 @@ Sample Tag/Value parsing Usage:
     # data is a string containing the SPDX file.
     document, error = p.parse(data)
 
+Installation:
+=============
+Clone the repository and run 'python setup.py install'
+on windows the command should be 'setup.py install'
 
 
 
