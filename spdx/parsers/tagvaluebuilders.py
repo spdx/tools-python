@@ -796,29 +796,17 @@ class FileBuilder(object):
         else:
             raise OrderError('File::Dependency')
 
-    def set_file_artifact_of_project_name(self, doc, value):
-        """Raises OrderError if no package or file defined.
+    def set_file_atrificat_of_project(self, doc, symbol, value):
+        """Sets a file name, uri or home artificat.
+        Raises OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-            self.file(doc).artifact_of_project_name.append(value)
+            attribute = 'self.file(doc).artificat_of_{0}.append(value)'.format(
+                symbol)
+            eval(attribute)
         else:
-            raise OrderError('File::AoFProfjectName')
+            raise OrderError('File::Artificat')
 
-    def set_file_artificat_of_project_home(self, doc, value):
-        """Raises OrderError if no package or file defined.
-        """
-        if self.has_package(doc) and self.has_file(doc):
-            self.file(doc).artifact_of_project_home.append(value)
-        else:
-            raise OrderError('File::AoFProfjectHome')
-
-    def set_file_artificat_of_project_uri(self, doc, value):
-        """Raises OrderError if no package or file defined.
-        """
-        if self.has_package(doc) and self.has_file(doc):
-            self.file(doc).artifact_of_project_uri.append(value)
-        else:
-            raise OrderError('File::AoFProfjectUri')
 
     def file(self, doc):
         """Returns the last file in the document's package's file list."""
