@@ -35,6 +35,9 @@ Sample Tag/Value parsing Usage:
     # data is a string containing the SPDX file.
     document, error = p.parse(data)
 
+The file parse_tv_ex.py has a working example
+try running 'python parse_tv_ex.py 'Examples/SPDXSimpleTag.tax' '
+
 Installation:
 =============
 Clone the repository and run 'python setup.py install'
