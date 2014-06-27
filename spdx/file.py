@@ -36,7 +36,9 @@ class File(object):
     notice - optional One.
     contributers - List of strings.
     dependencies - list of file locations.
-    artifact_of_project_name - list of project names
+    artifact_of_project_name - list of project names, possibly empty.
+    artifact_of_project_home - list of project home page, possibly empty.
+    artifact_of_project_uri - list of project uris, possibly empty.
     """
 
     def __init__(self, name):
