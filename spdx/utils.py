@@ -18,12 +18,15 @@ from ply import yacc, lex
 
 
 def datetime_iso_format(date):
+    """Returns and iso 8601 representation of a datetime object."""
     return "{0:0>4}-{1:0>2}-{2:0>2}T{3:0>2}:{4:0>2}:{5:0>2}Z".format(
         date.year, date.month, date.day, date.hour,
         date.minute, date.second)
 
+# Matches an iso 8601 date representation
 DATE_ISO_REGEX = re.compile(r'(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z',
                             re.UNICODE)
+# Groups for retrivieng values from DATE_ISO_REGEX matches.
 DATE_ISO_YEAR_GRP = 1
 DATE_ISO_MONTH_GRP = 2
 DATE_ISO_DAY_GRP = 3
@@ -33,6 +36,9 @@ DATE_ISO_SEC_GRP = 6
 
 
 def datetime_from_iso_format(string):
+    """Returns a datetime object from an iso 8601 representation.
+    Returns None if string is non conforming.
+    """
     match = DATE_ISO_REGEX.match(string)
     if match:
         date = datetime.datetime(year=int(match.group(DATE_ISO_YEAR_GRP)),
@@ -47,6 +53,8 @@ def datetime_from_iso_format(string):
 
 
 class NoAssert(object):
+
+    """Represents SPDX NOASSERTION value."""
     pass
 
 
@@ -88,12 +96,17 @@ class LicenseListLexer(object):
         pass
 
     def input(self, data):
+        """Set input, data - str."""
         self.lexer.input(data)
 
     def token(self):
+        """Get the next token or None if exhausted input."""
         return self.lexer.token()
 
     def build(self, **kwargs):
+        """Build lexer, must be called before input or token methods.
+        Only need to build once.
+        """
         self.lexer = lex.lex(module=self, **kwargs)
 
 
@@ -147,9 +160,11 @@ class LicenseListParser(object):
         pass
 
     def build(self, **kwargs):
+        """Must be called before parse."""
         self.yacc = yacc.yacc(module=self, **kwargs)
 
     def parse(self, data):
+        """Parses a license list and returns a License or None if it failed."""
         try:
             return self.yacc.parse(data, lexer=self.lex)
         except:
