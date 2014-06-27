@@ -36,7 +36,7 @@ Sample Tag/Value parsing Usage:
     document, error = p.parse(data)
 
 The file parse_tv_ex.py has a working example
-try running 'python parse_tv_ex.py 'Examples/SPDXSimpleTag.tax' '
+try running 'python parse_tv_ex.py 'Examples/SPDXSimpleTag.tag' '
 
 Installation:
 =============
