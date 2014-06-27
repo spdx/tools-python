@@ -12,9 +12,12 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
+
 class InvalidDocumentError(Exception):
+
     """Raised if attempting to write an invalid document."""
     pass
+
 
 def write_seperators(out):
     for i in xrange(0, 4):
@@ -31,7 +34,9 @@ def write_creation_info(creation_info, out):
     out.write('Created: {0}\n'.format(creation_info.created_iso_format))
     # possible comment
     if creation_info.has_comment():
-        out.write('CreatorComment: <text>{0}</text>\n'.format(creation_info.comment))
+        out.write(
+            'CreatorComment: <text>{0}</text>\n'.format(creation_info.comment))
+
 
 def write_review(review, out):
     """Writes out the fields of a single review in tag/value format."""
@@ -44,6 +49,7 @@ def write_review(review, out):
 
 def write_package(package, out):
     pass
+
 
 def write_extr_licens(lics, out):
     pass
@@ -58,10 +64,11 @@ def write_document(document, out):
     # Write out document information
     out.write('# Document Information\n\n')
     out.write('SPDXVersion: SPDX-{0}.{1}\n'.format(document.version.major,
-        document.version.minor))
+                                                   document.version.minor))
     out.write('DataLicense: {0}\n'.format(document.data_license.identifier))
     if document.has_comment():
-        out.write('DocumentComment: <text>{0}</text>\n'.format(document.comment))
+        out.write(
+            'DocumentComment: <text>{0}</text>\n'.format(document.comment))
     write_seperators(out)
     # Write out creation info
     write_creation_info(document.creation_info, out)
@@ -76,5 +83,3 @@ def write_document(document, out):
     for lic in document.extracted_licenses:
         write_extr_licens(lic)
         write_seperators(out)
-    
-
