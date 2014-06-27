@@ -80,7 +80,7 @@ class Lexer(object):
     }
     states = (('text', 'exclusive'),)
 
-    tokens = ['COMMENT', 'TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
+    tokens = ['TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
               'ORG_VALUE', 'PERSON_VALUE',
               'DATE', 'LINE', 'CHKSUM'] + list(reserved.values())
 
@@ -140,7 +140,7 @@ class Lexer(object):
         t.value = t.value.strip()
         return t
 
-    def t_COMMENT(self, t):
+    def t_comment(self, t):
         r'\#.*'
         pass
 
