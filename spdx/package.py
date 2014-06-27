@@ -56,3 +56,9 @@ class Package(object):
         self.summary = None
         self.description = None
         self.files = []
+
+    def validate(self, messages):
+        """Validates the package's fields. Appends user friends errors
+        to messages.
+        """
+        return True
