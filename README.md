@@ -36,6 +36,9 @@ Sample Tag/Value parsing Usage:
 
 ```
 
+The file `parse_tv_ex.py` has a working example
+try running `python parse_tv_ex.py 'Examples/SPDXSimpleTag.tax' `
+
 Installation:
 =============
 Clone the repository and run `python setup.py install`
