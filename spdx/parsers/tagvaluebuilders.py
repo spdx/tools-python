@@ -817,7 +817,7 @@ class FileBuilder(object):
         Raises OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-            attribute = 'self.file(doc).artificat_of_project_{0}.append(value)'.format(
+            attribute = 'self.file(doc).artifact_of_project_{0}.append(value)'.format(
                 symbol)
             eval(attribute)
         else:
@@ -846,6 +846,7 @@ class FileBuilder(object):
         self.file_conc_lics_set = False
         self.file_license_comment_set = False
         self.file_notice_set = False
+        self.file_copytext_set = False
 
 
 class LicenseBuilder(object):
