@@ -39,5 +39,19 @@ PackageLicenseInfoFromFiles: Apache-1.0
 PackageLicenseInfoFromFiles: Apache-2.0
 PackageLicenseComments: <text>License Comments</text>
 
+# File Info
+
+FileName: testfile.java
+FileType: SOURCE
+FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
+LicenseConcluded: Apache-2.0
+LicenseInfoInFile: Apache-2.0
+FileCopyrightText: <text>Copyright 2014 Acme Inc.</text>
+ArtifactOfProjectName: AcmeTest
+ArtifactOfProjectHomePage: http://www.acme.org/
+ArtifactOfProjectURI: http://www.acme.org/
+FileComment: <text>Very long file</text>
+
+
 
 
