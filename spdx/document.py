@@ -140,6 +140,9 @@ class Document(object):
         self.reviews.append(review)
 
     def validate(self, messages=[]):
+        """Validate all fields of the document.
+        messages - appends user friendly error messages to this list for display.
+        """
         return (self.validate_version(messages)
                 & self.validate_data_lics(messages)
                 & self.validate_creation_info(messages)
