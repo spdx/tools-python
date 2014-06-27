@@ -31,6 +31,7 @@ class Creator(object):
         return self.name == other.name
 
 
+
 class Organization(Creator):
 
     """Organization entity.
@@ -48,6 +49,13 @@ class Organization(Creator):
             return False
         else:
             return (self.name + self.email) == (other.name + other.email)
+
+    def to_value(self):
+        """Tag/value representation of Organization entity."""
+        if self.email is not None:
+            return 'Organization : {0} ({1})'.format(self.name, self.email)
+        else:
+            return 'Organization: {0}'.format(self.name)
 
 
 class Person(Creator):
@@ -68,6 +76,12 @@ class Person(Creator):
         else:
             return (self.name + self.email) == (other.name + other.email)
 
+    def to_value(self):
+        """Tag/value representation of Person entity."""
+        if self.email is not None:
+            return 'Person : {0} ({1})'.format(self.name, self.email)
+        else:
+            return 'Person: {0}'.format(self.name)
 
 class Tool(Creator):
 
@@ -78,6 +92,10 @@ class Tool(Creator):
 
     def __init__(self, name):
         super(Tool, self).__init__(name)
+
+    def to_value(self):
+        """Tag/value representation of Tool entity."""
+        return 'Tool: {0}'.format(self.name)
 
 
 class CreationInfo(object):
@@ -112,6 +130,9 @@ class CreationInfo(object):
     @property
     def created_iso_format(self):
         return datetime_iso_format(self.created)
+
+    def has_comment(self):
+        return self.comment is not None
 
     def validate(self, messages):
         """Returns True if the fields are valid according to the SPDX standard.
