@@ -47,7 +47,7 @@ ERROR_MESSAGES = {
     'PKG_CHKSUM_VALUE': 'PackageChecksum must be a single line of text, line: {0}',
     'PKG_LICS_CONC_VALUE': 'PackageLicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line: {0}',
     'PKG_LIC_FFILE_VALUE': 'PackageLicenseInfoFromFiles must be, line: {0}',
-    'PKG_LICS_DECL_VALUE': 'PackageLicenseDeclared must be, line: {0}',
+    'PKG_LICS_DECL_VALUE': 'PackageLicenseDeclared must be NOASSERTION, NONE, license identifier or license list, line: {0}',
     'PKG_LICS_COMMENT_VALUE': 'PackageLicenseComments must be free form text, line: {0}',
     'PKG_SUM_VALUE': 'PackageSummary must be free form text, line: {0}',
     'PKG_DESC_VALUE': 'PackageDescription must be free form text, line: {0}',
