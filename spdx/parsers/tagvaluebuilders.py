@@ -53,8 +53,8 @@ class OrderError(BuilderException):
 
 
 def str_from_text(text):
-    """Returns content of a free form text block as a python string."""
-    REGEX = re.compile('<text>((.|\n)+)</text>')
+    """Returns content of a free form text block as a string."""
+    REGEX = re.compile('<text>((.|\n)+)</text>', re.UNICODE)
     match = REGEX.match(text)
     if match:
         return match.group(1)
@@ -63,13 +63,12 @@ def str_from_text(text):
 
 
 class DocBuilder(object):
-    VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)')
+    """Responsible for setting the fields of the top level document model."""
+    VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
 
     def __init__(self):
         super(DocBuilder, self).__init__()
-        self.doc_version_set = False
-        self.doc_comment_set = False
-        self.doc_data_lics_set = False
+        self.reset_document()
 
     def set_doc_version(self, doc, value):
         """Sets the document version. 
@@ -121,6 +120,12 @@ class DocBuilder(object):
                 raise ValueError('Document::Comment')
         else:
             raise CardinalityError('Document::Comment')
+
+    def reset_document(self):
+        """Resets the state to allow building new documents"""
+        self.doc_version_set = False
+        self.doc_comment_set = False
+        self.doc_data_lics_set = False
 
 
 class EntityBuilder(object):
@@ -186,9 +191,7 @@ class CreationInfoBuilder(object):
 
     def __init__(self):
         super(CreationInfoBuilder, self).__init__()
-        self.created_date_set = False
-        self.creation_comment_set = False
-        self.lics_list_ver_set = False
+        self.reset_creation_info()
 
     def add_creator(self, doc, creator):
         """Adds a creator to the document's creation info.
@@ -248,21 +251,31 @@ class CreationInfoBuilder(object):
         else:
             raise CardinalityError('CreationInfo::LicenseListVersion')
 
-
+    def reset_creation_info(self):
+        """Resets builder's state to allow building new creation info."""
+        self.created_date_set = False
+        self.creation_comment_set = False
+        self.lics_list_ver_set = False
+        
 class ReviewBuilder(object):
 
     def __init__(self):
         super(ReviewBuilder, self).__init__()
+        self.reset_reviews()
+
+
+    def reset_reviews(self):
+        """Resets the builder's state to allow building new reviews."""
         self.review_date_set = False
-        self.review_comment_set = False
+        self.review_comment_set = False    
 
     def add_reviewer(self, doc, reviewer):
         """Adds a reviewer to the SPDX Document.
         Reviwer is an entity created by an EntityBuilder.
         Raises ValueError if not a valid reviewer type.
         """
-        self.review_date_set = False
-        self.review_comment_set = False
+        # Each reviewer marks the start of a new review object.
+        self.reset_reviews()
         if validate_reviewer(reviewer):
             doc.add_review(review.Review(reviewer=reviewer))
             return True
@@ -314,6 +327,7 @@ class PackageBuilder(object):
         self.reset_package()
 
     def reset_package(self):
+        """Resets the builder's state in order to build new packages."""
         self.package_set = False
         self.package_vers_set = False
         self.package_file_name_set = False
@@ -620,6 +634,8 @@ class FileBuilder(object):
         """
         if self.has_package(doc):
             doc.package.files.append(file.File(name))
+            # A file name marks the start of a new file instance.
+            # The builder must be reset
             self.reset_file_stat()
             return True
         else:
@@ -801,7 +817,7 @@ class FileBuilder(object):
         Raises OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-            attribute = 'self.file(doc).artificat_of_{0}.append(value)'.format(
+            attribute = 'self.file(doc).artificat_of_project_{0}.append(value)'.format(
                 symbol)
             eval(attribute)
         else:
@@ -823,6 +839,7 @@ class FileBuilder(object):
         return doc.package is not None
 
     def reset_file_stat(self):
+        """Resets the builder's state to enable building new files."""
         self.file_comment_set = False
         self.file_type_set = False
         self.file_chksum_set = False
@@ -844,3 +861,12 @@ class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
 
     def __init__(self):
         super(Builder, self).__init__()
+
+    def reset(self):
+        """Resets builder's state for building new documents.
+        Must be called between usage with different documents.
+        """
+        self.reset_document()
+        self.reset_package()
+        self.reset_file_stat()
+        self.reset_reviews()
