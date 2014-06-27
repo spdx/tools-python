@@ -57,3 +57,9 @@ class File(object):
         self.artifact_of_project_name = []
         self.artifact_of_project_home = []
         self.artifact_of_project_uri = []
+
+    def validate(self, messages):
+        """Validates the fields and appends user friendly messages 
+        to messages parameter if there are errors.
+        """
+        return True
