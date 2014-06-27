@@ -40,6 +40,9 @@ class Review(object):
         datetime_iso_format(self.review_date)
 
     def validate(self, messages):
+        """Returns True if all the fields are valid.
+        Appends any error messages to messages parameter.
+        """
         return (self.validate_reviewer(messages) &
                 self.validate_review_date(messages))
 
