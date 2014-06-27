@@ -58,6 +58,12 @@ class NoAssert(object):
     pass
 
 
+class UnKnown(object):
+
+    """Represents SPDX UNKNOWN value."""
+    pass
+
+
 class LicenseListLexer(object):
 
     def __init__(self):
