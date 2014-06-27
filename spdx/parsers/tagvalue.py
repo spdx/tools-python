@@ -62,6 +62,11 @@ ERROR_MESSAGES = {
     'FILE_NOTICE_VALUE': 'FileNotice must be free form text, line: {0}',
     'FILE_CONTRIB_VALUE': 'FileContributor must be a single line, line: {0}',
     'FILE_DEP_VALUE': 'FileDependency must be a single line, line: {0}',
+    'ART_PRJ_NAME_VALUE' : 'ArtifactOfProjectName must be a single line, line: {0}',
+    'FILE_ART_OPT_ORDER' : 'ArtificatOfProjectHomePage and ArtificatOfProjectURI must immediatly follow ArtifactOfProjectName, line: {0}',
+    'ART_PRJ_HOME_VALUE' : 'ArtificatOfProjectHomePage must be a URL or UNKNOWN, line: {0}',
+    'ART_PRJ_URI_VALUE' : 'ArtificatOfProjectURI must be a URI, line: {0}',
+    'UNKNOWN_TAG' : 'Found unknown tag : {0} at line: {1}',
 }
 
 
@@ -122,15 +127,14 @@ class Parser(object):
                   | file_notice
                   | file_comment
                   | file_contrib
-                  | file_dp
-                  | ART_PRJ_NAME
-                  | ART_PRJ_HOME
-                  | ART_PRJ_URI
+                  | file_dep
+                  | file_artifact
                   | LICS_ID
                   | LICS_TEXT
                   | LICS_NAME
                   | LICS_CRS_REG
                   | LICS_COMMENT
+                  | unknown_tag
         """
         pass
 
@@ -148,6 +152,78 @@ class Parser(object):
                                                   second_tag, line)
         self.logger.log(msg)
 
+    def p_uknown_tag(self, p):
+        """unknown_tag : UNKNOWN_TAG"""
+        self.error = True
+        msg = ERROR_MESSAGES['UNKNOWN_TAG'].format(p[1], p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_artifact_1(self, p):
+        """file_artifact : prj_name_art file_art_rest"""
+        pass
+
+    def p_file_artificat_2(self, p):
+        """file_artifact : prj_name_art error"""
+        self.error = True
+        msg = ERROR_MESSAGES['FILE_ART_OPT_ORDER'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_file_art_rest(self, p):
+        """file_art_rest : prj_home_art prj_uri_art
+                         | prj_uri_art prj_home_art
+        """
+        pass
+
+    def p_prj_uri_art_1(self, p):
+        """prj_uri_art : ART_PRJ_URI LINE"""
+        try:
+            self.builder.set_file_atrificat_of_project(self.document,
+                'uri', p[2])
+        except OrderError:
+            self.order_error('ArtificatOfProjectURI', 'FileName', p.lineno(1))
+
+    def p_prj_uri_art_2(self, p):
+        """prj_uri_art : ART_PRJ_URI error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ART_PRJ_URI_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_prj_home_art_1(self, p):
+        """prj_home_art : ART_PRJ_HOME LINE"""
+        try:
+            self.builder.set_file_atrificat_of_project(self.document,
+                'home', p[2])
+        except OrderError:
+            self.order_error('ArtificatOfProjectHomePage', 'FileName', p.lineno(1))
+
+    def p_prj_home_art_2(self, p):
+        """prj_name_art : ART_PRJ_HOME UN_KNOWN"""
+        try:
+            self.builder.set_file_atrificat_of_project(self.document, 
+                'home', utils.UnKnown())
+        except OrderError:
+            self.order_error('ArtifactOfProjectName', 'FileName', p.lineno(1))
+
+    def p_prj_home_art_3(self, p):
+        """prj_home_art : ART_PRJ_HOME error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ART_PRJ_HOME_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_prj_name_art_1(self, p):
+        """prj_name_art : ART_PRJ_NAME LINE"""
+        try:
+            self.builder.set_file_atrificat_of_project(self.document, 
+                'name', p[2])
+        except OrderError:
+            self.order_error('ArtifactOfProjectName', 'FileName', p.lineno(1))
+
+    def p_prj_name_art_2(self, p):
+        """prj_name_art : ART_PRJ_NAME error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ART_PRJ_NAME_VALUE'].format(p.lineno())
+        self.logger.log(msg)
+
     def p_file_dep_1(self, p):
         """file_dep : FILE_DEP LINE"""
         try:
@@ -156,7 +232,7 @@ class Parser(object):
             self.order_error('FileDependency', 'FileName', p.lineno(1))
 
     def p_file_dep_2(self, p):
-        """file_dp : FILE_DEP error"""
+        """file_dep : FILE_DEP error"""
         self.error = True
         msg = ERROR_MESSAGES['FILE_DEP_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
@@ -877,7 +953,7 @@ class Parser(object):
             p[0] = None
 
     def p_error(self, p):
-        print 'Parser error'
+        pass
 
     def build(self, **kwargs):
         self.lex = Lexer()
@@ -888,4 +964,5 @@ class Parser(object):
         self.document = document.Document()
         self.error = False
         self.yacc.parse(text, lexer=self.lex)
+        self.builder.reset()
         return self.document, self.error
