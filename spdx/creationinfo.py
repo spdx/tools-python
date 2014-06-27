@@ -114,6 +114,9 @@ class CreationInfo(object):
         return datetime_iso_format(self.created)
 
     def validate(self, messages):
+        """Returns True if the fields are valid according to the SPDX standard.
+        Appends user friendly messages to the messages parameter.
+        """
         return (self.validate_creators(messages) &
                 self.validate_created(messages))
 
