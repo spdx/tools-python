@@ -12,6 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import nose
+import spdx
 from spdx.parsers.tagvalue import Parser
 from spdx.parsers.lexers.tagvalue import Lexer
 from spdx.parsers.tagvaluebuilders import Builder
@@ -149,13 +150,26 @@ class TestParser(object):
         'PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12',
         'PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (something.rdf, something.txt)',
         'PackageDescription: <text>A package.</text>',
-        'PackageCopyrightText: <text> Copyright 2010, 2011 Acme Inc.</text>',
+        'PackageCopyrightText: <text> Copyright 2014 Acme Inc.</text>',
         'PackageLicenseDeclared: Apache-2.0',
         'PackageLicenseConcluded: (LicenseRef-2.0 and Apache-2.0)',
         'PackageLicenseInfoFromFiles: Apache-1.0',
         'PackageLicenseInfoFromFiles: Apache-2.0',
         'PackageLicenseComments: <text>License Comments</text>'
     ])
+
+    file_str = '\n'.join([
+        'FileName: testfile.java',
+        'FileType: SOURCE',
+        'FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12',
+        'LicenseConcluded: Apache-2.0',
+        'LicenseInfoInFile: Apache-2.0',
+        'FileCopyrightText: <text>Copyright 2014 Acme Inc.</text>',
+        'ArtifactOfProjectName: AcmeTest',
+        'ArtifactOfProjectHomePage: http://www.acme.org/',
+        'ArtifactOfProjectURI: http://www.acme.org/',
+        'FileComment: <text>Very long file</text>'
+        ])
 
     def __init__(self):
         self.p = Parser(Builder(), StandardLogger())
@@ -193,3 +207,15 @@ class TestParser(object):
         assert len(document.package.licenses_from_files) == 2
         assert (document.package.conc_lics.identifier == 
                  'LicenseRef-2.0 and Apache-2.0')
+
+    def test_file(self):
+        document, error = self.p.parse(self.package_str + self.file_str)
+        assert document is not None
+        assert not error
+        assert len(document.package.files) == 1
+        file = document.package.files[0]
+        assert file.name == 'testfile.java'
+        assert file.type == spdx.file.FileType.SOURCE
+        assert len(file.artifact_of_project_name) == 1
+        assert len(file.artifact_of_project_home) == 1
+        assert len(file.artifact_of_project_uri) == 1
