@@ -26,7 +26,7 @@ class Review(object):
         comment: Review comment. Optional one. Type: str.
     """
 
-    def __init__(self, reviewer=None, review_date=None, comment=""):
+    def __init__(self, reviewer=None, review_date=None, comment=None):
         super(Review, self).__init__()
         self.reviewer = reviewer
         self.review_date = review_date
@@ -38,6 +38,9 @@ class Review(object):
     @property
     def review_date_iso_format(self):
         datetime_iso_format(self.review_date)
+
+    def has_comment(self):
+        return self.comment is not None
 
     def validate(self, messages):
         """Returns True if all the fields are valid.

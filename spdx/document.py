@@ -139,6 +139,9 @@ class Document(object):
     def add_review(self, review):
         self.reviews.append(review)
 
+    def has_comment(self):
+        return self.comment is not None
+
     def validate(self, messages=[]):
         """Validate all fields of the document.
         messages - appends user friendly error messages to this list for display.
