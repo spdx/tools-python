@@ -30,6 +30,10 @@ class Version(object):
 
     @classmethod
     def from_str(cls, value):
+        """Constructs a Version from a string.
+        Returns None if string not in N.N form where N represents a 
+        number.
+        """
         m = cls.VERS_STR_REGEX.match(value)
         if m is not None:
             return cls(int(m.group(1)), int(m.group(2)))
