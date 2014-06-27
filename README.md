@@ -36,6 +36,11 @@ Sample Tag/Value parsing Usage:
 
 ```
 
+Installation:
+=============
+Clone the repository and run `python setup.py install`
+on windows the command should be `setup.py install`
+
 How to run tests:
 =================
 From the project root directory.
