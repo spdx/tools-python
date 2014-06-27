@@ -5,10 +5,36 @@ Official repository: http://git.spdx.org/?p=spdx-tools-python.git
 
 GitHub mirror: https://github.com/ah450/sdpx-tools-python
 
+This library provides an implementation of a tag/value and RDF SPDX parser in python.
+
+Expected Features:
+==================
+* API for creating and manipulating SPDX documents.
+* Parse Tag/Value format SPDX files
+* Parse RDF format SPDX files
+* Create Tag/Value files.
+* Create RDF files.
+
+Current Status:
+===============
+* RDF Parser unimplemented.
+* Tag/Value Parser missing License parsing rules.
+* Writers unimplemented.
+
 
 How to use:
 ===========
-    Coming soon.
+Sample Tag/Value parsing Usage:
+```Python
+    from spdx.parsers.tagvalue import Parser
+    from spdx.parsers.tagvaluebuilders import Builder
+    from spdx.parsers.loggers import StandardLogger
+    p = Parser(Builder(), StandardLogger())
+    p.build()
+    # data is a string containing the SPDX file.
+    document, error = p.parse(data)
+
+```
 
 How to run tests:
 =================
