@@ -28,6 +28,10 @@ class License(object):
 
     @classmethod
     def from_identifier(cls, identifier):
+        """If identifier exists in config.LICENSE_MAP
+        the full_name is retrived from it. Otherwise 
+        the full_name is the same as the identifier.
+        """
         if identifier in config.LICENSE_MAP.keys():
             return cls(config.LICENSE_MAP[identifier], identifier)
         else:
@@ -35,7 +39,14 @@ class License(object):
 
     @classmethod
     def from_full_name(cls, full_name):
-        return cls(full_name, config.LICENSE_MAP[full_name])
+        """If the full_name exists in config.LICENSE_MAP
+        the identifier is retrieved from it. Otherwise
+        the identifier is the same as the full_name.
+        """
+        if full_name in config.LICENSE_MAP.keys():
+            return cls(full_name, config.LICENSE_MAP[full_name])
+        else:
+            return cls(full_name, full_name)
 
     @property
     def url(self):
