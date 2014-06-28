@@ -139,6 +139,7 @@ class Document(object):
     def add_review(self, review):
         self.reviews.append(review)
 
+    @property
     def has_comment(self):
         return self.comment is not None
 
