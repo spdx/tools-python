@@ -39,6 +39,7 @@ class Review(object):
     def review_date_iso_format(self):
         datetime_iso_format(self.review_date)
 
+    @property
     def has_comment(self):
         return self.comment is not None
 
