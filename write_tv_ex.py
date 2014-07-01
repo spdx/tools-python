@@ -6,6 +6,7 @@ if __name__ == '__main__':
     from spdx.creationinfo import Person
     from spdx.review import Review
     from spdx.package import Package
+    from spdx.file import File
 
     doc = Document()
     doc.version = Version(1, 2)
@@ -17,14 +18,16 @@ if __name__ == '__main__':
     review.set_review_date_now()
     review.comment = 'Joe reviewed this document'
     doc.add_review(review)
+    # Package and file tag/value writing still under development.
     doc.package = Package()
+    doc.file = File()
 
     file = sys.argv[1]
     with open(file, 'w') as out:
         try:
             write_document(doc, out)
         except InvalidDocumentError:
-            print 'Document is Invlid'
+            print 'Document is Invalid'
             messages = []
             doc.validate(messages)
             print '\n'.join(messages)
