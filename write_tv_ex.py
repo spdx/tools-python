@@ -20,7 +20,7 @@ if __name__ == '__main__':
     doc.add_review(review)
     # Package and file tag/value writing still under development.
     doc.package = Package()
-    doc.file = File()
+    doc.package.add_file(File('Test File'))
 
     file = sys.argv[1]
     with open(file, 'w') as out:
