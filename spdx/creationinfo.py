@@ -13,7 +13,7 @@
 #    limitations under the License.
 import config
 from datetime import datetime
-from utils import datetime_iso_format
+import utils
 
 
 class Creator(object):
@@ -29,6 +29,8 @@ class Creator(object):
 
     def __eq__(self, other):
         return self.name == other.name
+
+
 
 
 
@@ -57,6 +59,9 @@ class Organization(Creator):
         else:
             return 'Organization: {0}'.format(self.name)
 
+    def __str__(self):
+        return self.to_value()
+
 
 class Person(Creator):
 
@@ -83,6 +88,9 @@ class Person(Creator):
         else:
             return 'Person: {0}'.format(self.name)
 
+    def __str__(self):
+        return self.to_value()
+
 class Tool(Creator):
 
     """Tool entity.
@@ -96,6 +104,10 @@ class Tool(Creator):
     def to_value(self):
         """Tag/value representation of Tool entity."""
         return 'Tool: {0}'.format(self.name)
+
+    def __str__(self):
+        return self.to_value()
+
 
 
 class CreationInfo(object):
@@ -129,8 +141,9 @@ class CreationInfo(object):
 
     @property
     def created_iso_format(self):
-        return datetime_iso_format(self.created)
+        return utils.datetime_iso_format(self.created)
 
+    @property
     def has_comment(self):
         return self.comment is not None
 
