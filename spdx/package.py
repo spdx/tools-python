@@ -61,6 +61,9 @@ class Package(object):
         self.description = None
         self.files = []
 
+    def add_file(self, file):
+        self.files.append(file)
+
     def validate(self, messages):
         """Validates the package's fields. Appends user friends errors
         to messages.
@@ -78,7 +81,7 @@ class Package(object):
         else:
             return_value = True
             for f in self.files:
-                return_value &= f.validate()
+                return_value &= f.validate(messages)
             return return_value
 
     def validate_optional_str_fields(self, messages):
