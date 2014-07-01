@@ -55,13 +55,31 @@ def datetime_from_iso_format(string):
 class NoAssert(object):
 
     """Represents SPDX NOASSERTION value."""
-    pass
+    def to_value(self):
+        return 'NOASSERTION'
+        
+    def __str__(self):
+        return self.to_value()
 
 
 class UnKnown(object):
 
     """Represents SPDX UNKNOWN value."""
-    pass
+    def to_value(self):
+        return 'UNKNOWN'
+
+    def __str__(self):
+        return self.to_value()
+
+class SPDXNone(object):
+    """Represents SPDX None value."""
+    def to_value(self):
+        return 'NONE'
+
+    def __str__(self):
+        return self.to_value()
+
+
 
 
 class LicenseListLexer(object):
