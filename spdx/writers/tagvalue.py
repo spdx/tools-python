@@ -11,8 +11,7 @@
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
-
-
+from .. import utils
 class InvalidDocumentError(Exception):
 
     """Raised if attempting to write an invalid document."""
@@ -23,32 +22,58 @@ def write_seperators(out):
     for i in xrange(0, 4):
         out.write('\n')
 
+def write_value(tag, value, out):
+    out.write('{0}: {1}\n'.format(tag, value))
+
+def write_text_value(tag, value, out):
+    text_value = '<text>{0}</text>'.format(value)
+    write_value(tag, text_value, out)
+
 
 def write_creation_info(creation_info, out):
     """Writes out the creation info, does not check if it's valid."""
     out.write('# Creation Info\n\n')
     # Write creators
     for creator in creation_info.creators:
-        out.write('Creator: {0}\n'.format(creator.to_value()))
+        write_value('Creator', creator, out)
     # write created
-    out.write('Created: {0}\n'.format(creation_info.created_iso_format))
+    write_value('Created', creation_info.created_iso_format, out)
     # possible comment
-    if creation_info.has_comment():
-        out.write(
-            'CreatorComment: <text>{0}</text>\n'.format(creation_info.comment))
+    if creation_info.has_comment:
+        write_text_value('CreatorComment', creation_info.comment, out)
 
 
 def write_review(review, out):
     """Writes out the fields of a single review in tag/value format."""
     out.write('# Review\n\n')
-    out.write('Reviewer: {0}\n'.format(review.reviewer.to_value()))
-    out.write('ReviewDate: {0}\n'.format(review.review_date_iso_format))
-    if review.has_comment():
-        out.write('ReviewComment: {0}\n'.format(review.comment))
+    write_value('Reviewer', review.reviewer, out)
+    write_value('ReviewDate', review.review_date_iso_format, out)
+    if review.has_comment:
+        write_text_value('ReviewComment', review.comment, out)
 
 
 def write_package(package, out):
-    pass
+    """Writes out the fields of a package in tag/value format."""
+    out.write('# Package\n\n')
+    write_value('PackageName', package.name, out)
+    if package.has_optional_field('version'):
+        write_value('PackageVersion', package.version, out)
+    write_value('PackageDownloadLocation', package.download_location, out)
+    if package.has_optional_field('summary'):
+        write_text_value('PackageSummary', package.summary, out)
+    if package.has_optional_field('source_info'):
+        write_text_value('PackageSourceInfo', package.source_info, out)
+    if package.has_optional_field('file_name'):
+        write_value('PackageFileName', package.file_name, out)
+    if package.has_optional_field('supplier'):
+        write_value('PackageSupplier', package.supplier, out)
+    if package.has_optional_field('originator'):
+        write_value('PackageOriginator', package.originator, out)
+    if package.has_optional_field('check_sum'):
+        write_value('PackageChecksum', package.check_sum, out)
+
+    
+
 
 
 def write_extr_licens(lics, out):
@@ -63,12 +88,12 @@ def write_document(document, out):
         raise InvalidDocumentError()
     # Write out document information
     out.write('# Document Information\n\n')
-    out.write('SPDXVersion: SPDX-{0}.{1}\n'.format(document.version.major,
-                                                   document.version.minor))
-    out.write('DataLicense: {0}\n'.format(document.data_license.identifier))
-    if document.has_comment():
-        out.write(
-            'DocumentComment: <text>{0}</text>\n'.format(document.comment))
+    version_value = 'SPDX-{0}.{1}'.format(document.version.major, 
+                                            document.version.minor)
+    write_value('SPDXVersion', version_value, out)
+    write_value('DataLicense', document.data_license.identifier, out)
+    if document.has_comment:
+        write_text_value('DocumentComment', document.comment, out)
     write_seperators(out)
     # Write out creation info
     write_creation_info(document.creation_info, out)
