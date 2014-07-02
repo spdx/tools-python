@@ -52,6 +52,9 @@ def write_review(review, out):
         write_text_value('ReviewComment', review.comment, out)
 
 
+def write_file(file, out):
+    pass
+
 def write_package(package, out):
     """Writes out the fields of a package in tag/value format."""
     out.write('# Package\n\n')
@@ -71,6 +74,26 @@ def write_package(package, out):
         write_value('PackageOriginator', package.originator, out)
     if package.has_optional_field('check_sum'):
         write_value('PackageChecksum', package.check_sum, out)
+    write_value('PackageVerificationCode', package.verif_code, out)
+    if package.has_optional_field('description'):
+        write_text_value('PackageDescription', package.description, out)
+    write_value('PackageLicenseDeclared', package.license_declared, out)
+    write_value('PackageLicenseConcluded', package.conc_lics, out)
+    # Write list of licenses.
+    for lics in package.licenses_from_files:
+        write_value('PackageLicenseInfoFromFiles', lics, out)
+    if package.has_optional_field('license_comment'):
+        write_text_value('PackageLicenseComments', package.license_comment, out)
+    # cr_text is either free form text or NONE or NOASSERTION.
+    if isinstance(package.cr_text, str):
+        write_text_value('PackageCopyrightText', package.cr_text, out)
+    else:
+        write_value('PackageCopyrightText', package.cr_text, out)
+    if package.has_optional_field('homepage'):
+        write_value('PackageHomePage', package.homepage, out)
+    # Write files.
+    for file in package.files:
+        write_file(file, out)
 
     
 
