@@ -67,6 +67,9 @@ class License(object):
         else:
             return False
 
+    def __str__(self):
+        return self.identifier
+
 
 class LicenseConjuction(License):
 
