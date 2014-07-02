@@ -32,7 +32,7 @@ class Package(object):
         conc_lics: Mandatory spdx.document.License.
         license_declared : spdx.document.License.
         license_comment  : optional string.
-        licenses_from_files: spdx.document.License.
+        licenses_from_files: list of spdx.document.License.
         cr_text: Copyright text, string , NoAssertion or NONE. Mandatory.
         summary: Optional str.
         description: Optional str.
@@ -120,7 +120,6 @@ class Package(object):
     def validate_checksum(self, messages):
         return (self.check_sum is None) or isinstance(self.check_sum,
                                                       checksum.Algorithm)
-
 
     def has_optional_field(self, field):
         expr = 'self.{0} is not None'.format(field)
