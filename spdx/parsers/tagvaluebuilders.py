@@ -19,6 +19,7 @@ from .. import utils
 from .. import review
 from .. import package
 from .. import file
+from .. import checksum
 from validations import *
 
 
@@ -50,6 +51,19 @@ class OrderError(BuilderException):
 
     def __init__(self, msg):
         self.msg = msg
+
+def checksum_from_sha1(value):
+    """Returns an spdx.checksum.Algorithm instance representing the SHA1
+    checksum. Returns None if doesn't match CHECKSUM_RE.
+    """
+    # More constrained regex at lexer level
+    CHECKSUM_RE = re.compile('SHA1:(.+)', re.UNICODE)
+    match = CHECKSUM_RE.match(value)
+    if match:
+        return checksum.Algorithm(identifier='SHA1', value=match.group(1))
+    else:
+        return None
+
 
 
 def str_from_text(text):
@@ -474,7 +488,7 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_chk_sum_set:
             self.package_chk_sum_set = True
-            doc.package.check_sum = chk_sum
+            doc.package.check_sum = checksum_from_sha1(chk_sum)
             return True
         else:
             raise CardinalityError('Package::CheckSum')
@@ -522,13 +536,7 @@ class PackageBuilder(object):
         """
         self.assert_package_exists()
         if validate_lics_from_file(license):
-            if license == 'NO_ASSERT':
-                doc.package.licenses_from_files.append(utils.NoAssert())
-            elif license == 'NONE':
-                doc.package.licenses_from_files.append(utils.None())
-            else:
-                doc.package.licenses_from_files.append(
-                    document.License.from_identifier(license))
+            doc.package.licenses_from_files.append(license)
             return True
         else:
             raise ValueError('Package::LicensesFromFile')
@@ -726,14 +734,8 @@ class FileBuilder(object):
         """
         if self.has_package(doc) and self.has_file(doc):
             if validate_file_lics_in_file(license):
-                if ((license is None) or
-                        (type(license) is utils.NoAssert)):
-                    self.file(doc).licenses_in_file.append(license)
-                    return True
-                else:
-                    self.file(doc).licenses_in_file.append(
-                        document.License.from_identifier(license))
-                    return True
+                self.file(doc).licenses_in_file.append(license)
+                return True
             else:
                 raise ValueError('File::LicenseInFile')
         else:

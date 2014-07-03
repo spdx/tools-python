@@ -29,10 +29,11 @@ class File(object):
     type - one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
     and FileType.OTHER, optional zero or one.
     chk_sum - SHA1, Mandatory one.
-    conc_lics - Mandatory one.
+    conc_lics - Mandatory one. document.License or utils.NoAssert or utils.SPDXNone.
     licenses_in_file - list of licenses found in file, mandatory one or more.
+    document.license or utils.NoAssert or utils.SPDXNone.
     license_comment - Optional.
-    copyright - Copyright text, Mandatory one. NoAssert or None or str.
+    copyright - Copyright text, Mandatory one. utils.NoAssert or utils.SPDXNone or str.
     notice - optional One.
     contributers - List of strings.
     dependencies - list of file locations.
