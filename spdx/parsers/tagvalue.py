@@ -326,7 +326,7 @@ class Parser(object):
 
     def p_file_lic_info_value_1(self, p):
         """file_lic_info_value : NONE"""
-        p[0] = utils.SPDXNone
+        p[0] = utils.SPDXNone()
 
     def p_file_lic_info_value_2(self, p):
         """file_lic_info_value : NO_ASSERT"""

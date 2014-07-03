@@ -701,7 +701,7 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_chksum_set:
                 self.file_chksum_set = True
-                self.file(doc).chk_sum = chksum
+                self.file(doc).chk_sum = checksum_from_sha1(chksum)
                 return True
             else:
                 raise CardinalityError('File::CheckSum')
@@ -734,7 +734,7 @@ class FileBuilder(object):
         """
         if self.has_package(doc) and self.has_file(doc):
             if validate_file_lics_in_file(license):
-                self.file(doc).licenses_in_file.append(license)
+                self.file(doc).add_lics(license)
                 return True
             else:
                 raise ValueError('File::LicenseInFile')
@@ -802,7 +802,7 @@ class FileBuilder(object):
         """Raises OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-            self.file(doc).contributers.append(value)
+            self.file(doc).add_contrib(value)
         else:
             raise OrderError('File::Contributor')
 
@@ -810,7 +810,7 @@ class FileBuilder(object):
         """Raises OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-            self.file(doc).dependencies.append(value)
+            self.file(doc).add_depend(value)
         else:
             raise OrderError('File::Dependency')
 
@@ -819,9 +819,7 @@ class FileBuilder(object):
         Raises OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-            attribute = 'self.file(doc).artifact_of_project_{0}.append(value)'.format(
-                symbol)
-            eval(attribute)
+            self.file(doc).add_artifact(symbol, value)
         else:
             raise OrderError('File::Artificat')
 
