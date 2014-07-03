@@ -29,11 +29,14 @@ class Package(object):
         verif_code: Mandatory string.
         check_sum: Optional , spdx.checksum.Algorithm.
         source_info: Optional string.
-        conc_lics: Mandatory spdx.document.License.
-        license_declared : spdx.document.License.
+        conc_lics: Mandatory spdx.document.License or spdx.utils.SPDXNone or 
+        spdx.utils.NoAssert.
+        license_declared : spdx.document.License or spdx.utils.SPDXNone or 
+        spdx.utils.NoAssert.
         license_comment  : optional string.
-        licenses_from_files: list of spdx.document.License.
-        cr_text: Copyright text, string , NoAssertion or NONE. Mandatory.
+        licenses_from_files: list of spdx.document.License or spdx.utils.SPDXNone or 
+        spdx.utils.NoAssert. 
+        cr_text: Copyright text, string , utils.NoAssert or utils.SPDXNone. Mandatory.
         summary: Optional str.
         description: Optional str.
         files: List of files in package, atleast one.
