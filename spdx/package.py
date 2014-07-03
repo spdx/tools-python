@@ -31,7 +31,7 @@ class Package(object):
         source_info: Optional string.
         conc_lics: Mandatory spdx.document.License or spdx.utils.SPDXNone or 
         spdx.utils.NoAssert.
-        license_declared : spdx.document.License or spdx.utils.SPDXNone or 
+        license_declared : Mandatory spdx.document.License or spdx.utils.SPDXNone or 
         spdx.utils.NoAssert.
         license_comment  : optional string.
         licenses_from_files: list of spdx.document.License or spdx.utils.SPDXNone or 
@@ -71,11 +71,11 @@ class Package(object):
         """Validates the package's fields. Appends user friends errors
         to messages.
         """
-        value = (self.validate_checksum(messages) &
+        return (self.validate_checksum(messages) &
                  self.validate_optional_str_fields(messages) &
-                 self.validate_mandatory_str_fields(messages)
-                 & self.validate_files(messages))
-        return value
+                 self.validate_mandatory_str_fields(messages) &
+                 self.validate_files(messages))
+        
 
     def validate_files(self, messages):
         if len(self.files) == 0:
@@ -106,23 +106,33 @@ class Package(object):
         """Helper for validate_mandatory_str_field and 
         validate_optional_str_fields"""
         return_value = True
-        for field in fields:
-            if field is not None:
-                field = eval('self.{0}'.format(field))
+        for field_str in fields:
+            field = eval('self.{0}'.format(field_str))
+            if field is not None:                
                 attr = getattr(field, '__str__', None)
                 if not callable(attr):
                     messages.append('{0} must provide __str__ method.'.format(
                         field))
                     return_value = False  # Continue checking.
             elif not optional:
-                messages.append('{0} can not be None.'.format(field))
+                messages.append('Package {0} can not be None.'.format(field_str))
                 return_value = False
 
         return return_value
 
     def validate_checksum(self, messages):
-        return (self.check_sum is None) or isinstance(self.check_sum,
-                                                      checksum.Algorithm)
+        if self.check_sum is None:
+            return True
+        elif isinstance(self.check_sum, checksum.Algorithm):
+            if self.chk_sum.identifier == 'SHA1':
+                return True
+            else:
+                messages.append('File checksum algorithm must be SHA1')
+                return False
+        else:
+            messages.append('Package checksum must be instance of spdx.checksum.Algorithm')
+            return False
+        
 
     def has_optional_field(self, field):
         expr = 'self.{0} is not None'.format(field)
