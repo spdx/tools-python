@@ -67,6 +67,9 @@ class Package(object):
     def add_file(self, file):
         self.files.append(file)
 
+    def add_lics_from_file(self, lics):
+        self.licenses_from_files.append(lics)
+
     def validate(self, messages):
         """Validates the package's fields. Appends user friends errors
         to messages.
