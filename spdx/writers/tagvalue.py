@@ -12,6 +12,9 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 from .. import utils
+from .. import file
+
+
 class InvalidDocumentError(Exception):
 
     """Raised if attempting to write an invalid document."""
@@ -22,8 +25,10 @@ def write_seperators(out):
     for i in xrange(0, 4):
         out.write('\n')
 
+
 def write_value(tag, value, out):
     out.write('{0}: {1}\n'.format(tag, value))
+
 
 def write_text_value(tag, value, out):
     text_value = '<text>{0}</text>'.format(value)
@@ -52,8 +57,46 @@ def write_review(review, out):
         write_text_value('ReviewComment', review.comment, out)
 
 
+def write_file_type(ftype, out):
+    VALUES = {
+        file.FileType.SOURCE: 'SOURCE',
+        file.FileType.OTHER: 'OTHER',
+        file.FileType.BINARY: 'BINARY',
+        file.FileType.ARCHIVE: 'ARCHIVE'
+    }
+    write_value('FileType', VALUES[ftype], out)
+
+
 def write_file(file, out):
-    pass
+    """Writes out the fields of a file in tag/value format."""
+    out.write('# File\n\n')
+    write_value('FileName', file.name, out)
+    write_file_type(file.type, out)
+    write_value('FileChecksum', file.chk_sum, out)
+    write_value('LicenseConcluded', file.conc_lics, out)
+    for lics in file.licenses_in_file:
+        write_value('LicenseInfoInFile', lics, out)
+    if type(file.copyright) is str:
+        write_text_value('FileCopyrightText', file.copyright, out)
+    else:
+        write_value('FileCopyrightText', file.copyright, out)
+    if file.has_optional_field('license_comment'):
+        write_text_value('LicenseComments', file.license_comment, out)
+    if file.has_optional_field('comment'):
+        write_text_value('FileComment', file.comment, out)
+    if file.has_optional_field('notice'):
+        write_text_value('FileNotice', file.notice, out)
+    for contributer in file.contributers:
+        write_value('FileContributor', contributer, out)
+    for dependency in file.dependencies:
+        write_value('FileDependency', dependency, out)
+    for indx, name in enumerate(file.artifact_of_project_name):
+        write_value('ArtifactOfProjectName', name, out)
+        write_value(
+            'ArtifactOfProjectHomePage', file.artifact_of_project_home[indx], out)
+        write_value(
+            'ArtifactOfProjectURI', file.artifact_of_project_uri[indx], out)
+
 
 def write_package(package, out):
     """Writes out the fields of a package in tag/value format."""
@@ -83,7 +126,8 @@ def write_package(package, out):
     for lics in package.licenses_from_files:
         write_value('PackageLicenseInfoFromFiles', lics, out)
     if package.has_optional_field('license_comment'):
-        write_text_value('PackageLicenseComments', package.license_comment, out)
+        write_text_value(
+            'PackageLicenseComments', package.license_comment, out)
     # cr_text is either free form text or NONE or NOASSERTION.
     if isinstance(package.cr_text, str):
         write_text_value('PackageCopyrightText', package.cr_text, out)
@@ -93,10 +137,8 @@ def write_package(package, out):
         write_value('PackageHomePage', package.homepage, out)
     # Write files.
     for file in package.files:
+        write_seperators(out)
         write_file(file, out)
-
-    
-
 
 
 def write_extr_licens(lics, out):
@@ -111,8 +153,8 @@ def write_document(document, out):
         raise InvalidDocumentError()
     # Write out document information
     out.write('# Document Information\n\n')
-    version_value = 'SPDX-{0}.{1}'.format(document.version.major, 
-                                            document.version.minor)
+    version_value = 'SPDX-{0}.{1}'.format(document.version.major,
+                                          document.version.minor)
     write_value('SPDXVersion', version_value, out)
     write_value('DataLicense', document.data_license.identifier, out)
     if document.has_comment:
