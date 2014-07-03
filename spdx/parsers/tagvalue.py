@@ -286,7 +286,7 @@ class Parser(object):
 
     def p_file_cr_value_2(self, p):
         """file_cr_value : NONE"""
-        p[0] = None
+        p[0] = utils.SPDXNone()
 
     def p_file_cr_value_3(self, p):
         """file_cr_value : NO_ASSERT"""
@@ -326,7 +326,7 @@ class Parser(object):
 
     def p_file_lic_info_value_1(self, p):
         """file_lic_info_value : NONE"""
-        p[0] = None
+        p[0] = utils.SPDXNone
 
     def p_file_lic_info_value_2(self, p):
         """file_lic_info_value : NO_ASSERT"""
@@ -335,7 +335,7 @@ class Parser(object):
     # License Identifier
     def p_file_lic_info_value_3(self, p):
         """file_lic_info_value : LINE"""
-        p[0] = p[1]
+        p[0] = document.License.from_identifier(p[1])
 
     def p_conc_license_1(self, p):
         """conc_license : NO_ASSERT"""
@@ -343,7 +343,7 @@ class Parser(object):
 
     def p_conc_license_2(self, p):
         """conc_license : NONE"""
-        p[0] = None
+        p[0] = utils.SPDXNone()
 
     def p_conc_license_3(self, p):
         """conc_license : LINE"""
@@ -490,7 +490,7 @@ class Parser(object):
 
     def p_pkg_cr_text_value_2(self, p):
         """pkg_cr_text_value : NONE"""
-        p[0] = None
+        p[0] = utils.SPDXNone()
 
     def p_pkg_cr_text_value_3(self, p):
         """pkg_cr_text_value : NO_ASSERT"""
@@ -546,7 +546,7 @@ class Parser(object):
 
     def p_pkg_lic_ff_value_1(self, p):
         """pkg_lic_ff_value : NONE"""
-        p[0] = None
+        p[0] = utils.SPDXNone()
 
     def p_pkg_lic_ff_value_2(self, p):
         """pkg_lic_ff_value : NO_ASSERT"""
@@ -554,7 +554,7 @@ class Parser(object):
 
     def p_pkg_lic_ff_value_3(self, p):
         """pkg_lic_ff_value : LINE"""
-        p[0] = p[1]
+        p[0] = document.License.from_identifier(p[1])
 
     def p_pkg_lic_ff_2(self, p):
         """pkg_lic_ff : PKG_LICS_FFILE error"""
@@ -650,7 +650,7 @@ class Parser(object):
 
     def p_pkg_home_value_2(self, p):
         """pkg_home_value : NONE"""
-        p[0] = None
+        p[0] = utils.SPDXNone()
 
     def p_pkg_home_value_3(self, p):
         """pkg_home_value : NO_ASSERT"""
@@ -678,7 +678,7 @@ class Parser(object):
 
     def p_pkg_down_value_2(self, p):
         """pkg_down_value : NONE"""
-        p[0] = None
+        p[0] = utils.SPDXNone()
 
     def p_pkg_down_value_3(self, p):
         """pkg_down_value : NO_ASSERT"""
