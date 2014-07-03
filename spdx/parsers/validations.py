@@ -179,4 +179,13 @@ def validate_lics_conc(value, optional=False):
 
 
 def validate_file_lics_in_file(value, optional=False):
-    return True  # TODO implement
+    if value is None:
+        return optional
+    elif isinstance(value, document.License):
+        return True
+    elif isinstance(value, utils.SPDXNone):
+        return True
+    elif isinstance(value, utils.NoAssert):
+        return True
+    else:
+        return False
