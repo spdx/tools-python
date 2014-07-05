@@ -87,12 +87,12 @@ class LicenseConjuction(License):
 
     @property
     def full_name(self):
-        return '{0} and {1}'.format(self.license_1.full_name,
+        return '{0} AND {1}'.format(self.license_1.full_name,
                                     self.license_2.full_name)
 
     @property
     def identifier(self):
-        return '{0} and {1}'.format(self.license_1.identifier,
+        return '{0} AND {1}'.format(self.license_1.identifier,
                                     self.license_2.identifier)
 
 
@@ -108,15 +108,15 @@ class LicenseDisjunction(License):
 
     @property
     def full_name(self):
-        return '{0} or {1}'.format(self.license_1.full_name,
+        return '{0} OR {1}'.format(self.license_1.full_name,
                                    self.license_2.full_name)
 
     @property
     def identifier(self):
-        return '{0} or {1}'.format(self.license_1.identifier,
+        return '{0} OR {1}'.format(self.license_1.identifier,
                                    self.license_2.identifier)
 
-class ExtractedLicense(license):
+class ExtractedLicense(License):
     """Represents an ExtractedLicense.
     text - Extracted text, str. Mandatory.
     cross_ref - list of cross references.
@@ -203,10 +203,10 @@ class Document(object):
 
     def validate_data_lics(self, messages):
         if self.data_license is not None:
-            if self.data_license.identifier == 'CC-1.0':
+            if self.data_license.identifier == 'CC0-1.0':
                 return True
             else:
-                messages.append('Document data license must be CC-1.0.')
+                messages.append('Document data license must be CC0-1.0.')
                 return False
         else:
             messages.append('Document has no data license.')
