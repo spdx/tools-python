@@ -58,7 +58,7 @@ FileType: ARCHIVE
 FileChecksum: SHA1: 3ab4e1c67a2d28fced849ee1bb76e7391b93f125
 LicenseConcluded: LicenseRef-1
 LicenseInfoInFile: LicenseRef-1
-LicenseComments: This license is used by Jena
+LicenseComments: <text>This license is used by Jena</text>
 FileCopyrightText: <text>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP</text>
 ArtifactOfProjectName: Jena
 ArtifactOfProjectHomePage: http://www.openjena.org/
