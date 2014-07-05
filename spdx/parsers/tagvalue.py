@@ -65,8 +65,13 @@ ERROR_MESSAGES = {
     'ART_PRJ_NAME_VALUE' : 'ArtifactOfProjectName must be a single line, line: {0}',
     'FILE_ART_OPT_ORDER' : 'ArtificatOfProjectHomePage and ArtificatOfProjectURI must immediatly follow ArtifactOfProjectName, line: {0}',
     'ART_PRJ_HOME_VALUE' : 'ArtificatOfProjectHomePage must be a URL or UNKNOWN, line: {0}',
-    'ART_PRJ_URI_VALUE' : 'ArtificatOfProjectURI must be a URI, line: {0}',
+    'ART_PRJ_URI_VALUE' : 'ArtificatOfProjectURI must be a URI or UNKNOWN, line: {0}',
     'UNKNOWN_TAG' : 'Found unknown tag : {0} at line: {1}',
+    'LICS_ID_VALUE' : 'LicenseID must start with \'LicenseRef-\', line: {0}',
+    'LICS_TEXT_VALUE' : 'ExtractedText must be free form text, line: {0}',
+    'LICS_NAME_VALE' : 'LicenseName must be single line of text or NOASSERTION, line: {0}',
+    'LICS_COMMENT_VALUE' : 'LicenseComment must be free form text, line: {0}',
+    'LICS_CRS_REF_VALUE' : 'LicenseCrossReference must be uri as single line of text, line: {0}',
 }
 
 
@@ -129,11 +134,11 @@ class Parser(object):
                   | file_contrib
                   | file_dep
                   | file_artifact
-                  | LICS_ID
-                  | LICS_TEXT
-                  | LICS_NAME
-                  | LICS_CRS_REG
-                  | LICS_COMMENT
+                  | extr_lic_id
+                  | extr_lic_text
+                  | extr_lic_name
+                  | lic_xref
+                  | lic_comment
                   | unknown_tag
         """
         pass
@@ -150,6 +155,82 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES['A_BEFORE_B'].format(first_tag,
                                                   second_tag, line)
+        self.logger.log(msg)
+
+    def p_lic_xref_1(self, p):
+        """lic_xref : LICS_CRS_REF LINE"""
+        try:
+            self.builder.add_lic_xref(self.document, p[2])
+        except OrderError:
+            order_error('LicenseCrossReference', 'LicenseName', p.lineno(1))
+
+    def p_lic_xref_2(self, p):
+        """lic_xref : LICS_CRS_REF error"""
+        self.error = True
+        msg = ERROR_MESSAGES['LICS_CRS_REF_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_lic_comment_1(self, p):
+        """lic_comment : LICS_COMMENT TEXT"""
+        try:
+            self.builder.set_lic_comment(self.document, p[2])
+        except OrderError:
+            order_error('LicenseName', 'LicenseComment', p.lineno(1))
+
+
+    def p_lic_comment_2(self, p):
+        """lic_comment : LICS_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['LICS_COMMENT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_extr_lic_name_1(self, p):
+        """extr_lic_name : LICS_NAME extr_lic_name_value"""
+        try:
+            self.builder.set_lic_name(self.document, p[2])
+        except OrderError:
+            order_error('LicenseName', 'LicenseID', p.lineno(1))
+
+    def p_extr_lic_name_2(self, p):
+        """extr_lic_name : LICS_NAME error"""
+        self.error = True
+        msg = ERROR_MESSAGES['LICS_NAME_VALE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_extr_lic_name_value_1(self, p):
+        """extr_lic_name_value : LINE"""
+        p[0] = p[1]
+
+    def p_extr_lic_name_value_2(self, p):
+        """extr_lic_name_value : NO_ASSERT"""
+        p[0] =  utils.NoAssert() 
+
+    def p_extr_lic_text_1(self, p):
+        """extr_lic_text : LICS_TEXT TEXT"""
+        try:
+            self.builder.set_lic_text(self.document, p[2])
+        except OrderError:
+            order_error('ExtractedText', 'LicenseID', p.lineno(1))
+
+    def p_extr_lic_text_2(self, p):
+        """extr_lic_text : LICS_TEXT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['LICS_TEXT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_extr_lic_id_1(self, p):
+        """extr_lic_id : LICS_ID LINE"""
+        try:
+            self.builder.set_lic_id(self.document, p[2])
+        except ValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['LICS_ID_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+
+    def p_extr_lic_id_2(self, p):
+        """extr_lic_id : LICS_ID error"""
+        self.error = True
+        msg = ERROR_MESSAGES['LICS_ID_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_uknown_tag(self, p):
@@ -175,6 +256,14 @@ class Parser(object):
         pass
 
     def p_prj_uri_art_1(self, p):
+        """prj_uri_art : ART_PRJ_URI UN_KNOWN"""
+        try:
+            self.builder.set_file_atrificat_of_project(self.document,
+                'uri', utils.UnKnown())
+        except OrderError:
+            self.order_error('ArtificatOfProjectURI', 'FileName', p.lineno(1))
+
+    def p_prj_uri_art_2(self, p):
         """prj_uri_art : ART_PRJ_URI LINE"""
         try:
             self.builder.set_file_atrificat_of_project(self.document,
@@ -182,7 +271,7 @@ class Parser(object):
         except OrderError:
             self.order_error('ArtificatOfProjectURI', 'FileName', p.lineno(1))
 
-    def p_prj_uri_art_2(self, p):
+    def p_prj_uri_art_3(self, p):
         """prj_uri_art : ART_PRJ_URI error"""
         self.error = True
         msg = ERROR_MESSAGES['ART_PRJ_URI_VALUE'].format(p.lineno(1))
@@ -348,7 +437,7 @@ class Parser(object):
     def p_conc_license_3(self, p):
         """conc_license : LINE"""
         ref_re = re.compile('LicenseRef-.+', re.UNICODE)
-        if p[1] in config.LICENSE_MAP.keys() or (ref_re.match(p[1]) is not None):
+        if (p[1] in config.LICENSE_MAP.keys()) or (ref_re.match(p[1]) is not None):
             p[0] = document.License.from_identifier(p[1])
         else:
             p[0] = self.license_list_parser.parse(p[1])
@@ -965,4 +1054,8 @@ class Parser(object):
         self.error = False
         self.yacc.parse(text, lexer=self.lex)
         self.builder.reset()
+        validation_messages  = []
+        self.error = self.error and self.document.validate(validation_messages)
+        for msg in validation_messages:
+            self.logger.log(msg)
         return self.document, self.error
