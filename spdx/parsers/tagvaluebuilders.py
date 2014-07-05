@@ -772,7 +772,6 @@ class FileBuilder(object):
                         self.file(doc).copyright = str_from_text(text)
                     else:
                         self.file(doc).copyright = text  # None or NoAssert
-
                     return True
                 else:
                     raise ValueError('File::CopyRight')
@@ -853,6 +852,76 @@ class LicenseBuilder(object):
 
     def __init__(self):
         super(LicenseBuilder, self).__init__()
+
+    def extr_lic(self, doc):
+        """Retrieves last license in extracted license list"""
+        return doc.extracted_licenses[-1]
+
+    def has_extr_lic(self, doc):
+        return len(doc.extracted_licenses) != 0
+
+    def set_lic_id(self, doc, id):
+        """Adds a new extracted license to the document.
+        Raises ValueError if data format is incorrect.
+        """
+        if validate_extracted_lic_id(id):
+            doc.add_extr_lic(document.ExtractedLicense(id))
+            return True
+        else:
+            raise ValueError('ExtractedLicense::id')
+
+    def set_lic_text(self, doc, text):
+        """Sets license extracted text. 
+        Raises ValueError if text is not free form text.
+        Raises OrderError if no license ID defined.
+        """
+        if self.has_extr_lic(doc):
+            if validate_is_free_form_text(text):
+                self.extr_lic(doc).text = str_from_text(text)
+                return True
+            else:
+                raise ValueError('ExtractedLicense::text')
+        else:
+            raise OrderError('ExtractedLicense::text')
+
+    def set_lic_name(self, doc, name):
+        """Sets license name.
+        Raises ValueError if name is not str or utils.NoAssert
+        Raises OrderError if no license id defined.
+        """
+        if self.has_extr_lic(doc):
+            if validate_extr_lic_name(name):
+                self.extr_lic(doc).full_name = name
+                return True
+            else:
+                raise ValueError('ExtractedLicense::Name')
+        else:
+            raise OrderError('ExtractedLicense::Name')
+
+    def set_lic_comment(self, doc, comment):
+        """Sets license comment. 
+        Raises ValueError if comment is not free form text.
+        Raises OrderError if no license ID defined.
+        """
+        if self.has_extr_lic(doc):
+            if validate_is_free_form_text(comment):
+                self.extr_lic(doc).comment = str_from_text(comment)
+                return True
+            else:
+                raise ValueError('ExtractedLicense::comment')
+        else:
+            raise OrderError('ExtractedLicense::comment')
+
+    def add_lic_xref(self, doc, ref):
+        """Adds a license cross reference.
+        Raises OrderError if no License ID defined.
+        """
+        if self.has_extr_lic(doc):
+            self.extr_lic(doc).add_xref(ref)
+            return True
+        else:
+            raise OrderError('ExtractedLicense::CrossRef')
+
 
 
 class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,

@@ -143,7 +143,7 @@ def validate_file_cpyright(value, optional=False):
         return True
     elif type(value) is utils.NoAssert:
         return True
-    elif value is utils.SPDXNone:
+    elif type(value) is utils.SPDXNone:
         return True
     else:
         return False
@@ -189,3 +189,16 @@ def validate_file_lics_in_file(value, optional=False):
         return True
     else:
         return False
+
+
+def validate_extracted_lic_id(value, optional=False):
+    if value is None:
+        return optional
+    else:
+        return value.startswith('LicenseRef-')
+
+def validate_extr_lic_name(value, optional=False):
+    if value is None:
+        return optional
+    else:
+        return type(value) in [str, utils.NoAssert]
