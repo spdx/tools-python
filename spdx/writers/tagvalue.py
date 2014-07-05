@@ -180,6 +180,7 @@ def write_document(document, out):
     # Write out package info
     write_package(document.package, out)
     write_seperators(out)
+    out.write('# Extracted Licenses\n\n')
     for lic in document.extracted_licenses:
         write_extr_licens(lic, out)
         write_seperators(out)
