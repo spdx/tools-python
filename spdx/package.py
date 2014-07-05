@@ -127,7 +127,7 @@ class Package(object):
         if self.check_sum is None:
             return True
         elif isinstance(self.check_sum, checksum.Algorithm):
-            if self.chk_sum.identifier == 'SHA1':
+            if self.check_sum.identifier == 'SHA1':
                 return True
             else:
                 messages.append('File checksum algorithm must be SHA1')
