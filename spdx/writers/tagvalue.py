@@ -142,7 +142,17 @@ def write_package(package, out):
 
 
 def write_extr_licens(lics, out):
-    pass
+    """Writes out extracted licenses in tag/value format.
+    """
+    write_value('LicenseID', lics.identifier, out)
+    write_text_value('ExtractedText', lics.text, out)
+    if lics.full_name is not None:
+        write_value('LicenseName', lics.full_name, out)
+    for xref in lics.cross_ref:
+        write_value('LicenseCrossReference', xref, out)
+    if lics.comment is not None:
+        write_text_value('LicenseComment', lics.comment, out)
+
 
 
 def write_document(document, out):
@@ -171,5 +181,5 @@ def write_document(document, out):
     write_package(document.package, out)
     write_seperators(out)
     for lic in document.extracted_licenses:
-        write_extr_licens(lic)
+        write_extr_licens(lic, out)
         write_seperators(out)
