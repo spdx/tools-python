@@ -56,6 +56,10 @@ class License(object):
     def full_name(self):
         return self._full_name
 
+    @full_name.setter
+    def full_name(self, value):
+        self._full_name = value
+
     @property
     def identifier(self):
         return self._identifier
@@ -112,6 +116,32 @@ class LicenseDisjunction(License):
         return '{0} or {1}'.format(self.license_1.identifier,
                                    self.license_2.identifier)
 
+class ExtractedLicense(license):
+    """Represents an ExtractedLicense.
+    text - Extracted text, str. Mandatory.
+    cross_ref - list of cross references.
+    comment - license comment, str.
+    full_name - license name. str or utils.NoAssert.
+    """
+    def __init__(self, identifier):
+        super(ExtractedLicense, self).__init__(None, identifier)
+        self.text = None
+        self.cross_ref = []
+        self.comment = None
+
+    def add_xref(self, ref):
+        self.cross_ref.append(ref)
+
+    def validate(self, messages):
+        if self.text is None:
+            messages.append('ExtractedLicense text can not be None')
+            return False
+        else:
+            return True
+
+
+    
+
 
 class Document(object):
 
@@ -141,6 +171,9 @@ class Document(object):
 
     def add_review(self, review):
         self.reviews.append(review)
+
+    def add_extr_lic(self, lic):
+        self.extracted_licenses.append(lic)
 
     @property
     def has_comment(self):
@@ -200,4 +233,7 @@ class Document(object):
             return False
 
     def validate_extracted_licenses(self, messages):
-        return True  # TODO: Implement.
+        status = True
+        for lic in self.extracted_licenses:
+            status &= lic.validate(messages)
+        return status
