@@ -206,7 +206,7 @@ class TestParser(object):
         assert document.package.version == 'Version 0.9.2'
         assert len(document.package.licenses_from_files) == 2
         assert (document.package.conc_lics.identifier == 
-                 'LicenseRef-2.0 and Apache-2.0')
+                 'LicenseRef-2.0 AND Apache-2.0')
 
     def test_file(self):
         document, error = self.p.parse(self.package_str + self.file_str)
