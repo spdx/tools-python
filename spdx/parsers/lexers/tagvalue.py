@@ -67,7 +67,7 @@ class Lexer(object):
         'LicenseID': 'LICS_ID',
         'ExtractedText': 'LICS_TEXT',
         'LicenseName': 'LICS_NAME',
-        'LicenseCrossReference': 'LICS_CRS_REG',
+        'LicenseCrossReference': 'LICS_CRS_REF',
         'LicenseComment': 'LICS_COMMENT',
         # Common
         'NOASSERTION': 'NO_ASSERT',
