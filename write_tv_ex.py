@@ -1,7 +1,7 @@
 if __name__ == '__main__':
     import sys
     from spdx.writers.tagvalue import write_document, InvalidDocumentError
-    from spdx.document import Document, License, LicenseConjuction
+    from spdx.document import Document, License, LicenseConjuction, ExtractedLicense
     from spdx.version import Version
     from spdx.creationinfo import Person
     from spdx.review import Review
@@ -13,7 +13,7 @@ if __name__ == '__main__':
     doc = Document()
     doc.version = Version(1, 2)
     doc.comment = 'Example Document'
-    doc.data_license = License.from_identifier('CC-1.0')
+    doc.data_license = License.from_identifier('CC0-1.0')
     doc.creation_info.add_creator(Person('Alice', 'alice@example.com'))
     doc.creation_info.set_created_now()
     review = Review(Person('Joe', None))
@@ -62,6 +62,12 @@ if __name__ == '__main__':
     package.add_file(testfile2)
 
     doc.package = package
+
+    # An extracted license
+
+    lic = ExtractedLicense('LicenseRef-1')
+    lic.text = 'Some non legal legal text..'
+    doc.add_extr_lic(lic)
 
     file = sys.argv[1]
     with open(file, 'w') as out:
