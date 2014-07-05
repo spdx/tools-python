@@ -18,9 +18,7 @@ Expected Features:
 Current Status:
 ===============
 * RDF Parser unimplemented.
-* Tag/Value Parser missing License parsing rules.
-* Tag/Value package and license writers incomplete.
-* RDF/Writer incomplete..
+* RDF/Writer incomplete.
 
 
 How to use:
@@ -45,7 +43,8 @@ The file `write_tv_ex.py` provides an example of writing tag/value files.
 
 Run `python write_tv_ex.py sample.tag` to test it.
 
-Note: Not all features of the writer are complete.
+The file `pp_tv.py` demonstrates how to parse a tag/value file and print it out.
+To test it run `python pp_tv.py Examples/SPDXTagExample.tag pretty.tag`.
 
 
 Installation:
