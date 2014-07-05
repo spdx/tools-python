@@ -98,12 +98,12 @@ class LicenseListLexer(object):
         return t
 
     def t_AND(self, t):
-        r'\sand\s'
+        r'\s(and|AND)\s'
         t.value = t.value.strip()
         return t
 
     def t_OR(self, t):
-        r'\sor\s'
+        r'\s(or|OR)\s'
         t.value = t.value.strip()
         return t
 
@@ -153,16 +153,20 @@ class LicenseListParser(object):
         p[0] = None
 
     def p_conjuctions_1(self, p):
-        """conjuctions : conjuctions conjuction"""
-        p[0] = document.LicenseConjuction(p[1], p[2])
+        """conjuctions : conjuctions AND conjuction
+                       | conjuctions AND license
+        """
+        p[0] = document.LicenseConjuction(p[1], p[3])
 
     def p_conjuctions_2(self, p):
         """conjuctions : conjuction"""
         p[0] = p[1]
 
     def p_disjunctions_1(self, p):
-        """disjunctions : disjunctions disjunction"""
-        p[0] = document.LicenseDisjunction(p[1], p[2])
+        """disjunctions : disjunctions OR disjunction
+                        | disjunctions OR license
+        """
+        p[0] = document.LicenseDisjunction(p[1], p[3])
 
     def p_disjunctions_2(self, p):
         """disjunctions : disjunction"""
