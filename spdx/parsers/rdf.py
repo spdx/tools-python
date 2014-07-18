@@ -41,7 +41,36 @@ class Parser(object):
         self.doc = document.Document()
         for s, p, o in self.graph.triples( (None, RDF.type, self.spdx_namespace['SpdxDocument']) ):
             self.parse_doc_fields(s)
+        for s, p, o in self.graph.triples( (None, RDF.type, self.spdx_namespace['CreationInfo']) ):
+            self.parse_creation_info(s)
         return self.doc, self.error
+
+    def parse_creation_info(self, ci_term):
+        """Parses creators, creater and comment."""
+        for s, p, o in self.graph.triples( (ci_term, self.spdx_namespace['creator'], None) ):
+            try:
+                ent = self.builder.create_entity(self.doc, o)
+                self.builder.add_creator(self.doc, ent)
+            except ValueError:
+                msg = ERROR_MESSAGES['CREATOR_VALUE'].format(o)
+                self.logger.log(msg)
+                self.error = True
+        for s, p, o in self.graph.triples( (ci_term, self.spdx_namespace['created'], None) ):
+            try:
+                self.builder.set_created_date(self.doc, o)
+            except ValueError:
+                msg = ERROR_MESSAGES['CREATED_VALUE'].format(o)
+                self.logger.log(msg)
+                self.error = True
+            except CardinalityError:
+                self.more_than_one_error('created')
+        for s, p, o in self.graph.triples( (ci_term, RDFS.comment, None) ):
+            try:
+                self.builder.set_creation_comment(self.doc, o)
+            except CardinalityError:
+                self.more_than_one_error('CreationInfo comment')
+
+
 
     def parse_doc_fields(self, doc_term):
         """Parses the version, data license and comment."""

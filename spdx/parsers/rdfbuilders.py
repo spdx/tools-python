@@ -12,9 +12,12 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import re
+import tagvaluebuilders
 from builderexceptions import *
+from validations import validate_creator
 from .. import version
 from .. import document
+from .. import creationinfo
 
 class DocBuilder(object):
     VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
@@ -76,5 +79,42 @@ class DocBuilder(object):
         self.doc_comment_set = False
         self.doc_data_lics_set = False
 
-class Builder(DocBuilder):
-    pass
+
+class EntityBuilder(tagvaluebuilders.EntityBuilder):
+
+    def create_entity(self, doc, value):
+        if self.tool_re.match(value):
+            return self.build_tool(doc, value)
+        elif self.person_re.match(value):
+            return self.build_person(doc, value)
+        elif self.org_re.match(value):
+            return self.build_org(doc, value)
+        else:
+            raise ValueError('Entity')
+
+
+class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
+
+    def set_creation_comment(self, doc, comment):
+        """Sets creation comment, Raises CardinalityError if
+        comment already set.
+        Raises ValueError if not free form text.
+        """
+        if not self.creation_comment_set:
+            self.creation_comment_set = True
+            doc.creation_info.comment = comment
+            return True
+        else:
+            raise CardinalityError('CreationInfo::Comment')
+        
+
+class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder):
+    
+    def reset(self):
+        """Resets builder's state for building new documents.
+        Must be called between usage with different documents.
+        """
+        self.reset_document()
+        self.reset_package()
+        self.reset_file_stat()
+        self.reset_reviews()
