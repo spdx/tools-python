@@ -21,36 +21,9 @@ from .. import package
 from .. import file
 from .. import checksum
 from validations import *
+from builderexceptions import *
 
 
-class BuilderException(Exception):
-
-    """Builder exception base class."""
-    pass
-
-
-class IncompatibleVersionError(BuilderException):
-
-    def __init__(self, msg):
-        self.msg = msg
-
-
-class CardinalityError(BuilderException):
-
-    def __init__(self, msg):
-        self.msg = msg
-
-
-class ValueError(BuilderException):
-
-    def __init__(self, msg):
-        self.msg = msg
-
-
-class OrderError(BuilderException):
-
-    def __init__(self, msg):
-        self.msg = msg
 
 def checksum_from_sha1(value):
     """Returns an spdx.checksum.Algorithm instance representing the SHA1

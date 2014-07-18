@@ -13,7 +13,7 @@
 #    limitations under the License.
 import re
 from lexers.tagvalue import Lexer
-from tagvaluebuilders import CardinalityError, OrderError, ValueError, IncompatibleVersionError
+from builderexceptions import CardinalityError, OrderError, ValueError, IncompatibleVersionError
 from ply import yacc
 from .. import document
 from .. import utils
