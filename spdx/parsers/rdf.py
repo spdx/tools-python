@@ -69,6 +69,15 @@ class Parser(object):
                 self.builder.set_creation_comment(self.doc, o)
             except CardinalityError:
                 self.more_than_one_error('CreationInfo comment')
+        for s, p, o in self.graph.triples( (ci_term), self.spdx_namespace['licenseListVersion'], None) ):
+            try:
+                self.builder.set_lics_list_ver(self.doc, o)
+            except CardinalityError:
+                self.more_than_one_error('licenseListVersion')
+            except ValueError:
+                msg = ERROR_MESSAGES['LL_VALUE'].format(o)
+                self.logger.log(msg)
+                self.error = True
 
 
 
