@@ -63,3 +63,5 @@ Dependencies:
 nose : https://pypi.python.org/pypi/nose/1.3.3
 
 PLY : https://pypi.python.org/pypi/ply/3.4
+
+rdflib : https://pypi.python.org/pypi/rdflib/4.1.2
