@@ -15,17 +15,16 @@ Expected Features:
 * Create Tag/Value files.
 * Create RDF files.
 
-
 Current Status:
 ===============
 * RDF Parser unimplemented.
 * RDF/Writer incomplete.
 
+
 How to use:
 ===========
-
 Sample Tag/Value parsing Usage:
-
+```Python
     from spdx.parsers.tagvalue import Parser
     from spdx.parsers.tagvaluebuilders import Builder
     from spdx.parsers.loggers import StandardLogger
@@ -34,32 +33,30 @@ Sample Tag/Value parsing Usage:
     # data is a string containing the SPDX file.
     document, error = p.parse(data)
 
+```
 
-The file 'parse_tv_ex.py' has a working example.
+The file `parse_tv_ex.py` has a working example.
 
-Try running 'python parse_tv_ex.py 'Examples/SPDXSimpleTag.tag' '
+Try running `python parse_tv_ex.py 'Examples/SPDXSimpleTag.tag' `
 
-The file 'write_tv_ex.py' provides an example of writing tag/value files.
+The file `write_tv_ex.py` provides an example of writing tag/value files.
 
-Run 'python write_tv_ex.py sample.tag' to test it.
+Run `python write_tv_ex.py sample.tag` to test it.
 
-The file 'pp_tv.py' demonstrates how to parse a tag/value file and print it out.
-To test it run 'python pp_tv.py Examples/SPDXTagExample.tag pretty.tag'.
+The file `pp_tv.py` demonstrates how to parse a tag/value file and print it out.
+To test it run `python pp_tv.py Examples/SPDXTagExample.tag pretty.tag`.
 
 
 Installation:
 =============
-Clone the repository and run 'python setup.py install'
-on windows the command should be 'setup.py install'
-
-
+Clone the repository and run `python setup.py install`
+on windows the command should be `setup.py install`
 
 How to run tests:
 =================
 From the project root directory.
 
-run: 'nosetests'
-
+run: `nosetests`
 
 Dependencies:
 =============
