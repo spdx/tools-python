@@ -19,6 +19,9 @@ from .. import document
 ERROR_MESSAGES = {
     'DOC_VERS_VALUE' : 'Invalid specVersion \'{0}\' must be SPDX-M.N where M and N are numbers.',
     'DOC_D_LICS' : 'Invalid dataLicense \'{0}\' must be http://spdx.org/licenses/CC0-1.0.',
+    'LL_VALUE' : 'Invalid licenseListVersion \'{0}\' must be of the format N.N where N is a number',
+    'CREATED_VALUE': 'Invalid created value \'{0}\' must be date in ISO 8601 format.',
+    'CREATOR_VALUE' : 'Invalid creator value \'{0}\' must be Organization, Tool or Person.',
 }
 
 
@@ -69,7 +72,7 @@ class Parser(object):
                 self.builder.set_creation_comment(self.doc, o)
             except CardinalityError:
                 self.more_than_one_error('CreationInfo comment')
-        for s, p, o in self.graph.triples( (ci_term), self.spdx_namespace['licenseListVersion'], None) ):
+        for s, p, o in self.graph.triples( (ci_term, self.spdx_namespace['licenseListVersion'], None) ):
             try:
                 self.builder.set_lics_list_ver(self.doc, o)
             except CardinalityError:
