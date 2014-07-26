@@ -72,7 +72,7 @@ def write_file(file, out):
     out.write('# File\n\n')
     write_value('FileName', file.name, out)
     write_file_type(file.type, out)
-    write_value('FileChecksum', file.chk_sum, out)
+    write_value('FileChecksum', file.chk_sum.to_tv(), out)
     write_value('LicenseConcluded', file.conc_lics, out)
     for lics in file.licenses_in_file:
         write_value('LicenseInfoInFile', lics, out)
@@ -116,7 +116,7 @@ def write_package(package, out):
     if package.has_optional_field('originator'):
         write_value('PackageOriginator', package.originator, out)
     if package.has_optional_field('check_sum'):
-        write_value('PackageChecksum', package.check_sum, out)
+        write_value('PackageChecksum', package.check_sum.to_tv(), out)
     write_value('PackageVerificationCode', package.verif_code, out)
     if package.has_optional_field('description'):
         write_text_value('PackageDescription', package.description, out)
