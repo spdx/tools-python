@@ -106,9 +106,12 @@ class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
             return True
         else:
             raise CardinalityError('CreationInfo::Comment')
+
+class PackageBuilder(tagvaluebuilders.PackageBuilder):
+    pass
         
 
-class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder):
+class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder):
     
     def reset(self):
         """Resets builder's state for building new documents.
