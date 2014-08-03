@@ -12,6 +12,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 import re
+import rdflib
 from .. import creationinfo
 from .. import utils
 from .. import document
@@ -201,4 +202,4 @@ def validate_extr_lic_name(value, optional=False):
     if value is None:
         return optional
     else:
-        return type(value) in [str, utils.NoAssert]
+        return type(value) in [str, utils.NoAssert, rdflib.Literal]
