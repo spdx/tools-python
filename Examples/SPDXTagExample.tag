@@ -145,7 +145,7 @@ ExtractedText: <text>/*
 
 LicenseID: LicenseRef-2
 ExtractedText: <text>This package includes the GRDDL parser developed by Hewlett Packard under the following license:
-© Copyright 2007 Hewlett-Packard Development Company, LP
+Â© Copyright 2007 Hewlett-Packard Development Company, LP
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 
 
