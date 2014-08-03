@@ -226,7 +226,7 @@ class PackageParser(LicenseParser):
     """Helper class for parsing packages."""
 
     def __init__(self, builder, logger):
-        super(LicenseParser, self).__init__(builder, logger)
+        super(PackageParser, self).__init__(builder, logger)
 
     def parse_package(self, p_term):
         """Parses package fields."""
@@ -440,7 +440,13 @@ class PackageParser(LicenseParser):
                 break
 
 
-class Parser(PackageParser):
+class FileParser(LicenseParser):
+    """Helper class for parsing files."""
+    def __init__(self, builder, logger):
+        super(FileParser, self).__init__(builder, logger)
+        
+
+class Parser(PackageParser, FileParser):
 
     """RDF/XML file parser."""
 
@@ -461,6 +467,8 @@ class Parser(PackageParser):
             self.parse_creation_info(s)
         for s, p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['Package'])):
             self.parse_package(s)
+        for s, p, o in self.graph.triples((None, self.spdx_namespace['referencesFile'], None)):
+            pass
         return self.doc, self.error
 
     def parse_creation_info(self, ci_term):
