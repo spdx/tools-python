@@ -30,7 +30,8 @@ ERROR_MESSAGES = {
     'PKG_CONC_LIST': 'Package concluded license list must have more than one member',
     'PKG_MEMBER_CONC' : 'Package concluded license list member must be a license url or identifier',
     'PKG_SINGLE_LICS' : 'Package concluded license must be a license url or spdx:noassertion or spdx:none.',
-    'PKG_LICS_INFO_FILES' : 'Package licenseInfoFromFiles must be a license or spdx:none or spdx:noassertion'
+    'PKG_LICS_INFO_FILES' : 'Package licenseInfoFromFiles must be a license or spdx:none or spdx:noassertion',
+    'FILE_TYPE' : 'File type must be binary, other, source or archive term.',
 
 }
 
@@ -154,7 +155,6 @@ class LicenseParser(BaseParser):
         text = self.get_extr_license_text(extr_lic)
         comment = self.get_extr_lics_comment(extr_lic)
         xrefs = self.get_extr_lics_xref(extr_lic)
-        print ident
         name = self.get_extr_lic_name(extr_lic)
         if ident is None:
             return None
@@ -444,6 +444,47 @@ class FileParser(LicenseParser):
     """Helper class for parsing files."""
     def __init__(self, builder, logger):
         super(FileParser, self).__init__(builder, logger)
+
+    def parse_file(self, f_term):
+        if not (f_term, self.spdx_namespace['fileName'], None) in self.graph:
+            self.error = True
+            self.logger.log('File must have a name.')
+            # Dummy name to continue
+            self.builder.set_file_name(self.doc, 'Dummy file')
+        else:
+            for _, _, name in self.graph.triples(
+                (f_term, self.spdx_namespace['fileName'], None)):
+                self.builder.set_file_name(self.doc, name)
+        self.p_file_type(f_term, self.spdx_namespace['fileType'])
+        self.p_file_chk_sum(f_term, self.spdx_namespace['checksum'])
+
+    def p_file_type(self, f_term, predicate):
+        try:
+            for _, _, ftype in self.graph.triples(
+                (f_term, predicate, None)):
+                try:
+                    if ftype.endswith('binary'):
+                        ftype = 'BINARY'
+                    elif ftype.endswith('source'):
+                        ftype = 'SOURCE'
+                    elif ftype.endswith('other'):
+                        ftype = 'OTHER'
+                    elif ftype.endswith('archive'):
+                        ftype = 'ARCHIVE'
+                    self.builder.set_file_type(self.doc, ftype)
+                except ValueError:
+                    self.value_error('FILE_TYPE', ftype)    
+        except CardinalityError:
+            self.more_than_one_error('file type')
+
+    def p_file_chk_sum(self, f_term, predicate):
+        try:
+            for s, p, checksum in self.graph.triples((f_term, predicate, None)):
+                for _, _, value in self.graph.triples((checksum, self.spdx_namespace['checksumValue'], None)):                   
+                    self.builder.set_file_chksum(self.doc, value)
+        except CardinalityError:
+            self.more_than_one_error('File checksum')      
+
         
 
 class Parser(PackageParser, FileParser):
@@ -468,7 +509,7 @@ class Parser(PackageParser, FileParser):
         for s, p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['Package'])):
             self.parse_package(s)
         for s, p, o in self.graph.triples((None, self.spdx_namespace['referencesFile'], None)):
-            pass
+            self.parse_file(o)
         return self.doc, self.error
 
     def parse_creation_info(self, ci_term):
