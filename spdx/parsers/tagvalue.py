@@ -175,7 +175,9 @@ class Parser(object):
         try:
             self.builder.set_lic_comment(self.document, p[2])
         except OrderError:
-            order_error('LicenseName', 'LicenseComment', p.lineno(1))
+            order_error('LicenseComment', 'LicenseID', p.lineno(1))
+        except CardinalityError:
+            more_than_one_error('LicenseComment', p.lineno(1))
 
 
     def p_lic_comment_2(self, p):
@@ -190,6 +192,8 @@ class Parser(object):
             self.builder.set_lic_name(self.document, p[2])
         except OrderError:
             order_error('LicenseName', 'LicenseID', p.lineno(1))
+        except CardinalityError:
+            more_than_one_error('LicenseName', p.lineno(1))
 
     def p_extr_lic_name_2(self, p):
         """extr_lic_name : LICS_NAME error"""
@@ -211,6 +215,8 @@ class Parser(object):
             self.builder.set_lic_text(self.document, p[2])
         except OrderError:
             order_error('ExtractedText', 'LicenseID', p.lineno(1))
+        except CardinalityError:
+            more_than_one_error('ExtractedText', p.lineno(1))
 
     def p_extr_lic_text_2(self, p):
         """extr_lic_text : LICS_TEXT error"""
@@ -711,6 +717,10 @@ class Parser(object):
                 'PackageVerificationCode', 'PackageName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageVerificationCode', p.lineno(1))
+        except ValueError:
+            self.error = true
+            msg = ERROR_MESSAGES['PKG_VERF_CODE_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
 
     def p_pkg_verif_2(self, p):
         """pkg_verif : PKG_VERF_CODE error"""

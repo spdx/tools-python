@@ -40,6 +40,7 @@ class Package(object):
         summary: Optional str.
         description: Optional str.
         files: List of files in package, atleast one.
+        verif_exc_files : list of file names excluded from verification code or None.
     """
 
     def __init__(self, name=None, download_location=None, version=None,
@@ -63,12 +64,16 @@ class Package(object):
         self.summary = None
         self.description = None
         self.files = []
+        self.verif_exc_files = []
 
     def add_file(self, file):
         self.files.append(file)
 
     def add_lics_from_file(self, lics):
         self.licenses_from_files.append(lics)
+
+    def add_exc_file(self, filename):
+        self.verif_exc_files.append(filename)
 
     def validate(self, messages):
         """Validates the package's fields. Appends user friends errors
