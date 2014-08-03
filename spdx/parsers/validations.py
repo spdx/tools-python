@@ -71,6 +71,8 @@ def validate_pkg_homepage(value, optional=False):
         return optional
     elif type(value) is str:
         return True
+    elif type (value) is unicode:
+        return True
     elif type(value) is utils.NoAssert:
         return True
     elif type(value) is utils.SPDXNone:
@@ -202,4 +204,4 @@ def validate_extr_lic_name(value, optional=False):
     if value is None:
         return optional
     else:
-        return type(value) in [str, utils.NoAssert, rdflib.Literal]
+        return type(value) in [str, unicode, utils.NoAssert, rdflib.Literal]

@@ -171,12 +171,15 @@ class TestParser(object):
         'FileComment: <text>Very long file</text>'
         ])
 
+    complete_str = '{0}\n{1}\n{2}\n{3}\n{4}'.format(document_str, creation_str,
+        review_str, package_str, file_str)
+
     def __init__(self):
         self.p = Parser(Builder(), StandardLogger())
         self.p.build()
 
     def test_doc(self):
-        document, error = self.p.parse(self.document_str)
+        document, error = self.p.parse(self.complete_str)
         assert document is not None
         assert not error
         assert document.version == Version(major=1, minor=2)
@@ -184,7 +187,7 @@ class TestParser(object):
         assert document.comment == 'Sample Comment'
 
     def test_creation_info(self):
-        document, error = self.p.parse(self.creation_str)
+        document, error = self.p.parse(self.complete_str)
         assert document is not None
         assert not error
         assert len(document.creation_info.creators) == 2
@@ -193,13 +196,13 @@ class TestParser(object):
                 '2010-02-03T00:00:00Z')
 
     def test_review(self):
-        document, error = self.p.parse(self.review_str)
+        document, error = self.p.parse(self.complete_str)
         assert document is not None
         assert not error
         assert len(document.reviews) == 2
 
     def test_package(self):
-        document, error = self.p.parse(self.package_str)
+        document, error = self.p.parse(self.complete_str)
         assert document is not None
         assert not error
         assert document.package.name == 'Test'
@@ -209,7 +212,7 @@ class TestParser(object):
                  'LicenseRef-2.0 AND Apache-2.0')
 
     def test_file(self):
-        document, error = self.p.parse(self.package_str + self.file_str)
+        document, error = self.p.parse(self.complete_str)
         assert document is not None
         assert not error
         assert len(document.package.files) == 1

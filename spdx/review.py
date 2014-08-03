@@ -37,7 +37,7 @@ class Review(object):
 
     @property
     def review_date_iso_format(self):
-        datetime_iso_format(self.review_date)
+        return datetime_iso_format(self.review_date)
 
     @property
     def has_comment(self):

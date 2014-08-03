@@ -139,10 +139,6 @@ class ExtractedLicense(License):
         else:
             return True
 
-
-    
-
-
 class Document(object):
 
     """Represents an SPDX document.
@@ -174,6 +170,13 @@ class Document(object):
 
     def add_extr_lic(self, lic):
         self.extracted_licenses.append(lic)
+
+    @property
+    def files(self):
+        return self.package.files
+    @files.setter
+    def files(self, value):
+        self.package.files = value    
 
     @property
     def has_comment(self):
