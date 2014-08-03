@@ -308,6 +308,9 @@ class ReviewBuilder(object):
 
 
 class PackageBuilder(object):
+    VERIF_CODE_REGEX = re.compile(r"([0-9a-f]+)\s*(\(\s*(.+)\))?", re.UNICODE)
+    VERIF_CODE_CODE_GRP = 1
+    VERIF_CODE_EXC_FILES_GRP = 3
 
     def __init__(self):
         super(PackageBuilder, self).__init__()
@@ -443,12 +446,19 @@ class PackageBuilder(object):
         code - A string.
         Raises CardinalityError if already defined.
         Raises OrderError if no package previously defined.
+        Raises Value error if doesn't match verifcode form
         """
         self.assert_package_exists()
         if not self.package_verif_set:
             self.package_verif_set = True
-            doc.package.verif_code = code
-            return True
+            match = self.VERIF_CODE_REGEX.match(code)
+            if match:
+                doc.package.verif_code = match.group(self.VERIF_CODE_CODE_GRP)
+                if match.group(self.VERIF_CODE_EXC_FILES_GRP) is not None:
+                    doc.package.verif_exc_files = match.group(self.VERIF_CODE_EXC_FILES_GRP).split(',')
+                return True
+            else:
+                raise ValueError('Package::VerificationCode')
         else:
             raise CardinalityError('Package::VerificationCode')
 
@@ -825,6 +835,7 @@ class LicenseBuilder(object):
 
     def __init__(self):
         super(LicenseBuilder, self).__init__()
+        self.reset_extr_lics()
 
     def extr_lic(self, doc):
         """Retrieves last license in extracted license list"""
@@ -837,6 +848,7 @@ class LicenseBuilder(object):
         """Adds a new extracted license to the document.
         Raises ValueError if data format is incorrect.
         """
+        self.reset_extr_lics()
         if validate_extracted_lic_id(id):
             doc.add_extr_lic(document.ExtractedLicense(id))
             return True
@@ -849,11 +861,15 @@ class LicenseBuilder(object):
         Raises OrderError if no license ID defined.
         """
         if self.has_extr_lic(doc):
-            if validate_is_free_form_text(text):
-                self.extr_lic(doc).text = str_from_text(text)
-                return True
+            if not self.extr_text_set:
+                self.extr_text_set = True
+                if validate_is_free_form_text(text):
+                    self.extr_lic(doc).text = str_from_text(text)
+                    return True
+                else:
+                    raise ValueError('ExtractedLicense::text')
             else:
-                raise ValueError('ExtractedLicense::text')
+                raise CardinalityError('ExtractedLicense::text')
         else:
             raise OrderError('ExtractedLicense::text')
 
@@ -863,11 +879,15 @@ class LicenseBuilder(object):
         Raises OrderError if no license id defined.
         """
         if self.has_extr_lic(doc):
-            if validate_extr_lic_name(name):
-                self.extr_lic(doc).full_name = name
-                return True
+            if not self.extr_lic_name_set:
+                self.extr_lic_name_set = True
+                if validate_extr_lic_name(name):
+                    self.extr_lic(doc).full_name = name
+                    return True
+                else:
+                    raise ValueError('ExtractedLicense::Name')
             else:
-                raise ValueError('ExtractedLicense::Name')
+                raise CardinalityError('ExtractedLicense::Name')
         else:
             raise OrderError('ExtractedLicense::Name')
 
@@ -877,11 +897,15 @@ class LicenseBuilder(object):
         Raises OrderError if no license ID defined.
         """
         if self.has_extr_lic(doc):
-            if validate_is_free_form_text(comment):
-                self.extr_lic(doc).comment = str_from_text(comment)
-                return True
+            if not self.extr_lic_comment_set:
+                self.extr_lic_comment_set = True
+                if validate_is_free_form_text(comment):
+                    self.extr_lic(doc).comment = str_from_text(comment)
+                    return True
+                else:
+                    raise ValueError('ExtractedLicense::comment')
             else:
-                raise ValueError('ExtractedLicense::comment')
+                raise CardinalityError('ExtractedLicense::comment')
         else:
             raise OrderError('ExtractedLicense::comment')
 
@@ -894,6 +918,12 @@ class LicenseBuilder(object):
             return True
         else:
             raise OrderError('ExtractedLicense::CrossRef')
+
+    def reset_extr_lics(self):
+        self.extr_text_set = False
+        self.extr_lic_name_set = False
+        self.extr_lic_comment_set = False
+
 
 
 
@@ -913,3 +943,4 @@ class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
         self.reset_package()
         self.reset_file_stat()
         self.reset_reviews()
+        self.reset_extr_lics()

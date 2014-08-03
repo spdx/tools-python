@@ -25,6 +25,12 @@ def write_seperators(out):
     for i in xrange(0, 4):
         out.write('\n')
 
+def format_verif_code(package):
+    if len(package.verif_exc_files) == 0:
+        return package.verif_code
+    else:
+        return "{0} ({1})".format(package.verif_code, ','.join(package.verif_exc_files))
+
 
 def write_value(tag, value, out):
     out.write('{0}: {1}\n'.format(tag, value))
@@ -117,7 +123,7 @@ def write_package(package, out):
         write_value('PackageOriginator', package.originator, out)
     if package.has_optional_field('check_sum'):
         write_value('PackageChecksum', package.check_sum.to_tv(), out)
-    write_value('PackageVerificationCode', package.verif_code, out)
+    write_value('PackageVerificationCode', format_verif_code(package), out)
     if package.has_optional_field('description'):
         write_text_value('PackageDescription', package.description, out)
     write_value('PackageLicenseDeclared', package.license_declared, out)
