@@ -13,7 +13,8 @@
 #    limitations under the License.
 from .. import utils
 from .. import file
-
+from .. import document
+from itertools import izip_longest as zip_longest
 
 class InvalidDocumentError(Exception):
 
@@ -23,7 +24,7 @@ class InvalidDocumentError(Exception):
 
 def write_seperators(out):
     for i in xrange(0, 4):
-        out.write('\n')
+        out.write(u'\n')
 
 def format_verif_code(package):
     if len(package.verif_exc_files) == 0:
@@ -33,12 +34,12 @@ def format_verif_code(package):
 
 
 def write_value(tag, value, out):
-    out.write('{0}: {1}\n'.format(tag, value))
+    out.write(u'{0}: {1}\n'.format(tag, value))
 
 
 def write_text_value(tag, value, out):
-    text_value = '<text>{0}</text>'.format(value)
-    write_value(tag, text_value, out)
+    value = u'{0}: <text>{1}</text>'.format(tag, value)
+    out.write(value)
 
 
 def write_creation_info(creation_info, out):
@@ -79,7 +80,10 @@ def write_file(file, out):
     write_value('FileName', file.name, out)
     write_file_type(file.type, out)
     write_value('FileChecksum', file.chk_sum.to_tv(), out)
-    write_value('LicenseConcluded', file.conc_lics, out)
+    if type(file.conc_lics) in [document.LicenseConjuction, document.LicenseDisjunction]:
+        write_value('LicenseConcluded', u'({0})'.format(file.conc_lics), out)
+    else:
+        write_value('LicenseConcluded', file.conc_lics, out)
     for lics in file.licenses_in_file:
         write_value('LicenseInfoInFile', lics, out)
     if type(file.copyright) is str:
@@ -96,12 +100,17 @@ def write_file(file, out):
         write_value('FileContributor', contributer, out)
     for dependency in file.dependencies:
         write_value('FileDependency', dependency, out)
-    for indx, name in enumerate(file.artifact_of_project_name):
+    names = file.artifact_of_project_name
+    homepages = file.artifact_of_project_home
+    uris = file.artifact_of_project_uri
+    for name, homepage, uri in zip_longest(names, homepages, uris):
         write_value('ArtifactOfProjectName', name, out)
-        write_value(
-            'ArtifactOfProjectHomePage', file.artifact_of_project_home[indx], out)
-        write_value(
-            'ArtifactOfProjectURI', file.artifact_of_project_uri[indx], out)
+        if homepage is not None:
+            write_value(
+                'ArtifactOfProjectHomePage', homepage, out)
+        if uri is not None:
+            write_value(
+                'ArtifactOfProjectURI', uri, out)
 
 
 def write_package(package, out):
@@ -126,8 +135,16 @@ def write_package(package, out):
     write_value('PackageVerificationCode', format_verif_code(package), out)
     if package.has_optional_field('description'):
         write_text_value('PackageDescription', package.description, out)
-    write_value('PackageLicenseDeclared', package.license_declared, out)
-    write_value('PackageLicenseConcluded', package.conc_lics, out)
+    if type(package.license_declared) in [document.LicenseConjuction, 
+        document.LicenseDisjunction]:
+        write_value('PackageLicenseDeclared', u'({0})'.format(package.license_declared), out)
+    else:
+        write_value('PackageLicenseDeclared', package.license_declared, out)
+    if type(package.conc_lics) in [document.LicenseConjuction, 
+        document.LicenseDisjunction]:
+        write_value('PackageLicenseConcluded', u'({0})'.format(package.conc_lics), out)
+    else:
+        write_value('PackageLicenseConcluded', package.conc_lics, out)
     # Write list of licenses.
     for lics in package.licenses_from_files:
         write_value('PackageLicenseInfoFromFiles', lics, out)

@@ -205,8 +205,98 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             doc.package.description = text
         else:
             raise CardinalityError('Package::Description')
+
+class FileBuilder(tagvaluebuilders.FileBuilder):
+    
+    def set_file_chksum(self, doc, chk_sum):
+        """Sets the file check sum, if not already set.
+        chk_sum - A string
+        Raises CardinalityError if already defined.
+        Raises OrderError if no package previously defined.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_chksum_set:
+                self.file_chksum_set = True
+                self.file(doc).chk_sum = checksum.Algorithm('SHA1', chk_sum)
+                return True
+            else:
+                raise CardinalityError('File::CheckSum')
+        else:
+            raise OrderError('File::CheckSum')
+
+    def set_file_license_comment(self, doc, text):
+        """
+        Raises OrderError if no package or file defined.
+        Raises CardinalityError if more than one per file.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_license_comment_set:
+                self.file_license_comment_set = True
+                self.file(doc).license_comment = text
+                return True
+            else:
+                raise CardinalityError('File::LicenseComment')
+        else:
+            raise OrderError('File::LicenseComment')
+
+    def set_file_copyright(self, doc, text):
+        """Raises OrderError if no package or file defined.
+        Raises CardinalityError if more than one.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_copytext_set:
+                self.file_copytext_set = True
+                self.file(doc).copyright = text
+                return True
+            else:
+                raise CardinalityError('File::CopyRight')
+        else:
+            raise OrderError('File::CopyRight')
+
+    def set_file_comment(self, doc, text):
+        """Raises OrderError if no package or no file defined.
+        Raises CardinalityError if more than one comment set.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_comment_set:
+                self.file_comment_set = True
+                self.file(doc).comment = text
+                return True
+            else:
+                raise CardinalityError('File::Comment')
+        else:
+            raise OrderError('File::Comment')
+
+    def set_file_notice(self, doc, text):
+        """Raises OrderError if no package or file defined.
+        Raises CardinalityError if more than one.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if not self.file_notice_set:
+                self.file_notice_set = True
+                self.file(doc).notice = str_from_text(text)
+                return True
+            else:
+                raise CardinalityError('File::Notice')
+        else:
+            raise OrderError('File::Notice')
+
+class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
+    def add_review_comment(self, doc, comment):
+        """Sets the review comment. Raises CardinalityError if 
+        already set. OrderError if no reviewer defined before.
+        """
+        if len(doc.reviews) != 0:
+            if not self.review_comment_set:
+                self.review_comment_set = True
+                doc.reviews[-1].comment = comment
+                return True
+            else:
+                raise CardinalityError('ReviewComment')
+        else:
+            raise OrderError('ReviewComment')
        
-class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder):
+class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder, FileBuilder, ReviewBuilder):
     
     def reset(self):
         """Resets builder's state for building new documents.

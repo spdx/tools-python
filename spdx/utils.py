@@ -80,8 +80,6 @@ class SPDXNone(object):
         return self.to_value()
 
 
-
-
 class LicenseListLexer(object):
 
     def __init__(self):
