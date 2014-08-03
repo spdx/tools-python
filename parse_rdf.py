@@ -1,5 +1,7 @@
+#!/usr/bin/env python
 if __name__ == '__main__':
     import sys
+    import spdx.file as spdxfile
     from spdx.parsers.rdf import Parser
     from spdx.parsers.loggers import StandardLogger
     from spdx.parsers.rdfbuilders import Builder
@@ -12,6 +14,11 @@ if __name__ == '__main__':
             print 'Creators:'
             for c in doc.creation_info.creators:
                 print '\t{0}'.format(c)
+            print 'Document review information:'
+            for review in doc.reviews:
+                print '\tReviewer: {0}'.format(review.reviewer)
+                print '\tDate: {0}'.format(review.review_date)
+                print '\tComment: {0}'.format(review.comment)
             print 'Creation comment: {0}'.format(doc.creation_info.comment)
             print 'Package Name: {0}'.format(doc.package.name)
             print 'Package Version: {0}'.format(doc.package.version)
@@ -28,6 +35,22 @@ if __name__ == '__main__':
             print 'Package Copyright text: {0}'.format(doc.package.cr_text)
             print 'Package summary: {0}'.format(doc.package.summary)
             print 'Package description: {0}'.format(doc.package.description)
+            print 'Package Files:'
+            VALUES = {
+                spdxfile.FileType.SOURCE: 'SOURCE',
+                spdxfile.FileType.OTHER: 'OTHER',
+                spdxfile.FileType.BINARY: 'BINARY',
+                spdxfile.FileType.ARCHIVE: 'ARCHIVE'
+            }
+            for f in doc.files:
+                print '\tFile name: {0}'.format(f.name)
+                print '\tFile type: {0}'.format(VALUES[f.type])
+                print '\tFile Checksum: {0}'.format(f.chk_sum.value)
+                print '\tFile license concluded: {0}'.format(f.conc_lics)
+                print '\tFile license info in file: {0}'.format(','.join(
+                     map(lambda l: l.identifier, f.licenses_in_file)))
+                print '\tFile artifact of project name: {0}'.format(','.join(f.artifact_of_project_name))
+
             print 'Document Extracted licenses:'
             for lics in doc.extracted_licenses:
                 print '\tIdentifier: {0}'.format(lics.identifier)
