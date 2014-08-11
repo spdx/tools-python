@@ -74,6 +74,9 @@ class License(object):
     def __str__(self):
         return self.identifier
 
+    def __hash__(self):
+        return self.identifier.__hash__()
+
 
 class LicenseConjuction(License):
 

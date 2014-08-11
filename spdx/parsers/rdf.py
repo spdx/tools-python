@@ -74,11 +74,11 @@ class BaseParser(object):
         """Checks if value is a special SPDX value such as 
         NONE, NOASSERTION or UNKNOWN if so returns proper model.
         else returns value"""
-        if value == 'spdx:none':
+        if value == self.spdx_namespace.none:
             return utils.SPDXNone()
-        elif value == 'spdx:noassertion':
+        elif value == self.spdx_namespace.noassertion:
             return utils.NoAssert()
-        elif value == 'spdx:unknown':
+        elif value == self.spdx_namespace.unknown:
             return utils.UnKnown()
         else:
             return value
@@ -157,8 +157,8 @@ class LicenseParser(BaseParser):
         """Returns list of cross references"""
         xrefs =  list(self.graph.triples(
             (extr_lic, RDFS.seeAlso, None)))
-        return filter(lambda xref_triple: xref_triple[2], xrefs)
-
+        return map(lambda xref_triple: xref_triple[2], xrefs)
+        
     def get_extr_lics_comment(self, extr_lics):
         """Returns license comment or None if failed or none exists"""
         comment_list = list(self.graph.triples(
@@ -194,7 +194,7 @@ class LicenseParser(BaseParser):
                 license.full_name = name
             if comment is not None:
                 license.comment = comment
-            license.cross_ref = xrefs
+            license.cross_ref = map(lambda x: unicode(x), xrefs)
             return license
 
 
