@@ -152,7 +152,7 @@ class Document(object):
         creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
         package: Package described by this document. Mandatory, one. Type: Package
         extracted_licenses: List of licenses extracted that are not part of the
-            SPDX license list. Optional, many. Type: License.
+            SPDX license list. Optional, many. Type: ExtractedLicense.
         reviews: SPDX document review information, Optional zero or more. 
             Type: Review.
     """
@@ -241,5 +241,11 @@ class Document(object):
     def validate_extracted_licenses(self, messages):
         status = True
         for lic in self.extracted_licenses:
-            status &= lic.validate(messages)
+            if isinstance(lic, ExtractedLicense):
+                status &= lic.validate(messages)
+            else:
+                messages.append('Document extracted licenses must be of type' +
+                    'spdx.document.ExtractedLicense')
+                return False
+
         return status
