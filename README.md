@@ -20,7 +20,7 @@ Current Status:
 * RDF Parser implemented.
 * Tag/value parser implemented
 * Tag/value writer implemented.
-* RDF/Writer incomplete.
+* RDF/Writer implemented.
 
 
 How to use:
@@ -54,6 +54,9 @@ To test it run `python parse_rdf.py Examples/SPDXRdfExample.rdf`
 
 The file `rdf_to_tv.py` demonstrates how to convert a RDF file to a tag/value one.
 To test it run `python rdf_to_tv.py Examples/SPDXRdfExample.rdf converted.tag`
+
+The file `rdf_pp.py` demonstrates how to pretty print a RDF file, 
+to test it run `python rdf_pp.py Examples/SPDXRdfExample.rdf pretty.rdf`
 
 Installation:
 =============
