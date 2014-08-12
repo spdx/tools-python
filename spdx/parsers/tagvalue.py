@@ -72,6 +72,7 @@ ERROR_MESSAGES = {
     'LICS_NAME_VALE' : 'LicenseName must be single line of text or NOASSERTION, line: {0}',
     'LICS_COMMENT_VALUE' : 'LicenseComment must be free form text, line: {0}',
     'LICS_CRS_REF_VALUE' : 'LicenseCrossReference must be uri as single line of text, line: {0}',
+    'PKG_CPY_TEXT_VALUE' : 'Package copyright text must be free form text, line: {0}',
 }
 
 
