@@ -568,7 +568,7 @@ class PackageBuilder(object):
         if not self.package_cr_text_set:
             self.package_cr_text_set = True
             if validate_pkg_cr_text(text):
-                if type(text) is str:
+                if isinstance(text, basestring):
                     doc.package.cr_text = str_from_text(text)
                 else:
                     doc.package.cr_text = text  # None or NoAssert
@@ -651,7 +651,7 @@ class FileBuilder(object):
         else:
             raise OrderError('File::Comment')
 
-    def set_file_type(self, doc, type):
+    def set_file_type(self, doc, type_value):
         """
         Raises OrderError if no package or file defined.
         Raises CardinalityError if more than one type set.
@@ -666,8 +666,8 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_type_set:
                 self.file_type_set = True
-                if type in type_dict.keys():
-                    self.file(doc).type = type_dict[type]
+                if type_value in type_dict.keys():
+                    self.file(doc).type = type_dict[type_value]
                     return True
                 else:
                     raise ValueError('File::Type')
@@ -751,7 +751,7 @@ class FileBuilder(object):
             if not self.file_copytext_set:
                 self.file_copytext_set = True
                 if validate_file_cpyright(text):
-                    if type(text) is str:
+                    if isinstance(text,  basestring):
                         self.file(doc).copyright = str_from_text(text)
                     else:
                         self.file(doc).copyright = text  # None or NoAssert

@@ -52,11 +52,8 @@ def validate_data_lics(value):
 def validate_pkg_supplier(value, optional=False):
     if optional and value is None:
         return True
-    elif type(value) is creationinfo.Organization:
-        return True
-    elif type(value) is creationinfo.Person:
-        return True
-    elif type(value) is utils.NoAssert:
+    elif isinstance(value, (utils.NoAssert, creationinfo.Person, 
+        creationinfo.Organization)):
         return True
     else:
         return False
@@ -69,13 +66,7 @@ def validate_pkg_originator(value, optional=False):
 def validate_pkg_homepage(value, optional=False):
     if value is None:
         return optional
-    elif type(value) is str:
-        return True
-    elif type (value) is unicode:
-        return True
-    elif type(value) is utils.NoAssert:
-        return True
-    elif type(value) is utils.SPDXNone:
+    elif isinstance(value, (basestring, utils.NoAssert, utils.SPDXNone)):
         return True
     else:
         return False
@@ -84,10 +75,8 @@ def validate_pkg_homepage(value, optional=False):
 def validate_pkg_cr_text(value, optional=False):
     if validate_is_free_form_text(value, optional):
         return True
-    elif type(value) is utils.NoAssert:
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone)):
         return True
-    elif type(value) is utils.SPDXNone:
-        return True 
     elif value is None:
         return optional
     else:
@@ -144,9 +133,7 @@ def validate_file_lics_comment(value, optional=False):
 def validate_file_cpyright(value, optional=False):
     if validate_is_free_form_text(value, optional):
         return True
-    elif type(value) is utils.NoAssert:
-        return True
-    elif type(value) is utils.SPDXNone:
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone)):
         return True
     else:
         return False
@@ -155,11 +142,7 @@ def validate_file_cpyright(value, optional=False):
 def validate_lics_from_file(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, document.License):
-        return True
-    elif isinstance(value, utils.SPDXNone):
-        return True
-    elif isinstance(value, utils.NoAssert):
+    elif isinstance(value, (document.License, utils.SPDXNone, utils.NoAssert)):
         return True
     else:
         return False
@@ -171,11 +154,7 @@ def validate_file_notice(value, optional=False):
 def validate_lics_conc(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, document.License):
-        return True
-    elif isinstance(value, utils.SPDXNone):
-        return True
-    elif isinstance(value, utils.NoAssert):
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, document.License)):
         return True
     else:
         return False
@@ -184,11 +163,7 @@ def validate_lics_conc(value, optional=False):
 def validate_file_lics_in_file(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, document.License):
-        return True
-    elif isinstance(value, utils.SPDXNone):
-        return True
-    elif isinstance(value, utils.NoAssert):
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, document.License)):
         return True
     else:
         return False
@@ -204,4 +179,4 @@ def validate_extr_lic_name(value, optional=False):
     if value is None:
         return optional
     else:
-        return type(value) in [str, unicode, utils.NoAssert, rdflib.Literal]
+        return isinstance(value, (basestring, utils.NoAssert, rdflib.Literal) )

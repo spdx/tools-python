@@ -80,13 +80,13 @@ def write_file(file, out):
     write_value('FileName', file.name, out)
     write_file_type(file.type, out)
     write_value('FileChecksum', file.chk_sum.to_tv(), out)
-    if type(file.conc_lics) in [document.LicenseConjuction, document.LicenseDisjunction]:
+    if isinstance(file.conc_lics, (document.LicenseConjuction, document.LicenseDisjunction)):
         write_value('LicenseConcluded', u'({0})'.format(file.conc_lics), out)
     else:
         write_value('LicenseConcluded', file.conc_lics, out)
     for lics in file.licenses_in_file:
         write_value('LicenseInfoInFile', lics, out)
-    if type(file.copyright) in [str, unicode]:
+    if isinstance(file.copyright, basestring):
         write_text_value('FileCopyrightText', file.copyright, out)
     else:
         write_value('FileCopyrightText', file.copyright, out)
@@ -135,13 +135,13 @@ def write_package(package, out):
     write_value('PackageVerificationCode', format_verif_code(package), out)
     if package.has_optional_field('description'):
         write_text_value('PackageDescription', package.description, out)
-    if type(package.license_declared) in [document.LicenseConjuction, 
-        document.LicenseDisjunction]:
+    if isinstance(package.license_declared, (document.LicenseConjuction, 
+        document.LicenseDisjunction)):
         write_value('PackageLicenseDeclared', u'({0})'.format(package.license_declared), out)
     else:
         write_value('PackageLicenseDeclared', package.license_declared, out)
-    if type(package.conc_lics) in [document.LicenseConjuction, 
-        document.LicenseDisjunction]:
+    if isinstance(package.conc_lics, (document.LicenseConjuction, 
+        document.LicenseDisjunction)):
         write_value('PackageLicenseConcluded', u'({0})'.format(package.conc_lics), out)
     else:
         write_value('PackageLicenseConcluded', package.conc_lics, out)
@@ -152,7 +152,7 @@ def write_package(package, out):
         write_text_value(
             'PackageLicenseComments', package.license_comment, out)
     # cr_text is either free form text or NONE or NOASSERTION.
-    if isinstance(package.cr_text, str) or isinstance(package.cr_text, unicode):
+    if isinstance(package.cr_text, basestring):
         write_text_value('PackageCopyrightText', package.cr_text, out)
     else:
         write_value('PackageCopyrightText', package.cr_text, out)

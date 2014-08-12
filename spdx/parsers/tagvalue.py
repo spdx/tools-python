@@ -247,18 +247,22 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_file_artifact_1(self, p):
-        """file_artifact : prj_name_art file_art_rest"""
+        """file_artifact : prj_name_art file_art_rest
+                         | prj_name_art
+        """
         pass
 
     def p_file_artificat_2(self, p):
         """file_artifact : prj_name_art error"""
         self.error = True
-        msg = ERROR_MESSAGES['FILE_ART_OPT_ORDER'].format(p.lineno(1))
+        msg = ERROR_MESSAGES['FILE_ART_OPT_ORDER'].format(p.lineno(2))
         self.logger.log(msg)
 
     def p_file_art_rest(self, p):
         """file_art_rest : prj_home_art prj_uri_art
                          | prj_uri_art prj_home_art
+                         | prj_home_art
+                         | prj_uri_art
         """
         pass
 
@@ -293,7 +297,7 @@ class Parser(object):
             self.order_error('ArtificatOfProjectHomePage', 'FileName', p.lineno(1))
 
     def p_prj_home_art_2(self, p):
-        """prj_name_art : ART_PRJ_HOME UN_KNOWN"""
+        """prj_home_art : ART_PRJ_HOME UN_KNOWN"""
         try:
             self.builder.set_file_atrificat_of_project(self.document, 
                 'home', utils.UnKnown())
