@@ -38,7 +38,7 @@ def write_value(tag, value, out):
 
 
 def write_text_value(tag, value, out):
-    value = u'{0}: <text>{1}</text>'.format(tag, value)
+    value = u'{0}: <text>{1}</text>\n'.format(tag, value)
     out.write(value)
 
 
@@ -86,7 +86,7 @@ def write_file(file, out):
         write_value('LicenseConcluded', file.conc_lics, out)
     for lics in file.licenses_in_file:
         write_value('LicenseInfoInFile', lics, out)
-    if type(file.copyright) is str:
+    if type(file.copyright) in [str, unicode]:
         write_text_value('FileCopyrightText', file.copyright, out)
     else:
         write_value('FileCopyrightText', file.copyright, out)
@@ -152,7 +152,7 @@ def write_package(package, out):
         write_text_value(
             'PackageLicenseComments', package.license_comment, out)
     # cr_text is either free form text or NONE or NOASSERTION.
-    if isinstance(package.cr_text, str):
+    if isinstance(package.cr_text, str) or isinstance(package.cr_text, unicode):
         write_text_value('PackageCopyrightText', package.cr_text, out)
     else:
         write_value('PackageCopyrightText', package.cr_text, out)

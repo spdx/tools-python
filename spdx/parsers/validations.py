@@ -19,7 +19,7 @@ from .. import document
 
 
 def validate_is_free_form_text(value, optional=False):
-    TEXT_RE = re.compile(r'<text>(.|\n)+</text>', re.UNICODE)
+    TEXT_RE = re.compile(r'<text>(.|\n)*</text>', re.UNICODE)
     if value is None:
         return optional
     else:
