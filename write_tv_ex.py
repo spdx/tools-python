@@ -1,5 +1,7 @@
+#!/usr/bin/env python
 if __name__ == '__main__':
     import sys
+    import codecs
     from spdx.writers.tagvalue import write_document, InvalidDocumentError
     from spdx.document import Document, License, LicenseConjuction, ExtractedLicense
     from spdx.version import Version
@@ -70,7 +72,7 @@ if __name__ == '__main__':
     doc.add_extr_lic(lic)
 
     file = sys.argv[1]
-    with open(file, 'w') as out:
+    with codecs.open(file, mode='w', encoding='utf-8') as out:
         try:
             write_document(doc, out)
         except InvalidDocumentError:

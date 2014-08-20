@@ -13,6 +13,9 @@
 #    limitations under the License.
 
 import checksum
+import document
+import utils
+import creationinfo
 
 
 class Package(object):
@@ -40,6 +43,7 @@ class Package(object):
         summary: Optional str.
         description: Optional str.
         files: List of files in package, atleast one.
+        verif_exc_files : list of file names excluded from verification code or None.
     """
 
     def __init__(self, name=None, download_location=None, version=None,
@@ -63,12 +67,16 @@ class Package(object):
         self.summary = None
         self.description = None
         self.files = []
+        self.verif_exc_files = []
 
     def add_file(self, file):
         self.files.append(file)
 
     def add_lics_from_file(self, lics):
         self.licenses_from_files.append(lics)
+
+    def add_exc_file(self, filename):
+        self.verif_exc_files.append(filename)
 
     def validate(self, messages):
         """Validates the package's fields. Appends user friends errors
@@ -77,8 +85,47 @@ class Package(object):
         return (self.validate_checksum(messages) &
                  self.validate_optional_str_fields(messages) &
                  self.validate_mandatory_str_fields(messages) &
-                 self.validate_files(messages))
+                 self.validate_files(messages) & 
+                 self.validate_mandatory_fields(messages) &
+                 self.validate_optional_fields(messages))
+
+    def validate_optional_fields(self, messages):
+        status = True
+        if not ( (self.originator is None) or 
+            isinstance(self.originator, utils.NoAssert) or 
+            isinstance(self.originator, creationinfo.Creator) ):
+            messages.append('Package originator must be instance of ' + 
+                'spdx.utils.NoAssert or spdx.creationinfo.Creator')
+            status = False
+        if not ( (self.supplier is None) or isinstance(self.supplier, utils.NoAssert) or 
+            isinstance(self.supplier, utils.SPDXNone) or 
+            isinstance(self.supplier, creationinfo.Creator)):
+            messages.append('Package supplier must be instance of ' +
+                'spdx.utils.NoAssert or spdx.utils.SPDXNone or spdx.creationinfo.Creator')
+            status = False
+
+        return status
         
+    def validate_mandatory_fields(self, messages):
+        status = True
+        if not isinstance(self.conc_lics, document.License):
+            messages.append('Package concluded license must be instance of spdx.document.License')
+            status = False
+        if not isinstance(self.license_declared, document.License):
+            messages.append('Package declared license must be instance of spdx.document.License')
+            status = False
+        license_from_file_check = lambda prev, el : prev and (isinstance(el, document.License) or 
+         isinstance(el, utils.SPDXNone) or isinstance(el, utils.NoAssert))
+        if not reduce(license_from_file_check, self.licenses_from_files, True):
+            messages.append('each element in licenses_from_files must be instance of ' + 
+                'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
+            status = False
+        if len(self.licenses_from_files) == 0:
+            messages.append('Package licenses_from_files can not be empty')
+            status = False
+
+
+        return status
 
     def validate_files(self, messages):
         if len(self.files) == 0:

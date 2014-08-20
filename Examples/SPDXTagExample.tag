@@ -112,7 +112,8 @@ WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, 
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</text>
 LicenseName: CyberNeko License
-LicenseCrossReference: http://people.apache.org/~andyc/neko/LICENSE, http://justasample.url.com
+LicenseCrossReference: http://people.apache.org/~andyc/neko/LICENSE
+LicenseCrossReference: http://justasample.url.com
 LicenseComment: <text>This is tye CyperNeko License</text>
 
 LicenseID: LicenseRef-1
@@ -145,7 +146,7 @@ ExtractedText: <text>/*
 
 LicenseID: LicenseRef-2
 ExtractedText: <text>This package includes the GRDDL parser developed by Hewlett Packard under the following license:
-© Copyright 2007 Hewlett-Packard Development Company, LP
+Â© Copyright 2007 Hewlett-Packard Development Company, LP
 
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met: 
 

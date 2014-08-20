@@ -17,4 +17,7 @@ class Algorithm(object):
         super(Algorithm, self).__init__()
         self.identifier = identifier
         self.value = value
+
+    def to_tv(self):
+        return "{0}: {1}".format(self.identifier, self.value)
     

@@ -1,9 +1,11 @@
+#!/usr/bin/env python
 # Parses a tag/value file 
 # and prints it out formatted.
 # usage pp_tv <inputfile> <outfile>
 
 if __name__ == '__main__':
     import sys
+    import codecs
     from spdx.writers.tagvalue import write_document, InvalidDocumentError
     from spdx.parsers.tagvalue import Parser
     from spdx.parsers.loggers import StandardLogger
@@ -17,7 +19,7 @@ if __name__ == '__main__':
         document, error = p.parse(data)
         if not error:
             print 'Parsing Successful'
-            with open(target, 'w') as out:
+            with codecs.open(target, mode='w', encoding='utf-8') as out:
                 try:
                     write_document(document, out)
                 except InvalidDocumentError:

@@ -74,6 +74,9 @@ class License(object):
     def __str__(self):
         return self.identifier
 
+    def __hash__(self):
+        return self.identifier.__hash__()
+
 
 class LicenseConjuction(License):
 
@@ -139,10 +142,6 @@ class ExtractedLicense(License):
         else:
             return True
 
-
-    
-
-
 class Document(object):
 
     """Represents an SPDX document.
@@ -153,7 +152,7 @@ class Document(object):
         creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
         package: Package described by this document. Mandatory, one. Type: Package
         extracted_licenses: List of licenses extracted that are not part of the
-            SPDX license list. Optional, many. Type: License.
+            SPDX license list. Optional, many. Type: ExtractedLicense.
         reviews: SPDX document review information, Optional zero or more. 
             Type: Review.
     """
@@ -174,6 +173,13 @@ class Document(object):
 
     def add_extr_lic(self, lic):
         self.extracted_licenses.append(lic)
+
+    @property
+    def files(self):
+        return self.package.files
+    @files.setter
+    def files(self, value):
+        self.package.files = value    
 
     @property
     def has_comment(self):
@@ -235,5 +241,11 @@ class Document(object):
     def validate_extracted_licenses(self, messages):
         status = True
         for lic in self.extracted_licenses:
-            status &= lic.validate(messages)
+            if isinstance(lic, ExtractedLicense):
+                status &= lic.validate(messages)
+            else:
+                messages.append('Document extracted licenses must be of type' +
+                    'spdx.document.ExtractedLicense')
+                return False
+
         return status

@@ -88,18 +88,18 @@ class File(object):
             & self.validate_copyright(messages) & self.validate_artifacts(messages) )
 
     def validate_copyright(self, messages):
-        if type(self.copyright) in [str, utils.NoAssert, utils.SPDXNone]:
+        if type(self.copyright) in [str, unicode, utils.NoAssert, utils.SPDXNone]:
             return True
         else:
-            messages.append('File copyright must be str or utils.NoAssert or utils.SPDXNone')
+            messages.append('File copyright must be str or unicode or utils.NoAssert or utils.SPDXNone')
             return False
 
     def validate_artifacts(self, messages):
-        if ( len(self.artifact_of_project_uri) == len(self.artifact_of_project_home)
-            == len(self.artifact_of_project_name) ):
+        if (len(self.artifact_of_project_home) >=
+            max(len(self.artifact_of_project_uri), len(self.artifact_of_project_name)) ):
             return True
         else:
-            messages.append('File must have artificat of project home and project uri for each artificat of project name.')
+            messages.append('File must have as much artifact of project as uri or homepage')
             return False
 
 
@@ -111,7 +111,8 @@ class File(object):
             return True
 
     def validate_lic_conc(self, messages):
-        if type(self.conc_lics) in [document.License, utils.NoAssert, utils.SPDXNone]:
+        if type(self.conc_lics) in [utils.NoAssert, 
+            utils.SPDXNone] or isinstance(self.conc_lics, document.License):
             return True
         else:
             messages.append('File concluded license must be one of document.License, utils.NoAssert or utils.SPDXNone')

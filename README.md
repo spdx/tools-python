@@ -17,8 +17,10 @@ Expected Features:
 
 Current Status:
 ===============
-* RDF Parser unimplemented.
-* RDF/Writer incomplete.
+* RDF Parser implemented.
+* Tag/value parser implemented
+* Tag/value writer implemented.
+* RDF/Writer implemented.
 
 
 How to use:
@@ -46,6 +48,15 @@ Run `python write_tv_ex.py sample.tag` to test it.
 The file `pp_tv.py` demonstrates how to parse a tag/value file and print it out.
 To test it run `python pp_tv.py Examples/SPDXTagExample.tag pretty.tag`.
 
+The file `parse_rdf.py` demonstrates how to parse a RDF/xml file and print out 
+document information.
+To test it run `python parse_rdf.py Examples/SPDXRdfExample.rdf`
+
+The file `rdf_to_tv.py` demonstrates how to convert a RDF file to a tag/value one.
+To test it run `python rdf_to_tv.py Examples/SPDXRdfExample.rdf converted.tag`
+
+The file `rdf_pp.py` demonstrates how to pretty print a RDF file, 
+to test it run `python rdf_pp.py Examples/SPDXRdfExample.rdf pretty.rdf`
 
 Installation:
 =============

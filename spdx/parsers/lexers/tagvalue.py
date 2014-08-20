@@ -100,12 +100,13 @@ class Lexer(object):
 
     def t_text_any(self, t):
         r'.|\n'
+        pass
 
     def t_text_error(self, t):
         print 'Lexer error in text state'
 
     def t_CHKSUM(self, t):
-        r':\s?SHA1:\s[a-f0-9]{40,40}'
+        r':\s*SHA1:\s*[a-f0-9]{40,40}'
         t.value = t.value[1:].strip()
         return t
 
@@ -125,7 +126,7 @@ class Lexer(object):
         return t
 
     def t_DATE(self, t):
-        r':\s?\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ'
+        r':\s*\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ'
         t.value = t.value[1:].strip()
         return t
 
@@ -166,4 +167,6 @@ class Lexer(object):
         self.lexer.input(data)
 
     def t_error(self, t):
-        print 'Lexer error'
+        t.lexer.skip(1)
+        t.value = 'Lexer error'
+        return t
