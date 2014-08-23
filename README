@@ -1,3 +1,7 @@
+
+**Note: This branch is to provide a better alternative history and 
+diverges from that of master. Work should not be based on this branch. ***
+
 Python SPDX Parser Library.
 ===========================
 
