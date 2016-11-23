@@ -39,24 +39,24 @@ Sample Tag/Value parsing Usage:
 
 The file `parse_tv_ex.py` has a working example.
 
-Try running `python parse_tv_ex.py 'Examples/SPDXSimpleTag.tag' `
+Try running `python parse_tv_ex.py 'data/SPDXSimpleTag.tag' `
 
 The file `write_tv_ex.py` provides an example of writing tag/value files.
 
 Run `python write_tv_ex.py sample.tag` to test it.
 
 The file `pp_tv.py` demonstrates how to parse a tag/value file and print it out.
-To test it run `python pp_tv.py Examples/SPDXTagExample.tag pretty.tag`.
+To test it run `python pp_tv.py data/SPDXTagExample.tag pretty.tag`.
 
 The file `parse_rdf.py` demonstrates how to parse a RDF/xml file and print out 
 document information.
-To test it run `python parse_rdf.py Examples/SPDXRdfExample.rdf`
+To test it run `python parse_rdf.py data/SPDXRdfExample.rdf`
 
 The file `rdf_to_tv.py` demonstrates how to convert a RDF file to a tag/value one.
-To test it run `python rdf_to_tv.py Examples/SPDXRdfExample.rdf converted.tag`
+To test it run `python rdf_to_tv.py data/SPDXRdfExample.rdf converted.tag`
 
 The file `rdf_pp.py` demonstrates how to pretty print a RDF file, 
-to test it run `python rdf_pp.py Examples/SPDXRdfExample.rdf pretty.rdf`
+to test it run `python rdf_pp.py data/SPDXRdfExample.rdf pretty.rdf`
 
 Installation:
 =============
