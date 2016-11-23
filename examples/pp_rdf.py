@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Parses an RDF file and writes it out pretty-printed.
+# Usage: pp_rdf <infile> <outfile>
+
 if __name__ == '__main__':
     import sys
     import spdx.file as spdxfile
@@ -14,6 +18,6 @@ if __name__ == '__main__':
         if not error:
             with open(outfile, mode='w') as out:
                 write_document(doc, out)
-        
+
         else:
             print 'Errors while parsing'

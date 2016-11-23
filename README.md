@@ -37,26 +37,26 @@ Sample Tag/Value parsing Usage:
 
 ```
 
-The file `parse_tv_ex.py` has a working example.
+See `parse_tv.py` in the `examples` directory.
 
-Try running `python parse_tv_ex.py 'data/SPDXSimpleTag.tag' `
+Try running `python parse_tv.py 'data/SPDXSimpleTag.tag' `
 
-The file `write_tv_ex.py` provides an example of writing tag/value files.
+The file `write_tv.py` provides an example of writing tag/value files.
 
-Run `python write_tv_ex.py sample.tag` to test it.
+Run `python write_tv.py sample.tag` to test it.
 
-The file `pp_tv.py` demonstrates how to parse a tag/value file and print it out.
+The file `pp_tv.py` demonstrates how to pretty-print a tag/value file.
 To test it run `python pp_tv.py data/SPDXTagExample.tag pretty.tag`.
 
-The file `parse_rdf.py` demonstrates how to parse a RDF/xml file and print out 
+The file `parse_rdf.py` demonstrates how to parse an RDF file and print out
 document information.
 To test it run `python parse_rdf.py data/SPDXRdfExample.rdf`
 
-The file `rdf_to_tv.py` demonstrates how to convert a RDF file to a tag/value one.
+The file `rdf_to_tv.py` demonstrates how to convert an RDF file to a tag/value one.
 To test it run `python rdf_to_tv.py data/SPDXRdfExample.rdf converted.tag`
 
-The file `rdf_pp.py` demonstrates how to pretty print a RDF file, 
-to test it run `python rdf_pp.py data/SPDXRdfExample.rdf pretty.rdf`
+The file `pp_rdf.py` demonstrates how to pretty-print an RDF file,
+to test it run `python pp_rdf.py data/SPDXRdfExample.rdf pretty.rdf`
 
 Installation:
 =============
