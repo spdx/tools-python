@@ -56,7 +56,7 @@ class TestConversions(object):
             rdfwriter.write_document(document, out)
 
     def test_tagvalue_rdf(self):
-        doc, error = self.parse_tagvalue_file('Examples/SPDXTagExample.tag')
+        doc, error = self.parse_tagvalue_file('data/SPDXTagExample.tag')
         assert not error
         assert doc.validate([])
         filename = self.random_file(10, '.rdf')
@@ -66,7 +66,7 @@ class TestConversions(object):
         assert doc.validate([])
 
     def test_rdf_rdf(self):
-        doc, error = self.parse_rdf_file('Examples/SPDXRdfExample.rdf')
+        doc, error = self.parse_rdf_file('data/SPDXRdfExample.rdf')
         assert not error
         assert doc.validate([])
         filename = self.random_file(10, '.rdf')
@@ -76,7 +76,7 @@ class TestConversions(object):
         assert doc.validate([])  
 
     def test_tagvalue_tagvalue(self):
-        doc, error = self.parse_tagvalue_file('Examples/SPDXTagExample.tag')
+        doc, error = self.parse_tagvalue_file('data/SPDXTagExample.tag')
         assert not error
         assert doc.validate([])
         filename = self.random_file(10, '.tag')
@@ -86,7 +86,7 @@ class TestConversions(object):
         assert doc.validate([])
 
     def test_rdf_tagvalue(self):
-        doc, error = self.parse_rdf_file('Examples/SPDXRdfExample.rdf')
+        doc, error = self.parse_rdf_file('data/SPDXRdfExample.rdf')
         assert not error
         assert doc.validate([])
         filename = self.random_file(10, '.tag')

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
-# Parses a tag/value file 
-# and prints it out formatted.
-# usage pp_tv <inputfile> <outfile>
+
+# Parses a tag/value file and writes it out pretty-printed.
+# Usage: pp_tv <infile> <outfile>
 
 if __name__ == '__main__':
     import sys

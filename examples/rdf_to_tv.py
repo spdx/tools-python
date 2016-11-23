@@ -1,6 +1,8 @@
 #!/usr/bin/env python
+
 # Converts an RDF file to tag/value format.
-# usage rdf_to_tv <rdffile> <tagvaluefile>
+# Usage: rdf_to_tv <rdffile> <tagvaluefile>
+
 if __name__ == '__main__':
     import sys
     import codecs

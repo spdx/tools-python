@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Parses an RDF file and prints out some basic information.
+# Usage: parse_rdf.py <rdffile>
+
 if __name__ == '__main__':
     import sys
     import spdx.file as spdxfile
