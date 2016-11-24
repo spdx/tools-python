@@ -41,4 +41,4 @@ def load_license_list():
 
 
 LICENSE_MAP = load_license_list()
-LICENSE_LIST_VERSION = Version(major=1, minor=19)
+LICENSE_LIST_VERSION = Version(major=2, minor=25)
