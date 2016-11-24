@@ -90,12 +90,12 @@ class LicenseConjuction(License):
 
     @property
     def full_name(self):
-        return '{0} AND {1}'.format(self.license_1.full_name,
+        return '({0} AND {1})'.format(self.license_1.full_name,
                                     self.license_2.full_name)
 
     @property
     def identifier(self):
-        return '{0} AND {1}'.format(self.license_1.identifier,
+        return '({0} AND {1})'.format(self.license_1.identifier,
                                     self.license_2.identifier)
 
 
@@ -111,12 +111,12 @@ class LicenseDisjunction(License):
 
     @property
     def full_name(self):
-        return '{0} OR {1}'.format(self.license_1.full_name,
+        return '({0} OR {1})'.format(self.license_1.full_name,
                                    self.license_2.full_name)
 
     @property
     def identifier(self):
-        return '{0} OR {1}'.format(self.license_1.identifier,
+        return '({0} OR {1})'.format(self.license_1.identifier,
                                    self.license_2.identifier)
 
 class ExtractedLicense(License):
