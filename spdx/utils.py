@@ -114,7 +114,7 @@ class LicenseListLexer(object):
         pass
 
     def t_LICENSE(self, t):
-        r'[A-Za-z.0-9\-]+'
+        r'[A-Za-z.0-9\-+]+'
         t.value = t.value.strip()
         return t
 
