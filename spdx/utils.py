@@ -144,47 +144,35 @@ class LicenseListParser(object):
         self.lex.build(reflags=re.UNICODE)
         self.tokens = self.lex.tokens
 
-    def p_license_list_1(self, p):
-        """license_list : LP conjuctions RP
-                        | LP disjunctions RP
+    def p_disjunction_1(self, p):
+        """disjunction : disjunction OR conjunction
+        """
+        p[0] = document.LicenseDisjunction(p[1], p[3])
+
+    def p_disjunction_2(self, p):
+        """disjunction : conjunction
+        """
+        p[0] = p[1]
+
+    def p_conjunction_1(self, p):
+        """conjunction : conjunction AND license_atom
+        """
+        p[0] = document.LicenseConjunction(p[1], p[3])
+
+    def p_conjunction_2(self, p):
+        """conjunction : license_atom
+        """
+        p[0] = p[1]
+
+    def p_license_atom_1(self, p):
+        """license_atom : LICENSE
+        """
+        p[0] = document.License.from_identifier(p[1])
+
+    def p_license_atom_2(self, p):
+        """license_atom : LP disjunction RP
         """
         p[0] = p[2]
-
-    def p_license_list_2(self, p):
-        """license_list : error"""
-        p[0] = None
-
-    def p_conjunctions_1(self, p):
-        """conjunctions : conjunctions AND conjunction
-                       | conjunctions AND license
-        """
-        p[0] = document.LicenseConjunction(p[1], p[3])
-
-    def p_conjunctions_2(self, p):
-        """conjunctions : conjunction"""
-        p[0] = p[1]
-
-    def p_disjunctions_1(self, p):
-        """disjunctions : disjunctions OR disjunction
-                        | disjunctions OR license
-        """
-        p[0] = document.LicenseDisjunction(p[1], p[3])
-
-    def p_disjunctions_2(self, p):
-        """disjunctions : disjunction"""
-        p[0] = p[1]
-
-    def p_conjunction(self, p):
-        """conjunction : license AND license"""
-        p[0] = document.LicenseConjunction(p[1], p[3])
-
-    def p_disjunction(self, p):
-        """disjunction : license OR license"""
-        p[0] = document.LicenseDisjunction(p[1], p[3])
-
-    def p_license(self, p):
-        """license : LICENSE"""
-        p[0] = document.License.from_identifier(p[1])
 
     def p_error(self, p):
         pass
