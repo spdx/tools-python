@@ -36,7 +36,7 @@ def checksum_from_sha1(value):
     checksum. Returns None if doesn't match CHECKSUM_RE.
     """
     # More constrained regex at lexer level
-    CHECKSUM_RE = re.compile('SHA1:(.+)', re.UNICODE)
+    CHECKSUM_RE = re.compile('SHA1: *(.+)', re.UNICODE)
     match = CHECKSUM_RE.match(value)
     if match:
         return checksum.Algorithm(identifier='SHA1', value=match.group(1))
