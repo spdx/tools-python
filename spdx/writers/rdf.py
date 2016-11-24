@@ -69,7 +69,8 @@ class LicenseWriter(BaseWriter):
         super(LicenseWriter, self).__init__(document, out)
 
     def licenses_from_tree_helper(self, current, licenses):
-        if (isinstance(current, (document.LicenseConjuction, document.LicenseDisjunction))):
+        if (isinstance(current, (document.LicenseConjunction,
+                                 document.LicenseDisjunction))):
             self.licenses_from_tree_helper(current.license_1, licenses)
             self.licenses_from_tree_helper(current.license_2, licenses)
         else:
@@ -151,7 +152,7 @@ class LicenseWriter(BaseWriter):
         Could be a single license (extracted or part of license list.) or
         a conjunction/disjunction of licenses.
         """
-        if isinstance(lic, document.LicenseConjuction):
+        if isinstance(license, document.LicenseConjunction):
             return self.create_conjunction_node(lic)
         elif isinstance(license, document.LicenseDisjunction):
             return self.create_disjunction_node(lic)

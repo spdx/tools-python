@@ -78,14 +78,14 @@ class License(object):
         return self.identifier.__hash__()
 
 
-class LicenseConjuction(License):
+class LicenseConjunction(License):
 
-    """A conjuction of two licenses."""
+    """A conjunction of two licenses."""
 
     def __init__(self, license_1, license_2):
         self.license_1 = license_1
         self.license_2 = license_2
-        super(LicenseConjuction, self).__init__(
+        super(LicenseConjunction, self).__init__(
             self.full_name, self.identifier)
 
     @property

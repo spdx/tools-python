@@ -7,7 +7,7 @@ if __name__ == '__main__':
     import sys
     import codecs
     from spdx.writers.tagvalue import write_document, InvalidDocumentError
-    from spdx.document import Document, License, LicenseConjuction, ExtractedLicense
+    from spdx.document import Document, License, LicenseConjunction, ExtractedLicense
     from spdx.version import Version
     from spdx.creationinfo import Person
     from spdx.review import Review
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     package.download_location = 'http://www.tagwritetest.test/download'
     package.homepage = SPDXNone()
     package.verif_code = '4e3211c67a2d28fced849ee1bb76e7391b93feba'
-    license_set = LicenseConjuction(License.from_identifier('Apache-2.0'),
+    license_set = LicenseConjunction(License.from_identifier('Apache-2.0'),
         License.from_identifier('BSD-2-Clause'))
     package.conc_lics = license_set
     package.license_declared = license_set

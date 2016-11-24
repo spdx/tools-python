@@ -154,14 +154,14 @@ class LicenseListParser(object):
         """license_list : error"""
         p[0] = None
 
-    def p_conjuctions_1(self, p):
-        """conjuctions : conjuctions AND conjuction
-                       | conjuctions AND license
+    def p_conjunctions_1(self, p):
+        """conjunctions : conjunctions AND conjunction
+                       | conjunctions AND license
         """
-        p[0] = document.LicenseConjuction(p[1], p[3])
+        p[0] = document.LicenseConjunction(p[1], p[3])
 
-    def p_conjuctions_2(self, p):
-        """conjuctions : conjuction"""
+    def p_conjunctions_2(self, p):
+        """conjunctions : conjunction"""
         p[0] = p[1]
 
     def p_disjunctions_1(self, p):
@@ -174,9 +174,9 @@ class LicenseListParser(object):
         """disjunctions : disjunction"""
         p[0] = p[1]
 
-    def p_conjuction(self, p):
-        """conjuction : license AND license"""
-        p[0] = document.LicenseConjuction(p[1], p[3])
+    def p_conjunction(self, p):
+        """conjunction : license AND license"""
+        p[0] = document.LicenseConjunction(p[1], p[3])
 
     def p_disjunction(self, p):
         """disjunction : license OR license"""
