@@ -4,3 +4,4 @@ __pycache__/
 *.out
 /build/
 /dist/
+/tmp/
