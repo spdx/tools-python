@@ -12,7 +12,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-import nose
+from unittest.case import TestCase
 
 from spdx.version import Version
 from spdx.document import Document
@@ -20,7 +20,7 @@ from spdx.document import License
 from spdx.config import LICENSE_MAP
 
 
-class TestVersion(object):
+class TestVersion(TestCase):
 
     def test_creation(self):
         v = Version(major=1, minor=2)
@@ -41,7 +41,7 @@ class TestVersion(object):
         assert v1 <= v3
 
 
-class TestDocument(object):
+class TestDocument(TestCase):
 
     def test_creation(self):
         document = Document(
@@ -54,11 +54,11 @@ class TestDocument(object):
         assert document.data_license.identifier == 'AFL-1.1'
 
 
-class TestLicense(object):
+class TestLicense(TestCase):
 
     def test_url(self):
-        license = License(full_name='Apache License 1.0', identifier='Apache-1.0')
-        assert license.url == 'http://spdx.org/licenses/Apache-1.0'
+        lic = License(full_name='Apache License 1.0', identifier='Apache-1.0')
+        assert lic.url == 'http://spdx.org/licenses/Apache-1.0'
 
     def test_license_list(self):
         assert LICENSE_MAP['Aladdin Free Public License'] == 'Aladdin'

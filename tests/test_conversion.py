@@ -16,16 +16,15 @@ from __future__ import print_function
 import codecs
 import os
 import tempfile
+from unittest.case import TestCase
 
-import nose
-
-import spdx.writers.tagvalue as tvwriter
-from spdx.parsers.tagvalue import Parser as TVParser
-from spdx.parsers.tagvaluebuilders import Builder as TVBuilder
-import spdx.writers.rdf as rdfwriter
 from spdx.parsers.rdf import Parser as RDFParser
 from spdx.parsers.rdfbuilders import Builder as RDFBuilder
 from spdx.parsers.loggers import StandardLogger
+from spdx.parsers.tagvalue import Parser as TVParser
+from spdx.parsers.tagvaluebuilders import Builder as TVBuilder
+import spdx.writers.rdf as rdfwriter
+import spdx.writers.tagvalue as tvwriter
 
 
 def get_temp_file(extension=''):
@@ -42,7 +41,7 @@ def get_temp_file(extension=''):
     return os.path.join(temp_dir, file_name)
 
 
-class TestConversions(object):
+class TestConversions(TestCase):
 
     def parse_rdf_file(self, file_name):
         """Returns tuple error, document."""

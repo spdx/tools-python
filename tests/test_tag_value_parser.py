@@ -12,7 +12,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-import nose
+from unittest.case import TestCase
 
 import spdx
 from spdx.parsers.tagvalue import Parser
@@ -22,9 +22,9 @@ from spdx.parsers.loggers import StandardLogger
 from spdx.version import Version
 
 
-class TestLexer(object):
+class TestLexer(TestCase):
 
-    def __init__(self):
+    def setUp(self):
         self.l = Lexer()
         self.l.build()
 
@@ -92,13 +92,13 @@ class TestLexer(object):
         self.token_assert_helper(self.l.token(), 'PKG_VERF_CODE', 'PackageVerificationCode', 3)
         self.token_assert_helper(self.l.token(), 'LINE', '4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)', 3)
 
-    def token_assert_helper(self, token, type, value, line):
-        assert token.type == type
+    def token_assert_helper(self, token, ttype, value, line):
+        assert token.type == ttype
         assert token.value == value
         assert token.lineno == line
 
 
-class TestParser(object):
+class TestParser(TestCase):
 
     document_str = '\n'.join([
         'SPDXVersion: SPDX-1.2',
@@ -157,7 +157,7 @@ class TestParser(object):
 
     complete_str = '{0}\n{1}\n{2}\n{3}\n{4}'.format(document_str, creation_str, review_str, package_str, file_str)
 
-    def __init__(self):
+    def setUp(self):
         self.p = Parser(Builder(), StandardLogger())
         self.p.build()
 
@@ -197,9 +197,9 @@ class TestParser(object):
         assert document is not None
         assert not error
         assert len(document.package.files) == 1
-        file = document.package.files[0]
-        assert file.name == 'testfile.java'
-        assert file.type == spdx.file.FileType.SOURCE
-        assert len(file.artifact_of_project_name) == 1
-        assert len(file.artifact_of_project_home) == 1
-        assert len(file.artifact_of_project_uri) == 1
+        spdx_file = document.package.files[0]
+        assert spdx_file.name == 'testfile.java'
+        assert spdx_file.type == spdx.file.FileType.SOURCE
+        assert len(spdx_file.artifact_of_project_name) == 1
+        assert len(spdx_file.artifact_of_project_home) == 1
+        assert len(spdx_file.artifact_of_project_uri) == 1

@@ -14,8 +14,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from datetime import datetime
-
-import nose
+from unittest.case import TestCase
 
 import spdx.config as config
 from spdx.creationinfo import CreationInfo
@@ -25,7 +24,7 @@ from spdx.creationinfo import Person
 from spdx.version import Version
 
 
-class TestCreationInfo(object):
+class TestCreationInfo(TestCase):
 
     def test_timestamp(self):
         dt = datetime(2014, 4, 8, 13, 42, 12)
