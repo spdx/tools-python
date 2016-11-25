@@ -5,6 +5,8 @@ Official repository: http://git.spdx.org/?p=spdx-tools-python.git
 
 GitHub mirror: https://github.com/ah450/sdpx-tools-python
 
+Pypi: https://pypi.python.org/pypi/spdx-tools
+
 This library provides an implementation of a tag/value and RDF SPDX parser in python.
 
 Expected Features:
@@ -61,13 +63,12 @@ to test it run `python pp_rdf.py data/SPDXRdfExample.rdf pretty.rdf`
 Installation:
 =============
 Clone the repository and run `python setup.py install`
-on windows the command should be `setup.py install`
 
 How to run tests:
 =================
-From the project root directory.
+Install the dev-requirements.txt 
 
-run: `nosetests`
+Then, from the project root directory run: `nosetests`
 
 Dependencies:
 =============
