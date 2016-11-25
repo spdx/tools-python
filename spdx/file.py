@@ -1,19 +1,22 @@
-# Copyright 2014 Ahmed H. Ismail
 
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+# Copyright (c) 2014 Ahmed H. Ismail
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-#        http://www.apache.org/licenses/LICENSE-2.0
+from __future__ import absolute_import
+from __future__ import print_function
 
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
-import utils
-import document
-import checksum
+from spdx import checksum
+from spdx import document
+from spdx import utils
+
 
 class FileType(object):
     SOURCE = 1
@@ -23,7 +26,6 @@ class FileType(object):
 
 
 class File(object):
-
     """Representation of SPDX file.
     Fields:
     name - File name, str mandatory one.
@@ -32,7 +34,7 @@ class File(object):
     and FileType.OTHER, optional zero or one.
     chk_sum - SHA1, Mandatory one.
     conc_lics - Mandatory one. document.License or utils.NoAssert or utils.SPDXNone.
-    licenses_in_file - list of licenses found in file, mandatory one or more. 
+    licenses_in_file - list of licenses found in file, mandatory one or more.
         document.License or utils.SPDXNone or utils.NoAssert.
     document.license or utils.NoAssert or utils.SPDXNone.
     license_comment - Optional.
@@ -80,12 +82,12 @@ class File(object):
         eval(expr)
 
     def validate(self, messages):
-        """Validates the fields and appends user friendly messages 
+        """Validates the fields and appends user friendly messages
         to messages parameter if there are errors.
         """
-        return ( self.validate_lic_conc(messages) & self.validate_type(messages)
-            & self.validate_chksum(messages) & self.validate_licenses_in_file(messages) 
-            & self.validate_copyright(messages) & self.validate_artifacts(messages) )
+        return (self.validate_lic_conc(messages) & self.validate_type(messages)
+            & self.validate_chksum(messages) & self.validate_licenses_in_file(messages)
+            & self.validate_copyright(messages) & self.validate_artifacts(messages))
 
     def validate_copyright(self, messages):
         if type(self.copyright) in [str, unicode, utils.NoAssert, utils.SPDXNone]:
@@ -96,7 +98,7 @@ class File(object):
 
     def validate_artifacts(self, messages):
         if (len(self.artifact_of_project_home) >=
-            max(len(self.artifact_of_project_uri), len(self.artifact_of_project_name)) ):
+            max(len(self.artifact_of_project_uri), len(self.artifact_of_project_name))):
             return True
         else:
             messages.append('File must have as much artifact of project as uri or homepage')
@@ -111,7 +113,7 @@ class File(object):
             return True
 
     def validate_lic_conc(self, messages):
-        if type(self.conc_lics) in [utils.NoAssert, 
+        if type(self.conc_lics) in [utils.NoAssert,
             utils.SPDXNone] or isinstance(self.conc_lics, document.License):
             return True
         else:

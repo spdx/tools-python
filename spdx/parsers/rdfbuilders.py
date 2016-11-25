@@ -1,24 +1,29 @@
-# Copyright 2014 Ahmed H. Ismail
 
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+# Copyright (c) 2014 Ahmed H. Ismail
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-#        http://www.apache.org/licenses/LICENSE-2.0
+from __future__ import absolute_import
+from __future__ import print_function
 
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
 import re
-import tagvaluebuilders
-from builderexceptions import *
-from validations import validate_creator
-from .. import version
-from .. import document
-from .. import creationinfo
-from .. import checksum
+
+from spdx import checksum
+from spdx import document
+from spdx import version
+from spdx.parsers.builderexceptions import CardinalityError
+from spdx.parsers.builderexceptions import IncompatibleVersionError
+from spdx.parsers.builderexceptions import OrderError
+from spdx.parsers.builderexceptions import SPDXValueError
+from spdx.parsers import tagvaluebuilders
+
 
 class DocBuilder(object):
     VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
@@ -27,7 +32,7 @@ class DocBuilder(object):
         self.reset_document()
 
     def set_doc_version(self, doc, value):
-        """Sets the document version. 
+        """Sets the document version.
         Raises value error if malformed value, CardinalityError
         if already defined, IncompatibleVersionError if not 1.2.
         """
@@ -35,7 +40,7 @@ class DocBuilder(object):
             self.doc_version_set = True
             m = self.VERS_STR_REGEX.match(value)
             if m is None:
-                raise ValueError('Document::Version')
+                raise SPDXValueError('Document::Version')
             else:
                 vers = version.Version(major=int(m.group(1)),
                                        minor=int(m.group(2)))
@@ -48,7 +53,7 @@ class DocBuilder(object):
             raise CardinalityError('Document::Version')
 
     def set_doc_data_lic(self, doc, res):
-        """Sets the document data license. 
+        """Sets the document data license.
         Raises value error if malformed value, CardinalityError
         if already defined.
         """
@@ -59,7 +64,7 @@ class DocBuilder(object):
                 identifier = res_parts[-1]
                 doc.data_license = document.License.from_identifier(identifier)
             else:
-                raise ValueError('Document::License')
+                raise SPDXValueError('Document::License')
         else:
             raise CardinalityError('Document::License')
 
@@ -72,7 +77,6 @@ class DocBuilder(object):
             doc.comment = comment
         else:
             raise CardinalityError('Document::Comment')
-
 
     def reset_document(self):
         """Resets the state to allow building new documents"""
@@ -91,7 +95,7 @@ class EntityBuilder(tagvaluebuilders.EntityBuilder):
         elif self.org_re.match(value):
             return self.build_org(doc, value)
         else:
-            raise ValueError('Entity')
+            raise SPDXValueError('Entity')
 
 
 class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
@@ -99,7 +103,7 @@ class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
     def set_creation_comment(self, doc, comment):
         """Sets creation comment, Raises CardinalityError if
         comment already set.
-        Raises ValueError if not free form text.
+        Raises SPDXValueError if not free form text.
         """
         if not self.creation_comment_set:
             self.creation_comment_set = True
@@ -108,8 +112,9 @@ class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
         else:
             raise CardinalityError('CreationInfo::Comment')
 
+
 class PackageBuilder(tagvaluebuilders.PackageBuilder):
-    
+
     def set_pkg_chk_sum(self, doc, chk_sum):
         """Sets the package check sum, if not already set.
         chk_sum - A string
@@ -206,8 +211,9 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         else:
             raise CardinalityError('Package::Description')
 
+
 class FileBuilder(tagvaluebuilders.FileBuilder):
-    
+
     def set_file_chksum(self, doc, chk_sum):
         """Sets the file check sum, if not already set.
         chk_sum - A string
@@ -274,16 +280,17 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_notice_set:
                 self.file_notice_set = True
-                self.file(doc).notice = str_from_text(text)
+                self.file(doc).notice = tagvaluebuilders.str_from_text(text)
                 return True
             else:
                 raise CardinalityError('File::Notice')
         else:
             raise OrderError('File::Notice')
 
+
 class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
     def add_review_comment(self, doc, comment):
-        """Sets the review comment. Raises CardinalityError if 
+        """Sets the review comment. Raises CardinalityError if
         already set. OrderError if no reviewer defined before.
         """
         if len(doc.reviews) != 0:
@@ -295,9 +302,10 @@ class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
                 raise CardinalityError('ReviewComment')
         else:
             raise OrderError('ReviewComment')
-       
+
+
 class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder, FileBuilder, ReviewBuilder):
-    
+
     def reset(self):
         """Resets builder's state for building new documents.
         Must be called between usage with different documents.

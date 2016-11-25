@@ -1,21 +1,21 @@
-# Copyright 2014 Ahmed H. Ismail
+# Copyright (c) 2014 Ahmed H. Ismail
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+from __future__ import absolute_import
+from __future__ import print_function
 
-#        http://www.apache.org/licenses/LICENSE-2.0
-
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
-
-import checksum
-import document
-import utils
-import creationinfo
+from spdx import checksum
+from spdx import creationinfo
+from spdx import document
+from spdx import utils
 
 
 class Package(object):
@@ -32,13 +32,13 @@ class Package(object):
         verif_code: Mandatory string.
         check_sum: Optional , spdx.checksum.Algorithm.
         source_info: Optional string.
-        conc_lics: Mandatory spdx.document.License or spdx.utils.SPDXNone or 
+        conc_lics: Mandatory spdx.document.License or spdx.utils.SPDXNone or
         spdx.utils.NoAssert.
-        license_declared : Mandatory spdx.document.License or spdx.utils.SPDXNone or 
+        license_declared : Mandatory spdx.document.License or spdx.utils.SPDXNone or
         spdx.utils.NoAssert.
         license_comment  : optional string.
-        licenses_from_files: list of spdx.document.License or spdx.utils.SPDXNone or 
-        spdx.utils.NoAssert. 
+        licenses_from_files: list of spdx.document.License or spdx.utils.SPDXNone or
+        spdx.utils.NoAssert.
         cr_text: Copyright text, string , utils.NoAssert or utils.SPDXNone. Mandatory.
         summary: Optional str.
         description: Optional str.
@@ -69,8 +69,8 @@ class Package(object):
         self.files = []
         self.verif_exc_files = []
 
-    def add_file(self, file):
-        self.files.append(file)
+    def add_file(self, fil):
+        self.files.append(fil)
 
     def add_lics_from_file(self, lics):
         self.licenses_from_files.append(lics)
@@ -85,27 +85,27 @@ class Package(object):
         return (self.validate_checksum(messages) &
                  self.validate_optional_str_fields(messages) &
                  self.validate_mandatory_str_fields(messages) &
-                 self.validate_files(messages) & 
+                 self.validate_files(messages) &
                  self.validate_mandatory_fields(messages) &
                  self.validate_optional_fields(messages))
 
     def validate_optional_fields(self, messages):
         status = True
-        if not ( (self.originator is None) or 
-            isinstance(self.originator, utils.NoAssert) or 
-            isinstance(self.originator, creationinfo.Creator) ):
-            messages.append('Package originator must be instance of ' + 
+        if not ((self.originator is None) or
+            isinstance(self.originator, utils.NoAssert) or
+            isinstance(self.originator, creationinfo.Creator)):
+            messages.append('Package originator must be instance of ' +
                 'spdx.utils.NoAssert or spdx.creationinfo.Creator')
             status = False
-        if not ( (self.supplier is None) or isinstance(self.supplier, utils.NoAssert) or 
-            isinstance(self.supplier, utils.SPDXNone) or 
+        if not ((self.supplier is None) or isinstance(self.supplier, utils.NoAssert) or
+            isinstance(self.supplier, utils.SPDXNone) or
             isinstance(self.supplier, creationinfo.Creator)):
             messages.append('Package supplier must be instance of ' +
                 'spdx.utils.NoAssert or spdx.utils.SPDXNone or spdx.creationinfo.Creator')
             status = False
 
         return status
-        
+
     def validate_mandatory_fields(self, messages):
         status = True
         if not isinstance(self.conc_lics, document.License):
@@ -114,10 +114,10 @@ class Package(object):
         if not isinstance(self.license_declared, document.License):
             messages.append('Package declared license must be instance of spdx.document.License')
             status = False
-        license_from_file_check = lambda prev, el : prev and (isinstance(el, document.License) or 
+        license_from_file_check = lambda prev, el : prev and (isinstance(el, document.License) or
          isinstance(el, utils.SPDXNone) or isinstance(el, utils.NoAssert))
         if not reduce(license_from_file_check, self.licenses_from_files, True):
-            messages.append('each element in licenses_from_files must be instance of ' + 
+            messages.append('each element in licenses_from_files must be instance of ' +
                 'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
             status = False
         if len(self.licenses_from_files) == 0:
@@ -153,12 +153,12 @@ class Package(object):
         return self.validate_str_fields(FIELDS, False, messages)
 
     def validate_str_fields(self, fields, optional, messages):
-        """Helper for validate_mandatory_str_field and 
+        """Helper for validate_mandatory_str_field and
         validate_optional_str_fields"""
         return_value = True
         for field_str in fields:
             field = eval('self.{0}'.format(field_str))
-            if field is not None:                
+            if field is not None:
                 attr = getattr(field, '__str__', None)
                 if not callable(attr):
                     messages.append('{0} must provide __str__ method.'.format(
@@ -182,7 +182,7 @@ class Package(object):
         else:
             messages.append('Package checksum must be instance of spdx.checksum.Algorithm')
             return False
-        
+
 
     def has_optional_field(self, field):
         expr = 'self.{0} is not None'.format(field)
