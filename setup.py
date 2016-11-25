@@ -14,11 +14,11 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=[
-        'ply', 
+        'ply',
         'rdflib'
     ],
     test_requires=[
-        'nose', 
+        'nose',
     ],
 
     author='Ahmed H. Ismail',
