@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Writes a new tag/value file from scratch.
+# Usage: write_tv <tagvaluefile>
+
 if __name__ == '__main__':
     import sys
     import codecs

@@ -1,23 +1,30 @@
-# Copyright 2014 Ahmed H. Ismail
 
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+# Copyright (c) 2014 Ahmed H. Ismail
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-#        http://www.apache.org/licenses/LICENSE-2.0
+from __future__ import absolute_import
+from __future__ import print_function
 
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
 import re
-from lexers.tagvalue import Lexer
-from builderexceptions import CardinalityError, OrderError, ValueError, IncompatibleVersionError
+
 from ply import yacc
-from .. import document
-from .. import utils
-from .. import config
+
+from spdx import config
+from spdx import utils
+from spdx.parsers.builderexceptions import CardinalityError
+from spdx.parsers.builderexceptions import OrderError
+from spdx.parsers.builderexceptions import SPDXValueError
+from spdx.parsers.builderexceptions import IncompatibleVersionError
+from spdx.parsers.lexers.tagvalue import Lexer
+from spdx import document
 
 ERROR_MESSAGES = {
     'TOOL_VALUE': 'Invalid tool value {0} at line: {1}',
@@ -154,8 +161,7 @@ class Parser(object):
         first_tag came before second_tag.
         """
         self.error = True
-        msg = ERROR_MESSAGES['A_BEFORE_B'].format(first_tag,
-                                                  second_tag, line)
+        msg = ERROR_MESSAGES['A_BEFORE_B'].format(first_tag, second_tag, line)
         self.logger.log(msg)
 
     def p_lic_xref_1(self, p):
@@ -163,7 +169,7 @@ class Parser(object):
         try:
             self.builder.add_lic_xref(self.document, p[2].decode(encoding='utf-8'))
         except OrderError:
-            order_error('LicenseCrossReference', 'LicenseName', p.lineno(1))
+            self.order_error('LicenseCrossReference', 'LicenseName', p.lineno(1))
 
     def p_lic_xref_2(self, p):
         """lic_xref : LICS_CRS_REF error"""
@@ -176,9 +182,9 @@ class Parser(object):
         try:
             self.builder.set_lic_comment(self.document, p[2].decode(encoding='utf-8'))
         except OrderError:
-            order_error('LicenseComment', 'LicenseID', p.lineno(1))
+            self.order_error('LicenseComment', 'LicenseID', p.lineno(1))
         except CardinalityError:
-            more_than_one_error('LicenseComment', p.lineno(1))
+            self.more_than_one_error('LicenseComment', p.lineno(1))
 
 
     def p_lic_comment_2(self, p):
@@ -192,9 +198,9 @@ class Parser(object):
         try:
             self.builder.set_lic_name(self.document, p[2])
         except OrderError:
-            order_error('LicenseName', 'LicenseID', p.lineno(1))
+            self.order_error('LicenseName', 'LicenseID', p.lineno(1))
         except CardinalityError:
-            more_than_one_error('LicenseName', p.lineno(1))
+            self.more_than_one_error('LicenseName', p.lineno(1))
 
     def p_extr_lic_name_2(self, p):
         """extr_lic_name : LICS_NAME error"""
@@ -208,16 +214,16 @@ class Parser(object):
 
     def p_extr_lic_name_value_2(self, p):
         """extr_lic_name_value : NO_ASSERT"""
-        p[0] =  utils.NoAssert() 
+        p[0] = utils.NoAssert()
 
     def p_extr_lic_text_1(self, p):
         """extr_lic_text : LICS_TEXT TEXT"""
         try:
             self.builder.set_lic_text(self.document, p[2].decode(encoding='utf-8'))
         except OrderError:
-            order_error('ExtractedText', 'LicenseID', p.lineno(1))
+            self.order_error('ExtractedText', 'LicenseID', p.lineno(1))
         except CardinalityError:
-            more_than_one_error('ExtractedText', p.lineno(1))
+            self.more_than_one_error('ExtractedText', p.lineno(1))
 
     def p_extr_lic_text_2(self, p):
         """extr_lic_text : LICS_TEXT error"""
@@ -229,7 +235,7 @@ class Parser(object):
         """extr_lic_id : LICS_ID LINE"""
         try:
             self.builder.set_lic_id(self.document, p[2].decode(encoding='utf-8'))
-        except ValueError:
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['LICS_ID_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
@@ -277,8 +283,7 @@ class Parser(object):
     def p_prj_uri_art_2(self, p):
         """prj_uri_art : ART_PRJ_URI LINE"""
         try:
-            self.builder.set_file_atrificat_of_project(self.document,
-                'uri', p[2].decode(encoding='utf-8'))
+            self.builder.set_file_atrificat_of_project(self.document, 'uri', p[2].decode(encoding='utf-8'))
         except OrderError:
             self.order_error('ArtificatOfProjectURI', 'FileName', p.lineno(1))
 
@@ -291,15 +296,14 @@ class Parser(object):
     def p_prj_home_art_1(self, p):
         """prj_home_art : ART_PRJ_HOME LINE"""
         try:
-            self.builder.set_file_atrificat_of_project(self.document,
-                'home', p[2])
+            self.builder.set_file_atrificat_of_project(self.document, 'home', p[2])
         except OrderError:
             self.order_error('ArtificatOfProjectHomePage', 'FileName', p.lineno(1))
 
     def p_prj_home_art_2(self, p):
         """prj_home_art : ART_PRJ_HOME UN_KNOWN"""
         try:
-            self.builder.set_file_atrificat_of_project(self.document, 
+            self.builder.set_file_atrificat_of_project(self.document,
                 'home', utils.UnKnown())
         except OrderError:
             self.order_error('ArtifactOfProjectName', 'FileName', p.lineno(1))
@@ -313,8 +317,7 @@ class Parser(object):
     def p_prj_name_art_1(self, p):
         """prj_name_art : ART_PRJ_NAME LINE"""
         try:
-            self.builder.set_file_atrificat_of_project(self.document, 
-                'name', p[2].decode(encoding='utf-8'))
+            self.builder.set_file_atrificat_of_project(self.document, 'name', p[2].decode(encoding='utf-8'))
         except OrderError:
             self.order_error('ArtifactOfProjectName', 'FileName', p.lineno(1))
 
@@ -413,7 +416,7 @@ class Parser(object):
             self.builder.set_file_license_in_file(self.document, p[2])
         except OrderError:
             self.order_error('LicenseInfoInFile', 'FileName', p.lineno(1))
-        except ValueError:
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['FILE_LICS_INFO_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
@@ -515,7 +518,7 @@ class Parser(object):
         """file_conc : FILE_LICS_CONC conc_license"""
         try:
             self.builder.set_concluded_license(self.document, p[2])
-        except ValueError:
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['FILE_LICS_CONC_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
@@ -545,8 +548,7 @@ class Parser(object):
         except CardinalityError:
             self.more_than_one_error('PackageDescription', p.lineno(1))
         except OrderError:
-            self.order_error('PackageDescription', 'PackageFileName',
-                             p.lineno(1))
+            self.order_error('PackageDescription', 'PackageFileName', p.lineno(1))
 
     def p_pkg_desc_2(self, p):
         """pkg_desc : PKG_DESC error"""
@@ -574,8 +576,7 @@ class Parser(object):
         try:
             self.builder.set_pkg_cr_text(self.document, p[2])
         except OrderError:
-            self.order_error('PackageCopyrightText', 'PackageFileName',
-                             p.lineno(1))
+            self.order_error('PackageCopyrightText', 'PackageFileName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageCopyrightText', p.lineno(1))
 
@@ -583,6 +584,7 @@ class Parser(object):
         """pkg_cr_text : PKG_CPY_TEXT error"""
         self.error = True
         msg = ERROR_MESSAGES['PKG_CPY_TEXT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
 
     def p_pkg_cr_text_value_1(self, p):
         """pkg_cr_text_value : TEXT"""
@@ -601,8 +603,7 @@ class Parser(object):
         try:
             self.builder.set_pkg_license_comment(self.document, p[2].decode(encoding='utf-8'))
         except OrderError:
-            self.order_error('PackageLicenseComments', 'PackageFileName',
-                             p.lineno(1))
+            self.order_error('PackageLicenseComments', 'PackageFileName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageLicenseComments', p.lineno(1))
 
@@ -617,11 +618,10 @@ class Parser(object):
         try:
             self.builder.set_pkg_license_declared(self.document, p[2])
         except OrderError:
-            self.order_error(
-                'PackageLicenseDeclared', 'PackageName', p.lineno(1))
+            self.order_error('PackageLicenseDeclared', 'PackageName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageLicenseDeclared', p.lineno(1))
-        except ValueError:
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_LICS_DECL_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
@@ -637,9 +637,8 @@ class Parser(object):
         try:
             self.builder.set_pkg_license_from_file(self.document, p[2])
         except OrderError:
-            self.order_error('PackageLicenseInfoFromFiles', 'PackageName',
-                             p.lineno(1))
-        except ValueError:
+            self.order_error('PackageLicenseInfoFromFiles', 'PackageName', p.lineno(1))
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_LIC_FFILE_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
@@ -669,9 +668,8 @@ class Parser(object):
         except CardinalityError:
             self.more_than_one_error('PackageLicenseConcluded', p.lineno(1))
         except OrderError:
-            self.order_error('PackageLicenseConcluded', 'PackageFileName',
-                             p.lineno(1))
-        except ValueError:
+            self.order_error('PackageLicenseConcluded', 'PackageFileName', p.lineno(1))
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_LICS_CONC_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
@@ -689,8 +687,7 @@ class Parser(object):
         except CardinalityError:
             self.more_than_one_error('PackageSourceInfo', p.lineno(1))
         except OrderError:
-            self.order_error(
-                'PackageSourceInfo', 'PackageFileName', p.lineno(1))
+            self.order_error('PackageSourceInfo', 'PackageFileName', p.lineno(1))
 
     def p_pkg_src_info_2(self, p):
         """pkg_src_info : PKG_SRC_INFO error"""
@@ -718,12 +715,11 @@ class Parser(object):
         try:
             self.builder.set_pkg_verif_code(self.document, p[2].decode(encoding='utf-8'))
         except OrderError:
-            self.order_error(
-                'PackageVerificationCode', 'PackageName', p.lineno(1))
+            self.order_error('PackageVerificationCode', 'PackageName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageVerificationCode', p.lineno(1))
-        except ValueError:
-            self.error = true
+        except SPDXValueError:
+            self.error = True
             msg = ERROR_MESSAGES['PKG_VERF_CODE_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
 
@@ -765,8 +761,7 @@ class Parser(object):
         try:
             self.builder.set_pkg_down_location(self.document, p[2])
         except OrderError:
-            self.order_error(
-                'PackageDownloadLocation', 'PackageName', p.lineno(1))
+            self.order_error('PackageDownloadLocation', 'PackageName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageDownloadLocation', p.lineno(1))
 
@@ -793,8 +788,8 @@ class Parser(object):
         try:
             self.builder.set_pkg_originator(self.document, p[2])
         except OrderError:
-            self.order_error('PackageOriginator', 'PackageName', line)
-        except ValueError:
+            self.order_error('PackageOriginator', 'PackageName', p.lineno(1))
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_ORIG_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
@@ -816,7 +811,7 @@ class Parser(object):
             self.order_error('PackageSupplier', 'PackageName', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('PackageSupplier', p.lineno(1))
-        except ValueError:
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['PKG_SUPPL_VALUE'].format(p.lineno(1))
             self.logger.log(msg)
@@ -922,7 +917,7 @@ class Parser(object):
         """locs_list_ver : LIC_LIST_VER LINE"""
         try:
             self.builder.set_lics_list_ver(self.document, p[2].decode(encoding='utf-8'))
-        except ValueError:
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['LIC_LIST_VER_VALUE'].format(
                 p[2], p.lineno(2))
@@ -953,7 +948,7 @@ class Parser(object):
         """data_lics : DOC_LICENSE LINE"""
         try:
             self.builder.set_doc_data_lics(self.document, p[2].decode(encoding='utf-8'))
-        except ValueError:
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['DOC_LICENSE_VALUE'].format(p[2], p.lineno(2))
             self.logger.log(msg)
@@ -969,10 +964,11 @@ class Parser(object):
     def p_spdx_version_1(self, p):
         """spdx_version : DOC_VERSION LINE"""
         try:
-            self.builder.set_doc_version(self.document, p[2].decode(encoding='utf-8'))
+            value = p[2].decode(encoding='utf-8')
+            self.builder.set_doc_version(self.document, value)
         except CardinalityError:
             self.more_than_one_error('SPDXVersion', p.lineno(1))
-        except ValueError:
+        except SPDXValueError:
             self.error = True
             msg = ERROR_MESSAGES['DOC_VERSION_VALUE'].format(p[2], p.lineno(1))
             self.logger.log(msg)
@@ -1028,7 +1024,7 @@ class Parser(object):
         """
         try:
             p[0] = self.builder.build_tool(self.document, p[1].decode(encoding='utf-8'))
-        except ValueError:
+        except SPDXValueError:
             msg = ERROR_MESSAGES['TOOL_VALUE'].format(p[1], p.lineno(1))
             self.logger.log(msg)
             self.error = True
@@ -1039,7 +1035,7 @@ class Parser(object):
         """
         try:
             p[0] = self.builder.build_org(self.document, p[1].decode(encoding='utf-8'))
-        except ValueError:
+        except SPDXValueError:
             msg = ERROR_MESSAGES['ORG_VALUE'].format(p[1], p.lineno(1))
             self.logger.log(msg)
             self.error = True
@@ -1050,7 +1046,7 @@ class Parser(object):
         """
         try:
             p[0] = self.builder.build_person(self.document, p[1].decode(encoding='utf-8'))
-        except ValueError:
+        except SPDXValueError:
             msg = ERROR_MESSAGES['PERSON_VALUE'].format(p[1], p.lineno(1))
             self.logger.log(msg)
             self.error = True
@@ -1069,8 +1065,8 @@ class Parser(object):
         self.error = False
         self.yacc.parse(text, lexer=self.lex)
         self.builder.reset()
-        validation_messages  = []
-        # Report extra errors if self.error is False otherwise there will be 
+        validation_messages = []
+        # Report extra errors if self.error is False otherwise there will be
         # redundent messages
         if (not self.error) and (not self.document.validate(validation_messages)):
             for msg in validation_messages:

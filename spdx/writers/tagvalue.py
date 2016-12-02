@@ -1,30 +1,32 @@
-# Copyright 2014 Ahmed H. Ismail
 
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+# Copyright (c) 2014 Ahmed H. Ismail
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-#        http://www.apache.org/licenses/LICENSE-2.
+from __future__ import absolute_import
+from __future__ import print_function
 
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
-from .. import utils
-from .. import file
-from .. import document
 from itertools import izip_longest as zip_longest
 
-class InvalidDocumentError(Exception):
+from spdx import document
+from spdx import file as spdx_file
 
+
+class InvalidDocumentError(Exception):
     """Raised if attempting to write an invalid document."""
     pass
 
 
 def write_seperators(out):
-    for i in xrange(0, 4):
-        out.write(u'\n')
+    out.write(u'\n' * 4)
+
 
 def format_verif_code(package):
     if len(package.verif_exc_files) == 0:
@@ -66,51 +68,49 @@ def write_review(review, out):
 
 def write_file_type(ftype, out):
     VALUES = {
-        file.FileType.SOURCE: 'SOURCE',
-        file.FileType.OTHER: 'OTHER',
-        file.FileType.BINARY: 'BINARY',
-        file.FileType.ARCHIVE: 'ARCHIVE'
+        spdx_file.FileType.SOURCE: 'SOURCE',
+        spdx_file.FileType.OTHER: 'OTHER',
+        spdx_file.FileType.BINARY: 'BINARY',
+        spdx_file.FileType.ARCHIVE: 'ARCHIVE'
     }
     write_value('FileType', VALUES[ftype], out)
 
 
-def write_file(file, out):
+def write_file(spdx_file, out):
     """Writes out the fields of a file in tag/value format."""
     out.write('# File\n\n')
-    write_value('FileName', file.name, out)
-    write_file_type(file.type, out)
-    write_value('FileChecksum', file.chk_sum.to_tv(), out)
-    if isinstance(file.conc_lics, (document.LicenseConjuction, document.LicenseDisjunction)):
-        write_value('LicenseConcluded', u'({0})'.format(file.conc_lics), out)
+    write_value('FileName', spdx_file.name, out)
+    write_file_type(spdx_file.type, out)
+    write_value('FileChecksum', spdx_file.chk_sum.to_tv(), out)
+    if isinstance(spdx_file.conc_lics, (document.LicenseConjuction, document.LicenseDisjunction)):
+        write_value('LicenseConcluded', u'({0})'.format(spdx_file.conc_lics), out)
     else:
-        write_value('LicenseConcluded', file.conc_lics, out)
-    for lics in file.licenses_in_file:
+        write_value('LicenseConcluded', spdx_file.conc_lics, out)
+    for lics in spdx_file.licenses_in_file:
         write_value('LicenseInfoInFile', lics, out)
-    if isinstance(file.copyright, basestring):
-        write_text_value('FileCopyrightText', file.copyright, out)
+    if isinstance(spdx_file.copyright, basestring):
+        write_text_value('FileCopyrightText', spdx_file.copyright, out)
     else:
-        write_value('FileCopyrightText', file.copyright, out)
-    if file.has_optional_field('license_comment'):
-        write_text_value('LicenseComments', file.license_comment, out)
-    if file.has_optional_field('comment'):
-        write_text_value('FileComment', file.comment, out)
-    if file.has_optional_field('notice'):
-        write_text_value('FileNotice', file.notice, out)
-    for contributer in file.contributers:
+        write_value('FileCopyrightText', spdx_file.copyright, out)
+    if spdx_file.has_optional_field('license_comment'):
+        write_text_value('LicenseComments', spdx_file.license_comment, out)
+    if spdx_file.has_optional_field('comment'):
+        write_text_value('FileComment', spdx_file.comment, out)
+    if spdx_file.has_optional_field('notice'):
+        write_text_value('FileNotice', spdx_file.notice, out)
+    for contributer in spdx_file.contributers:
         write_value('FileContributor', contributer, out)
-    for dependency in file.dependencies:
+    for dependency in spdx_file.dependencies:
         write_value('FileDependency', dependency, out)
-    names = file.artifact_of_project_name
-    homepages = file.artifact_of_project_home
-    uris = file.artifact_of_project_uri
+    names = spdx_file.artifact_of_project_name
+    homepages = spdx_file.artifact_of_project_home
+    uris = spdx_file.artifact_of_project_uri
     for name, homepage, uri in zip_longest(names, homepages, uris):
         write_value('ArtifactOfProjectName', name, out)
         if homepage is not None:
-            write_value(
-                'ArtifactOfProjectHomePage', homepage, out)
+            write_value('ArtifactOfProjectHomePage', homepage, out)
         if uri is not None:
-            write_value(
-                'ArtifactOfProjectURI', uri, out)
+            write_value('ArtifactOfProjectURI', uri, out)
 
 
 def write_package(package, out):
@@ -135,12 +135,12 @@ def write_package(package, out):
     write_value('PackageVerificationCode', format_verif_code(package), out)
     if package.has_optional_field('description'):
         write_text_value('PackageDescription', package.description, out)
-    if isinstance(package.license_declared, (document.LicenseConjuction, 
+    if isinstance(package.license_declared, (document.LicenseConjuction,
         document.LicenseDisjunction)):
         write_value('PackageLicenseDeclared', u'({0})'.format(package.license_declared), out)
     else:
         write_value('PackageLicenseDeclared', package.license_declared, out)
-    if isinstance(package.conc_lics, (document.LicenseConjuction, 
+    if isinstance(package.conc_lics, (document.LicenseConjuction,
         document.LicenseDisjunction)):
         write_value('PackageLicenseConcluded', u'({0})'.format(package.conc_lics), out)
     else:
@@ -149,8 +149,7 @@ def write_package(package, out):
     for lics in package.licenses_from_files:
         write_value('PackageLicenseInfoFromFiles', lics, out)
     if package.has_optional_field('license_comment'):
-        write_text_value(
-            'PackageLicenseComments', package.license_comment, out)
+        write_text_value('PackageLicenseComments', package.license_comment, out)
     # cr_text is either free form text or NONE or NOASSERTION.
     if isinstance(package.cr_text, basestring):
         write_text_value('PackageCopyrightText', package.cr_text, out)
@@ -159,12 +158,12 @@ def write_package(package, out):
     if package.has_optional_field('homepage'):
         write_value('PackageHomePage', package.homepage, out)
     # Write files.
-    for file in package.files:
+    for spdx_file in package.files:
         write_seperators(out)
-        write_file(file, out)
+        write_file(spdx_file, out)
 
 
-def write_extr_licens(lics, out):
+def write_extracted_licenses(lics, out):
     """Writes out extracted licenses in tag/value format.
     """
     write_value('LicenseID', lics.identifier, out)
@@ -177,7 +176,6 @@ def write_extr_licens(lics, out):
         write_text_value('LicenseComment', lics.comment, out)
 
 
-
 def write_document(document, out):
     """Writes out a tag value representation of the document.
     Out must implement a method write that takes a single string.
@@ -186,8 +184,7 @@ def write_document(document, out):
         raise InvalidDocumentError()
     # Write out document information
     out.write('# Document Information\n\n')
-    version_value = 'SPDX-{0}.{1}'.format(document.version.major,
-                                          document.version.minor)
+    version_value = 'SPDX-{0}.{1}'.format(document.version.major, document.version.minor)
     write_value('SPDXVersion', version_value, out)
     write_value('DataLicense', document.data_license.identifier, out)
     if document.has_comment:
@@ -205,5 +202,5 @@ def write_document(document, out):
     write_seperators(out)
     out.write('# Extracted Licenses\n\n')
     for lic in document.extracted_licenses:
-        write_extr_licens(lic, out)
+        write_extracted_licenses(lic, out)
         write_seperators(out)

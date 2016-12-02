@@ -1,28 +1,34 @@
-# Copyright 2014 Ahmed H. Ismail
 
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+# Copyright (c) 2014 Ahmed H. Ismail
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-#        http://www.apache.org/licenses/LICENSE-2.0
+from __future__ import absolute_import
+from __future__ import print_function
 
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
 import re
-from .. import version
-from .. import document
-from .. import creationinfo
-from .. import utils
-from .. import review
-from .. import package
-from .. import file
-from .. import checksum
-from validations import *
-from builderexceptions import *
 
+from spdx import checksum
+from spdx import creationinfo
+from spdx import document
+from spdx import file
+from spdx import package
+from spdx import review
+from spdx import utils
+from spdx import version
+
+from spdx.parsers.builderexceptions import CardinalityError
+from spdx.parsers.builderexceptions import OrderError
+from spdx.parsers.builderexceptions import SPDXValueError
+from spdx.parsers.builderexceptions import IncompatibleVersionError
+from spdx.parsers import validations
 
 
 def checksum_from_sha1(value):
@@ -36,7 +42,6 @@ def checksum_from_sha1(value):
         return checksum.Algorithm(identifier='SHA1', value=match.group(1))
     else:
         return None
-
 
 
 def str_from_text(text):
@@ -58,7 +63,7 @@ class DocBuilder(object):
         self.reset_document()
 
     def set_doc_version(self, doc, value):
-        """Sets the document version. 
+        """Sets the document version.
         Raises value error if malformed value, CardinalityError
         if already defined, IncompatibleVersionError if not 1.2.
         """
@@ -66,7 +71,7 @@ class DocBuilder(object):
             self.doc_version_set = True
             m = self.VERS_STR_REGEX.match(value)
             if m is None:
-                raise ValueError('Document::Version')
+                raise SPDXValueError('Document::Version')
             else:
                 vers = version.Version(major=int(m.group(1)),
                                        minor=int(m.group(2)))
@@ -79,32 +84,32 @@ class DocBuilder(object):
             raise CardinalityError('Document::Version')
 
     def set_doc_data_lics(self, doc, lics):
-        """Sets the document data license. 
+        """Sets the document data license.
         Raises value error if malformed value, CardinalityError
         if already defined.
         """
         if not self.doc_data_lics_set:
             self.doc_data_lics_set = True
-            if validate_data_lics(lics):
+            if validations.validate_data_lics(lics):
                 doc.data_license = document.License.from_identifier(lics)
                 return True
             else:
-                raise ValueError('Document::DataLicense')
+                raise SPDXValueError('Document::DataLicense')
         else:
             raise CardinalityError('Document::DataLicense')
 
     def set_doc_comment(self, doc, comment):
         """Sets document comment, Raises CardinalityError if
         comment already set.
-        Raises ValueError if comment is not free form text.
+        Raises SPDXValueError if comment is not free form text.
         """
         if not self.doc_comment_set:
             self.doc_comment_set = True
-            if validate_doc_comment(comment):
+            if validations.validate_doc_comment(comment):
                 doc.comment = str_from_text(comment)
                 return True
             else:
-                raise ValueError('Document::Comment')
+                raise SPDXValueError('Document::Comment')
         else:
             raise CardinalityError('Document::Comment')
 
@@ -131,23 +136,23 @@ class EntityBuilder(object):
 
     def build_tool(self, doc, entity):
         """Builds a tool object out of a string representation.
-        Returns built tool. Raises ValueError if failed to extract
+        Returns built tool. Raises SPDXValueError if failed to extract
         tool name or name is malformed
         """
         match = self.tool_re.match(entity)
-        if match and validate_tool_name(match.group(self.TOOL_NAME_GROUP)):
+        if match and validations.validate_tool_name(match.group(self.TOOL_NAME_GROUP)):
             name = match.group(self.TOOL_NAME_GROUP)
             return creationinfo.Tool(name)
         else:
-            raise ValueError('Failed to extract tool name')
+            raise SPDXValueError('Failed to extract tool name')
 
     def build_org(self, doc, entity):
         """Builds an organization object of of a string representation.
-        Returns built organization. Raises ValueError if failed to extract
+        Returns built organization. Raises SPDXValueError if failed to extract
         name.
         """
         match = self.org_re.match(entity)
-        if match and validate_org_name(match.group(self.ORG_NAME_GROUP)):
+        if match and validations.validate_org_name(match.group(self.ORG_NAME_GROUP)):
             name = match.group(self.ORG_NAME_GROUP).strip()
             email = match.group(self.ORG_EMAIL_GROUP)
             if (email is not None) and (len(email) != 0):
@@ -155,15 +160,15 @@ class EntityBuilder(object):
             else:
                 return creationinfo.Organization(name=name, email=None)
         else:
-            raise ValueError('Failed to extract Organization name')
+            raise SPDXValueError('Failed to extract Organization name')
 
     def build_person(self, doc, entity):
         """Builds an organization object of of a string representation.
-        Returns built organization. Raises ValueError if failed to extract
+        Returns built organization. Raises SPDXValueError if failed to extract
         name.
         """
         match = self.person_re.match(entity)
-        if match and validate_person_name(match.group(self.PERSON_NAME_GROUP)):
+        if match and validations.validate_person_name(match.group(self.PERSON_NAME_GROUP)):
             name = match.group(self.PERSON_NAME_GROUP).strip()
             email = match.group(self.PERSON_EMAIL_GROUP)
             if (email is not None) and (len(email) != 0):
@@ -171,7 +176,7 @@ class EntityBuilder(object):
             else:
                 return creationinfo.Person(name=name, email=None)
         else:
-            raise ValueError('Failed to extract person name')
+            raise SPDXValueError('Failed to extract person name')
 
 
 class CreationInfoBuilder(object):
@@ -184,18 +189,18 @@ class CreationInfoBuilder(object):
         """Adds a creator to the document's creation info.
         Returns true if creator is valid.
         Creator must be built by an EntityBuilder.
-        Raises ValueError if not a creator type.
+        Raises SPDXValueError if not a creator type.
         """
-        if validate_creator(creator):
+        if validations.validate_creator(creator):
             doc.creation_info.add_creator(creator)
             return True
         else:
-            raise ValueError('CreationInfo::Creator')
+            raise SPDXValueError('CreationInfo::Creator')
 
     def set_created_date(self, doc, created):
-        """Sets created date, Raises CardinalityError if 
+        """Sets created date, Raises CardinalityError if
         created date already set.
-        Raises ValueError if created is not a date.
+        Raises SPDXValueError if created is not a date.
         """
         if not self.created_date_set:
             self.created_date_set = True
@@ -204,28 +209,28 @@ class CreationInfoBuilder(object):
                 doc.creation_info.created = date
                 return True
             else:
-                raise ValueError('CreationInfo::Date')
+                raise SPDXValueError('CreationInfo::Date')
         else:
             raise CardinalityError('CreationInfo::Created')
 
     def set_creation_comment(self, doc, comment):
         """Sets creation comment, Raises CardinalityError if
         comment already set.
-        Raises ValueError if not free form text.
+        Raises SPDXValueError if not free form text.
         """
         if not self.creation_comment_set:
             self.creation_comment_set = True
-            if validate_creation_comment(comment):
+            if validations.validate_creation_comment(comment):
                 doc.creation_info.comment = str_from_text(comment)
                 return True
             else:
-                raise ValueError('CreationInfo::Comment')
+                raise SPDXValueError('CreationInfo::Comment')
         else:
             raise CardinalityError('CreationInfo::Comment')
 
     def set_lics_list_ver(self, doc, value):
         """Sets the license list version, Raises CardinalityError if
-        already set, ValueError if incorrect value.
+        already set, SPDXValueError if incorrect value.
         """
         if not self.lics_list_ver_set:
             self.lics_list_ver_set = True
@@ -234,7 +239,7 @@ class CreationInfoBuilder(object):
                 doc.creation_info.license_list_version = vers
                 return True
             else:
-                raise ValueError('CreationInfo::LicenseListVersion')
+                raise SPDXValueError('CreationInfo::LicenseListVersion')
         else:
             raise CardinalityError('CreationInfo::LicenseListVersion')
 
@@ -243,7 +248,8 @@ class CreationInfoBuilder(object):
         self.created_date_set = False
         self.creation_comment_set = False
         self.lics_list_ver_set = False
-        
+
+
 class ReviewBuilder(object):
 
     def __init__(self):
@@ -254,25 +260,25 @@ class ReviewBuilder(object):
     def reset_reviews(self):
         """Resets the builder's state to allow building new reviews."""
         self.review_date_set = False
-        self.review_comment_set = False    
+        self.review_comment_set = False
 
     def add_reviewer(self, doc, reviewer):
         """Adds a reviewer to the SPDX Document.
         Reviwer is an entity created by an EntityBuilder.
-        Raises ValueError if not a valid reviewer type.
+        Raises SPDXValueError if not a valid reviewer type.
         """
         # Each reviewer marks the start of a new review object.
         self.reset_reviews()
-        if validate_reviewer(reviewer):
+        if validations.validate_reviewer(reviewer):
             doc.add_review(review.Review(reviewer=reviewer))
             return True
         else:
-            raise ValueError('Review::Reviewer')
+            raise SPDXValueError('Review::Reviewer')
 
     def add_review_date(self, doc, reviewed):
-        """Sets the review date. Raises CardinalityError if 
+        """Sets the review date. Raises CardinalityError if
         already set. OrderError if no reviewer defined before.
-        Raises ValueError if invalid reviewed value.
+        Raises SPDXValueError if invalid reviewed value.
         """
         if len(doc.reviews) != 0:
             if not self.review_date_set:
@@ -282,25 +288,25 @@ class ReviewBuilder(object):
                     doc.reviews[-1].review_date = date
                     return True
                 else:
-                    raise ValueError('Review::ReviewDate')
+                    raise SPDXValueError('Review::ReviewDate')
             else:
                 raise CardinalityError('Review::ReviewDate')
         else:
             raise OrderError('Review::ReviewDate')
 
     def add_review_comment(self, doc, comment):
-        """Sets the review comment. Raises CardinalityError if 
+        """Sets the review comment. Raises CardinalityError if
         already set. OrderError if no reviewer defined before.
-        Raises ValueError if comment is not free form text.
+        Raises SPDXValueError if comment is not free form text.
         """
         if len(doc.reviews) != 0:
             if not self.review_comment_set:
                 self.review_comment_set = True
-                if validate_review_comment(comment):
+                if validations.validate_review_comment(comment):
                     doc.reviews[-1].comment = str_from_text(comment)
                     return True
                 else:
-                    raise ValueError('ReviewComment::Comment')
+                    raise SPDXValueError('ReviewComment::Comment')
             else:
                 raise CardinalityError('ReviewComment')
         else:
@@ -384,11 +390,11 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_supplier_set:
             self.package_supplier_set = True
-            if validate_pkg_supplier(entity):
+            if validations.validate_pkg_supplier(entity):
                 doc.package.supplier = entity
                 return True
             else:
-                raise ValueError('Package::Supplier')
+                raise SPDXValueError('Package::Supplier')
         else:
             raise CardinalityError('Package::Supplier')
 
@@ -401,11 +407,11 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_originator_set:
             self.package_originator_set = True
-            if validate_pkg_originator(entity):
+            if validations.validate_pkg_originator(entity):
                 doc.package.originator = entity
                 return True
             else:
-                raise ValueError('Package::Originator')
+                raise SPDXValueError('Package::Originator')
         else:
             raise CardinalityError('Package::Originator')
 
@@ -428,16 +434,16 @@ class PackageBuilder(object):
         location - A string or None or NoAssert.
         Raises CardinalityError if already defined.
         Raises OrderError if no package previously defined.
-        Raises ValueError if location has incorrect value.
+        Raises SPDXValueError if location has incorrect value.
         """
         self.assert_package_exists()
         if not self.package_home_set:
             self.package_home_set = True
-            if validate_pkg_homepage(location):
+            if validations.validate_pkg_homepage(location):
                 doc.package.homepage = location
                 return True
             else:
-                raise ValueError('Package::HomePage')
+                raise SPDXValueError('Package::HomePage')
         else:
             raise CardinalityError('Package::HomePage')
 
@@ -458,7 +464,7 @@ class PackageBuilder(object):
                     doc.package.verif_exc_files = match.group(self.VERIF_CODE_EXC_FILES_GRP).split(',')
                 return True
             else:
-                raise ValueError('Package::VerificationCode')
+                raise SPDXValueError('Package::VerificationCode')
         else:
             raise CardinalityError('Package::VerificationCode')
 
@@ -481,16 +487,16 @@ class PackageBuilder(object):
         text - Free form text.
         Raises CardinalityError if already defined.
         Raises OrderError if no package previously defined.
-        ValueError if text is not free form text.
+        SPDXValueError if text is not free form text.
         """
         self.assert_package_exists()
         if not self.package_source_info_set:
             self.package_source_info_set = True
-            if validate_pkg_src_info(text):
+            if validations.validate_pkg_src_info(text):
                 doc.package.source_info = str_from_text(text)
                 return True
             else:
-                raise ValueError('Pacckage::SourceInfo')
+                raise SPDXValueError('Pacckage::SourceInfo')
         else:
             raise CardinalityError('Package::SourceInfo')
 
@@ -499,45 +505,45 @@ class PackageBuilder(object):
         licenses - License info.
         Raises CardinalityError if already defined.
         Raises OrderError if no package previously defined.
-        Raises ValueError if data malformed.
+        Raises SPDXValueError if data malformed.
         """
         self.assert_package_exists()
         if not self.package_conc_lics_set:
             self.package_conc_lics_set = True
-            if validate_lics_conc(licenses):
+            if validations.validate_lics_conc(licenses):
                 doc.package.conc_lics = licenses
                 return True
             else:
-                raise ValueError('Package::ConcludedLicenses')
+                raise SPDXValueError('Package::ConcludedLicenses')
         else:
             raise CardinalityError('Package::ConcludedLicenses')
 
-    def set_pkg_license_from_file(self, doc, license):
+    def set_pkg_license_from_file(self, doc, lic):
         """Adds a license from a file to the package.
-        Raises ValueError if data malformed.
+        Raises SPDXValueError if data malformed.
         Raises OrderError if no package previously defined.
         """
         self.assert_package_exists()
-        if validate_lics_from_file(license):
-            doc.package.licenses_from_files.append(license)
+        if validations.validate_lics_from_file(lic):
+            doc.package.licenses_from_files.append(lic)
             return True
         else:
-            raise ValueError('Package::LicensesFromFile')
+            raise SPDXValueError('Package::LicensesFromFile')
 
-    def set_pkg_license_declared(self, doc, license):
+    def set_pkg_license_declared(self, doc, lic):
         """Sets the package's declared license.
-        Raises ValueError if data malformed.
+        Raises SPDXValueError if data malformed.
         Raises OrderError if no package previously defined.
         Raises CardinalityError if already set.
         """
         self.assert_package_exists()
         if not self.package_license_declared_set:
             self.package_license_declared_set = True
-            if validate_lics_conc(license):
-                doc.package.license_declared = license
+            if validations.validate_lics_conc(lic):
+                doc.package.license_declared = lic
                 return True
             else:
-                raise ValueError('Package::LicenseDeclared')
+                raise SPDXValueError('Package::LicenseDeclared')
         else:
             raise CardinalityError('Package::LicenseDeclared')
 
@@ -545,16 +551,16 @@ class PackageBuilder(object):
         """Sets the package's license comment.
         Raises OrderError if no package previously defined.
         Raises CardinalityError if already set.
-        Raises ValueError if text is not free form text.
+        Raises SPDXValueError if text is not free form text.
         """
         self.assert_package_exists()
         if not self.package_license_comment_set:
             self.package_license_comment_set = True
-            if validate_pkg_lics_comment(text):
+            if validations.validate_pkg_lics_comment(text):
                 doc.package.license_comment = str_from_text(text)
                 return True
             else:
-                raise ValueError('Package::LicenseComment')
+                raise SPDXValueError('Package::LicenseComment')
         else:
             raise CardinalityError('Package::LicenseComment')
 
@@ -567,45 +573,45 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_cr_text_set:
             self.package_cr_text_set = True
-            if validate_pkg_cr_text(text):
+            if validations.validate_pkg_cr_text(text):
                 if isinstance(text, basestring):
                     doc.package.cr_text = str_from_text(text)
                 else:
                     doc.package.cr_text = text  # None or NoAssert
             else:
-                raise ValueError('Package::CopyrightText')
+                raise SPDXValueError('Package::CopyrightText')
         else:
             raise CardinalityError('Package::CopyrightText')
 
     def set_pkg_summary(self, doc, text):
         """Set's the package summary.
-        Raises ValueError if text is not free form text.
+        Raises SPDXValueError if text is not free form text.
         Raises CardinalityError if summary already set.
         Raises OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_summary_set:
             self.package_summary_set = True
-            if validate_pkg_summary(text):
+            if validations.validate_pkg_summary(text):
                 doc.package.summary = str_from_text(text)
             else:
-                raise ValueError('Package::Summary')
+                raise SPDXValueError('Package::Summary')
         else:
             raise CardinalityError('Package::Summary')
 
     def set_pkg_desc(self, doc, text):
         """Set's the package's description.
-        Raises ValueError if text is not free form text.
+        Raises SPDXValueError if text is not free form text.
         Raises CardinalityError if description already set.
         Raises OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_desc_set:
             self.package_desc_set = True
-            if validate_pkg_desc(text):
+            if validations.validate_pkg_desc(text):
                 doc.package.description = str_from_text(text)
             else:
-                raise ValueError('Package::Description')
+                raise SPDXValueError('Package::Description')
         else:
             raise CardinalityError('Package::Description')
 
@@ -636,16 +642,16 @@ class FileBuilder(object):
         """
         Raises OrderError if no package or no file defined.
         Raises CardinalityError if more than one comment set.
-        Raises ValueError if text is not free form text.
+        Raises SPDXValueError if text is not free form text.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_comment_set:
                 self.file_comment_set = True
-                if validate_file_comment(text):
+                if validations.validate_file_comment(text):
                     self.file(doc).comment = str_from_text(text)
                     return True
                 else:
-                    raise ValueError('File::Comment')
+                    raise SPDXValueError('File::Comment')
             else:
                 raise CardinalityError('File::Comment')
         else:
@@ -655,7 +661,7 @@ class FileBuilder(object):
         """
         Raises OrderError if no package or file defined.
         Raises CardinalityError if more than one type set.
-        Raises ValueError if type is unknown.
+        Raises SPDXValueError if type is unknown.
         """
         type_dict = {
             'SOURCE': file.FileType.SOURCE,
@@ -670,7 +676,7 @@ class FileBuilder(object):
                     self.file(doc).type = type_dict[type_value]
                     return True
                 else:
-                    raise ValueError('File::Type')
+                    raise SPDXValueError('File::Type')
             else:
                 raise CardinalityError('File::Type')
         else:
@@ -691,52 +697,52 @@ class FileBuilder(object):
         else:
             raise OrderError('File::CheckSum')
 
-    def set_concluded_license(self, doc, license):
+    def set_concluded_license(self, doc, lic):
         """
         Raises OrderError if no package or file defined.
         Raises CardinalityError if already set.
-        Raises ValueError if malformed.
+        Raises SPDXValueError if malformed.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_conc_lics_set:
                 self.file_conc_lics_set = True
-                if validate_lics_conc(license):
-                    self.file(doc).conc_lics = license
+                if validations.validate_lics_conc(lic):
+                    self.file(doc).conc_lics = lic
                     return True
                 else:
-                    raise ValueError('File::ConcludedLicense')
+                    raise SPDXValueError('File::ConcludedLicense')
             else:
                 raise CardinalityError('File::ConcludedLicense')
         else:
             raise OrderError('File::ConcludedLicense')
 
-    def set_file_license_in_file(self, doc, license):
+    def set_file_license_in_file(self, doc, lic):
         """
         Raises OrderError if no package or file defined.
-        Raises ValueError if malformed value.
+        Raises SPDXValueError if malformed value.
         """
         if self.has_package(doc) and self.has_file(doc):
-            if validate_file_lics_in_file(license):
-                self.file(doc).add_lics(license)
+            if validations.validate_file_lics_in_file(lic):
+                self.file(doc).add_lics(lic)
                 return True
             else:
-                raise ValueError('File::LicenseInFile')
+                raise SPDXValueError('File::LicenseInFile')
         else:
             raise OrderError('File::LicenseInFile')
 
     def set_file_license_comment(self, doc, text):
         """
         Raises OrderError if no package or file defined.
-        Raises ValueError if text is not free form text.
+        Raises SPDXValueError if text is not free form text.
         Raises CardinalityError if more than one per file.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_license_comment_set:
                 self.file_license_comment_set = True
-                if validate_file_lics_comment(text):
+                if validations.validate_file_lics_comment(text):
                     self.file(doc).license_comment = str_from_text(text)
                 else:
-                    raise ValueError('File::LicenseComment')
+                    raise SPDXValueError('File::LicenseComment')
             else:
                 raise CardinalityError('File::LicenseComment')
         else:
@@ -744,20 +750,20 @@ class FileBuilder(object):
 
     def set_file_copyright(self, doc, text):
         """Raises OrderError if no package or file defined.
-        Raises ValueError if not free form text or NONE or NO_ASSERT.
+        Raises SPDXValueError if not free form text or NONE or NO_ASSERT.
         Raises CardinalityError if more than one.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_copytext_set:
                 self.file_copytext_set = True
-                if validate_file_cpyright(text):
-                    if isinstance(text,  basestring):
+                if validations.validate_file_cpyright(text):
+                    if isinstance(text, basestring):
                         self.file(doc).copyright = str_from_text(text)
                     else:
                         self.file(doc).copyright = text  # None or NoAssert
                     return True
                 else:
-                    raise ValueError('File::CopyRight')
+                    raise SPDXValueError('File::CopyRight')
             else:
                 raise CardinalityError('File::CopyRight')
         else:
@@ -765,16 +771,16 @@ class FileBuilder(object):
 
     def set_file_notice(self, doc, text):
         """Raises OrderError if no package or file defined.
-        Raises ValueError if not free form text.
+        Raises SPDXValueError if not free form text.
         Raises CardinalityError if more than one.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_notice_set:
                 self.file_notice_set = True
-                if validate_file_notice(text):
+                if validations.validate_file_notice(text):
                     self.file(doc).notice = str_from_text(text)
                 else:
-                    raise ValueError('File::Notice')
+                    raise SPDXValueError('File::Notice')
             else:
                 raise CardinalityError('File::Notice')
         else:
@@ -844,30 +850,30 @@ class LicenseBuilder(object):
     def has_extr_lic(self, doc):
         return len(doc.extracted_licenses) != 0
 
-    def set_lic_id(self, doc, id):
+    def set_lic_id(self, doc, lic_id):
         """Adds a new extracted license to the document.
-        Raises ValueError if data format is incorrect.
+        Raises SPDXValueError if data format is incorrect.
         """
         self.reset_extr_lics()
-        if validate_extracted_lic_id(id):
-            doc.add_extr_lic(document.ExtractedLicense(id))
+        if validations.validate_extracted_lic_id(lic_id):
+            doc.add_extr_lic(document.ExtractedLicense(lic_id))
             return True
         else:
-            raise ValueError('ExtractedLicense::id')
+            raise SPDXValueError('ExtractedLicense::id')
 
     def set_lic_text(self, doc, text):
-        """Sets license extracted text. 
-        Raises ValueError if text is not free form text.
+        """Sets license extracted text.
+        Raises SPDXValueError if text is not free form text.
         Raises OrderError if no license ID defined.
         """
         if self.has_extr_lic(doc):
             if not self.extr_text_set:
                 self.extr_text_set = True
-                if validate_is_free_form_text(text):
+                if validations.validate_is_free_form_text(text):
                     self.extr_lic(doc).text = str_from_text(text)
                     return True
                 else:
-                    raise ValueError('ExtractedLicense::text')
+                    raise SPDXValueError('ExtractedLicense::text')
             else:
                 raise CardinalityError('ExtractedLicense::text')
         else:
@@ -875,35 +881,35 @@ class LicenseBuilder(object):
 
     def set_lic_name(self, doc, name):
         """Sets license name.
-        Raises ValueError if name is not str or utils.NoAssert
+        Raises SPDXValueError if name is not str or utils.NoAssert
         Raises OrderError if no license id defined.
         """
         if self.has_extr_lic(doc):
             if not self.extr_lic_name_set:
                 self.extr_lic_name_set = True
-                if validate_extr_lic_name(name):
+                if validations.validate_extr_lic_name(name):
                     self.extr_lic(doc).full_name = name
                     return True
                 else:
-                    raise ValueError('ExtractedLicense::Name')
+                    raise SPDXValueError('ExtractedLicense::Name')
             else:
                 raise CardinalityError('ExtractedLicense::Name')
         else:
             raise OrderError('ExtractedLicense::Name')
 
     def set_lic_comment(self, doc, comment):
-        """Sets license comment. 
-        Raises ValueError if comment is not free form text.
+        """Sets license comment.
+        Raises SPDXValueError if comment is not free form text.
         Raises OrderError if no license ID defined.
         """
         if self.has_extr_lic(doc):
             if not self.extr_lic_comment_set:
                 self.extr_lic_comment_set = True
-                if validate_is_free_form_text(comment):
+                if validations.validate_is_free_form_text(comment):
                     self.extr_lic(doc).comment = str_from_text(comment)
                     return True
                 else:
-                    raise ValueError('ExtractedLicense::comment')
+                    raise SPDXValueError('ExtractedLicense::comment')
             else:
                 raise CardinalityError('ExtractedLicense::comment')
         else:
@@ -923,8 +929,6 @@ class LicenseBuilder(object):
         self.extr_text_set = False
         self.extr_lic_name_set = False
         self.extr_lic_comment_set = False
-
-
 
 
 class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,

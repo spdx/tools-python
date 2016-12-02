@@ -1,20 +1,20 @@
-# Copyright 2014 Ahmed H. Ismail
 
-#    Licensed under the Apache License, Version 2.0 (the "License");
-#    you may not use this file except in compliance with the License.
-#    You may obtain a copy of the License at
+# Copyright (c) 2014 Ahmed H. Ismail
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#     http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-#        http://www.apache.org/licenses/LICENSE-2.0
+from __future__ import absolute_import
+from __future__ import print_function
 
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
-#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#    See the License for the specific language governing permissions and
-#    limitations under the License.
-import config
-from version import Version
-from creationinfo import CreationInfo
-from package import Package
+from spdx import config
+from spdx.version import Version
 
 
 class License(object):
@@ -29,7 +29,7 @@ class License(object):
     @classmethod
     def from_identifier(cls, identifier):
         """If identifier exists in config.LICENSE_MAP
-        the full_name is retrived from it. Otherwise 
+        the full_name is retrived from it. Otherwise
         the full_name is the same as the identifier.
         """
         if identifier in config.LICENSE_MAP.keys():
@@ -145,7 +145,7 @@ class ExtractedLicense(License):
 class Document(object):
 
     """Represents an SPDX document.
-        Fields: 
+        Fields:
         version: Spec version. Mandatory, one - Type: Version.
         data_license: SPDX-Metadata license. Mandatory, one. Type: License.
         comment: Comments on the SPDX file, optional one. Type: str
@@ -153,12 +153,14 @@ class Document(object):
         package: Package described by this document. Mandatory, one. Type: Package
         extracted_licenses: List of licenses extracted that are not part of the
             SPDX license list. Optional, many. Type: ExtractedLicense.
-        reviews: SPDX document review information, Optional zero or more. 
+        reviews: SPDX document review information, Optional zero or more.
             Type: Review.
     """
 
-    def __init__(self, version=None, data_license=None, comment=None,
-                 package=None):
+    def __init__(self, version=None, data_license=None, comment=None, package=None):
+        # avoid recursive impor
+        from spdx.creationinfo import CreationInfo
+
         super(Document, self).__init__()
         self.version = version
         self.data_license = data_license
@@ -177,9 +179,10 @@ class Document(object):
     @property
     def files(self):
         return self.package.files
+
     @files.setter
     def files(self, value):
-        self.package.files = value    
+        self.package.files = value
 
     @property
     def has_comment(self):

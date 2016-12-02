@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+
+# Parses a tag/value file and prints out some basic information.
+# Usage: parse_tv.py <tagvaluefile>
+
 if __name__ == '__main__':
     import sys
     from spdx.parsers.tagvalue import Parser
@@ -20,4 +24,3 @@ if __name__ == '__main__':
                 print creator.name
         else:
             print 'Errors encountered while parsing'
-
