@@ -16,7 +16,8 @@ from __future__ import print_function
 import codecs
 import os
 import tempfile
-from unittest.case import TestCase
+import unittest
+from unittest import TestCase
 
 from spdx.parsers.rdf import Parser as RDFParser
 from spdx.parsers.rdfbuilders import Builder as RDFBuilder
@@ -103,3 +104,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_tagvalue_file(filename)
         assert not error
         assert doc.validate([])
+
+
+if __name__ == '__main__':
+    unittest.main()

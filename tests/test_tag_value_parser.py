@@ -12,7 +12,8 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-from unittest.case import TestCase
+import unittest
+from unittest import TestCase
 
 import spdx
 from spdx.parsers.tagvalue import Parser
@@ -203,3 +204,7 @@ class TestParser(TestCase):
         assert len(spdx_file.artifact_of_project_name) == 1
         assert len(spdx_file.artifact_of_project_home) == 1
         assert len(spdx_file.artifact_of_project_uri) == 1
+
+
+if __name__ == '__main__':
+    unittest.main()

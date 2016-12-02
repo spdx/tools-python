@@ -14,7 +14,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from datetime import datetime
-from unittest.case import TestCase
+import unittest
+from unittest import TestCase
 
 import spdx.config as config
 from spdx.creationinfo import CreationInfo
@@ -67,3 +68,7 @@ class TestCreationInfo(TestCase):
         ci = CreationInfo(license_list_version=Version(major=1, minor=0))
         assert ci.license_list_version == Version(major=1, minor=0)
         assert not ci.license_list_version == Version(major=1, minor=2)
+
+
+if __name__ == '__main__':
+    unittest.main()

@@ -13,7 +13,8 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-from unittest.case import TestCase
+import unittest
+from unittest import TestCase
 
 import testing_utils
 
@@ -22,7 +23,7 @@ import spdx.parsers.tagvaluebuilders as builders
 from spdx.version import Version
 
 
-class TestDocumentBuilder(TestCase):
+class TestDocumentBuilder(unittest.case.TestCase):
 
     def setUp(self):
         self.document = Document()
@@ -342,3 +343,7 @@ class TestPackageBuilder(TestCase):
     @testing_utils.raises(builders.OrderError)
     def test_set_pkg_desc_order(self):
         self.builder.set_pkg_desc(self.document, '<text>something</text>')
+
+
+if __name__ == '__main__':
+    unittest.main()

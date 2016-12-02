@@ -12,7 +12,8 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-from unittest.case import TestCase
+import unittest
+from unittest import TestCase
 
 from spdx.version import Version
 from spdx.document import Document
@@ -77,3 +78,7 @@ class TestLicense(TestCase):
         mit = License.from_identifier('MIT')
         assert mit.full_name == 'MIT License'
         assert mit.url == 'http://spdx.org/licenses/MIT'
+
+
+if __name__ == '__main__':
+    unittest.main()

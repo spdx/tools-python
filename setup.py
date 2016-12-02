@@ -4,6 +4,11 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from setuptools import setup
+import unittest
+
+
+def test_suite():
+    return unittest.TestLoader().discover('tests', pattern='test_*.py')
 
 
 setup(
@@ -13,14 +18,11 @@ setup(
     packages=['spdx', 'spdx.parsers', 'spdx.writers', 'spdx.parsers.lexers'],
     include_package_data=True,
     zip_safe=False,
+    test_suite='setup.test_suite',
     install_requires=[
         'ply',
         'rdflib'
     ],
-    test_requires=[
-        'nose',
-    ],
-
     author='Ahmed H. Ismail',
     author_email='ahm3d.hisham@gmail.com',
     maintainer='Philippe Ombredanne and SPDX group at the Linux Foundation and others',
