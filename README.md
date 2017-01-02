@@ -1,21 +1,25 @@
 Python SPDX Parser Library
 ==========================
 
-This library provides an implementation of a tag/value and RDF SPDX  v1.2 parser in python.
+This library provides an implementation of an SPDX tag/value and RDF v1.2 parser in Python.
 
 Official repository: http://git.spdx.org/?p=spdx-tools-python.git
 
-GitHub mirror: https://github.com/spdx/sdpx-tools-python
-Issues: https://github.com/spdx/sdpx-tools-python/issues
+GitHub mirror: https://github.com/spdx/tools-python
+Issues: https://github.com/spdx/tools-python/issues
 
-Pypi: https://pypi.python.org/pypi/spdx-tools
+Pypi: https://pypi.python.org/pypi/spdx-tools (not yet there, see issue #2)
+
 
 License:
 ========
+
 Apache-2.0
+
 
 Expected Features:
 ==================
+
 * API for creating and manipulating SPDX documents.
 * Parse Tag/Value format SPDX files
 * Parse RDF format SPDX files
@@ -25,6 +29,7 @@ Expected Features:
 
 Current Status:
 ===============
+
 * RDF Parser implemented.
 * Tag/value parser implemented
 * Tag/value writer implemented.
@@ -33,12 +38,14 @@ Current Status:
 
 Plans:
 ======
+
 * Update to SPDX v2.1
 
 
 How to use:
 ===========
-Example tag/vlue parsing usage:
+
+Example tag/value parsing usage:
 ```Python
     from spdx.parsers.tagvalue import Parser
     from spdx.parsers.tagvaluebuilders import Builder
@@ -73,17 +80,20 @@ The `examples` directory contains several code samples:
 
 Installation:
 =============
-Clone or download the repository and run `python setup.py install`
+
+Clone or download the repository and run `python setup.py install`.
 
 
 How to run tests:
 =================
+
 From the project root directory run: `python setup.py test`.
 You can use another test runner such as pytest or nose at your preference.
 
 
 Dependencies:
 =============
+
 * PLY : https://pypi.python.org/pypi/ply/3.4 used for parsing.
 * rdflib : https://pypi.python.org/pypi/rdflib/4.1.2 for for handling RDF. 
 
