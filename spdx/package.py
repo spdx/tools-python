@@ -134,7 +134,7 @@ class Package(object):
         else:
             return_value = True
             for f in self.files:
-                return_value &= f.validate(messages)
+                return_value = return_value and f.validate(messages)
             return return_value
 
     def validate_optional_str_fields(self, messages):
