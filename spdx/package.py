@@ -82,12 +82,12 @@ class Package(object):
         """Validates the package's fields. Appends user friends errors
         to messages.
         """
-        return (self.validate_checksum(messages) &
-                 self.validate_optional_str_fields(messages) &
-                 self.validate_mandatory_str_fields(messages) &
-                 self.validate_files(messages) &
-                 self.validate_mandatory_fields(messages) &
-                 self.validate_optional_fields(messages))
+        return (self.validate_checksum(messages) and
+                self.validate_optional_str_fields(messages) and
+                self.validate_mandatory_str_fields(messages) and
+                self.validate_files(messages) and
+                self.validate_mandatory_fields(messages) and
+                self.validate_optional_fields(messages))
 
     def validate_optional_fields(self, messages):
         status = True

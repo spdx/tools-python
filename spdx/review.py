@@ -49,7 +49,7 @@ class Review(object):
         """Returns True if all the fields are valid.
         Appends any error messages to messages parameter.
         """
-        return (self.validate_reviewer(messages) &
+        return (self.validate_reviewer(messages) and
                 self.validate_review_date(messages))
 
     def validate_reviewer(self, messages):

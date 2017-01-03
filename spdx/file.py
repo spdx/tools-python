@@ -85,9 +85,12 @@ class File(object):
         """Validates the fields and appends user friendly messages
         to messages parameter if there are errors.
         """
-        return (self.validate_lic_conc(messages) & self.validate_type(messages)
-            & self.validate_chksum(messages) & self.validate_licenses_in_file(messages)
-            & self.validate_copyright(messages) & self.validate_artifacts(messages))
+        return (self.validate_lic_conc(messages) and
+                self.validate_type(messages) and
+                self.validate_chksum(messages) and
+                self.validate_licenses_in_file(messages) and
+                self.validate_copyright(messages) and
+                self.validate_artifacts(messages))
 
     def validate_copyright(self, messages):
         if type(self.copyright) in [str, unicode, utils.NoAssert, utils.SPDXNone]:
