@@ -32,8 +32,8 @@ class TestDocumentBuilder(unittest.case.TestCase):
     def test_correct_version(self):
         version_str = 'SPDX-1.2'
         self.builder.set_doc_version(self.document, version_str)
-        assert (self.document.version.major == 1) & (
-            self.document.version.minor == 2)
+        assert (self.document.version.major == 1 and
+                self.document.version.minor == 2)
 
     @testing_utils.raises(builders.CardinalityError)
     def test_version_cardinality(self):

@@ -66,8 +66,8 @@ class License(object):
 
     def __eq__(self, other):
         if isinstance(other, License):
-            return ((self.identifier == other.identifier) &
-                    (self.full_name == other.full_name))
+            return (self.identifier == other.identifier and
+                    self.full_name == other.full_name)
         else:
             return False
 
@@ -192,12 +192,12 @@ class Document(object):
         """Validate all fields of the document.
         messages - appends user friendly error messages to this list for display.
         """
-        return (self.validate_version(messages)
-                & self.validate_data_lics(messages)
-                & self.validate_creation_info(messages)
-                & self.validate_package(messages)
-                & self.validate_extracted_licenses(messages)
-                & self.validate_reviews(messages))
+        return (self.validate_version(messages) and
+                self.validate_data_lics(messages) and
+                self.validate_creation_info(messages) and
+                self.validate_package(messages) and
+                self.validate_extracted_licenses(messages) and
+                self.validate_reviews(messages))
 
     def validate_version(self, messages):
         if self.version is not None:
@@ -224,7 +224,7 @@ class Document(object):
     def validate_reviews(self, messages):
         status = True
         for review in self.reviews:
-            status &= review.validate(messages)
+            status = status and review.validate(messages)
         return status
 
     def validate_creation_info(self, messages):
@@ -245,7 +245,7 @@ class Document(object):
         status = True
         for lic in self.extracted_licenses:
             if isinstance(lic, ExtractedLicense):
-                status &= lic.validate(messages)
+                status = status and lic.validate(messages)
             else:
                 messages.append('Document extracted licenses must be of type' +
                     'spdx.document.ExtractedLicense')

@@ -154,7 +154,7 @@ class CreationInfo(object):
         """Returns True if the fields are valid according to the SPDX standard.
         Appends user friendly messages to the messages parameter.
         """
-        return (self.validate_creators(messages) &
+        return (self.validate_creators(messages) and
                 self.validate_created(messages))
 
     def validate_creators(self, messages):
