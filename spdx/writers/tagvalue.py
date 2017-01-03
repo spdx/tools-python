@@ -80,7 +80,8 @@ def write_file(spdx_file, out):
     """Writes out the fields of a file in tag/value format."""
     out.write('# File\n\n')
     write_value('FileName', spdx_file.name, out)
-    write_file_type(spdx_file.type, out)
+    if spdx_file.has_optional_field('type'):
+        write_file_type(spdx_file.type, out)
     write_value('FileChecksum', spdx_file.chk_sum.to_tv(), out)
     if isinstance(spdx_file.conc_lics, (document.LicenseConjuction, document.LicenseDisjunction)):
         write_value('LicenseConcluded', u'({0})'.format(spdx_file.conc_lics), out)

@@ -124,7 +124,7 @@ class File(object):
             return False
 
     def validate_type(self, messages):
-        if self.type in [FileType.SOURCE, FileType.OTHER, FileType.BINARY,
+        if self.type in [None, FileType.SOURCE, FileType.OTHER, FileType.BINARY,
             FileType.ARCHIVE]:
             return True
         else:
