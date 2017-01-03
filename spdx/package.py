@@ -92,17 +92,15 @@ class Package(object):
 
     def validate_optional_fields(self, messages):
         status = True
-        if not ((self.originator is None) or
-            isinstance(self.originator, utils.NoAssert) or
-            isinstance(self.originator, creationinfo.Creator)):
+
+        if self.originator and not isinstance(self.originator, (utils.NoAssert, creationinfo.Creator)):
             messages.append('Package originator must be instance of ' +
-                'spdx.utils.NoAssert or spdx.creationinfo.Creator')
+                            'spdx.utils.NoAssert or spdx.creationinfo.Creator')
             status = False
-        if not ((self.supplier is None) or isinstance(self.supplier, utils.NoAssert) or
-            isinstance(self.supplier, utils.SPDXNone) or
-            isinstance(self.supplier, creationinfo.Creator)):
+
+        if self.supplier and not isinstance(self.supplier, (utils.NoAssert, utils.SPDXNone, creationinfo.Creator)):
             messages.append('Package supplier must be instance of ' +
-                'spdx.utils.NoAssert or spdx.utils.SPDXNone or spdx.creationinfo.Creator')
+                            'spdx.utils.NoAssert or spdx.utils.SPDXNone or spdx.creationinfo.Creator')
             status = False
 
         return status
