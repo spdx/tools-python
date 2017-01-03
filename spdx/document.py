@@ -200,15 +200,11 @@ class Document(object):
                 self.validate_reviews(messages))
 
     def validate_version(self, messages):
-        if self.version is not None:
-            if self.version == Version(1, 2):
-                return True
-            else:
-                messages.append('SPDX Version must be 1.2')
-                return False
-        else:
+        if self.version is None:
             messages.append('Document has no version.')
             return False
+        else:
+            return True
 
     def validate_data_lics(self, messages):
         if self.data_license is not None:
