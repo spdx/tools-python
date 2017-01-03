@@ -98,9 +98,9 @@ class Package(object):
                             'spdx.utils.NoAssert or spdx.creationinfo.Creator')
             status = False
 
-        if self.supplier and not isinstance(self.supplier, (utils.NoAssert, utils.SPDXNone, creationinfo.Creator)):
+        if self.supplier and not isinstance(self.supplier, (utils.NoAssert, creationinfo.Creator)):
             messages.append('Package supplier must be instance of ' +
-                            'spdx.utils.NoAssert or spdx.utils.SPDXNone or spdx.creationinfo.Creator')
+                            'spdx.utils.NoAssert or spdx.creationinfo.Creator')
             status = False
 
         return status
