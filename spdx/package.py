@@ -108,12 +108,14 @@ class Package(object):
     def validate_mandatory_fields(self, messages):
         status = True
 
-        if not isinstance(self.conc_lics, document.License):
-            messages.append('Package concluded license must be instance of spdx.document.License')
+        if not isinstance(self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)):
+            messages.append('Package concluded license must be instance of ' +
+                            'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
             status = False
 
-        if not isinstance(self.license_declared, document.License):
-            messages.append('Package declared license must be instance of spdx.document.License')
+        if not isinstance(self.license_declared, (utils.SPDXNone, utils.NoAssert, document.License)):
+            messages.append('Package declared license must be instance of ' +
+                            'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
             status = False
 
         license_from_file_check = lambda prev, el: \
