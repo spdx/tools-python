@@ -180,8 +180,9 @@ def write_document(document, out):
     """Writes out a tag value representation of the document.
     Out must implement a method write that takes a single string.
     """
-    if not document.validate():
-        raise InvalidDocumentError()
+    messages = []
+    if not document.validate(messages):
+        raise InvalidDocumentError(messages)
     # Write out document information
     out.write('# Document Information\n\n')
     version_value = 'SPDX-{0}.{1}'.format(document.version.major, document.version.minor)

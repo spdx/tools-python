@@ -188,7 +188,7 @@ class Document(object):
     def has_comment(self):
         return self.comment is not None
 
-    def validate(self, messages=[]):
+    def validate(self, messages = []):
         """Validate all fields of the document.
         messages - appends user friendly error messages to this list for display.
         """
