@@ -17,6 +17,7 @@ from spdx import creationinfo
 from spdx import document
 from spdx import utils
 
+import hashlib
 
 class Package(object):
 
@@ -183,6 +184,17 @@ class Package(object):
             messages.append('Package checksum must be instance of spdx.checksum.Algorithm')
             return False
 
+    def calc_verif_code(self):
+        hashes = []
+
+        for file_entry in self.files:
+            hashes.append(file_entry.calc_chksum())
+
+        hashes.sort()
+
+        sha1 = hashlib.sha1()
+        sha1.update(''.join(hashes))
+        return sha1.hexdigest()
 
     def has_optional_field(self, field):
         expr = 'self.{0} is not None'.format(field)
