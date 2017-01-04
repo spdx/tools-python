@@ -17,6 +17,8 @@ from spdx import checksum
 from spdx import document
 from spdx import utils
 
+import hashlib
+
 
 class FileType(object):
     SOURCE = 1
@@ -124,7 +126,7 @@ class File(object):
             return False
 
     def validate_type(self, messages):
-        if self.type in [FileType.SOURCE, FileType.OTHER, FileType.BINARY,
+        if self.type in [None, FileType.SOURCE, FileType.OTHER, FileType.BINARY,
             FileType.ARCHIVE]:
             return True
         else:
@@ -141,6 +143,19 @@ class File(object):
         else:
             messages.append('File checksum must be instance of spdx.checksum.Algorithm')
             return False
+
+    def calc_chksum(self):
+        BUFFER_SIZE = 65536
+
+        file_sha1 = hashlib.sha1()
+        with open(self.name, 'rb') as file_handle:
+            while True:
+                data = file_handle.read(BUFFER_SIZE)
+                if not data:
+                    break
+                file_sha1.update(data)
+
+        return file_sha1.hexdigest()
 
     def has_optional_field(self, field):
         expr = 'self.{0} is not None'.format(field)

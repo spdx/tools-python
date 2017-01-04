@@ -17,6 +17,7 @@ from spdx import creationinfo
 from spdx import document
 from spdx import utils
 
+import hashlib
 
 class Package(object):
 
@@ -91,39 +92,43 @@ class Package(object):
 
     def validate_optional_fields(self, messages):
         status = True
-        if not ((self.originator is None) or
-            isinstance(self.originator, utils.NoAssert) or
-            isinstance(self.originator, creationinfo.Creator)):
+
+        if self.originator and not isinstance(self.originator, (utils.NoAssert, creationinfo.Creator)):
             messages.append('Package originator must be instance of ' +
-                'spdx.utils.NoAssert or spdx.creationinfo.Creator')
+                            'spdx.utils.NoAssert or spdx.creationinfo.Creator')
             status = False
-        if not ((self.supplier is None) or isinstance(self.supplier, utils.NoAssert) or
-            isinstance(self.supplier, utils.SPDXNone) or
-            isinstance(self.supplier, creationinfo.Creator)):
+
+        if self.supplier and not isinstance(self.supplier, (utils.NoAssert, creationinfo.Creator)):
             messages.append('Package supplier must be instance of ' +
-                'spdx.utils.NoAssert or spdx.utils.SPDXNone or spdx.creationinfo.Creator')
+                            'spdx.utils.NoAssert or spdx.creationinfo.Creator')
             status = False
 
         return status
 
     def validate_mandatory_fields(self, messages):
         status = True
-        if not isinstance(self.conc_lics, document.License):
-            messages.append('Package concluded license must be instance of spdx.document.License')
+
+        if not isinstance(self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)):
+            messages.append('Package concluded license must be instance of ' +
+                            'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
             status = False
-        if not isinstance(self.license_declared, document.License):
-            messages.append('Package declared license must be instance of spdx.document.License')
+
+        if not isinstance(self.license_declared, (utils.SPDXNone, utils.NoAssert, document.License)):
+            messages.append('Package declared license must be instance of ' +
+                            'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
             status = False
-        license_from_file_check = lambda prev, el : prev and (isinstance(el, document.License) or
-         isinstance(el, utils.SPDXNone) or isinstance(el, utils.NoAssert))
+
+        license_from_file_check = lambda prev, el: \
+            prev and isinstance(el, (document.License, utils.SPDXNone, utils.NoAssert))
+
         if not reduce(license_from_file_check, self.licenses_from_files, True):
             messages.append('each element in licenses_from_files must be instance of ' +
-                'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
+                            'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
             status = False
+
         if len(self.licenses_from_files) == 0:
             messages.append('Package licenses_from_files can not be empty')
             status = False
-
 
         return status
 
@@ -134,7 +139,7 @@ class Package(object):
         else:
             return_value = True
             for f in self.files:
-                return_value &= f.validate(messages)
+                return_value = return_value and f.validate(messages)
             return return_value
 
     def validate_optional_str_fields(self, messages):
@@ -183,6 +188,17 @@ class Package(object):
             messages.append('Package checksum must be instance of spdx.checksum.Algorithm')
             return False
 
+    def calc_verif_code(self):
+        hashes = []
+
+        for file_entry in self.files:
+            hashes.append(file_entry.calc_chksum())
+
+        hashes.sort()
+
+        sha1 = hashlib.sha1()
+        sha1.update(''.join(hashes))
+        return sha1.hexdigest()
 
     def has_optional_field(self, field):
         expr = 'self.{0} is not None'.format(field)
