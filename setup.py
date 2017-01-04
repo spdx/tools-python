@@ -13,7 +13,7 @@ def test_suite():
 
 setup(
     name='spdx-tools',
-    version='0.2',
+    version='0.3',
     description='SPDX parser and tools.',
     packages=['spdx', 'spdx.parsers', 'spdx.writers', 'spdx.parsers.lexers'],
     include_package_data=True,
