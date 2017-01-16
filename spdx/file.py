@@ -49,12 +49,12 @@ class File(object):
     artifact_of_project_uri - list of project uris, possibly empty.
     """
 
-    def __init__(self, name):
+    def __init__(self, name, chk_sum = None):
         super(File, self).__init__()
         self.name = name
         self.comment = None
         self.type = None
-        self.chk_sum = None
+        self.chk_sum = chk_sum
         self.conc_lics = None
         self.licenses_in_file = []
         self.license_comment = None
