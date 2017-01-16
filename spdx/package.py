@@ -192,8 +192,8 @@ class Package(object):
         hashes = []
 
         for file_entry in self.files:
-            if isinstance(file_entry.chk_sum, checksum.Algorithm) and
-               file_entry.chk_sum.identifier == 'SHA1':
+            if (isinstance(file_entry.chk_sum, checksum.Algorithm) and
+                file_entry.chk_sum.identifier == 'SHA1'):
                 sha1 = file_entry.chk_sum.value
             else:
                 sha1 = file_entry.calc_chksum()
