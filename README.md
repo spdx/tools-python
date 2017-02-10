@@ -6,7 +6,9 @@ This is the result of an initial GSoC contribution by @ah450 https://github.com/
 is maintained by a community of SPDX adopters and enthusiasts.
 
 Home: https://github.com/spdx/tools-python
+
 Issues: https://github.com/spdx/tools-python/issues
+
 Pypi: https://pypi.python.org/pypi/spdx-tools
 
 
