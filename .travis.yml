@@ -1,9 +1,4 @@
-# This deliverately is not "python" as a work-around to support
-# multi-os builds with custom Python versions in Travis CI.
-language: cpp
-
-os:
-  - linux
+language: python
 
 python:
   - "2.7"
@@ -11,7 +6,7 @@ python:
   - "3.5"
 
 install:
-  - PYTHON_EXE=python$TRAVIS_PYTHON_VERSION ./setup.py install --user
+  - ./setup.py install
 
 script:
-  - PYTHON_EXE=python$TRAVIS_PYTHON_VERSION ./setup.py test
+  - ./setup.py test
