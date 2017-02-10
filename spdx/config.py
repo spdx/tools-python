@@ -32,7 +32,7 @@ class TwoWayDict(dict):
 
 def load_license_list():
     FILE_NAME = os.path.join(os.path.dirname(__file__), 'spdx_licenselist.csv')
-    with open(FILE_NAME, 'rb') as file_in:
+    with open(FILE_NAME, 'r') as file_in:
         reader = csv.DictReader(file_in)
         dct = TwoWayDict()
         for entry in reader:
