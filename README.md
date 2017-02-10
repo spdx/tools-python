@@ -1,14 +1,13 @@
-Python SPDX Parser Library
+Python SPDX Library to parse, validate and create SPDX documents
 ==========================
 
-This library provides an implementation of an SPDX tag/value and RDF v1.2 parser in Python.
+This library implements an SPDX tag/value and RDF parser, validator and handler in Python.
+This is the result of an initial GSoC contribution by @ah450 https://github.com/ah450 and 
+is maintained by a community of SPDX adopters and enthusiasts.
 
-Official repository: http://git.spdx.org/?p=spdx-tools-python.git
-
-GitHub mirror: https://github.com/spdx/tools-python
+Home: https://github.com/spdx/tools-python
 Issues: https://github.com/spdx/tools-python/issues
-
-Pypi: https://pypi.python.org/pypi/spdx-tools (not yet there, see issue #2)
+Pypi: https://pypi.python.org/pypi/spdx-tools
 
 
 License:
@@ -17,30 +16,19 @@ License:
 Apache-2.0
 
 
-Expected Features:
+Features:
 ==================
 
-* API for creating and manipulating SPDX documents.
-* Parse Tag/Value format SPDX files
-* Parse RDF format SPDX files
-* Create Tag/Value files.
-* Create RDF files.
+* API to create and manipulate SPDX documents.
+* Parse and create Tag/Value format SPDX files
+* Parse and create RDF format SPDX files
 
 
-Current Status:
-===============
-
-* RDF Parser implemented.
-* Tag/value parser implemented
-* Tag/value writer implemented.
-* RDF/Writer implemented.
-
-
-Plans:
+TODOs:
 ======
 
-* Update to SPDX v2.1
-
+* Update to full SPDX v2.1
+* Add to full license expression support
 
 How to use:
 ===========
@@ -81,7 +69,9 @@ The `examples` directory contains several code samples:
 Installation:
 =============
 
-Clone or download the repository and run `python setup.py install`.
+Clone or download the repository and run `python setup.py install`. (In a virtualenv, of course)
+
+or install from Pypi with `pip install spdx-tools`
 
 
 How to run tests:
@@ -94,13 +84,13 @@ You can use another test runner such as pytest or nose at your preference.
 Dependencies:
 =============
 
-* PLY : https://pypi.python.org/pypi/ply/3.4 used for parsing.
-* rdflib : https://pypi.python.org/pypi/rdflib/4.1.2 for for handling RDF. 
+* PLY : https://pypi.python.org/pypi/ply/ used for parsing.
+* rdflib : https://pypi.python.org/pypi/rdflib/ for for handling RDF. 
 
 
 Support:
 =======
 
-* Submit issues, questions or feedback at: https://github.com/spdx/sdpx-tools-python/issues
+* Submit issues, questions or feedback at: https://github.com/spdx/tools-python/issues
 * Join the dicussion on https://lists.spdx.org/mailman/listinfo/spdx-tech and 
   https://spdx.org/WorkgroupTechnical
