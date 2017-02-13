@@ -19,6 +19,7 @@ from spdx import utils
 
 import hashlib
 
+import six
 
 class FileType(object):
     SOURCE = 1
@@ -95,7 +96,7 @@ class File(object):
                 self.validate_artifacts(messages))
 
     def validate_copyright(self, messages):
-        if type(self.copyright) in [str, unicode, utils.NoAssert, utils.SPDXNone]:
+        if type(self.copyright) in [six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone]:
             return True
         else:
             messages.append('File copyright must be str or unicode or utils.NoAssert or utils.SPDXNone')

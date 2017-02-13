@@ -15,10 +15,14 @@ from __future__ import print_function
 
 import re
 
+import six
+
 from rdflib import Graph
 from rdflib import Namespace
 from rdflib import RDF
 from rdflib import RDFS
+
+from six.moves import reduce
 
 from spdx import document
 from spdx import utils
@@ -201,7 +205,7 @@ class LicenseParser(BaseParser):
             lic.full_name = name
         if comment is not None:
             lic.comment = comment
-        lic.cross_ref = map(lambda x: unicode(x), xrefs)
+        lic.cross_ref = map(lambda x: six.text_type(x), xrefs)
         return lic
 
 
@@ -276,7 +280,7 @@ class PackageParser(LicenseParser):
         else:
             for _s, _p, o in self.graph.triples((p_term, self.spdx_namespace['name'], None)):
                 try:
-                    self.builder.create_package(self.doc, unicode(o))
+                    self.builder.create_package(self.doc, six.text_type(o))
                 except CardinalityError:
                     self.more_than_one_error('Package name')
                     break
@@ -301,14 +305,14 @@ class PackageParser(LicenseParser):
     def p_pkg_cr_text(self, p_term, predicate):
         try:
             for _, _, text in self.graph.triples((p_term, predicate, None)):
-                self.builder.set_pkg_cr_text(self.doc, self.to_special_value(unicode(text)))
+                self.builder.set_pkg_cr_text(self.doc, self.to_special_value(six.text_type(text)))
         except CardinalityError:
             self.more_than_one_error('package copyright text')
 
     def p_pkg_summary(self, p_term, predicate):
         try:
             for _, _, summary in self.graph.triples((p_term, predicate, None)):
-                self.builder.set_pkg_summary(self.doc, unicode(summary))
+                self.builder.set_pkg_summary(self.doc, six.text_type(summary))
         except CardinalityError:
             self.more_than_one_error('package summary')
 
@@ -316,7 +320,7 @@ class PackageParser(LicenseParser):
         try:
             for _, _, desc in self.graph.triples(
                 (p_term, predicate, None)):
-                self.builder.set_pkg_desc(self.doc, unicode(desc))
+                self.builder.set_pkg_desc(self.doc, six.text_type(desc))
         except CardinalityError:
             self.more_than_one_error('package description')
 
@@ -324,7 +328,7 @@ class PackageParser(LicenseParser):
     def p_pkg_comments_on_lics(self, p_term, predicate):
         for _, _, comment in self.graph.triples((p_term, predicate, None)):
             try:
-                self.builder.set_pkg_license_comment(self.doc, unicode(comment))
+                self.builder.set_pkg_license_comment(self.doc, six.text_type(comment))
             except CardinalityError:
                 self.more_than_one_error('package comments on license')
                 break
@@ -372,14 +376,14 @@ class PackageParser(LicenseParser):
             # Parse verification code
             for _, _, code in self.graph.triples((verifcode, self.spdx_namespace['packageVerificationCodeValue'], None)):
                 try:
-                    self.builder.set_pkg_verif_code(self.doc, unicode(code))
+                    self.builder.set_pkg_verif_code(self.doc, six.text_type(code))
                 except CardinalityError:
                     self.more_than_one_error('package verificaton code')
                     break
             # Parse excluded file
             for _, _, filename in self.graph.triples((verifcode, self.spdx_namespace['packageVerificationCodeExcludedFile'], None)):
                 try:
-                    self.builder.set_pkg_excl_file(self.doc, unicode(filename))
+                    self.builder.set_pkg_excl_file(self.doc, six.text_type(filename))
                 except CardinalityError:
                     self.more_than_one_error('package verificaton code excluded file')
                     break
@@ -387,7 +391,7 @@ class PackageParser(LicenseParser):
     def p_pkg_src_info(self, p_term, predicate):
         for _, _, o in self.graph.triples((p_term, predicate, None)):
             try:
-                self.builder.set_pkg_source_info(self.doc, unicode(o))
+                self.builder.set_pkg_source_info(self.doc, six.text_type(o))
             except CardinalityError:
                 self.more_than_one_error('package source info')
                 break
@@ -396,7 +400,7 @@ class PackageParser(LicenseParser):
         for _s, _p, checksum in self.graph.triples((p_term, predicate, None)):
             for _, _, value in self.graph.triples((checksum, self.spdx_namespace['checksumValue'], None)):
                 try:
-                    self.builder.set_pkg_chk_sum(self.doc, unicode(value))
+                    self.builder.set_pkg_chk_sum(self.doc, six.text_type(value))
                 except CardinalityError:
                     self.more_than_one_error('Package checksum')
                     break
@@ -404,7 +408,7 @@ class PackageParser(LicenseParser):
     def p_pkg_homepg(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):
             try:
-                self.builder.set_pkg_home(self.doc, unicode(self.to_special_value(o)))
+                self.builder.set_pkg_home(self.doc, six.text_type(self.to_special_value(o)))
             except CardinalityError:
                 self.more_than_one_error('Package home page')
                 break
@@ -414,7 +418,7 @@ class PackageParser(LicenseParser):
     def p_pkg_down_loc(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):
             try:
-                self.builder.set_pkg_down_location(self.doc, unicode(self.to_special_value(o)))
+                self.builder.set_pkg_down_location(self.doc, six.text_type(self.to_special_value(o)))
             except CardinalityError:
                 self.more_than_one_error('Package download location')
                 break
@@ -427,7 +431,7 @@ class PackageParser(LicenseParser):
                 if o == "NOASSERTION":
                     self.builder.set_pkg_originator(self.doc, utils.NoAssert())
                 else:
-                    ent = self.builder.create_entity(self.doc, unicode(o))
+                    ent = self.builder.create_entity(self.doc, six.text_type(o))
                     self.builder.set_pkg_originator(self.doc, ent)
             except CardinalityError:
                 self.more_than_one_error('Package originator')
@@ -441,7 +445,7 @@ class PackageParser(LicenseParser):
                 if o == "NOASSERTION":
                     self.builder.set_pkg_supplier(self.doc, utils.NoAssert())
                 else:
-                    ent = self.builder.create_entity(self.doc, unicode(o))
+                    ent = self.builder.create_entity(self.doc, six.text_type(o))
                     self.builder.set_pkg_supplier(self.doc, ent)
             except CardinalityError:
                 self.more_than_one_error('Package supplier')
@@ -452,7 +456,7 @@ class PackageParser(LicenseParser):
     def p_pkg_fname(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):
             try:
-                self.builder.set_pkg_file_name(self.doc, unicode(o))
+                self.builder.set_pkg_file_name(self.doc, six.text_type(o))
             except CardinalityError:
                 self.more_than_one_error('Package file name')
                 break
@@ -460,7 +464,7 @@ class PackageParser(LicenseParser):
     def p_pkg_vinfo(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):
             try:
-                self.builder.set_pkg_vers(self.doc, unicode(o))
+                self.builder.set_pkg_vers(self.doc, six.text_type(o))
             except CardinalityError:
                 self.more_than_one_error('Package version info')
                 break
@@ -479,7 +483,7 @@ class FileParser(LicenseParser):
             self.builder.set_file_name(self.doc, 'Dummy file')
         else:
             for _, _, name in self.graph.triples((f_term, self.spdx_namespace['fileName'], None)):
-                self.builder.set_file_name(self.doc, unicode(name))
+                self.builder.set_file_name(self.doc, six.text_type(name))
 
         self.p_file_type(f_term, self.spdx_namespace['fileType'])
         self.p_file_chk_sum(f_term, self.spdx_namespace['checksum'])
@@ -504,7 +508,7 @@ class FileParser(LicenseParser):
         for _, _, other_file in self.graph.triples((f_term, predicate, None)):
             name = self.get_file_name(other_file)
             if name is not None:
-                self.builder.add_file_dep(unicode(name))
+                self.builder.add_file_dep(six.text_type(name))
             else:
                 self.error = True
                 msg = 'File depends on file with no name'
@@ -513,13 +517,13 @@ class FileParser(LicenseParser):
     def p_file_contributer(self, f_term, predicate):
         """Parses all file contributers and adds them to the model."""
         for _, _, contributer in self.graph.triples((f_term, predicate, None)):
-            self.builder.add_file_contribution(self.doc, unicode(contributer))
+            self.builder.add_file_contribution(self.doc, six.text_type(contributer))
 
     def p_file_notice(self, f_term, predicate):
         """Sets file notice text."""
         try:
             for _, _, notice in self.graph.triples((f_term, predicate, None)):
-                self.builder.set_file_notice(self.doc, unicode(notice))
+                self.builder.set_file_notice(self.doc, six.text_type(notice))
         except CardinalityError:
             self.more_than_one_error('file notice')
 
@@ -527,7 +531,7 @@ class FileParser(LicenseParser):
         """Sets file comment text."""
         try:
             for _, _, comment in self.graph.triples((f_term, predicate, None)):
-                self.builder.set_file_comment(self.doc, unicode(comment))
+                self.builder.set_file_comment(self.doc, six.text_type(comment))
         except CardinalityError:
             self.more_than_one_error('file comment')
 
@@ -549,16 +553,16 @@ class FileParser(LicenseParser):
         and setting them using the file builder.
         """
         for _, _, name in self.graph.triples((project, self.doap_namespace['name'], None)):
-            self.builder.set_file_atrificat_of_project(self.doc, 'name', unicode(name))
+            self.builder.set_file_atrificat_of_project(self.doc, 'name', six.text_type(name))
         for _, _, homepage in self.graph.triples(
             (project, self.doap_namespace['homepage'], None)):
-            self.builder.set_file_atrificat_of_project(self.doc, 'home', unicode(homepage))
+            self.builder.set_file_atrificat_of_project(self.doc, 'home', six.text_type(homepage))
 
     def p_file_cr_text(self, f_term, predicate):
         """Sets file copyright text."""
         try:
             for _, _, cr_text in self.graph.triples((f_term, predicate, None)):
-                self.builder.set_file_copyright(self.doc, unicode(cr_text))
+                self.builder.set_file_copyright(self.doc, six.text_type(cr_text))
         except CardinalityError:
             self.more_than_one_error('file copyright text')
 
@@ -566,7 +570,7 @@ class FileParser(LicenseParser):
         """Sets file license comment."""
         try:
             for _, _, comment in self.graph.triples((f_term, predicate, None)):
-                self.builder.set_file_license_comment(self.doc, unicode(comment))
+                self.builder.set_file_license_comment(self.doc, six.text_type(comment))
         except CardinalityError:
             self.more_than_one_error('file comments on license')
 
@@ -601,7 +605,7 @@ class FileParser(LicenseParser):
         try:
             for _s, _p, checksum in self.graph.triples((f_term, predicate, None)):
                 for _, _, value in self.graph.triples((checksum, self.spdx_namespace['checksumValue'], None)):
-                    self.builder.set_file_chksum(self.doc, unicode(value))
+                    self.builder.set_file_chksum(self.doc, six.text_type(value))
         except CardinalityError:
             self.more_than_one_error('File checksum')
 
@@ -657,7 +661,7 @@ class ReviewParser(BaseParser):
             self.logger.log(msg)
             return
         else:
-            return unicode(comment_list[0][2])
+            return six.text_type(comment_list[0][2])
 
     def get_review_date(self, r_term):
         """Returns review date or None if not found.
@@ -670,7 +674,7 @@ class ReviewParser(BaseParser):
             msg = 'Review must have exactlyone review date'
             self.logger.log(msg)
             return
-        return unicode(reviewed_list[0][2])
+        return six.text_type(reviewed_list[0][2])
 
     def get_reviewer(self, r_term):
         """Returns reviewer as creator object or None if failed.
@@ -683,7 +687,7 @@ class ReviewParser(BaseParser):
             self.logger.log(msg)
             return
         try:
-            return self.builder.create_entity(self.doc, unicode(reviewer_list[0][2]))
+            return self.builder.create_entity(self.doc, six.text_type(reviewer_list[0][2]))
         except SPDXValueError:
             self.value_error('REVIEWER_VALUE', reviewer_list[0][2])
 
@@ -726,13 +730,13 @@ class Parser(PackageParser, FileParser, ReviewParser):
         """Parses creators, creater and comment."""
         for _s, _p, o in self.graph.triples((ci_term, self.spdx_namespace['creator'], None)):
             try:
-                ent = self.builder.create_entity(self.doc, unicode(o))
+                ent = self.builder.create_entity(self.doc, six.text_type(o))
                 self.builder.add_creator(self.doc, ent)
             except SPDXValueError:
                 self.value_error('CREATOR_VALUE', o)
         for _s, _p, o in self.graph.triples((ci_term, self.spdx_namespace['created'], None)):
             try:
-                self.builder.set_created_date(self.doc, unicode(o))
+                self.builder.set_created_date(self.doc, six.text_type(o))
             except SPDXValueError:
                 self.value_error('CREATED_VALUE', o)
             except CardinalityError:
@@ -740,13 +744,13 @@ class Parser(PackageParser, FileParser, ReviewParser):
                 break
         for _s, _p, o in self.graph.triples((ci_term, RDFS.comment, None)):
             try:
-                self.builder.set_creation_comment(self.doc, unicode(o))
+                self.builder.set_creation_comment(self.doc, six.text_type(o))
             except CardinalityError:
                 self.more_than_one_error('CreationInfo comment')
                 break
         for _s, _p, o in self.graph.triples((ci_term, self.spdx_namespace['licenseListVersion'], None)):
             try:
-                self.builder.set_lics_list_ver(self.doc, unicode(o))
+                self.builder.set_lics_list_ver(self.doc, six.text_type(o))
             except CardinalityError:
                 self.more_than_one_error('licenseListVersion')
                 break
@@ -757,7 +761,7 @@ class Parser(PackageParser, FileParser, ReviewParser):
         """Parses the version, data license and comment."""
         for _s, _p, o in self.graph.triples((doc_term, self.spdx_namespace['specVersion'], None)):
             try:
-                self.builder.set_doc_version(self.doc, unicode(o))
+                self.builder.set_doc_version(self.doc, six.text_type(o))
             except SPDXValueError:
                 self.value_error('DOC_VERS_VALUE', o)
             except CardinalityError:
@@ -765,7 +769,7 @@ class Parser(PackageParser, FileParser, ReviewParser):
                 break
         for _s, _p, o in self.graph.triples((doc_term, self.spdx_namespace['dataLicense'], None)):
             try:
-                self.builder.set_doc_data_lic(self.doc, unicode(o))
+                self.builder.set_doc_data_lic(self.doc, six.text_type(o))
             except SPDXValueError:
                 self.value_error('DOC_D_LICS', o)
             except CardinalityError:
@@ -773,7 +777,7 @@ class Parser(PackageParser, FileParser, ReviewParser):
                 break
         for _s, _p, o in self.graph.triples((doc_term, RDFS.comment, None)):
             try:
-                self.builder.set_doc_comment(self.doc, unicode(o))
+                self.builder.set_doc_comment(self.doc, six.text_type(o))
             except CardinalityError:
                 self.more_than_one_error('Document comment')
                 break

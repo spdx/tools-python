@@ -21,7 +21,8 @@ setup(
     test_suite='setup.test_suite',
     install_requires=[
         'ply',
-        'rdflib'
+        'rdflib',
+        'six'
     ],
     author='Ahmed H. Ismail',
     author_email='ahm3d.hisham@gmail.com',

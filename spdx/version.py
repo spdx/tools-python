@@ -42,9 +42,27 @@ class Version(object):
             return None
 
     def __cmp__(self, other):
-        if self.major == other.major:
-            return self.minor - other.minor
-        elif self.major < other.major:
+        if self.__lt__(other):
             return -1
-        else:
+        elif self.__gt__(other):
             return 1
+        else:
+            return 0
+
+    def __eq__(self, other):
+        return self.major == other.major and self.minor == other.minor
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __lt__(self, other):
+        return self.major < other.major or (self.major == other.major and self.minor < other.minor)
+
+    def __le__(self, other):
+        return self.__lt__(other) or self.__eq__(other)
+
+    def __gt__(self, other):
+        return self.major > other.major or (self.major == other.major and self.minor > other.minor)
+
+    def __ge__(self, other):
+        return self.__gt__(other) or self.__eq__(other)

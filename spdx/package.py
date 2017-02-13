@@ -12,6 +12,8 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+from six.moves import reduce
+
 from spdx import checksum
 from spdx import creationinfo
 from spdx import document

@@ -15,6 +15,8 @@ from __future__ import print_function
 
 import re
 
+from six import string_types
+
 from spdx import checksum
 from spdx import creationinfo
 from spdx import document
@@ -574,7 +576,7 @@ class PackageBuilder(object):
         if not self.package_cr_text_set:
             self.package_cr_text_set = True
             if validations.validate_pkg_cr_text(text):
-                if isinstance(text, basestring):
+                if isinstance(text, string_types):
                     doc.package.cr_text = str_from_text(text)
                 else:
                     doc.package.cr_text = text  # None or NoAssert
@@ -757,7 +759,7 @@ class FileBuilder(object):
             if not self.file_copytext_set:
                 self.file_copytext_set = True
                 if validations.validate_file_cpyright(text):
-                    if isinstance(text, basestring):
+                    if isinstance(text, string_types):
                         self.file(doc).copyright = str_from_text(text)
                     else:
                         self.file(doc).copyright = text  # None or NoAssert

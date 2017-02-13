@@ -13,10 +13,12 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-from itertools import izip_longest as zip_longest
+from six.moves import zip_longest
 
 from spdx import document
 from spdx import file as spdx_file
+
+import six
 
 
 class InvalidDocumentError(Exception):
@@ -89,7 +91,7 @@ def write_file(spdx_file, out):
         write_value('LicenseConcluded', spdx_file.conc_lics, out)
     for lics in spdx_file.licenses_in_file:
         write_value('LicenseInfoInFile', lics, out)
-    if isinstance(spdx_file.copyright, basestring):
+    if isinstance(spdx_file.copyright, six.string_types):
         write_text_value('FileCopyrightText', spdx_file.copyright, out)
     else:
         write_value('FileCopyrightText', spdx_file.copyright, out)
@@ -152,7 +154,7 @@ def write_package(package, out):
     if package.has_optional_field('license_comment'):
         write_text_value('PackageLicenseComments', package.license_comment, out)
     # cr_text is either free form text or NONE or NOASSERTION.
-    if isinstance(package.cr_text, basestring):
+    if isinstance(package.cr_text, six.string_types):
         write_text_value('PackageCopyrightText', package.cr_text, out)
     else:
         write_value('PackageCopyrightText', package.cr_text, out)

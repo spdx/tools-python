@@ -17,6 +17,8 @@ import re
 
 import rdflib
 
+import six
+
 from spdx import creationinfo
 from spdx import utils
 from spdx import document
@@ -69,7 +71,7 @@ def validate_pkg_originator(value, optional=False):
 def validate_pkg_homepage(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (basestring, utils.NoAssert, utils.SPDXNone)):
+    elif type(value) in [six.string_types, utils.NoAssert, utils.SPDXNone]:
         return True
     else:
         return False
@@ -183,4 +185,4 @@ def validate_extr_lic_name(value, optional=False):
     if value is None:
         return optional
     else:
-        return isinstance(value, (basestring, utils.NoAssert, rdflib.Literal))
+        return isinstance(value, (six.string_types, utils.NoAssert, rdflib.Literal))
