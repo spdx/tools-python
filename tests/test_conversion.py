@@ -46,7 +46,7 @@ class TestConversions(TestCase):
 
     def parse_rdf_file(self, file_name):
         """Returns tuple error, document."""
-        with open(file_name, mode='r') as infile:
+        with open(file_name, mode='rb') as infile:
             rdfparser = RDFParser(RDFBuilder(), StandardLogger())
             return rdfparser.parse(infile)
 
@@ -62,7 +62,7 @@ class TestConversions(TestCase):
             tvwriter.write_document(document, out)
 
     def write_rdf_file(self, document, file_name):
-        with open(file_name, mode='w') as out:
+        with open(file_name, mode='wb') as out:
             rdfwriter.write_document(document, out)
 
     def test_tagvalue_rdf(self):
