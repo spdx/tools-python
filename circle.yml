@@ -1,0 +1,21 @@
+machine:
+  pre:
+    - python --version
+    - brew install pyenv
+    - echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+    - source ~/.bash_profile
+    - pyenv install 3.4.2
+    - pyenv install 3.5.2
+    - pyenv versions
+
+dependencies:
+  override:
+    - pyenv global system && python --version && python setup.py install
+    - pyenv global 3.4.2 && python --version && python setup.py install
+    - pyenv global 3.5.2 && python --version && python setup.py install
+
+test:
+  override:
+    - pyenv global system && python --version && python setup.py test
+    - pyenv global 3.4.2 && python --version && python setup.py test
+    - pyenv global 3.5.2 && python --version && python setup.py test
