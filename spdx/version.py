@@ -13,9 +13,11 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+from functools import total_ordering
 import re
 
 
+@total_ordering
 class Version(object):
     """Version number composed of major and minor.
        Fields:
@@ -41,28 +43,9 @@ class Version(object):
         else:
             return None
 
-    def __cmp__(self, other):
-        if self.__lt__(other):
-            return -1
-        elif self.__gt__(other):
-            return 1
-        else:
-            return 0
-
     def __eq__(self, other):
         return self.major == other.major and self.minor == other.minor
 
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
     def __lt__(self, other):
-        return self.major < other.major or (self.major == other.major and self.minor < other.minor)
-
-    def __le__(self, other):
-        return self.__lt__(other) or self.__eq__(other)
-
-    def __gt__(self, other):
-        return self.major > other.major or (self.major == other.major and self.minor > other.minor)
-
-    def __ge__(self, other):
-        return self.__gt__(other) or self.__eq__(other)
+        return (self.major < other.major
+            or (self.major == other.major and self.minor < other.minor))

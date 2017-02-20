@@ -16,6 +16,7 @@ from __future__ import print_function
 import re
 
 from ply import yacc
+import six
 
 from spdx import config
 from spdx import utils
@@ -26,7 +27,6 @@ from spdx.parsers.builderexceptions import IncompatibleVersionError
 from spdx.parsers.lexers.tagvalue import Lexer
 from spdx import document
 
-import six
 
 ERROR_MESSAGES = {
     'TOOL_VALUE': 'Invalid tool value {0} at line: {1}',

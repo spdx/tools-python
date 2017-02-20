@@ -16,13 +16,12 @@ from __future__ import print_function
 import re
 
 import six
+from six.moves import reduce
 
 from rdflib import Graph
 from rdflib import Namespace
 from rdflib import RDF
 from rdflib import RDFS
-
-from six.moves import reduce
 
 from spdx import document
 from spdx import utils

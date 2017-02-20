@@ -12,6 +12,8 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+import hashlib
+
 from six.moves import reduce
 
 from spdx import checksum
@@ -19,7 +21,6 @@ from spdx import creationinfo
 from spdx import document
 from spdx import utils
 
-import hashlib
 
 class Package(object):
 

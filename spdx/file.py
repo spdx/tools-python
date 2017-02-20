@@ -13,13 +13,14 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
+import hashlib
+
+import six
+
 from spdx import checksum
 from spdx import document
 from spdx import utils
 
-import hashlib
-
-import six
 
 class FileType(object):
     SOURCE = 1
@@ -50,7 +51,7 @@ class File(object):
     artifact_of_project_uri - list of project uris, possibly empty.
     """
 
-    def __init__(self, name, chk_sum = None):
+    def __init__(self, name, chk_sum=None):
         super(File, self).__init__()
         self.name = name
         self.comment = None
@@ -96,7 +97,8 @@ class File(object):
                 self.validate_artifacts(messages))
 
     def validate_copyright(self, messages):
-        if type(self.copyright) in [six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone]:
+        if isinstance(self.copyright, (six.string_types, six.text_type, 
+                                       utils.NoAssert, utils.SPDXNone)):
             return True
         else:
             messages.append('File copyright must be str or unicode or utils.NoAssert or utils.SPDXNone')
