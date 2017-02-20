@@ -17,6 +17,15 @@ from spdx import config
 from spdx.version import Version
 
 
+def _add_parens(required, text):
+    """
+    Add parens around a license expression if `required` is True, otherwise
+    return `text` unmodified.
+    """
+    if required:
+        return '(' + str(text) + ')'
+    return text
+
 class License(object):
 
     """Represents a License."""
@@ -78,25 +87,33 @@ class License(object):
         return self.identifier.__hash__()
 
 
-class LicenseConjuction(License):
+class LicenseConjunction(License):
 
-    """A conjuction of two licenses."""
+    """A conjunction of two licenses."""
 
     def __init__(self, license_1, license_2):
         self.license_1 = license_1
         self.license_2 = license_2
-        super(LicenseConjuction, self).__init__(
+        super(LicenseConjunction, self).__init__(
             self.full_name, self.identifier)
 
     @property
     def full_name(self):
-        return '{0} AND {1}'.format(self.license_1.full_name,
-                                    self.license_2.full_name)
+        license_1_complex = type(self.license_1) == LicenseDisjunction
+        license_2_complex = type(self.license_2) == LicenseDisjunction
+
+        return '{0} AND {1}'.format(
+            _add_parens(license_1_complex, self.license_1.full_name),
+            _add_parens(license_2_complex, self.license_2.full_name))
 
     @property
     def identifier(self):
-        return '{0} AND {1}'.format(self.license_1.identifier,
-                                    self.license_2.identifier)
+        license_1_complex = type(self.license_1) == LicenseDisjunction
+        license_2_complex = type(self.license_2) == LicenseDisjunction
+
+        return '{0} AND {1}'.format(
+            _add_parens(license_1_complex, self.license_1.identifier),
+            _add_parens(license_2_complex, self.license_2.identifier))
 
 
 class LicenseDisjunction(License):
@@ -111,13 +128,21 @@ class LicenseDisjunction(License):
 
     @property
     def full_name(self):
-        return '{0} OR {1}'.format(self.license_1.full_name,
-                                   self.license_2.full_name)
+        license_1_complex = type(self.license_1) == LicenseConjunction
+        license_2_complex = type(self.license_2) == LicenseConjunction
+
+        return '{0} OR {1}'.format(
+            _add_parens(license_1_complex, self.license_1.full_name),
+            _add_parens(license_2_complex, self.license_2.full_name))
 
     @property
     def identifier(self):
-        return '{0} OR {1}'.format(self.license_1.identifier,
-                                   self.license_2.identifier)
+        license_1_complex = type(self.license_1) == LicenseConjunction
+        license_2_complex = type(self.license_2) == LicenseConjunction
+
+        return '{0} OR {1}'.format(
+            _add_parens(license_1_complex, self.license_1.identifier),
+            _add_parens(license_2_complex, self.license_2.identifier))
 
 class ExtractedLicense(License):
     """Represents an ExtractedLicense.

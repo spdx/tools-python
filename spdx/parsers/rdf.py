@@ -235,7 +235,7 @@ class LicenseParser(BaseParser):
                 self.value_error('LICS_LIST_MEMBER', lics_member)
                 break
         if len(licenses) > 1:
-            return reduce(lambda a, b: document.LicenseConjuction(a, b), licenses)
+            return reduce(lambda a, b: document.LicenseConjunction(a, b), licenses)
         else:
             self.value_error('PKG_CONC_LIST', '')
             return
