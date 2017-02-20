@@ -22,9 +22,8 @@ def _add_parens(required, text):
     Add parens around a license expression if `required` is True, otherwise
     return `text` unmodified.
     """
-    if required:
-        return '(' + str(text) + ')'
-    return text
+    return '({})'.format(text) if required else text
+
 
 class License(object):
 
