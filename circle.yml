@@ -1,6 +1,7 @@
 machine:
   pre:
     - python --version
+    - pip install virtualenv
     - brew install pyenv
     - echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
     - source ~/.bash_profile
