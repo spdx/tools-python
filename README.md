@@ -1,5 +1,16 @@
 # Python SPDX Library to parse, validate and create SPDX documents
 
+| Linux | macOS | Windows |
+| :---- | :------ | :---- |
+[ ![Linux build status][1]][2] | [![macOS build status][3]][4] | [![Windows build status][5]][6] |
+
+[1]: https://travis-ci.org/spdx/tools-python.svg?branch=master
+[2]: https://travis-ci.org/spdx/tools-python
+[3]: https://circleci.com/gh/spdx/tools-python/tree/master.svg?style=shield&circle-token=36cca2dfa3639886fc34e22d92495a6773bdae6d
+[4]: https://circleci.com/gh/spdx/tools-python/tree/master
+[5]: https://ci.appveyor.com/api/projects/status/0bf9glha2yg9x8ef/branch/master?svg=true
+[6]: https://ci.appveyor.com/project/spdx/tools-python/branch/master
+
 This library implements an SPDX tag/value and RDF parser, validator and handler in Python.
 This is the result of an initial GSoC contribution by @ah450 https://github.com/ah450 and 
 is maintained by a community of SPDX adopters and enthusiasts.
