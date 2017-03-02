@@ -12,6 +12,7 @@
 
 from __future__ import absolute_import
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import csv
 import os
@@ -31,8 +32,8 @@ class TwoWayDict(dict):
 
 
 def load_license_list():
-    FILE_NAME = os.path.join(os.path.dirname(__file__), 'spdx_licenselist.csv')
-    with open(FILE_NAME, 'r') as file_in:
+    file_name = os.path.join(os.path.dirname(__file__), 'spdx_licenselist.csv')
+    with open(file_name, 'r') as file_in:
         reader = csv.DictReader(file_in)
         dct = TwoWayDict()
         for entry in reader:

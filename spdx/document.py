@@ -12,6 +12,7 @@
 
 from __future__ import absolute_import
 from __future__ import print_function
+from __future__ import unicode_literals
 
 from spdx import config
 from spdx.version import Version
@@ -37,7 +38,7 @@ class License(object):
     @classmethod
     def from_identifier(cls, identifier):
         """If identifier exists in config.LICENSE_MAP
-        the full_name is retrived from it. Otherwise
+        the full_name is retrieved from it. Otherwise
         the full_name is the same as the identifier.
         """
         if identifier in config.LICENSE_MAP.keys():
