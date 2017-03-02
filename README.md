@@ -1,5 +1,15 @@
-Python SPDX Library to parse, validate and create SPDX documents
-==========================
+# Python SPDX Library to parse, validate and create SPDX documents
+
+| Linux | macOS | Windows |
+| :---- | :------ | :---- |
+[ ![Linux build status][1]][2] | [![macOS build status][3]][4] | [![Windows build status][5]][6] |
+
+[1]: https://travis-ci.org/spdx/tools-python.svg?branch=master
+[2]: https://travis-ci.org/spdx/tools-python
+[3]: https://circleci.com/gh/spdx/tools-python/tree/master.svg?style=shield&circle-token=36cca2dfa3639886fc34e22d92495a6773bdae6d
+[4]: https://circleci.com/gh/spdx/tools-python/tree/master
+[5]: https://ci.appveyor.com/api/projects/status/0bf9glha2yg9x8ef/branch/master?svg=true
+[6]: https://ci.appveyor.com/project/spdx/tools-python/branch/master
 
 This library implements an SPDX tag/value and RDF parser, validator and handler in Python.
 This is the result of an initial GSoC contribution by @ah450 https://github.com/ah450 and 
@@ -12,28 +22,25 @@ Issues: https://github.com/spdx/tools-python/issues
 Pypi: https://pypi.python.org/pypi/spdx-tools
 
 
-License:
-========
+# License
 
-Apache-2.0
+[Apache-2.0](LICENSE)
 
 
-Features:
-==================
+# Features
 
 * API to create and manipulate SPDX documents.
 * Parse and create Tag/Value format SPDX files
 * Parse and create RDF format SPDX files
 
 
-TODOs:
-======
+# TODOs
 
 * Update to full SPDX v2.1
 * Add to full license expression support
 
-How to use:
-===========
+
+# How to use
 
 Example tag/value parsing usage:
 ```Python
@@ -68,30 +75,26 @@ The `examples` directory contains several code samples:
   `python pp_rdf.py data/SPDXRdfExample.rdf pretty.rdf`
 
 
-Installation:
-=============
+# Installation
 
 Clone or download the repository and run `python setup.py install`. (In a virtualenv, of course)
 
 or install from Pypi with `pip install spdx-tools`
 
 
-How to run tests:
-=================
+# How to run tests
 
 From the project root directory run: `python setup.py test`.
 You can use another test runner such as pytest or nose at your preference.
 
 
-Dependencies:
-=============
+# Dependencies
 
 * PLY : https://pypi.python.org/pypi/ply/ used for parsing.
 * rdflib : https://pypi.python.org/pypi/rdflib/ for for handling RDF. 
 
 
-Support:
-=======
+# Support
 
 * Submit issues, questions or feedback at: https://github.com/spdx/tools-python/issues
 * Join the dicussion on https://lists.spdx.org/mailman/listinfo/spdx-tech and 
