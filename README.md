@@ -13,7 +13,7 @@ Pypi: https://pypi.python.org/pypi/spdx-tools
 
 # License
 
-Apache-2.0
+[Apache-2.0](LICENSE)
 
 
 # Features
