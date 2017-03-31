@@ -16,7 +16,7 @@ from __future__ import print_function
 import unittest
 from unittest import TestCase
 
-import testing_utils
+import tests.testing_utils as testing_utils
 
 from spdx.document import Document, License
 import spdx.parsers.tagvaluebuilders as builders
