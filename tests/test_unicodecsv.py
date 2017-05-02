@@ -10,6 +10,7 @@ import unittest
 import csv
 import sys
 
+
 class TestUnicodeCsv(unittest.TestCase):
 
 	def test_unicode(self):
