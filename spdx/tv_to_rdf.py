@@ -12,18 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
+
 import codecs
 import sys
 
-from spdx.parsers.tagvalue import Parser
 from spdx.parsers.loggers import StandardLogger
-from spdx.parsers.tagvaluebuilders import Builder
 from spdx.writers.rdf import write_document
+from spdx.parsers.tagvalue import Parser
+from spdx.parsers.tagvaluebuilders import Builder
 
 
 def tv_to_rdf(infile_name, outfile_name):
     """
     Convert a SPDX file from tag/value format to RDF format.
+    Return True on sucess, False otherwise. 
     """
     parser = Parser(Builder(), StandardLogger())
     parser.build()
@@ -33,12 +38,29 @@ def tv_to_rdf(infile_name, outfile_name):
         if not error:
             with open(outfile_name, mode='w') as outfile:
                 write_document(document, outfile)
+            return True
         else:
-            print 'Errors encountered while parsing RDF file.'
+            print('Errors encountered while parsing RDF file.')
             messages = []
             document.validate(messages)
-            print '\n'.join(messages)
+            print('\n'.join(messages))
+            return False
+
+
+def main():
+    args= sys.argv[1:]
+    if not args:
+        print(
+            'Usage: spdx-tv2rdf <tag-value-file> <rdf-file>\n'
+            'Convert an SPDX tag/value document to RDF.'
+        )
+        sys.exit(1)
+
+    tvfile = args[0]
+    rdffile = args[1]
+    success = tv_to_rdf(tvfile, rdffile)
+    sys.exit(0 if sucess else 1)
 
 
 if __name__ == '__main__':
-    tv_to_rdf(*sys.argv[1:])
+    main()
