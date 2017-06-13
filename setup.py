@@ -13,7 +13,7 @@ def test_suite():
 
 setup(
     name='spdx-tools',
-    version='0.5.0',
+    version='0.5.1',
     description='SPDX parser and tools.',
     packages=['spdx', 'spdx.parsers', 'spdx.writers', 'spdx.parsers.lexers'],
     package_data={'spdx': ['spdx_licenselist.csv']},
@@ -23,7 +23,7 @@ setup(
     install_requires=[
         'ply',
         'rdflib',
-        'six'
+        'six',
     ],
     entry_points={
         'console_scripts': [

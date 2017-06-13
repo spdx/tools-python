@@ -14,31 +14,24 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import csv
+import codecs
 import os
 
 from spdx.version import Version
 
 
-class TwoWayDict(dict):
-
-    def __setitem__(self, key, value):
-        dict.__setitem__(self, key, value)
-        dict.__setitem__(self, value, key)
-
-    def __delitem__(self, key):
-        dict.__delitem__(self, self[key])
-        dict.__delitem__(self, key)
-
-
-def load_license_list():
-    file_name = os.path.join(os.path.dirname(__file__), 'spdx_licenselist.csv')
-    with open(file_name, 'r') as file_in:
-        reader = csv.DictReader(file_in)
-        dct = TwoWayDict()
-        for entry in reader:
-            dct[entry['Full name of License']] = entry['License Identifier']
-    return dct
+def load_license_list(file_name=os.path.join(os.path.dirname(__file__), 'spdx_licenselist.csv')):
+    """
+    Return a mapping of licenses name->id and id->name loaded from a
+    CSV file as "name,identifier"
+    """
+    licenses_map = {}
+    with codecs.open(file_name, 'rb', encoding='utf-8') as licenses:
+        for line in licenses:
+            name, identifier = line.strip().split(',')
+            licenses_map[name] = identifier
+            licenses_map[identifier] = name
+    return licenses_map
 
 
 LICENSE_MAP = load_license_list()
