@@ -1,0 +1,22 @@
+graft etc
+graft tests
+graft spdx
+graft data
+graft examples
+
+prune src/spdx_tools.egg-info
+
+include spdx/licenses.json
+include README.md
+include CHANGELOG.rst
+include LICENSE
+include MANIFEST.in
+include setup.py
+include setup.cfg
+include .gitignore
+include MANIFEST.in
+include .travis.yml
+include circle.yml
+include appveyor.yml
+
+global-exclude *.py[co] __pycache__ *.*~
