@@ -15,11 +15,13 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from datetime import datetime
+from functools import total_ordering
 
 from spdx import config
 from spdx import utils
 
 
+@total_ordering
 class Creator(object):
     """
     Creator enity.
@@ -31,9 +33,13 @@ class Creator(object):
 
     # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
-        return self.name == other.name
+        return isinstance(other, Creator) and self.name == other.name
+
+    def __lt__(self, other):
+        return isinstance(other, Creator) and self.name < other.name
 
 
+@total_ordering
 class Organization(Creator):
     """
     Organization entity.
@@ -48,13 +54,13 @@ class Organization(Creator):
 
     # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
-        if type(other) is not Organization:
-            return False
-        else:
-            return (self.name + self.email) == (other.name + other.email)
+        return isinstance(other, Organization) and (self.name, self.email) == (other.name,  other.email)
+
+    def __lt__(self, other):
+        return isinstance(other, Organization) and (self.name, self.email) < (other.name,  other.email)
 
     def to_value(self):
-        if self.email is not None:
+        if self.email:
             return 'Organization: {0} ({1})'.format(self.name, self.email)
         else:
             return 'Organization: {0}'.format(self.name)
@@ -63,6 +69,7 @@ class Organization(Creator):
         return self.to_value()
 
 
+@total_ordering
 class Person(Creator):
     """
     Person entity.
@@ -77,10 +84,10 @@ class Person(Creator):
 
     # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
-        if type(other) is not Person:
-            return False
-        else:
-            return (self.name + self.email) == (other.name + other.email)
+        return isinstance(other, Person) and (self.name, self.email) == (other.name,  other.email)
+
+    def __lt__(self, other):
+        return isinstance(other, Person) and (self.name, self.email) < (other.name,  other.email)
 
     def to_value(self):
         if self.email is not None:

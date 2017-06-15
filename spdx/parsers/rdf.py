@@ -106,12 +106,14 @@ class LicenseParser(BaseParser):
         super(LicenseParser, self).__init__(builder, logger)
 
     def handle_lics(self, lics):
-        """Takes a license resource and returns a license object."""
+        """
+        Return a License from a `lics` license resource.
+        """
         # Handle extracted licensing info type.
         if (lics, RDF.type, self.spdx_namespace['ExtractedLicensingInfo']) in self.graph:
             return self.parse_only_extr_license(lics)
 
-        # Assume resource
+        # Assume resource, hence the path separator
         ident_start = lics.rfind('/') + 1
         if ident_start == 0:
             # special values such as spdx:noassertion
@@ -131,33 +133,48 @@ class LicenseParser(BaseParser):
             return document.License.from_identifier(lics[ident_start:])
 
     def get_extr_license_ident(self, extr_lic):
-        """Returns identifier or None if failed"""
-        ident_list = list(self.graph.triples((extr_lic, self.spdx_namespace['licenseId'], None)))
-        if len(ident_list) > 1:
-            self.more_than_one_error('extracted license identifier')
-            return
-        elif len(ident_list) == 0:
+        """
+        Return an a license identifier from an ExtractedLicense or None.
+        """
+        identifier_tripples = list(self.graph.triples((extr_lic, self.spdx_namespace['licenseId'], None)))
+
+        if not identifier_tripples:
             self.error = True
             msg = 'Extracted license must have licenseId property.'
             self.logger.log(msg)
             return
-        return ident_list[0][2]
+
+        if len(identifier_tripples) > 1:
+            self.more_than_one_error('extracted license identifier_tripples')
+            return
+
+        identifier_tripple = identifier_tripples[0]
+        _s, _p, identifier = identifier_tripple
+        return identifier
 
     def get_extr_license_text(self, extr_lic):
-        """Returns extracted text or None if failed"""
-        extr_text_list = list(self.graph.triples((extr_lic, self.spdx_namespace['extractedText'], None)))
-        if len(extr_text_list) > 1:
-            self.more_than_one_error('extracted license text')
-            return
-        elif len(extr_text_list) == 0:
+        """
+        Return extracted text  from an ExtractedLicense or None.
+        """
+        text_tripples = list(self.graph.triples((extr_lic, self.spdx_namespace['extractedText'], None)))
+        if not text_tripples:
             self.error = True
             msg = 'Extracted license must have extractedText property'
             self.logger.log(msg)
             return
-        return extr_text_list[0][2]
+
+        if len(text_tripples) > 1:
+            self.more_than_one_error('extracted license text')
+            return
+
+        text_tripple = text_tripples[0]
+        _s, _p, text = text_tripple
+        return text
 
     def get_extr_lic_name(self, extr_lic):
-        """Returns extracted license name or None if failed"""
+        """
+        Return the license name from an ExtractedLicense or None
+        """
         extr_name_list = list(self.graph.triples((extr_lic, self.spdx_namespace['licenseName'], None)))
         if len(extr_name_list) > 1:
             self.more_than_one_error('extracted license name')
@@ -167,12 +184,16 @@ class LicenseParser(BaseParser):
         return self.to_special_value(extr_name_list[0][2])
 
     def get_extr_lics_xref(self, extr_lic):
-        """Returns list of cross references"""
+        """
+        Return a list of cross references.
+        """
         xrefs = list(self.graph.triples((extr_lic, RDFS.seeAlso, None)))
         return map(lambda xref_triple: xref_triple[2], xrefs)
 
     def get_extr_lics_comment(self, extr_lics):
-        """Returns license comment or None if failed or none exists"""
+        """
+        Return license comment or None.
+        """
         comment_list = list(self.graph.triples(
             (extr_lics, RDFS.comment, None)))
         if len(comment_list) > 1 :
@@ -184,9 +205,10 @@ class LicenseParser(BaseParser):
             return
 
     def parse_only_extr_license(self, extr_lic):
-        """Returns a License object to represent a license object.
+        """
+        Return an ExtractedLicense object to represent a license object.
         But does not add it to the SPDXDocument model.
-        Returns None if failed.
+        Return None if failed.
         """
         # Grab all possible values
         ident = self.get_extr_license_ident(extr_lic)
@@ -195,11 +217,12 @@ class LicenseParser(BaseParser):
         xrefs = self.get_extr_lics_xref(extr_lic)
         name = self.get_extr_lic_name(extr_lic)
 
-        if ident is None:
+        if not ident:
             # Must have identifier
             return
 
         # Set fields
+        # FIXME: the constructor of the license should alwas accept a name
         lic = document.ExtractedLicense(ident)
         if text is not None:
             lic.text = text
@@ -211,17 +234,20 @@ class LicenseParser(BaseParser):
         return lic
 
     def handle_extracted_license(self, extr_lic):
-        """Builds an extracted license and returns it.
-        returns None if failed. Note that this function
-        adds the license to the document model.
+        """
+        Build and return an ExtractedLicense or None.
+        Note that this function adds the license to the document.
         """
         lic = self.parse_only_extr_license(extr_lic)
         if lic is not None:
             self.doc.add_extr_lic(lic)
         return lic
 
-    def handle_conjunctive_list(self, lics_set):
-        """Returns a license representing the conjunction or None if encountered errors"""
+    def _handle_license_list(self, lics_set, cls=None):
+        """
+        Return a license representing a `cls` object (LicenseConjunction
+        or LicenseDisjunction) from a list of license resources or None.
+        """
         licenses = []
         for _, _, lics_member in self.graph.triples(
             (lics_set, self.spdx_namespace['member'], None)):
@@ -236,29 +262,24 @@ class LicenseParser(BaseParser):
                 self.value_error('LICS_LIST_MEMBER', lics_member)
                 break
         if len(licenses) > 1:
-            return reduce(lambda a, b: document.LicenseConjunction(a, b), licenses)
+            return reduce(lambda a, b: cls(a, b), licenses)
         else:
             self.value_error('PKG_CONC_LIST', '')
             return
 
+    def handle_conjunctive_list(self, lics_set):
+        """
+        Return a license representing the conjunction from a list of
+        license resources or None.
+        """
+        return self._handle_license_list(lics_set, cls=document.LicenseConjunction)
+
     def handle_disjunctive_list(self, lics_set):
-        """Returns a license representing the disjunction or None if encountered errors"""
-        licenses = []
-        for _, _, lics_member in self.graph.triples((lics_set, self.spdx_namespace['member'], None)):
-            try:
-                if (lics_member, RDF.type, self.spdx_namespace['ExtractedLicensingInfo']) in self.graph:
-                    lics = self.handle_extracted_license(lics_member)
-                    if lics is not None:
-                        licenses.append(lics)
-                else:
-                    licenses.append(self.handle_lics(lics_member))
-            except SPDXValueError:
-                self.value_error('LICS_LIST_MEMBER', lics_member)
-        if len(licenses) > 1:
-            return reduce(lambda a, b: document.LicenseDisjunction(a, b), licenses)
-        else:
-            self.value_error('PKG_CONC_LIST', '')
-            return
+        """
+        Return a license representing the disjunction from a list of
+        license resources or None.
+        """
+        return self._handle_license_list(lics_set, cls=document.LicenseDisjunction)
 
 
 class PackageParser(LicenseParser):
@@ -498,7 +519,7 @@ class FileParser(LicenseParser):
         self.p_file_artifact(f_term, self.spdx_namespace['artifactOf'])
         self.p_file_comment(f_term, RDFS.comment)
         self.p_file_notice(f_term, self.spdx_namespace['noticeText'])
-        self.p_file_contributer(f_term, self.spdx_namespace['fileContributor'])
+        self.p_file_contributor(f_term, self.spdx_namespace['fileContributor'])
         self.p_file_depends(f_term, self.spdx_namespace['fileDependency'])
 
     def get_file_name(self, f_term):
@@ -518,10 +539,12 @@ class FileParser(LicenseParser):
                 msg = 'File depends on file with no name'
                 self.logger.log(msg)
 
-    def p_file_contributer(self, f_term, predicate):
-        """Parses all file contributers and adds them to the model."""
-        for _, _, contributer in self.graph.triples((f_term, predicate, None)):
-            self.builder.add_file_contribution(self.doc, six.text_type(contributer))
+    def p_file_contributor(self, f_term, predicate):
+        """
+        Parse all file contributors and adds them to the model.
+        """
+        for _, _, contributor in self.graph.triples((f_term, predicate, None)):
+            self.builder.add_file_contribution(self.doc, six.text_type(contributor))
 
     def p_file_notice(self, f_term, predicate):
         """Sets file notice text."""

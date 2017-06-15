@@ -15,24 +15,40 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from datetime import datetime
+from functools import total_ordering
 
 from spdx.utils import datetime_iso_format
 
 
+@total_ordering
 class Review(object):
 
-    """Document review information.
-        Fields:
-        reviewer: Person, Organization or tool that reviewed the SPDX file.
-            Mandotary one.
-        review_date: Review date, mandatory one. Type: datetime.
-        comment: Review comment. Optional one. Type: str.
+    """
+    Document review information.
+    Fields:
+    - reviewer: Person, Organization or tool that reviewed the SPDX file.
+      Mandatory one.
+    - review_date: Review date, mandatory one. Type: datetime.
+    - comment: Review comment. Optional one. Type: str.
     """
 
     def __init__(self, reviewer=None, review_date=None, comment=None):
         self.reviewer = reviewer
         self.review_date = review_date
         self.comment = comment
+
+    def __eq__(self, other):
+        return (
+            isinstance(other, Review) and self.reviewer == other.reviewer
+            and self.review_date == other.review_date
+            and self.comment == other.comment
+        )
+
+    def __lt__(self, other):
+        return (
+            (self.reviewer, self.review_date, self.comment) <
+            (other.reviewer, other.review_date, other.comment,)
+        )
 
     def set_review_date_now(self):
         self.review_date = datetime.utcnow()

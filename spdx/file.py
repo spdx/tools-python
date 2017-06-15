@@ -14,6 +14,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from functools import total_ordering
 import hashlib
 
 import six
@@ -29,15 +30,15 @@ class FileType(object):
     ARCHIVE = 3
     OTHER = 4
 
-
+@total_ordering
 class File(object):
     """
     Represent an SPDX file.
     Fields:
-    - - name: File name, str mandatory one.
+    - name: File name, str mandatory one.
     - comment: File comment str, Optional zero or one.
     - type: one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
-    - and FileType.OTHER, optional zero or one.
+      and FileType.OTHER, optional zero or one.
     - chk_sum: SHA1, Mandatory one.
     - conc_lics: Mandatory one. document.License or utils.NoAssert or utils.SPDXNone.
     - licenses_in_file: list of licenses found in file, mandatory one or more.
@@ -46,7 +47,7 @@ class File(object):
     - license_comment: Optional.
     - copyright: Copyright text, Mandatory one. utils.NoAssert or utils.SPDXNone or str.
     - notice: optional One, str.
-    - contributers: List of strings.
+    - contributors: List of strings.
     - dependencies: list of file locations.
     - artifact_of_project_name: list of project names, possibly empty.
     - artifact_of_project_home: list of project home page, possibly empty.
@@ -63,30 +64,31 @@ class File(object):
         self.license_comment = None
         self.copyright = None
         self.notice = None
-        self.contributers = []
+        self.contributors = []
         self.dependencies = []
         self.artifact_of_project_name = []
         self.artifact_of_project_home = []
         self.artifact_of_project_uri = []
 
+    def __eq__(self, other):
+        return isinstance(other, File) and self.name == other.name
+
+    def __lt__(self, other):
+        return self.name < other.name
+
     def add_lics(self, lics):
-        """
-        Append lics to licenses_in_file.
-        """
         self.licenses_in_file.append(lics)
 
     def add_contrib(self, contrib):
-        """
-        Append contrib to contributers.
-        """
-        self.contributers.append(contrib)
+        self.contributors.append(contrib)
 
     def add_depend(self, depend):
-        """Appends depend to dependencies."""
         self.dependencies.append(depend)
 
     def add_artifact(self, symbol, value):
-        """Adds value as artifact_of_project{symbol}."""
+        """
+        Add value as artifact_of_project{symbol}.
+        """
         symbol = 'artifact_of_project_{}'.format(symbol)
         artifact = getattr(self, symbol)
         artifact.append(value)

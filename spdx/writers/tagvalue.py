@@ -28,7 +28,7 @@ class InvalidDocumentError(Exception):
     pass
 
 
-def write_seperators(out):
+def write_separators(out):
     out.write(u'\n' * 2)
 
 
@@ -117,8 +117,8 @@ def write_file(spdx_file, out):
     if spdx_file.has_optional_field('notice'):
         write_text_value('FileNotice', spdx_file.notice, out)
 
-    for contributer in sorted(spdx_file.contributers):
-        write_value('FileContributor', contributer, out)
+    for contributor in sorted(spdx_file.contributors):
+        write_value('FileContributor', contributor, out)
 
     for dependency in sorted(spdx_file.dependencies):
         write_value('FileDependency', dependency, out)
@@ -198,7 +198,7 @@ def write_package(package, out):
 
     # Write sorted files.
     for spdx_file in sorted(package.files):
-        write_seperators(out)
+        write_separators(out)
         write_file(spdx_file, out)
 
 
@@ -207,15 +207,17 @@ def write_extracted_licenses(lics, out):
     Write extracted licenses fields to out.
     """
     write_value('LicenseID', lics.identifier, out)
-    write_text_value('ExtractedText', lics.text, out)
+
     if lics.full_name is not None:
         write_value('LicenseName', lics.full_name, out)
+
+    if lics.comment is not None:
+        write_text_value('LicenseComment', lics.comment, out)
 
     for xref in sorted(lics.cross_ref):
         write_value('LicenseCrossReference', xref, out)
 
-    if lics.comment is not None:
-        write_text_value('LicenseComment', lics.comment, out)
+    write_text_value('ExtractedText', lics.text, out)
 
 
 def write_document(document, out, validate=True):
@@ -236,21 +238,21 @@ def write_document(document, out, validate=True):
     write_value('DataLicense', document.data_license.identifier, out)
     if document.has_comment:
         write_text_value('DocumentComment', document.comment, out)
-    write_seperators(out)
+    write_separators(out)
     # Write out creation info
     write_creation_info(document.creation_info, out)
-    write_seperators(out)
+    write_separators(out)
 
     # Writesorted reviews
     for review in sorted(document.reviews):
         write_review(review, out)
-        write_seperators(out)
+        write_separators(out)
 
     # Write out package info
     write_package(document.package, out)
-    write_seperators(out)
+    write_separators(out)
 
     out.write('# Extracted Licenses\n\n')
     for lic in sorted(document.extracted_licenses):
         write_extracted_licenses(lic, out)
-        write_seperators(out)
+        write_separators(out)

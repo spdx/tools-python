@@ -247,7 +247,7 @@ class FileWriter(LicenseWriter):
             notice_triple = (file_node, self.spdx_namespace.noticeText, doc_file.notice)
             self.graph.add(notice_triple)
 
-        contrib_nodes = map(lambda c: Literal(c), doc_file.contributers)
+        contrib_nodes = map(lambda c: Literal(c), doc_file.contributors)
         contrib_triples = [(file_node, self.spdx_namespace.fileContributor, node) for node in contrib_nodes]
         for triple in contrib_triples:
             self.graph.add(triple)

@@ -137,7 +137,7 @@ class Package(object):
                             'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
             status = False
 
-        if len(self.licenses_from_files) == 0:
+        if not self.licenses_from_files:
             messages.append('Package licenses_from_files can not be empty')
             status = False
 
@@ -146,7 +146,7 @@ class Package(object):
     def validate_files(self, messages):
         # FIXME: we should return messages instead
         messages = messages if messages is not None else []
-        if len(self.files) == 0:
+        if not self.files:
             messages.append('Package must have at least one file.')
             return False
         else:

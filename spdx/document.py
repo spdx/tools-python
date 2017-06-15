@@ -14,6 +14,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from functools import total_ordering
+
 from spdx import config
 
 
@@ -25,6 +27,7 @@ def _add_parens(required, text):
     return '({})'.format(text) if required else text
 
 
+@total_ordering
 class License(object):
     def __init__(self, full_name, identifier):
         self._full_name = full_name
@@ -43,9 +46,10 @@ class License(object):
 
     @classmethod
     def from_full_name(cls, full_name):
-        """If the full_name exists in config.LICENSE_MAP
-        the identifier is retrieved from it. Otherwise
-        the identifier is the same as the full_name.
+        """
+        Returna new License for a full_name. If the full_name exists in
+        config.LICENSE_MAP the identifier is retrieved from it.
+        Otherwise the identifier is the same as the full_name.
         """
         if full_name in config.LICENSE_MAP.keys():
             return cls(full_name, config.LICENSE_MAP[full_name])
@@ -69,11 +73,13 @@ class License(object):
         return self._identifier
 
     def __eq__(self, other):
-        if isinstance(other, License):
-            return (self.identifier == other.identifier and
-                    self.full_name == other.full_name)
-        else:
-            return False
+        return (
+            isinstance(other, License)
+            and self.identifier == other.identifier
+            and self.full_name == other.full_name)
+
+    def __lt__(self, other):
+        return isinstance(other, License) and self.identifier < other.identifier
 
     def __str__(self):
         return self.identifier
@@ -140,6 +146,7 @@ class LicenseDisjunction(License):
             _add_parens(license_2_complex, self.license_2.identifier))
 
 
+@total_ordering
 class ExtractedLicense(License):
     """
     Represent an ExtractedLicense with its additional attributes:
@@ -153,6 +160,15 @@ class ExtractedLicense(License):
         self.text = None
         self.cross_ref = []
         self.comment = None
+
+    def __eq__(self, other):
+        return (
+            isinstance(other, ExtractedLicense)
+            and self.identifier == other.identifier
+            and self.full_name == other.full_name)
+
+    def __lt__(self, other):
+        return isinstance(other, ExtractedLicense) and self.identifier < other.identifier
 
     def add_xref(self, ref):
         self.cross_ref.append(ref)
