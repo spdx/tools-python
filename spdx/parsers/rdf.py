@@ -266,8 +266,6 @@ class PackageParser(LicenseParser):
     Helper class for parsing packages.
     """
 
-    """Helper class for parsing packages."""
-
     def __init__(self, builder, logger):
         super(PackageParser, self).__init__(builder, logger)
 
@@ -717,16 +715,22 @@ class Parser(PackageParser, FileParser, ReviewParser):
         self.graph = Graph()
         self.graph.parse(file=fil, format='xml')
         self.doc = document.Document()
+
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['SpdxDocument'])):
             self.parse_doc_fields(s)
+
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['CreationInfo'])):
             self.parse_creation_info(s)
+
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['Package'])):
             self.parse_package(s)
+
         for s, _p, o in self.graph.triples((None, self.spdx_namespace['referencesFile'], None)):
             self.parse_file(o)
+
         for s, _p, o in self.graph.triples((None, self.spdx_namespace['reviewed'], None)):
             self.parse_review(o)
+
         validation_messages = []
         # Report extra errors if self.error is False otherwise there will be
         # redundent messages
@@ -737,13 +741,16 @@ class Parser(PackageParser, FileParser, ReviewParser):
         return self.doc, self.error
 
     def parse_creation_info(self, ci_term):
-        """Parses creators, creater and comment."""
+        """
+        Parse creators, created and comment.
+        """
         for _s, _p, o in self.graph.triples((ci_term, self.spdx_namespace['creator'], None)):
             try:
                 ent = self.builder.create_entity(self.doc, six.text_type(o))
                 self.builder.add_creator(self.doc, ent)
             except SPDXValueError:
                 self.value_error('CREATOR_VALUE', o)
+
         for _s, _p, o in self.graph.triples((ci_term, self.spdx_namespace['created'], None)):
             try:
                 self.builder.set_created_date(self.doc, six.text_type(o))
@@ -752,6 +759,7 @@ class Parser(PackageParser, FileParser, ReviewParser):
             except CardinalityError:
                 self.more_than_one_error('created')
                 break
+
         for _s, _p, o in self.graph.triples((ci_term, RDFS.comment, None)):
             try:
                 self.builder.set_creation_comment(self.doc, six.text_type(o))

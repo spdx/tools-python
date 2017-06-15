@@ -1226,6 +1226,7 @@ class Parser(object):
         self.document = document.Document()
         self.error = False
         self.yacc.parse(text, lexer=self.lex)
+        # FIXME: this state does not make sense
         self.builder.reset()
         validation_messages = []
         # Report extra errors if self.error is False otherwise there will be

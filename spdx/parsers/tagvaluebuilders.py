@@ -35,8 +35,9 @@ from spdx.parsers import validations
 
 
 def checksum_from_sha1(value):
-    """Returns an spdx.checksum.Algorithm instance representing the SHA1
-    checksum. Returns None if doesn't match CHECKSUM_RE.
+    """
+    Return an spdx.checksum.Algorithm instance representing the SHA1
+    checksum or None if does not match CHECKSUM_RE.
     """
     # More constrained regex at lexer level
     CHECKSUM_RE = re.compile('SHA1:\s*([\S]+)', re.UNICODE)
@@ -48,7 +49,9 @@ def checksum_from_sha1(value):
 
 
 def str_from_text(text):
-    """Returns content of a free form text block as a string."""
+    """
+    Return content of a free form text block as a string.
+    """
     REGEX = re.compile('<text>((.|\n)+)</text>', re.UNICODE)
     match = REGEX.match(text)
     if match:
@@ -58,17 +61,22 @@ def str_from_text(text):
 
 
 class DocBuilder(object):
-    """Responsible for setting the fields of the top level document model."""
+    """
+    Responsible for setting the fields of the top level document model.
+    """
     VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
 
     def __init__(self):
+        # FIXME: this state does not make sense
         self.reset_document()
 
     def set_doc_version(self, doc, value):
-        """Sets the document version.
-        Raises value error if malformed value, CardinalityError
-        if already defined, IncompatibleVersionError if not 1.2.
         """
+        Set the document version.
+        Raise SPDXValueError if malformed value, CardinalityError
+        if already defined, IncompatibleVersionError v
+        """
+        # FIXME: we support other versions!!!
         if not self.doc_version_set:
             self.doc_version_set = True
             m = self.VERS_STR_REGEX.match(value)
@@ -117,6 +125,7 @@ class DocBuilder(object):
 
     def reset_document(self):
         """Resets the state to allow building new documents"""
+        # FIXME: this state does not make sense
         self.doc_version_set = False
         self.doc_comment_set = False
         self.doc_data_lics_set = False
@@ -181,6 +190,7 @@ class EntityBuilder(object):
 class CreationInfoBuilder(object):
 
     def __init__(self):
+        # FIXME: this state does not make sense
         self.reset_creation_info()
 
     def add_creator(self, doc, creator):
@@ -242,7 +252,9 @@ class CreationInfoBuilder(object):
             raise CardinalityError('CreationInfo::LicenseListVersion')
 
     def reset_creation_info(self):
-        """Resets builder's state to allow building new creation info."""
+        """
+        Resets builder state to allow building new creation info."""
+        # FIXME: this state does not make sense
         self.created_date_set = False
         self.creation_comment_set = False
         self.lics_list_ver_set = False
@@ -251,10 +263,12 @@ class CreationInfoBuilder(object):
 class ReviewBuilder(object):
 
     def __init__(self):
+        # FIXME: this state does not make sense
         self.reset_reviews()
 
     def reset_reviews(self):
         """Resets the builder's state to allow building new reviews."""
+        # FIXME: this state does not make sense
         self.review_date_set = False
         self.review_comment_set = False
 
@@ -264,6 +278,7 @@ class ReviewBuilder(object):
         Raises SPDXValueError if not a valid reviewer type.
         """
         # Each reviewer marks the start of a new review object.
+        # FIXME: this state does not make sense
         self.reset_reviews()
         if validations.validate_reviewer(reviewer):
             doc.add_review(review.Review(reviewer=reviewer))
@@ -315,10 +330,12 @@ class PackageBuilder(object):
     VERIF_CODE_EXC_FILES_GRP = 3
 
     def __init__(self):
+        # FIXME: this state does not make sense
         self.reset_package()
 
     def reset_package(self):
         """Resets the builder's state in order to build new packages."""
+        # FIXME: this state does not make sense
         self.package_set = False
         self.package_vers_set = False
         self.package_file_name_set = False
@@ -618,6 +635,7 @@ class PackageBuilder(object):
 class FileBuilder(object):
 
     def __init__(self):
+        # FIXME: this state does not make sense
         self.reset_file_stat()
 
     def set_file_name(self, doc, name):
@@ -627,6 +645,7 @@ class FileBuilder(object):
             doc.package.files.append(file.File(name))
             # A file name marks the start of a new file instance.
             # The builder must be reset
+            # FIXME: this state does not make sense
             self.reset_file_stat()
             return True
         else:
@@ -822,6 +841,7 @@ class FileBuilder(object):
 
     def reset_file_stat(self):
         """Resets the builder's state to enable building new files."""
+        # FIXME: this state does not make sense
         self.file_comment_set = False
         self.file_type_set = False
         self.file_chksum_set = False
@@ -834,6 +854,7 @@ class FileBuilder(object):
 class LicenseBuilder(object):
 
     def __init__(self):
+        # FIXME: this state does not make sense
         self.reset_extr_lics()
 
     def extr_lic(self, doc):
@@ -847,6 +868,7 @@ class LicenseBuilder(object):
         """Adds a new extracted license to the document.
         Raises SPDXValueError if data format is incorrect.
         """
+        # FIXME: this state does not make sense
         self.reset_extr_lics()
         if validations.validate_extracted_lic_id(lic_id):
             doc.add_extr_lic(document.ExtractedLicense(lic_id))
@@ -919,6 +941,7 @@ class LicenseBuilder(object):
             raise OrderError('ExtractedLicense::CrossRef')
 
     def reset_extr_lics(self):
+        # FIXME: this state does not make sense
         self.extr_text_set = False
         self.extr_lic_name_set = False
         self.extr_lic_comment_set = False
@@ -931,11 +954,15 @@ class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
 
     def __init__(self):
         super(Builder, self).__init__()
+        # FIXME: this state does not make sense
+        self.reset()
 
     def reset(self):
         """Resets builder's state for building new documents.
         Must be called between usage with different documents.
         """
+        # FIXME: this state does not make sense
+        self.reset_creation_info()
         self.reset_document()
         self.reset_package()
         self.reset_file_stat()

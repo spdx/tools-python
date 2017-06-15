@@ -30,6 +30,7 @@ class DocBuilder(object):
     VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
 
     def __init__(self):
+        # FIXME: this state does not make sense
         self.reset_document()
 
     def set_doc_version(self, doc, value):
@@ -63,7 +64,7 @@ class DocBuilder(object):
         """
         Set the document data license.
         Raise exceptions:
-        - SPDXValueError if malformed value, 
+        - SPDXValueError if malformed value,
         - CardinalityError if already defined.
         """
         if not self.doc_data_lics_set:
@@ -92,12 +93,16 @@ class DocBuilder(object):
         """
         Reset the internal state to allow building new document
         """
+        # FIXME: this state does not make sense
         self.doc_version_set = False
         self.doc_comment_set = False
         self.doc_data_lics_set = False
 
 
 class EntityBuilder(tagvaluebuilders.EntityBuilder):
+
+    def __init__(self):
+        super(EntityBuilder, self).__init__()
 
     def create_entity(self, doc, value):
         if self.tool_re.match(value):
@@ -111,6 +116,9 @@ class EntityBuilder(tagvaluebuilders.EntityBuilder):
 
 
 class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
+
+    def __init__(self):
+        super(CreationInfoBuilder, self).__init__()
 
     def set_creation_comment(self, doc, comment):
         """Sets creation comment, Raises CardinalityError if
@@ -126,6 +134,9 @@ class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
 
 
 class PackageBuilder(tagvaluebuilders.PackageBuilder):
+
+    def __init__(self):
+        super(PackageBuilder, self).__init__()
 
     def set_pkg_chk_sum(self, doc, chk_sum):
         """Sets the package check sum, if not already set.
@@ -226,6 +237,9 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
 
 class FileBuilder(tagvaluebuilders.FileBuilder):
 
+    def __init__(self):
+        super(FileBuilder, self).__init__()
+
     def set_file_chksum(self, doc, chk_sum):
         """Sets the file check sum, if not already set.
         chk_sum - A string
@@ -301,6 +315,10 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
 
 
 class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
+
+    def __init__(self):
+        super(ReviewBuilder, self).__init__()
+
     def add_review_comment(self, doc, comment):
         """Sets the review comment. Raises CardinalityError if
         already set. OrderError if no reviewer defined before.
@@ -318,10 +336,17 @@ class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
 
 class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder, FileBuilder, ReviewBuilder):
 
+    def __init__(self):
+        super(Builder, self).__init__()
+        # FIXME: this state does not make sense
+        self.reset()
+
     def reset(self):
         """Resets builder's state for building new documents.
         Must be called between usage with different documents.
         """
+        # FIXME: this state does not make sense
+        self.reset_creation_info()
         self.reset_document()
         self.reset_package()
         self.reset_file_stat()
