@@ -15,7 +15,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from spdx import config
-from spdx.version import Version
 
 
 def _add_parens(required, text):
@@ -27,11 +26,7 @@ def _add_parens(required, text):
 
 
 class License(object):
-
-    """Represents a License."""
-
     def __init__(self, full_name, identifier):
-        super(License, self).__init__()
         self._full_name = full_name
         self._identifier = identifier
 
@@ -88,14 +83,14 @@ class License(object):
 
 
 class LicenseConjunction(License):
-
-    """A conjunction of two licenses."""
+    """
+    A conjunction of two licenses.
+    """
 
     def __init__(self, license_1, license_2):
         self.license_1 = license_1
         self.license_2 = license_2
-        super(LicenseConjunction, self).__init__(
-            self.full_name, self.identifier)
+        super(LicenseConjunction, self).__init__(self.full_name, self.identifier)
 
     @property
     def full_name(self):
@@ -117,14 +112,14 @@ class LicenseConjunction(License):
 
 
 class LicenseDisjunction(License):
-
-    """A disjunction of two licenses."""
+    """
+    A disjunction of two licenses.
+    """
 
     def __init__(self, license_1, license_2):
         self.license_1 = license_1
         self.license_2 = license_2
-        super(LicenseDisjunction, self).__init__(
-            self.full_name, self.identifier)
+        super(LicenseDisjunction, self).__init__(self.full_name, self.identifier)
 
     @property
     def full_name(self):
@@ -144,12 +139,14 @@ class LicenseDisjunction(License):
             _add_parens(license_1_complex, self.license_1.identifier),
             _add_parens(license_2_complex, self.license_2.identifier))
 
+
 class ExtractedLicense(License):
-    """Represents an ExtractedLicense.
-    text - Extracted text, str. Mandatory.
-    cross_ref - list of cross references.
-    comment - license comment, str.
-    full_name - license name. str or utils.NoAssert.
+    """
+    Represent an ExtractedLicense with its additional attributes:
+    - text: Extracted text, str. Mandatory.
+    - cross_ref: list of cross references.
+    - comment: license comment, str.
+    - full_name: license name. str or utils.NoAssert.
     """
     def __init__(self, identifier):
         super(ExtractedLicense, self).__init__(None, identifier)
@@ -160,33 +157,34 @@ class ExtractedLicense(License):
     def add_xref(self, ref):
         self.cross_ref.append(ref)
 
-    def validate(self, messages):
+    def validate(self, messages=None):
+        # FIXME: messages should be returned
+        if messages is None:
+            messages = []
         if self.text is None:
             messages.append('ExtractedLicense text can not be None')
             return False
         else:
             return True
 
-class Document(object):
 
-    """Represents an SPDX document.
-        Fields:
-        version: Spec version. Mandatory, one - Type: Version.
-        data_license: SPDX-Metadata license. Mandatory, one. Type: License.
-        comment: Comments on the SPDX file, optional one. Type: str
-        creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
-        package: Package described by this document. Mandatory, one. Type: Package
-        extracted_licenses: List of licenses extracted that are not part of the
-            SPDX license list. Optional, many. Type: ExtractedLicense.
-        reviews: SPDX document review information, Optional zero or more.
-            Type: Review.
+class Document(object):
+    """
+    Represent an SPDX document with these fields:
+    - version: Spec version. Mandatory, one - Type: Version.
+    - data_license: SPDX-Metadata license. Mandatory, one. Type: License.
+    - comment: Comments on the SPDX file, optional one. Type: str
+    - creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
+    - package: Package described by this document. Mandatory, one. Type: Package
+    - extracted_licenses: List of licenses extracted that are not part of the
+      SPDX license list. Optional, many. Type: ExtractedLicense.
+    - reviews: SPDX document review information, Optional zero or more.
+      Type: Review.
     """
 
     def __init__(self, version=None, data_license=None, comment=None, package=None):
         # avoid recursive impor
         from spdx.creationinfo import CreationInfo
-
-        super(Document, self).__init__()
         self.version = version
         self.data_license = data_license
         self.comment = comment
@@ -213,25 +211,34 @@ class Document(object):
     def has_comment(self):
         return self.comment is not None
 
-    def validate(self, messages = []):
-        """Validate all fields of the document.
-        messages - appends user friendly error messages to this list for display.
+    def validate(self, messages=None):
         """
-        return (self.validate_version(messages) and
-                self.validate_data_lics(messages) and
-                self.validate_creation_info(messages) and
-                self.validate_package(messages) and
-                self.validate_extracted_licenses(messages) and
-                self.validate_reviews(messages))
+        Validate all fields of the document and update the
+        messages list with user friendly error messages for display.
+        """
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+        return (
+            self.validate_version(messages) and
+            self.validate_data_lics(messages) and
+            self.validate_creation_info(messages) and
+            self.validate_package(messages) and
+            self.validate_extracted_licenses(messages) and
+            self.validate_reviews(messages)
+        )
 
-    def validate_version(self, messages):
+    def validate_version(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
         if self.version is None:
             messages.append('Document has no version.')
             return False
         else:
             return True
 
-    def validate_data_lics(self, messages):
+    def validate_data_lics(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
         if self.data_license is not None:
             if self.data_license.identifier == 'CC0-1.0':
                 return True
@@ -242,27 +249,35 @@ class Document(object):
             messages.append('Document has no data license.')
             return False
 
-    def validate_reviews(self, messages):
+    def validate_reviews(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
         status = True
         for review in self.reviews:
             status = status and review.validate(messages)
         return status
 
-    def validate_creation_info(self, messages):
+    def validate_creation_info(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
         if self.creation_info is not None:
             return self.creation_info.validate(messages)
         else:
             messages.append('Document has no creation information.')
             return False
 
-    def validate_package(self, messages):
+    def validate_package(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
         if self.package is not None:
             return self.package.validate(messages)
         else:
             messages.append('Document has no package.')
             return False
 
-    def validate_extracted_licenses(self, messages):
+    def validate_extracted_licenses(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
         status = True
         for lic in self.extracted_licenses:
             if isinstance(lic, ExtractedLicense):
@@ -271,5 +286,4 @@ class Document(object):
                 messages.append('Document extracted licenses must be of type' +
                     'spdx.document.ExtractedLicense')
                 return False
-
         return status

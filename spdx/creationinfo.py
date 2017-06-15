@@ -21,35 +21,32 @@ from spdx import utils
 
 
 class Creator(object):
-
-    """Creator enity.
-        Fields:
-        name: creator's name/identifier
     """
-
+    Creator enity.
+    Fields:
+    - name: creator's name/identifier
+    """
     def __init__(self, name):
-        super(Creator, self).__init__()
         self.name = name
 
+    # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
         return self.name == other.name
 
 
-
-
-
 class Organization(Creator):
-
-    """Organization entity.
-        Fields:
-        name: Org's name/identifier. Mandatory. Type: str.
-        email: Org's email address. Optional. Type: str.
+    """
+    Organization entity.
+    Fields:
+    - name: Org's name/identifier. Mandatory. Type: str.
+    - email: Org's email address. Optional. Type: str.
     """
 
     def __init__(self, name, email):
         super(Organization, self).__init__(name)
         self.email = email
 
+    # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
         if type(other) is not Organization:
             return False
@@ -57,7 +54,6 @@ class Organization(Creator):
             return (self.name + self.email) == (other.name + other.email)
 
     def to_value(self):
-        """Tag/value representation of Organization entity."""
         if self.email is not None:
             return 'Organization: {0} ({1})'.format(self.name, self.email)
         else:
@@ -68,17 +64,18 @@ class Organization(Creator):
 
 
 class Person(Creator):
-
-    """Person entity.
-        Fields:
-        name: person's name/identifier. Mandatory. Type: str.
-        email: person's email address. Optional. Type: str.
+    """
+    Person entity.
+    Fields:
+    - name: person's name/identifier. Mandatory. Type: str.
+    - email: person's email address. Optional. Type: str.
     """
 
     def __init__(self, name, email):
         super(Person, self).__init__(name)
         self.email = email
 
+    # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
         if type(other) is not Person:
             return False
@@ -86,7 +83,6 @@ class Person(Creator):
             return (self.name + self.email) == (other.name + other.email)
 
     def to_value(self):
-        """Tag/value representation of Person entity."""
         if self.email is not None:
             return 'Person: {0} ({1})'.format(self.name, self.email)
         else:
@@ -95,40 +91,38 @@ class Person(Creator):
     def __str__(self):
         return self.to_value()
 
-class Tool(Creator):
 
-    """Tool entity.
-        Fields:
-        name: tool identifier, with version. Type: str.
+class Tool(Creator):
+    """
+    Tool entity.
+    Fields:
+    - name: tool identifier, with version. Type: str.
     """
 
     def __init__(self, name):
         super(Tool, self).__init__(name)
 
     def to_value(self):
-        """Tag/value representation of Tool entity."""
         return 'Tool: {0}'.format(self.name)
 
     def __str__(self):
         return self.to_value()
 
 
-
 class CreationInfo(object):
-
-    """Represents a document's creation info.
-        Fields:
-        creators: List of creators. At least one required.
-            Type: Creator.
-        comment: Creation comment, optional. Type: str.
-        license_list_version: version of SPDX license used in creation of SPDX
-            document. One, optional. Type: spdx.version.Version
-        created: Creation date. Mandatory one. Type: datetime.
+    """
+    Represent a document creation info.
+    Fields:
+    - creators: List of creators. At least one required.
+        Type: Creator.
+    - comment: Creation comment, optional. Type: str.
+    - license_list_version: version of SPDX license used in creation of SPDX
+        document. One, optional. Type: spdx.version.Version
+    - created: Creation date. Mandatory one. Type: datetime.
     """
 
     def __init__(self, created=None, comment=None,
                  license_list_version=config.LICENSE_LIST_VERSION):
-        super(CreationInfo, self).__init__()
         self.creators = []
         self.created = created
         self.comment = comment

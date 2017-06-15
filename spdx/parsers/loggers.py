@@ -17,9 +17,6 @@ from __future__ import unicode_literals
 
 class StandardLogger(object):
 
-    def __init__(self):
-        super(StandardLogger, self).__init__()
-
     def log(self, msg):
         print(msg)
 
@@ -27,7 +24,6 @@ class StandardLogger(object):
 class FileLogger(object):
 
     def __init__(self, logfile):
-        super(FileLogger, self).__init__()
         self.dest = logfile
 
     def log(self, msg):

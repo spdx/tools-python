@@ -31,29 +31,29 @@ class FileType(object):
 
 
 class File(object):
-    """Representation of SPDX file.
+    """
+    Represent an SPDX file.
     Fields:
-    name - File name, str mandatory one.
-    comment - File comment str, Optional zero or one.
-    type - one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
-    and FileType.OTHER, optional zero or one.
-    chk_sum - SHA1, Mandatory one.
-    conc_lics - Mandatory one. document.License or utils.NoAssert or utils.SPDXNone.
-    licenses_in_file - list of licenses found in file, mandatory one or more.
-        document.License or utils.SPDXNone or utils.NoAssert.
-    document.license or utils.NoAssert or utils.SPDXNone.
-    license_comment - Optional.
-    copyright - Copyright text, Mandatory one. utils.NoAssert or utils.SPDXNone or str.
-    notice - optional One, str.
-    contributers - List of strings.
-    dependencies - list of file locations.
-    artifact_of_project_name - list of project names, possibly empty.
-    artifact_of_project_home - list of project home page, possibly empty.
-    artifact_of_project_uri - list of project uris, possibly empty.
+    - - name: File name, str mandatory one.
+    - comment: File comment str, Optional zero or one.
+    - type: one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
+    - and FileType.OTHER, optional zero or one.
+    - chk_sum: SHA1, Mandatory one.
+    - conc_lics: Mandatory one. document.License or utils.NoAssert or utils.SPDXNone.
+    - licenses_in_file: list of licenses found in file, mandatory one or more.
+      document.License or utils.SPDXNone or utils.NoAssert.
+    - document.license or utils.NoAssert or utils.SPDXNone.
+    - license_comment: Optional.
+    - copyright: Copyright text, Mandatory one. utils.NoAssert or utils.SPDXNone or str.
+    - notice: optional One, str.
+    - contributers: List of strings.
+    - dependencies: list of file locations.
+    - artifact_of_project_name: list of project names, possibly empty.
+    - artifact_of_project_home: list of project home page, possibly empty.
+    - artifact_of_project_uri: list of project uris, possibly empty.
     """
 
     def __init__(self, name, chk_sum=None):
-        super(File, self).__init__()
         self.name = name
         self.comment = None
         self.type = None
@@ -70,11 +70,15 @@ class File(object):
         self.artifact_of_project_uri = []
 
     def add_lics(self, lics):
-        """Appends lics to licenses_in_file."""
+        """
+        Append lics to licenses_in_file.
+        """
         self.licenses_in_file.append(lics)
 
     def add_contrib(self, contrib):
-        """Appends contrib to contributers."""
+        """
+        Append contrib to contributers.
+        """
         self.contributers.append(contrib)
 
     def add_depend(self, depend):
@@ -83,13 +87,16 @@ class File(object):
 
     def add_artifact(self, symbol, value):
         """Adds value as artifact_of_project{symbol}."""
-        expr = 'self.artifact_of_project_{0}.append(value)'.format(symbol)
-        eval(expr)
+        symbol = 'artifact_of_project_{}'.format(symbol)
+        artifact = getattr(self, symbol)
+        artifact.append(value)
 
-    def validate(self, messages):
+    def validate(self, messages=None):
         """Validates the fields and appends user friendly messages
         to messages parameter if there are errors.
         """
+        # FIXME: messages should be returned
+        messages = messages if messages is None else []
         return (self.validate_lic_conc(messages) and
                 self.validate_type(messages) and
                 self.validate_chksum(messages) and
@@ -97,15 +104,19 @@ class File(object):
                 self.validate_copyright(messages) and
                 self.validate_artifacts(messages))
 
-    def validate_copyright(self, messages):
-        if isinstance(self.copyright, (six.string_types, six.text_type, 
+    def validate_copyright(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is None else []
+        if isinstance(self.copyright, (six.string_types, six.text_type,
                                        utils.NoAssert, utils.SPDXNone)):
             return True
         else:
             messages.append('File copyright must be str or unicode or utils.NoAssert or utils.SPDXNone')
             return False
 
-    def validate_artifacts(self, messages):
+    def validate_artifacts(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is None else []
         if (len(self.artifact_of_project_home) >=
             max(len(self.artifact_of_project_uri), len(self.artifact_of_project_name))):
             return True
@@ -113,15 +124,18 @@ class File(object):
             messages.append('File must have as much artifact of project as uri or homepage')
             return False
 
-
-    def validate_licenses_in_file(self, messages):
+    def validate_licenses_in_file(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is None else []
         if len(self.licenses_in_file) == 0:
             messages.append('File must have at least one license in file.')
             return False
         else:
             return True
 
-    def validate_lic_conc(self, messages):
+    def validate_lic_conc(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is None else []
         if type(self.conc_lics) in [utils.NoAssert,
             utils.SPDXNone] or isinstance(self.conc_lics, document.License):
             return True
@@ -129,7 +143,9 @@ class File(object):
             messages.append('File concluded license must be one of document.License, utils.NoAssert or utils.SPDXNone')
             return False
 
-    def validate_type(self, messages):
+    def validate_type(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is None else []
         if self.type in [None, FileType.SOURCE, FileType.OTHER, FileType.BINARY,
             FileType.ARCHIVE]:
             return True
@@ -137,7 +153,9 @@ class File(object):
             messages.append('File type must be one of the constants defined in class spdx.file.FileType')
             return False
 
-    def validate_chksum(self, messages):
+    def validate_chksum(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is None else []
         if isinstance(self.chk_sum, checksum.Algorithm):
             if self.chk_sum.identifier == 'SHA1':
                 return True
@@ -162,5 +180,4 @@ class File(object):
         return file_sha1.hexdigest()
 
     def has_optional_field(self, field):
-        expr = 'self.{0} is not None'.format(field)
-        return eval(expr)
+        return getattr(self, field, None) is not None

@@ -28,15 +28,19 @@ from spdx.parsers import tagvaluebuilders
 
 class DocBuilder(object):
     VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
+
     def __init__(self):
-        super(DocBuilder, self).__init__()
         self.reset_document()
 
     def set_doc_version(self, doc, value):
-        """Sets the document version.
-        Raises value error if malformed value, CardinalityError
-        if already defined, IncompatibleVersionError if not 1.2.
         """
+        Set the document version.
+        Raise exceptions:
+        - SPDXValueError if malformed value,
+        - CardinalityError if already defined,
+        - IncompatibleVersionError if not 1.2.
+        """
+        # FIXME: relax version supported
         if not self.doc_version_set:
             self.doc_version_set = True
             m = self.VERS_STR_REGEX.match(value)
@@ -45,6 +49,8 @@ class DocBuilder(object):
             else:
                 vers = version.Version(major=int(m.group(1)),
                                        minor=int(m.group(2)))
+
+                # FIXME: we can deal with newer versions too
                 if vers == version.Version(major=1, minor=2):
                     doc.version = vers
                     return True
@@ -54,12 +60,15 @@ class DocBuilder(object):
             raise CardinalityError('Document::Version')
 
     def set_doc_data_lic(self, doc, res):
-        """Sets the document data license.
-        Raises value error if malformed value, CardinalityError
-        if already defined.
+        """
+        Set the document data license.
+        Raise exceptions:
+        - SPDXValueError if malformed value, 
+        - CardinalityError if already defined.
         """
         if not self.doc_data_lics_set:
             self.doc_data_lics_set = True
+            # TODO: what is this split?
             res_parts = res.split('/')
             if len(res_parts) != 0:
                 identifier = res_parts[-1]
@@ -80,7 +89,9 @@ class DocBuilder(object):
             raise CardinalityError('Document::Comment')
 
     def reset_document(self):
-        """Resets the state to allow building new documents"""
+        """
+        Reset the internal state to allow building new document
+        """
         self.doc_version_set = False
         self.doc_comment_set = False
         self.doc_data_lics_set = False

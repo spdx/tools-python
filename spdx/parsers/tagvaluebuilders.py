@@ -62,7 +62,6 @@ class DocBuilder(object):
     VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
 
     def __init__(self):
-        super(DocBuilder, self).__init__()
         self.reset_document()
 
     def set_doc_version(self, doc, value):
@@ -134,9 +133,6 @@ class EntityBuilder(object):
     ORG_EMAIL_GROUP = 4
     TOOL_NAME_GROUP = 1
 
-    def __init__(self):
-        super(EntityBuilder, self).__init__()
-
     def build_tool(self, doc, entity):
         """Builds a tool object out of a string representation.
         Returns built tool. Raises SPDXValueError if failed to extract
@@ -185,7 +181,6 @@ class EntityBuilder(object):
 class CreationInfoBuilder(object):
 
     def __init__(self):
-        super(CreationInfoBuilder, self).__init__()
         self.reset_creation_info()
 
     def add_creator(self, doc, creator):
@@ -256,9 +251,7 @@ class CreationInfoBuilder(object):
 class ReviewBuilder(object):
 
     def __init__(self):
-        super(ReviewBuilder, self).__init__()
         self.reset_reviews()
-
 
     def reset_reviews(self):
         """Resets the builder's state to allow building new reviews."""
@@ -322,7 +315,6 @@ class PackageBuilder(object):
     VERIF_CODE_EXC_FILES_GRP = 3
 
     def __init__(self):
-        super(PackageBuilder, self).__init__()
         self.reset_package()
 
     def reset_package(self):
@@ -626,7 +618,6 @@ class PackageBuilder(object):
 class FileBuilder(object):
 
     def __init__(self):
-        super(FileBuilder, self).__init__()
         self.reset_file_stat()
 
     def set_file_name(self, doc, name):
@@ -843,7 +834,6 @@ class FileBuilder(object):
 class LicenseBuilder(object):
 
     def __init__(self):
-        super(LicenseBuilder, self).__init__()
         self.reset_extr_lics()
 
     def extr_lic(self, doc):

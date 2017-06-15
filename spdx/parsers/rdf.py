@@ -51,13 +51,13 @@ ERROR_MESSAGES = {
 
 
 class BaseParser(object):
-    """Base class for all parsers.
+    """
+    Base class for all parsers.
     Contains logger, doap_namespace, spdx_namespace and model builder.
     Also provides utility functions used by the deriving parsers.
     """
 
     def __init__(self, builder, logger):
-        super(BaseParser, self).__init__()
         self.logger = logger
         self.doap_namespace = Namespace('http://usefulinc.com/ns/doap#')
         self.spdx_namespace = Namespace("http://spdx.org/rdf/terms#")
@@ -96,7 +96,9 @@ class BaseParser(object):
 
 
 class LicenseParser(BaseParser):
-    """Helper class for parsing extracted licenses and license lists."""
+    """
+    Helper class for parsing extracted licenses and license lists.
+    """
 
     LICS_REF_REGEX = re.compile('LicenseRef-.+', re.UNICODE)
 
@@ -208,7 +210,6 @@ class LicenseParser(BaseParser):
         lic.cross_ref = map(lambda x: six.text_type(x), xrefs)
         return lic
 
-
     def handle_extracted_license(self, extr_lic):
         """Builds an extracted license and returns it.
         returns None if failed. Note that this function
@@ -218,7 +219,6 @@ class LicenseParser(BaseParser):
         if lic is not None:
             self.doc.add_extr_lic(lic)
         return lic
-
 
     def handle_conjunctive_list(self, lics_set):
         """Returns a license representing the conjunction or None if encountered errors"""
@@ -262,6 +262,9 @@ class LicenseParser(BaseParser):
 
 
 class PackageParser(LicenseParser):
+    """
+    Helper class for parsing packages.
+    """
 
     """Helper class for parsing packages."""
 
@@ -471,7 +474,10 @@ class PackageParser(LicenseParser):
 
 
 class FileParser(LicenseParser):
-    """Helper class for parsing files."""
+    """
+    Helper class for parsing files.
+    """
+
     def __init__(self, builder, logger):
         super(FileParser, self).__init__(builder, logger)
 
@@ -632,7 +638,10 @@ class FileParser(LicenseParser):
 
 
 class ReviewParser(BaseParser):
-    """Helper class for parsing review information."""
+    """
+    Helper class for parsing review information.
+    """
+
     def __init__(self, builder, logger):
         super(ReviewParser, self).__init__(builder, logger)
 
@@ -693,8 +702,9 @@ class ReviewParser(BaseParser):
 
 
 class Parser(PackageParser, FileParser, ReviewParser):
-
-    """RDF/XML file parser."""
+    """
+    RDF/XML file parser.
+    """
 
     def __init__(self, builder, logger):
         super(Parser, self).__init__(builder, logger)

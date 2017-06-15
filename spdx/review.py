@@ -30,7 +30,6 @@ class Review(object):
     """
 
     def __init__(self, reviewer=None, review_date=None, comment=None):
-        super(Review, self).__init__()
         self.reviewer = reviewer
         self.review_date = review_date
         self.comment = comment

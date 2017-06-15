@@ -89,7 +89,6 @@ ERROR_MESSAGES = {
 class Parser(object):
 
     def __init__(self, builder, logger):
-        super(Parser, self).__init__()
         self.tokens = Lexer.tokens
         self.builder = builder
         self.logger = logger
@@ -196,7 +195,6 @@ class Parser(object):
             self.order_error('LicenseComment', 'LicenseID', p.lineno(1))
         except CardinalityError:
             self.more_than_one_error('LicenseComment', p.lineno(1))
-
 
     def p_lic_comment_2(self, p):
         """lic_comment : LICS_COMMENT error"""
