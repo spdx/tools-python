@@ -15,24 +15,35 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import codecs
+import json
 import os
 
 from spdx.version import Version
 
+_base_dir = os.path.dirname(__file__)
+_licenses = os.path.join(_base_dir, 'licenses.json')
+_exceptions = os.path.join(_base_dir, 'exceptions.json')
 
-def load_license_list(file_name=os.path.join(os.path.dirname(__file__), 'spdx_licenselist.csv')):
+
+def load_license_list(file_name):
     """
-    Return a mapping of licenses name->id and id->name loaded from a
-    CSV file as "name,identifier"
+    Return the licenses list version tuple and a mapping of licenses
+    name->id and id->name loaded from a JSON file
+    from https://github.com/spdx/license-list-data
     """
     licenses_map = {}
-    with codecs.open(file_name, 'rb', encoding='utf-8') as licenses:
-        for line in licenses:
-            name, identifier = line.strip().split(',')
+    with codecs.open(file_name, 'rb', encoding='utf-8') as lics:
+        licenses = json.load(lics)
+        version = licenses['licenseListVersion'].split('.')
+        for lic in licenses['licenses']:
+            if lic.get('isDeprecatedLicenseId'):
+                continue
+            name = lic['name']
+            identifier = lic['licenseId']
             licenses_map[name] = identifier
             licenses_map[identifier] = name
-    return licenses_map
+    return version, licenses_map
 
 
-LICENSE_MAP = load_license_list()
-LICENSE_LIST_VERSION = Version(major=2, minor=25)
+(_major, _minor), LICENSE_MAP = load_license_list(_licenses)
+LICENSE_LIST_VERSION = Version(major=_major, minor=_minor)
