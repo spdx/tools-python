@@ -98,19 +98,22 @@ class File(object):
         to messages parameter if there are errors.
         """
         # FIXME: messages should be returned
-        messages = messages if messages is None else []
-        return (self.validate_lic_conc(messages) and
-                self.validate_type(messages) and
-                self.validate_chksum(messages) and
-                self.validate_licenses_in_file(messages) and
-                self.validate_copyright(messages) and
-                self.validate_artifacts(messages))
+        messages = messages if messages is not None else []
+
+        return (self.validate_concluded_license(messages)
+            and self.validate_type(messages)
+            and self.validate_chksum(messages)
+            and self.validate_licenses_in_file(messages)
+            and self.validate_copyright(messages)
+            and self.validate_artifacts(messages))
 
     def validate_copyright(self, messages=None):
         # FIXME: messages should be returned
-        messages = messages if messages is None else []
-        if isinstance(self.copyright, (six.string_types, six.text_type,
-                                       utils.NoAssert, utils.SPDXNone)):
+        messages = messages if messages is not None else []
+
+        if isinstance(
+            self.copyright,
+            (six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone)):
             return True
         else:
             messages.append('File copyright must be str or unicode or utils.NoAssert or utils.SPDXNone')
@@ -118,7 +121,8 @@ class File(object):
 
     def validate_artifacts(self, messages=None):
         # FIXME: messages should be returned
-        messages = messages if messages is None else []
+        messages = messages if messages is not None else []
+
         if (len(self.artifact_of_project_home) >=
             max(len(self.artifact_of_project_uri), len(self.artifact_of_project_name))):
             return True
@@ -128,28 +132,34 @@ class File(object):
 
     def validate_licenses_in_file(self, messages=None):
         # FIXME: messages should be returned
-        messages = messages if messages is None else []
+        messages = messages if messages is not None else []
+
+        # FIXME: what are we testing the length of a list? or?
         if len(self.licenses_in_file) == 0:
             messages.append('File must have at least one license in file.')
             return False
         else:
             return True
 
-    def validate_lic_conc(self, messages=None):
+    def validate_concluded_license(self, messages=None):
         # FIXME: messages should be returned
-        messages = messages if messages is None else []
-        if type(self.conc_lics) in [utils.NoAssert,
-            utils.SPDXNone] or isinstance(self.conc_lics, document.License):
+        messages = messages if messages is not None else []
+
+        # FIXME: use isinstance instead??
+        if (type(self.conc_lics) in [utils.NoAssert, utils.SPDXNone]
+        or isinstance(self.conc_lics, document.License)):
             return True
         else:
-            messages.append('File concluded license must be one of document.License, utils.NoAssert or utils.SPDXNone')
+            messages.append(
+                'File concluded license must be one of '
+                'document.License, utils.NoAssert or utils.SPDXNone')
             return False
 
     def validate_type(self, messages=None):
         # FIXME: messages should be returned
-        messages = messages if messages is None else []
-        if self.type in [None, FileType.SOURCE, FileType.OTHER, FileType.BINARY,
-            FileType.ARCHIVE]:
+        messages = messages if messages is not None else []
+
+        if self.type in [None, FileType.SOURCE, FileType.OTHER, FileType.BINARY, FileType.ARCHIVE]:
             return True
         else:
             messages.append('File type must be one of the constants defined in class spdx.file.FileType')
@@ -157,7 +167,8 @@ class File(object):
 
     def validate_chksum(self, messages=None):
         # FIXME: messages should be returned
-        messages = messages if messages is None else []
+        messages = messages if messages is not None else []
+
         if isinstance(self.chk_sum, checksum.Algorithm):
             if self.chk_sum.identifier == 'SHA1':
                 return True

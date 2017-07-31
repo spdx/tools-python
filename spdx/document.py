@@ -175,8 +175,8 @@ class ExtractedLicense(License):
 
     def validate(self, messages=None):
         # FIXME: messages should be returned
-        if messages is None:
-            messages = []
+        messages = messages if messages is not None else []
+
         if self.text is None:
             messages.append('ExtractedLicense text can not be None')
             return False
@@ -234,18 +234,19 @@ class Document(object):
         """
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
-        return (
-            self.validate_version(messages) and
-            self.validate_data_lics(messages) and
-            self.validate_creation_info(messages) and
-            self.validate_package(messages) and
-            self.validate_extracted_licenses(messages) and
-            self.validate_reviews(messages)
+
+        return (self.validate_version(messages)
+            and self.validate_data_lics(messages)
+            and self.validate_creation_info(messages)
+            and self.validate_package(messages)
+            and self.validate_extracted_licenses(messages)
+            and self.validate_reviews(messages)
         )
 
     def validate_version(self, messages=None):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
+
         if self.version is None:
             messages.append('Document has no version.')
             return False
@@ -255,27 +256,31 @@ class Document(object):
     def validate_data_lics(self, messages=None):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
-        if self.data_license is not None:
-            if self.data_license.identifier == 'CC0-1.0':
-                return True
-            else:
-                messages.append('Document data license must be CC0-1.0.')
-                return False
-        else:
+
+        if self.data_license is None:
             messages.append('Document has no data license.')
+            return False
+
+        if self.data_license.identifier == 'CC0-1.0':
+            return True
+        else:
+            # FIXME: REALLY? what if someone wants to use something else?
+            messages.append('Document data license must be CC0-1.0.')
             return False
 
     def validate_reviews(self, messages=None):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
-        status = True
+
+        valid = True
         for review in self.reviews:
-            status = status and review.validate(messages)
-        return status
+            valid = review.validate(messages) and valid
+        return valid
 
     def validate_creation_info(self, messages=None):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
+
         if self.creation_info is not None:
             return self.creation_info.validate(messages)
         else:
@@ -285,6 +290,7 @@ class Document(object):
     def validate_package(self, messages=None):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
+
         if self.package is not None:
             return self.package.validate(messages)
         else:
@@ -294,12 +300,14 @@ class Document(object):
     def validate_extracted_licenses(self, messages=None):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
-        status = True
+
+        valid = True
         for lic in self.extracted_licenses:
             if isinstance(lic, ExtractedLicense):
-                status = status and lic.validate(messages)
+                valid = lic.validate(messages) and valid
             else:
-                messages.append('Document extracted licenses must be of type' +
-                    'spdx.document.ExtractedLicense')
-                return False
-        return status
+                messages.append(
+                    'Document extracted licenses must be of type '
+                    'spdx.document.ExtractedLicense and not ' + type(lic))
+                valid = False
+        return valid

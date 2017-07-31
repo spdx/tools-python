@@ -13,7 +13,7 @@ def test_suite():
 
 setup(
     name='spdx-tools',
-    version='0.5.3',
+    version='0.5.4',
     description='SPDX parser and tools.',
     packages=['spdx', 'spdx.parsers', 'spdx.writers', 'spdx.parsers.lexers'],
     package_data={'spdx': ['spdx_licenselist.csv']},
@@ -30,6 +30,9 @@ setup(
             'spdx-tv2rdf = spdx.tv_to_rdf:main',
         ],
     },
+    tests_require=[
+        'xmltodict',
+    ],
 
     author='Ahmed H. Ismail',
     author_email='ahm3d.hisham@gmail.com',

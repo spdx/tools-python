@@ -1,0 +1,19 @@
+# Document Information
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+# Creation Info
+# Package
+PackageName: some/path
+PackageDownloadLocation: NOASSERTION
+PackageVerificationCode: SOME code
+PackageLicenseDeclared: NOASSERTION
+PackageLicenseConcluded: NOASSERTION
+PackageLicenseInfoFromFiles: LGPL-2.1
+PackageCopyrightText: <text>Some copyrught</text>
+# File
+FileName: ./some/path/tofile
+FileChecksum: SHA1: SOME-SHA1
+LicenseConcluded: NOASSERTION
+LicenseInfoInFile: LGPL-2.1
+FileCopyrightText: NOASSERTION
+# Extracted Licenses

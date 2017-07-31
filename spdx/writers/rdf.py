@@ -127,7 +127,7 @@ class LicenseWriter(BaseWriter):
         """
         if isinstance(lic, document.ExtractedLicense):
             return self.create_extracted_license(lic)
-        elif lic.identifier in config.LICENSE_MAP:
+        if lic.identifier.rstrip('+') in config.LICENSE_MAP:
             return URIRef(lic.url)
         else:
             matches = [l for l in self.document.extracted_licenses if l.identifier == lic.identifier]
@@ -563,8 +563,12 @@ def write_document(document, out, validate=True):
     Optionally `validate` the document before writing and raise
     InvalidDocumentError if document.validate returns False.
     """
-    if validate and not document.validate([]):
-        raise InvalidDocumentError()
+    
+    if validate:
+        messages = []
+        is_valid = document.validate(messages)
+        if not is_valid:
+            raise InvalidDocumentError(messages)
 
     writer = Writer(document, out)
     writer.write()

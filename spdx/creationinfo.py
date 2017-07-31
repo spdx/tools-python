@@ -54,10 +54,10 @@ class Organization(Creator):
 
     # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
-        return isinstance(other, Organization) and (self.name, self.email) == (other.name,  other.email)
+        return isinstance(other, Organization) and (self.name, self.email) == (other.name, other.email)
 
     def __lt__(self, other):
-        return isinstance(other, Organization) and (self.name, self.email) < (other.name,  other.email)
+        return isinstance(other, Organization) and (self.name, self.email) < (other.name, other.email)
 
     def to_value(self):
         if self.email:
@@ -84,10 +84,10 @@ class Person(Creator):
 
     # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
-        return isinstance(other, Person) and (self.name, self.email) == (other.name,  other.email)
+        return isinstance(other, Person) and (self.name, self.email) == (other.name, other.email)
 
     def __lt__(self, other):
-        return isinstance(other, Person) and (self.name, self.email) < (other.name,  other.email)
+        return isinstance(other, Person) and (self.name, self.email) < (other.name, other.email)
 
     def to_value(self):
         if self.email is not None:
@@ -152,21 +152,30 @@ class CreationInfo(object):
     def has_comment(self):
         return self.comment is not None
 
-    def validate(self, messages):
+    def validate(self, messages=None):
         """Returns True if the fields are valid according to the SPDX standard.
         Appends user friendly messages to the messages parameter.
         """
-        return (self.validate_creators(messages) and
-                self.validate_created(messages))
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
 
-    def validate_creators(self, messages):
+        return (self.validate_creators(messages)
+            and self.validate_created(messages))
+
+    def validate_creators(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
         if len(self.creators) != 0:
             return True
         else:
             messages.append('No creators defined, must have at least one.')
             return False
 
-    def validate_created(self, messages):
+    def validate_created(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
         if self.created is not None:
             return True
         else:
