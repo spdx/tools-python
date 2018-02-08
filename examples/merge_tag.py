@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-# Parses a tag/value file and prints out some basic information.
-# Usage: parse_tv.py <tagvaluefile>
+# Merge multiple tag/value file into one.
+# Usage: merge_tag.py <tagvaluefile1> <tagvaluefile2> ...
 
 if __name__ == '__main__':
     import sys
