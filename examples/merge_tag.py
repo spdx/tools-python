@@ -36,12 +36,12 @@ if __name__ == '__main__':
 
     newFileName = input("Enter file name to save: ")
 
-    # with codecs.open(newFileName, mode='w', encoding='utf-8') as newFile:
-    #     try:
-    #         write_document("".join(fileData), newFile)
+    with codecs.open(newFileName, mode='w', encoding='utf-8') as newFile:
+        try:
+            write_document("".join(fileData), newFile)
 
-    #     except InvalidDocumentError:
-    #         print ('Document is Invalid')
-    #         messages = []
-    #         doc.validate(messages)
-    #         print ('\n'.join(messages))
+        except InvalidDocumentError:
+            print ('Document is Invalid')
+            messages = []
+            doc.validate(messages)
+            print ('\n'.join(messages))
