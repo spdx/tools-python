@@ -21,6 +21,10 @@ Issues: https://github.com/spdx/tools-python/issues
 
 Pypi: https://pypi.python.org/pypi/spdx-tools
 
+# Contributing
+
+See the file CONTRIBUTING.md for information on making contributions to the SPDX tools-python.
+
 
 # License
 
