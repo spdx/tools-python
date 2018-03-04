@@ -188,7 +188,7 @@ class TestWriters(TestCase):
         try:
             temp_dir = tempfile.mkdtemp(prefix='test_spdx')
             result_file = os.path.join(temp_dir, 'spdx-simple.tv')
-            with open(result_file, 'wb') as output:
+            with open(result_file, 'w') as output:
                 write_document(doc, output, validate=True)
 
             expected_file = utils_test.get_test_loc(
@@ -211,7 +211,7 @@ class TestWriters(TestCase):
             result_file = os.path.join(temp_dir, 'spdx-simple-plus.tv')
 
             # test proper!
-            with open(result_file, 'wb') as output:
+            with open(result_file, 'w') as output:
                 write_document(doc, output, validate=True)
 
             expected_file = utils_test.get_test_loc(
