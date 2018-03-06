@@ -12,7 +12,7 @@
 [6]: https://ci.appveyor.com/project/spdx/tools-python/branch/master
 
 This library implements an SPDX tag/value and RDF parser, validator and handler in Python.
-This is the result of an initial GSoC contribution by @ah450 https://github.com/ah450 and 
+This is the result of an initial GSoC contribution by @[ah450](https://github.com/ah450) (or https://github.com/a-h-i) and 
 is maintained by a community of SPDX adopters and enthusiasts.
 
 Home: https://github.com/spdx/tools-python
