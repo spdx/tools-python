@@ -78,9 +78,9 @@ def validate_pkg_homepage(value, optional=False):
 
 
 def validate_pkg_cr_text(value, optional=False):
-    if validate_is_free_form_text(value, optional):
+    if isinstance(value, (utils.NoAssert, utils.SPDXNone)):
         return True
-    elif isinstance(value, (utils.NoAssert, utils.SPDXNone)):
+    elif validate_is_free_form_text(value, optional):
         return True
     elif value is None:
         return optional
@@ -136,9 +136,9 @@ def validate_file_lics_comment(value, optional=False):
 
 
 def validate_file_cpyright(value, optional=False):
-    if validate_is_free_form_text(value, optional):
+    if isinstance(value, (utils.NoAssert, utils.SPDXNone)):
         return True
-    elif isinstance(value, (utils.NoAssert, utils.SPDXNone)):
+    elif validate_is_free_form_text(value, optional):
         return True
     else:
         return False
