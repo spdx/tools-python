@@ -19,6 +19,78 @@ from functools import total_ordering
 from spdx import config
 
 
+@total_ordering
+class ExternalDocumentRef(object):
+    """
+    External Document References entity that contains the following fields :
+    - external_document_id: A unique string containing letters, numbers, '.',
+        '-' or '+'.
+    - spdx_document_uri: The unique ID of the SPDX document being referenced.
+    - check_sum: The checksum of the referenced SPDX document.
+    """
+
+    def __init__(self, external_document_id=None, spdx_document_uri=None,
+                 check_sum=None):
+        self.external_document_id = external_document_id
+        self.spdx_document_uri = spdx_document_uri
+        self.check_sum = check_sum
+
+    def __eq__(self, other):
+        return (
+            isinstance(other, ExternalDocumentRef)
+            and self.external_document_id == other.external_document_id
+            and self.spdx_document_uri == other.spdx_document_uri
+            and self.check_sum == other.check_sum
+        )
+
+    def __lt__(self, other):
+        return (
+            (self.external_document_id, self.spdx_document_uri,
+             self.check_sum) <
+            (other.external_document_id, other.spdx_document_uri,
+             other.check_sum,)
+        )
+
+    def validate(self, messages=None):
+        """
+        Validate all fields of the ExternalDocumentRef class and update the
+        messages list with user friendly error messages for display.
+        """
+        messages = messages if messages is not None else []
+
+        return (self.validate_ext_doc_id(messages) and
+                self.validate_spdx_doc_uri(messages) and
+                self.validate_chksum(messages)
+        )
+
+    def validate_ext_doc_id(self, messages=None):
+        messages = messages if messages is not None else []
+
+        if self.external_document_id:
+            return True
+        else:
+            messages.append('ExternalDocumentRef has no External Document ID.')
+            return False
+
+    def validate_spdx_doc_uri(self, messages=None):
+        messages = messages if messages is not None else []
+
+        if self.spdx_document_uri:
+            return True
+        else:
+            messages.append('ExternalDocumentRef has no SPDX Document URI.')
+            return False
+
+    def validate_chksum(self, messages=None):
+        messages = messages if messages is not None else []
+
+        if self.check_sum:
+            return True
+        else:
+            messages.append('ExternalDocumentRef has no Checksum.')
+            return False
+
+
 def _add_parens(required, text):
     """
     Add parens around a license expression if `required` is True, otherwise
@@ -192,6 +264,8 @@ class Document(object):
     - name: Name of the document. Mandatory, one. Type: str.
     - spdx_id: SPDX Identifier for the document to refer to itself in
       relationship to other elements. Mandatory, one. Type: str.
+    - ext_document_references: External SPDX documents referenced within the
+        given SPDX document. Optional, one or many. Type: ExternalDocumentRef
     - comment: Comments on the SPDX file, optional one. Type: str
     - namespace: SPDX document specific namespace. Mandatory, one. Type: str
     - creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
@@ -210,6 +284,7 @@ class Document(object):
         self.data_license = data_license
         self.name = name
         self.spdx_id = spdx_id
+        self.ext_document_references = []
         self.comment = comment
         self.namespace = namespace
         self.creation_info = CreationInfo()
@@ -222,6 +297,9 @@ class Document(object):
 
     def add_extr_lic(self, lic):
         self.extracted_licenses.append(lic)
+
+    def add_ext_document_reference(self, ext_doc_ref):
+        self.ext_document_references.append(ext_doc_ref)
 
     @property
     def files(self):
@@ -248,6 +326,7 @@ class Document(object):
             and self.validate_name(messages)
             and self.validate_spdx_id(messages)
             and self.validate_namespace(messages)
+            and self.validate_ext_document_references(messages)
             and self.validate_creation_info(messages)
             and self.validate_package(messages)
             and self.validate_extracted_licenses(messages)
@@ -311,6 +390,21 @@ class Document(object):
         else:
             messages.append('Invalid Document SPDX Identifier value.')
             return False
+
+    def validate_ext_document_references(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
+        valid = True
+        for doc in self.ext_document_references:
+            if isinstance(doc, ExternalDocumentRef):
+                valid = doc.validate(messages) and valid
+            else:
+                messages.append(
+                    'External document references must be of the type '
+                    'spdx.document.ExternalDocumentRef and not ' + type(doc))
+                valid = False
+        return valid
 
     def validate_reviews(self, messages=None):
         # FIXME: messages should be returned

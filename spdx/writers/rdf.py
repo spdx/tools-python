@@ -362,6 +362,47 @@ class CreationInfoWriter(BaseWriter):
         return ci_node
 
 
+class ExternalDocumentRefWriter(BaseWriter):
+    """
+    Write class spdx.external_document_ref.ExternalDocumentRef
+    """
+
+    def __init__(self, document, out):
+        super(ExternalDocumentRefWriter, self).__init__(document, out)
+
+    def create_external_document_ref_node(self, ext_document_references):
+        """
+        Add and return a creation info node to graph
+        """
+        ext_doc_ref_node = BNode()
+        type_triple = (ext_doc_ref_node, RDF.type, self.spdx_namespace.ExternalDocumentRef)
+        self.graph.add(type_triple)
+
+        ext_doc_id = Literal(
+            ext_document_references.external_document_id)
+        ext_doc_id_triple = (
+            ext_doc_ref_node, self.spdx_namespace.externalDocumentId, ext_doc_id)
+        self.graph.add(ext_doc_id_triple)
+
+        doc_uri = Literal(
+            ext_document_references.spdx_document_uri)
+        doc_uri_triple = (
+            ext_doc_ref_node, self.spdx_namespace.spdxDocument, doc_uri)
+        self.graph.add(doc_uri_triple)
+
+        checksum_node = self.create_checksum_node(
+            ext_document_references.check_sum)
+        self.graph.add(
+            (ext_doc_ref_node, self.spdx_namespace.checksum, checksum_node))
+
+        return ext_doc_ref_node
+
+    def ext_doc_refs(self):
+        "Returns a list of review nodes"
+        return map(self.create_external_document_ref_node,
+                   self.document.ext_document_references)
+
+
 class PackageWriter(LicenseWriter):
 
     """
@@ -495,7 +536,8 @@ class PackageWriter(LicenseWriter):
             self.graph.add(triple)
 
 
-class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter):
+class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
+             ExternalDocumentRefWriter):
     """
     Warpper for other writers to write all fields of spdx.document.Document
     Call `write()` to start writing.
@@ -535,6 +577,13 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter):
         review_nodes = self.reviews()
         for review in review_nodes:
             self.graph.add((doc_node, self.spdx_namespace.reviewed, review))
+        # Add external document references info
+        ext_doc_ref_nodes = self.ext_doc_refs()
+        for ext_doc_ref in ext_doc_ref_nodes:
+            ext_doc_ref_triple = (doc_node,
+                                  self.spdx_namespace.externalDocumentRef,
+                                  ext_doc_ref)
+            self.graph.add(ext_doc_ref_triple)
         # Add extracted licenses
         licenses = map(
             self.create_extracted_license, self.document.extracted_licenses)

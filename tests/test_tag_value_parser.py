@@ -59,6 +59,23 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 8)
         self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 8)
 
+    def test_external_document_references(self):
+        data = '''
+        ExternalDocumentRef:DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759
+        '''
+        self.l.input(data)
+        self.token_assert_helper(self.l.token(), 'EXT_DOC_REF',
+                                 'ExternalDocumentRef', 2)
+        self.token_assert_helper(self.l.token(), 'DOC_REF_ID',
+                                 'DocumentRef-spdx-tool-2.1', 2)
+        self.token_assert_helper(self.l.token(), 'DOC_URI',
+                                 'http://spdx.org/spdxdocs/spdx-tools-v2.1-3F25'
+                                 '04E0-4F89-41D3-9A0C-0305E82C3301', 2)
+        self.token_assert_helper(self.l.token(), 'EXT_DOC_REF_CHKSUM',
+                                 'SHA1: '
+                                 'd6a770ba38583ed4bb4525bd96e50461655d2759', 2)
+
+
     def test_creation_info(self):
         data = '''
         ## Creation Information

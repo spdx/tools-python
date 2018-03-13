@@ -15,6 +15,18 @@
       </CreationInfo>
     </creationInfo>
     <specVersion>SPDX-2.1</specVersion>
+    <externalDocumentRef>
+      <ExternalDocumentRef>
+        <externalDocumentId>DocumentRef-spdx-tool-2.1</externalDocumentId>
+        <spdxDocument rdf:resource="https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
+        <checksum>
+          <Checksum>
+            <checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</checksumValue>
+            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+          </Checksum>
+        </checksum>
+      </ExternalDocumentRef>
+    </externalDocumentRef>
     <referencesFile>
       <File rdf:nodeID="A0">
         <licenseConcluded>

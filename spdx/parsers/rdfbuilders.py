@@ -135,6 +135,20 @@ class DocBuilder(object):
         self.doc_spdx_id_set = False
 
 
+class ExternalDocumentRefBuilder(tagvaluebuilders.ExternalDocumentRefBuilder):
+
+    def set_chksum(self, doc, chk_sum):
+        """
+        Sets the external document reference's check sum, if not already set.
+        chk_sum - The checksum value in the form of a string.
+        """
+        if chk_sum:
+            doc.ext_document_references[-1].check_sum = checksum.Algorithm(
+                'SHA1', chk_sum)
+        else:
+            raise SPDXValueError('ExternalDocumentRef::Checksum')
+
+
 class EntityBuilder(tagvaluebuilders.EntityBuilder):
 
     def __init__(self):
@@ -370,7 +384,8 @@ class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
             raise OrderError('ReviewComment')
 
 
-class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder, FileBuilder, ReviewBuilder):
+class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder,
+              FileBuilder, ReviewBuilder, ExternalDocumentRefBuilder):
 
     def __init__(self):
         super(Builder, self).__init__()

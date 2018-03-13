@@ -109,6 +109,43 @@ class TestDocumentBuilder(unittest.case.TestCase):
         self.builder.set_doc_comment(self.document, comment)
 
 
+class TestExternalDocumentRefBuilder(TestCase):
+
+    def setUp(self):
+        self.document = Document()
+        self.builder = builders.ExternalDocumentRefBuilder()
+
+    def test_external_doc_id(self):
+        ext_doc_id = 'DocumentRef-spdx-tool-2.1'
+        self.builder.set_ext_doc_id(self.document, ext_doc_id)
+        assert self.document.ext_document_references[-1].external_document_id == ext_doc_id
+
+    def test_spdx_doc_uri(self):
+        spdx_doc_uri = 'https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301'
+        self.builder.set_ext_doc_id(self.document, 'DocumentRef-spdx-tool-2.1')
+        self.builder.set_spdx_doc_uri(self.document, spdx_doc_uri)
+        assert self.document.ext_document_references[-1].spdx_document_uri == spdx_doc_uri
+
+    def test_checksum(self):
+        chksum = 'SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759'
+        chksum_val = 'd6a770ba38583ed4bb4525bd96e50461655d2759'
+        self.builder.set_ext_doc_id(self.document, 'DocumentRef-spdx-tool-2.1')
+        self.builder.set_chksum(self.document, chksum)
+        assert self.document.ext_document_references[-1].check_sum.value == chksum_val
+
+    def test_add_ext_doc_refs(self):
+        ext_doc_id_val = 'DocumentRef-spdx-tool-2.1'
+        spdx_doc_uri = 'http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301'
+        chksum = 'SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759'
+        chksum_val = 'd6a770ba38583ed4bb4525bd96e50461655d2759'
+
+        self.builder.add_ext_doc_refs(self.document, ext_doc_id_val,
+                                      spdx_doc_uri, chksum)
+        assert self.document.ext_document_references[-1].external_document_id == ext_doc_id_val
+        assert self.document.ext_document_references[-1].spdx_document_uri == spdx_doc_uri
+        assert self.document.ext_document_references[-1].check_sum.value == chksum_val
+
+
 class TestEntityBuilder(TestCase):
 
     def setUp(self):

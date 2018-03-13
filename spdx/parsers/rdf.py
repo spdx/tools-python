@@ -40,6 +40,7 @@ ERROR_MESSAGES = {
     'LL_VALUE': 'Invalid licenseListVersion \'{0}\' must be of the format N.N where N is a number',
     'CREATED_VALUE': 'Invalid created value \'{0}\' must be date in ISO 8601 format.',
     'CREATOR_VALUE': 'Invalid creator value \'{0}\' must be Organization, Tool or Person.',
+    'EXT_DOC_REF_VALUE': 'Failed to extract {0} from ExternalDocumentRef.',
     'PKG_SUPPL_VALUE': 'Invalid package supplier value \'{0}\' must be Organization, Person or NOASSERTION.',
     'PKG_ORIGINATOR_VALUE': 'Invalid package supplier value \'{0}\'  must be Organization, Person or NOASSERTION.',
     'PKG_DOWN_LOC': 'Invalid package download location value \'{0}\'  must be a url or NONE or NOASSERTION',
@@ -746,6 +747,9 @@ class Parser(PackageParser, FileParser, ReviewParser):
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['SpdxDocument'])):
             self.parse_doc_fields(s)
 
+        for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['ExternalDocumentRef'])):
+            self.parse_ext_doc_ref(s)
+
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['CreationInfo'])):
             self.parse_creation_info(s)
 
@@ -846,3 +850,37 @@ class Parser(PackageParser, FileParser, ReviewParser):
             except CardinalityError:
                 self.more_than_one_error('Document comment')
                 break
+
+    def parse_ext_doc_ref(self, ext_doc_ref_term):
+        """
+        Parses the External Document ID, SPDX Document URI and Checksum.
+        """
+        for _s, _p, o in self.graph.triples(
+                (ext_doc_ref_term,
+                 self.spdx_namespace['externalDocumentId'],
+                 None)):
+            try:
+                self.builder.set_ext_doc_id(self.doc, six.text_type(o))
+            except SPDXValueError:
+                self.value_error('EXT_DOC_REF_VALUE', 'External Document ID')
+                break
+
+        for _s, _p, o in self.graph.triples(
+                (ext_doc_ref_term,
+                 self.spdx_namespace['spdxDocument'],
+                 None)):
+            try:
+                self.builder.set_spdx_doc_uri(self.doc, six.text_type(o))
+            except SPDXValueError:
+                self.value_error('EXT_DOC_REF_VALUE', 'SPDX Document URI')
+                break
+
+        for _s, _p, checksum in self.graph.triples(
+                (ext_doc_ref_term, self.spdx_namespace['checksum'], None)):
+            for _, _, value in self.graph.triples(
+                    (checksum, self.spdx_namespace['checksumValue'], None)):
+                try:
+                    self.builder.set_chksum(self.doc, six.text_type(value))
+                except SPDXValueError:
+                    self.value_error('EXT_DOC_REF_VALUE', 'Checksum')
+                    break

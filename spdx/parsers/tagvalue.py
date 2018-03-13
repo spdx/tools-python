@@ -41,6 +41,8 @@ ERROR_MESSAGES = {
     'DOC_VERSION_VALUE_TYPE': 'Invalid SPDXVersion value, must be SPDX-M.N where M and N are numbers. Line: {0}',
     'DOC_NAME_VALUE': 'DocumentName must be single line of text, line: {0}',
     'DOC_SPDX_ID_VALUE': 'Invalid SPDXID value, SPDXID must be SPDXRef-DOCUMENT, line: {0}',
+    'EXT_DOC_REF_VALUE': 'ExternalDocumentRef must contain External Document ID, SPDX Document URI and Checksum'
+                         'in the standard format, line:{0}.',
     'DOC_COMMENT_VALUE_TYPE': 'DocumentComment value must be free form text between <text></text> tags, line:{0}',
     'DOC_NAMESPACE_VALUE': 'Invalid DocumentNamespace value {0}, must contain a scheme (e.g. "https:") '
                            'and should not contain the "#" delimiter, line:{1}',
@@ -114,6 +116,7 @@ class Parser(object):
                   | data_lics
                   | doc_name
                   | doc_spdx_id
+                  | ext_doc_ref
                   | doc_comment
                   | doc_namespace
                   | creator
@@ -1164,6 +1167,31 @@ class Parser(object):
         """doc_spdx_id : DOC_SPDX_ID error"""
         self.error = True
         msg = ERROR_MESSAGES['DOC_SPDX_ID_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_ext_doc_refs_1(self, p):
+        """ext_doc_ref : EXT_DOC_REF DOC_REF_ID DOC_URI EXT_DOC_REF_CHKSUM"""
+        try:
+            if six.PY2:
+                doc_ref_id = p[2].decode(encoding='utf-8')
+                doc_uri = p[3].decode(encoding='utf-8')
+                ext_doc_chksum = p[4].decode(encoding='utf-8')
+            else:
+                doc_ref_id = p[2]
+                doc_uri = p[3]
+                ext_doc_chksum = p[4]
+
+            self.builder.add_ext_doc_refs(self.document, doc_ref_id, doc_uri,
+                                          ext_doc_chksum)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['EXT_DOC_REF_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+
+    def p_ext_doc_refs_2(self, p):
+        """ext_doc_ref : EXT_DOC_REF error"""
+        self.error = True
+        msg = ERROR_MESSAGES['EXT_DOC_REF_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_spdx_version_1(self, p):
