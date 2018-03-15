@@ -145,9 +145,8 @@ class File(object):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
 
-        # FIXME: use isinstance instead??
-        if (type(self.conc_lics) in [utils.NoAssert, utils.SPDXNone]
-        or isinstance(self.conc_lics, document.License)):
+        if isinstance(self.conc_lics, (document.License, utils.NoAssert,
+                                       utils.SPDXNone)):
             return True
         else:
             messages.append(
