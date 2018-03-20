@@ -906,7 +906,6 @@ class Parser(object):
     def p_pkg_orig_2(self, p):
         """pkg_orig : PKG_ORIG error"""
         self.error = True
-        self.error = True
         msg = ERROR_MESSAGES['PKG_ORIG_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
