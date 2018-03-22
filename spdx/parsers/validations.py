@@ -71,7 +71,7 @@ def validate_pkg_originator(value, optional=False):
 def validate_pkg_homepage(value, optional=False):
     if value is None:
         return optional
-    elif type(value) in [six.string_types, utils.NoAssert, utils.SPDXNone]:
+    elif isinstance(value, (six.string_types, utils.NoAssert, utils.SPDXNone)):
         return True
     else:
         return False
