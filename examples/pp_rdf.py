@@ -20,4 +20,4 @@ if __name__ == '__main__':
                 write_document(doc, out)
 
         else:
-            print 'Errors while parsing'
+            print('Errors while parsing')

@@ -2,6 +2,9 @@
 
 # Parses a tag/value file and writes it out pretty-printed.
 # Usage: pp_tv <infile> <outfile>
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 
 if __name__ == '__main__':
     import sys
@@ -18,14 +21,14 @@ if __name__ == '__main__':
         data = f.read()
         document, error = p.parse(data)
         if not error:
-            print 'Parsing Successful'
+            print('Parsing Successful')
             with codecs.open(target, mode='w', encoding='utf-8') as out:
                 try:
                     write_document(document, out)
                 except InvalidDocumentError:
-                    print 'Document is Invalid'
+                    print('Document is Invalid')
                     messages = []
                     document.validate(messages)
-                    print '\n'.join(messages)
+                    print('\n'.join(messages))
         else:
-            print 'Errors encountered while parsing'
+            print('Errors encountered while parsing')

@@ -2,6 +2,9 @@
 
 # Converts an RDF file to tag/value format.
 # Usage: rdf_to_tv <rdffile> <tagvaluefile>
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 
 if __name__ == '__main__':
     import sys
@@ -17,15 +20,15 @@ if __name__ == '__main__':
         document, error = rdfparser.parse(infile)
         if not error:
             # print map(lambda c: c.name, document.creation_info.creators)
-            print 'Parsing Successful'
+            print('Parsing Successful')
             with codecs.open(outfile_name, mode='w', encoding='utf-8') as outfile:
                 try:
                     write_document(document, outfile)
                 except InvalidDocumentError:
                     # Note document is valid if error is False
-                    print 'Document is Invalid'
+                    print('Document is Invalid')
         else:
-            print 'Errors encountered while parsing RDF file.'
+            print('Errors encountered while parsing RDF file.')
             messages = []
             document.validate(messages)
-            print '\n'.join(messages)
+            print('\n'.join(messages))
