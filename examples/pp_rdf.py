@@ -16,7 +16,7 @@ if __name__ == '__main__':
     with open(infile) as f:
         doc, error = p.parse(f)
         if not error:
-            with open(outfile, mode='w') as out:
+            with open(outfile, mode='wb') as out:
                 write_document(doc, out)
 
         else:
