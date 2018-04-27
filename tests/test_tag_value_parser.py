@@ -13,6 +13,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import sys
 import unittest
 from unittest import TestCase
 
@@ -95,6 +96,14 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'PKG_VERF_CODE', 'PackageVerificationCode', 3)
         self.token_assert_helper(self.l.token(), 'LINE', '4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)', 3)
 
+    def test_unknown_tag(self):
+        data = '''
+        SomeUnknownTag: SomeUnknownValue
+        '''
+        self.l.input(data)
+        self.token_assert_helper(self.l.token(), 'UNKNOWN_TAG', 'SomeUnknownTag', 2)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SomeUnknownValue', 2)
+
     def token_assert_helper(self, token, ttype, value, line):
         assert token.type == ttype
         assert token.value == value
@@ -158,6 +167,8 @@ class TestParser(TestCase):
         'FileComment: <text>Very long file</text>'
         ])
 
+    unknown_tag_str = 'SomeUnknownTag: SomeUnknownValue'
+
     complete_str = '{0}\n{1}\n{2}\n{3}\n{4}'.format(document_str, creation_str, review_str, package_str, file_str)
 
     def setUp(self):
@@ -206,6 +217,21 @@ class TestParser(TestCase):
         assert len(spdx_file.artifact_of_project_name) == 1
         assert len(spdx_file.artifact_of_project_home) == 1
         assert len(spdx_file.artifact_of_project_uri) == 1
+
+    def test_unknown_tag(self):
+
+        try:
+            from StringIO import StringIO
+        except ImportError:
+            from io import StringIO
+
+        saved_out = sys.stdout
+        sys.stdout = StringIO()
+        document, error = self.p.parse(self.unknown_tag_str)
+        self.assertEqual(sys.stdout.getvalue(), 'Found unknown tag : SomeUnknownTag at line: 1\n')
+        sys.stdout = saved_out
+        assert error
+        assert document is not None
 
 
 if __name__ == '__main__':

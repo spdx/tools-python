@@ -266,7 +266,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_uknown_tag(self, p):
-        """unknown_tag : UNKNOWN_TAG"""
+        """unknown_tag : UNKNOWN_TAG LINE"""
         self.error = True
         msg = ERROR_MESSAGES['UNKNOWN_TAG'].format(p[1], p.lineno(1))
         self.logger.log(msg)
