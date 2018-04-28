@@ -30,7 +30,6 @@ from spdx import version
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
-from spdx.parsers.builderexceptions import IncompatibleVersionError
 from spdx.parsers import validations
 
 
@@ -74,22 +73,17 @@ class DocBuilder(object):
         """
         Set the document version.
         Raise SPDXValueError if malformed value, CardinalityError
-        if already defined, IncompatibleVersionError v
+        if already defined
         """
-        # FIXME: we support other versions!!!
         if not self.doc_version_set:
             self.doc_version_set = True
             m = self.VERS_STR_REGEX.match(value)
             if m is None:
                 raise SPDXValueError('Document::Version')
             else:
-                vers = version.Version(major=int(m.group(1)),
-                                       minor=int(m.group(2)))
-                if vers == version.Version(major=1, minor=2):
-                    doc.version = vers
-                    return True
-                else:
-                    raise IncompatibleVersionError(value)
+                doc.version = version.Version(major=int(m.group(1)),
+                                              minor=int(m.group(2)))
+                return True
         else:
             raise CardinalityError('Document::Version')
 

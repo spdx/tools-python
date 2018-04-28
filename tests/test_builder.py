@@ -47,11 +47,6 @@ class TestDocumentBuilder(unittest.case.TestCase):
         version_str = '1.2'
         self.builder.set_doc_version(self.document, version_str)
 
-    @testing_utils.raises(builders.IncompatibleVersionError)
-    def test_version_number(self):
-        version_str = 'SPDX-2.0'
-        self.builder.set_doc_version(self.document, version_str)
-
     def test_correct_data_lics(self):
         lics_str = 'CC0-1.0'
         self.builder.set_doc_data_lics(self.document, lics_str)

@@ -24,7 +24,6 @@ from spdx import utils
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
-from spdx.parsers.builderexceptions import IncompatibleVersionError
 from spdx.parsers.lexers.tagvalue import Lexer
 from spdx import document
 
@@ -1113,10 +1112,6 @@ class Parser(object):
             self.error = True
             msg = ERROR_MESSAGES['DOC_VERSION_VALUE'].format(p[2], p.lineno(1))
             self.logger.log(msg)
-        except IncompatibleVersionError:
-            self.error = True
-            self.logger.log(
-                'SPDXVersion must be SPDX-1.2 found {0}.'.format(value))
 
     def p_spdx_version_2(self, p):
         """spdx_version : DOC_VERSION error"""
