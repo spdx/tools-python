@@ -35,9 +35,9 @@ from tests import utils_test
 class TestVersion(TestCase):
 
     def test_creation(self):
-        v = Version(major=1, minor=2)
-        assert v.major == 1
-        assert v.minor == 2
+        v = Version(major=2, minor=1)
+        assert v.major == 2
+        assert v.minor == 1
 
     def test_comparison(self):
         v1 = Version(major=1, minor=2)
@@ -57,12 +57,12 @@ class TestDocument(TestCase):
 
     def test_creation(self):
         document = Document(
-            version=Version(major=1, minor=2),
+            version=Version(major=2, minor=1),
             data_license=License(full_name='Academic Free License v1.1',
                                 identifier='AFL-1.1')
         )
         assert document.comment is None
-        assert document.version == Version(1, 2)
+        assert document.version == Version(2, 1)
         assert document.data_license.identifier == 'AFL-1.1'
 
     def test_document_validate_failures_returns_informative_messages(self):

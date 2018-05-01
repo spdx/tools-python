@@ -13,7 +13,7 @@
         <creator>Person: Gary O'Neall</creator>
       </CreationInfo>
     </creationInfo>
-    <specVersion>SPDX-1.2</specVersion>
+    <specVersion>SPDX-2.1</specVersion>
     <referencesFile>
       <File rdf:nodeID="A0">
         <licenseConcluded>
