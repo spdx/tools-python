@@ -1,6 +1,7 @@
 # Document info
 SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
+SPDXID: SPDXRef-DOCUMENT
 DocumentComment: <text>Sample Comment</text>
 
 # Creation info

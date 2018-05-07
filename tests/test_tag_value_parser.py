@@ -35,6 +35,7 @@ class TestLexer(TestCase):
         SPDXVersion: SPDX-2.1
         # Comment.
         DataLicense: CC0-1.0
+        SPDXID: SPDXRef-DOCUMENT
         DocumentComment: <text>This is a sample spreadsheet</text>
         '''
         self.l.input(data)
@@ -42,8 +43,10 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-2.1', 2)
         self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense', 4)
         self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 4)
-        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 5)
-        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 5)
+        self.token_assert_helper(self.l.token(), 'DOC_SPDX_ID', 'SPDXID', 5)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-DOCUMENT', 5)
+        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 6)
+        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 6)
 
     def test_creation_info(self):
         data = '''
@@ -105,6 +108,7 @@ class TestParser(TestCase):
     document_str = '\n'.join([
         'SPDXVersion: SPDX-2.1',
         'DataLicense: CC0-1.0',
+        'SPDXID: SPDXRef-DOCUMENT',
         'DocumentComment: <text>Sample Comment</text>'
     ])
 
@@ -169,6 +173,7 @@ class TestParser(TestCase):
         assert not error
         assert document.version == Version(major=2, minor=1)
         assert document.data_license.identifier == 'CC0-1.0'
+        assert document.spdx_id == 'SPDXRef-DOCUMENT'
         assert document.comment == 'Sample Comment'
 
     def test_creation_info(self):
