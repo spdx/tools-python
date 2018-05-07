@@ -23,6 +23,7 @@ from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers import tagvaluebuilders
+from spdx.parsers import validations
 
 
 class DocBuilder(object):
@@ -81,6 +82,21 @@ class DocBuilder(object):
         else:
             raise CardinalityError('Document::Name')
 
+    def set_doc_spdx_id(self, doc, doc_spdx_id_line):
+        """Sets the document SPDX Identifier.
+        Raises value error if malformed value, CardinalityError
+        if already defined.
+        """
+        if not self.doc_spdx_id_set:
+            if validations.validate_doc_spdx_id(doc_spdx_id_line):
+                doc.spdx_id = doc_spdx_id_line
+                self.doc_spdx_id_set = True
+                return True
+            else:
+                raise SPDXValueError('Document::SPDXID')
+        else:
+            raise CardinalityError('Document::SPDXID')
+
     def set_doc_comment(self, doc, comment):
         """Sets document comment, Raises CardinalityError if
         comment already set.
@@ -100,6 +116,7 @@ class DocBuilder(object):
         self.doc_comment_set = False
         self.doc_data_lics_set = False
         self.doc_name_set = False
+        self.doc_spdx_id_set = False
 
 
 class EntityBuilder(tagvaluebuilders.EntityBuilder):

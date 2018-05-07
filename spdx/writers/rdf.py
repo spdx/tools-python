@@ -512,7 +512,7 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter):
         """
         Add and return the root document node to graph.
         """
-        doc_node = URIRef('http://www.spdx.org/tools#SPDXANALYSIS')
+        doc_node = URIRef('http://www.spdx.org/tools#SPDXRef-DOCUMENT')
         # Doc type
         self.graph.add((doc_node, RDF.type, self.spdx_namespace.SpdxDocument))
         # Version

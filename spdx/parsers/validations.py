@@ -104,6 +104,15 @@ def validate_doc_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
+def validate_doc_spdx_id(value, optional=False):
+    if value is None:
+        return optional
+    elif value.endswith('#SPDXRef-DOCUMENT'):
+        return True
+    else:
+        return False
+
+
 def validate_creator(value, optional=False):
     if value is None:
         return optional

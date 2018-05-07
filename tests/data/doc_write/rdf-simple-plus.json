@@ -49,7 +49,7 @@
           }
         }
       }, 
-      "@rdf:about": "http://www.spdx.org/tools#SPDXANALYSIS"
+      "@rdf:about": "http://www.spdx.org/tools#SPDXRef-DOCUMENT"
     }
   }
 }

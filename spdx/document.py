@@ -190,6 +190,8 @@ class Document(object):
     - version: Spec version. Mandatory, one - Type: Version.
     - data_license: SPDX-Metadata license. Mandatory, one. Type: License.
     - name: Name of the document. Mandatory, one. Type: str.
+    - spdx_id: SPDX Identifier for the document to refer to itself in
+      relationship to other elements. Mandatory, one. Type: str.
     - comment: Comments on the SPDX file, optional one. Type: str
     - creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
     - package: Package described by this document. Mandatory, one. Type: Package
@@ -199,13 +201,15 @@ class Document(object):
       Type: Review.
     """
 
-    def __init__(self, version=None, data_license=None, name=None, comment=None,
-                 package=None):
+
+    def __init__(self, version=None, data_license=None, name=None, spdx_id=None,
+                 comment=None, package=None):
         # avoid recursive impor
         from spdx.creationinfo import CreationInfo
         self.version = version
         self.data_license = data_license
         self.name = name
+        self.spdx_id = spdx_id
         self.comment = comment
         self.creation_info = CreationInfo()
         self.package = package
@@ -241,6 +245,7 @@ class Document(object):
         return (self.validate_version(messages)
             and self.validate_data_lics(messages)
             and self.validate_name(messages)
+            and self.validate_spdx_id(messages)
             and self.validate_creation_info(messages)
             and self.validate_package(messages)
             and self.validate_extracted_licenses(messages)
@@ -281,6 +286,20 @@ class Document(object):
             return False
         else:
             return True
+
+    def validate_spdx_id(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
+        if self.spdx_id is None:
+            messages.append('Document has no SPDX Identifier.')
+            return False
+
+        if self.spdx_id.endswith('SPDXRef-DOCUMENT'):
+            return True
+        else:
+            messages.append('Invalid Document SPDX Identifier value.')
+            return False
 
     def validate_reviews(self, messages=None):
         # FIXME: messages should be returned

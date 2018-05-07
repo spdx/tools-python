@@ -2,6 +2,7 @@
 SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 DocumentName: Sample_Document-V2.1
+SPDXID: SPDXRef-DOCUMENT
 # Creation Info
 # Package
 PackageName: some/path

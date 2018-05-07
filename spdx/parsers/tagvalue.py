@@ -40,6 +40,7 @@ ERROR_MESSAGES = {
     'DOC_VERSION_VALUE': 'Invalid SPDXVersion \'{0}\' must be SPDX-M.N where M and N are numbers. Line: {1}',
     'DOC_VERSION_VALUE_TYPE': 'Invalid SPDXVersion value, must be SPDX-M.N where M and N are numbers. Line: {0}',
     'DOC_NAME_VALUE': 'DocumentName must be single line of text, line: {0}',
+    'DOC_SPDX_ID_VALUE': 'Invalid SPDXID value, SPDXID must be SPDXRef-DOCUMENT, line: {0}',
     'DOC_COMMENT_VALUE_TYPE': 'DocumentComment value must be free form text between <text></text> tags, line:{0}',
     'REVIEWER_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
     'CREATOR_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
@@ -108,6 +109,7 @@ class Parser(object):
         """attrib : spdx_version
                   | data_lics
                   | doc_name
+                  | doc_spdx_id
                   | doc_comment
                   | creator
                   | created
@@ -1115,6 +1117,27 @@ class Parser(object):
         """doc_name : DOC_NAME error"""
         self.error = True
         msg = ERROR_MESSAGES['DOC_NAME_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_doc_spdx_id_1(self, p):
+        """doc_spdx_id : DOC_SPDX_ID LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_doc_spdx_id(self.document, value)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['DOC_SPDX_ID_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('SPDXID', p.lineno(1))
+
+    def p_doc_spdx_id_2(self, p):
+        """doc_spdx_id : DOC_SPDX_ID error"""
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_SPDX_ID_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_spdx_version_1(self, p):
