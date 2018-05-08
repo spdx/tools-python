@@ -1,4 +1,4 @@
-SPDXVersion: SPDX-1.2
+SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 DocumentComment: <text>This is a sample spreadsheet</text>
 

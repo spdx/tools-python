@@ -20,7 +20,6 @@ from spdx import checksum
 from spdx import document
 from spdx import version
 from spdx.parsers.builderexceptions import CardinalityError
-from spdx.parsers.builderexceptions import IncompatibleVersionError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers import tagvaluebuilders
@@ -39,24 +38,16 @@ class DocBuilder(object):
         Raise exceptions:
         - SPDXValueError if malformed value,
         - CardinalityError if already defined,
-        - IncompatibleVersionError if not 1.2.
         """
-        # FIXME: relax version supported
         if not self.doc_version_set:
             self.doc_version_set = True
             m = self.VERS_STR_REGEX.match(value)
             if m is None:
                 raise SPDXValueError('Document::Version')
             else:
-                vers = version.Version(major=int(m.group(1)),
-                                       minor=int(m.group(2)))
-
-                # FIXME: we can deal with newer versions too
-                if vers == version.Version(major=1, minor=2):
-                    doc.version = vers
-                    return True
-                else:
-                    raise IncompatibleVersionError(value)
+                doc.version = version.Version(major=int(m.group(1)),
+                                              minor=int(m.group(2)))
+                return True
         else:
             raise CardinalityError('Document::Version')
 

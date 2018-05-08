@@ -31,25 +31,20 @@ class TestDocumentBuilder(unittest.case.TestCase):
         self.builder = builders.DocBuilder()
 
     def test_correct_version(self):
-        version_str = 'SPDX-1.2'
+        version_str = 'SPDX-2.1'
         self.builder.set_doc_version(self.document, version_str)
-        assert (self.document.version.major == 1 and
-                self.document.version.minor == 2)
+        assert (self.document.version.major == 2 and
+                self.document.version.minor == 1)
 
     @testing_utils.raises(builders.CardinalityError)
     def test_version_cardinality(self):
-        version_str = 'SPDX-1.2'
+        version_str = 'SPDX-2.1'
         self.builder.set_doc_version(self.document, version_str)
         self.builder.set_doc_version(self.document, version_str)
 
     @testing_utils.raises(builders.SPDXValueError)
     def test_version_value(self):
-        version_str = '1.2'
-        self.builder.set_doc_version(self.document, version_str)
-
-    @testing_utils.raises(builders.IncompatibleVersionError)
-    def test_version_number(self):
-        version_str = 'SPDX-2.0'
+        version_str = '2.1'
         self.builder.set_doc_version(self.document, version_str)
 
     def test_correct_data_lics(self):

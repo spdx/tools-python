@@ -20,11 +20,6 @@ class BuilderException(Exception):
     pass
 
 
-class IncompatibleVersionError(BuilderException):
-    def __init__(self, msg):
-        self.msg = msg
-
-
 class CardinalityError(BuilderException):
     def __init__(self, msg):
         self.msg = msg
