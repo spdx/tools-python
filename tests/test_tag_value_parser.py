@@ -35,6 +35,7 @@ class TestLexer(TestCase):
         SPDXVersion: SPDX-2.1
         # Comment.
         DataLicense: CC0-1.0
+        DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
         DocumentComment: <text>This is a sample spreadsheet</text>
         '''
         self.l.input(data)
@@ -42,8 +43,13 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-2.1', 2)
         self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense', 4)
         self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 4)
-        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 5)
-        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 5)
+        self.token_assert_helper(self.l.token(), 'DOC_NAMESPACE',
+                                 'DocumentNamespace', 5)
+        self.token_assert_helper(self.l.token(), 'LINE',
+                                 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301',
+                                 5)
+        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 6)
+        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 6)
 
     def test_creation_info(self):
         data = '''
@@ -105,7 +111,8 @@ class TestParser(TestCase):
     document_str = '\n'.join([
         'SPDXVersion: SPDX-2.1',
         'DataLicense: CC0-1.0',
-        'DocumentComment: <text>Sample Comment</text>'
+        'DocumentComment: <text>Sample Comment</text>',
+        'DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
     ])
 
     creation_str = '\n'.join([
@@ -170,6 +177,7 @@ class TestParser(TestCase):
         assert document.version == Version(major=2, minor=1)
         assert document.data_license.identifier == 'CC0-1.0'
         assert document.comment == 'Sample Comment'
+        assert document.namespace == 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
 
     def test_creation_info(self):
         document, error = self.p.parse(self.complete_str)

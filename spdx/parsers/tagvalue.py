@@ -40,6 +40,10 @@ ERROR_MESSAGES = {
     'DOC_VERSION_VALUE': 'Invalid SPDXVersion \'{0}\' must be SPDX-M.N where M and N are numbers. Line: {1}',
     'DOC_VERSION_VALUE_TYPE': 'Invalid SPDXVersion value, must be SPDX-M.N where M and N are numbers. Line: {0}',
     'DOC_COMMENT_VALUE_TYPE': 'DocumentComment value must be free form text between <text></text> tags, line:{0}',
+    'DOC_NAMESPACE_VALUE': 'Invalid DocumentNamespace value {0}, must contain a scheme (e.g. "https:") '
+                           'and should not contain the "#" delimiter, line:{1}',
+    'DOC_NAMESPACE_VALUE_TYPE': 'Invalid DocumentNamespace value, must contain a scheme (e.g. "https:") '
+                                'and should not contain the "#" delimiter, line: {0}',
     'REVIEWER_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
     'CREATOR_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
     'REVIEW_DATE_VALUE_TYPE': 'ReviewDate value must be date in ISO 8601 format, line: {0}',
@@ -107,6 +111,7 @@ class Parser(object):
         """attrib : spdx_version
                   | data_lics
                   | doc_comment
+                  | doc_namespace
                   | creator
                   | created
                   | creator_comment
@@ -1075,6 +1080,27 @@ class Parser(object):
         """doc_comment : DOC_COMMENT error"""
         self.error = True
         msg = ERROR_MESSAGES['DOC_COMMENT_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_doc_namespace_1(self, p):
+        """doc_namespace : DOC_NAMESPACE LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_doc_namespace(self.document, value)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['DOC_NAMESPACE_VALUE'].format(p[2], p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('DocumentNamespace', p.lineno(1))
+
+    def p_doc_namespace_2(self, p):
+        """doc_namespace : DOC_NAMESPACE error"""
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_NAMESPACE_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_data_license_1(self, p):
