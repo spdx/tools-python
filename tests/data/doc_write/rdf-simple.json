@@ -25,7 +25,10 @@
       "ns1:specVersion": "SPDX-2.1", 
       "ns1:dataLicense": {
         "@rdf:resource": "http://spdx.org/licenses/CC0-1.0"
-      }, 
+      },
+      "ns1:name": {
+        "@rdf:resource": "Sample_Document-V2.1"
+      },
       "ns1:referencesFile": {
         "ns1:File": {
           "ns1:licenseInfoInFile": {

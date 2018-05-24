@@ -189,6 +189,7 @@ class Document(object):
     Represent an SPDX document with these fields:
     - version: Spec version. Mandatory, one - Type: Version.
     - data_license: SPDX-Metadata license. Mandatory, one. Type: License.
+    - name: Name of the document. Mandatory, one. Type: str.
     - comment: Comments on the SPDX file, optional one. Type: str
     - creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
     - package: Package described by this document. Mandatory, one. Type: Package
@@ -198,11 +199,13 @@ class Document(object):
       Type: Review.
     """
 
-    def __init__(self, version=None, data_license=None, comment=None, package=None):
+    def __init__(self, version=None, data_license=None, name=None, comment=None,
+                 package=None):
         # avoid recursive impor
         from spdx.creationinfo import CreationInfo
         self.version = version
         self.data_license = data_license
+        self.name = name
         self.comment = comment
         self.creation_info = CreationInfo()
         self.package = package
@@ -237,6 +240,7 @@ class Document(object):
 
         return (self.validate_version(messages)
             and self.validate_data_lics(messages)
+            and self.validate_name(messages)
             and self.validate_creation_info(messages)
             and self.validate_package(messages)
             and self.validate_extracted_licenses(messages)
@@ -267,6 +271,16 @@ class Document(object):
             # FIXME: REALLY? what if someone wants to use something else?
             messages.append('Document data license must be CC0-1.0.')
             return False
+
+    def validate_name(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
+        if self.name is None:
+            messages.append('Document has no name.')
+            return False
+        else:
+            return True
 
     def validate_reviews(self, messages=None):
         # FIXME: messages should be returned

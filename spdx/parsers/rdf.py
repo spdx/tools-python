@@ -799,7 +799,7 @@ class Parser(PackageParser, FileParser, ReviewParser):
                 self.value_error('LL_VALUE', o)
 
     def parse_doc_fields(self, doc_term):
-        """Parses the version, data license and comment."""
+        """Parses the version, data license, name and comment."""
         for _s, _p, o in self.graph.triples((doc_term, self.spdx_namespace['specVersion'], None)):
             try:
                 self.builder.set_doc_version(self.doc, six.text_type(o))
@@ -815,6 +815,13 @@ class Parser(PackageParser, FileParser, ReviewParser):
                 self.value_error('DOC_D_LICS', o)
             except CardinalityError:
                 self.more_than_one_error('dataLicense')
+                break
+        for _s, _p, o in self.graph.triples(
+                (doc_term, self.spdx_namespace['name'], None)):
+            try:
+                self.builder.set_doc_name(self.doc, six.text_type(o))
+            except CardinalityError:
+                self.more_than_one_error('name')
                 break
         for _s, _p, o in self.graph.triples((doc_term, RDFS.comment, None)):
             try:
