@@ -521,6 +521,8 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter):
         # Data license
         data_lics = URIRef(self.document.data_license.url)
         self.graph.add((doc_node, self.spdx_namespace.dataLicense, data_lics))
+        doc_name = URIRef(self.document.name)
+        self.graph.add((doc_node, self.spdx_namespace.name, doc_name))
         return doc_node
 
     def write(self):

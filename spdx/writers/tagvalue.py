@@ -236,6 +236,7 @@ def write_document(document, out, validate=True):
     out.write('# Document Information\n\n')
     write_value('SPDXVersion', str(document.version), out)
     write_value('DataLicense', document.data_license.identifier, out)
+    write_value('DocumentName', document.name, out)
     if document.has_comment:
         write_text_value('DocumentComment', document.comment, out)
     write_separators(out)

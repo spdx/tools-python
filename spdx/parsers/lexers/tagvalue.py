@@ -21,6 +21,7 @@ class Lexer(object):
         # Top level fields
         'SPDXVersion': 'DOC_VERSION',
         'DataLicense': 'DOC_LICENSE',
+        'DocumentName': 'DOC_NAME',
         'DocumentComment': 'DOC_COMMENT',
         # Creation info
         'Creator': 'CREATOR',
