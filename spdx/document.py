@@ -193,6 +193,7 @@ class Document(object):
     - spdx_id: SPDX Identifier for the document to refer to itself in
       relationship to other elements. Mandatory, one. Type: str.
     - comment: Comments on the SPDX file, optional one. Type: str
+    - namespace: SPDX document specific namespace. Mandatory, one. Type: str
     - creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
     - package: Package described by this document. Mandatory, one. Type: Package
     - extracted_licenses: List of licenses extracted that are not part of the
@@ -201,9 +202,8 @@ class Document(object):
       Type: Review.
     """
 
-
     def __init__(self, version=None, data_license=None, name=None, spdx_id=None,
-                 comment=None, package=None):
+                 namespace=None, comment=None, package=None):
         # avoid recursive impor
         from spdx.creationinfo import CreationInfo
         self.version = version
@@ -211,6 +211,7 @@ class Document(object):
         self.name = name
         self.spdx_id = spdx_id
         self.comment = comment
+        self.namespace = namespace
         self.creation_info = CreationInfo()
         self.package = package
         self.extracted_licenses = []
@@ -246,11 +247,11 @@ class Document(object):
             and self.validate_data_lics(messages)
             and self.validate_name(messages)
             and self.validate_spdx_id(messages)
+            and self.validate_namespace(messages)
             and self.validate_creation_info(messages)
             and self.validate_package(messages)
             and self.validate_extracted_licenses(messages)
-            and self.validate_reviews(messages)
-        )
+            and self.validate_reviews(messages))
 
     def validate_version(self, messages=None):
         # FIXME: messages should be returned
@@ -283,6 +284,16 @@ class Document(object):
 
         if self.name is None:
             messages.append('Document has no name.')
+            return False
+        else:
+            return True
+
+    def validate_namespace(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
+        if self.namespace is None:
+            messages.append('Document has no namespace.')
             return False
         else:
             return True

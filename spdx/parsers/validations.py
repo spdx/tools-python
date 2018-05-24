@@ -113,6 +113,17 @@ def validate_doc_spdx_id(value, optional=False):
         return False
 
 
+def validate_doc_namespace(value, optional=False):
+    if value is None:
+        return optional
+    elif ((value.startswith('http://') or value.startswith(
+            'https://') or
+           value.startswith('ftp://')) and ('#' not in value)):
+        return True
+    else:
+        return False
+
+
 def validate_creator(value, optional=False):
     if value is None:
         return optional

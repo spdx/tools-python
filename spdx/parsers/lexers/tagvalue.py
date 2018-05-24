@@ -24,6 +24,7 @@ class Lexer(object):
         'DocumentName': 'DOC_NAME',
         'SPDXID': 'DOC_SPDX_ID',
         'DocumentComment': 'DOC_COMMENT',
+        'DocumentNamespace': 'DOC_NAMESPACE',
         # Creation info
         'Creator': 'CREATOR',
         'Created': 'CREATED',

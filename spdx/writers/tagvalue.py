@@ -238,6 +238,7 @@ def write_document(document, out, validate=True):
     write_value('DataLicense', document.data_license.identifier, out)
     write_value('DocumentName', document.name, out)
     write_value('SPDXID', 'SPDXRef-DOCUMENT', out)
+    write_value('DocumentNamespace', document.namespace, out)
     if document.has_comment:
         write_text_value('DocumentComment', document.comment, out)
     write_separators(out)

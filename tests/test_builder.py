@@ -74,6 +74,22 @@ class TestDocumentBuilder(unittest.case.TestCase):
         self.builder.set_doc_name(self.document, name_str)
         self.builder.set_doc_name(self.document, name_str)
 
+    def test_correct_doc_namespace(self):
+        doc_namespace_str = 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
+        self.builder.set_doc_namespace(self.document, doc_namespace_str)
+        assert self.document.namespace == doc_namespace_str
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_doc_namespace_value(self):
+        doc_namespace_str = 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT'
+        self.builder.set_doc_data_lics(self.document, doc_namespace_str)
+
+    @testing_utils.raises(builders.CardinalityError)
+    def test_doc_namespace_cardinality(self):
+        doc_namespace_str = 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
+        self.builder.set_doc_namespace(self.document, doc_namespace_str)
+        self.builder.set_doc_namespace(self.document, doc_namespace_str)
+
     def test_correct_data_comment(self):
         comment_str = 'This is a comment.'
         comment_text = '<text>' + comment_str + '</text>'
