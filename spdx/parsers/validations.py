@@ -100,6 +100,16 @@ def validate_doc_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
+def validate_doc_namespace(value, optional=False):
+    if value is None:
+        return optional
+    elif ((value.startswith('http://') or value.startswith('https://') or
+            value.startswith('ftp://')) and ('#' not in value)):
+        return True
+    else:
+        return False
+
+
 def validate_creator(value, optional=False):
     if value is None:
         return optional

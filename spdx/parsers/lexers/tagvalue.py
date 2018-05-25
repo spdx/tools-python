@@ -22,6 +22,7 @@ class Lexer(object):
         'SPDXVersion': 'DOC_VERSION',
         'DataLicense': 'DOC_LICENSE',
         'DocumentComment': 'DOC_COMMENT',
+        'DocumentNamespace': 'DOC_NAMESPACE',
         # Creation info
         'Creator': 'CREATOR',
         'Created': 'CREATED',

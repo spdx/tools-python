@@ -190,6 +190,7 @@ class Document(object):
     - version: Spec version. Mandatory, one - Type: Version.
     - data_license: SPDX-Metadata license. Mandatory, one. Type: License.
     - comment: Comments on the SPDX file, optional one. Type: str
+    - namespace: SPDX document specific namespace. Mandatory, one. Type: str
     - creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
     - package: Package described by this document. Mandatory, one. Type: Package
     - extracted_licenses: List of licenses extracted that are not part of the
@@ -198,12 +199,14 @@ class Document(object):
       Type: Review.
     """
 
-    def __init__(self, version=None, data_license=None, comment=None, package=None):
+    def __init__(self, version=None, data_license=None, comment=None,
+                 namespace=None, package=None):
         # avoid recursive impor
         from spdx.creationinfo import CreationInfo
         self.version = version
         self.data_license = data_license
         self.comment = comment
+        self.namespace = namespace
         self.creation_info = CreationInfo()
         self.package = package
         self.extracted_licenses = []
@@ -237,6 +240,7 @@ class Document(object):
 
         return (self.validate_version(messages)
             and self.validate_data_lics(messages)
+            and self.validate_namespace(messages)
             and self.validate_creation_info(messages)
             and self.validate_package(messages)
             and self.validate_extracted_licenses(messages)
@@ -267,6 +271,16 @@ class Document(object):
             # FIXME: REALLY? what if someone wants to use something else?
             messages.append('Document data license must be CC0-1.0.')
             return False
+
+    def validate_namespace(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
+        if self.namespace is None:
+            messages.append('Document has no namespace.')
+            return False
+        else:
+            return True
 
     def validate_reviews(self, messages=None):
         # FIXME: messages should be returned

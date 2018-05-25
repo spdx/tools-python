@@ -33,6 +33,8 @@ from spdx.parsers.builderexceptions import SPDXValueError
 ERROR_MESSAGES = {
     'DOC_VERS_VALUE': 'Invalid specVersion \'{0}\' must be SPDX-M.N where M and N are numbers.',
     'DOC_D_LICS': 'Invalid dataLicense \'{0}\' must be http://spdx.org/licenses/CC0-1.0.',
+    'DOC_NAMESPACE_VALUE': 'Invalid DocumentNamespace value {0}, must contain a scheme (e.g. "https:") '
+                           'and should not contain the "#" delimiter.',
     'LL_VALUE': 'Invalid licenseListVersion \'{0}\' must be of the format N.N where N is a number',
     'CREATED_VALUE': 'Invalid created value \'{0}\' must be date in ISO 8601 format.',
     'CREATOR_VALUE': 'Invalid creator value \'{0}\' must be Organization, Tool or Person.',
@@ -799,7 +801,15 @@ class Parser(PackageParser, FileParser, ReviewParser):
                 self.value_error('LL_VALUE', o)
 
     def parse_doc_fields(self, doc_term):
-        """Parses the version, data license and comment."""
+        """Parses the version, data license, comment, and namespace."""
+        try:
+            if doc_term.count('#', 0, len(doc_term)) <= 1:
+                doc_namespace = doc_term.split('#')[0]
+                self.builder.set_doc_namespace(self.doc, doc_namespace)
+            else:
+                self.value_error('DOC_NAMESPACE_VALUE', doc_term)
+        except SPDXValueError:
+            self.value_error('DOC_NAMESPACE_VALUE', doc_term)
         for _s, _p, o in self.graph.triples((doc_term, self.spdx_namespace['specVersion'], None)):
             try:
                 self.builder.set_doc_version(self.doc, six.text_type(o))

@@ -1,5 +1,6 @@
 SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
+DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
 DocumentComment: <text>This is a sample spreadsheet</text>
 
 ## Creation Information
