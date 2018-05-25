@@ -102,6 +102,21 @@ class DocBuilder(object):
         else:
             raise CardinalityError('Document::DataLicense')
 
+    def set_doc_spdx_id(self, doc, doc_spdx_id_line):
+        """Sets the document SPDX Identifier.
+        Raises value error if malformed value, CardinalityError
+        if already defined.
+        """
+        if not self.doc_spdx_id_set:
+            if doc_spdx_id_line == 'SPDXRef-DOCUMENT':
+                doc.spdx_id = doc_spdx_id_line
+                self.doc_spdx_id_set = True
+                return True
+            else:
+                raise SPDXValueError('Document::SPDX Identifier')
+        else:
+            raise CardinalityError('Document::SPDX Identifier')
+
     def set_doc_comment(self, doc, comment):
         """Sets document comment, Raises CardinalityError if
         comment already set.
@@ -123,6 +138,7 @@ class DocBuilder(object):
         self.doc_version_set = False
         self.doc_comment_set = False
         self.doc_data_lics_set = False
+        self.doc_spdx_id_set = False
 
 
 class EntityBuilder(object):

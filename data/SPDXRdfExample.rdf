@@ -3,7 +3,7 @@
     xmlns:j.0="http://usefulinc.com/ns/doap#"
     xmlns="http://spdx.org/rdf/terms#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-  <SpdxDocument rdf:about="http://www.spdx.org/tools#SPDXANALYSIS">
+  <SpdxDocument rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT">
     <creationInfo>
       <CreationInfo>
         <created>2010-02-03T00:00:00Z</created>
