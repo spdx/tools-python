@@ -340,6 +340,20 @@ class TestPackageBuilder(TestCase):
     def test_set_pkg_desc_order(self):
         self.builder.set_pkg_desc(self.document, '<text>something</text>')
 
+    @testing_utils.raises(builders.OrderError)
+    def test_set_pkg_spdx_id_order(self):
+        self.builder.set_pkg_spdx_id(self.document, 'SPDXRe-Package')
+
+    def test_correct_pkg_spdx_id(self):
+        self.builder.create_package(self.document, 'pkg')
+        assert self.builder.set_pkg_spdx_id(self.document, 'SPDXRef-Package')
+        assert self.document.package.spdx_id == 'SPDXRef-Package'
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_incorrect_pkg_spdx_id(self):
+        self.builder.create_package(self.document, 'pkg')
+        assert self.builder.set_pkg_spdx_id(self.document, 'SPDXRe-Package')
+
 
 if __name__ == '__main__':
     unittest.main()

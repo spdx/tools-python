@@ -85,14 +85,17 @@ class TestLexer(TestCase):
 
     def test_pacakage(self):
         data = '''
+        SPDXID: SPDXRef-Package
         PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
         PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)
         '''
         self.l.input(data)
-        self.token_assert_helper(self.l.token(), 'PKG_CHKSUM', 'PackageChecksum', 2)
-        self.token_assert_helper(self.l.token(), 'CHKSUM', 'SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12', 2)
-        self.token_assert_helper(self.l.token(), 'PKG_VERF_CODE', 'PackageVerificationCode', 3)
-        self.token_assert_helper(self.l.token(), 'LINE', '4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)', 3)
+        self.token_assert_helper(self.l.token(), 'PKG_SPDX_ID', 'SPDXID', 2)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-Package', 2)
+        self.token_assert_helper(self.l.token(), 'PKG_CHKSUM', 'PackageChecksum', 3)
+        self.token_assert_helper(self.l.token(), 'CHKSUM', 'SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12', 3)
+        self.token_assert_helper(self.l.token(), 'PKG_VERF_CODE', 'PackageVerificationCode', 4)
+        self.token_assert_helper(self.l.token(), 'LINE', '4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)', 4)
 
     def token_assert_helper(self, token, ttype, value, line):
         assert token.type == ttype
@@ -126,6 +129,7 @@ class TestParser(TestCase):
 
     package_str = '\n'.join([
         'PackageName: Test',
+        'SPDXID: SPDXRef-Package',
         'PackageVersion: Version 0.9.2',
         'PackageDownloadLocation: http://example.com/test',
         'PackageSummary: <text>Test package</text>',
@@ -190,6 +194,7 @@ class TestParser(TestCase):
         assert document is not None
         assert not error
         assert document.package.name == 'Test'
+        assert document.package.spdx_id == 'SPDXRef-Package'
         assert document.package.version == 'Version 0.9.2'
         assert len(document.package.licenses_from_files) == 2
         assert (document.package.conc_lics.identifier == 'LicenseRef-2.0 AND Apache-2.0')

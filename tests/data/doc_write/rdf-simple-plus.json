@@ -5,6 +5,10 @@
     "ns1:SpdxDocument": {
       "ns1:describesPackage": {
         "ns1:Package": {
+          "@rdf:about": "http://www.spdx.org/tools#SPDXRef-Package",
+          "ns1:Package": {
+            "@rdf:resource": "SPDXRef-Package"
+          },
           "ns1:hasFile": null, 
           "ns1:name": "some/path", 
           "ns1:licenseDeclared": {

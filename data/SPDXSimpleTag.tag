@@ -22,6 +22,7 @@ ReviewComment: <text>Alice was also here.</text>
 
 # Package info
 PackageName: Test
+SPDXID: SPDXRef-Package
 PackageVersion: Version 0.9.2
 PackageDownloadLocation: http://example.com/test
 PackageSummary: <text>Test package</text>

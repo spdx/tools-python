@@ -46,6 +46,8 @@ ERROR_MESSAGES = {
     'REVIEW_COMMENT_VALUE_TYPE': 'ReviewComment value must be free form text between <text></text> tags, line:{0}',
     'A_BEFORE_B': '{0} Can not appear before {1}, line: {2}',
     'PACKAGE_NAME_VALUE': 'PackageName must be single line of text, line: {0}',
+    'PKG_SPDX_ID_VALUE': 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
+                             'letters, numbers, ".", "-".',
     'PKG_VERSION_VALUE': 'PackageVersion must be single line of text, line: {0}',
     'PKG_FILE_NAME_VALUE': 'PackageFileName must be single line of text, line: {0}',
     'PKG_SUPPL_VALUE': 'PackageSupplier must be Organization, Person or NOASSERTION, line: {0}',
@@ -115,6 +117,7 @@ class Parser(object):
                   | review_date
                   | review_comment
                   | package_name
+                  | pkg_spdx_id
                   | package_version
                   | pkg_down_location
                   | pkg_home
@@ -988,6 +991,27 @@ class Parser(object):
         """package_name : PKG_NAME error"""
         self.error = True
         msg = ERROR_MESSAGES['PACKAGE_NAME_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_package_spdx_id_1(self, p):
+        """pkg_spdx_id : PKG_SPDX_ID LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_pkg_spdx_id(self.document, value)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['PKG_SPDX_ID_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('SPDXID', p.lineno(1))
+
+    def p_package_spdx_id_2(self, p):
+        """pkg_spdx_id : PKG_SPDX_ID error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_SPDX_ID_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_reviewer_1(self, p):

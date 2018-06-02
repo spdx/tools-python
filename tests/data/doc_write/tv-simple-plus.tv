@@ -4,6 +4,7 @@ DataLicense: CC0-1.0
 # Creation Info
 # Package
 PackageName: some/path
+SPDXID: SPDXRef-Package
 PackageDownloadLocation: NOASSERTION
 PackageVerificationCode: SOME code
 PackageLicenseDeclared: NOASSERTION
