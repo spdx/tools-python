@@ -511,11 +511,13 @@ class PackageBuilder(object):
         """Resets the builder's state in order to build new packages."""
         # FIXME: this state does not make sense
         self.package_set = False
+        self.package_spdx_id_set = False
         self.package_vers_set = False
         self.package_file_name_set = False
         self.package_supplier_set = False
         self.package_originator_set = False
         self.package_down_location_set = False
+        self.package_files_analyzed_set = False
         self.package_home_set = False
         self.package_verif_set = False
         self.package_chk_sum_set = False
@@ -526,6 +528,8 @@ class PackageBuilder(object):
         self.package_cr_text_set = False
         self.package_summary_set = False
         self.package_desc_set = False
+        self.package_comment_set = False
+        self.pkg_ext_comment_set = False
 
     def create_package(self, doc, name):
         """Creates a package for the SPDX Document.
@@ -538,6 +542,22 @@ class PackageBuilder(object):
             return True
         else:
             raise CardinalityError('Package::Name')
+
+    def set_pkg_spdx_id(self, doc, spdx_id):
+        """
+        Sets the Package SPDX Identifier.
+        Raises SPDXValueError if malformed value, CardinalityError if
+        already defined.
+        """
+        self.assert_package_exists()
+        if not self.package_spdx_id_set:
+            if validations.validate_pkg_spdx_id(spdx_id):
+                doc.package.spdx_id = spdx_id
+                return True
+            else:
+                raise SPDXValueError('Package::SPDXID')
+        else:
+            raise CardinalityError('Package::SPDXID')
 
     def set_pkg_vers(self, doc, version):
         """Sets package version, if not already set.
@@ -614,6 +634,25 @@ class PackageBuilder(object):
             return True
         else:
             raise CardinalityError('Package::DownloadLocation')
+
+    def set_pkg_files_analyzed(self, doc, files_analyzed):
+        """
+        Sets the package files analyzed, if not already set.
+        Raises SPDXValueError if malformed value, CardinalityError if
+        already defined.
+        """
+        self.assert_package_exists()
+        if not self.package_files_analyzed_set:
+            if files_analyzed:
+                if validations.validate_pkg_files_analyzed(files_analyzed):
+                    self.package_files_analyzed_set = True
+                    doc.package.files_analyzed = files_analyzed
+                    print(doc.package.files_analyzed)
+                    return True
+                else:
+                    raise SPDXValueError('Package::FilesAnalyzed')
+        else:
+            raise CardinalityError('Package::FilesAnalyzed')
 
     def set_pkg_home(self, doc, location):
         """Sets the package homepage location if not already set.
@@ -800,6 +839,82 @@ class PackageBuilder(object):
                 raise SPDXValueError('Package::Description')
         else:
             raise CardinalityError('Package::Description')
+
+    def set_pkg_comment(self, doc, text):
+        """Set's the package's comment.
+        Raises SPDXValueError if text is not free form text.
+        Raises CardinalityError if comment already set.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_comment_set:
+            self.package_comment_set = True
+            if validations.validate_pkg_comment(text):
+                doc.package.comment = str_from_text(text)
+            else:
+                raise SPDXValueError('Package::Comment')
+        else:
+            raise CardinalityError('Package::Comment')
+
+    def set_pkg_ext_ref_category(self, doc, category):
+        """
+        Sets the `category` attribute of the `ExternalPackageRef` object.
+        """
+        self.assert_package_exists()
+        if validations.validate_pkg_ext_ref_category(category):
+            if (len(doc.package.pkg_ext_refs) and
+                    doc.package.pkg_ext_refs[-1].category is None):
+                doc.package.pkg_ext_refs[-1].category = category
+            else:
+                doc.package.add_pkg_ext_refs(
+                    package.ExternalPackageRef(category=category))
+        else:
+            raise SPDXValueError('ExternalRef::Category')
+
+    def set_pkg_ext_ref_type(self, doc, pkg_ext_ref_type):
+        """
+        Sets the `pkg_ext_ref_type` attribute of the `ExternalPackageRef` object.
+        """
+        self.assert_package_exists()
+        if validations.validate_pkg_ext_ref_type(pkg_ext_ref_type):
+            if (len(doc.package.pkg_ext_refs) and
+                    doc.package.pkg_ext_refs[-1].pkg_ext_ref_type is None):
+                doc.package.pkg_ext_refs[-1].pkg_ext_ref_type = pkg_ext_ref_type
+            else:
+                doc.package.add_pkg_ext_refs(package.ExternalPackageRef(
+                    pkg_ext_ref_type=pkg_ext_ref_type))
+        else:
+            raise SPDXValueError('ExternalRef::Type')
+
+    def set_pkg_ext_ref_locator(self, doc, locator):
+        """
+        Sets the `locator` attribute of the `ExternalPackageRef` object.
+        """
+        self.assert_package_exists()
+        if (len(doc.package.pkg_ext_refs) and
+                doc.package.pkg_ext_refs[-1].locator is None):
+            doc.package.pkg_ext_refs[-1].locator = locator
+        else:
+            doc.package.add_pkg_ext_refs(package.ExternalPackageRef(
+                locator=locator))
+
+    def add_pkg_ext_ref_comment(self, doc, comment):
+        """
+        Sets the `comment` attribute of the `ExternalPackageRef` object.
+        """
+        self.assert_package_exists()
+        if not len(doc.package.pkg_ext_refs):
+            raise OrderError('Package::ExternalRef')
+        else:
+            if validations.validate_pkg_ext_ref_comment(comment):
+                doc.package.pkg_ext_refs[-1].comment = str_from_text(comment)
+            else:
+                raise SPDXValueError('ExternalRef::Comment')
+
+    def add_pkg_ext_refs(self, doc, category, pkg_ext_ref_type, locator):
+        self.set_pkg_ext_ref_category(doc, category)
+        self.set_pkg_ext_ref_type(doc, pkg_ext_ref_type)
+        self.set_pkg_ext_ref_locator(doc, locator)
 
     def assert_package_exists(self):
         if not self.package_set:

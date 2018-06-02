@@ -100,6 +100,28 @@ def validate_pkg_desc(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
+def validate_pkg_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
+def validate_pkg_ext_ref_category(value, optional=False):
+    if value.upper() in ['SECURITY', 'OTHER', 'PACKAGE-MANAGER']:
+        return True
+    else:
+        return False
+
+
+def validate_pkg_ext_ref_type(value, optional=False):
+    if re.match(r'^[A-Za-z0-9.\-]+$', value) is not None:
+        return True
+    else:
+        return False
+
+
+def validate_pkg_ext_ref_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
 def validate_doc_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
@@ -157,6 +179,22 @@ def validate_annotation_type(value, optional=False):
         return True
     else:
         return False
+
+
+def validate_pkg_spdx_id(value, optional=False):
+    value = value.split('#')[-1]
+    TEXT_RE = re.compile(r'SPDXRef-([A-Za-z0-9\.\-]+)', re.UNICODE)
+    if value is None:
+        return optional
+    else:
+        return TEXT_RE.match(value) is not None
+
+
+def validate_pkg_files_analyzed(value, optional=False):
+    if value in ['True', 'true', 'False', 'false']:
+        return True
+    else:
+        return optional
 
 
 def validate_pkg_src_info(value, optional=False):

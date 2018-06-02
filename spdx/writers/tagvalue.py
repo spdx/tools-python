@@ -155,9 +155,13 @@ def write_package(package, out):
     """
     out.write('# Package\n\n')
     write_value('PackageName', package.name, out)
+    write_value('SPDXID', package.spdx_id, out)
     if package.has_optional_field('version'):
         write_value('PackageVersion', package.version, out)
     write_value('PackageDownloadLocation', package.download_location, out)
+
+    if package.has_optional_field('files_analyzed'):
+        write_value('FilesAnalyzed', package.files_analyzed, out)
 
     if package.has_optional_field('summary'):
         write_text_value('PackageSummary', package.summary, out)
@@ -181,6 +185,9 @@ def write_package(package, out):
 
     if package.has_optional_field('description'):
         write_text_value('PackageDescription', package.description, out)
+
+    if package.has_optional_field('comment'):
+        write_text_value('PackageComment', package.comment, out)
 
     if isinstance(package.license_declared, (document.LicenseConjunction,
         document.LicenseDisjunction)):
@@ -209,6 +216,14 @@ def write_package(package, out):
 
     if package.has_optional_field('homepage'):
         write_value('PackageHomePage', package.homepage, out)
+
+    for pkg_ref in package.pkg_ext_refs:
+        pkg_ref_str = ' '.join([pkg_ref.category,
+                                pkg_ref.pkg_ext_ref_type,
+                                pkg_ref.locator])
+        write_value('ExternalRef', pkg_ref_str, out)
+        if pkg_ref.comment:
+            write_text_value('ExternalRefComment', pkg_ref.comment, out)
 
     # Write sorted files.
     for spdx_file in sorted(package.files):
