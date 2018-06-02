@@ -41,6 +41,8 @@ ERROR_MESSAGES = {
     'CREATED_VALUE': 'Invalid created value \'{0}\' must be date in ISO 8601 format.',
     'CREATOR_VALUE': 'Invalid creator value \'{0}\' must be Organization, Tool or Person.',
     'EXT_DOC_REF_VALUE': 'Failed to extract {0} from ExternalDocumentRef.',
+    'PKG_SPDX_ID_VALUE': 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
+                         'letters, numbers, ".", "-".',
     'PKG_SUPPL_VALUE': 'Invalid package supplier value \'{0}\' must be Organization, Person or NOASSERTION.',
     'PKG_ORIGINATOR_VALUE': 'Invalid package supplier value \'{0}\'  must be Organization, Person or NOASSERTION.',
     'PKG_DOWN_LOC': 'Invalid package download location value \'{0}\'  must be a url or NONE or NOASSERTION',
@@ -320,6 +322,15 @@ class PackageParser(LicenseParser):
                 except CardinalityError:
                     self.more_than_one_error('Package name')
                     break
+        # Set SPDXID
+        try:
+            if p_term.count('#', 0, len(p_term)) == 1:
+                pkg_spdx_id = p_term.split('#')[-1]
+                self.builder.set_pkg_spdx_id(self.doc, pkg_spdx_id)
+            else:
+                self.value_error('PKG_SPDX_ID_VALUE', p_term)
+        except SPDXValueError:
+            self.value_error('PKG_SPDX_ID_VALUE', p_term)
 
         self.p_pkg_vinfo(p_term, self.spdx_namespace['versionInfo'])
         self.p_pkg_fname(p_term, self.spdx_namespace['packageFileName'])

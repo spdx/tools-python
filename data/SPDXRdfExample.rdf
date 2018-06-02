@@ -132,7 +132,7 @@
       </File>
     </referencesFile>
     <describesPackage>
-      <Package rdf:about="http://www.spdx.org/tools#SPDXANALYSIS?package">
+      <Package rdf:about="http://www.spdx.org/tools#SPDXRef-Package">
         <licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/Apache-1.0"/>
         <downloadLocation>http://www.spdx.org/tools</downloadLocation>
         <supplier>Organization:Linux Foundation</supplier>

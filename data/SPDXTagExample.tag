@@ -30,6 +30,7 @@ SPDXREF: SPDXRef-45
 
 ## Package Information
 PackageName: SPDX Translator
+SPDXID: SPDXRef-Package
 PackageVersion: Version 0.9.2
 PackageDownloadLocation: http://www.spdx.org/tools
 PackageSummary: <text>SPDX Translator utility</text>

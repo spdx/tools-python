@@ -512,6 +512,7 @@ class PackageBuilder(object):
         """Resets the builder's state in order to build new packages."""
         # FIXME: this state does not make sense
         self.package_set = False
+        self.package_spdx_id_set = False
         self.package_vers_set = False
         self.package_file_name_set = False
         self.package_supplier_set = False
@@ -539,6 +540,22 @@ class PackageBuilder(object):
             return True
         else:
             raise CardinalityError('Package::Name')
+
+    def set_pkg_spdx_id(self, doc, spdx_id):
+        """
+        Sets the Package SPDX Identifier.
+        Raises SPDXValueError if malformed value, CardinalityError if
+        already defined.
+        """
+        self.assert_package_exists()
+        if not self.package_spdx_id_set:
+            if validations.validate_pkg_spdx_id(spdx_id):
+                doc.package.spdx_id = spdx_id
+                return True
+            else:
+                raise SPDXValueError('Package::SPDXID')
+        else:
+            raise CardinalityError('Package::SPDXID')
 
     def set_pkg_vers(self, doc, version):
         """Sets package version, if not already set.

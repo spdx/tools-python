@@ -110,6 +110,7 @@ class TestDocument(TestCase):
         doc.creation_info.set_created_now()
 
         package = doc.package = Package(name='some/path', download_location=NoAssert())
+        package.spdx_id = 'SPDXRef-Package'
         package.cr_text = 'Some copyrught'
         package.verif_code = 'SOME code'
         package.license_declared = NoAssert()
@@ -143,6 +144,7 @@ class TestWriters(TestCase):
         doc.creation_info.set_created_now()
 
         package = doc.package = Package(name='some/path', download_location=NoAssert())
+        package.spdx_id = 'SPDXRef-Package'
         package.cr_text = 'Some copyrught'
         package.verif_code = 'SOME code'
         package.check_sum = Algorithm('SHA1', 'SOME-SHA1')

@@ -61,6 +61,8 @@ ERROR_MESSAGES = {
                                 'SPDXID is a unique string containing letters, numbers, ".","-".',
     'A_BEFORE_B': '{0} Can not appear before {1}, line: {2}',
     'PACKAGE_NAME_VALUE': 'PackageName must be single line of text, line: {0}',
+    'PKG_SPDX_ID_VALUE': 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
+                             'letters, numbers, ".", "-".',
     'PKG_VERSION_VALUE': 'PackageVersion must be single line of text, line: {0}',
     'PKG_FILE_NAME_VALUE': 'PackageFileName must be single line of text, line: {0}',
     'PKG_SUPPL_VALUE': 'PackageSupplier must be Organization, Person or NOASSERTION, line: {0}',
@@ -154,6 +156,7 @@ class Parser(object):
                   | annotation_type
                   | annotation_spdx_id
                   | package_name
+                  | pkg_spdx_id
                   | package_version
                   | pkg_down_location
                   | pkg_home

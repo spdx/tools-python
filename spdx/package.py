@@ -29,6 +29,8 @@ class Package(object):
     Represent an analyzed Package.
     Fields:
      - name : Mandatory, string.
+     - spdx_id: Uniquely identify any element in an SPDX document which may be
+     referenced by other elements. Mandatory, one. Type: str.
      - version: Optional, string.
      - file_name: Optional, string.
      - supplier: Optional, Organization or Person or NO_ASSERTION.
@@ -52,9 +54,10 @@ class Package(object):
      - verif_exc_files : list of file names excluded from verification code or None.
     """
 
-    def __init__(self, name=None, download_location=None, version=None,
-                 file_name=None, supplier=None, originator=None):
+    def __init__(self, name=None, spdx_id=None, download_location=None,
+                 version=None, file_name=None, supplier=None, originator=None):
         self.name = name
+        self.spdx_id = spdx_id
         self.version = version
         self.file_name = file_name
         self.supplier = supplier
@@ -174,7 +177,7 @@ class Package(object):
         """Fields marked as Mandatory and of type string in class
         docstring must be of a type that provides __str__ method.
         """
-        FIELDS = ['name', 'download_location', 'verif_code', 'cr_text']
+        FIELDS = ['name', 'spdx_id', 'download_location', 'verif_code', 'cr_text']
         messages = self.validate_str_fields(FIELDS, False, messages)
 
         return messages

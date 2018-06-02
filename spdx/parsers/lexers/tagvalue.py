@@ -43,6 +43,7 @@ class Lexer(object):
         'SPDXREF': 'ANNOTATION_SPDX_ID',
         # Package Fields
         'PackageName': 'PKG_NAME',
+        'SPDXID': 'PKG_SPDX_ID',
         'PackageVersion': 'PKG_VERSION',
         'PackageDownloadLocation': 'PKG_DOWN',
         'PackageSummary': 'PKG_SUM',

@@ -566,9 +566,14 @@ class PackageWriter(LicenseWriter):
         Return a Node representing the package.
         Files must have been added to the graph before this method is called.
         """
-        package_node = BNode()
+        package_node = URIRef('http://www.spdx.org/tools#SPDXRef-Package')
         type_triple = (package_node, RDF.type, self.spdx_namespace.Package)
         self.graph.add(type_triple)
+        # Package SPDXID
+        pkg_spdx_id = URIRef(package.spdx_id)
+        pkg_spdx_id_triple = (package_node, self.spdx_namespace.Package,
+                              pkg_spdx_id)
+        self.graph.add(pkg_spdx_id_triple)
         # Handle optional fields:
         self.handle_pkg_optional_fields(package, package_node)
         # package name
