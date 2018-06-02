@@ -185,6 +185,9 @@ def write_package(package, out):
         write_value('PackageVersion', package.version, out)
     write_value('PackageDownloadLocation', package.download_location, out)
 
+    if package.has_optional_field('files_analyzed'):
+        write_value('FilesAnalyzed', package.files_analyzed, out)
+
     if package.has_optional_field('summary'):
         write_text_value('PackageSummary', package.summary, out)
 

@@ -518,6 +518,7 @@ class PackageBuilder(object):
         self.package_supplier_set = False
         self.package_originator_set = False
         self.package_down_location_set = False
+        self.package_files_analyzed_set = False
         self.package_home_set = False
         self.package_verif_set = False
         self.package_chk_sum_set = False
@@ -632,6 +633,25 @@ class PackageBuilder(object):
             return True
         else:
             raise CardinalityError('Package::DownloadLocation')
+
+    def set_pkg_files_analyzed(self, doc, files_analyzed):
+        """
+        Sets the package files analyzed, if not already set.
+        Raises SPDXValueError if malformed value, CardinalityError if
+        already defined.
+        """
+        self.assert_package_exists()
+        if not self.package_files_analyzed_set:
+            if files_analyzed:
+                if validations.validate_pkg_files_analyzed(files_analyzed):
+                    self.package_files_analyzed_set = True
+                    doc.package.files_analyzed = files_analyzed
+                    print(doc.package.files_analyzed)
+                    return True
+                else:
+                    raise SPDXValueError('Package::FilesAnalyzed')
+        else:
+            raise CardinalityError('Package::FilesAnalyzed')
 
     def set_pkg_home(self, doc, location):
         """Sets the package homepage location if not already set.
