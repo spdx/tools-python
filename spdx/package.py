@@ -36,6 +36,12 @@ class Package(object):
      - supplier: Optional, Organization or Person or NO_ASSERTION.
      - originator: Optional, Organization or Person.
      - download_location: Mandatory, URL as string.
+     - files_analyzed: Indicates whether the file content of this package has
+     been available for or subjected to analysis when creating the SPDX
+     document. If "false" indicates packages that represent metadata or URI
+     references to a project, product, artifact, distribution or a component.
+     If set to "false", the package must not contain any files.
+     Optional, boolean.
      - homepage: Optional, URL as string or NONE or NO_ASSERTION.
      - verif_code: Mandatory string.
      - check_sum: Optional , spdx.checksum.Algorithm.
@@ -63,6 +69,7 @@ class Package(object):
         self.supplier = supplier
         self.originator = originator
         self.download_location = download_location
+        self.files_analyzed = None
         self.homepage = None
         self.verif_code = None
         self.check_sum = None
@@ -179,7 +186,7 @@ class Package(object):
             'homepage',
             'source_info',
             'summary',
-            'description'
+            'description',
         ]
         return self.validate_str_fields(FIELDS, True, messages)
 

@@ -41,6 +41,7 @@ ERROR_MESSAGES = {
     'PKG_SUPPL_VALUE': 'Invalid package supplier value \'{0}\' must be Organization, Person or NOASSERTION.',
     'PKG_ORIGINATOR_VALUE': 'Invalid package supplier value \'{0}\'  must be Organization, Person or NOASSERTION.',
     'PKG_DOWN_LOC': 'Invalid package download location value \'{0}\'  must be a url or NONE or NOASSERTION',
+    'PKG_FILES_ANALYZED_VALUE': 'FilesAnalyzed must be a boolean value, line: {0}',
     'PKG_CONC_LIST': 'Package concluded license list must have more than one member',
     'LICS_LIST_MEMBER' : 'Declaritive or Conjunctive license set member must be a license url or identifier',
     'PKG_SINGLE_LICS' : 'Package concluded license must be a license url or spdx:noassertion or spdx:none.',
@@ -323,6 +324,7 @@ class PackageParser(LicenseParser):
         self.p_pkg_suppl(p_term, self.spdx_namespace['supplier'])
         self.p_pkg_originator(p_term, self.spdx_namespace['originator'])
         self.p_pkg_down_loc(p_term, self.spdx_namespace['downloadLocation'])
+        self.p_pkg_files_analyzed(p_term, self.spdx_namespace['filesAnalyzed'])
         self.p_pkg_homepg(p_term, self.doap_namespace['homepage'])
         self.p_pkg_chk_sum(p_term, self.spdx_namespace['checksum'])
         self.p_pkg_src_info(p_term, self.spdx_namespace['sourceInfo'])
@@ -457,6 +459,16 @@ class PackageParser(LicenseParser):
                 break
             except SPDXValueError:
                 self.value_error('PKG_DOWN_LOC', o)
+
+    def p_pkg_files_analyzed(self, p_term, predicate):
+        for _s, _p, o in self.graph.triples((p_term, predicate, None)):
+            try:
+                self.builder.set_pkg_files_analyzed(self.doc, six.text_type(o))
+            except CardinalityError:
+                self.more_than_one_error('Package Files Analyzed')
+                break
+            except SPDXValueError:
+                self.value_error('PKG_FILES_ANALYZED_VALUE', o)
 
     def p_pkg_originator(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):

@@ -128,6 +128,13 @@ def validate_pkg_spdx_id(value, optional=False):
         return TEXT_RE.match(value) is not None
 
 
+def validate_pkg_files_analyzed(value, optional=False):
+    if value in ['True', 'true', 'False', 'false']:
+        return True
+    else:
+        return optional
+
+
 def validate_pkg_src_info(value, optional=False):
     return validate_is_free_form_text(value, optional)
 

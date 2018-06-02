@@ -36,6 +36,7 @@ class Lexer(object):
         'SPDXID': 'PKG_SPDX_ID',
         'PackageVersion': 'PKG_VERSION',
         'PackageDownloadLocation': 'PKG_DOWN',
+        'FilesAnalyzed': 'PKG_FILES_ANALYZED',
         'PackageSummary': 'PKG_SUM',
         'PackageSourceInfo': 'PKG_SRC_INFO',
         'PackageFileName': 'PKG_FILE_NAME',

@@ -344,6 +344,10 @@ class TestPackageBuilder(TestCase):
     def test_set_pkg_spdx_id_order(self):
         self.builder.set_pkg_spdx_id(self.document, 'SPDXRe-Package')
 
+    @testing_utils.raises(builders.OrderError)
+    def test_set_pkg_files_analyzed_order(self):
+        self.builder.set_pkg_files_analyzed(self.document, 'True')
+
     def test_correct_pkg_spdx_id(self):
         self.builder.create_package(self.document, 'pkg')
         assert self.builder.set_pkg_spdx_id(self.document, 'SPDXRef-Package')
@@ -353,6 +357,19 @@ class TestPackageBuilder(TestCase):
     def test_incorrect_pkg_spdx_id(self):
         self.builder.create_package(self.document, 'pkg')
         assert self.builder.set_pkg_spdx_id(self.document, 'SPDXRe-Package')
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_incorrect_pkg_files_analyzed(self):
+        self.builder.create_package(self.document, 'pkg')
+        assert self.builder.set_pkg_files_analyzed(self.document, 'XYZ')
+
+    def test_correct_pkg_files_analyzed_1(self):
+        self.builder.create_package(self.document, 'pkg')
+        assert self.builder.set_pkg_files_analyzed(self.document, 'True')
+
+    def test_correct_pkg_files_analyzed_2(self):
+        self.builder.create_package(self.document, 'pkg')
+        assert self.builder.set_pkg_files_analyzed(self.document, 'true')
 
 
 if __name__ == '__main__':

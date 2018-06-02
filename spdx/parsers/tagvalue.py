@@ -53,6 +53,7 @@ ERROR_MESSAGES = {
     'PKG_SUPPL_VALUE': 'PackageSupplier must be Organization, Person or NOASSERTION, line: {0}',
     'PKG_ORIG_VALUE': 'PackageOriginator must be Organization, Person or NOASSERTION, line: {0}',
     'PKG_DOWN_VALUE': 'PackageDownloadLocation must be a url or NONE or NOASSERTION, line: {0}',
+    'PKG_FILES_ANALYZED_VALUE': 'FilesAnalyzed must be a boolean value, line: {0}',
     'PKG_HOME_VALUE': 'PackageHomePage must be a url or NONE or NOASSERTION, line: {0}',
     'PKG_SRC_INFO_VALUE': 'PackageSourceInfo must be free form text, line: {0}',
     'PKG_CHKSUM_VALUE': 'PackageChecksum must be a single line of text, line: {0}',
@@ -120,6 +121,7 @@ class Parser(object):
                   | pkg_spdx_id
                   | package_version
                   | pkg_down_location
+                  | pkg_files_analyzed
                   | pkg_home
                   | pkg_summary
                   | pkg_src_info
@@ -875,6 +877,27 @@ class Parser(object):
         """pkg_down_location : PKG_DOWN error"""
         self.error = True
         msg = ERROR_MESSAGES['PKG_DOWN_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_pkg_files_analyzed_1(self, p):
+        """pkg_files_analyzed : PKG_FILES_ANALYZED LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_pkg_files_analyzed(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('FilesAnalyzed', p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['PKG_FILES_ANALYZED_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+
+    def p_pkg_files_analyzed_2(self, p):
+        """pkg_files_analyzed : PKG_FILES_ANALYZED error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_FILES_ANALYZED_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_pkg_down_value_1(self, p):

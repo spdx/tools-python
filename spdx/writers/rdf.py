@@ -412,6 +412,8 @@ class PackageWriter(LicenseWriter):
         self.handle_package_literal_optional(package, package_node, self.spdx_namespace.licenseComments, 'license_comment')
         self.handle_package_literal_optional(package, package_node, self.spdx_namespace.summary, 'summary')
         self.handle_package_literal_optional(package, package_node, self.spdx_namespace.description, 'description')
+        self.handle_package_literal_optional(package, package_node, self.spdx_namespace.filesAnalyzed, 'files_analyzed')
+
 
         if package.has_optional_field('check_sum'):
             checksum_node = self.create_checksum_node(package.check_sum)
