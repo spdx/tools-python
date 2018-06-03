@@ -284,6 +284,18 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         else:
             raise CardinalityError('Package::Description')
 
+    def set_pkg_comment(self, doc, text):
+        """Set's the package's comment.
+        Raises CardinalityError if comment already set.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_comment_set:
+            self.package_comment_set = True
+            doc.package.comment = text
+        else:
+            raise CardinalityError('Package::Comment')
+
 
 class FileBuilder(tagvaluebuilders.FileBuilder):
 

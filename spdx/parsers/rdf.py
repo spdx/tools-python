@@ -350,6 +350,7 @@ class PackageParser(LicenseParser):
         self.p_pkg_cr_text(p_term, self.spdx_namespace['copyrightText'])
         self.p_pkg_summary(p_term, self.spdx_namespace['summary'])
         self.p_pkg_descr(p_term, self.spdx_namespace['description'])
+        self.p_pkg_comment(p_term, self.spdx_namespace['comment'])
 
     def p_pkg_cr_text(self, p_term, predicate):
         try:
@@ -373,6 +374,12 @@ class PackageParser(LicenseParser):
         except CardinalityError:
             self.more_than_one_error('package description')
 
+    def p_pkg_comment(self, p_term, predicate):
+        try:
+            for _, _, comment in self.graph.triples((p_term, predicate, None)):
+                self.builder.set_pkg_comment(self.doc, six.text_type(comment))
+        except CardinalityError:
+            self.more_than_one_error('package comment')
 
     def p_pkg_comments_on_lics(self, p_term, predicate):
         for _, _, comment in self.graph.triples((p_term, predicate, None)):

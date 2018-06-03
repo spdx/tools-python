@@ -55,6 +55,7 @@ class Lexer(object):
         'PackageChecksum': 'PKG_CHKSUM',
         'PackageVerificationCode': 'PKG_VERF_CODE',
         'PackageDescription': 'PKG_DESC',
+        'PackageComment': 'PKG_COMMENT',
         'PackageLicenseDeclared': 'PKG_LICS_DECL',
         'PackageLicenseConcluded': 'PKG_LICS_CONC',
         'PackageLicenseInfoFromFiles': 'PKG_LICS_FFILE',

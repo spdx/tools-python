@@ -211,6 +211,9 @@ def write_package(package, out):
     if package.has_optional_field('description'):
         write_text_value('PackageDescription', package.description, out)
 
+    if package.has_optional_field('comment'):
+        write_text_value('PackageComment', package.comment, out)
+
     if isinstance(package.license_declared, (document.LicenseConjunction,
         document.LicenseDisjunction)):
         write_value('PackageLicenseDeclared', u'({0})'.format(package.license_declared), out)

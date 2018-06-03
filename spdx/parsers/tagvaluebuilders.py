@@ -529,6 +529,7 @@ class PackageBuilder(object):
         self.package_cr_text_set = False
         self.package_summary_set = False
         self.package_desc_set = False
+        self.package_comment_set = False
 
     def create_package(self, doc, name):
         """Creates a package for the SPDX Document.
@@ -838,6 +839,22 @@ class PackageBuilder(object):
                 raise SPDXValueError('Package::Description')
         else:
             raise CardinalityError('Package::Description')
+
+    def set_pkg_comment(self, doc, text):
+        """Set's the package's comment.
+        Raises SPDXValueError if text is not free form text.
+        Raises CardinalityError if comment already set.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not self.package_comment_set:
+            self.package_comment_set = True
+            if validations.validate_pkg_comment(text):
+                doc.package.comment = str_from_text(text)
+            else:
+                raise SPDXValueError('Package::Comment')
+        else:
+            raise CardinalityError('Package::Comment')
 
     def assert_package_exists(self):
         if not self.package_set:
