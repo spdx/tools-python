@@ -348,6 +348,19 @@ class TestPackageBuilder(TestCase):
     def test_set_pkg_files_analyzed_order(self):
         self.builder.set_pkg_files_analyzed(self.document, 'True')
 
+    @testing_utils.raises(builders.OrderError)
+    def test_set_pkg_comment_order(self):
+        self.builder.set_pkg_comment(self.document, '<text>something</text>')
+
+    def test_correct_pkg_comment(self):
+        self.builder.create_package(self.document, 'pkg')
+        self.builder.set_pkg_comment(self.document, '<text>something</text>')
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_incorrect_pkg_comment(self):
+        self.builder.create_package(self.document, 'pkg')
+        self.builder.set_pkg_comment(self.document, 'not_free_form_text')
+
     def test_correct_pkg_spdx_id(self):
         self.builder.create_package(self.document, 'pkg')
         assert self.builder.set_pkg_spdx_id(self.document, 'SPDXRef-Package')

@@ -144,6 +144,7 @@ class TestParser(TestCase):
         'PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12',
         'PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (something.rdf, something.txt)',
         'PackageDescription: <text>A package.</text>',
+        'PackageComment: <text>Comment on the package.</text>',
         'PackageCopyrightText: <text> Copyright 2014 Acme Inc.</text>',
         'PackageLicenseDeclared: Apache-2.0',
         'PackageLicenseConcluded: (LicenseRef-2.0 and Apache-2.0)',
@@ -203,6 +204,7 @@ class TestParser(TestCase):
         assert len(document.package.licenses_from_files) == 2
         assert (document.package.conc_lics.identifier == 'LicenseRef-2.0 AND Apache-2.0')
         assert document.package.files_analyzed == 'False'
+        assert document.package.comment == 'Comment on the package.'
 
     def test_file(self):
         document, error = self.p.parse(self.complete_str)

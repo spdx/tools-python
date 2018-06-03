@@ -31,6 +31,7 @@ PackageOriginator: Organization:SPDX
 PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
 PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)
 PackageDescription: <text>This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document.</text>
+PackageComment: <text>This package includes several sub-packages.</text>
 
 PackageCopyrightText: <text> Copyright 2010, 2011 Source Auditor Inc.</text>
 

@@ -63,6 +63,7 @@ ERROR_MESSAGES = {
     'PKG_LICS_COMMENT_VALUE': 'PackageLicenseComments must be free form text, line: {0}',
     'PKG_SUM_VALUE': 'PackageSummary must be free form text, line: {0}',
     'PKG_DESC_VALUE': 'PackageDescription must be free form text, line: {0}',
+    'PKG_COMMENT_VALUE': 'PackageComment must be free form text, line: {0}',
     'FILE_NAME_VALUE': 'FileName must be a single line of text, line: {0}',
     'FILE_COMMENT_VALUE': 'FileComment must be free form text, line:{0}',
     'FILE_TYPE_VALUE': 'FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}',
@@ -131,6 +132,7 @@ class Parser(object):
                   | pkg_chksum
                   | pkg_verif
                   | pkg_desc
+                  | pkg_comment
                   | pkg_lic_decl
                   | pkg_lic_conc
                   | pkg_lic_ff
@@ -632,6 +634,26 @@ class Parser(object):
         """pkg_desc : PKG_DESC error"""
         self.error = True
         msg = ERROR_MESSAGES['PKG_DESC_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_pkg_comment_1(self, p):
+        """pkg_comment : PKG_COMMENT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_pkg_comment(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('PackageComment', p.lineno(1))
+        except OrderError:
+            self.order_error('PackageComment', 'PackageFileName',
+                             p.lineno(1))
+
+    def p_pkg_comment_2(self, p):
+        """pkg_comment : PKG_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_COMMENT_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_pkg_summary_1(self, p):

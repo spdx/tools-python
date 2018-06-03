@@ -56,6 +56,8 @@ class Package(object):
      - cr_text: Copyright text, string , utils.NoAssert or utils.SPDXNone. Mandatory.
      - summary: Optional str.
      - description: Optional str.
+     - comment: Comments about the package being described, optional one.
+     Type: str
      - files: List of files in package, atleast one.
      - verif_exc_files : list of file names excluded from verification code or None.
     """
@@ -81,6 +83,7 @@ class Package(object):
         self.cr_text = None
         self.summary = None
         self.description = None
+        self.comment = None
         self.files = []
         self.verif_exc_files = []
 
@@ -187,6 +190,7 @@ class Package(object):
             'source_info',
             'summary',
             'description',
+            'comment'
         ]
         return self.validate_str_fields(FIELDS, True, messages)
 
