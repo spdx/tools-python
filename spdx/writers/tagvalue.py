@@ -84,6 +84,7 @@ def write_annotation(annotation, out):
     write_value('AnnotationDate', annotation.annotation_date_iso_format, out)
     if annotation.has_comment:
         write_text_value('AnnotationComment', annotation.comment, out)
+    write_value('AnnotationType', annotation.annotation_type, out)
 
 
 def write_file_type(ftype, out):

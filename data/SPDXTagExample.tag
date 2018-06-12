@@ -23,6 +23,7 @@ ReviewComment: <text>Another example reviewer.</text>
 
 ## Annotation Information
 Annotator: Person: Jim Annotator
+AnnotationType: REVIEW
 AnnotationDate: 2012-03-11T00:00:00Z
 AnnotationComment: <text>An example annotation comment.</text>
 

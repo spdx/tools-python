@@ -762,6 +762,21 @@ class AnnotationParser(BaseParser):
             comment = self.get_annotation_comment(r_term)
             if comment is not None:
                 self.builder.add_annotation_comment(self.doc, comment)
+            annotation_type = self.get_annotation_type(r_term)
+            self.builder.add_annotation_type(self.doc, annotation_type)
+
+    def get_annotation_type(self, r_term):
+        """Returns annotation type or None if found none or more than one.
+        Reports errors on failure."""
+        for _, _, typ in self.graph.triples((
+                r_term, self.spdx_namespace['annotationType'], None)):
+            if typ is not None:
+                return typ
+            else:
+                self.error = True
+                msg = 'Annotation must have exactly one annotation type.'
+                self.logger.log(msg)
+                return
 
     def get_annotation_comment(self, r_term):
         """Returns annotation comment or None if found none or more than one.

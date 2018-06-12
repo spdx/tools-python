@@ -59,6 +59,8 @@ if __name__ == '__main__':
             for lics in doc.extracted_licenses:
                 print '\tIdentifier: {0}'.format(lics.identifier)
                 print '\tName: {0}'.format(lics.full_name)
+            for an in doc.annotations:
+                print an.type
 
         else:
             print 'Errors while parsing'

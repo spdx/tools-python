@@ -39,6 +39,7 @@ class Lexer(object):
         'Annotator': 'ANNOTATOR',
         'AnnotationDate': 'ANNOTATION_DATE',
         'AnnotationComment': 'ANNOTATION_COMMENT',
+        'AnnotationType': 'ANNOTATION_TYPE',
         # Package Fields
         'PackageName': 'PKG_NAME',
         'PackageVersion': 'PKG_VERSION',

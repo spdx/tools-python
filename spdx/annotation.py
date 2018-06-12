@@ -33,12 +33,16 @@ class Annotation(object):
     (Mandatory, one), if there is an Annotation. Type: datetime.
     - comment: Annotation comment. Conditional (Mandatory, one), if there is
     an Annotation. Type: str.
+    - annotation_type: Annotation type. Conditional (Mandatory, one), if there is an
+    Annotation. Type: str.
     """
 
-    def __init__(self, annotator=None, annotation_date=None, comment=None):
+    def __init__(self, annotator=None, annotation_date=None, comment=None,
+                 annotation_type=None):
         self.annotator = annotator
         self.annotation_date = annotation_date
         self.comment = comment
+        self.annotation_type = annotation_type
 
     def __eq__(self, other):
         return (
@@ -72,7 +76,8 @@ class Annotation(object):
         messages = messages if messages is not None else []
 
         return (self.validate_annotator(messages)
-            and self.validate_annotation_date(messages))
+            and self.validate_annotation_date(messages)
+            and self.validate_annotation_type(messages))
 
     def validate_annotator(self, messages=None):
         # FIXME: we should return messages instead
@@ -92,4 +97,14 @@ class Annotation(object):
             return True
         else:
             messages.append('Annotation missing annotation date.')
+            return False
+
+    def validate_annotation_type(self, messages=None):
+        # FIXME: we should return messages instead
+        messages = messages if messages is not None else []
+
+        if self.annotation_type is not None:
+            return True
+        else:
+            messages.append('Annotation missing annotation type.')
             return False

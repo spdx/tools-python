@@ -349,6 +349,9 @@ class AnnotationInfoWriter(BaseWriter):
             comment_node = Literal(annotation.comment)
             comment_triple = (annotation_node, RDFS.comment, comment_node)
             self.graph.add(comment_triple)
+        annotation_type_node = Literal(annotation.annotation_type)
+        annotation_type_triple = (annotation_node, self.spdx_namespace.annotationType, annotation_type_node)
+        self.graph.add(annotation_type_triple)
 
         return annotation_node
 

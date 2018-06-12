@@ -335,6 +335,11 @@ class TestAnnotationBuilder(TestCase):
         comment = '<text>Comment without annotator</text>'
         self.builder.add_annotation_comment(self.document, comment)
 
+    @testing_utils.raises(builders.OrderError)
+    def test_type_without_annotator(self):
+        annotation_type = 'REVIEW'
+        self.builder.add_annotation_type(self.document, annotation_type)
+
     @testing_utils.raises(builders.CardinalityError)
     def test_annotation_comment_cardinality(self):
         comment = '<text>Annotation Comment</text>'
@@ -374,6 +379,24 @@ class TestAnnotationBuilder(TestCase):
         comment = '<text>Annotation Comment<text>'
         self.add_annotator()
         self.builder.add_annotation_comment(self.document, comment)
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_incorrect_annotation_type_value(self):
+        annotation_type = 'Some random value instead of REVIEW or OTHER'
+        self.add_annotator()
+        self.builder.add_annotation_type(self.document, annotation_type)
+
+    def test_correct_annotation_type(self):
+        annotation_type = 'REVIEW'
+        self.add_annotator()
+        assert self.builder.add_annotation_type(self.document, annotation_type)
+
+    @testing_utils.raises(builders.CardinalityError)
+    def test_annotation_type_cardinality(self):
+        annotation_type = 'REVIEW'
+        self.add_annotator()
+        assert self.builder.add_annotation_type(self.document, annotation_type)
+        self.builder.add_annotation_type(self.document, annotation_type)
 
     def add_annotator(self):
         per_str = 'Person: Jim (jim@example.com)'
