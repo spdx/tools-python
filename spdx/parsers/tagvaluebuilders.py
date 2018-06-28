@@ -530,6 +530,7 @@ class PackageBuilder(object):
         self.package_summary_set = False
         self.package_desc_set = False
         self.package_comment_set = False
+        self.pkg_ext_comment_set = False
 
     def create_package(self, doc, name):
         """Creates a package for the SPDX Document.
@@ -855,6 +856,66 @@ class PackageBuilder(object):
                 raise SPDXValueError('Package::Comment')
         else:
             raise CardinalityError('Package::Comment')
+
+    def set_pkg_ext_ref_category(self, doc, category):
+        """
+        Sets the `category` attribute of the `ExternalPackageRef` object.
+        """
+        self.assert_package_exists()
+        if validations.validate_pkg_ext_ref_category(category):
+            if (len(doc.package.pkg_ext_refs) and
+                    doc.package.pkg_ext_refs[-1].category is None):
+                doc.package.pkg_ext_refs[-1].category = category
+            else:
+                doc.package.add_pkg_ext_refs(
+                    package.ExternalPackageRef(category=category))
+        else:
+            raise SPDXValueError('ExternalRef::Category')
+
+    def set_pkg_ext_ref_type(self, doc, pkg_ext_ref_type):
+        """
+        Sets the `pkg_ext_ref_type` attribute of the `ExternalPackageRef` object.
+        """
+        self.assert_package_exists()
+        if validations.validate_pkg_ext_ref_type(pkg_ext_ref_type):
+            if (len(doc.package.pkg_ext_refs) and
+                    doc.package.pkg_ext_refs[-1].pkg_ext_ref_type is None):
+                doc.package.pkg_ext_refs[-1].pkg_ext_ref_type = pkg_ext_ref_type
+            else:
+                doc.package.add_pkg_ext_refs(package.ExternalPackageRef(
+                    pkg_ext_ref_type=pkg_ext_ref_type))
+        else:
+            raise SPDXValueError('ExternalRef::Type')
+
+    def set_pkg_ext_ref_locator(self, doc, locator):
+        """
+        Sets the `locator` attribute of the `ExternalPackageRef` object.
+        """
+        self.assert_package_exists()
+        if (len(doc.package.pkg_ext_refs) and
+                doc.package.pkg_ext_refs[-1].locator is None):
+            doc.package.pkg_ext_refs[-1].locator = locator
+        else:
+            doc.package.add_pkg_ext_refs(package.ExternalPackageRef(
+                locator=locator))
+
+    def add_pkg_ext_ref_comment(self, doc, comment):
+        """
+        Sets the `comment` attribute of the `ExternalPackageRef` object.
+        """
+        self.assert_package_exists()
+        if not len(doc.package.pkg_ext_refs):
+            raise OrderError('Package::ExternalRef')
+        else:
+            if validations.validate_pkg_ext_ref_comment(comment):
+                doc.package.pkg_ext_refs[-1].comment = str_from_text(comment)
+            else:
+                raise SPDXValueError('ExternalRef::Comment')
+
+    def add_pkg_ext_refs(self, doc, category, pkg_ext_ref_type, locator):
+        self.set_pkg_ext_ref_category(doc, category)
+        self.set_pkg_ext_ref_type(doc, pkg_ext_ref_type)
+        self.set_pkg_ext_ref_locator(doc, locator)
 
     def assert_package_exists(self):
         if not self.package_set:

@@ -242,6 +242,14 @@ def write_package(package, out):
     if package.has_optional_field('homepage'):
         write_value('PackageHomePage', package.homepage, out)
 
+    for pkg_ref in package.pkg_ext_refs:
+        pkg_ref_str = ' '.join([pkg_ref.category,
+                                pkg_ref.pkg_ext_ref_type,
+                                pkg_ref.locator])
+        write_value('ExternalRef', pkg_ref_str, out)
+        if pkg_ref.comment:
+            write_text_value('ExternalRefComment', pkg_ref.comment, out)
+
     # Write sorted files.
     for spdx_file in sorted(package.files):
         write_separators(out)

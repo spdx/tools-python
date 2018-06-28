@@ -104,6 +104,24 @@ def validate_pkg_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
+def validate_pkg_ext_ref_category(value, optional=False):
+    if value.upper() in ['SECURITY', 'OTHER', 'PACKAGE-MANAGER']:
+        return True
+    else:
+        return False
+
+
+def validate_pkg_ext_ref_type(value, optional=False):
+    if re.match(r'^[A-Za-z0-9.\-]+$', value) is not None:
+        return True
+    else:
+        return False
+
+
+def validate_pkg_ext_ref_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
 def validate_doc_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 

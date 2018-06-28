@@ -120,6 +120,8 @@ class TestLexer(TestCase):
         FilesAnalyzed: False
         PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
         PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)
+        ExternalRef: SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:
+        ExternalRefComment: <text>Some comment about the package.</text>
         '''
         self.l.input(data)
         self.token_assert_helper(self.l.token(), 'PKG_SPDX_ID', 'SPDXID', 2)
@@ -130,6 +132,10 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'CHKSUM', 'SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12', 4)
         self.token_assert_helper(self.l.token(), 'PKG_VERF_CODE', 'PackageVerificationCode', 5)
         self.token_assert_helper(self.l.token(), 'LINE', '4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)', 5)
+        self.token_assert_helper(self.l.token(), 'PKG_EXT_REF', 'ExternalRef', 6)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:', 6)
+        self.token_assert_helper(self.l.token(), 'PKG_EXT_REF_COMMENT', 'ExternalRefComment', 7)
+        self.token_assert_helper(self.l.token(), 'TEXT', '<text>Some comment about the package.</text>', 7)
 
     def test_unknown_tag(self):
         data = '''
@@ -224,7 +230,9 @@ class TestParser(TestCase):
         'PackageLicenseConcluded: (LicenseRef-2.0 and Apache-2.0)',
         'PackageLicenseInfoFromFiles: Apache-1.0',
         'PackageLicenseInfoFromFiles: Apache-2.0',
-        'PackageLicenseComments: <text>License Comments</text>'
+        'PackageLicenseComments: <text>License Comments</text>',
+        'ExternalRef: SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:',
+        'ExternalRefComment: <text>Some comment about the package.</text>'
     ])
 
     file_str = '\n'.join([
@@ -296,6 +304,10 @@ class TestParser(TestCase):
         assert (document.package.conc_lics.identifier == 'LicenseRef-2.0 AND Apache-2.0')
         assert document.package.files_analyzed == 'False'
         assert document.package.comment == 'Comment on the package.'
+        assert document.package.pkg_ext_refs[-1].category == 'SECURITY'
+        assert document.package.pkg_ext_refs[-1].pkg_ext_ref_type == 'cpe23Type'
+        assert document.package.pkg_ext_refs[-1].locator == 'cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:'
+        assert document.package.pkg_ext_refs[-1].comment == 'Some comment about the package.'
 
     def test_file(self):
         document, error = self.p.parse(self.complete_str)
