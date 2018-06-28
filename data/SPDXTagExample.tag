@@ -47,6 +47,9 @@ PackageLicenseInfoFromFiles: LicenseRef-1
 PackageLicenseInfoFromFiles: MPL-1.1
 PackageLicenseComments: <text>The declared license information can be found in the NOTICE file at the root of the archive file</text>
 
+ExternalRef: SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:
+ExternalRefComment: <text>NIST National Vulnerability Database (NVD) describes security vulnerabilities (CVEs) which affect Vendor Product Version acmecorp:acmenator:6.6.6.</text>
+
 ## File Information
 FileName: src/org/spdx/parser/DOAPProject.java
 FileType: SOURCE

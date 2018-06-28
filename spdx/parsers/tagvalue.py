@@ -64,6 +64,8 @@ ERROR_MESSAGES = {
     'PKG_SUM_VALUE': 'PackageSummary must be free form text, line: {0}',
     'PKG_DESC_VALUE': 'PackageDescription must be free form text, line: {0}',
     'PKG_COMMENT_VALUE': 'PackageComment must be free form text, line: {0}',
+    'PKG_EXT_REF_VALUE': 'ExternalRef must contain category, type, and locator in the standard format, line:{0}.',
+    'PKG_EXT_REF_COMMENT_VALUE' : 'ExternalRefComment must be free form text, line:{0}',
     'FILE_NAME_VALUE': 'FileName must be a single line of text, line: {0}',
     'FILE_COMMENT_VALUE': 'FileComment must be free form text, line:{0}',
     'FILE_TYPE_VALUE': 'FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}',
@@ -138,6 +140,8 @@ class Parser(object):
                   | pkg_lic_ff
                   | pkg_lic_comment
                   | pkg_cr_text
+                  | pkg_ext_ref
+                  | pkg_ext_ref_comment
                   | file_name
                   | file_type
                   | file_chksum
@@ -688,6 +692,47 @@ class Parser(object):
         """pkg_cr_text : PKG_CPY_TEXT error"""
         self.error = True
         msg = ERROR_MESSAGES['PKG_CPY_TEXT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_pkg_ext_refs_1(self, p):
+        """pkg_ext_ref : PKG_EXT_REF LINE"""
+        try:
+            if six.PY2:
+                pkg_ext_info = p[2].decode(encoding='utf-8')
+            else:
+                pkg_ext_info = p[2]
+            if len(pkg_ext_info.split()) != 3:
+                raise SPDXValueError
+            else:
+                pkg_ext_category, pkg_ext_type, pkg_ext_locator = pkg_ext_info.split()
+            self.builder.add_pkg_ext_refs(self.document, pkg_ext_category,
+                                          pkg_ext_type, pkg_ext_locator)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['PKG_EXT_REF_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+
+    def p_pkg_ext_refs_2(self, p):
+        """pkg_ext_ref : PKG_EXT_REF error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_EXT_REF_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_pkg_ext_ref_comment_1(self, p):
+        """pkg_ext_ref_comment : PKG_EXT_REF_COMMENT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.add_pkg_ext_ref_comment(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('ExternalRefComment', p.lineno(1))
+
+    def p_pkg_ext_ref_comment_2(self, p):
+        """pkg_ext_ref_comment : PKG_EXT_REF_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_EXT_REF_COMMENT_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_pkg_cr_text_value_1(self, p):

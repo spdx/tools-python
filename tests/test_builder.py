@@ -384,6 +384,58 @@ class TestPackageBuilder(TestCase):
         self.builder.create_package(self.document, 'pkg')
         assert self.builder.set_pkg_files_analyzed(self.document, 'true')
 
+    def test_correct_pkg_ext_ref_category(self):
+        category = 'SECURITY'
+        self.builder.create_package(self.document, 'pkg')
+        self.builder.set_pkg_ext_ref_category(self.document, category)
+        assert self.document.package.pkg_ext_refs[-1].category == category
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_incorrect_pkg_ext_ref_category(self):
+        category = 'some_other_value'
+        self.builder.create_package(self.document, 'pkg')
+        self.builder.set_pkg_ext_ref_category(self.document, category)
+
+    def test_correct_pkg_ext_ref_type(self):
+        pkg_ext_ref_type = 'cpe23Type'
+        self.builder.create_package(self.document, 'pkg')
+        self.builder.set_pkg_ext_ref_type(self.document, pkg_ext_ref_type)
+        assert self.document.package.pkg_ext_refs[
+                   -1].pkg_ext_ref_type == pkg_ext_ref_type
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_incorrect_pkg_ext_ref_type(self):
+        pkg_ext_ref_type = 'cpe23Type_with_special_symbols&%'
+        self.builder.create_package(self.document, 'pkg')
+        self.builder.set_pkg_ext_ref_type(self.document, pkg_ext_ref_type)
+
+    def test_correct_pkg_ext_ref_locator(self):
+        locator = 'cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*'
+        self.builder.create_package(self.document, 'pkg')
+        self.builder.set_pkg_ext_ref_locator(self.document, locator)
+        assert self.document.package.pkg_ext_refs[-1].locator == locator
+
+    @testing_utils.raises(builders.OrderError)
+    def test_pkg_ext_ref_without_pkg(self):
+        locator = 'cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*'
+        self.builder.set_pkg_ext_ref_locator(self.document, locator)
+
+    def test_correct_pkg_ext_comment(self):
+        comment_str = 'This is a comment.'
+        comment_text = '<text>' + comment_str + '</text>'
+        self.builder.create_package(self.document, 'pkg')
+        self.builder.set_pkg_ext_ref_category(self.document, 'SECURITY')
+        self.builder.add_pkg_ext_ref_comment(self.document, comment_text)
+        assert self.document.package.pkg_ext_refs[-1].comment == comment_str
+
+    @testing_utils.raises(builders.OrderError)
+    def test_pkg_ext_comment_without_pkg_ext_ref(self):
+        comment_str = 'This is a comment.'
+        comment_text = '<text>' + comment_str + '</text>'
+        self.builder.create_package(self.document, 'pkg')
+        self.builder.add_pkg_ext_ref_comment(self.document, comment_text)
+
 
 if __name__ == '__main__':
     unittest.main()
+

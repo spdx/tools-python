@@ -18,6 +18,7 @@ import re
 
 from spdx import checksum
 from spdx import document
+from spdx import package
 from spdx import version
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
@@ -236,6 +237,66 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             doc.package.comment = text
         else:
             raise CardinalityError('Package::Comment')
+
+    def set_pkg_ext_ref_category(self, doc, category):
+        """
+        Sets the package's external reference locator.
+        Raises OrderError if no package previously defined.
+        Raises SPDXValueError if malformed value.
+        """
+        self.assert_package_exists()
+        category = category.split('_')[-1]
+
+        if category.lower() == 'packagemanager':
+            category = 'PACKAGE-MANAGER'
+
+        if validations.validate_pkg_ext_ref_category(category):
+            if (len(doc.package.pkg_ext_refs) and
+                    doc.package.pkg_ext_refs[-1].category is None):
+                doc.package.pkg_ext_refs[-1].category = category
+            else:
+                doc.package.add_pkg_ext_refs(
+                    package.ExternalPackageRef(category=category))
+        else:
+            raise SPDXValueError('ExternalRef::Category')
+
+    def set_pkg_ext_ref_type(self, doc, typ):
+        """
+        Sets the package's external reference type.
+        Raises OrderError if no package previously defined.
+        Raises SPDXValueError if malformed value.
+        """
+        self.assert_package_exists()
+        if '#' in typ:
+            typ = typ.split('#')[-1]
+        else:
+            typ = typ.split('/')[-1]
+
+        if validations.validate_pkg_ext_ref_type(typ):
+            if (len(doc.package.pkg_ext_refs) and
+                    doc.package.pkg_ext_refs[-1].pkg_ext_ref_type is None):
+                doc.package.pkg_ext_refs[-1].pkg_ext_ref_type = typ
+            else:
+                doc.package.add_pkg_ext_refs(
+                    package.ExternalPackageRef(pkg_ext_ref_type=typ))
+        else:
+            raise SPDXValueError('ExternalRef::Type')
+
+    def set_pkg_ext_ref_comment(self, doc, comment):
+        """
+        Sets the package's external reference comment.
+        Raises CardinalityError if comment already set.
+        Raises OrderError if no package previously defined.
+        """
+        self.assert_package_exists()
+        if not len(doc.package.pkg_ext_refs):
+            raise OrderError('Package::ExternalRef')
+        if not self.pkg_ext_comment_set:
+            self.pkg_ext_comment_set = True
+            doc.package.pkg_ext_refs[-1].comment = comment
+            return True
+        else:
+            raise CardinalityError('ExternalRef::Comment')
 
 
 class FileBuilder(tagvaluebuilders.FileBuilder):

@@ -52,6 +52,8 @@ class Lexer(object):
         'PackageLicenseComments': 'PKG_LICS_COMMENT',
         'PackageCopyrightText': 'PKG_CPY_TEXT',
         'PackageHomePage': 'PKG_HOME',
+        'ExternalRef': 'PKG_EXT_REF',
+        'ExternalRefComment': 'PKG_EXT_REF_COMMENT',
         # Files
         'FileName': 'FILE_NAME',
         'FileType': 'FILE_TYPE',
@@ -86,7 +88,8 @@ class Lexer(object):
 
     tokens = ['TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
               'ORG_VALUE', 'PERSON_VALUE',
-              'DATE', 'LINE', 'CHKSUM'] + list(reserved.values())
+              'DATE', 'LINE', 'CHKSUM'
+              ] + list(reserved.values())
 
     def t_text(self, t):
         r':\s*<text>'

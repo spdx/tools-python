@@ -46,6 +46,8 @@ ERROR_MESSAGES = {
     'LICS_LIST_MEMBER' : 'Declaritive or Conjunctive license set member must be a license url or identifier',
     'PKG_SINGLE_LICS' : 'Package concluded license must be a license url or spdx:noassertion or spdx:none.',
     'PKG_LICS_INFO_FILES' : 'Package licenseInfoFromFiles must be a license or spdx:none or spdx:noassertion',
+    'PKG_EXT_REF_CATEGORY': '\'{0}\' must be "SECURITY", "PACKAGE-MANAGER", or "OTHER".',
+    'PKG_EXT_REF_TYPE': '{0} must be a unique string containing letters, numbers, ".", or "-".',
     'FILE_TYPE' : 'File type must be binary, other, source or archive term.',
     'FILE_SINGLE_LICS': 'File concluded license must be a license url or spdx:noassertion or spdx:none.',
     'REVIEWER_VALUE' : 'Invalid reviewer value \'{0}\' must be Organization, Tool or Person.',
@@ -778,6 +780,9 @@ class Parser(PackageParser, FileParser, ReviewParser):
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['Package'])):
             self.parse_package(s)
 
+        for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['ExternalRef'])):
+            self.parse_pkg_ext_ref(s)
+
         for s, _p, o in self.graph.triples((None, self.spdx_namespace['referencesFile'], None)):
             self.parse_file(o)
 
@@ -851,4 +856,40 @@ class Parser(PackageParser, FileParser, ReviewParser):
                 self.builder.set_doc_comment(self.doc, six.text_type(o))
             except CardinalityError:
                 self.more_than_one_error('Document comment')
+                break
+
+    def parse_pkg_ext_ref(self, pkg_ext_term):
+        """
+        Parses the category, type, locator, and comment.
+        """
+        for _s, _p, o in self.graph.triples((pkg_ext_term,
+                                             self.spdx_namespace['referenceCategory'],
+                                             None)):
+            try:
+                self.builder.set_pkg_ext_ref_category(self.doc, six.text_type(o))
+            except SPDXValueError:
+                self.value_error('PKG_EXT_REF_CATEGORY',
+                                 'Package External Reference Category')
+                break
+
+        for _s, _p, o in self.graph.triples((pkg_ext_term,
+                                             self.spdx_namespace['referenceType'],
+                                             None)):
+            try:
+                self.builder.set_pkg_ext_ref_type(self.doc, six.text_type(o))
+            except SPDXValueError:
+                self.value_error('PKG_EXT_REF_TYPE',
+                                 'Package External Reference Type')
+                break
+
+        for _s, _p, o in self.graph.triples((pkg_ext_term,
+                                             self.spdx_namespace['referenceLocator'],
+                                             None)):
+            self.builder.set_pkg_ext_ref_locator(self.doc, six.text_type(o))
+
+        for _s, _p, o in self.graph.triples((pkg_ext_term, RDFS.comment, None)):
+            try:
+                self.builder.set_pkg_ext_ref_comment(self.doc, six.text_type(o))
+            except CardinalityError:
+                self.more_than_one_error('Package External Reference Comment')
                 break
