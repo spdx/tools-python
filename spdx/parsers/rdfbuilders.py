@@ -364,6 +364,50 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
             raise OrderError('File::Notice')
 
 
+class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
+
+    def __init__(self):
+        super(SnippetBuilder, self).__init__()
+
+    def set_snippet_lic_comment(self, doc, lic_comment):
+        """Sets the snippet's license comment.
+        Raises OrderError if no snippet previously defined.
+        Raises CardinalityError if already set.
+        """
+        self.assert_snippet_exists()
+        if not self.snippet_lic_comment_set:
+            self.snippet_lic_comment_set = True
+            doc.snippet[-1].license_comment = lic_comment
+        else:
+            CardinalityError('Snippet::licenseComments')
+
+    def set_snippet_comment(self, doc, comment):
+        """
+        Sets general comments about the snippet.
+        Raises OrderError if no snippet previously defined.
+        Raises CardinalityError if comment already set.
+        """
+        self.assert_snippet_exists()
+        if not self.snippet_comment_set:
+            self.snippet_comment_set = True
+            doc.snippet[-1].comment = comment
+            return True
+        else:
+            raise CardinalityError('Snippet::comment')
+
+    def set_snippet_copyright(self, doc, copyright):
+        """Sets the snippet's copyright text.
+        Raises OrderError if no snippet previously defined.
+        Raises CardinalityError if already set.
+        """
+        self.assert_snippet_exists()
+        if not self.snippet_copyright_set:
+            self.snippet_copyright_set = True
+            doc.snippet[-1].copyright = copyright
+        else:
+            raise CardinalityError('Snippet::copyrightText')
+
+
 class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
 
     def __init__(self):
@@ -426,7 +470,7 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
 
 
 class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder,
-              FileBuilder, ReviewBuilder, ExternalDocumentRefBuilder,
+              FileBuilder, SnippetBuilder, ReviewBuilder, ExternalDocumentRefBuilder,
               AnnotationBuilder):
 
     def __init__(self):

@@ -55,7 +55,9 @@ ERROR_MESSAGES = {
     'REVIEWER_VALUE' : 'Invalid reviewer value \'{0}\' must be Organization, Tool or Person.',
     'REVIEW_DATE' : 'Invalid review date value \'{0}\' must be date in ISO 8601 format.',
     'ANNOTATOR_VALUE': 'Invalid annotator value \'{0}\' must be Organization, Tool or Person.',
-    'ANNOTATION_DATE': 'Invalid annotation date value \'{0}\' must be date in ISO 8601 format.'
+    'ANNOTATION_DATE': 'Invalid annotation date value \'{0}\' must be date in ISO 8601 format.',
+    'SNIPPET_SPDX_ID_VALUE' : 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string '
+                              'containing letters, numbers, ".", "-".',
 }
 
 
@@ -677,6 +679,49 @@ class FileParser(LicenseParser):
             self.more_than_one_error('file {0}'.format(predicate))
 
 
+class SnippetParser(LicenseParser):
+    """
+    Helper class for parsing snippet information.
+    """
+
+    def __init__(self, builder, logger):
+        super(SnippetParser, self).__init__(builder, logger)
+
+    def parse_snippet(self, snippet_term):
+        try:
+            self.builder.create_snippet(self.doc, snippet_term)
+        except SPDXValueError:
+            self.value_error('SNIPPET_SPDX_ID_VALUE', snippet_term)
+
+        for _s, _p, o in self.graph.triples((snippet_term, self.spdx_namespace['name'], None)):
+            try:
+                self.builder.set_snippet_name(self.doc, six.text_type(o))
+            except CardinalityError:
+                self.more_than_one_error('snippetName')
+                break
+
+        for _s, _p, o in self.graph.triples((snippet_term, self.spdx_namespace['licenseComments'], None)):
+            try:
+                self.builder.set_snippet_lic_comment(self.doc, six.text_type(o))
+            except CardinalityError:
+                self.more_than_one_error('licenseComments')
+                break
+
+        for _s, _p, o in self.graph.triples((snippet_term, RDFS.comment, None)):
+            try:
+                self.builder.set_snippet_comment(self.doc, six.text_type(o))
+            except CardinalityError:
+                self.more_than_one_error('comment')
+                break
+
+        for _s, _p, o in self.graph.triples((snippet_term, self.spdx_namespace['copyrightText'], None)):
+            try:
+                self.builder.set_snippet_copyright(self.doc, self.to_special_value(six.text_type(o)))
+            except CardinalityError:
+                self.more_than_one_error('copyrightText')
+                break
+
+
 class ReviewParser(BaseParser):
     """
     Helper class for parsing review information.
@@ -824,7 +869,7 @@ class AnnotationParser(BaseParser):
             self.value_error('ANNOTATOR_VALUE', annotator_list[0][2])
 
 
-class Parser(PackageParser, FileParser, ReviewParser, AnnotationParser):
+class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationParser):
     """
     RDF/XML file parser.
     """
@@ -855,6 +900,9 @@ class Parser(PackageParser, FileParser, ReviewParser, AnnotationParser):
 
         for s, _p, o in self.graph.triples((None, self.spdx_namespace['referencesFile'], None)):
             self.parse_file(o)
+
+        for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['Snippet'])):
+            self.parse_snippet(s)
 
         for s, _p, o in self.graph.triples((None, self.spdx_namespace['reviewed'], None)):
             self.parse_review(o)

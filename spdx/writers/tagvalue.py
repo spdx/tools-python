@@ -149,6 +149,21 @@ def write_file(spdx_file, out):
             write_value('ArtifactOfProjectURI', uri, out)
 
 
+def write_snippet(snippet, out):
+    """
+    Write snippet fields to out.
+    """
+    out.write('# Snippet\n\n')
+    write_value('SnippetSPDXID', snippet.spdx_id, out)
+    write_text_value('SnippetCopyrightText', snippet.copyright, out)
+    if snippet.has_optional_field('name'):
+        write_value('SnippetName', snippet.name, out)
+    if snippet.has_optional_field('comment'):
+        write_text_value('SnippetComment', snippet.comment, out)
+    if snippet.has_optional_field('license_comment'):
+        write_text_value('SnippetLicenseComments', snippet.license_comment, out)
+
+
 def write_package(package, out):
     """
     Write a package fields to out.
@@ -280,6 +295,11 @@ def write_document(document, out, validate=True):
     # Write out package info
     write_package(document.package, out)
     write_separators(out)
+
+    # Write out snippet info
+    for snippet in document.snippet:
+        write_snippet(snippet, out)
+        write_separators(out)
 
     out.write('# Extracted Licenses\n\n')
     for lic in sorted(document.extracted_licenses):

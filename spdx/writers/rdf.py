@@ -290,6 +290,41 @@ class FileWriter(LicenseWriter):
             self.add_file_dependencies_helper(doc_file)
 
 
+class SnippetWriter(LicenseWriter):
+
+    """
+    Write spdx.snippet.Snippet
+    """
+
+    def __init__(self, document, out):
+        super(SnippetWriter, self).__init__(document, out)
+
+    def create_snippet_node(self, snippet):
+        """
+        Return a snippet node.
+        """
+        snippet_node = URIRef('http://spdx.org/rdf/terms/Snippet' + str(snippet.spdx_id))
+        type_triple = (snippet_node, RDF.type, self.spdx_namespace.Snippet)
+        self.graph.add(type_triple)
+
+        if snippet.has_optional_field('comment'):
+            comment_triple = (snippet_node, RDFS.comment, Literal(snippet.comment))
+            self.graph.add(comment_triple)
+
+        if snippet.has_optional_field('name'):
+            name_triple = (snippet_node, self.spdx_namespace.name, snippet.name)
+            self.graph.add(name_triple)
+
+        if snippet.has_optional_field('license_comment'):
+            lic_comment_triple = (snippet_node, self.spdx_namespace.licenseComments,
+                                  snippet.license_comment)
+            self.graph.add(lic_comment_triple)
+
+        cr_text_node = self.to_special_value(snippet.copyright)
+        cr_text_triple = (snippet_node, self.spdx_namespace.copyrightText, cr_text_node)
+        self.graph.add(cr_text_triple)
+
+
 class ReviewInfoWriter(BaseWriter):
 
     """
@@ -576,7 +611,7 @@ class PackageWriter(LicenseWriter):
 
 
 class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
-             ExternalDocumentRefWriter, AnnotationInfoWriter):
+             ExternalDocumentRefWriter, AnnotationInfoWriter, SnippetWriter):
     """
     Warpper for other writers to write all fields of spdx.document.Document
     Call `write()` to start writing.
