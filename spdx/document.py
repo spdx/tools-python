@@ -264,12 +264,13 @@ class Document(object):
       SPDX license list. Optional, many. Type: ExtractedLicense.
     - reviews: SPDX document review information, Optional zero or more.
       Type: Review.
+    - snippet: Snippet information. Optional zero or more. Type: Snippet.
     - annotations: SPDX document annotation information, Optional zero or more.
       Type: Annotation.
     """
 
     def __init__(self, version=None, data_license=None, name=None, spdx_id=None,
-                 namespace=None, comment=None, package=None):
+                 namespace=None, comment=None, package=None, snippet=None):
         # avoid recursive impor
         from spdx.creationinfo import CreationInfo
         self.version = version
@@ -283,6 +284,7 @@ class Document(object):
         self.package = package
         self.extracted_licenses = []
         self.reviews = []
+        self.snippet = []
         self.annotations = []
 
     def add_review(self, review):
@@ -296,6 +298,9 @@ class Document(object):
 
     def add_ext_document_reference(self, ext_doc_ref):
         self.ext_document_references.append(ext_doc_ref)
+
+    def add_snippet(self, snip):
+        self.snippet.append(snip)
 
     @property
     def files(self):
@@ -324,6 +329,7 @@ class Document(object):
         messages = self.validate_package(messages)
         messages = self.validate_extracted_licenses(messages)
         messages = self.validate_reviews(messages)
+        messages = self.validate_snippet(messages)
 
         return messages
 
@@ -381,6 +387,11 @@ class Document(object):
         for review in self.reviews:
             messages = review.validate(messages)
 
+        return messages
+
+    def validate_snippet(self, messages):
+        for snippet in self.snippet:
+            messages = snippet.validate(messages) and valid
         return messages
 
     def validate_annotations(self, messages):

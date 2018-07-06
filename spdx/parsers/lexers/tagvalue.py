@@ -80,6 +80,15 @@ class Lexer(object):
         'LicenseName': 'LICS_NAME',
         'LicenseCrossReference': 'LICS_CRS_REF',
         'LicenseComment': 'LICS_COMMENT',
+        # Snippet
+        'SnippetSPDXID': 'SNIPPET_SPDX_ID',
+        'SnippetName': 'SNIPPET_NAME',
+        'SnippetComment': 'SNIPPET_COMMENT',
+        'SnippetCopyrightText': 'SNIPPET_CR_TEXT',
+        'SnippetLicenseComments': 'SNIPPET_LICS_COMMENT',
+        'SnippetFromFileSPDXID': 'SNIPPET_FILE_SPDXID',
+        'SnippetLicenseConcluded': 'SNIPPET_LICS_CONC',
+        'LicenseInfoInSnippet': 'SNIPPET_LICS_INFO',
         # Common
         'NOASSERTION': 'NO_ASSERT',
         'UNKNOWN': 'UN_KNOWN',
