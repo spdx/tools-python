@@ -24,6 +24,7 @@ from spdx import document
 from spdx import file
 from spdx import package
 from spdx import review
+from spdx import snippet
 from spdx import utils
 from spdx import version
 
@@ -941,8 +942,110 @@ class LicenseBuilder(object):
         self.extr_lic_comment_set = False
 
 
+class SnippetBuilder(object):
+
+    def __init__(self):
+        # FIXME: this state does not make sense
+        self.reset_snippet()
+
+    def create_snippet(self, doc, spdx_id):
+        """Creates a snippet for the SPDX Document.
+        spdx_id - To uniquely identify any element in an SPDX document which
+        may be referenced by other elements.
+        Raises SPDXValueError if the data is a malformed value.
+        """
+        self.reset_snippet()
+        spdx_id = spdx_id.split('#')[-1]
+        if validations.validate_snippet_spdx_id(spdx_id):
+            doc.add_snippet(snippet.Snippet(spdx_id=spdx_id))
+            self.snippet_spdx_id_set = True
+            return True
+        else:
+            raise SPDXValueError('Snippet::SnippetSPDXID')
+
+    def set_snippet_name(self, doc, name):
+        """
+        Sets name of the snippet.
+        Raises OrderError if no snippet previously defined.
+        Raises CardinalityError if the name is already set.
+        """
+        self.assert_snippet_exists()
+        if not self.snippet_name_set:
+            self.snippet_name_set = True
+            doc.snippet[-1].name = name
+            return True
+        else:
+            raise CardinalityError('SnippetName')
+
+    def set_snippet_comment(self, doc, comment):
+        """
+        Sets general comments about the snippet.
+        Raises OrderError if no snippet previously defined.
+        Raises SPDXValueError if the data is a malformed value.
+        Raises CardinalityError if comment already set.
+        """
+        self.assert_snippet_exists()
+        if not self.snippet_comment_set:
+            self.snippet_comment_set = True
+            if validations.validate_snip_comment(comment):
+                doc.snippet[-1].comment = str_from_text(comment)
+                return True
+            else:
+                raise SPDXValueError('Snippet::SnippetComment')
+        else:
+            raise CardinalityError('Snippet::SnippetComment')
+
+    def set_snippet_copyright(self, doc, text):
+        """Sets the snippet's copyright text.
+        Raises OrderError if no snippet previously defined.
+        Raises CardinalityError if already set.
+        Raises SPDXValueError if text is not one of [None, NOASSERT, TEXT].
+        """
+        self.assert_snippet_exists()
+        if not self.snippet_copyright_set:
+            self.snippet_copyright_set = True
+            if validations.validate_snippet_copyright(text):
+                if isinstance(text, string_types):
+                    doc.snippet[-1].copyright = str_from_text(text)
+                else:
+                    doc.snippet[-1].copyright = text  # None or NoAssert
+            else:
+                raise SPDXValueError('Snippet::SnippetCopyrightText')
+        else:
+            raise CardinalityError('Snippet::SnippetCopyrightText')
+
+    def set_snippet_lic_comment(self, doc, text):
+        """Sets the snippet's license comment.
+        Raises OrderError if no snippet previously defined.
+        Raises CardinalityError if already set.
+        Raises SPDXValueError if the data is a malformed value.
+        """
+        self.assert_snippet_exists()
+        if not self.snippet_lic_comment_set:
+            self.snippet_lic_comment_set = True
+            if validations.validate_snip_lic_comment(text):
+                doc.snippet[-1].license_comment = str_from_text(text)
+                return True
+            else:
+                raise SPDXValueError('Snippet::SnippetLicenseComments')
+        else:
+            raise CardinalityError('Snippet::SnippetLicenseComments')
+
+    def reset_snippet(self):
+        # FIXME: this state does not make sense
+        self.snippet_spdx_id_set = False
+        self.snippet_name_set = False
+        self.snippet_comment_set = False
+        self.snippet_copyright_set = False
+        self.snippet_lic_comment_set = False
+
+    def assert_snippet_exists(self):
+        if not self.snippet_spdx_id_set:
+            raise OrderError('Snippet')
+
+
 class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
-              PackageBuilder, FileBuilder, LicenseBuilder):
+              PackageBuilder, FileBuilder, LicenseBuilder, SnippetBuilder):
 
     """SPDX document builder."""
 
@@ -962,3 +1065,4 @@ class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
         self.reset_file_stat()
         self.reset_reviews()
         self.reset_extr_lics()
+        self.reset_snippet()

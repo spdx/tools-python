@@ -196,9 +196,11 @@ class Document(object):
       SPDX license list. Optional, many. Type: ExtractedLicense.
     - reviews: SPDX document review information, Optional zero or more.
       Type: Review.
+    - snippet: Snippet information. Optional zero or more. Type: Snippet.
     """
 
-    def __init__(self, version=None, data_license=None, comment=None, package=None):
+    def __init__(self, version=None, data_license=None, comment=None,
+                 package=None, snippet=None):
         # avoid recursive impor
         from spdx.creationinfo import CreationInfo
         self.version = version
@@ -208,12 +210,16 @@ class Document(object):
         self.package = package
         self.extracted_licenses = []
         self.reviews = []
+        self.snippet = []
 
     def add_review(self, review):
         self.reviews.append(review)
 
     def add_extr_lic(self, lic):
         self.extracted_licenses.append(lic)
+
+    def add_snippet(self, snip):
+        self.snippet.append(snip)
 
     @property
     def files(self):
@@ -241,6 +247,7 @@ class Document(object):
             and self.validate_package(messages)
             and self.validate_extracted_licenses(messages)
             and self.validate_reviews(messages)
+            and self.validate_snippet(messages)
         )
 
     def validate_version(self, messages=None):
@@ -275,6 +282,15 @@ class Document(object):
         valid = True
         for review in self.reviews:
             valid = review.validate(messages) and valid
+        return valid
+
+    def validate_snippet(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
+        valid = True
+        for snippet in self.snippet:
+            valid = snippet.validate(messages) and valid
         return valid
 
     def validate_creation_info(self, messages=None):

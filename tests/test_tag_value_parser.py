@@ -94,6 +94,26 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'PKG_VERF_CODE', 'PackageVerificationCode', 3)
         self.token_assert_helper(self.l.token(), 'LINE', '4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)', 3)
 
+    def test_snippet(self):
+        data = '''
+        SnippetSPDXID: SPDXRef-Snippet
+        SnippetLicenseComments: <text>Some lic comment.</text>
+        SnippetCopyrightText: <text>Some cr text.</text>
+        SnippetComment: <text>Some snippet comment.</text>
+        SnippetName: from linux kernel
+        '''
+        self.l.input(data)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_SPDX_ID', 'SnippetSPDXID', 2)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-Snippet', 2)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_LICS_COMMENT', 'SnippetLicenseComments', 3)
+        self.token_assert_helper(self.l.token(), 'TEXT', '<text>Some lic comment.</text>', 3)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_CR_TEXT', 'SnippetCopyrightText', 4)
+        self.token_assert_helper(self.l.token(), 'TEXT', '<text>Some cr text.</text>', 4)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_COMMENT', 'SnippetComment', 5)
+        self.token_assert_helper(self.l.token(), 'TEXT', '<text>Some snippet comment.</text>', 5)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_NAME', 'SnippetName', 6)
+        self.token_assert_helper(self.l.token(), 'LINE', 'from linux kernel', 6)
+
     def token_assert_helper(self, token, ttype, value, line):
         assert token.type == ttype
         assert token.value == value
@@ -157,7 +177,15 @@ class TestParser(TestCase):
         'FileComment: <text>Very long file</text>'
         ])
 
-    complete_str = '{0}\n{1}\n{2}\n{3}\n{4}'.format(document_str, creation_str, review_str, package_str, file_str)
+    snippet_str = '\n'.join([
+        'SnippetSPDXID: SPDXRef-Snippet',
+        'SnippetLicenseComments: <text>Some lic comment.</text>',
+        'SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>',
+        'SnippetComment: <text>Some snippet comment.</text>',
+        'SnippetName: from linux kernel',
+    ])
+
+    complete_str = '{0}\n{1}\n{2}\n{3}\n{4}\n{5}'.format(document_str, creation_str, review_str, package_str, file_str, snippet_str)
 
     def setUp(self):
         self.p = Parser(Builder(), StandardLogger())
@@ -205,6 +233,17 @@ class TestParser(TestCase):
         assert len(spdx_file.artifact_of_project_name) == 1
         assert len(spdx_file.artifact_of_project_home) == 1
         assert len(spdx_file.artifact_of_project_uri) == 1
+
+    def test_snippet(self):
+        document, error = self.p.parse(self.complete_str)
+        assert document is not None
+        assert not error
+        assert len(document.snippet) == 1
+        assert document.snippet[-1].spdx_id == 'SPDXRef-Snippet'
+        assert document.snippet[-1].name == 'from linux kernel'
+        assert document.snippet[-1].comment == 'Some snippet comment.'
+        assert document.snippet[-1].copyright == ' Copyright 2008-2010 John Smith '
+        assert document.snippet[-1].license_comment == 'Some lic comment.'
 
 
 if __name__ == '__main__':

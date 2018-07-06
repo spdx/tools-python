@@ -186,3 +186,30 @@ def validate_extr_lic_name(value, optional=False):
         return optional
     else:
         return isinstance(value, (six.string_types, utils.NoAssert, rdflib.Literal))
+
+
+def validate_snippet_spdx_id(value, optional=False):
+    value = value.split('#')[-1]
+    if re.match(r'^SPDXRef[A-Za-z0-9.\-]+$', value) is not None:
+        return True
+    else:
+        return False
+
+
+def validate_snip_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
+def validate_snippet_copyright(value, optional=False):
+    if validate_is_free_form_text(value, optional):
+        return True
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone)):
+        return True
+    elif value is None:
+        return optional
+    else:
+        return False
+
+
+def validate_snip_lic_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)

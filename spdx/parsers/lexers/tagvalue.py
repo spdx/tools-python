@@ -70,6 +70,12 @@ class Lexer(object):
         'LicenseName': 'LICS_NAME',
         'LicenseCrossReference': 'LICS_CRS_REF',
         'LicenseComment': 'LICS_COMMENT',
+        # Snippet
+        'SnippetSPDXID': 'SNIPPET_SPDX_ID',
+        'SnippetName': 'SNIPPET_NAME',
+        'SnippetComment': 'SNIPPET_COMMENT',
+        'SnippetCopyrightText': 'SNIPPET_CR_TEXT',
+        'SnippetLicenseComments': 'SNIPPET_LICS_COMMENT',
         # Common
         'NOASSERTION': 'NO_ASSERT',
         'UNKNOWN': 'UN_KNOWN',
@@ -94,8 +100,9 @@ class Lexer(object):
         r'</text>\s*'
         t.type = 'TEXT'
         t.value = t.lexer.lexdata[
-            t.lexer.text_start:t.lexer.lexpos].strip()
+                  t.lexer.text_start:t.lexer.lexpos]
         t.lexer.lineno += t.value.count('\n')
+        t.value = t.value.strip()
         t.lexer.begin('INITIAL')
         return t
 

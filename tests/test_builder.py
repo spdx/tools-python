@@ -341,5 +341,72 @@ class TestPackageBuilder(TestCase):
         self.builder.set_pkg_desc(self.document, '<text>something</text>')
 
 
+class TestSnippetBuilder(TestCase):
+
+    def setUp(self):
+        self.entity_builder = builders.EntityBuilder()
+        self.builder = builders.SnippetBuilder()
+        self.document = Document()
+
+    def test_create_snippet(self):
+        assert self.builder.create_snippet(self.document, 'SPDXRef-Snippet')
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_incorrect_snippet_spdx_id(self):
+        self.builder.create_snippet(self.document, 'Some_value_with_$%')
+
+    def test_snippet_name(self):
+        self.builder.create_snippet(self.document, 'SPDXRef-Snippet')
+        self.builder.set_snippet_name(self.document, 'Name_of_snippet')
+
+    @testing_utils.raises(builders.OrderError)
+    def test_snippet_name_order(self):
+        self.builder.set_snippet_name(self.document, 'Name_of_snippet')
+
+    def test_snippet_comment(self):
+        self.builder.create_snippet(self.document, 'SPDXRef-Snippet')
+        self.builder.set_snippet_comment(self.document, '<text>Comment</text>')
+
+    @testing_utils.raises(builders.OrderError)
+    def test_snippet_comment_order(self):
+        self.builder.set_snippet_comment(self.document, '<text>Comment</text>')
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_snippet_comment_text_value(self):
+        self.builder.create_snippet(self.document, 'SPDXRef-Snippet')
+        self.builder.set_snippet_comment(self.document, 'Comment.')
+
+    def test_snippet_copyright(self):
+        self.builder.create_snippet(self.document, 'SPDXRef-Snippet')
+        self.builder.set_snippet_copyright(self.document, '<text>Copyright 2008-2010 John Smith</text>')
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_snippet_copyright_text_value(self):
+        self.builder.create_snippet(self.document, 'SPDXRef-Snippet')
+        self.builder.set_snippet_copyright(self.document,
+                                           'Copyright 2008-2010 John Smith')
+
+    @testing_utils.raises(builders.OrderError)
+    def test_snippet_copyright_order(self):
+        self.builder.set_snippet_copyright(self.document,
+                                           '<text>Copyright 2008-2010 John Smith</text>')
+
+    def test_snippet_lic_comment(self):
+        self.builder.create_snippet(self.document, 'SPDXRef-Snippet')
+        self.builder.set_snippet_lic_comment(self.document,
+                                             '<text>Lic comment</text>')
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_snippet_lic_comment_text_value(self):
+        self.builder.create_snippet(self.document, 'SPDXRef-Snippet')
+        self.builder.set_snippet_lic_comment(self.document,
+                                             'Lic comment')
+
+    @testing_utils.raises(builders.OrderError)
+    def test_snippet_lic_comment_order(self):
+        self.builder.set_snippet_lic_comment(self.document,
+                                             '<text>Lic comment</text>')
+
+
 if __name__ == '__main__':
     unittest.main()
