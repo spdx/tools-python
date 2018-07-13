@@ -94,8 +94,9 @@ class Lexer(object):
         r'</text>\s*'
         t.type = 'TEXT'
         t.value = t.lexer.lexdata[
-            t.lexer.text_start:t.lexer.lexpos].strip()
+            t.lexer.text_start:t.lexer.lexpos]
         t.lexer.lineno += t.value.count('\n')
+        t.value = t.value.strip()
         t.lexer.begin('INITIAL')
         return t
 
