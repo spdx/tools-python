@@ -140,6 +140,9 @@ class TestLexer(TestCase):
         SnippetCopyrightText: <text>Some cr text.</text>
         SnippetComment: <text>Some snippet comment.</text>
         SnippetName: from linux kernel
+        SnippetFromFileSPDXID: SPDXRef-DoapSource
+        SnippetLicenseConcluded: Apache-2.0
+        LicenseInfoInSnippet: Apache-2.0
         '''
         self.l.input(data)
         self.token_assert_helper(self.l.token(), 'SNIPPET_SPDX_ID', 'SnippetSPDXID', 2)
@@ -152,6 +155,15 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'TEXT', '<text>Some snippet comment.</text>', 5)
         self.token_assert_helper(self.l.token(), 'SNIPPET_NAME', 'SnippetName', 6)
         self.token_assert_helper(self.l.token(), 'LINE', 'from linux kernel', 6)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_FILE_SPDXID',
+                                 'SnippetFromFileSPDXID', 7)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-DoapSource', 7)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_LICS_CONC',
+                                 'SnippetLicenseConcluded', 8)
+        self.token_assert_helper(self.l.token(), 'LINE', 'Apache-2.0', 8)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_LICS_INFO',
+                                 'LicenseInfoInSnippet', 9)
+        self.token_assert_helper(self.l.token(), 'LINE', 'Apache-2.0', 9)
 
     def token_assert_helper(self, token, ttype, value, line):
         assert token.type == ttype
@@ -228,6 +240,9 @@ class TestParser(TestCase):
         'SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>',
         'SnippetComment: <text>Some snippet comment.</text>',
         'SnippetName: from linux kernel',
+        'SnippetFromFileSPDXID: SPDXRef-DoapSource',
+        'SnippetLicenseConcluded: Apache-2.0',
+        'LicenseInfoInSnippet: Apache-2.0',
     ])
 
     complete_str = '{0}\n{1}\n{2}\n{3}\n{4}\n{5}'.format(document_str, creation_str, review_str, package_str, file_str, snippet_str)
@@ -308,6 +323,9 @@ class TestParser(TestCase):
         assert document.snippet[-1].comment == 'Some snippet comment.'
         assert document.snippet[-1].copyright == ' Copyright 2008-2010 John Smith '
         assert document.snippet[-1].license_comment == 'Some lic comment.'
+        assert document.snippet[-1].snip_from_file_spdxid == 'SPDXRef-DoapSource'
+        assert document.snippet[-1].conc_lics.identifier == 'Apache-2.0'
+        assert document.snippet[-1].licenses_in_snippet[-1].identifier == 'Apache-2.0'
 
 
 if __name__ == '__main__':

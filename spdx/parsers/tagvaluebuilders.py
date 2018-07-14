@@ -1232,6 +1232,53 @@ class SnippetBuilder(object):
         else:
             raise CardinalityError('Snippet::SnippetLicenseComments')
 
+    def set_snip_from_file_spdxid(self, doc, snip_from_file_spdxid):
+        """Sets the snippet's 'Snippet from File SPDX Identifier'.
+        Raises OrderError if no snippet previously defined.
+        Raises CardinalityError if already set.
+        Raises SPDXValueError if the data is a malformed value.
+        """
+        self.assert_snippet_exists()
+        snip_from_file_spdxid = snip_from_file_spdxid.split('#')[-1]
+        if not self.snip_file_spdxid_set:
+            self.snip_file_spdxid_set = True
+            if validations.validate_snip_file_spdxid(snip_from_file_spdxid):
+                doc.snippet[-1].snip_from_file_spdxid = snip_from_file_spdxid
+                return True
+            else:
+                raise SPDXValueError('Snippet::SnippetFromFileSPDXID')
+        else:
+            raise CardinalityError('Snippet::SnippetFromFileSPDXID')
+
+    def set_snip_concluded_license(self, doc, conc_lics):
+        """
+        Raises OrderError if no snippet previously defined.
+        Raises CardinalityError if already set.
+        Raises SPDXValueError if the data is a malformed value.
+        """
+        self.assert_snippet_exists()
+        if not self.snippet_conc_lics_set:
+            self.snippet_conc_lics_set = True
+            if validations.validate_lics_conc(conc_lics):
+                doc.snippet[-1].conc_lics = conc_lics
+                return True
+            else:
+                raise SPDXValueError('Snippet::SnippetLicenseConcluded')
+        else:
+            raise CardinalityError('Snippet::SnippetLicenseConcluded')
+
+    def set_snippet_lics_info(self, doc, lics_info):
+        """
+        Raises OrderError if no snippet previously defined.
+        Raises SPDXValueError if the data is a malformed value.
+        """
+        self.assert_snippet_exists()
+        if validations.validate_snip_lics_info(lics_info):
+            doc.snippet[-1].add_lics(lics_info)
+            return True
+        else:
+            raise SPDXValueError('Snippet::LicenseInfoInSnippet')
+
     def reset_snippet(self):
         # FIXME: this state does not make sense
         self.snippet_spdx_id_set = False
@@ -1239,6 +1286,8 @@ class SnippetBuilder(object):
         self.snippet_comment_set = False
         self.snippet_copyright_set = False
         self.snippet_lic_comment_set = False
+        self.snip_file_spdxid_set = False
+        self.snippet_conc_lics_set = False
 
     def assert_snippet_exists(self):
         if not self.snippet_spdx_id_set:

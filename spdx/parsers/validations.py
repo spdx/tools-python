@@ -262,3 +262,20 @@ def validate_snippet_copyright(value, optional=False):
 
 def validate_snip_lic_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
+
+def validate_snip_file_spdxid(value, optional=False):
+    if re.match(
+            r'(DocumentRef[A-Za-z0-9.\-]+:){0,1}SPDXRef[A-Za-z0-9.\-]+', value) is not None:
+        return True
+    else:
+        return False
+
+
+def validate_snip_lics_info(value, optional=False):
+    if value is None:
+        return optional
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, document.License)):
+        return True
+    else:
+        return False

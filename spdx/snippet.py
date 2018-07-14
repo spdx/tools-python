@@ -11,6 +11,7 @@
 
 import six
 
+from spdx import document
 from spdx import utils
 
 
@@ -26,15 +27,31 @@ class Snippet(object):
      - copyright: Copyright text. Mandatory, one. Type: str.
      - license_comment: Relevant background references or analysis that went
      in to arriving at the Concluded License for a snippet. Optional, one.
+     - snip_from_file_spdxid:  Uniquely identify the file in an SPDX document
+     which this snippet is associated with. Mandatory, one. Type: str.
      Type: str.
+     - conc_lics: Contains the license the SPDX file creator has concluded as
+     governing the snippet or alternative values if the governing license
+     cannot be determined. Mandatory one. Type: document.License or
+     utils.NoAssert or utils.SPDXNone.
+     - licenses_in_snippet: The list of licenses found in the snippet.
+     Mandatory, one or more. Type: document.License or utils.SPDXNone or
+     utils.NoAssert.
     """
 
-    def __init__(self, spdx_id=None, copyright=None):
+    def __init__(self, spdx_id=None, copyright=None,
+                 snip_from_file_spdxid=None, conc_lics=None):
         self.spdx_id = spdx_id
         self.name = None
         self.comment = None
         self.copyright = copyright
         self.license_comment = None
+        self.snip_from_file_spdxid = snip_from_file_spdxid
+        self.conc_lics = conc_lics
+        self.licenses_in_snippet = []
+
+    def add_lics(self, lics):
+        self.licenses_in_snippet.append(lics)
 
     def validate(self, messages=None):
         """
@@ -45,7 +62,10 @@ class Snippet(object):
         messages = messages if messages is not None else []
 
         return (self.validate_spdx_id(messages) and
-                self.validate_copyright_text(messages))
+                self.validate_copyright_text(messages) and
+                self.validate_snip_from_file_spdxid(messages) and
+                self.validate_concluded_license(messages) and
+                self.validate_licenses_in_snippet(messages))
 
     def validate_spdx_id(self, messages=None):
         # FIXME: messages should be returned
@@ -71,6 +91,44 @@ class Snippet(object):
             messages.append('Snippet copyright must be str or unicode or '
                             'utils.NoAssert or utils.SPDXNone')
             return False
+
+    def validate_snip_from_file_spdxid(self, messages=None):
+        # FIXME: we should return messages instead
+        messages = messages if messages is not None else []
+
+        if self.snip_from_file_spdxid is None:
+            messages.append('Snippet has no Snippet from File SPDX Identifier.')
+            return False
+
+        else:
+            return True
+
+    def validate_concluded_license(self, messages=None):
+        # FIXME: we should return messages instead
+        messages = messages if messages is not None else []
+
+        if isinstance(self.conc_lics, (document.License, utils.NoAssert,
+                                       utils.SPDXNone)):
+            return True
+        else:
+            messages.append(
+                'Snippet Concluded License must be one of '
+                'document.License, utils.NoAssert or utils.SPDXNone')
+            return False
+
+    def validate_licenses_in_snippet(self, messages=None):
+        # FIXME: we should return messages instead
+        messages = messages if messages is not None else []
+
+        if len(self.licenses_in_snippet) == 0:
+            messages.append('Snippet must have at least one license in file.')
+            return False
+        else:
+            for lic in self.licenses_in_snippet:
+                if not isinstance(lic, (document.License, utils.NoAssert,
+                                        utils.SPDXNone)):
+                    return False
+            return True
 
     def has_optional_field(self, field):
         return getattr(self, field, None) is not None

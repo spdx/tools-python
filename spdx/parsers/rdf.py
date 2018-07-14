@@ -58,6 +58,9 @@ ERROR_MESSAGES = {
     'ANNOTATION_DATE': 'Invalid annotation date value \'{0}\' must be date in ISO 8601 format.',
     'SNIPPET_SPDX_ID_VALUE' : 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string '
                               'containing letters, numbers, ".", "-".',
+    'SNIPPET_SINGLE_LICS' : 'Snippet Concluded License must be a license url or spdx:noassertion or spdx:none.',
+    'SNIPPET_LIC_INFO' : 'License Information in Snippet must be a license url or a reference '
+                         'to the license, denoted by LicenseRef-[idstring] or spdx:noassertion or spdx:none.',
 }
 
 
@@ -719,6 +722,44 @@ class SnippetParser(LicenseParser):
                 self.builder.set_snippet_copyright(self.doc, self.to_special_value(six.text_type(o)))
             except CardinalityError:
                 self.more_than_one_error('copyrightText')
+                break
+
+        try:
+            for _, _, licenses in self.graph.triples(
+                    (snippet_term, self.spdx_namespace['licenseConcluded'], None)):
+                if (licenses, RDF.type, self.spdx_namespace['ConjunctiveLicenseSet']) in self.graph:
+                    lics = self.handle_conjunctive_list(licenses)
+                    self.builder.set_snip_concluded_license(self.doc, lics)
+
+                elif (licenses, RDF.type, self.spdx_namespace['DisjunctiveLicenseSet']) in self.graph:
+                    lics = self.handle_disjunctive_list(licenses)
+                    self.builder.set_snip_concluded_license(self.doc, lics)
+
+                else:
+                    try:
+                        lics = self.handle_lics(licenses)
+                        self.builder.set_snip_concluded_license(self.doc, lics)
+                    except SPDXValueError:
+                        self.value_error('SNIPPET_SINGLE_LICS', licenses)
+        except CardinalityError:
+            self.more_than_one_error('package {0}'.format(
+                self.spdx_namespace['licenseConcluded']))
+
+        for _, _, info in self.graph.triples(
+                (snippet_term, self.spdx_namespace['licenseInfoInSnippet'], None)):
+            lic = self.handle_lics(info)
+            if lic is not None:
+                try:
+                    self.builder.set_snippet_lics_info(self.doc, lic)
+                except SPDXValueError:
+                    self.value_error('SNIPPET_LIC_INFO', lic)
+
+        for _s, _p, o in self.graph.triples(
+                (snippet_term, self.spdx_namespace['snippetFromFile'], None)):
+            try:
+                self.builder.set_snip_from_file_spdxid(self.doc, six.text_type(o))
+            except CardinalityError:
+                self.more_than_one_error('snippetFromFile')
                 break
 
 

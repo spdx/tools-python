@@ -79,10 +79,13 @@ FileComment: <text>This file belongs to Jena</text>
 
 ## Snippet Information
 SnippetSPDXID: SPDXRef-Snippet
+SnippetFromFileSPDXID: SPDXRef-DoapSource
 SnippetLicenseComments: <text>The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.</text>
 SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>
 SnippetComment: <text>This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0-or-later.</text>
 SnippetName: from linux kernel
+SnippetLicenseConcluded: Apache-2.0
+LicenseInfoInSnippet: Apache-2.0
 
 ## License Information
 LicenseID: LicenseRef-3
