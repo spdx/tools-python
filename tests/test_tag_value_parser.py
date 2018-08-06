@@ -34,16 +34,17 @@ class TestLexer(TestCase):
         data = '''
         SPDXVersion: SPDX-2.1
         # Comment.
-        DataLicense: CC0-1.0
         DocumentComment: <text>This is a sample spreadsheet</text>
+        DataLicense: CC0-1.0
         '''
         self.l.input(data)
         self.token_assert_helper(self.l.token(), 'DOC_VERSION', 'SPDXVersion', 2)
         self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-2.1', 2)
-        self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense', 4)
-        self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 4)
-        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 5)
-        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 5)
+        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 4)
+        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 4)
+        self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense',
+                                 5)
+        self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 5)
 
     def test_creation_info(self):
         data = '''
