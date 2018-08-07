@@ -63,6 +63,17 @@ class TestDocumentBuilder(unittest.case.TestCase):
         self.builder.set_doc_data_lics(self.document, lics_str)
         self.builder.set_doc_data_lics(self.document, lics_str)
 
+    def test_correct_name(self):
+        name_str = 'Sample_Document-V2.1'
+        self.builder.set_doc_name(self.document, name_str)
+        assert self.document.name == name_str
+
+    @testing_utils.raises(builders.CardinalityError)
+    def test_name_cardinality(self):
+        name_str = 'Sample_Document-V2.1'
+        self.builder.set_doc_name(self.document, name_str)
+        self.builder.set_doc_name(self.document, name_str)
+
     def test_correct_data_comment(self):
         comment_str = 'This is a comment.'
         comment_text = '<text>' + comment_str + '</text>'

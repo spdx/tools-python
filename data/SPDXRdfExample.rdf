@@ -4,6 +4,7 @@
     xmlns="http://spdx.org/rdf/terms#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
   <SpdxDocument rdf:about="http://www.spdx.org/tools#SPDXANALYSIS">
+    <name>Sample_Document-V2.1</name>
     <creationInfo>
       <CreationInfo>
         <created>2010-02-03T00:00:00Z</created>

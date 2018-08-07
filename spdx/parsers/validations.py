@@ -55,6 +55,10 @@ def validate_data_lics(value):
     return value == 'CC0-1.0'
 
 
+def validate_doc_name(value, optional=False):
+    return validate_tool_name(value, optional)
+
+
 def validate_pkg_supplier(value, optional=False):
     if optional and value is None:
         return True

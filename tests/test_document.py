@@ -66,7 +66,8 @@ class TestDocument(TestCase):
         assert document.data_license.identifier == 'AFL-1.1'
 
     def test_document_validate_failures_returns_informative_messages(self):
-        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1')
         pack = doc.package = Package('some/path', NoAssert())
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
@@ -83,7 +84,8 @@ class TestDocument(TestCase):
         assert expected == messages
 
     def test_document_is_valid_when_using_or_later_licenses(self):
-        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1')
         doc.creation_info.add_creator(Tool('ScanCode'))
         doc.creation_info.set_created_now()
 
@@ -113,7 +115,8 @@ class TestDocument(TestCase):
 class TestWriters(TestCase):
 
     def _get_lgpl_doc(self, or_later=False):
-        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1')
         doc.creation_info.add_creator(Tool('ScanCode'))
         doc.creation_info.set_created_now()
 
