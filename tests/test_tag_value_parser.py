@@ -49,7 +49,7 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'DOC_NAME', 'DocumentName', 5)
         self.token_assert_helper(self.l.token(), 'LINE', 'Sample_Document-V2.1',
                                  5)
-        self.token_assert_helper(self.l.token(), 'DOC_SPDX_ID', 'SPDXID', 6)
+        self.token_assert_helper(self.l.token(), 'SPDX_ID', 'SPDXID', 6)
         self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-DOCUMENT', 6)
         self.token_assert_helper(self.l.token(), 'DOC_NAMESPACE',
                                  'DocumentNamespace', 7)
@@ -188,6 +188,7 @@ class TestParser(TestCase):
 
     file_str = '\n'.join([
         'FileName: testfile.java',
+        'SPDXID: SPDXRef-File',
         'FileType: SOURCE',
         'FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12',
         'LicenseConcluded: Apache-2.0',
@@ -248,6 +249,7 @@ class TestParser(TestCase):
         assert len(document.package.files) == 1
         spdx_file = document.package.files[0]
         assert spdx_file.name == 'testfile.java'
+        assert spdx_file.spdx_id == 'SPDXRef-File'
         assert spdx_file.type == spdx.file.FileType.SOURCE
         assert len(spdx_file.artifact_of_project_name) == 1
         assert len(spdx_file.artifact_of_project_home) == 1

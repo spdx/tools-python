@@ -81,6 +81,7 @@ class TestDocument(TestCase):
         pack = doc.package = Package('some/path', NoAssert())
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
+        file1.spdx_id = 'SPDXRef-File'
         file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
         lic1 = License.from_identifier('LGPL-2.1')
         file1.add_lics(lic1)
@@ -108,6 +109,7 @@ class TestDocument(TestCase):
 
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
+        file1.spdx_id = 'SPDXRef-File'
         file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
@@ -140,6 +142,7 @@ class TestWriters(TestCase):
 
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
+        file1.spdx_id = 'SPDXRef-File'
         file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
