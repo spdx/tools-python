@@ -27,6 +27,7 @@ from spdx import review
 from spdx import utils
 from spdx import version
 
+from spdx.document import ExternalDocumentRef
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
@@ -102,6 +103,32 @@ class DocBuilder(object):
         else:
             raise CardinalityError('Document::DataLicense')
 
+    def set_doc_name(self, doc, name):
+        """Sets the document name.
+        Raises CardinalityError if already defined.
+        """
+        if not self.doc_name_set:
+            doc.name = name
+            self.doc_name_set = True
+            return True
+        else:
+            raise CardinalityError('Document::Name')
+
+    def set_doc_spdx_id(self, doc, doc_spdx_id_line):
+        """Sets the document SPDX Identifier.
+        Raises value error if malformed value, CardinalityError
+        if already defined.
+        """
+        if not self.doc_spdx_id_set:
+            if doc_spdx_id_line == 'SPDXRef-DOCUMENT':
+                doc.spdx_id = doc_spdx_id_line
+                self.doc_spdx_id_set = True
+                return True
+            else:
+                raise SPDXValueError('Document::SPDXID')
+        else:
+            raise CardinalityError('Document::SPDXID')
+
     def set_doc_comment(self, doc, comment):
         """Sets document comment, Raises CardinalityError if
         comment already set.
@@ -117,12 +144,65 @@ class DocBuilder(object):
         else:
             raise CardinalityError('Document::Comment')
 
+    def set_doc_namespace(self, doc, namespace):
+        """Sets the document namespace.
+        Raise SPDXValueError if malformed value, CardinalityError
+        if already defined.
+        """
+        if not self.doc_namespace_set:
+            self.doc_namespace_set = True
+            if validations.validate_doc_namespace(namespace):
+                doc.namespace = namespace
+                return True
+            else:
+                raise SPDXValueError('Document::Namespace')
+        else:
+            raise CardinalityError('Document::Comment')
+
     def reset_document(self):
         """Resets the state to allow building new documents"""
         # FIXME: this state does not make sense
         self.doc_version_set = False
         self.doc_comment_set = False
+        self.doc_namespace_set = False
         self.doc_data_lics_set = False
+        self.doc_name_set = False
+        self.doc_spdx_id_set = False
+
+
+class ExternalDocumentRefBuilder(object):
+
+    def set_ext_doc_id(self, doc, ext_doc_id):
+        """
+        Sets the `external_document_id` attribute of the `ExternalDocumentRef`
+        object.
+        """
+        doc.add_ext_document_reference(
+            ExternalDocumentRef(
+                external_document_id=ext_doc_id))
+
+    def set_spdx_doc_uri(self, doc, spdx_doc_uri):
+        """
+        Sets the `spdx_document_uri` attribute of the `ExternalDocumentRef`
+        object.
+        """
+        if validations.validate_doc_namespace(spdx_doc_uri):
+            doc.ext_document_references[-1].spdx_document_uri = spdx_doc_uri
+        else:
+            raise SPDXValueError('Document::ExternalDocumentRef')
+
+    def set_chksum(self, doc, chksum):
+        """
+        Sets the `check_sum` attribute of the `ExternalDocumentRef`
+        object.
+        """
+        doc.ext_document_references[-1].check_sum = checksum_from_sha1(
+            chksum)
+
+    def add_ext_doc_refs(self, doc, ext_doc_id, spdx_doc_uri, chksum):
+        self.set_ext_doc_id(doc, ext_doc_id)
+        self.set_spdx_doc_uri(doc, spdx_doc_uri)
+        self.set_chksum(doc, chksum)
 
 
 class EntityBuilder(object):
@@ -942,7 +1022,8 @@ class LicenseBuilder(object):
 
 
 class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
-              PackageBuilder, FileBuilder, LicenseBuilder):
+              PackageBuilder, FileBuilder, LicenseBuilder,
+              ExternalDocumentRefBuilder):
 
     """SPDX document builder."""
 

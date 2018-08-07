@@ -23,6 +23,7 @@ from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers import tagvaluebuilders
+from spdx.parsers import validations
 
 
 class DocBuilder(object):
@@ -70,6 +71,32 @@ class DocBuilder(object):
         else:
             raise CardinalityError('Document::License')
 
+    def set_doc_name(self, doc, name):
+        """
+        Sets the document name, raises CardinalityError if already defined.
+        """
+        if not self.doc_name_set:
+            doc.name = name
+            self.doc_name_set = True
+            return True
+        else:
+            raise CardinalityError('Document::Name')
+
+    def set_doc_spdx_id(self, doc, doc_spdx_id_line):
+        """Sets the document SPDX Identifier.
+        Raises value error if malformed value, CardinalityError
+        if already defined.
+        """
+        if not self.doc_spdx_id_set:
+            if validations.validate_doc_spdx_id(doc_spdx_id_line):
+                doc.spdx_id = doc_spdx_id_line
+                self.doc_spdx_id_set = True
+                return True
+            else:
+                raise SPDXValueError('Document::SPDXID')
+        else:
+            raise CardinalityError('Document::SPDXID')
+
     def set_doc_comment(self, doc, comment):
         """Sets document comment, Raises CardinalityError if
         comment already set.
@@ -80,6 +107,21 @@ class DocBuilder(object):
         else:
             raise CardinalityError('Document::Comment')
 
+    def set_doc_namespace(self, doc, namespace):
+        """Sets the document namespace.
+        Raise SPDXValueError if malformed value, CardinalityError
+        if already defined.
+        """
+        if not self.doc_namespace_set:
+            self.doc_namespace_set = True
+            if validations.validate_doc_namespace(namespace):
+                doc.namespace = namespace
+                return True
+            else:
+                raise SPDXValueError('Document::Namespace')
+        else:
+            raise CardinalityError('Document::Comment')
+
     def reset_document(self):
         """
         Reset the internal state to allow building new document
@@ -87,7 +129,24 @@ class DocBuilder(object):
         # FIXME: this state does not make sense
         self.doc_version_set = False
         self.doc_comment_set = False
+        self.doc_namespace_set = False
         self.doc_data_lics_set = False
+        self.doc_name_set = False
+        self.doc_spdx_id_set = False
+
+
+class ExternalDocumentRefBuilder(tagvaluebuilders.ExternalDocumentRefBuilder):
+
+    def set_chksum(self, doc, chk_sum):
+        """
+        Sets the external document reference's check sum, if not already set.
+        chk_sum - The checksum value in the form of a string.
+        """
+        if chk_sum:
+            doc.ext_document_references[-1].check_sum = checksum.Algorithm(
+                'SHA1', chk_sum)
+        else:
+            raise SPDXValueError('ExternalDocumentRef::Checksum')
 
 
 class EntityBuilder(tagvaluebuilders.EntityBuilder):
@@ -325,7 +384,8 @@ class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
             raise OrderError('ReviewComment')
 
 
-class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder, FileBuilder, ReviewBuilder):
+class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder,
+              FileBuilder, ReviewBuilder, ExternalDocumentRefBuilder):
 
     def __init__(self):
         super(Builder, self).__init__()

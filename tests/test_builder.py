@@ -63,6 +63,33 @@ class TestDocumentBuilder(unittest.case.TestCase):
         self.builder.set_doc_data_lics(self.document, lics_str)
         self.builder.set_doc_data_lics(self.document, lics_str)
 
+    def test_correct_name(self):
+        name_str = 'Sample_Document-V2.1'
+        self.builder.set_doc_name(self.document, name_str)
+        assert self.document.name == name_str
+
+    @testing_utils.raises(builders.CardinalityError)
+    def test_name_cardinality(self):
+        name_str = 'Sample_Document-V2.1'
+        self.builder.set_doc_name(self.document, name_str)
+        self.builder.set_doc_name(self.document, name_str)
+
+    def test_correct_doc_namespace(self):
+        doc_namespace_str = 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
+        self.builder.set_doc_namespace(self.document, doc_namespace_str)
+        assert self.document.namespace == doc_namespace_str
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_doc_namespace_value(self):
+        doc_namespace_str = 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT'
+        self.builder.set_doc_data_lics(self.document, doc_namespace_str)
+
+    @testing_utils.raises(builders.CardinalityError)
+    def test_doc_namespace_cardinality(self):
+        doc_namespace_str = 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
+        self.builder.set_doc_namespace(self.document, doc_namespace_str)
+        self.builder.set_doc_namespace(self.document, doc_namespace_str)
+
     def test_correct_data_comment(self):
         comment_str = 'This is a comment.'
         comment_text = '<text>' + comment_str + '</text>'
@@ -80,6 +107,43 @@ class TestDocumentBuilder(unittest.case.TestCase):
     def test_comment_value(self):
         comment = '<text>slslss<text'
         self.builder.set_doc_comment(self.document, comment)
+
+
+class TestExternalDocumentRefBuilder(TestCase):
+
+    def setUp(self):
+        self.document = Document()
+        self.builder = builders.ExternalDocumentRefBuilder()
+
+    def test_external_doc_id(self):
+        ext_doc_id = 'DocumentRef-spdx-tool-2.1'
+        self.builder.set_ext_doc_id(self.document, ext_doc_id)
+        assert self.document.ext_document_references[-1].external_document_id == ext_doc_id
+
+    def test_spdx_doc_uri(self):
+        spdx_doc_uri = 'https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301'
+        self.builder.set_ext_doc_id(self.document, 'DocumentRef-spdx-tool-2.1')
+        self.builder.set_spdx_doc_uri(self.document, spdx_doc_uri)
+        assert self.document.ext_document_references[-1].spdx_document_uri == spdx_doc_uri
+
+    def test_checksum(self):
+        chksum = 'SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759'
+        chksum_val = 'd6a770ba38583ed4bb4525bd96e50461655d2759'
+        self.builder.set_ext_doc_id(self.document, 'DocumentRef-spdx-tool-2.1')
+        self.builder.set_chksum(self.document, chksum)
+        assert self.document.ext_document_references[-1].check_sum.value == chksum_val
+
+    def test_add_ext_doc_refs(self):
+        ext_doc_id_val = 'DocumentRef-spdx-tool-2.1'
+        spdx_doc_uri = 'http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301'
+        chksum = 'SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759'
+        chksum_val = 'd6a770ba38583ed4bb4525bd96e50461655d2759'
+
+        self.builder.add_ext_doc_refs(self.document, ext_doc_id_val,
+                                      spdx_doc_uri, chksum)
+        assert self.document.ext_document_references[-1].external_document_id == ext_doc_id_val
+        assert self.document.ext_document_references[-1].spdx_document_uri == spdx_doc_uri
+        assert self.document.ext_document_references[-1].check_sum.value == chksum_val
 
 
 class TestEntityBuilder(TestCase):

@@ -35,17 +35,46 @@ class TestLexer(TestCase):
         data = '''
         SPDXVersion: SPDX-2.1
         # Comment.
-        DocumentComment: <text>This is a sample spreadsheet</text>
         DataLicense: CC0-1.0
+        DocumentName: Sample_Document-V2.1
+        SPDXID: SPDXRef-DOCUMENT
+        DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
+        DocumentComment: <text>This is a sample spreadsheet</text>
         '''
         self.l.input(data)
         self.token_assert_helper(self.l.token(), 'DOC_VERSION', 'SPDXVersion', 2)
         self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-2.1', 2)
-        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 4)
-        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 4)
-        self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense',
+        self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense', 4)
+        self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 4)
+        self.token_assert_helper(self.l.token(), 'DOC_NAME', 'DocumentName', 5)
+        self.token_assert_helper(self.l.token(), 'LINE', 'Sample_Document-V2.1',
                                  5)
-        self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 5)
+        self.token_assert_helper(self.l.token(), 'DOC_SPDX_ID', 'SPDXID', 6)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-DOCUMENT', 6)
+        self.token_assert_helper(self.l.token(), 'DOC_NAMESPACE',
+                                 'DocumentNamespace', 7)
+        self.token_assert_helper(self.l.token(), 'LINE',
+                                 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301',
+                                 7)
+        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 8)
+        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 8)
+
+    def test_external_document_references(self):
+        data = '''
+        ExternalDocumentRef:DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759
+        '''
+        self.l.input(data)
+        self.token_assert_helper(self.l.token(), 'EXT_DOC_REF',
+                                 'ExternalDocumentRef', 2)
+        self.token_assert_helper(self.l.token(), 'DOC_REF_ID',
+                                 'DocumentRef-spdx-tool-2.1', 2)
+        self.token_assert_helper(self.l.token(), 'DOC_URI',
+                                 'http://spdx.org/spdxdocs/spdx-tools-v2.1-3F25'
+                                 '04E0-4F89-41D3-9A0C-0305E82C3301', 2)
+        self.token_assert_helper(self.l.token(), 'EXT_DOC_REF_CHKSUM',
+                                 'SHA1: '
+                                 'd6a770ba38583ed4bb4525bd96e50461655d2759', 2)
+
 
     def test_creation_info(self):
         data = '''
@@ -115,7 +144,10 @@ class TestParser(TestCase):
     document_str = '\n'.join([
         'SPDXVersion: SPDX-2.1',
         'DataLicense: CC0-1.0',
-        'DocumentComment: <text>Sample Comment</text>'
+        'DocumentName: Sample_Document-V2.1',
+        'SPDXID: SPDXRef-DOCUMENT',
+        'DocumentComment: <text>Sample Comment</text>',
+        'DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
     ])
 
     creation_str = '\n'.join([
@@ -181,7 +213,10 @@ class TestParser(TestCase):
         assert not error
         assert document.version == Version(major=2, minor=1)
         assert document.data_license.identifier == 'CC0-1.0'
+        assert document.name == 'Sample_Document-V2.1'
+        assert document.spdx_id == 'SPDXRef-DOCUMENT'
         assert document.comment == 'Sample Comment'
+        assert document.namespace == 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
 
     def test_creation_info(self):
         document, error = self.p.parse(self.complete_str)

@@ -39,7 +39,15 @@ ERROR_MESSAGES = {
     'DOC_LICENSE_VALUE_TYPE': 'DataLicense must be CC0-1.0, line: {0}',
     'DOC_VERSION_VALUE': 'Invalid SPDXVersion \'{0}\' must be SPDX-M.N where M and N are numbers. Line: {1}',
     'DOC_VERSION_VALUE_TYPE': 'Invalid SPDXVersion value, must be SPDX-M.N where M and N are numbers. Line: {0}',
+    'DOC_NAME_VALUE': 'DocumentName must be single line of text, line: {0}',
+    'DOC_SPDX_ID_VALUE': 'Invalid SPDXID value, SPDXID must be SPDXRef-DOCUMENT, line: {0}',
+    'EXT_DOC_REF_VALUE': 'ExternalDocumentRef must contain External Document ID, SPDX Document URI and Checksum'
+                         'in the standard format, line:{0}.',
     'DOC_COMMENT_VALUE_TYPE': 'DocumentComment value must be free form text between <text></text> tags, line:{0}',
+    'DOC_NAMESPACE_VALUE': 'Invalid DocumentNamespace value {0}, must contain a scheme (e.g. "https:") '
+                           'and should not contain the "#" delimiter, line:{1}',
+    'DOC_NAMESPACE_VALUE_TYPE': 'Invalid DocumentNamespace value, must contain a scheme (e.g. "https:") '
+                                'and should not contain the "#" delimiter, line: {0}',
     'REVIEWER_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
     'CREATOR_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
     'REVIEW_DATE_VALUE_TYPE': 'ReviewDate value must be date in ISO 8601 format, line: {0}',
@@ -106,7 +114,11 @@ class Parser(object):
     def p_attrib(self, p):
         """attrib : spdx_version
                   | data_lics
+                  | doc_name
+                  | doc_spdx_id
+                  | ext_doc_ref
                   | doc_comment
+                  | doc_namespace
                   | creator
                   | created
                   | creator_comment
@@ -1077,6 +1089,27 @@ class Parser(object):
         msg = ERROR_MESSAGES['DOC_COMMENT_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
+    def p_doc_namespace_1(self, p):
+        """doc_namespace : DOC_NAMESPACE LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_doc_namespace(self.document, value)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['DOC_NAMESPACE_VALUE'].format(p[2], p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('DocumentNamespace', p.lineno(1))
+
+    def p_doc_namespace_2(self, p):
+        """doc_namespace : DOC_NAMESPACE error"""
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_NAMESPACE_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
     def p_data_license_1(self, p):
         """data_lics : DOC_LICENSE LINE"""
         try:
@@ -1096,6 +1129,69 @@ class Parser(object):
         """data_lics : DOC_LICENSE error"""
         self.error = True
         msg = ERROR_MESSAGES['DOC_LICENSE_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_doc_name_1(self, p):
+        """doc_name : DOC_NAME LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_doc_name(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('DocumentName', p.lineno(1))
+
+    def p_doc_name_2(self, p):
+        """doc_name : DOC_NAME error"""
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_NAME_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_doc_spdx_id_1(self, p):
+        """doc_spdx_id : DOC_SPDX_ID LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_doc_spdx_id(self.document, value)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['DOC_SPDX_ID_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('SPDXID', p.lineno(1))
+
+    def p_doc_spdx_id_2(self, p):
+        """doc_spdx_id : DOC_SPDX_ID error"""
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_SPDX_ID_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_ext_doc_refs_1(self, p):
+        """ext_doc_ref : EXT_DOC_REF DOC_REF_ID DOC_URI EXT_DOC_REF_CHKSUM"""
+        try:
+            if six.PY2:
+                doc_ref_id = p[2].decode(encoding='utf-8')
+                doc_uri = p[3].decode(encoding='utf-8')
+                ext_doc_chksum = p[4].decode(encoding='utf-8')
+            else:
+                doc_ref_id = p[2]
+                doc_uri = p[3]
+                ext_doc_chksum = p[4]
+
+            self.builder.add_ext_doc_refs(self.document, doc_ref_id, doc_uri,
+                                          ext_doc_chksum)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['EXT_DOC_REF_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+
+    def p_ext_doc_refs_2(self, p):
+        """ext_doc_ref : EXT_DOC_REF error"""
+        self.error = True
+        msg = ERROR_MESSAGES['EXT_DOC_REF_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_spdx_version_1(self, p):

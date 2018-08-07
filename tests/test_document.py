@@ -22,7 +22,7 @@ from unittest import TestCase
 from spdx.checksum import Algorithm
 from spdx.config import LICENSE_MAP
 from spdx.creationinfo import Tool
-from spdx.document import Document
+from spdx.document import Document, ExternalDocumentRef
 from spdx.document import License
 from spdx.file import File
 from spdx.package import Package
@@ -61,12 +61,23 @@ class TestDocument(TestCase):
             data_license=License(full_name='Academic Free License v1.1',
                                 identifier='AFL-1.1')
         )
+        document.add_ext_document_reference(
+            ExternalDocumentRef('DocumentRef-spdx-tool-2.1',
+                                'https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301',
+                                Algorithm('SHA1', 'SOME-SHA1'))
+        )
         assert document.comment is None
         assert document.version == Version(2, 1)
         assert document.data_license.identifier == 'AFL-1.1'
+        assert document.ext_document_references[-1].external_document_id == 'DocumentRef-spdx-tool-2.1'
+        assert document.ext_document_references[-1].spdx_document_uri == 'https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301'
+        assert document.ext_document_references[-1].check_sum.identifier == 'SHA1'
+        assert document.ext_document_references[-1].check_sum.value == 'SOME-SHA1'
 
     def test_document_validate_failures_returns_informative_messages(self):
-        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
         pack = doc.package = Package('some/path', NoAssert())
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
@@ -83,7 +94,9 @@ class TestDocument(TestCase):
         assert expected == messages
 
     def test_document_is_valid_when_using_or_later_licenses(self):
-        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
         doc.creation_info.add_creator(Tool('ScanCode'))
         doc.creation_info.set_created_now()
 
@@ -113,7 +126,9 @@ class TestDocument(TestCase):
 class TestWriters(TestCase):
 
     def _get_lgpl_doc(self, or_later=False):
-        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
         doc.creation_info.add_creator(Tool('ScanCode'))
         doc.creation_info.set_created_now()
 

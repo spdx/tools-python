@@ -236,8 +236,17 @@ def write_document(document, out, validate=True):
     out.write('# Document Information\n\n')
     write_value('SPDXVersion', str(document.version), out)
     write_value('DataLicense', document.data_license.identifier, out)
+    write_value('DocumentName', document.name, out)
+    write_value('SPDXID', 'SPDXRef-DOCUMENT', out)
+    write_value('DocumentNamespace', document.namespace, out)
     if document.has_comment:
         write_text_value('DocumentComment', document.comment, out)
+    for doc_ref in document.ext_document_references:
+        doc_ref_str = ' '.join([doc_ref.external_document_id,
+                                doc_ref.spdx_document_uri,
+                                doc_ref.check_sum.identifier + ':' +
+                                doc_ref.check_sum.value])
+        write_value('ExternalDocumentRef', doc_ref_str, out)
     write_separators(out)
     # Write out creation info
     write_creation_info(document.creation_info, out)

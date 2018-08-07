@@ -21,7 +21,11 @@ class Lexer(object):
         # Top level fields
         'SPDXVersion': 'DOC_VERSION',
         'DataLicense': 'DOC_LICENSE',
+        'DocumentName': 'DOC_NAME',
+        'SPDXID': 'DOC_SPDX_ID',
         'DocumentComment': 'DOC_COMMENT',
+        'DocumentNamespace': 'DOC_NAMESPACE',
+        'ExternalDocumentRef': 'EXT_DOC_REF',
         # Creation info
         'Creator': 'CREATOR',
         'Created': 'CREATED',
@@ -83,7 +87,8 @@ class Lexer(object):
 
     tokens = ['TEXT', 'TOOL_VALUE', 'UNKNOWN_TAG',
               'ORG_VALUE', 'PERSON_VALUE',
-              'DATE', 'LINE', 'CHKSUM'] + list(reserved.values())
+              'DATE', 'LINE', 'CHKSUM', 'DOC_REF_ID',
+              'DOC_URI', 'EXT_DOC_REF_CHKSUM'] + list(reserved.values())
 
     def t_text(self, t):
         r':\s*<text>'
@@ -109,6 +114,21 @@ class Lexer(object):
 
     def t_CHKSUM(self, t):
         r':\s*SHA1:\s*[a-f0-9]{40,40}'
+        t.value = t.value[1:].strip()
+        return t
+
+    def t_DOC_REF_ID(self, t):
+        r':\s*DocumentRef-([A-Za-z0-9\+\.\-]+)'
+        t.value = t.value[1:].strip()
+        return t
+
+    def t_DOC_URI(self, t):
+        r'\s*((ht|f)tps?:\/\/\S*)'
+        t.value = t.value.strip()
+        return t
+
+    def t_EXT_DOC_REF_CHKSUM(self, t):
+        r'\s*SHA1:\s*[a-f0-9]{40,40}'
         t.value = t.value[1:].strip()
         return t
 
