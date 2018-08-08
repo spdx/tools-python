@@ -46,6 +46,7 @@ PackageLicenseComments: <text>License Comments</text>
 # File Info
 
 FileName: testfile.java
+SPDXID: SPDXRef-File
 FileType: SOURCE
 FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
 LicenseConcluded: Apache-2.0

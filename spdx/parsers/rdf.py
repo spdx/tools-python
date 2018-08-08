@@ -48,6 +48,8 @@ ERROR_MESSAGES = {
     'LICS_LIST_MEMBER' : 'Declaritive or Conjunctive license set member must be a license url or identifier',
     'PKG_SINGLE_LICS' : 'Package concluded license must be a license url or spdx:noassertion or spdx:none.',
     'PKG_LICS_INFO_FILES' : 'Package licenseInfoFromFiles must be a license or spdx:none or spdx:noassertion',
+    'FILE_SPDX_ID_VALUE': 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
+                          'letters, numbers, ".", "-".',
     'FILE_TYPE' : 'File type must be binary, other, source or archive term.',
     'FILE_SINGLE_LICS': 'File concluded license must be a license url or spdx:noassertion or spdx:none.',
     'REVIEWER_VALUE' : 'Invalid reviewer value \'{0}\' must be Organization, Tool or Person.',
@@ -515,6 +517,7 @@ class FileParser(LicenseParser):
             for _, _, name in self.graph.triples((f_term, self.spdx_namespace['fileName'], None)):
                 self.builder.set_file_name(self.doc, six.text_type(name))
 
+        self.p_file_spdx_id(f_term, self.spdx_namespace['File'])
         self.p_file_type(f_term, self.spdx_namespace['fileType'])
         self.p_file_chk_sum(f_term, self.spdx_namespace['checksum'])
         self.p_file_lic_conc(f_term, self.spdx_namespace['licenseConcluded'])
@@ -612,6 +615,15 @@ class FileParser(LicenseParser):
             lic = self.handle_lics(info)
             if lic is not None:
                 self.builder.set_file_license_in_file(self.doc, lic)
+
+    def p_file_spdx_id(self, f_term, predicate):
+        try:
+            try:
+                self.builder.set_file_spdx_id(self.doc, f_term)
+            except SPDXValueError:
+                self.value_error('FILE_SPDX_ID_VALUE', f_term)
+        except CardinalityError:
+            self.more_than_one_error('FILE_SPDX_ID_VALUE')
 
     def p_file_type(self, f_term, predicate):
         """Sets file type."""

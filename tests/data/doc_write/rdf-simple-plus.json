@@ -5,7 +5,9 @@
     "ns1:SpdxDocument": {
       "ns1:describesPackage": {
         "ns1:Package": {
-          "ns1:hasFile": null, 
+          "ns1:hasFile": {
+            "@rdf:resource": "http://www.spdx.org/files#SPDXRef-File"
+          },
           "ns1:name": "some/path", 
           "ns1:licenseDeclared": {
             "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
@@ -31,6 +33,7 @@
       },
       "ns1:referencesFile": {
         "ns1:File": {
+          "@rdf:about": "http://www.spdx.org/files#SPDXRef-File",
           "ns1:fileName": "./some/path/tofile", 
           "ns1:checksum": {
             "ns1:Checksum": {

@@ -15,6 +15,7 @@ PackageLicenseInfoFromFiles: LGPL-2.1+
 PackageCopyrightText: <text>Some copyrught</text>
 # File
 FileName: ./some/path/tofile
+SPDXID: SPDXRef-File
 FileChecksum: SHA1: SOME-SHA1
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: LGPL-2.1+

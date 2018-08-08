@@ -71,6 +71,8 @@ ERROR_MESSAGES = {
     'FILE_NAME_VALUE': 'FileName must be a single line of text, line: {0}',
     'FILE_COMMENT_VALUE': 'FileComment must be free form text, line:{0}',
     'FILE_TYPE_VALUE': 'FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}',
+    'FILE_SPDX_ID_VALUE': 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
+                          'letters, numbers, ".", "-".',
     'FILE_CHKSUM_VALUE': 'FileChecksum must be a single line of text starting with \'SHA1:\', line:{0}',
     'FILE_LICS_CONC_VALUE': 'LicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line:{0}',
     'FILE_LICS_INFO_VALUE': 'LicenseInfoInFile must be NOASSERTION, NONE or license identifier, line: {0}',
@@ -113,9 +115,9 @@ class Parser(object):
 
     def p_attrib(self, p):
         """attrib : spdx_version
+                  | spdx_id
                   | data_lics
                   | doc_name
-                  | doc_spdx_id
                   | ext_doc_ref
                   | doc_comment
                   | doc_namespace
@@ -538,6 +540,17 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES['FILE_NAME_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
+
+    def p_spdx_id(self, p):
+        """spdx_id : SPDX_ID LINE"""
+        if six.PY2:
+            value = p[2].decode(encoding='utf-8')
+        else:
+            value = p[2]
+        if not self.builder.doc_spdx_id_set:
+            self.builder.set_doc_spdx_id(self.document, value)
+        else:
+            self.builder.set_file_spdx_id(self.document, value)
 
     def p_file_comment_1(self, p):
         """file_comment : FILE_COMMENT TEXT"""
@@ -1146,27 +1159,6 @@ class Parser(object):
         """doc_name : DOC_NAME error"""
         self.error = True
         msg = ERROR_MESSAGES['DOC_NAME_VALUE'].format(p.lineno(1))
-        self.logger.log(msg)
-
-    def p_doc_spdx_id_1(self, p):
-        """doc_spdx_id : DOC_SPDX_ID LINE"""
-        try:
-            if six.PY2:
-                value = p[2].decode(encoding='utf-8')
-            else:
-                value = p[2]
-            self.builder.set_doc_spdx_id(self.document, value)
-        except SPDXValueError:
-            self.error = True
-            msg = ERROR_MESSAGES['DOC_SPDX_ID_VALUE'].format(p.lineno(2))
-            self.logger.log(msg)
-        except CardinalityError:
-            self.more_than_one_error('SPDXID', p.lineno(1))
-
-    def p_doc_spdx_id_2(self, p):
-        """doc_spdx_id : DOC_SPDX_ID error"""
-        self.error = True
-        msg = ERROR_MESSAGES['DOC_SPDX_ID_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_ext_doc_refs_1(self, p):

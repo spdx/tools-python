@@ -91,6 +91,7 @@ def write_file(spdx_file, out):
     """
     out.write('# File\n\n')
     write_value('FileName', spdx_file.name, out)
+    write_value('SPDXID', spdx_file.spdx_id, out)
     if spdx_file.has_optional_field('type'):
         write_file_type(spdx_file.type, out)
     write_value('FileChecksum', spdx_file.chk_sum.to_tv(), out)

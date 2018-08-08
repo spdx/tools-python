@@ -60,7 +60,7 @@ class ExternalDocumentRef(object):
 
         return (self.validate_ext_doc_id(messages) and
                 self.validate_spdx_doc_uri(messages) and
-                self.validate_chksum(messages)
+                self.validate_checksum(messages)
         )
 
     def validate_ext_doc_id(self, messages=None):
@@ -81,7 +81,7 @@ class ExternalDocumentRef(object):
             messages.append('ExternalDocumentRef has no SPDX Document URI.')
             return False
 
-    def validate_chksum(self, messages=None):
+    def validate_checksum(self, messages=None):
         messages = messages if messages is not None else []
 
         if self.check_sum:

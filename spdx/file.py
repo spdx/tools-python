@@ -36,6 +36,8 @@ class File(object):
     Represent an SPDX file.
     Fields:
     - name: File name, str mandatory one.
+    - spdx_id: Uniquely identify any element in an SPDX document which may be
+    referenced by other elements. Mandatory, one. Type: str.
     - comment: File comment str, Optional zero or one.
     - type: one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
       and FileType.OTHER, optional zero or one.
@@ -54,8 +56,9 @@ class File(object):
     - artifact_of_project_uri: list of project uris, possibly empty.
     """
 
-    def __init__(self, name, chk_sum=None):
+    def __init__(self, name, spdx_id=None, chk_sum=None):
         self.name = name
+        self.spdx_id = spdx_id
         self.comment = None
         self.type = None
         self.chk_sum = chk_sum
@@ -102,10 +105,21 @@ class File(object):
 
         return (self.validate_concluded_license(messages)
             and self.validate_type(messages)
-            and self.validate_chksum(messages)
+            and self.validate_checksum(messages)
             and self.validate_licenses_in_file(messages)
             and self.validate_copyright(messages)
-            and self.validate_artifacts(messages))
+            and self.validate_artifacts(messages)
+            and self.validate_spdx_id(messages))
+
+    def validate_spdx_id(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
+        if self.spdx_id is None:
+            messages.append('File has no SPDX Identifier.')
+            return False
+        else:
+            return True
 
     def validate_copyright(self, messages=None):
         # FIXME: messages should be returned
@@ -164,7 +178,7 @@ class File(object):
             messages.append('File type must be one of the constants defined in class spdx.file.FileType')
             return False
 
-    def validate_chksum(self, messages=None):
+    def validate_checksum(self, messages=None):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
 

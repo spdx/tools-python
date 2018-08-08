@@ -14,6 +14,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import uuid
+
 from rdflib import BNode
 from rdflib import Graph
 from rdflib import Literal
@@ -208,7 +210,8 @@ class FileWriter(LicenseWriter):
         """
         Create a node for spdx.file.
         """
-        file_node = BNode()
+        file_node = URIRef('http://www.spdx.org/files#{id}'.format(
+            id=str(doc_file.spdx_id)))
         type_triple = (file_node, RDF.type, self.spdx_namespace.File)
         self.graph.add(type_triple)
 
