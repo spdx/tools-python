@@ -105,7 +105,7 @@ class File(object):
 
         return (self.validate_concluded_license(messages)
             and self.validate_type(messages)
-            and self.validate_chksum(messages)
+            and self.validate_checksum(messages)
             and self.validate_licenses_in_file(messages)
             and self.validate_copyright(messages)
             and self.validate_artifacts(messages)
@@ -178,7 +178,7 @@ class File(object):
             messages.append('File type must be one of the constants defined in class spdx.file.FileType')
             return False
 
-    def validate_chksum(self, messages=None):
+    def validate_checksum(self, messages=None):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []
 
