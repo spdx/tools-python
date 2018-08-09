@@ -21,6 +21,11 @@ Reviewer: Person: Suzanne Reviewer
 ReviewDate: 2011-03-13T00:00:00Z
 ReviewComment: <text>Another example reviewer.</text>
 
+## Annotation Information
+Annotator: Person: Jim Annotator
+AnnotationDate: 2012-03-11T00:00:00Z
+AnnotationComment: <text>An example annotation comment.</text>
+
 ## Package Information
 PackageName: SPDX Translator
 PackageVersion: Version 0.9.2

@@ -35,6 +35,10 @@ class Lexer(object):
         'Reviewer': 'REVIEWER',
         'ReviewDate': 'REVIEW_DATE',
         'ReviewComment': 'REVIEW_COMMENT',
+        # Annotation info
+        'Annotator': 'ANNOTATOR',
+        'AnnotationDate': 'ANNOTATION_DATE',
+        'AnnotationComment': 'ANNOTATION_COMMENT',
         # Package Fields
         'PackageName': 'PKG_NAME',
         'PackageVersion': 'PKG_VERSION',

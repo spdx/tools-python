@@ -52,6 +52,9 @@ ERROR_MESSAGES = {
     'CREATOR_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
     'REVIEW_DATE_VALUE_TYPE': 'ReviewDate value must be date in ISO 8601 format, line: {0}',
     'REVIEW_COMMENT_VALUE_TYPE': 'ReviewComment value must be free form text between <text></text> tags, line:{0}',
+    'ANNOTATOR_VALUE_TYPE': 'Invalid Annotator value must be a Person, Organization or Tool. Line: {0}',
+    'ANNOTATION_DATE_VALUE_TYPE': 'AnnotationDate value must be date in ISO 8601 format, line: {0}',
+    'ANNOTATION_COMMENT_VALUE_TYPE': 'AnnotationComment value must be free form text between <text></text> tags, line:{0}',
     'A_BEFORE_B': '{0} Can not appear before {1}, line: {2}',
     'PACKAGE_NAME_VALUE': 'PackageName must be single line of text, line: {0}',
     'PKG_VERSION_VALUE': 'PackageVersion must be single line of text, line: {0}',
@@ -128,6 +131,9 @@ class Parser(object):
                   | reviewer
                   | review_date
                   | review_comment
+                  | annotator
+                  | annotation_date
+                  | annotation_comment
                   | package_name
                   | package_version
                   | pkg_down_location
@@ -1061,6 +1067,54 @@ class Parser(object):
         """review_comment : REVIEW_COMMENT error"""
         self.error = True
         msg = ERROR_MESSAGES['REVIEW_COMMENT_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_annotator_1(self, p):
+        """annotator : ANNOTATOR entity"""
+        self.builder.add_annotator(self.document, p[2])
+
+    def p_annotator_2(self, p):
+        """annotator : ANNOTATOR error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ANNOTATOR_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_annotation_date_1(self, p):
+        """annotation_date : ANNOTATION_DATE DATE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.add_annotation_date(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('AnnotationDate', p.lineno(1))
+        except OrderError:
+            self.order_error('AnnotationDate', 'Annotator', p.lineno(1))
+
+    def p_annotation_date_2(self, p):
+        """annotation_date : ANNOTATION_DATE error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ANNOTATION_DATE_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_annotation_comment_1(self, p):
+        """annotation_comment : ANNOTATION_COMMENT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.add_annotation_comment(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('AnnotationComment', p.lineno(1))
+        except OrderError:
+            self.order_error('AnnotationComment', 'Annotator', p.lineno(1))
+
+    def p_annotation_comment_2(self, p):
+        """annotation_comment : ANNOTATION_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ANNOTATION_COMMENT_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_lics_list_ver_1(self, p):

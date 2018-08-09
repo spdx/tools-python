@@ -318,6 +318,69 @@ class TestReviewBuilder(TestCase):
         self.builder.add_reviewer(self.document, per)
 
 
+class TestAnnotationBuilder(TestCase):
+
+    def setUp(self):
+        self.entity_builder = builders.EntityBuilder()
+        self.builder = builders.AnnotationBuilder()
+        self.document = Document()
+
+    @testing_utils.raises(builders.OrderError)
+    def test_annotation_without_annotator(self):
+        date_str = '2014-08-06T00:00:00Z'
+        self.builder.add_annotation_date(self.document, date_str)
+
+    @testing_utils.raises(builders.OrderError)
+    def test_comment_without_annotator(self):
+        comment = '<text>Comment without annotator</text>'
+        self.builder.add_annotation_comment(self.document, comment)
+
+    @testing_utils.raises(builders.CardinalityError)
+    def test_annotation_comment_cardinality(self):
+        comment = '<text>Annotation Comment</text>'
+        self.add_annotator()
+        assert self.builder.add_annotation_comment(self.document, comment)
+        self.builder.add_annotation_comment(self.document, comment)
+
+    @testing_utils.raises(builders.CardinalityError)
+    def test_annotation_cardinality(self):
+        date_str = '2014-08-06T00:00:00Z'
+        self.add_annotator()
+        assert self.builder.add_annotation_date(self.document, date_str)
+        self.builder.add_annotation_date(self.document, date_str)
+
+    def test_annotation_comment_reset(self):
+        comment = '<text>Annotation Comment</text>'
+        self.add_annotator()
+        assert self.builder.add_annotation_comment(self.document, comment)
+        self.add_annotator()
+        assert self.builder.add_annotation_comment(self.document, comment)
+
+    def test_annotation_reset(self):
+        date_str = '2014-08-06T00:00:00Z'
+        self.add_annotator()
+        assert self.builder.add_annotation_date(self.document, date_str)
+        self.add_annotator()
+        assert self.builder.add_annotation_date(self.document, date_str)
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_annotation_date_value(self):
+        date_str = '2014-8-06T00:00:00Z'
+        self.add_annotator()
+        self.builder.add_annotation_date(self.document, date_str)
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_annotation_comment_value(self):
+        comment = '<text>Annotation Comment<text>'
+        self.add_annotator()
+        self.builder.add_annotation_comment(self.document, comment)
+
+    def add_annotator(self):
+        per_str = 'Person: Jim (jim@example.com)'
+        per = self.entity_builder.build_person(self.document, per_str)
+        self.builder.add_annotator(self.document, per)
+
+
 class TestPackageBuilder(TestCase):
 
     def setUp(self):

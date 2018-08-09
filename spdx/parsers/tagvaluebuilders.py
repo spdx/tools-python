@@ -18,6 +18,7 @@ import re
 
 from six import string_types
 
+from spdx import annotation
 from spdx import checksum
 from spdx import creationinfo
 from spdx import document
@@ -396,6 +397,70 @@ class ReviewBuilder(object):
                 raise CardinalityError('ReviewComment')
         else:
             raise OrderError('ReviewComment')
+
+
+class AnnotationBuilder(object):
+
+    def __init__(self):
+        # FIXME: this state does not make sense
+        self.reset_annotations()
+
+    def reset_annotations(self):
+        """Resets the builder's state to allow building new annotations."""
+        # FIXME: this state does not make sense
+        self.annotation_date_set = False
+        self.annotation_comment_set = False
+
+    def add_annotator(self, doc, annotator):
+        """Adds an annotator to the SPDX Document.
+        Annotator is an entity created by an EntityBuilder.
+        Raises SPDXValueError if not a valid annotator type.
+        """
+        # Each annotator marks the start of a new annotation object.
+        # FIXME: this state does not make sense
+        self.reset_annotations()
+        if validations.validate_annotator(annotator):
+            doc.add_annotation(annotation.Annotation(annotator=annotator))
+            return True
+        else:
+            raise SPDXValueError('Annotation::Annotator')
+
+    def add_annotation_date(self, doc, annotation_date):
+        """Sets the annotation date. Raises CardinalityError if
+        already set. OrderError if no annotator defined before.
+        Raises SPDXValueError if invalid value.
+        """
+        if len(doc.annotations) != 0:
+            if not self.annotation_date_set:
+                self.annotation_date_set = True
+                date = utils.datetime_from_iso_format(annotation_date)
+                if date is not None:
+                    doc.annotations[-1].annotation_date = date
+                    return True
+                else:
+                    raise SPDXValueError('Annotation::AnnotationDate')
+            else:
+                raise CardinalityError('Annotation::AnnotationDate')
+        else:
+            raise OrderError('Annotation::AnnotationDate')
+
+    def add_annotation_comment(self, doc, comment):
+        """Sets the annotation comment. Raises CardinalityError if
+        already set. OrderError if no annotator defined before.
+        Raises SPDXValueError if comment is not free form text.
+        """
+        if len(doc.annotations) != 0:
+            if not self.annotation_comment_set:
+                self.annotation_comment_set = True
+                if validations.validate_annotation_comment(comment):
+                    doc.annotations[-1].comment = str_from_text(comment)
+                    return True
+                else:
+                    raise SPDXValueError('AnnotationComment::Comment')
+            else:
+                raise CardinalityError('AnnotationComment::Comment')
+        else:
+            raise OrderError('AnnotationComment::Comment')
 
 
 class PackageBuilder(object):
@@ -1044,7 +1109,7 @@ class LicenseBuilder(object):
 
 class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
               PackageBuilder, FileBuilder, LicenseBuilder,
-              ExternalDocumentRefBuilder):
+              ExternalDocumentRefBuilder, AnnotationBuilder):
 
     """SPDX document builder."""
 
@@ -1063,4 +1128,5 @@ class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
         self.reset_package()
         self.reset_file_stat()
         self.reset_reviews()
+        self.reset_annotations()
         self.reset_extr_lics()
