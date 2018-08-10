@@ -336,7 +336,7 @@ class AnnotationInfoWriter(BaseWriter):
         """
         Return an annotation node.
         """
-        annotation_node = BNode()
+        annotation_node = URIRef(str(annotation.spdx_id))
         type_triple = (annotation_node, RDF.type, self.spdx_namespace.Annotation)
         self.graph.add(type_triple)
 

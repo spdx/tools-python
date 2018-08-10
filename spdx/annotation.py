@@ -35,14 +35,18 @@ class Annotation(object):
     an Annotation. Type: str.
     - annotation_type: Annotation type. Conditional (Mandatory, one), if there is an
     Annotation. Type: str.
+    - spdx_id: Uniquely identify the element in an SPDX document which is being
+    referenced. Conditional (Mandatory, one), if there is an Annotation.
+    Type: str.
     """
 
     def __init__(self, annotator=None, annotation_date=None, comment=None,
-                 annotation_type=None):
+                 annotation_type=None, spdx_id=None):
         self.annotator = annotator
         self.annotation_date = annotation_date
         self.comment = comment
         self.annotation_type = annotation_type
+        self.spdx_id = spdx_id
 
     def __eq__(self, other):
         return (
@@ -77,7 +81,8 @@ class Annotation(object):
 
         return (self.validate_annotator(messages)
             and self.validate_annotation_date(messages)
-            and self.validate_annotation_type(messages))
+            and self.validate_annotation_type(messages)
+            and self.validate_spdx_id(messages))
 
     def validate_annotator(self, messages=None):
         # FIXME: we should return messages instead
@@ -107,4 +112,14 @@ class Annotation(object):
             return True
         else:
             messages.append('Annotation missing annotation type.')
+            return False
+
+    def validate_spdx_id(self, messages=None):
+        # FIXME: we should return messages instead
+        messages = messages if messages is not None else []
+
+        if self.spdx_id is not None:
+            return True
+        else:
+            messages.append('Annotation missing SPDX Identifier Reference.')
             return False

@@ -421,6 +421,15 @@ class Document(object):
             valid = review.validate(messages) and valid
         return valid
 
+    def validate_annotations(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
+        valid = True
+        for annotation in self.annotations:
+            valid = annotation.validate(messages) and valid
+        return valid
+
     def validate_creation_info(self, messages=None):
         # FIXME: messages should be returned
         messages = messages if messages is not None else []

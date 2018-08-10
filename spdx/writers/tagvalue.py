@@ -85,6 +85,7 @@ def write_annotation(annotation, out):
     if annotation.has_comment:
         write_text_value('AnnotationComment', annotation.comment, out)
     write_value('AnnotationType', annotation.annotation_type, out)
+    write_value('SPDXREF', annotation.spdx_id, out)
 
 
 def write_file_type(ftype, out):

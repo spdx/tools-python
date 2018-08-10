@@ -340,6 +340,11 @@ class TestAnnotationBuilder(TestCase):
         annotation_type = 'REVIEW'
         self.builder.add_annotation_type(self.document, annotation_type)
 
+    @testing_utils.raises(builders.OrderError)
+    def test_spdx_id_without_annotator(self):
+        spdx_id = 'SPDXRef-45'
+        self.builder.set_annotation_spdx_id(self.document, spdx_id)
+
     @testing_utils.raises(builders.CardinalityError)
     def test_annotation_comment_cardinality(self):
         comment = '<text>Annotation Comment</text>'
@@ -353,6 +358,13 @@ class TestAnnotationBuilder(TestCase):
         self.add_annotator()
         assert self.builder.add_annotation_date(self.document, date_str)
         self.builder.add_annotation_date(self.document, date_str)
+
+    @testing_utils.raises(builders.CardinalityError)
+    def test_annotation_spdx_id_cardinality(self):
+        spdx_id = 'SPDXRef-45'
+        self.add_annotator()
+        self.builder.set_annotation_spdx_id(self.document, spdx_id)
+        self.builder.set_annotation_spdx_id(self.document, spdx_id)
 
     def test_annotation_comment_reset(self):
         comment = '<text>Annotation Comment</text>'
@@ -390,6 +402,11 @@ class TestAnnotationBuilder(TestCase):
         annotation_type = 'REVIEW'
         self.add_annotator()
         assert self.builder.add_annotation_type(self.document, annotation_type)
+
+    def test_correct_annotation_spdx_id(self):
+        spdx_id = 'SPDXRef-45'
+        self.add_annotator()
+        self.builder.set_annotation_spdx_id(self.document, spdx_id)
 
     @testing_utils.raises(builders.CardinalityError)
     def test_annotation_type_cardinality(self):

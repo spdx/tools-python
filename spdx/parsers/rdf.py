@@ -764,6 +764,10 @@ class AnnotationParser(BaseParser):
                 self.builder.add_annotation_comment(self.doc, comment)
             annotation_type = self.get_annotation_type(r_term)
             self.builder.add_annotation_type(self.doc, annotation_type)
+            try:
+                self.builder.set_annotation_spdx_id(self.doc, r_term)
+            except CardinalityError:
+                self.more_than_one_error('SPDX Identifier Reference')
 
     def get_annotation_type(self, r_term):
         """Returns annotation type or None if found none or more than one.

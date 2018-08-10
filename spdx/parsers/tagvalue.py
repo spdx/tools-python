@@ -56,6 +56,9 @@ ERROR_MESSAGES = {
     'ANNOTATION_DATE_VALUE_TYPE': 'AnnotationDate value must be date in ISO 8601 format, line: {0}',
     'ANNOTATION_COMMENT_VALUE_TYPE': 'AnnotationComment value must be free form text between <text></text> tags, line:{0}',
     'ANNOTATION_TYPE_VALUE': 'AnnotationType must be "REVIEW" or "OTHER". Line: {0}',
+    'ANNOTATION_SPDX_ID_VALUE': 'SPDXREF must be ["DocumentRef-"[idstring]":"]SPDXID where'
+                                '["DocumentRef-"[idstring]":"] is an optional reference to an external SPDX document and'
+                                'SPDXID is a unique string containing letters, numbers, ".","-".',
     'A_BEFORE_B': '{0} Can not appear before {1}, line: {2}',
     'PACKAGE_NAME_VALUE': 'PackageName must be single line of text, line: {0}',
     'PKG_VERSION_VALUE': 'PackageVersion must be single line of text, line: {0}',
@@ -136,6 +139,7 @@ class Parser(object):
                   | annotation_date
                   | annotation_comment
                   | annotation_type
+                  | annotation_spdx_id
                   | package_name
                   | package_version
                   | pkg_down_location
@@ -1140,6 +1144,26 @@ class Parser(object):
         """annotation_type : ANNOTATION_TYPE error"""
         self.error = True
         msg = ERROR_MESSAGES['ANNOTATION_TYPE_VALUE'].format(
+            p.lineno(1))
+        self.logger.log(msg)
+
+    def p_annotation_spdx_id_1(self, p):
+        """annotation_spdx_id : ANNOTATION_SPDX_ID LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_annotation_spdx_id(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('SPDXREF', p.lineno(1))
+        except OrderError:
+            self.order_error('SPDXREF', 'Annotator', p.lineno(1))
+
+    def p_annotation_spdx_id_2(self, p):
+        """annotation_spdx_id : ANNOTATION_SPDX_ID error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ANNOTATION_SPDX_ID_VALUE'].format(
             p.lineno(1))
         self.logger.log(msg)
 
