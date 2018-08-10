@@ -54,6 +54,8 @@ ERROR_MESSAGES = {
     'FILE_SINGLE_LICS': 'File concluded license must be a license url or spdx:noassertion or spdx:none.',
     'REVIEWER_VALUE' : 'Invalid reviewer value \'{0}\' must be Organization, Tool or Person.',
     'REVIEW_DATE' : 'Invalid review date value \'{0}\' must be date in ISO 8601 format.',
+    'ANNOTATOR_VALUE': 'Invalid annotator value \'{0}\' must be Organization, Tool or Person.',
+    'ANNOTATION_DATE': 'Invalid annotation date value \'{0}\' must be date in ISO 8601 format.'
 }
 
 
@@ -739,7 +741,90 @@ class ReviewParser(BaseParser):
             self.value_error('REVIEWER_VALUE', reviewer_list[0][2])
 
 
-class Parser(PackageParser, FileParser, ReviewParser):
+class AnnotationParser(BaseParser):
+    """
+    Helper class for parsing annotation information.
+    """
+
+    def __init__(self, builder, logger):
+        super(AnnotationParser, self).__init__(builder, logger)
+
+    def parse_annotation(self, r_term):
+        annotator = self.get_annotator(r_term)
+        annotation_date = self.get_annotation_date(r_term)
+        if annotator is not None:
+            self.builder.add_annotator(self.doc, annotator)
+            if annotation_date is not None:
+                try:
+                    self.builder.add_annotation_date(self.doc, annotation_date)
+                except SPDXValueError:
+                    self.value_error('ANNOTATION_DATE', annotation_date)
+            comment = self.get_annotation_comment(r_term)
+            if comment is not None:
+                self.builder.add_annotation_comment(self.doc, comment)
+            annotation_type = self.get_annotation_type(r_term)
+            self.builder.add_annotation_type(self.doc, annotation_type)
+            try:
+                self.builder.set_annotation_spdx_id(self.doc, r_term)
+            except CardinalityError:
+                self.more_than_one_error('SPDX Identifier Reference')
+
+    def get_annotation_type(self, r_term):
+        """Returns annotation type or None if found none or more than one.
+        Reports errors on failure."""
+        for _, _, typ in self.graph.triples((
+                r_term, self.spdx_namespace['annotationType'], None)):
+            if typ is not None:
+                return typ
+            else:
+                self.error = True
+                msg = 'Annotation must have exactly one annotation type.'
+                self.logger.log(msg)
+                return
+
+    def get_annotation_comment(self, r_term):
+        """Returns annotation comment or None if found none or more than one.
+        Reports errors.
+        """
+        comment_list = list(self.graph.triples((r_term, RDFS.comment, None)))
+        if len(comment_list) > 1:
+            self.error = True
+            msg = 'Annotation can have at most one comment.'
+            self.logger.log(msg)
+            return
+        else:
+            return six.text_type(comment_list[0][2])
+
+    def get_annotation_date(self, r_term):
+        """Returns annotation date or None if not found.
+        Reports error on failure.
+        Note does not check value format.
+        """
+        annotation_date_list = list(self.graph.triples((r_term, self.spdx_namespace['annotationDate'], None)))
+        if len(annotation_date_list) != 1:
+            self.error = True
+            msg = 'Annotation must have exactly one annotation date.'
+            self.logger.log(msg)
+            return
+        return six.text_type(annotation_date_list[0][2])
+
+    def get_annotator(self, r_term):
+        """Returns annotator as creator object or None if failed.
+        Reports errors on failure.
+        """
+        annotator_list = list(self.graph.triples((r_term, self.spdx_namespace['annotator'], None)))
+        if len(annotator_list) != 1:
+            self.error = True
+            msg = 'Annotation must have exactly one annotator'
+            self.logger.log(msg)
+            return
+        try:
+            return self.builder.create_entity(self.doc, six.text_type(annotator_list[0][2]))
+        except SPDXValueError:
+            self.value_error('ANNOTATOR_VALUE', annotator_list[0][2])
+
+
+class Parser(PackageParser, FileParser, ReviewParser, AnnotationParser):
     """
     RDF/XML file parser.
     """
@@ -773,6 +858,9 @@ class Parser(PackageParser, FileParser, ReviewParser):
 
         for s, _p, o in self.graph.triples((None, self.spdx_namespace['reviewed'], None)):
             self.parse_review(o)
+
+        for s, _p, o in self.graph.triples((None, self.spdx_namespace['annotation'], None)):
+            self.parse_annotation(o)
 
         validation_messages = []
         # Report extra errors if self.error is False otherwise there will be

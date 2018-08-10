@@ -274,6 +274,8 @@ class Document(object):
       SPDX license list. Optional, many. Type: ExtractedLicense.
     - reviews: SPDX document review information, Optional zero or more.
       Type: Review.
+    - annotations: SPDX document annotation information, Optional zero or more.
+      Type: Annotation.
     """
 
     def __init__(self, version=None, data_license=None, name=None, spdx_id=None,
@@ -291,9 +293,13 @@ class Document(object):
         self.package = package
         self.extracted_licenses = []
         self.reviews = []
+        self.annotations = []
 
     def add_review(self, review):
         self.reviews.append(review)
+
+    def add_annotation(self, annotation):
+        self.annotations.append(annotation)
 
     def add_extr_lic(self, lic):
         self.extracted_licenses.append(lic)
@@ -413,6 +419,15 @@ class Document(object):
         valid = True
         for review in self.reviews:
             valid = review.validate(messages) and valid
+        return valid
+
+    def validate_annotations(self, messages=None):
+        # FIXME: messages should be returned
+        messages = messages if messages is not None else []
+
+        valid = True
+        for annotation in self.annotations:
+            valid = annotation.validate(messages) and valid
         return valid
 
     def validate_creation_info(self, messages=None):

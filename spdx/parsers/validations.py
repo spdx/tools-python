@@ -143,6 +143,22 @@ def validate_review_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
+def validate_annotator(value, optional=False):
+    return validate_creator(value, optional)
+
+
+def validate_annotation_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
+def validate_annotation_type(value, optional=False):
+    value = value.strip()
+    if value == 'REVIEW' or value == 'OTHER':
+        return True
+    else:
+        return False
+
+
 def validate_pkg_src_info(value, optional=False):
     return validate_is_free_form_text(value, optional)
 

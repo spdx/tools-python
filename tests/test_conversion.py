@@ -102,7 +102,9 @@ class TestConversions(TestCase):
         assert doc.validate([])
         filename = get_temp_file('.tag')
         self.write_tagvalue_file(doc, filename)
+        ###############################################
         doc, error = self.parse_tagvalue_file(filename)
+        # print(doc.annotations[-1].annotation_type)
         assert not error
         assert doc.validate([])
 
