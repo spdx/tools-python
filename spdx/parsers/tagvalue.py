@@ -1417,8 +1417,10 @@ class Parser(object):
         validation_messages = []
         # Report extra errors if self.error is False otherwise there will be
         # redundent messages
-        if (not self.error) and (not self.document.validate(validation_messages)):
-            for msg in validation_messages:
-                self.logger.log(msg)
-            self.error = True
+        validation_messages = self.document.validate(validation_messages)
+        if not self.error:
+            if validation_messages:
+                for msg in validation_messages:
+                    self.logger.log(msg)
+                self.error = True
         return self.document, self.error

@@ -72,54 +72,39 @@ class Annotation(object):
     def has_comment(self):
         return self.comment is not None
 
-    def validate(self, messages=None):
+    def validate(self, messages):
         """Returns True if all the fields are valid.
         Appends any error messages to messages parameter.
         """
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
+        messages = self.validate_annotator(messages)
+        messages = self.validate_annotation_date(messages)
+        messages = self.validate_annotation_type(messages)
+        messages = self.validate_spdx_id(messages)
 
-        return (self.validate_annotator(messages)
-            and self.validate_annotation_date(messages)
-            and self.validate_annotation_type(messages)
-            and self.validate_spdx_id(messages))
+        return messages
 
-    def validate_annotator(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
+    def validate_annotator(self, messages):
+        if self.annotator is None:
+            messages = messages + ['Annotation missing annotator.']
 
-        if self.annotator is not None:
-            return True
-        else:
-            messages.append('Annotation missing annotator.')
-            return False
+        return messages
 
-    def validate_annotation_date(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
+    def validate_annotation_date(self, messages):
+        if self.annotation_date is None:
+            messages = messages + ['Annotation missing annotation date.']
 
-        if self.annotation_date is not None:
-            return True
-        else:
-            messages.append('Annotation missing annotation date.')
-            return False
+        return messages
 
-    def validate_annotation_type(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
+    def validate_annotation_type(self, messages):
+        if self.annotation_type is None:
+            messages = messages + ['Annotation missing annotation type.']
 
-        if self.annotation_type is not None:
-            return True
-        else:
-            messages.append('Annotation missing annotation type.')
-            return False
+        return messages
 
-    def validate_spdx_id(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
+    def validate_spdx_id(self, messages):
+        if self.spdx_id is None:
+            messages = messages + [
+                'Annotation missing SPDX Identifier Reference.'
+            ]
 
-        if self.spdx_id is not None:
-            return True
-        else:
-            messages.append('Annotation missing SPDX Identifier Reference.')
-            return False
+        return messages

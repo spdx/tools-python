@@ -87,10 +87,18 @@ class TestDocument(TestCase):
         file1.add_lics(lic1)
         pack.add_lics_from_file(lic1)
         messages = []
-        is_valid = doc.validate(messages)
-        assert not is_valid
+        messages = doc.validate(messages)
         expected = [
-            'No creators defined, must have at least one.'
+            'No creators defined, must have at least one.',
+            'Creation info missing created date.',
+            'Package checksum must be instance of spdx.checksum.Algorithm',
+            'Package verif_code can not be None.',
+            'Package cr_text can not be None.',
+            'Package must have at least one file.',
+            'Package concluded license must be instance of spdx.utils.SPDXNone '
+            'or spdx.utils.NoAssert or spdx.document.License',
+            'Package declared license must be instance of spdx.utils.SPDXNone '
+            'or spdx.utils.NoAssert or spdx.document.License'
         ]
         assert expected == messages
 
@@ -137,6 +145,7 @@ class TestWriters(TestCase):
         package = doc.package = Package(name='some/path', download_location=NoAssert())
         package.cr_text = 'Some copyrught'
         package.verif_code = 'SOME code'
+        package.check_sum = Algorithm('SHA1', 'SOME-SHA1')
         package.license_declared = NoAssert()
         package.conc_lics = NoAssert()
 

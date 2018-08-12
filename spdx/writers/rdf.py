@@ -656,8 +656,8 @@ def write_document(document, out, validate=True):
     
     if validate:
         messages = []
-        is_valid = document.validate(messages)
-        if not is_valid:
+        messages = document.validate(messages)
+        if messages:
             raise InvalidDocumentError(messages)
 
     writer = Writer(document, out)

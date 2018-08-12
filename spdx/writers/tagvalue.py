@@ -243,7 +243,8 @@ def write_document(document, out, validate=True):
     InvalidDocumentError if document.validate returns False.
     """
     messages = []
-    if validate and not document.validate(messages):
+    messages = document.validate(messages)
+    if validate and messages:
         raise InvalidDocumentError(messages)
 
     # Write out document information

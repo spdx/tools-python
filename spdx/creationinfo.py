@@ -152,32 +152,24 @@ class CreationInfo(object):
     def has_comment(self):
         return self.comment is not None
 
-    def validate(self, messages=None):
+    def validate(self, messages):
         """Returns True if the fields are valid according to the SPDX standard.
         Appends user friendly messages to the messages parameter.
         """
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
+        messages = self.validate_creators(messages)
+        messages = self.validate_created(messages)
 
-        return (self.validate_creators(messages)
-            and self.validate_created(messages))
+        return messages
 
-    def validate_creators(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
+    def validate_creators(self, messages):
+        if len(self.creators) == 0:
+            messages = messages + [
+                'No creators defined, must have at least one.']
 
-        if len(self.creators) != 0:
-            return True
-        else:
-            messages.append('No creators defined, must have at least one.')
-            return False
+        return messages
 
-    def validate_created(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
+    def validate_created(self, messages):
+        if self.created is None:
+            messages = messages + ['Creation info missing created date.']
 
-        if self.created is not None:
-            return True
-        else:
-            messages.append('Creation info missing created date.')
-            return False
+        return messages

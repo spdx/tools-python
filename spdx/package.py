@@ -83,93 +83,81 @@ class Package(object):
     def add_exc_file(self, filename):
         self.verif_exc_files.append(filename)
 
-    def validate(self, messages=None):
+    def validate(self, messages):
         """
         Validate the package fields.
         Append user friendly error messages to the `messages` list.
         """
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
+        messages = self.validate_checksum(messages)
+        messages = self.validate_optional_str_fields(messages)
+        messages = self.validate_mandatory_str_fields(messages)
+        messages = self.validate_files(messages)
+        messages = self.validate_mandatory_fields(messages)
+        messages = self.validate_optional_fields(messages)
 
-        return (self.validate_checksum(messages)
-            and self.validate_optional_str_fields(messages)
-            and self.validate_mandatory_str_fields(messages)
-            and self.validate_files(messages)
-            and self.validate_mandatory_fields(messages)
-            and self.validate_optional_fields(messages))
+        return messages
 
-    def validate_optional_fields(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
-        valid = True
-
+    def validate_optional_fields(self, messages):
         if self.originator and not isinstance(self.originator, (utils.NoAssert, creationinfo.Creator)):
-            messages.append(
+            messages = messages + [
                 'Package originator must be instance of '
-                'spdx.utils.NoAssert or spdx.creationinfo.Creator')
-            valid = False
+                'spdx.utils.NoAssert or spdx.creationinfo.Creator'
+            ]
 
         if self.supplier and not isinstance(self.supplier, (utils.NoAssert, creationinfo.Creator)):
-            messages.append(
+            messages = messages + [
                 'Package supplier must be instance of '
-                'spdx.utils.NoAssert or spdx.creationinfo.Creator')
-            valid = False
+                'spdx.utils.NoAssert or spdx.creationinfo.Creator'
+            ]
 
-        return valid
+        return messages
 
-    def validate_mandatory_fields(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
-        valid = True
-
+    def validate_mandatory_fields(self, messages):
         if not isinstance(self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)):
-            messages.append(
+            messages = messages + [
                 'Package concluded license must be instance of '
-                'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
-            valid = False
+                'spdx.utils.SPDXNone or spdx.utils.NoAssert or '
+                'spdx.document.License'
+            ]
 
         if not isinstance(self.license_declared, (utils.SPDXNone, utils.NoAssert, document.License)):
-            messages.append(
+            messages = messages + [
                 'Package declared license must be instance of '
-                'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
-            valid = False
+                'spdx.utils.SPDXNone or spdx.utils.NoAssert or '
+                'spdx.document.License'
+            ]
 
         # FIXME: this is obscure and unreadable
         license_from_file_check = lambda prev, el: prev and isinstance(el, (document.License, utils.SPDXNone, utils.NoAssert))
         if not reduce(license_from_file_check, self.licenses_from_files, True):
-            messages.append(
+            messages = messages + [
                 'Each element in licenses_from_files must be instance of '
-                'spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License')
-            valid = False
+                'spdx.utils.SPDXNone or spdx.utils.NoAssert or '
+                'spdx.document.License'
+            ]
 
         if not self.licenses_from_files:
-            messages.append('Package licenses_from_files can not be empty')
-            valid = False
+            messages = messages + [
+                'Package licenses_from_files can not be empty'
+            ]
 
-        return valid
+        return messages
 
-    def validate_files(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
+    def validate_files(self, messages):
         if not self.files:
-            messages.append('Package must have at least one file.')
-            return False
+            messages = messages + [
+                'Package must have at least one file.'
+            ]
         else:
-            valid = True
             for f in self.files:
-                valid = f.validate(messages) and valid
-            return valid
+                messages = f.validate(messages)
 
-    def validate_optional_str_fields(self, messages=None):
+        return messages
+
+    def validate_optional_str_fields(self, messages):
         """Fields marked as optional and of type string in class
         docstring must be of a type that provides __str__ method.
         """
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
         FIELDS = [
             'file_name',
             'version',
@@ -178,57 +166,49 @@ class Package(object):
             'summary',
             'description'
         ]
-        return self.validate_str_fields(FIELDS, True, messages)
+        messages = self.validate_str_fields(FIELDS, True, messages)
 
-    def validate_mandatory_str_fields(self, messages=None):
+        return messages
+
+    def validate_mandatory_str_fields(self, messages):
         """Fields marked as Mandatory and of type string in class
         docstring must be of a type that provides __str__ method.
         """
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
         FIELDS = ['name', 'download_location', 'verif_code', 'cr_text']
-        return self.validate_str_fields(FIELDS, False, messages)
+        messages = self.validate_str_fields(FIELDS, False, messages)
 
-    def validate_str_fields(self, fields, optional, messages=None):
+        return messages
+
+    def validate_str_fields(self, fields, optional, messages):
         """Helper for validate_mandatory_str_field and
         validate_optional_str_fields"""
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
-        valid = True
         for field_str in fields:
             field = getattr(self, field_str)
             if field is not None:
                 # FIXME: this does not make sense???
                 attr = getattr(field, '__str__', None)
                 if not callable(attr):
-                    messages.append(
-                        '{0} must provide __str__ method.'.format(field))
+                    messages = messages + [
+                        '{0} must provide __str__ method.'.format(field)
+                    ]
                     # Continue checking.
-                    valid = False
             elif not optional:
-                messages.append('Package {0} can not be None.'.format(field_str))
-                valid = False
+                messages = messages + [
+                    'Package {0} can not be None.'.format(field_str)
+                ]
 
-        return valid
+        return messages
 
-    def validate_checksum(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
-        if self.check_sum is None:
-            return True
-
-        if isinstance(self.check_sum, checksum.Algorithm):
-            if self.check_sum.identifier == 'SHA1':
-                return True
-            else:
-                messages.append('File checksum algorithm must be SHA1')
-                return False
+    def validate_checksum(self, messages):
+        if not isinstance(self.check_sum, checksum.Algorithm):
+            messages = messages + [
+                'Package checksum must be instance of spdx.checksum.Algorithm'
+            ]
         else:
-            messages.append('Package checksum must be instance of spdx.checksum.Algorithm')
-            return False
+            if self.check_sum.identifier != 'SHA1':
+                messages = messages + ['File checksum algorithm must be SHA1']
+
+        return messages
 
     def calc_verif_code(self):
         hashes = []

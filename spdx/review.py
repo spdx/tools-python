@@ -61,32 +61,23 @@ class Review(object):
     def has_comment(self):
         return self.comment is not None
 
-    def validate(self, messages=None):
+    def validate(self, messages):
         """Returns True if all the fields are valid.
         Appends any error messages to messages parameter.
         """
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
+        messages = self.validate_reviewer(messages)
+        messages = self.validate_review_date(messages)
 
-        return (self.validate_reviewer(messages) 
-            and self.validate_review_date(messages))
+        return messages
 
-    def validate_reviewer(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
+    def validate_reviewer(self, messages):
+        if self.reviewer is None:
+            messages = messages + ['Review missing reviewer.']
 
-        if self.reviewer is not None:
-            return True
-        else:
-            messages.append('Review missing reviewer.')
-            return False
+        return messages
 
-    def validate_review_date(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
+    def validate_review_date(self, messages):
+        if self.review_date is None:
+            messages = messages + ['Review missing review date.']
 
-        if self.review_date is not None:
-            return True
-        else:
-            messages.append('Review missing review date.')
-            return False
+        return messages
