@@ -8,6 +8,7 @@ DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0
 # Package
 PackageName: some/path
 PackageDownloadLocation: NOASSERTION
+PackageChecksum: SHA1: SOME-SHA1
 PackageVerificationCode: SOME code
 PackageLicenseDeclared: NOASSERTION
 PackageLicenseConcluded: NOASSERTION
