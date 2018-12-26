@@ -751,7 +751,7 @@ class PackageBuilder(object):
             raise CardinalityError('Package::LicenseComment')
 
     def set_pkg_cr_text(self, doc, text):
-        """Sets the package's license comment.
+        """Sets the package's copyright text.
         Raises OrderError if no package previously defined.
         Raises CardinalityError if already set.
         Raises value error if text is not one of [None, NOASSERT, TEXT].
