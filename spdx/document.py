@@ -270,7 +270,7 @@ class Document(object):
 
     def __init__(self, version=None, data_license=None, name=None, spdx_id=None,
                  namespace=None, comment=None, package=None):
-        # avoid recursive impor
+        # avoid recursive import
         from spdx.creationinfo import CreationInfo
         self.version = version
         self.data_license = data_license
