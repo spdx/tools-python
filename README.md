@@ -57,7 +57,7 @@ Example tag/value parsing usage:
 The `examples` directory contains several code samples:
 
 * `parse_tv.py` is an example tag/value parsing usage.
-  Try running `python parse_tv.py '../data/SPDXSimpleTag.tag' `
+  Try running `python parse_tv.py ../data/SPDXSimpleTag.tag`
 
 * `write_tv.py` provides an example of writing tag/value files.
   Run `python write_tv.py sample.tag` to test it.
