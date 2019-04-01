@@ -22,15 +22,24 @@ class BaseWriter(object):
         Returns a string representation of a license or spdx.utils special object
         """
         if isinstance(license_field, document.License):
-            return str(license_field.identifier)
-        return license_field.__str__()
+            license_str =  str(license_field.identifier)
+        else:
+            license_str = license_field.__str__()
+        
+        tmp_license_str = license_str.lower()
+        comp_license = 'and' in tmp_license_str or 'or' in tmp_license_str
+        if comp_license:
+            if license_str.startswith('(') and license_str.endswith(')'):
+                return license_str
+            return ''.join(['(', license_str, ')'])
+        return license_str
 
     def checksum(self, checksum_field):
         """
         Returns a dictionary representation of a spdx.checksum.Algorithm object
         """
         checksum_object = dict()
-        checksum_object['algorithm'] = checksum_field.identifier
+        checksum_object['algorithm'] = 'checksumAlgorithm_' + checksum_field.identifier.lower()
         checksum_object['value'] = checksum_field.value
         return checksum_object
 
@@ -49,7 +58,7 @@ class CreationInfoWriter(BaseWriter):
         creation_info_object['created'] = creation_info.created_iso_format
 
         if creation_info.license_list_version:
-            creation_info_object['licenseListVersion'] = creation_info.license_list_version.__str__()
+            creation_info_object['licenseListVersion'] = '{0}.{1}'.format(creation_info.license_list_version.major, creation_info.license_list_version.minor)
 
         if creation_info.has_comment:
             creation_info_object['comment'] = creation_info.comment
@@ -83,7 +92,7 @@ class PackageWriter(BaseWriter):
         package_object = dict()
         package = self.document.package
         package_object['name'] = package.name
-        package_object['id'] = "pseudoID " + package.name # Mandatory field but there's not in package class
+        package_object['id'] = "PackageSPDXID" # Mandatory field but there's not in package class
         package_object['downloadLocation'] = package.download_location
         package_object['packageVerificationCode'] = self.package_verification_code(package)
         package_object['licenseConcluded'] = self.license(package.conc_lics)
@@ -148,7 +157,7 @@ class FileWriter(BaseWriter):
         return artifact_of_objects
 
     def create_file_info(self):
-        file_types = { 1: 'SOURCE', 2: 'BINARY', 3: 'ARCHIVE', 4: 'OTHER'}
+        file_types = { 1: 'fileType_source', 2: 'fileType_binary', 3: 'fileType_archive', 4: 'fileType_other'}
         file_objects = []
         files = self.document.files
 
@@ -167,7 +176,7 @@ class FileWriter(BaseWriter):
                 file_object['comment'] = file.comment
 
             if file.has_optional_field('type'):
-                file_object['fileTypes'] = [file_types.get(file.type, 'OTHER')]
+                file_object['fileTypes'] = [file_types.get(file.type)]
 
             if file.has_optional_field('license_comment'):
                 file_object['licenseComments'] = file.license_comment
@@ -176,7 +185,7 @@ class FileWriter(BaseWriter):
                 file_object['noticeText'] = file.notice
 
             if file.contributors:
-                file_object['fileContributors'] = file.contributors
+                file_object['fileContributors'] = file.contributors.__str__()
 
             if file.dependencies:
                 file_object['fileDependencies'] = file.dependencies
@@ -186,7 +195,7 @@ class FileWriter(BaseWriter):
             if valid_artifacts:
                 file_object['artifactOf'] = self.create_artifact_info(file)
 
-            file_objects.append(file_object)
+            file_objects.append({"File": file_object})
 
         return file_objects
 
@@ -259,30 +268,30 @@ class ExtractedLicenseWriter(BaseWriter):
             extracted_license_object = dict()
 
             if isinstance(extracted_license.identifier, Literal):
-                extracted_license_object['licenseId'] = extracted_license.identifier.n3()
+                extracted_license_object['licenseId'] = extracted_license.identifier.toPython()
             else:
                 extracted_license_object['licenseId'] = extracted_license.identifier
 
             if isinstance(extracted_license.text, Literal):
-                extracted_license_object['extractedText'] = extracted_license.text.n3()
+                extracted_license_object['extractedText'] = extracted_license.text.toPython()
             else:
                 extracted_license_object['extractedText'] = extracted_license.text
 
             if extracted_license.full_name:
                 if isinstance(extracted_license.full_name, Literal):
-                    extracted_license_object['name'] = extracted_license.full_name.n3()
+                    extracted_license_object['name'] = extracted_license.full_name.toPython()
                 else:
                     extracted_license_object['name'] = extracted_license.full_name
             
             if extracted_license.cross_ref:
                 if isinstance(extracted_license.cross_ref, Literal):
-                    extracted_license_object['seeAlso'] = extracted_license.cross_ref.n3()
+                    extracted_license_object['seeAlso'] = extracted_license.cross_ref.toPython()
                 else:
                     extracted_license_object['seeAlso'] = extracted_license.cross_ref
 
             if extracted_license.comment:
                 if isinstance(extracted_license.comment, Literal):
-                    extracted_license_object['comment'] = extracted_license.comment.n3()
+                    extracted_license_object['comment'] = extracted_license.comment.toPython()
                 else:
                     extracted_license_object['comment'] = extracted_license.comment
 
@@ -322,9 +331,9 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
     	self.document_object = dict()
 
         self.document_object['specVersion'] = self.document.version.__str__()
-        self.document_object['spdxVersion'] = self.document.version.__str__()
+        self.document_object['namespace'] = self.document.namespace.__str__()
         self.document_object['creationInfo'] = self.create_creation_info()
-        self.document_object['datalicense'] = self.license(self.document.data_license)
+        self.document_object['dataLicense'] = self.license(self.document.data_license)
         self.document_object['id'] = str(self.document.spdx_id)
         self.document_object['name'] = self.document.name
 
