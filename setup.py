@@ -5,16 +5,22 @@ from __future__ import print_function
 
 from setuptools import setup
 import unittest
+from os import path
 
 
 def test_suite():
     return unittest.TestLoader().discover('tests', pattern='test_*.py')
 
+this_directory = path.abspath(path.dirname(__file__))
+with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
 
 setup(
     name='spdx-tools',
     version='0.5.4',
     description='SPDX parser and tools.',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     packages=['spdx', 'spdx.parsers', 'spdx.writers', 'spdx.parsers.lexers'],
     package_data={'spdx': ['spdx_licenselist.csv']},
     include_package_data=True,
