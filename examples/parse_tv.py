@@ -2,6 +2,9 @@
 
 # Parses a tag/value file and prints out some basic information.
 # Usage: parse_tv.py <tagvaluefile>
+from __future__ import absolute_import
+from __future__ import print_function
+from __future__ import unicode_literals
 
 if __name__ == '__main__':
     import sys
@@ -15,12 +18,12 @@ if __name__ == '__main__':
         data = f.read()
         document, error = p.parse(data)
         if not error:
-            print 'Parsing Successful'
-            print 'Document Version {0}.{1}'.format(document.version.major,
-                document.version.minor)
-            print 'Package name : {0}'.format(document.package.name)
-            print 'Creators : '
+            print('Parsing Successful')
+            print('Document Version {0}.{1}'.format(document.version.major,
+                                                    document.version.minor))
+            print('Package name : {0}'.format(document.package.name))
+            print('Creators : ')
             for creator in document.creation_info.creators:
-                print creator.name
+                print(creator.name)
         else:
-            print 'Errors encountered while parsing'
+            print('Errors encountered while parsing')
