@@ -11,9 +11,8 @@ from os import path
 def test_suite():
     return unittest.TestLoader().discover('tests', pattern='test_*.py')
 
-this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
-    long_description = f.read()
+with open('README.md', 'r') as fh:
+    long_description = fh.read()
 
 setup(
     name='spdx-tools',
