@@ -22,7 +22,7 @@ from unittest import TestCase
 from spdx.checksum import Algorithm
 from spdx.config import LICENSE_MAP
 from spdx.creationinfo import Tool
-from spdx.document import Document
+from spdx.document import Document, ExternalDocumentRef
 from spdx.document import License
 from spdx.file import File
 from spdx.package import Package
@@ -35,9 +35,9 @@ from tests import utils_test
 class TestVersion(TestCase):
 
     def test_creation(self):
-        v = Version(major=1, minor=2)
-        assert v.major == 1
-        assert v.minor == 2
+        v = Version(major=2, minor=1)
+        assert v.major == 2
+        assert v.minor == 1
 
     def test_comparison(self):
         v1 = Version(major=1, minor=2)
@@ -57,33 +57,55 @@ class TestDocument(TestCase):
 
     def test_creation(self):
         document = Document(
-            version=Version(major=1, minor=2),
+            version=Version(major=2, minor=1),
             data_license=License(full_name='Academic Free License v1.1',
                                 identifier='AFL-1.1')
         )
+        document.add_ext_document_reference(
+            ExternalDocumentRef('DocumentRef-spdx-tool-2.1',
+                                'https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301',
+                                Algorithm('SHA1', 'SOME-SHA1'))
+        )
         assert document.comment is None
-        assert document.version == Version(1, 2)
+        assert document.version == Version(2, 1)
         assert document.data_license.identifier == 'AFL-1.1'
+        assert document.ext_document_references[-1].external_document_id == 'DocumentRef-spdx-tool-2.1'
+        assert document.ext_document_references[-1].spdx_document_uri == 'https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301'
+        assert document.ext_document_references[-1].check_sum.identifier == 'SHA1'
+        assert document.ext_document_references[-1].check_sum.value == 'SOME-SHA1'
 
     def test_document_validate_failures_returns_informative_messages(self):
-        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
         pack = doc.package = Package('some/path', NoAssert())
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
+        file1.spdx_id = 'SPDXRef-File'
         file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
         lic1 = License.from_identifier('LGPL-2.1')
         file1.add_lics(lic1)
         pack.add_lics_from_file(lic1)
         messages = []
-        is_valid = doc.validate(messages)
-        assert not is_valid
+        messages = doc.validate(messages)
         expected = [
-            'No creators defined, must have at least one.'
+            'No creators defined, must have at least one.',
+            'Creation info missing created date.',
+            'Package checksum must be instance of spdx.checksum.Algorithm',
+            'Package verif_code can not be None.',
+            'Package cr_text can not be None.',
+            'Package must have at least one file.',
+            'Package concluded license must be instance of spdx.utils.SPDXNone '
+            'or spdx.utils.NoAssert or spdx.document.License',
+            'Package declared license must be instance of spdx.utils.SPDXNone '
+            'or spdx.utils.NoAssert or spdx.document.License'
         ]
         assert expected == messages
 
     def test_document_is_valid_when_using_or_later_licenses(self):
-        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
         doc.creation_info.add_creator(Tool('ScanCode'))
         doc.creation_info.set_created_now()
 
@@ -95,6 +117,7 @@ class TestDocument(TestCase):
 
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
+        file1.spdx_id = 'SPDXRef-File'
         file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
@@ -113,18 +136,22 @@ class TestDocument(TestCase):
 class TestWriters(TestCase):
 
     def _get_lgpl_doc(self, or_later=False):
-        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
         doc.creation_info.add_creator(Tool('ScanCode'))
         doc.creation_info.set_created_now()
 
         package = doc.package = Package(name='some/path', download_location=NoAssert())
         package.cr_text = 'Some copyrught'
         package.verif_code = 'SOME code'
+        package.check_sum = Algorithm('SHA1', 'SOME-SHA1')
         package.license_declared = NoAssert()
         package.conc_lics = NoAssert()
 
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
+        file1.spdx_id = 'SPDXRef-File'
         file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()

@@ -1,7 +1,11 @@
 # Document info
-SPDXVersion: SPDX-1.2
+SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
+DocumentName: Sample_Document-V2.1
+SPDXID: SPDXRef-DOCUMENT
+DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
 DocumentComment: <text>Sample Comment</text>
+ExternalDocumentRef:DocumentRef-spdx-tool-2.1 https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759
 
 # Creation info
 Creator: Person: Bob (bob@example.com)
@@ -42,6 +46,7 @@ PackageLicenseComments: <text>License Comments</text>
 # File Info
 
 FileName: testfile.java
+SPDXID: SPDXRef-File
 FileType: SOURCE
 FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
 LicenseConcluded: Apache-2.0

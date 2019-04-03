@@ -1,8 +1,7 @@
-graft etc
-graft tests
-graft spdx
 graft data
 graft examples
+graft spdx
+graft tests
 
 prune src/spdx_tools.egg-info
 
