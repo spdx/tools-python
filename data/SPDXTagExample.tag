@@ -1,5 +1,8 @@
-SPDXVersion: SPDX-1.2
+SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
+DocumentName: Sample_Document-V2.1
+SPDXID: SPDXRef-DOCUMENT
+DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
 DocumentComment: <text>This is a sample spreadsheet</text>
 
 ## Creation Information
@@ -17,6 +20,13 @@ ReviewComment: <text>This is just an example.  Some of the non-standard licenses
 Reviewer: Person: Suzanne Reviewer
 ReviewDate: 2011-03-13T00:00:00Z
 ReviewComment: <text>Another example reviewer.</text>
+
+## Annotation Information
+Annotator: Person: Jim Annotator
+AnnotationType: REVIEW
+AnnotationDate: 2012-03-11T00:00:00Z
+AnnotationComment: <text>An example annotation comment.</text>
+SPDXREF: SPDXRef-45
 
 ## Package Information
 PackageName: SPDX Translator
@@ -47,6 +57,7 @@ PackageLicenseComments: <text>The declared license information can be found in t
 
 ## File Information
 FileName: src/org/spdx/parser/DOAPProject.java
+SPDXID: SPDXRef-File1
 FileType: SOURCE
 FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
 LicenseConcluded: Apache-2.0
@@ -54,6 +65,7 @@ LicenseInfoInFile: Apache-2.0
 FileCopyrightText: <text>Copyright 2010, 2011 Source Auditor Inc.</text>
 
 FileName: Jenna-2.6.3/jena-2.6.3-sources.jar
+SPDXID: SPDXRef-File2
 FileType: ARCHIVE
 FileChecksum: SHA1: 3ab4e1c67a2d28fced849ee1bb76e7391b93f125
 LicenseConcluded: LicenseRef-1

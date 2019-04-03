@@ -5,7 +5,9 @@
     "ns1:SpdxDocument": {
       "ns1:describesPackage": {
         "ns1:Package": {
-          "ns1:hasFile": null, 
+          "ns1:hasFile": {
+            "@rdf:resource": "http://www.spdx.org/files#SPDXRef-File"
+          },
           "ns1:name": "some/path", 
           "ns1:licenseDeclared": {
             "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
@@ -19,15 +21,25 @@
           "ns1:licenseConcluded": {
             "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
           }, 
-          "ns1:copyrightText": "Some copyrught"
+          "ns1:copyrightText": "Some copyrught",
+          "ns1:checksum": {
+            "ns1:Checksum": {
+              "ns1:algorithm": "SHA1",
+              "ns1:checksumValue": "SOME-SHA1"
+            }
+          }
         }
       }, 
       "ns1:specVersion": "SPDX-2.1", 
       "ns1:dataLicense": {
         "@rdf:resource": "http://spdx.org/licenses/CC0-1.0"
-      }, 
+      },
+      "ns1:name": {
+        "@rdf:resource": "Sample_Document-V2.1"
+      },
       "ns1:referencesFile": {
         "ns1:File": {
+          "@rdf:about": "http://www.spdx.org/files#SPDXRef-File",
           "ns1:fileName": "./some/path/tofile", 
           "ns1:checksum": {
             "ns1:Checksum": {
@@ -46,7 +58,7 @@
           }
         }
       }, 
-      "@rdf:about": "http://www.spdx.org/tools#SPDXANALYSIS"
+      "@rdf:about": "http://www.spdx.org/tools#SPDXRef-DOCUMENT"
     }
   }
 }

@@ -3,7 +3,8 @@
     xmlns:j.0="http://usefulinc.com/ns/doap#"
     xmlns="http://spdx.org/rdf/terms#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-  <SpdxDocument rdf:about="http://www.spdx.org/tools#SPDXANALYSIS">
+  <SpdxDocument rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT">
+    <name>Sample_Document-V2.1</name>
     <creationInfo>
       <CreationInfo>
         <created>2010-02-03T00:00:00Z</created>
@@ -13,9 +14,21 @@
         <creator>Person: Gary O'Neall</creator>
       </CreationInfo>
     </creationInfo>
-    <specVersion>SPDX-1.2</specVersion>
+    <specVersion>SPDX-2.1</specVersion>
+    <externalDocumentRef>
+      <ExternalDocumentRef>
+        <externalDocumentId>DocumentRef-spdx-tool-2.1</externalDocumentId>
+        <spdxDocument rdf:resource="https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301"/>
+        <checksum>
+          <Checksum>
+            <checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</checksumValue>
+            <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+          </Checksum>
+        </checksum>
+      </ExternalDocumentRef>
+    </externalDocumentRef>
     <referencesFile>
-      <File rdf:nodeID="A0">
+      <File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File1">>
         <licenseConcluded>
           <ExtractedLicensingInfo rdf:nodeID="A1">
             <extractedText>/*
@@ -83,8 +96,16 @@
         <reviewer>Person: Suzanne Reviewer</reviewer>
       </Review>
     </reviewed>
+    <annotation>
+      <Annotation rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-45">
+        <annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_review"/>
+        <rdfs:comment>This is just an example. Some of the non-standard licenses look like they are actually BSD 3 clause licenses</rdfs:comment>
+        <annotationDate>2012-06-13T00:00:00Z</annotationDate>
+        <annotator>Person: Jim Reviewer</annotator>
+      </Annotation>
+    </annotation>
     <referencesFile>
-      <File rdf:nodeID="A2">
+      <File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File2">
         <copyrightText>Copyright 2010, 2011 Source Auditor Inc.</copyrightText>
         <licenseComments></licenseComments>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>

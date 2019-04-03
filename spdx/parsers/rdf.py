@@ -33,9 +33,14 @@ from spdx.parsers.builderexceptions import SPDXValueError
 ERROR_MESSAGES = {
     'DOC_VERS_VALUE': 'Invalid specVersion \'{0}\' must be SPDX-M.N where M and N are numbers.',
     'DOC_D_LICS': 'Invalid dataLicense \'{0}\' must be http://spdx.org/licenses/CC0-1.0.',
+    'DOC_SPDX_ID_VALUE': 'Invalid SPDXID value, SPDXID must be the document namespace appended '
+                         'by "#SPDXRef-DOCUMENT", line: {0}',
+    'DOC_NAMESPACE_VALUE': 'Invalid DocumentNamespace value {0}, must contain a scheme (e.g. "https:") '
+                           'and should not contain the "#" delimiter.',
     'LL_VALUE': 'Invalid licenseListVersion \'{0}\' must be of the format N.N where N is a number',
     'CREATED_VALUE': 'Invalid created value \'{0}\' must be date in ISO 8601 format.',
     'CREATOR_VALUE': 'Invalid creator value \'{0}\' must be Organization, Tool or Person.',
+    'EXT_DOC_REF_VALUE': 'Failed to extract {0} from ExternalDocumentRef.',
     'PKG_SUPPL_VALUE': 'Invalid package supplier value \'{0}\' must be Organization, Person or NOASSERTION.',
     'PKG_ORIGINATOR_VALUE': 'Invalid package supplier value \'{0}\'  must be Organization, Person or NOASSERTION.',
     'PKG_DOWN_LOC': 'Invalid package download location value \'{0}\'  must be a url or NONE or NOASSERTION',
@@ -43,10 +48,14 @@ ERROR_MESSAGES = {
     'LICS_LIST_MEMBER' : 'Declaritive or Conjunctive license set member must be a license url or identifier',
     'PKG_SINGLE_LICS' : 'Package concluded license must be a license url or spdx:noassertion or spdx:none.',
     'PKG_LICS_INFO_FILES' : 'Package licenseInfoFromFiles must be a license or spdx:none or spdx:noassertion',
+    'FILE_SPDX_ID_VALUE': 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
+                          'letters, numbers, ".", "-".',
     'FILE_TYPE' : 'File type must be binary, other, source or archive term.',
     'FILE_SINGLE_LICS': 'File concluded license must be a license url or spdx:noassertion or spdx:none.',
     'REVIEWER_VALUE' : 'Invalid reviewer value \'{0}\' must be Organization, Tool or Person.',
     'REVIEW_DATE' : 'Invalid review date value \'{0}\' must be date in ISO 8601 format.',
+    'ANNOTATOR_VALUE': 'Invalid annotator value \'{0}\' must be Organization, Tool or Person.',
+    'ANNOTATION_DATE': 'Invalid annotation date value \'{0}\' must be date in ISO 8601 format.'
 }
 
 
@@ -510,6 +519,7 @@ class FileParser(LicenseParser):
             for _, _, name in self.graph.triples((f_term, self.spdx_namespace['fileName'], None)):
                 self.builder.set_file_name(self.doc, six.text_type(name))
 
+        self.p_file_spdx_id(f_term, self.spdx_namespace['File'])
         self.p_file_type(f_term, self.spdx_namespace['fileType'])
         self.p_file_chk_sum(f_term, self.spdx_namespace['checksum'])
         self.p_file_lic_conc(f_term, self.spdx_namespace['licenseConcluded'])
@@ -607,6 +617,15 @@ class FileParser(LicenseParser):
             lic = self.handle_lics(info)
             if lic is not None:
                 self.builder.set_file_license_in_file(self.doc, lic)
+
+    def p_file_spdx_id(self, f_term, predicate):
+        try:
+            try:
+                self.builder.set_file_spdx_id(self.doc, f_term)
+            except SPDXValueError:
+                self.value_error('FILE_SPDX_ID_VALUE', f_term)
+        except CardinalityError:
+            self.more_than_one_error('FILE_SPDX_ID_VALUE')
 
     def p_file_type(self, f_term, predicate):
         """Sets file type."""
@@ -722,7 +741,90 @@ class ReviewParser(BaseParser):
             self.value_error('REVIEWER_VALUE', reviewer_list[0][2])
 
 
-class Parser(PackageParser, FileParser, ReviewParser):
+class AnnotationParser(BaseParser):
+    """
+    Helper class for parsing annotation information.
+    """
+
+    def __init__(self, builder, logger):
+        super(AnnotationParser, self).__init__(builder, logger)
+
+    def parse_annotation(self, r_term):
+        annotator = self.get_annotator(r_term)
+        annotation_date = self.get_annotation_date(r_term)
+        if annotator is not None:
+            self.builder.add_annotator(self.doc, annotator)
+            if annotation_date is not None:
+                try:
+                    self.builder.add_annotation_date(self.doc, annotation_date)
+                except SPDXValueError:
+                    self.value_error('ANNOTATION_DATE', annotation_date)
+            comment = self.get_annotation_comment(r_term)
+            if comment is not None:
+                self.builder.add_annotation_comment(self.doc, comment)
+            annotation_type = self.get_annotation_type(r_term)
+            self.builder.add_annotation_type(self.doc, annotation_type)
+            try:
+                self.builder.set_annotation_spdx_id(self.doc, r_term)
+            except CardinalityError:
+                self.more_than_one_error('SPDX Identifier Reference')
+
+    def get_annotation_type(self, r_term):
+        """Returns annotation type or None if found none or more than one.
+        Reports errors on failure."""
+        for _, _, typ in self.graph.triples((
+                r_term, self.spdx_namespace['annotationType'], None)):
+            if typ is not None:
+                return typ
+            else:
+                self.error = True
+                msg = 'Annotation must have exactly one annotation type.'
+                self.logger.log(msg)
+                return
+
+    def get_annotation_comment(self, r_term):
+        """Returns annotation comment or None if found none or more than one.
+        Reports errors.
+        """
+        comment_list = list(self.graph.triples((r_term, RDFS.comment, None)))
+        if len(comment_list) > 1:
+            self.error = True
+            msg = 'Annotation can have at most one comment.'
+            self.logger.log(msg)
+            return
+        else:
+            return six.text_type(comment_list[0][2])
+
+    def get_annotation_date(self, r_term):
+        """Returns annotation date or None if not found.
+        Reports error on failure.
+        Note does not check value format.
+        """
+        annotation_date_list = list(self.graph.triples((r_term, self.spdx_namespace['annotationDate'], None)))
+        if len(annotation_date_list) != 1:
+            self.error = True
+            msg = 'Annotation must have exactly one annotation date.'
+            self.logger.log(msg)
+            return
+        return six.text_type(annotation_date_list[0][2])
+
+    def get_annotator(self, r_term):
+        """Returns annotator as creator object or None if failed.
+        Reports errors on failure.
+        """
+        annotator_list = list(self.graph.triples((r_term, self.spdx_namespace['annotator'], None)))
+        if len(annotator_list) != 1:
+            self.error = True
+            msg = 'Annotation must have exactly one annotator'
+            self.logger.log(msg)
+            return
+        try:
+            return self.builder.create_entity(self.doc, six.text_type(annotator_list[0][2]))
+        except SPDXValueError:
+            self.value_error('ANNOTATOR_VALUE', annotator_list[0][2])
+
+
+class Parser(PackageParser, FileParser, ReviewParser, AnnotationParser):
     """
     RDF/XML file parser.
     """
@@ -742,6 +844,9 @@ class Parser(PackageParser, FileParser, ReviewParser):
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['SpdxDocument'])):
             self.parse_doc_fields(s)
 
+        for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['ExternalDocumentRef'])):
+            self.parse_ext_doc_ref(s)
+
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['CreationInfo'])):
             self.parse_creation_info(s)
 
@@ -754,13 +859,18 @@ class Parser(PackageParser, FileParser, ReviewParser):
         for s, _p, o in self.graph.triples((None, self.spdx_namespace['reviewed'], None)):
             self.parse_review(o)
 
+        for s, _p, o in self.graph.triples((None, self.spdx_namespace['annotation'], None)):
+            self.parse_annotation(o)
+
         validation_messages = []
         # Report extra errors if self.error is False otherwise there will be
         # redundent messages
-        if (not self.error) and (not self.doc.validate(validation_messages)):
-            for msg in validation_messages:
-                self.logger.log(msg)
-            self.error = True
+        validation_messages = self.doc.validate(validation_messages)
+        if not self.error:
+            if validation_messages:
+                for msg in validation_messages:
+                    self.logger.log(msg)
+                self.error = True
         return self.doc, self.error
 
     def parse_creation_info(self, ci_term):
@@ -799,7 +909,20 @@ class Parser(PackageParser, FileParser, ReviewParser):
                 self.value_error('LL_VALUE', o)
 
     def parse_doc_fields(self, doc_term):
-        """Parses the version, data license and comment."""
+        """Parses the version, data license, name, SPDX Identifier, namespace,
+        and comment."""
+        try:
+            self.builder.set_doc_spdx_id(self.doc, doc_term)
+        except SPDXValueError:
+            self.value_error('DOC_SPDX_ID_VALUE', doc_term)
+        try:
+            if doc_term.count('#', 0, len(doc_term)) <= 1:
+                doc_namespace = doc_term.split('#')[0]
+                self.builder.set_doc_namespace(self.doc, doc_namespace)
+            else:
+                self.value_error('DOC_NAMESPACE_VALUE', doc_term)
+        except SPDXValueError:
+            self.value_error('DOC_NAMESPACE_VALUE', doc_term)
         for _s, _p, o in self.graph.triples((doc_term, self.spdx_namespace['specVersion'], None)):
             try:
                 self.builder.set_doc_version(self.doc, six.text_type(o))
@@ -816,9 +939,50 @@ class Parser(PackageParser, FileParser, ReviewParser):
             except CardinalityError:
                 self.more_than_one_error('dataLicense')
                 break
+        for _s, _p, o in self.graph.triples(
+                (doc_term, self.spdx_namespace['name'], None)):
+            try:
+                self.builder.set_doc_name(self.doc, six.text_type(o))
+            except CardinalityError:
+                self.more_than_one_error('name')
+                break
         for _s, _p, o in self.graph.triples((doc_term, RDFS.comment, None)):
             try:
                 self.builder.set_doc_comment(self.doc, six.text_type(o))
             except CardinalityError:
                 self.more_than_one_error('Document comment')
                 break
+
+    def parse_ext_doc_ref(self, ext_doc_ref_term):
+        """
+        Parses the External Document ID, SPDX Document URI and Checksum.
+        """
+        for _s, _p, o in self.graph.triples(
+                (ext_doc_ref_term,
+                 self.spdx_namespace['externalDocumentId'],
+                 None)):
+            try:
+                self.builder.set_ext_doc_id(self.doc, six.text_type(o))
+            except SPDXValueError:
+                self.value_error('EXT_DOC_REF_VALUE', 'External Document ID')
+                break
+
+        for _s, _p, o in self.graph.triples(
+                (ext_doc_ref_term,
+                 self.spdx_namespace['spdxDocument'],
+                 None)):
+            try:
+                self.builder.set_spdx_doc_uri(self.doc, six.text_type(o))
+            except SPDXValueError:
+                self.value_error('EXT_DOC_REF_VALUE', 'SPDX Document URI')
+                break
+
+        for _s, _p, checksum in self.graph.triples(
+                (ext_doc_ref_term, self.spdx_namespace['checksum'], None)):
+            for _, _, value in self.graph.triples(
+                    (checksum, self.spdx_namespace['checksumValue'], None)):
+                try:
+                    self.builder.set_chksum(self.doc, six.text_type(value))
+                except SPDXValueError:
+                    self.value_error('EXT_DOC_REF_VALUE', 'Checksum')
+                    break

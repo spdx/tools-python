@@ -1,10 +1,14 @@
 # Document Information
 SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
+DocumentName: Sample_Document-V2.1
+SPDXID: SPDXRef-DOCUMENT
+DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
 # Creation Info
 # Package
 PackageName: some/path
 PackageDownloadLocation: NOASSERTION
+PackageChecksum: SHA1: SOME-SHA1
 PackageVerificationCode: SOME code
 PackageLicenseDeclared: NOASSERTION
 PackageLicenseConcluded: NOASSERTION
@@ -12,6 +16,7 @@ PackageLicenseInfoFromFiles: LGPL-2.1+
 PackageCopyrightText: <text>Some copyrught</text>
 # File
 FileName: ./some/path/tofile
+SPDXID: SPDXRef-File
 FileChecksum: SHA1: SOME-SHA1
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: LGPL-2.1+

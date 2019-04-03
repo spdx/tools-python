@@ -1,5 +1,4 @@
 __pycache__/
-*.egg-info/
 *.py[cod]
 *.out
 /build/
@@ -7,3 +6,35 @@ __pycache__/
 /tmp/
 spdx/parsers/parsetab.py
 /.cache/
+
+# virtualenv
+/bin
+/lib
+/Lib
+/local
+/local/
+/.eggs/
+*.egg-info/
+/Include
+/include
+/pip-selfcheck.json
+.Python
+/share/
+
+# IDEs
+.project
+.pydevproject
+.idea
+org.eclipse.core.resources.prefs
+.vscode
+.pytest_cache
+
+# Installer logs
+pip-log.txt
+
+# Unit test / coverage reports
+.cache
+.coverage
+.coverage.*
+nosetests.xml
+htmlcov

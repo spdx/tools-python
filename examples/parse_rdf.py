@@ -59,6 +59,13 @@ if __name__ == '__main__':
             for lics in doc.extracted_licenses:
                 print '\tIdentifier: {0}'.format(lics.identifier)
                 print '\tName: {0}'.format(lics.full_name)
+            print 'Annotations:'
+            for an in doc.annotations:
+                print '\tAnnotator: {0}'.format(an.annotator)
+                print '\tAnnotation Date: {0}'.format(an.annotation_date)
+                print '\tAnnotation Comment: {0}'.format(an.comment)
+                print '\tAnnotation Type: {0}'.format(an.annotation_type)
+                print '\tAnnotation SPDX Identifier: {0}'.format(an.spdx_id)
 
         else:
             print 'Errors while parsing'

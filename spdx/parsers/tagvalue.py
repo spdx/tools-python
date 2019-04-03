@@ -24,7 +24,6 @@ from spdx import utils
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
-from spdx.parsers.builderexceptions import IncompatibleVersionError
 from spdx.parsers.lexers.tagvalue import Lexer
 from spdx import document
 
@@ -40,11 +39,26 @@ ERROR_MESSAGES = {
     'DOC_LICENSE_VALUE_TYPE': 'DataLicense must be CC0-1.0, line: {0}',
     'DOC_VERSION_VALUE': 'Invalid SPDXVersion \'{0}\' must be SPDX-M.N where M and N are numbers. Line: {1}',
     'DOC_VERSION_VALUE_TYPE': 'Invalid SPDXVersion value, must be SPDX-M.N where M and N are numbers. Line: {0}',
+    'DOC_NAME_VALUE': 'DocumentName must be single line of text, line: {0}',
+    'DOC_SPDX_ID_VALUE': 'Invalid SPDXID value, SPDXID must be SPDXRef-DOCUMENT, line: {0}',
+    'EXT_DOC_REF_VALUE': 'ExternalDocumentRef must contain External Document ID, SPDX Document URI and Checksum'
+                         'in the standard format, line:{0}.',
     'DOC_COMMENT_VALUE_TYPE': 'DocumentComment value must be free form text between <text></text> tags, line:{0}',
+    'DOC_NAMESPACE_VALUE': 'Invalid DocumentNamespace value {0}, must contain a scheme (e.g. "https:") '
+                           'and should not contain the "#" delimiter, line:{1}',
+    'DOC_NAMESPACE_VALUE_TYPE': 'Invalid DocumentNamespace value, must contain a scheme (e.g. "https:") '
+                                'and should not contain the "#" delimiter, line: {0}',
     'REVIEWER_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
     'CREATOR_VALUE_TYPE': 'Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}',
     'REVIEW_DATE_VALUE_TYPE': 'ReviewDate value must be date in ISO 8601 format, line: {0}',
     'REVIEW_COMMENT_VALUE_TYPE': 'ReviewComment value must be free form text between <text></text> tags, line:{0}',
+    'ANNOTATOR_VALUE_TYPE': 'Invalid Annotator value must be a Person, Organization or Tool. Line: {0}',
+    'ANNOTATION_DATE_VALUE_TYPE': 'AnnotationDate value must be date in ISO 8601 format, line: {0}',
+    'ANNOTATION_COMMENT_VALUE_TYPE': 'AnnotationComment value must be free form text between <text></text> tags, line:{0}',
+    'ANNOTATION_TYPE_VALUE': 'AnnotationType must be "REVIEW" or "OTHER". Line: {0}',
+    'ANNOTATION_SPDX_ID_VALUE': 'SPDXREF must be ["DocumentRef-"[idstring]":"]SPDXID where'
+                                '["DocumentRef-"[idstring]":"] is an optional reference to an external SPDX document and'
+                                'SPDXID is a unique string containing letters, numbers, ".","-".',
     'A_BEFORE_B': '{0} Can not appear before {1}, line: {2}',
     'PACKAGE_NAME_VALUE': 'PackageName must be single line of text, line: {0}',
     'PKG_VERSION_VALUE': 'PackageVersion must be single line of text, line: {0}',
@@ -64,6 +78,8 @@ ERROR_MESSAGES = {
     'FILE_NAME_VALUE': 'FileName must be a single line of text, line: {0}',
     'FILE_COMMENT_VALUE': 'FileComment must be free form text, line:{0}',
     'FILE_TYPE_VALUE': 'FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}',
+    'FILE_SPDX_ID_VALUE': 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
+                          'letters, numbers, ".", "-".',
     'FILE_CHKSUM_VALUE': 'FileChecksum must be a single line of text starting with \'SHA1:\', line:{0}',
     'FILE_LICS_CONC_VALUE': 'LicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line:{0}',
     'FILE_LICS_INFO_VALUE': 'LicenseInfoInFile must be NOASSERTION, NONE or license identifier, line: {0}',
@@ -106,8 +122,12 @@ class Parser(object):
 
     def p_attrib(self, p):
         """attrib : spdx_version
+                  | spdx_id
                   | data_lics
+                  | doc_name
+                  | ext_doc_ref
                   | doc_comment
+                  | doc_namespace
                   | creator
                   | created
                   | creator_comment
@@ -115,6 +135,11 @@ class Parser(object):
                   | reviewer
                   | review_date
                   | review_comment
+                  | annotator
+                  | annotation_date
+                  | annotation_comment
+                  | annotation_type
+                  | annotation_spdx_id
                   | package_name
                   | package_version
                   | pkg_down_location
@@ -267,7 +292,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_uknown_tag(self, p):
-        """unknown_tag : UNKNOWN_TAG"""
+        """unknown_tag : UNKNOWN_TAG LINE"""
         self.error = True
         msg = ERROR_MESSAGES['UNKNOWN_TAG'].format(p[1], p.lineno(1))
         self.logger.log(msg)
@@ -527,6 +552,17 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES['FILE_NAME_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
+
+    def p_spdx_id(self, p):
+        """spdx_id : SPDX_ID LINE"""
+        if six.PY2:
+            value = p[2].decode(encoding='utf-8')
+        else:
+            value = p[2]
+        if not self.builder.doc_spdx_id_set:
+            self.builder.set_doc_spdx_id(self.document, value)
+        else:
+            self.builder.set_file_spdx_id(self.document, value)
 
     def p_file_comment_1(self, p):
         """file_comment : FILE_COMMENT TEXT"""
@@ -906,7 +942,6 @@ class Parser(object):
     def p_pkg_orig_2(self, p):
         """pkg_orig : PKG_ORIG error"""
         self.error = True
-        self.error = True
         msg = ERROR_MESSAGES['PKG_ORIG_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
@@ -1040,6 +1075,98 @@ class Parser(object):
         msg = ERROR_MESSAGES['REVIEW_COMMENT_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
+    def p_annotator_1(self, p):
+        """annotator : ANNOTATOR entity"""
+        self.builder.add_annotator(self.document, p[2])
+
+    def p_annotator_2(self, p):
+        """annotator : ANNOTATOR error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ANNOTATOR_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_annotation_date_1(self, p):
+        """annotation_date : ANNOTATION_DATE DATE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.add_annotation_date(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('AnnotationDate', p.lineno(1))
+        except OrderError:
+            self.order_error('AnnotationDate', 'Annotator', p.lineno(1))
+
+    def p_annotation_date_2(self, p):
+        """annotation_date : ANNOTATION_DATE error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ANNOTATION_DATE_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_annotation_comment_1(self, p):
+        """annotation_comment : ANNOTATION_COMMENT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.add_annotation_comment(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('AnnotationComment', p.lineno(1))
+        except OrderError:
+            self.order_error('AnnotationComment', 'Annotator', p.lineno(1))
+
+    def p_annotation_comment_2(self, p):
+        """annotation_comment : ANNOTATION_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ANNOTATION_COMMENT_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_annotation_type_1(self, p):
+        """annotation_type : ANNOTATION_TYPE LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.add_annotation_type(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('AnnotationType', p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['ANNOTATION_TYPE_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+        except OrderError:
+            self.order_error('AnnotationType', 'Annotator', p.lineno(1))
+
+    def p_annotation_type_2(self, p):
+        """annotation_type : ANNOTATION_TYPE error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ANNOTATION_TYPE_VALUE'].format(
+            p.lineno(1))
+        self.logger.log(msg)
+
+    def p_annotation_spdx_id_1(self, p):
+        """annotation_spdx_id : ANNOTATION_SPDX_ID LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_annotation_spdx_id(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('SPDXREF', p.lineno(1))
+        except OrderError:
+            self.order_error('SPDXREF', 'Annotator', p.lineno(1))
+
+    def p_annotation_spdx_id_2(self, p):
+        """annotation_spdx_id : ANNOTATION_SPDX_ID error"""
+        self.error = True
+        msg = ERROR_MESSAGES['ANNOTATION_SPDX_ID_VALUE'].format(
+            p.lineno(1))
+        self.logger.log(msg)
+
     def p_lics_list_ver_1(self, p):
         """locs_list_ver : LIC_LIST_VER LINE"""
         try:
@@ -1079,6 +1206,27 @@ class Parser(object):
         msg = ERROR_MESSAGES['DOC_COMMENT_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
+    def p_doc_namespace_1(self, p):
+        """doc_namespace : DOC_NAMESPACE LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_doc_namespace(self.document, value)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['DOC_NAMESPACE_VALUE'].format(p[2], p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('DocumentNamespace', p.lineno(1))
+
+    def p_doc_namespace_2(self, p):
+        """doc_namespace : DOC_NAMESPACE error"""
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_NAMESPACE_VALUE_TYPE'].format(p.lineno(1))
+        self.logger.log(msg)
+
     def p_data_license_1(self, p):
         """data_lics : DOC_LICENSE LINE"""
         try:
@@ -1100,6 +1248,48 @@ class Parser(object):
         msg = ERROR_MESSAGES['DOC_LICENSE_VALUE_TYPE'].format(p.lineno(1))
         self.logger.log(msg)
 
+    def p_doc_name_1(self, p):
+        """doc_name : DOC_NAME LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_doc_name(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('DocumentName', p.lineno(1))
+
+    def p_doc_name_2(self, p):
+        """doc_name : DOC_NAME error"""
+        self.error = True
+        msg = ERROR_MESSAGES['DOC_NAME_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_ext_doc_refs_1(self, p):
+        """ext_doc_ref : EXT_DOC_REF DOC_REF_ID DOC_URI EXT_DOC_REF_CHKSUM"""
+        try:
+            if six.PY2:
+                doc_ref_id = p[2].decode(encoding='utf-8')
+                doc_uri = p[3].decode(encoding='utf-8')
+                ext_doc_chksum = p[4].decode(encoding='utf-8')
+            else:
+                doc_ref_id = p[2]
+                doc_uri = p[3]
+                ext_doc_chksum = p[4]
+
+            self.builder.add_ext_doc_refs(self.document, doc_ref_id, doc_uri,
+                                          ext_doc_chksum)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['EXT_DOC_REF_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+
+    def p_ext_doc_refs_2(self, p):
+        """ext_doc_ref : EXT_DOC_REF error"""
+        self.error = True
+        msg = ERROR_MESSAGES['EXT_DOC_REF_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
     def p_spdx_version_1(self, p):
         """spdx_version : DOC_VERSION LINE"""
         try:
@@ -1114,10 +1304,6 @@ class Parser(object):
             self.error = True
             msg = ERROR_MESSAGES['DOC_VERSION_VALUE'].format(p[2], p.lineno(1))
             self.logger.log(msg)
-        except IncompatibleVersionError:
-            self.error = True
-            self.logger.log(
-                'SPDXVersion must be SPDX-1.2 found {0}.'.format(value))
 
     def p_spdx_version_2(self, p):
         """spdx_version : DOC_VERSION error"""
@@ -1231,8 +1417,10 @@ class Parser(object):
         validation_messages = []
         # Report extra errors if self.error is False otherwise there will be
         # redundent messages
-        if (not self.error) and (not self.document.validate(validation_messages)):
-            for msg in validation_messages:
-                self.logger.log(msg)
-            self.error = True
+        validation_messages = self.document.validate(validation_messages)
+        if not self.error:
+            if validation_messages:
+                for msg in validation_messages:
+                    self.logger.log(msg)
+                self.error = True
         return self.document, self.error

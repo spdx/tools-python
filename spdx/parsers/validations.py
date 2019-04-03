@@ -55,6 +55,10 @@ def validate_data_lics(value):
     return value == 'CC0-1.0'
 
 
+def validate_doc_name(value, optional=False):
+    return validate_tool_name(value, optional)
+
+
 def validate_pkg_supplier(value, optional=False):
     if optional and value is None:
         return True
@@ -71,7 +75,7 @@ def validate_pkg_originator(value, optional=False):
 def validate_pkg_homepage(value, optional=False):
     if value is None:
         return optional
-    elif type(value) in [six.string_types, utils.NoAssert, utils.SPDXNone]:
+    elif isinstance(value, (six.string_types, utils.NoAssert, utils.SPDXNone)):
         return True
     else:
         return False
@@ -100,6 +104,26 @@ def validate_doc_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
+def validate_doc_spdx_id(value, optional=False):
+    if value is None:
+        return optional
+    elif value.endswith('#SPDXRef-DOCUMENT'):
+        return True
+    else:
+        return False
+
+
+def validate_doc_namespace(value, optional=False):
+    if value is None:
+        return optional
+    elif ((value.startswith('http://') or value.startswith(
+            'https://') or
+           value.startswith('ftp://')) and ('#' not in value)):
+        return True
+    else:
+        return False
+
+
 def validate_creator(value, optional=False):
     if value is None:
         return optional
@@ -119,12 +143,37 @@ def validate_review_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
+def validate_annotator(value, optional=False):
+    return validate_creator(value, optional)
+
+
+def validate_annotation_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
+def validate_annotation_type(value, optional=False):
+    value = value.strip()
+    if value == 'REVIEW' or value == 'OTHER':
+        return True
+    else:
+        return False
+
+
 def validate_pkg_src_info(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
 def validate_pkg_lics_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
+
+
+def validate_file_spdx_id(value, optional=False):
+    value = value.split('#')[-1]
+    TEXT_RE = re.compile(r'SPDXRef-([A-Za-z0-9.\-]+)', re.UNICODE)
+    if value is None:
+        return optional
+    else:
+        return TEXT_RE.match(value) is not None
 
 
 def validate_file_comment(value, optional=False):

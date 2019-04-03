@@ -13,6 +13,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import sys
 import unittest
 from unittest import TestCase
 
@@ -32,18 +33,48 @@ class TestLexer(TestCase):
 
     def test_document(self):
         data = '''
-        SPDXVersion: SPDX-1.2
+        SPDXVersion: SPDX-2.1
         # Comment.
         DataLicense: CC0-1.0
+        DocumentName: Sample_Document-V2.1
+        SPDXID: SPDXRef-DOCUMENT
+        DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
         DocumentComment: <text>This is a sample spreadsheet</text>
         '''
         self.l.input(data)
         self.token_assert_helper(self.l.token(), 'DOC_VERSION', 'SPDXVersion', 2)
-        self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-1.2', 2)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-2.1', 2)
         self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense', 4)
         self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 4)
-        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 5)
-        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 5)
+        self.token_assert_helper(self.l.token(), 'DOC_NAME', 'DocumentName', 5)
+        self.token_assert_helper(self.l.token(), 'LINE', 'Sample_Document-V2.1',
+                                 5)
+        self.token_assert_helper(self.l.token(), 'SPDX_ID', 'SPDXID', 6)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-DOCUMENT', 6)
+        self.token_assert_helper(self.l.token(), 'DOC_NAMESPACE',
+                                 'DocumentNamespace', 7)
+        self.token_assert_helper(self.l.token(), 'LINE',
+                                 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301',
+                                 7)
+        self.token_assert_helper(self.l.token(), 'DOC_COMMENT', 'DocumentComment', 8)
+        self.token_assert_helper(self.l.token(), 'TEXT', '<text>This is a sample spreadsheet</text>', 8)
+
+    def test_external_document_references(self):
+        data = '''
+        ExternalDocumentRef:DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759
+        '''
+        self.l.input(data)
+        self.token_assert_helper(self.l.token(), 'EXT_DOC_REF',
+                                 'ExternalDocumentRef', 2)
+        self.token_assert_helper(self.l.token(), 'DOC_REF_ID',
+                                 'DocumentRef-spdx-tool-2.1', 2)
+        self.token_assert_helper(self.l.token(), 'DOC_URI',
+                                 'http://spdx.org/spdxdocs/spdx-tools-v2.1-3F25'
+                                 '04E0-4F89-41D3-9A0C-0305E82C3301', 2)
+        self.token_assert_helper(self.l.token(), 'EXT_DOC_REF_CHKSUM',
+                                 'SHA1: '
+                                 'd6a770ba38583ed4bb4525bd96e50461655d2759', 2)
+
 
     def test_creation_info(self):
         data = '''
@@ -94,6 +125,14 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'PKG_VERF_CODE', 'PackageVerificationCode', 3)
         self.token_assert_helper(self.l.token(), 'LINE', '4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)', 3)
 
+    def test_unknown_tag(self):
+        data = '''
+        SomeUnknownTag: SomeUnknownValue
+        '''
+        self.l.input(data)
+        self.token_assert_helper(self.l.token(), 'UNKNOWN_TAG', 'SomeUnknownTag', 2)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SomeUnknownValue', 2)
+
     def token_assert_helper(self, token, ttype, value, line):
         assert token.type == ttype
         assert token.value == value
@@ -103,9 +142,12 @@ class TestLexer(TestCase):
 class TestParser(TestCase):
 
     document_str = '\n'.join([
-        'SPDXVersion: SPDX-1.2',
+        'SPDXVersion: SPDX-2.1',
         'DataLicense: CC0-1.0',
-        'DocumentComment: <text>Sample Comment</text>'
+        'DocumentName: Sample_Document-V2.1',
+        'SPDXID: SPDXRef-DOCUMENT',
+        'DocumentComment: <text>Sample Comment</text>',
+        'DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
     ])
 
     creation_str = '\n'.join([
@@ -146,6 +188,7 @@ class TestParser(TestCase):
 
     file_str = '\n'.join([
         'FileName: testfile.java',
+        'SPDXID: SPDXRef-File',
         'FileType: SOURCE',
         'FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12',
         'LicenseConcluded: Apache-2.0',
@@ -157,6 +200,8 @@ class TestParser(TestCase):
         'FileComment: <text>Very long file</text>'
         ])
 
+    unknown_tag_str = 'SomeUnknownTag: SomeUnknownValue'
+
     complete_str = '{0}\n{1}\n{2}\n{3}\n{4}'.format(document_str, creation_str, review_str, package_str, file_str)
 
     def setUp(self):
@@ -167,9 +212,12 @@ class TestParser(TestCase):
         document, error = self.p.parse(self.complete_str)
         assert document is not None
         assert not error
-        assert document.version == Version(major=1, minor=2)
+        assert document.version == Version(major=2, minor=1)
         assert document.data_license.identifier == 'CC0-1.0'
+        assert document.name == 'Sample_Document-V2.1'
+        assert document.spdx_id == 'SPDXRef-DOCUMENT'
         assert document.comment == 'Sample Comment'
+        assert document.namespace == 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
 
     def test_creation_info(self):
         document, error = self.p.parse(self.complete_str)
@@ -201,10 +249,26 @@ class TestParser(TestCase):
         assert len(document.package.files) == 1
         spdx_file = document.package.files[0]
         assert spdx_file.name == 'testfile.java'
+        assert spdx_file.spdx_id == 'SPDXRef-File'
         assert spdx_file.type == spdx.file.FileType.SOURCE
         assert len(spdx_file.artifact_of_project_name) == 1
         assert len(spdx_file.artifact_of_project_home) == 1
         assert len(spdx_file.artifact_of_project_uri) == 1
+
+    def test_unknown_tag(self):
+
+        try:
+            from StringIO import StringIO
+        except ImportError:
+            from io import StringIO
+
+        saved_out = sys.stdout
+        sys.stdout = StringIO()
+        document, error = self.p.parse(self.unknown_tag_str)
+        self.assertEqual(sys.stdout.getvalue(), 'Found unknown tag : SomeUnknownTag at line: 1\n')
+        sys.stdout = saved_out
+        assert error
+        assert document is not None
 
 
 if __name__ == '__main__':

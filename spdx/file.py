@@ -36,6 +36,8 @@ class File(object):
     Represent an SPDX file.
     Fields:
     - name: File name, str mandatory one.
+    - spdx_id: Uniquely identify any element in an SPDX document which may be
+    referenced by other elements. Mandatory, one. Type: str.
     - comment: File comment str, Optional zero or one.
     - type: one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
       and FileType.OTHER, optional zero or one.
@@ -54,8 +56,9 @@ class File(object):
     - artifact_of_project_uri: list of project uris, possibly empty.
     """
 
-    def __init__(self, name, chk_sum=None):
+    def __init__(self, name, spdx_id=None, chk_sum=None):
         self.name = name
+        self.spdx_id = spdx_id
         self.comment = None
         self.type = None
         self.chk_sum = chk_sum
@@ -93,91 +96,89 @@ class File(object):
         artifact = getattr(self, symbol)
         artifact.append(value)
 
-    def validate(self, messages=None):
+    def validate(self, messages):
         """Validates the fields and appends user friendly messages
         to messages parameter if there are errors.
         """
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
+        messages = self.validate_concluded_license(messages)
+        messages = self.validate_type(messages)
+        messages = self.validate_checksum(messages)
+        messages = self.validate_licenses_in_file(messages)
+        messages = self.validate_copyright(messages)
+        messages = self.validate_artifacts(messages)
+        messages = self.validate_spdx_id(messages)
 
-        return (self.validate_concluded_license(messages)
-            and self.validate_type(messages)
-            and self.validate_chksum(messages)
-            and self.validate_licenses_in_file(messages)
-            and self.validate_copyright(messages)
-            and self.validate_artifacts(messages))
+        return messages
 
-    def validate_copyright(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
+    def validate_spdx_id(self, messages):
+        if self.spdx_id is None:
+            messages = messages + ['File has no SPDX Identifier.']
 
-        if isinstance(
+        return messages
+
+    def validate_copyright(self, messages):
+        if not isinstance(
             self.copyright,
-            (six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone)):
-            return True
-        else:
-            messages.append('File copyright must be str or unicode or utils.NoAssert or utils.SPDXNone')
-            return False
+            (six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone)
+        ):
+            messages = messages + [
+                'File copyright must be str or unicode or '
+                'utils.NoAssert or utils.SPDXNone'
+            ]
 
-    def validate_artifacts(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
+        return messages
 
-        if (len(self.artifact_of_project_home) >=
-            max(len(self.artifact_of_project_uri), len(self.artifact_of_project_name))):
-            return True
-        else:
-            messages.append('File must have as much artifact of project as uri or homepage')
-            return False
+    def validate_artifacts(self, messages):
+        if (len(self.artifact_of_project_home) <
+            max(len(self.artifact_of_project_uri),
+                len(self.artifact_of_project_name))):
+            messages = messages + [
+                'File must have as much artifact of project as uri or homepage']
 
-    def validate_licenses_in_file(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
+        return messages
 
+    def validate_licenses_in_file(self, messages):
         # FIXME: what are we testing the length of a list? or?
         if len(self.licenses_in_file) == 0:
-            messages.append('File must have at least one license in file.')
-            return False
-        else:
-            return True
+            messages = messages + [
+                'File must have at least one license in file.'
+            ]
 
-    def validate_concluded_license(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
+        return messages
 
+    def validate_concluded_license(self, messages):
         # FIXME: use isinstance instead??
-        if (type(self.conc_lics) in [utils.NoAssert, utils.SPDXNone]
-        or isinstance(self.conc_lics, document.License)):
-            return True
-        else:
-            messages.append(
+        if not isinstance(self.conc_lics, (document.License, utils.NoAssert,
+                                           utils.SPDXNone)):
+            messages = messages + [
                 'File concluded license must be one of '
-                'document.License, utils.NoAssert or utils.SPDXNone')
-            return False
+                'document.License, utils.NoAssert or utils.SPDXNone'
+            ]
 
-    def validate_type(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
+        return messages
 
-        if self.type in [None, FileType.SOURCE, FileType.OTHER, FileType.BINARY, FileType.ARCHIVE]:
-            return True
+    def validate_type(self, messages):
+        if self.type not in [
+            None, FileType.SOURCE, FileType.OTHER, FileType.BINARY,
+            FileType.ARCHIVE
+        ]:
+            messages = messages + [
+                'File type must be one of the constants defined in '
+                'class spdx.file.FileType'
+            ]
+
+        return messages
+
+    def validate_checksum(self, messages):
+        if not isinstance(self.chk_sum, checksum.Algorithm):
+            messages = messages + [
+                'File checksum must be instance of spdx.checksum.Algorithm'
+            ]
         else:
-            messages.append('File type must be one of the constants defined in class spdx.file.FileType')
-            return False
+            if not self.chk_sum.identifier == 'SHA1':
+                messages = messages + ['File checksum algorithm must be SHA1']
 
-    def validate_chksum(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
-
-        if isinstance(self.chk_sum, checksum.Algorithm):
-            if self.chk_sum.identifier == 'SHA1':
-                return True
-            else:
-                messages.append('File checksum algorithm must be SHA1')
-                return False
-        else:
-            messages.append('File checksum must be instance of spdx.checksum.Algorithm')
-            return False
+        return messages
 
     def calc_chksum(self):
         BUFFER_SIZE = 65536
