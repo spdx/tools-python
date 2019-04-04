@@ -5,7 +5,6 @@ from __future__ import print_function
 
 from setuptools import setup
 import unittest
-from os import path
 
 
 def test_suite():
