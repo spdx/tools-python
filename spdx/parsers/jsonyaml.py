@@ -12,23 +12,30 @@ class BaseParser(object):
         self.logger = logger
     
     def order_error(self, first_tag, second_tag):
+        """
+        Helper method for logging an OrderError raised.
+        - first_tag: field to be added
+        - second_tag: required field
+        """
         self.error = True
         msg = '{0} Can not appear before {1}'.format(first_tag, second_tag)
         self.logger.log(msg)
     
     def more_than_one_error(self, field):
-        """Logs a more than one error.
-        field is the field/property that has more than one defined.
+        """
+        Helper method for logging an CardinalityError raised.
+        - field: field/property that has been already defined.
         """
         msg = 'More than one {0} defined.'.format(field)
         self.logger.log(msg)
         self.error = True
 
     def value_error(self, key, bad_value):
-        """Reports a value error using ERROR_MESSAGES dict.
-        key - key to use for ERROR_MESSAGES.
-        bad_value - is passed to format which is called on what key maps to
-        in ERROR_MESSAGES.
+        """
+        Helper method for logging an SPDXValueError raised.
+        It reports a value error using ERROR_MESSAGES dict.
+        - key: key to use for ERROR_MESSAGES. If not present, a default message is logged
+        - bad_value: malformed value
         """
         msg = ERROR_MESSAGES.get(key)
         if msg:
@@ -43,6 +50,10 @@ class CreationInfoParser(BaseParser):
         super(CreationInfoParser, self).__init__(builder, logger)
 
     def parse_creation_info(self, creation_info):
+        """
+        Responsible for parsing Creation Information fields
+        - creation_info: Python dict with Creation Information fields in it
+        """
         if isinstance(creation_info, dict):
             self.parse_creation_info_comment(creation_info.get('comment'))
             self.parse_creation_info_lic_list_version(creation_info.get('licenseListVersion'))
@@ -52,6 +63,10 @@ class CreationInfoParser(BaseParser):
             self.value_error('CREATION_INFO_SECTION', creation_info)
 
     def parse_creation_info_comment(self, comment):
+        """
+        Responsiable for parsing CreationInfo comment
+        - comment: Python str/unicode
+        """
         if isinstance(comment, six.string_types):
             try:
                 return self.builder.set_creation_comment(self.document, comment)
@@ -61,6 +76,10 @@ class CreationInfoParser(BaseParser):
             self.value_error('CREATION_COMMENT', comment)
     
     def parse_creation_info_lic_list_version(self, license_list_version):
+        """
+        Responsiable for parsing CreationInfo license list version
+        - license_list_version: Python str/unicode
+        """
         if isinstance(license_list_version, six.string_types):
             try:
                 return self.builder.set_lics_list_ver(self.document, license_list_version)
@@ -72,6 +91,10 @@ class CreationInfoParser(BaseParser):
             self.value_error('LL_VALUE', license_list_version)
     
     def parse_creation_info_created(self, created):
+        """
+        Responsiable for parsing CreationInfo creation date
+        - created: Python str/unicode (ISO-8601 representation of datetime)
+        """
         if isinstance(created, six.string_types):
             try:
                 return self.builder.set_created_date(self.document, created)
@@ -83,6 +106,10 @@ class CreationInfoParser(BaseParser):
             self.value_error('CREATED_VALUE', created)
 
     def parse_creation_info_creators(self, creators):
+        """
+        Responsiable for parsing CreationInfo creators
+        - creators: Python list of str/unicode
+        """
         if isinstance(creators, list):
             for creator in creators:
                 if isinstance(creator, six.string_types):
@@ -101,6 +128,10 @@ class  ExternalDocumentRefsParser(BaseParser):
         super(ExternalDocumentRefsParser, self).__init__(builder, logger)
 
     def parse_external_document_refs(self, external_document_refs):
+        """
+        Responsible for parsing External Document References fields
+        - external_document_refs: Python list with External Document References dicts in it
+        """
         if isinstance(external_document_refs, list):
             for external_document_ref in external_document_refs:
                 if isinstance(external_document_ref, dict):
@@ -113,6 +144,10 @@ class  ExternalDocumentRefsParser(BaseParser):
             self.value_error('EXT_DOC_REFS_SECTION', external_document_refs)
     
     def parse_ext_doc_ref_id(self, ext_doc_ref_id):
+        """
+        Responsible for parsing ExternalDocumentReference id
+        ext_doc_ref_id: Python str/unicode
+        """
         if isinstance(ext_doc_ref_id, six.string_types):
             return self.builder.set_ext_doc_id(self.document, ext_doc_ref_id)
         self.value_error('EXT_DOC_REF_ID', ext_doc_ref_id)
@@ -122,6 +157,10 @@ class  ExternalDocumentRefsParser(BaseParser):
         # Another approach is to skip the whole ex_doc_ref itself
     
     def parse_ext_doc_ref_namespace(self, namespace):
+        """
+        Responsible for parsing ExternalDocumentReference namespace
+        namespace: Python str/unicode
+        """
         if isinstance(namespace, six.string_types):
             try:
                 return self.builder.set_spdx_doc_uri(self.document, namespace)
@@ -131,6 +170,10 @@ class  ExternalDocumentRefsParser(BaseParser):
             self.value_error('EXT_DOC_REF_VALUE', namespace)
     
     def parse_ext_doc_ref_chksum(self, chksum):
+        """
+        Responsible for parsing ExternalDocumentReference checksum
+        chksum: Python dict('algorithm':str/unicode, 'value':str/unicode)
+        """
         if isinstance(chksum, dict):
             value = chksum.get('value')
             if isinstance(value, six.string_types):
@@ -149,6 +192,10 @@ class LicenseParser(BaseParser):
         super(LicenseParser, self).__init__(builder, logger)
 
     def parse_extracted_license_info(self, extracted_license_info):
+        """
+        Responsible for parsing Extracted Lisence Information fields
+        - extracted_license_info: Python list with Extracted Lisence Information dicts in it
+        """
         if isinstance(extracted_license_info, list):
             for extracted_license in extracted_license_info:
                 if isinstance(extracted_license, dict):
@@ -161,6 +208,10 @@ class LicenseParser(BaseParser):
                     self.value_error('EXTR_LIC', extracted_license)
     
     def parse_ext_lic_id(self, ext_lic_id):
+        """
+        Responsible for parsing ExtractedLicenseInformation id
+        ext_lic_id: Python str/unicode
+        """
         if isinstance(ext_lic_id, six.string_types):
             try:
                 return self.builder.set_lic_id(self.document, ext_lic_id)
@@ -170,6 +221,10 @@ class LicenseParser(BaseParser):
             self.value_error('EXTR_LIC_ID', ext_lic_id)
     
     def parse_ext_lic_name(self, ext_lic_name):
+        """
+        Responsible for parsing ExtractedLicenseInformation name
+        ext_lic_name: Python str/unicode
+        """
         try:
             return self.builder.set_lic_name(self.document, ext_lic_name)
         except SPDXValueError:
@@ -180,6 +235,10 @@ class LicenseParser(BaseParser):
             self.order_error('ExtractedLicense name', 'ExtractedLicense id')
 
     def parse_ext_lic_comment(self, ext_lic_comment):
+        """
+        Responsible for parsing ExtractedLicenseInformation comment
+        ext_lic_comment: Python str/unicode
+        """
         if isinstance(ext_lic_comment, six.string_types):
             try:
                 return self.builder.set_lic_comment(self.document, ext_lic_comment)
@@ -191,6 +250,10 @@ class LicenseParser(BaseParser):
             self.value_error('EXTR_LIC_COMMENT', ext_lic_comment)
     
     def parse_ext_lic_text(self, ext_lic_text):
+        """
+        Responsible for parsing ExtractedLicenseInformation text
+        ext_lic_text: Python str/unicode
+        """
         if isinstance(ext_lic_text, six.string_types):
             try:
                 return self.builder.set_lic_text(self.document, ext_lic_text)
@@ -202,6 +265,10 @@ class LicenseParser(BaseParser):
             self.value_error('EXTR_LIC_TXT', ext_lic_text)
 
     def parse_ext_lic_cross_refs(self, cross_refs):
+        """
+        Responsible for parsing ExtractedLicenseInformation cross references
+        cross_refs: Python list of str/unicode
+        """
         if isinstance(cross_refs, list):
             for cross_ref in cross_refs:
                 if isinstance(cross_ref, six.string_types):
@@ -217,6 +284,10 @@ class AnnotationParser(BaseParser):
         super(AnnotationParser, self).__init__(builder, logger)
 
     def parse_annotations(self, annotations):
+        """
+        Responsible for parsing Annotation Information fields
+        - annotations: Python list with Annotation Information dicts in it
+        """
         if isinstance(annotations, list):
             for annotation in annotations:
                 if isinstance(annotation, dict):
@@ -229,6 +300,10 @@ class AnnotationParser(BaseParser):
                     self.value_error('ANNOTATION', annotation)
     
     def parse_annotation_annotator(self, annotator):
+        """
+        Responsible for parsing Annotation annotator
+        - annotator: Python str/unicode
+        """
         if isinstance(annotator, six.string_types):
             entity = self.builder.create_entity(self.document, annotator)
             try:
@@ -240,6 +315,10 @@ class AnnotationParser(BaseParser):
 
     
     def parse_annotation_date(self, date):
+        """
+        Responsible for parsing Annotation date
+        - date: Python str/unicode (ISO-8601 representation of datetime)
+        """
         if isinstance(date, six.string_types):
             try:
                 return self.builder.add_annotation_date(self.document, date)
@@ -253,6 +332,10 @@ class AnnotationParser(BaseParser):
             self.value_error('ANNOTATION_DATE', date)
     
     def parse_annotation_comment(self, comment):
+        """
+        Responsible for parsing Annotation comment
+        - comment: Python str/unicode
+        """
         if isinstance(comment, six.string_types):
             try:
                 return self.builder.add_annotation_comment(self.document, comment)
@@ -264,6 +347,10 @@ class AnnotationParser(BaseParser):
             self.value_error('ANNOTATION_COMMENT', comment)
     
     def parse_annotation_type(self, annotation_type):
+        """
+        Responsible for parsing Annotation type
+        - annotation_type: Python str/unicode (REVIEW or OTHER)
+        """
         if isinstance(annotation_type, six.string_types):
             try:
                 return self.builder.add_annotation_type(self.document, annotation_type)
@@ -277,6 +364,10 @@ class AnnotationParser(BaseParser):
             self.value_error('ANNOTATION_TYPE', annotation_type)
     
     def parse_annotation_id(self, annotation_id):
+        """
+        Responsible for parsing Annotation id
+        - annotation_id: Python str/unicode
+        """
         if isinstance(annotation_id, six.string_types):
             try:
                 return self.builder.set_annotation_spdx_id(self.document, annotation_id)
@@ -287,18 +378,15 @@ class AnnotationParser(BaseParser):
         else:
             self.value_error('ANNOTATION_ID', annotation_id)
 
-class RelationshipParser(BaseParser):
-    def __init__(self, builder, logger):
-        super(RelationshipParser, self).__init__(builder, logger)
-    
-    def parse_relationships(self, relationships):
-        raise NotImplementedError("Relationship model needs to be implemented")
-
 class ReviewParser(BaseParser):
     def __init__(self, builder, logger):
         super(ReviewParser, self).__init__(builder, logger)
     
     def parse_reviews(self, reviews):
+        """
+        Responsible for parsing Review Information fields
+        - reviews: Python list with Review Information dicts in it
+        """
         if isinstance(reviews, list):
             for review in reviews:
                 if isinstance(review, dict):
@@ -309,6 +397,10 @@ class ReviewParser(BaseParser):
                     self.value_error('REVIEW', review)
 
     def parse_review_reviewer(self, reviewer):
+        """
+        Responsible for parsing Review reviewer
+        - reviewer: Python str/unicode
+        """
         if isinstance(reviewer, six.string_types):
             entity = self.builder.create_entity(self.document, reviewer)
             try:
@@ -319,6 +411,10 @@ class ReviewParser(BaseParser):
             self.value_error('REVIEWER_VALUE', reviewer)
     
     def parse_review_date(self, review_date):
+        """
+        Responsible for parsing Review date
+        - review_date: Python str/unicode (ISO-8601 representation of datetime)
+        """
         if isinstance(review_date, six.string_types):
             try:
                 return self.builder.add_review_date(self.document, review_date)
@@ -332,6 +428,10 @@ class ReviewParser(BaseParser):
             self.value_error('REVIEW_DATE', review_date)
     
     def parse_review_comment(self, review_comment):
+        """
+        Responsible for parsing Review comment
+        - review_comment: Python str/unicode
+        """
         if isinstance(review_comment, six.string_types):
             try:
                 return self.builder.add_review_comment(self.document, review_comment)
@@ -347,6 +447,10 @@ class FileParser(BaseParser):
         super(FileParser, self).__init__(builder, logger)
     
     def parse_file(self, file):
+        """
+        Responsible for parsing File Information fields
+        - file: Python dict with File Information fields in it
+        """
         if isinstance(file, dict):
             self.parse_file_name(file.get('name'))
             self.parse_file_id(file.get('id'))
@@ -361,12 +465,15 @@ class FileParser(BaseParser):
             self.parse_file_contributors(file.get('fileContributors'))
             self.parse_file_dependencies(file.get('fileDependencies'))
             self.parse_annotations(file.get('annotations'))
-            # TODO: call here parse_relationships when it is implemented
             self.parse_file_chksum(file.get('sha1'))
         else:
             self.value_error('FILE', file)
     
     def parse_file_name(self, file_name):
+        """
+        Responsible for parsing File name
+        - file_name: Python str/unicode
+        """
         if isinstance(file_name, six.string_types):
             return self.builder.set_file_name(self.document, file_name)
         self.value_error('FILE_NAME', file_name)
@@ -376,6 +483,10 @@ class FileParser(BaseParser):
         # Another approach is to skip the whole file itself
     
     def parse_file_id(self, file_id):
+        """
+        Responsible for parsing File id
+        - file_id: Python str/unicode
+        """
         if isinstance(file_id, six.string_types):
             try:
                 return self.builder.set_file_spdx_id(self.document, file_id)
@@ -389,6 +500,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_ID', file_id)
     
     def parse_file_types(self, file_types):
+        """
+        Responsible for parsing File types
+        - file_types: Python list of str/unicode (fileType_archive, fileType_binary, fileType_source or fileType_other)
+        """
         if isinstance(file_types, list): # file_types is an array in JSON examples...
             for file_type in file_types:
                 self.parse_file_type(file_type)
@@ -399,6 +514,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_TYPES', file_types)
     
     def parse_file_type(self, file_type):
+        """
+        Responsible for parsing File type
+        - file_type: Python str/unicode (fileType_archive, fileType_binary, fileType_source or fileType_other)
+        """
         if isinstance(file_type, six.string_types):
             try:
                 return self.builder.set_file_type(self.document, file_type)
@@ -412,6 +531,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_TYPE', file_type)
 
     def parse_file_concluded_license(self, concluded_license):
+        """
+        Responsible for parsing File concluded license
+        - concluded_license: Python str/unicode
+        """
         if isinstance(concluded_license, six.string_types):
             license_object = License.from_identifier(concluded_license)
             try:
@@ -426,6 +549,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_SINGLE_LICS', concluded_license)
     
     def parse_file_license_info_from_files(self, license_info_from_files):
+        """
+        Responsible for parsing File license information from files
+        - license_info_from_files: Python list of str/unicode
+        """
         if isinstance(license_info_from_files, list):
             for license_info_from_file in license_info_from_files:
                 if isinstance(license_info_from_file, six.string_types):
@@ -442,6 +569,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_LIC_FRM_FILES_FIELD', license_info_from_files)
     
     def parse_file_license_comments(self, license_comments):
+        """
+        Responsible for parsing File license comments
+        - license_comments: Python str/unicode
+        """
         if isinstance(license_comments, six.string_types):
             try:
                 return self.builder.set_file_license_comment(self.document, license_comments)
@@ -453,6 +584,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_LIC_COMMENTS', license_comments)
 
     def parse_file_copyright_text(self, copyright_text):
+        """
+        Responsible for parsing File copyright text
+        - copyright_text: Python str/unicode
+        """
         if isinstance(copyright_text, six.string_types):
             try:
                 return self.builder.set_file_copyright(self.document, copyright_text)
@@ -464,6 +599,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_COPYRIGHT_TEXT', copyright_text)
     
     def parse_file_artifacts(self, file_artifacts):
+        """
+        Responsible for parsing File artifacts
+        - file_artifacts: Python list of dict('name':str/unicode, 'homePage':str/unicode, 'projectUri':str/unicode)
+        """
         if isinstance(file_artifacts, list):
             for artifact in file_artifacts:
                 if isinstance(artifact, dict):
@@ -477,6 +616,10 @@ class FileParser(BaseParser):
             self.value_error('ARTIFACT_OF_FIELD', file_artifacts)
 
     def parse_file_comment(self, file_comment):
+        """
+        Responsible for parsing File comment
+        - file_comment: Python str/unicode
+        """
         if isinstance(file_comment, six.string_types):
             try:
                 return self.builder.set_file_comment(self.document, file_comment)
@@ -488,6 +631,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_COMMENT', file_comment)
     
     def parse_file_notice_text(self, notice_text):
+        """
+        Responsible for parsing File notice text
+        - notice_text: Python str/unicode
+        """
         if isinstance(notice_text, six.string_types):
             try:
                 return self.builder.set_file_notice(self.document, notice_text)
@@ -499,6 +646,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_NOTICE_TEXT', notice_text)
 
     def parse_file_contributors(self, file_contributors):
+        """
+        Responsible for parsing File contributors
+        - file_contributors: Python list of str/unicode
+        """
         if isinstance(file_contributors, list):
             for contributor in file_contributors:
                 if isinstance(contributor, six.string_types):
@@ -512,6 +663,10 @@ class FileParser(BaseParser):
             self.value_error('FILE_CONTRIBUTORS', file_contributors)
     
     def parse_file_dependencies(self, file_dependencies):
+        """
+        Responsible for parsing File dependencies
+        - file_dependencies: Python list of str/unicode
+        """
         if isinstance(file_dependencies, list):
             for dependency in file_dependencies:
                 dependency = self._handle_file_dependency(dependency)
@@ -526,6 +681,11 @@ class FileParser(BaseParser):
             self.value_error('FILE_DEPENDENCIES', file_dependencies)
     
     def _handle_file_dependency(self, file_dependency):
+        """
+        Helper method that handles file-like dependency
+        - file_dependency: Python dict as in FileParser.parse_file
+        return: file name (str/unicode) or None
+        """
         if isinstance(file_dependency, dict):
             filelike_dependency = file_dependency.get('File')
             if isinstance(filelike_dependency, dict):
@@ -534,6 +694,10 @@ class FileParser(BaseParser):
         return None
     
     def parse_file_chksum(self, file_chksum):
+        """
+        Responsible for parsing File checksum
+        - file_chksum: Python str/unicode
+        """
         if isinstance(file_chksum, six.string_types):
             try:
                 return self.builder.set_file_chksum(self.document, file_chksum)
@@ -549,6 +713,10 @@ class PackageParser(BaseParser):
         super(PackageParser, self).__init__(builder, logger)
     
     def parse_package(self, package):
+        """
+        Responsible for parsing Package Information fields
+        - package: Python dict with Package Information fields in it
+        """
         if isinstance(package, dict):
             self.parse_pkg_name(package.get('name'))
             self.parse_pkg_version(package.get('versionInfo'))
@@ -567,13 +735,16 @@ class PackageParser(BaseParser):
             self.parse_pkg_summary(package.get('summary'))
             self.parse_pkg_description(package.get('description'))
             self.parse_annotations(package.get('annotations'))
-            # TODO: call here parse_relationships when it is implemented
             self.parse_pkg_files(package.get('files'))
             self.parse_pkg_chksum(package.get('sha1'))
         else:
             self.value_error('PACKAGE', package)
 
     def parse_pkg_name(self, pkg_name):
+        """
+        Responsible for parsing Package name
+        - pkg_name: Python str/unicode
+        """
         if isinstance(pkg_name, six.string_types):
             return self.builder.create_package(self.document, pkg_name)
         self.value_error('PKG_NAME', pkg_name)
@@ -583,6 +754,10 @@ class PackageParser(BaseParser):
         # Another approach is to skip the whole package itself
     
     def parse_pkg_version(self, pkg_version):
+        """
+        Responsible for parsing Package version
+        - pkg_name: Python str/unicode
+        """
         if isinstance(pkg_version, six.string_types):
             try:
                 return self.builder.set_pkg_vers(self.document, pkg_version)
@@ -594,6 +769,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_VERSION', pkg_version)
 
     def parse_pkg_file_name(self, pkg_file_name):
+        """
+        Responsible for parsing Package file name
+        - pkg_file_name: Python str/unicode
+        """
         if isinstance(pkg_file_name, six.string_types):
             try:
                 return self.builder.set_pkg_file_name(self.document, pkg_file_name)
@@ -605,6 +784,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_FILE_NAME', pkg_file_name)
     
     def parse_pkg_supplier(self, pkg_supplier):
+        """
+        Responsible for parsing Package supplier
+        - pkg_supplier: Python str/unicode
+        """
         if isinstance(pkg_supplier, six.string_types):
             entity = self.builder.create_entity(self.document, pkg_supplier)
             try:
@@ -619,6 +802,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_SUPPL_VALUE', pkg_supplier)
     
     def parse_pkg_originator(self, pkg_originator):
+        """
+        Responsible for parsing Package originator
+        - pkg_originator: Python str/unicode
+        """
         if isinstance(pkg_originator, six.string_types):
             entity = self.builder.create_entity(self.document, pkg_originator)
             try:
@@ -633,6 +820,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_ORIGINATOR_VALUE', pkg_originator)
 
     def parse_pkg_down_location(self, pkg_down_location):
+        """
+        Responsible for parsing Package download location
+        - pkg_down_location: Python str/unicode
+        """
         if isinstance(pkg_down_location, six.string_types):
             try:
                 return self.builder.set_pkg_down_location(self.document, pkg_down_location)
@@ -644,6 +835,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_DOWN_LOC', pkg_down_location)
     
     def parse_pkg_verif_code_field(self, pkg_verif_code_field):
+        """
+        Responsible for parsing Package verification code dict
+        - pkg_verif_code_field: Python dict('value':str/unicode, 'excludedFilesNames':list)
+        """
         if isinstance(pkg_verif_code_field, dict):
             self.parse_pkg_verif_exc_files(pkg_verif_code_field.get('excludedFileNames'))
             return self.parse_pkg_verif_code(pkg_verif_code_field.get('value'))
@@ -651,6 +846,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_VERIF_CODE_FIELD', pkg_verif_code_field)
     
     def parse_pkg_verif_code(self, pkg_verif_code):
+        """
+        Responsible for parsing Package verification code value
+        - pkg_verif_code: Python str/unicode
+        """
         if isinstance(pkg_verif_code, six.string_types):
             try:
                 return self.builder.set_pkg_verif_code(self.document, pkg_verif_code)
@@ -662,6 +861,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_VERIF_CODE', pkg_verif_code)
 
     def parse_pkg_verif_exc_files(self, pkg_verif_exc_files):
+        """
+        Responsible for parsing Package files excluded from verification code
+        - pkg_verif_exc_files: Python list of str/unicode
+        """
         if isinstance(pkg_verif_exc_files, list):
             for pkg_verif_exc_file in pkg_verif_exc_files:
                 if isinstance(pkg_verif_exc_file, six.string_types):
@@ -675,6 +878,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_VERIF_EXC_FILE_FIELD', pkg_verif_exc_files)
 
     def parse_pkg_homepage(self, pkg_homepage):
+        """
+        Responsible for parsing Package homepage
+        - pkg_homepage: Python str/unicode
+        """
         if isinstance(pkg_homepage, six.string_types):
             try:
                 return self.builder.set_pkg_home(self.document, pkg_homepage)
@@ -688,6 +895,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_HOMEPAGE', pkg_homepage)
     
     def parse_pkg_source_info(self, pkg_source_info):
+        """
+        Responsible for parsing Package source information
+        - pkg_source_info: Python str/unicode
+        """
         if isinstance(pkg_source_info, six.string_types):
             try:
                 return self.builder.set_pkg_source_info(self.document, pkg_source_info)
@@ -699,6 +910,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_SRC_INFO', pkg_source_info)
 
     def parse_pkg_concluded_license(self, pkg_concluded_license):
+        """
+        Responsible for parsing Package concluded license
+        - pkg_concluded_license: Python str/unicode
+        """
         if isinstance(pkg_concluded_license, six.string_types):
             license_object = License.from_identifier(pkg_concluded_license)
             try:
@@ -713,6 +928,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_SINGLE_LICS', pkg_concluded_license)
     
     def parse_pkg_license_info_from_files(self, license_info_from_files):
+        """
+        Responsible for parsing Package license information from files
+        - license_info_from_files: Python list of str/unicode
+        """
         if isinstance(license_info_from_files, list):
             for license_info_from_file in license_info_from_files:
                 if isinstance(license_info_from_file, six.string_types):
@@ -729,6 +948,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_LIC_FRM_FILES_FIELD', license_info_from_files)
     
     def parse_pkg_declared_license(self, pkg_declared_license):
+        """
+        Responsible for parsing Package license declared
+        - pkg_declared_license: Python str/unicode
+        """
         if isinstance(pkg_declared_license, six.string_types):
             license_object = License.from_identifier(pkg_declared_license)
             try:
@@ -743,10 +966,26 @@ class PackageParser(BaseParser):
             self.value_error('PKG_DECL_LIC', pkg_declared_license)
 
     def parse_pkg_license_comment(self, pkg_license_comment):
+        """
+        Responsible for parsing Package license comment
+        - pkg_license_comment: Python str/unicode
+        """
         if isinstance(pkg_license_comment, six.string_types):
-            return self.builder.set_pkg_license_comment(self.document, pkg_license_comment)
+            try:
+                return self.builder.set_pkg_license_comment(self.document, pkg_license_comment)
+            except CardinalityError:
+                self.more_than_one_error('PKG_LIC_COMMENT')
+            except OrderError:
+                self.order_error('PKG_LIC_COMMENT', 'PKG_NAME')
+        elif pkg_license_comment is not None:
+            self.value_error('PKG_LIC_COMMENT', pkg_license_comment)
+
     
     def parse_pkg_copyright_text(self, pkg_copyright_text):
+        """
+        Responsible for parsing Package copyright text
+        - pkg_copyright_text: Python str/unicode
+        """
         if isinstance(pkg_copyright_text, six.string_types):
             try:
                 return self.builder.set_pkg_cr_text(self.document, pkg_copyright_text)
@@ -758,6 +997,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_COPYRIGHT_TEXT', pkg_copyright_text)
     
     def parse_pkg_summary(self, pkg_summary):
+        """
+        Responsible for parsing Package summary
+        - pkg_summary: Python str/unicode
+        """
         if isinstance(pkg_summary, six.string_types):
             try:
                 return self.builder.set_pkg_summary(self.document, pkg_summary)
@@ -769,6 +1012,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_SUMMARY', pkg_summary)
     
     def parse_pkg_description(self, pkg_description):
+        """
+        Responsible for parsing Package description
+        - pkg_description: Python str/unicode
+        """
         if isinstance(pkg_description, six.string_types):
             try:
                 return self.builder.set_pkg_desc(self.document, pkg_description)
@@ -780,6 +1027,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_DESCRIPTION', pkg_description)
     
     def parse_pkg_files(self, pkg_files):
+        """
+        Responsible for parsing Package files
+        - pkg_files: Python list of dicts as in FileParser.parse_file
+        """
         if isinstance(pkg_files, list):
             for pkg_file in pkg_files:
                 if isinstance(pkg_file, dict):
@@ -790,6 +1041,10 @@ class PackageParser(BaseParser):
             self.value_error('PKG_FILES', pkg_files)
     
     def parse_pkg_chksum(self, pkg_chksum):
+        """
+        Responsible for parsing Package checksum
+        - pkg_chksum: Python str/unicode
+        """
         if isinstance(pkg_chksum, six.string_types):
             try:
                 return self.builder.set_pkg_chk_sum(self.document, pkg_chksum)
@@ -800,11 +1055,14 @@ class PackageParser(BaseParser):
         elif pkg_chksum is not None:
             self.value_error('PKG_CHECKSUM', pkg_chksum)
 
-class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, AnnotationParser, RelationshipParser, ReviewParser, FileParser, PackageParser):
+class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, AnnotationParser, ReviewParser, FileParser, PackageParser):
     def __init__(self, builder, logger):
         super(Parser, self).__init__(builder, logger)
 
     def parse(self):
+        """
+        Responsible for parsing Document Information fields
+        """
         self.error = False
         self.document = document.Document()
         if not isinstance(self.document_object, dict):
@@ -822,7 +1080,6 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, Anno
         self.parse_external_document_refs(self.document_object.get('externalDocumentRefs'))
         self.parse_extracted_license_info(self.document_object.get('extractedLicenseInfos'))
         self.parse_annotations(self.document_object.get('annotations'))
-        # TODO: call here parse_relationships when it is implemented
         self.parse_reviews(self.document_object.get('reviewers'))
 
         self.parse_doc_described_objects(self.document_object.get('documentDescribes'))
@@ -840,6 +1097,10 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, Anno
         return self.document, self.error
     
     def parse_doc_version(self, doc_version):
+        """
+        Responsible for parsing Document version
+        - doc_version: Python str/unicode
+        """
         if isinstance(doc_version, six.string_types):
             try:
                 return self.builder.set_doc_version(self.document, doc_version)
@@ -851,6 +1112,10 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, Anno
             self.value_error('DOC_VERS_VALUE', doc_version)
 
     def parse_doc_data_license(self, doc_data_license):
+        """
+        Responsible for parsing Document data license
+        - doc_data_license: Python str/unicode
+        """
         try:
             return self.builder.set_doc_data_lics(self.document, doc_data_license)
         except SPDXValueError:
@@ -859,6 +1124,10 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, Anno
             self.more_than_one_error('DOC_D_LICS')
     
     def parse_doc_id(self, doc_id):
+        """
+        Responsible for parsing Document SPDX id
+        - doc_id: Python str/unicode
+        """
         if isinstance(doc_id, six.string_types):
             try:
                 return self.builder.set_doc_spdx_id(self.document, doc_id)
@@ -870,6 +1139,10 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, Anno
             self.value_error('DOC_SPDX_ID_VALUE', doc_id)
 
     def parse_doc_name(self, doc_name):
+        """
+        Responsible for parsing Document name
+        - doc_name: Python str/unicode
+        """
         if isinstance(doc_name, six.string_types):
             try:
                 return self.builder.set_doc_name(self.document, doc_name)
@@ -894,6 +1167,10 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, Anno
             self.value_error('DOC_NAMESPACE_VALUE', doc_namespace)
     
     def parse_doc_comment(self, doc_comment):
+        """
+        Responsible for parsing Document comment
+        - doc_comment: Python str/unicode
+        """
         if isinstance(doc_comment, six.string_types):
             try:
                 return self.builder.set_doc_comment(self.document, doc_comment)
@@ -903,6 +1180,10 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, Anno
             self.value_error('DOC_COMMENT_VALUE', doc_comment)
 
     def parse_doc_described_objects(self, doc_described_objects):
+        """
+        Responsible for parsing Document documentDescribes (Files and Packages dicts)
+        - doc_described_objects: Python list of dicts as in FileParser.parse_file or PackageParser.parse_package
+        """
         if isinstance(doc_described_objects, list):
             packages = filter(lambda described: isinstance(described, dict) and described.get('Package') is not None, doc_described_objects)
             files = filter(lambda described: isinstance(described, dict) and described.get('File') is not None, doc_described_objects)

@@ -19,10 +19,6 @@ class ReviewBuilder(rdfbuilders.ReviewBuilder):
     def __init__(self):
         super(ReviewBuilder, self).__init__()
 
-class RelationshipBuilder(object):
-    def __init__(self):
-        raise NotImplementedError("Relationship model needs to be implemented")
-
 class PackageBuilder(rdfbuilders.PackageBuilder):
     def __init__(self):
         super(PackageBuilder, self).__init__()
@@ -32,8 +28,9 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
         super(DocBuilder, self).__init__()
     
     def set_doc_spdx_id(self, doc, doc_spdx_id_line):
-        """Sets the document SPDX Identifier.
-        Raises value error if malformed value, CardinalityError
+        """
+        Sets the document SPDX Identifier.
+        Raises SPDXValueError if malformed value, CardinalityError
         if already defined.
         """
         if not self.doc_spdx_id_set:
@@ -47,7 +44,8 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
             raise CardinalityError('Document::SPDXID')
     
     def set_doc_comment(self, doc, comment):
-        """Sets document comment, Raises CardinalityError if
+        """
+        Sets document comment, Raises CardinalityError if
         comment already set.
         """
         if not self.doc_comment_set:
@@ -61,8 +59,10 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
         super(LicenseBuilder, self).__init__()
     
     def set_lic_name(self, doc, name):
-        """Sets license name.
+        """
+        Sets license name.
         Raises SPDXValueError if name is not str or utils.NoAssert
+        Raises CardinalityError if it is already set
         Raises OrderError if no license id defined.
         """
         if self.has_extr_lic(doc):
@@ -81,7 +81,6 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
     def set_lic_text(self, doc, text):
         """
         Sets license name.
-        Raises SPDXValueError if text is empty
         Raises CardinalityError if it is already set.
         Raises OrderError if no license id defined.
         """
@@ -98,7 +97,6 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
     def set_lic_comment(self, doc, comment):
         """
         Sets license comment.
-        Raises SPDXValueError if comment is empty.
         Raises CardinalityError if it is already set.
         Raises OrderError if no license ID defined.
         """
@@ -117,7 +115,8 @@ class FileBuilder(rdfbuilders.FileBuilder):
         super(FileBuilder, self).__init__()
     
     def set_file_notice(self, doc, text):
-        """Raises OrderError if no package or file defined.
+        """
+        Raises OrderError if no package or file defined.
         Raises CardinalityError if more than one.
         """
         if self.has_package(doc) and self.has_file(doc):
@@ -131,6 +130,10 @@ class FileBuilder(rdfbuilders.FileBuilder):
             raise OrderError('File::Notice')
     
     def set_file_type(self, doc, type_value):
+        """
+        Wraps rdfbuilders.FileBuilder.set_file_type to match the different 
+        fileType representations.
+        """
         
         type_dict = {
             'fileType_source': 'SOURCE',
@@ -146,7 +149,8 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
         super(AnnotationBuilder, self).__init__()
     
     def add_annotation_comment(self, doc, comment):
-        """Sets the annotation comment. Raises CardinalityError if
+        """
+        Sets the annotation comment. Raises CardinalityError if
         already set. OrderError if no annotator defined before.
         """
         if len(doc.annotations) != 0:
@@ -168,7 +172,8 @@ class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, Enti
         self.reset()
 
     def reset(self):
-        """Resets builder's state for building new documents.
+        """
+        Resets builder's state for building new documents.
         Must be called between usage with different documents.
         """
         # FIXME: this state does not make sense

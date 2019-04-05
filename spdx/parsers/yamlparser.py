@@ -1,5 +1,4 @@
 import ruamel.yaml as yaml
-from spdx import document
 from spdx.parsers import jsonyaml
 
 class Parser(jsonyaml.Parser):
