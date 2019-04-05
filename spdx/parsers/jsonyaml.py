@@ -108,7 +108,7 @@ class CreationInfoParser(BaseParser):
     def parse_creation_info_creators(self, creators):
         """
         Responsiable for parsing CreationInfo creators
-        - creators: Python list of str/unicode
+        - creators: Python list of creators (str/unicode)
         """
         if isinstance(creators, list):
             for creator in creators:
@@ -267,7 +267,7 @@ class LicenseParser(BaseParser):
     def parse_ext_lic_cross_refs(self, cross_refs):
         """
         Responsible for parsing ExtractedLicenseInformation cross references
-        cross_refs: Python list of str/unicode
+        cross_refs: Python list of cross references (str/unicode)
         """
         if isinstance(cross_refs, list):
             for cross_ref in cross_refs:
@@ -502,7 +502,7 @@ class FileParser(BaseParser):
     def parse_file_types(self, file_types):
         """
         Responsible for parsing File types
-        - file_types: Python list of str/unicode (fileType_archive, fileType_binary, fileType_source or fileType_other)
+        - file_types: Python list of file types (str/unicode: fileType_archive, fileType_binary, fileType_source or fileType_other)
         """
         if isinstance(file_types, list): # file_types is an array in JSON examples...
             for file_type in file_types:
@@ -551,7 +551,7 @@ class FileParser(BaseParser):
     def parse_file_license_info_from_files(self, license_info_from_files):
         """
         Responsible for parsing File license information from files
-        - license_info_from_files: Python list of str/unicode
+        - license_info_from_files: Python list of licenses information from files (str/unicode)
         """
         if isinstance(license_info_from_files, list):
             for license_info_from_file in license_info_from_files:
@@ -648,7 +648,7 @@ class FileParser(BaseParser):
     def parse_file_contributors(self, file_contributors):
         """
         Responsible for parsing File contributors
-        - file_contributors: Python list of str/unicode
+        - file_contributors: Python list of contributors (str/unicode)
         """
         if isinstance(file_contributors, list):
             for contributor in file_contributors:
@@ -665,7 +665,7 @@ class FileParser(BaseParser):
     def parse_file_dependencies(self, file_dependencies):
         """
         Responsible for parsing File dependencies
-        - file_dependencies: Python list of str/unicode
+        - file_dependencies: Python list of dependencies (str/unicode or file dict as in FileParser.parse_file)
         """
         if isinstance(file_dependencies, list):
             for dependency in file_dependencies:
@@ -863,7 +863,7 @@ class PackageParser(BaseParser):
     def parse_pkg_verif_exc_files(self, pkg_verif_exc_files):
         """
         Responsible for parsing Package files excluded from verification code
-        - pkg_verif_exc_files: Python list of str/unicode
+        - pkg_verif_exc_files: Python list of files excluded (str/unicode)
         """
         if isinstance(pkg_verif_exc_files, list):
             for pkg_verif_exc_file in pkg_verif_exc_files:
@@ -930,7 +930,7 @@ class PackageParser(BaseParser):
     def parse_pkg_license_info_from_files(self, license_info_from_files):
         """
         Responsible for parsing Package license information from files
-        - license_info_from_files: Python list of str/unicode
+        - license_info_from_files: Python list of licenses information from files (str/unicode)
         """
         if isinstance(license_info_from_files, list):
             for license_info_from_file in license_info_from_files:

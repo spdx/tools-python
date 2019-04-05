@@ -121,7 +121,6 @@ If there is no issue for the changes that you want to make, create first an issu
 * PLY : https://pypi.python.org/pypi/ply/ used for parsing.
 * rdflib : https://pypi.python.org/pypi/rdflib/ for for handling RDF. 
 
-
 # Support
 
 * Submit issues, questions or feedback at: https://github.com/spdx/tools-python/issues
