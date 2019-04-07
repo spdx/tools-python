@@ -16,4 +16,4 @@ To submit a patch via GitHub, fork the repository, create a topic branch from `m
 
 ## Licensing
 
-However you choose to contribute, please confirm in a comment to your pull request that you license your contributions under the terms of [the Developer Certificate of Origin](https://developercertificate.org/).
+However you choose to contribute, please sign-off in each of your commits that you license your contributions under the terms of [the Developer Certificate of Origin](https://developercertificate.org/). Git has utilities for signing off on commits: `git commit -s` signs a current commit, and `git rebase --signoff <revision-range>` retroactively signs a range of past commits.
