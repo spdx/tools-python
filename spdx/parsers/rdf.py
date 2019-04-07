@@ -266,12 +266,7 @@ class LicenseParser(BaseParser):
         for _, _, lics_member in self.graph.triples(
             (lics_set, self.spdx_namespace['member'], None)):
             try:
-                if (lics_member, RDF.type, self.spdx_namespace['ExtractedLicensingInfo']) in self.graph:
-                    lics = self.handle_extracted_license(lics_member)
-                    if lics is not None:
-                        licenses.append(lics)
-                else:
-                    licenses.append(self.handle_lics(lics_member))
+                licenses.append(self.handle_lics(lics_member))
             except CardinalityError:
                 self.value_error('LICS_LIST_MEMBER', lics_member)
                 break
@@ -935,6 +930,9 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
 
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['CreationInfo'])):
             self.parse_creation_info(s)
+        
+        for s, _p, o in self.graph.triples((None, None, self.spdx_namespace['ExtractedLicensingInfo'])):
+            self.handle_extracted_license(s)
 
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['Package'])):
             self.parse_package(s)
