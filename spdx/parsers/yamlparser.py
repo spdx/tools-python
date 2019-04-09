@@ -1,4 +1,4 @@
-import ruamel.yaml as yaml
+import yaml
 from spdx.parsers import jsonyaml
 
 class Parser(jsonyaml.Parser):
