@@ -207,7 +207,7 @@ class LicenseParser(BaseParser):
         Return a list of cross references.
         """
         xrefs = list(self.graph.triples((extr_lic, RDFS.seeAlso, None)))
-        return map(lambda xref_triple: six.text_type(xref_triple[2]), xrefs)
+        return list(map(lambda xref_triple: xref_triple[2], xrefs))
 
     def get_extr_lics_comment(self, extr_lics):
         """
@@ -249,7 +249,7 @@ class LicenseParser(BaseParser):
             lic.full_name = name
         if comment is not None:
             lic.comment = comment
-        lic.cross_ref = xrefs
+        lic.cross_ref = list(map(lambda x: six.text_type(x), xrefs))
         return lic
 
     def handle_extracted_license(self, extr_lic):

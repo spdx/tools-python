@@ -252,7 +252,7 @@ class TestParserUtils(object):
         """
         Represents spdx.version.Version as a Python dictionary
         """
-        return {'major': int(version.major), 'minor': int(version.minor)}
+        return {'major': version.major, 'minor': version.minor}
     
     @classmethod
     def entity_to_dict(cls, entity):
@@ -374,8 +374,7 @@ class TestParserUtils(object):
                 'comment': extracted_license.comment,
                 'cross_refs': sorted(extracted_license.cross_ref)
             }
-            if extracted_license_dict not in extracted_licenses_list:
-                extracted_licenses_list.append(extracted_license_dict)
+            extracted_licenses_list.append(extracted_license_dict)
         
         return extracted_licenses_list
     

@@ -252,6 +252,86 @@ class TestWriters(TestCase):
         finally:
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
+    
+    def test_write_document_json_with_validate(self):
+        from spdx.writers.json import write_document
+        doc = self._get_lgpl_doc()
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple.json')
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=True)
+
+            expected_file = utils_test.get_test_loc(
+                'doc_write/json-simple.json',
+                test_data_dir=utils_test.test_data_dir)
+
+            utils_test.check_json_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+    
+    def test_write_document_json_with_or_later_with_validate(self):
+        from spdx.writers.json import write_document
+        doc = self._get_lgpl_doc(or_later=True)
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple-plus.json')
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=True)
+
+            expected_file = utils_test.get_test_loc(
+                'doc_write/json-simple-plus.json',
+                test_data_dir=utils_test.test_data_dir)
+
+            utils_test.check_json_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+    
+    def test_write_document_yaml_with_validate(self):
+        from spdx.writers.yaml import write_document
+        doc = self._get_lgpl_doc()
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple.yaml')
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=True)
+
+            expected_file = utils_test.get_test_loc(
+                'doc_write/yaml-simple.yaml',
+                test_data_dir=utils_test.test_data_dir)
+
+            utils_test.check_yaml_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+    
+    def test_write_document_yaml_with_or_later_with_validate(self):
+        from spdx.writers.yaml import write_document
+        doc = self._get_lgpl_doc(or_later=True)
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple-plus.yaml')
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=True)
+
+            expected_file = utils_test.get_test_loc(
+                'doc_write/yaml-simple-plus.yaml',
+                test_data_dir=utils_test.test_data_dir)
+
+            utils_test.check_yaml_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
 
 
 class TestLicense(TestCase):

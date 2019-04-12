@@ -1,8 +1,8 @@
 import six
 from spdx import document
+from spdx import utils
 from spdx.parsers.builderexceptions import SPDXValueError, CardinalityError, OrderError
 from spdx.parsers import rdf
-from spdx.document import License
 
 ERROR_MESSAGES = rdf.ERROR_MESSAGES
 
@@ -140,7 +140,7 @@ class  ExternalDocumentRefsParser(BaseParser):
                     self.parse_ext_doc_ref_chksum(external_document_ref.get('checksum'))
                 else:
                     self.value_error('EXT_DOC_REF', external_document_ref)
-        else:
+        elif external_document_refs is not None:
             self.value_error('EXT_DOC_REFS_SECTION', external_document_refs)
     
     def parse_ext_doc_ref_id(self, ext_doc_ref_id):
@@ -536,7 +536,9 @@ class FileParser(BaseParser):
         - concluded_license: Python str/unicode
         """
         if isinstance(concluded_license, six.string_types):
-            license_object = License.from_identifier(concluded_license)
+            lic_parser = utils.LicenseListParser()
+            lic_parser.build(write_tables=0, debug=0)
+            license_object = lic_parser.parse(concluded_license)
             try:
                 return self.builder.set_concluded_license(self.document, license_object)
             except SPDXValueError:
@@ -556,7 +558,9 @@ class FileParser(BaseParser):
         if isinstance(license_info_from_files, list):
             for license_info_from_file in license_info_from_files:
                 if isinstance(license_info_from_file, six.string_types):
-                    license_object = License.from_identifier(license_info_from_file)
+                    lic_parser = utils.LicenseListParser()
+                    lic_parser.build(write_tables=0, debug=0)
+                    license_object = lic_parser.parse(license_info_from_file)
                     try:
                         self.builder.set_file_license_in_file(self.document, license_object)
                     except SPDXValueError:
@@ -840,7 +844,7 @@ class PackageParser(BaseParser):
         - pkg_verif_code_field: Python dict('value':str/unicode, 'excludedFilesNames':list)
         """
         if isinstance(pkg_verif_code_field, dict):
-            self.parse_pkg_verif_exc_files(pkg_verif_code_field.get('excludedFileNames'))
+            self.parse_pkg_verif_exc_files(pkg_verif_code_field.get('excludedFilesNames'))
             return self.parse_pkg_verif_code(pkg_verif_code_field.get('value'))
         else:
             self.value_error('PKG_VERIF_CODE_FIELD', pkg_verif_code_field)
@@ -915,7 +919,9 @@ class PackageParser(BaseParser):
         - pkg_concluded_license: Python str/unicode
         """
         if isinstance(pkg_concluded_license, six.string_types):
-            license_object = License.from_identifier(pkg_concluded_license)
+            lic_parser = utils.LicenseListParser()
+            lic_parser.build(write_tables=0, debug=0)
+            license_object = lic_parser.parse(pkg_concluded_license)
             try:
                 return self.builder.set_pkg_licenses_concluded(self.document, license_object)
             except SPDXValueError:
@@ -935,7 +941,9 @@ class PackageParser(BaseParser):
         if isinstance(license_info_from_files, list):
             for license_info_from_file in license_info_from_files:
                 if isinstance(license_info_from_file, six.string_types):
-                    license_object = License.from_identifier(license_info_from_file)
+                    lic_parser = utils.LicenseListParser()
+                    lic_parser.build(write_tables=0, debug=0)
+                    license_object = lic_parser.parse(license_info_from_file)
                     try:
                         self.builder.set_pkg_license_from_file(self.document, license_object)
                     except SPDXValueError:
@@ -953,7 +961,9 @@ class PackageParser(BaseParser):
         - pkg_declared_license: Python str/unicode
         """
         if isinstance(pkg_declared_license, six.string_types):
-            license_object = License.from_identifier(pkg_declared_license)
+            lic_parser = utils.LicenseListParser()
+            lic_parser.build(write_tables=0, debug=0)
+            license_object = lic_parser.parse(pkg_declared_license)
             try:
                 return self.builder.set_pkg_license_declared(self.document, license_object)
             except SPDXValueError:

@@ -21,17 +21,13 @@ class BaseWriter(object):
         """
         Returns a string representation of a license or spdx.utils special object
         """
+        if isinstance(license_field, (document.LicenseDisjunction, document.LicenseConjunction)):
+            return '({})'.format(license_field)
+
         if isinstance(license_field, document.License):
-            license_str =  str(license_field.identifier)
+            license_str =  license_field.identifier.__str__()
         else:
             license_str = license_field.__str__()
-        
-        tmp_license_str = license_str.lower()
-        comp_license = 'and' in tmp_license_str or 'or' in tmp_license_str
-        if comp_license:
-            if license_str.startswith('(') and license_str.endswith(')'):
-                return license_str
-            return ''.join(['(', license_str, ')'])
         return license_str
 
     def checksum(self, checksum_field):
@@ -54,7 +50,7 @@ class CreationInfoWriter(BaseWriter):
     def create_creation_info(self):
         creation_info_object = dict()
         creation_info = self.document.creation_info
-        creation_info_object['creators'] = map(str, creation_info.creators)
+        creation_info_object['creators'] = list(map(str, creation_info.creators))
         creation_info_object['created'] = creation_info.created_iso_format
 
         if creation_info.license_list_version:
@@ -92,11 +88,10 @@ class PackageWriter(BaseWriter):
         package_object = dict()
         package = self.document.package
         package_object['name'] = package.name
-        package_object['id'] = "PackageSPDXID" # Mandatory field but there's not in package class
-        package_object['downloadLocation'] = package.download_location
+        package_object['downloadLocation'] = package.download_location.__str__()
         package_object['packageVerificationCode'] = self.package_verification_code(package)
         package_object['licenseConcluded'] = self.license(package.conc_lics)
-        package_object['licenseInfoFromFiles'] = map(self.license, package.licenses_from_files)
+        package_object['licenseInfoFromFiles'] = list(map(self.license, package.licenses_from_files))
         package_object['licenseDeclared'] = self.license(package.license_declared)
         package_object['copyrightText'] = package.cr_text.__str__()
 
@@ -119,7 +114,7 @@ class PackageWriter(BaseWriter):
             package_object['originator'] = package.originator.__str__()
 
         if package.has_optional_field('check_sum'):
-            package_object['checksums'] = self.checksum(package.check_sum)
+            package_object['checksums'] = [self.checksum(package.check_sum)]
             package_object['sha1'] = package.check_sum.value
 
         if package.has_optional_field('description'):
@@ -168,7 +163,7 @@ class FileWriter(BaseWriter):
             file_object['id'] = str(file.spdx_id)
             file_object['checksums'] = [self.checksum(file.chk_sum)]
             file_object['licenseConcluded'] = self.license(file.conc_lics)
-            file_object['licenseInfoFromFiles'] = map(self.license, file.licenses_in_file)
+            file_object['licenseInfoFromFiles'] = list(map(self.license, file.licenses_in_file))
             file_object['copyrightText'] = file.copyright.__str__()
             file_object['sha1'] = file.chk_sum.value
 
@@ -328,7 +323,7 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
         return ext_document_reference_objects
 
     def create_document(self):
-    	self.document_object = dict()
+        self.document_object = dict()
 
         self.document_object['specVersion'] = self.document.version.__str__()
         self.document_object['namespace'] = self.document.namespace.__str__()
