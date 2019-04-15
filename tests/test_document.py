@@ -83,7 +83,7 @@ class TestDocument(TestCase):
         file1.name = './some/path/tofile'
         file1.spdx_id = 'SPDXRef-File'
         file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
-        lic1 = License.from_identifier('LGPL-2.1')
+        lic1 = License.from_identifier('LGPL-2.1-only')
         file1.add_lics(lic1)
         pack.add_lics_from_file(lic1)
         messages = []
@@ -122,7 +122,7 @@ class TestDocument(TestCase):
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
 
-        lic1 = License.from_identifier('LGPL-2.1+')
+        lic1 = License.from_identifier('LGPL-2.1-or-later')
         file1.add_lics(lic1)
 
         package.add_lics_from_file(lic1)
@@ -156,9 +156,9 @@ class TestWriters(TestCase):
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
 
-        lic1 = License.from_identifier('LGPL-2.1')
+        lic1 = License.from_identifier('LGPL-2.1-only')
         if or_later:
-            lic1 = License.from_identifier('LGPL-2.1+')
+            lic1 = License.from_identifier('LGPL-2.1-or-later')
 
         file1.add_lics(lic1)
 
@@ -262,8 +262,8 @@ class TestLicense(TestCase):
         assert LICENSE_MAP['Aladdin'] == 'Aladdin Free Public License'
         assert LICENSE_MAP['MIT License'] == 'MIT'
         assert LICENSE_MAP['MIT'] == 'MIT License'
-        assert LICENSE_MAP['BSD 4-clause "Original" or "Old" License'] == 'BSD-4-Clause'
-        assert LICENSE_MAP['BSD-4-Clause'] == 'BSD 4-clause "Original" or "Old" License'
+        assert LICENSE_MAP['BSD 4-Clause "Original" or "Old" License'] == 'BSD-4-Clause'
+        assert LICENSE_MAP['BSD-4-Clause'] == 'BSD 4-Clause "Original" or "Old" License'
 
     def test_from_full_name(self):
         mit = License.from_full_name('MIT License')
