@@ -20,7 +20,7 @@ import unittest
 from unittest import TestCase
 
 from spdx.checksum import Algorithm
-from spdx.config import LICENSE_MAP
+from spdx.config import LICENSE_MAP, EXCEPTION_MAP
 from spdx.creationinfo import Tool
 from spdx.document import Document, ExternalDocumentRef
 from spdx.document import License
@@ -274,6 +274,15 @@ class TestLicense(TestCase):
         mit = License.from_identifier('MIT')
         assert mit.full_name == 'MIT License'
         assert mit.url == 'http://spdx.org/licenses/MIT'
+
+
+class TestException(TestCase):
+
+    def test_exception_list(self):
+        assert EXCEPTION_MAP["Linux Syscall Note"] == "Linux-syscall-note"
+        assert EXCEPTION_MAP["Linux-syscall-note"] == "Linux Syscall Note"
+        assert EXCEPTION_MAP["GCC Runtime Library exception 3.1"] == "GCC-exception-3.1"
+        assert EXCEPTION_MAP["GCC-exception-3.1"] == "GCC Runtime Library exception 3.1"
 
 
 if __name__ == '__main__':
