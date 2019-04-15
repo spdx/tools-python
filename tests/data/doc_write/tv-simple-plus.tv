@@ -12,13 +12,13 @@ PackageChecksum: SHA1: SOME-SHA1
 PackageVerificationCode: SOME code
 PackageLicenseDeclared: NOASSERTION
 PackageLicenseConcluded: NOASSERTION
-PackageLicenseInfoFromFiles: LGPL-2.1+
+PackageLicenseInfoFromFiles: LGPL-2.1-or-later
 PackageCopyrightText: <text>Some copyrught</text>
 # File
 FileName: ./some/path/tofile
 SPDXID: SPDXRef-File
 FileChecksum: SHA1: SOME-SHA1
 LicenseConcluded: NOASSERTION
-LicenseInfoInFile: LGPL-2.1+
+LicenseInfoInFile: LGPL-2.1-or-later
 FileCopyrightText: NOASSERTION
 # Extracted Licenses
