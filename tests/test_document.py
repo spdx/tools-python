@@ -279,10 +279,10 @@ class TestLicense(TestCase):
 class TestException(TestCase):
 
     def test_exception_list(self):
-        assert EXCEPTION_MAP["Linux Syscall Note"] == "Linux-syscall-note"
-        assert EXCEPTION_MAP["Linux-syscall-note"] == "Linux Syscall Note"
-        assert EXCEPTION_MAP["GCC Runtime Library exception 3.1"] == "GCC-exception-3.1"
-        assert EXCEPTION_MAP["GCC-exception-3.1"] == "GCC Runtime Library exception 3.1"
+        assert EXCEPTION_MAP['Linux Syscall Note'] == 'Linux-syscall-note'
+        assert EXCEPTION_MAP['Linux-syscall-note'] == 'Linux Syscall Note'
+        assert EXCEPTION_MAP['GCC Runtime Library exception 3.1'] == 'GCC-exception-3.1'
+        assert EXCEPTION_MAP['GCC-exception-3.1'] == 'GCC Runtime Library exception 3.1'
 
 
 if __name__ == '__main__':
