@@ -18,15 +18,15 @@ def convert(infile_name, outfile_name):
         data = infile.read()
         document, error = tagvalueparser.parse(data)
         if not error:
-            # print map(lambda c: c.name, document.creation_info.creators)
-            print 'Parsing Successful'
+            # print(map(lambda c: c.name, document.creation_info.creators))
+            print('Parsing Successful')
             with open(outfile_name, mode='w') as out:
                 write_document(document,out,validate = True)
         else:
-            print 'Errors encountered while parsing tag value file.'
+            print('Errors encountered while parsing tag value file.')
             messages = []
             document.validate(messages)
-            print '\n'.join(messages)
+            print('\n'.join(messages))
 
 
 if __name__ == '__main__':

@@ -19,7 +19,7 @@ if __name__ == '__main__':
     with open(infile_name) as infile:
         document, error = rdfparser.parse(infile)
         if not error:
-            # print map(lambda c: c.name, document.creation_info.creators)
+            # print(map(lambda c: c.name, document.creation_info.creators))
             print('Parsing Successful')
             with codecs.open(outfile_name, mode='w', encoding='utf-8') as outfile:
                 try:

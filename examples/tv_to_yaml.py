@@ -17,4 +17,4 @@ if __name__ == '__main__':
             with open('yaml_from_tv_example.yaml', 'w') as out:
                 write_document(document, out)
         else:
-            print 'Errors encountered while parsing'
+            print('Errors encountered while parsing')

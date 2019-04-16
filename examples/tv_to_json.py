@@ -17,4 +17,4 @@ if __name__ == '__main__':
             with open('json_from_tv_example.json', 'w') as out:
                 write_document(document, out)
         else:
-            print 'Errors encountered while parsing'
+            print('Errors encountered while parsing')
