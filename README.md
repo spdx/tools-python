@@ -119,7 +119,7 @@ If there is no issue for the changes that you want to make, create first an issu
 # Dependencies
 
 * PLY : https://pypi.python.org/pypi/ply/ used for parsing.
-* rdflib : https://pypi.python.org/pypi/rdflib/ for for handling RDF. 
+* rdflib : https://pypi.python.org/pypi/rdflib/ for handling RDF. 
 
 
 # Support
