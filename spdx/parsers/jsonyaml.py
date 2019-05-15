@@ -1,8 +1,10 @@
 import six
 from spdx import document
+from spdx.document import License, LicenseConjunction, LicenseDisjunction
 from spdx import utils
 from spdx.parsers.builderexceptions import SPDXValueError, CardinalityError, OrderError
 from spdx.parsers import rdf
+from spdx.utils import UnKnown
 
 ERROR_MESSAGES = rdf.ERROR_MESSAGES
 
@@ -278,6 +280,15 @@ class LicenseParser(BaseParser):
                         self.order_error('ExtractedLicense cross references', 'ExtractedLicense id')
                 else:
                     self.value_error('CROSS_REF', cross_ref)
+    
+    def replace_license(self, license_object):
+        if isinstance(license_object, LicenseConjunction):
+            return LicenseConjunction(self.replace_license(license_object.license_1), self.replace_license(license_object.license_2))
+        elif isinstance(license_object, LicenseDisjunction):
+            return LicenseDisjunction(self.replace_license(license_object.license_1), self.replace_license(license_object.license_2))
+        else:
+            license_objects = list(filter(lambda lic: lic.identifier == license_object.identifier, self.document.extracted_licenses))
+            return license_objects[-1] if license_objects else license_object
 
 class AnnotationParser(BaseParser):
     def __init__(self, builder, logger):
@@ -295,7 +306,7 @@ class AnnotationParser(BaseParser):
                         self.parse_annotation_date(annotation.get('annotationDate'))
                         self.parse_annotation_comment(annotation.get('comment'))
                         self.parse_annotation_type(annotation.get('annotationType'))
-                        #self.parse_annotation_id(annotation.get('id'))
+                        self.parse_annotation_id(annotation.get('id'))
                 else:
                     self.value_error('ANNOTATION', annotation)
     
@@ -538,7 +549,7 @@ class FileParser(BaseParser):
         if isinstance(concluded_license, six.string_types):
             lic_parser = utils.LicenseListParser()
             lic_parser.build(write_tables=0, debug=0)
-            license_object = lic_parser.parse(concluded_license)
+            license_object = self.replace_license(lic_parser.parse(concluded_license))
             try:
                 return self.builder.set_concluded_license(self.document, license_object)
             except SPDXValueError:
@@ -560,7 +571,7 @@ class FileParser(BaseParser):
                 if isinstance(license_info_from_file, six.string_types):
                     lic_parser = utils.LicenseListParser()
                     lic_parser.build(write_tables=0, debug=0)
-                    license_object = lic_parser.parse(license_info_from_file)
+                    license_object = self.replace_license(lic_parser.parse(license_info_from_file))
                     try:
                         self.builder.set_file_license_in_file(self.document, license_object)
                     except SPDXValueError:
@@ -610,9 +621,9 @@ class FileParser(BaseParser):
         if isinstance(file_artifacts, list):
             for artifact in file_artifacts:
                 if isinstance(artifact, dict):
-                    self.builder.set_file_atrificat_of_project(self.document, 'name', artifact.get('name'))
-                    self.builder.set_file_atrificat_of_project(self.document, 'home', artifact.get('homePage'))
-                    self.builder.set_file_atrificat_of_project(self.document, 'uri', artifact.get('projectUri'))
+                    self.builder.set_file_atrificat_of_project(self.document, 'name', artifact.get('name', UnKnown()))
+                    self.builder.set_file_atrificat_of_project(self.document, 'home', artifact.get('homePage', UnKnown()))
+                    self.builder.set_file_atrificat_of_project(self.document, 'uri', artifact.get('projectUri', UnKnown()))
                     return True
                 else:
                     self.value_error('ARTIFACT_OF_VALUE', artifact)
@@ -921,7 +932,7 @@ class PackageParser(BaseParser):
         if isinstance(pkg_concluded_license, six.string_types):
             lic_parser = utils.LicenseListParser()
             lic_parser.build(write_tables=0, debug=0)
-            license_object = lic_parser.parse(pkg_concluded_license)
+            license_object = self.replace_license(lic_parser.parse(pkg_concluded_license))
             try:
                 return self.builder.set_pkg_licenses_concluded(self.document, license_object)
             except SPDXValueError:
@@ -943,7 +954,7 @@ class PackageParser(BaseParser):
                 if isinstance(license_info_from_file, six.string_types):
                     lic_parser = utils.LicenseListParser()
                     lic_parser.build(write_tables=0, debug=0)
-                    license_object = lic_parser.parse(license_info_from_file)
+                    license_object = self.replace_license(lic_parser.parse(license_info_from_file))
                     try:
                         self.builder.set_pkg_license_from_file(self.document, license_object)
                     except SPDXValueError:
@@ -963,7 +974,7 @@ class PackageParser(BaseParser):
         if isinstance(pkg_declared_license, six.string_types):
             lic_parser = utils.LicenseListParser()
             lic_parser.build(write_tables=0, debug=0)
-            license_object = lic_parser.parse(pkg_declared_license)
+            license_object = self.replace_license(lic_parser.parse(pkg_declared_license))
             try:
                 return self.builder.set_pkg_license_declared(self.document, license_object)
             except SPDXValueError:

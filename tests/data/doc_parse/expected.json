@@ -1,5 +1,5 @@
 {
-    "id": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT", 
+    "id": "SPDXRef-DOCUMENT", 
     "specVersion": {
         "major": 2,
         "minor": 1
@@ -9,7 +9,8 @@
     "comment": "This is a sample spreadsheet", 
     "dataLicense": {
         "identifier": "CC0-1.0", 
-        "name": "Creative Commons Zero v1.0 Universal"
+        "name": "Creative Commons Zero v1.0 Universal", 
+        "type": "Single"
     },
     "licenseListVersion": {
         "major": 2,
@@ -53,12 +54,14 @@
             "email": null
         }, 
         "licenseConcluded": {
-            "identifier": "Apache-1.0 AND MPL-1.1 AND LicenseRef-3 AND LicenseRef-4 AND Apache-2.0 AND LicenseRef-1 AND LicenseRef-2", 
-            "name": "Apache License 1.0 AND Mozilla Public License 1.1 AND LicenseRef-3 AND LicenseRef-4 AND Apache License 2.0 AND LicenseRef-1 AND LicenseRef-2"
+            "identifier": ["Apache-1.0", "Apache-2.0", "LicenseRef-1", "LicenseRef-2", "LicenseRef-3", "LicenseRef-4", "MPL-1.1"], 
+            "name": ["Apache License 1.0", "Apache License 2.0", "CyberNeko License", "Mozilla Public License 1.1", "None", "None", "None"], 
+            "type": "Conjunction"
         }, 
         "licenseDeclared": {
-            "identifier": "Apache-2.0 AND LicenseRef-3 AND LicenseRef-2 AND LicenseRef-1 AND LicenseRef-4 AND MPL-1.1", 
-            "name": "Apache License 2.0 AND LicenseRef-3 AND LicenseRef-2 AND LicenseRef-1 AND LicenseRef-4 AND Mozilla Public License 1.1"
+            "identifier": ["Apache-2.0", "LicenseRef-1", "LicenseRef-2", "LicenseRef-3", "LicenseRef-4", "MPL-1.1"], 
+            "name": ["Apache License 2.0", "CyberNeko License", "Mozilla Public License 1.1", "None", "None", "None"], 
+            "type": "Conjunction"
         }, 
         "copyrightText": " Copyright 2010, 2011 Source Auditor Inc.", 
         "licenseComment": "The declared license information can be found in the NOTICE file at the root of the archive file", 
@@ -68,13 +71,14 @@
         }, 
         "files": [
             {
-                "id": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File1", 
+                "id": "SPDXRef-File1", 
                 "name": "Jenna-2.6.3/jena-2.6.3-sources.jar", 
                 "type": 3, 
                 "comment": "This file belongs to Jena",  
                 "licenseConcluded": {
                     "identifier": "LicenseRef-1", 
-                    "name": "LicenseRef-1"
+                    "name": null, 
+                    "type": "Single"
                 }, 
                 "copyrightText": "(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP", 
                 "licenseComment": "This license is used by Jena", 
@@ -86,23 +90,25 @@
                 "licenseInfoFromFiles": [
                     {
                         "identifier": "LicenseRef-1", 
-                        "name": "LicenseRef-1"
+                        "name": null, 
+                        "type": "Single"
                     }
                 ], 
                 "contributors": [], 
                 "dependencies": [], 
-                "artifactOfProjectName": [], 
-                "artifactOfProjectHome": [], 
-                "artifactOfProjectURI": []
+                "artifactOfProjectName": ["Jena"], 
+                "artifactOfProjectHome": ["http://www.openjena.org/"], 
+                "artifactOfProjectURI": ["UNKNOWN"]
             }, 
             {
-                "id": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File2", 
+                "id": "SPDXRef-File2", 
                 "name": "src/org/spdx/parser/DOAPProject.java", 
                 "type": 1, 
                 "comment": null, 
                 "licenseConcluded": {
                     "identifier": "Apache-2.0", 
-                    "name": "Apache License 2.0"
+                    "name": "Apache License 2.0", 
+                    "type": "Single"
                 }, 
                 "copyrightText": "Copyright 2010, 2011 Source Auditor Inc.", 
                 "licenseComment": null, 
@@ -114,7 +120,8 @@
                 "licenseInfoFromFiles": [
                     {
                         "identifier": "Apache-2.0", 
-                        "name": "Apache License 2.0"
+                        "name": "Apache License 2.0", 
+                        "type": "Single"
                     }
                 ], 
                 "contributors": [], 
@@ -127,31 +134,38 @@
         "licenseInfoFromFiles": [
             {
                 "identifier": "Apache-1.0", 
-                "name": "Apache License 1.0"
+                "name": "Apache License 1.0", 
+                "type": "Single"
             }, 
             {
                 "identifier": "Apache-2.0", 
-                "name": "Apache License 2.0"
+                "name": "Apache License 2.0", 
+                "type": "Single"
             }, 
             {
                 "identifier": "LicenseRef-1", 
-                "name": "LicenseRef-1"
+                "name": null, 
+                "type": "Single"
             }, 
             {
                 "identifier": "LicenseRef-2", 
-                "name": "LicenseRef-2"
+                "name": null, 
+                "type": "Single"
             }, 
             {
                 "identifier": "LicenseRef-3", 
-                "name": "LicenseRef-3"
+                "name": "CyberNeko License", 
+                "type": "Single"
             }, 
             {
                 "identifier": "LicenseRef-4", 
-                "name": "LicenseRef-4"
+                "name": null, 
+                "type": "Single"
             }, 
             {
                 "identifier": "MPL-1.1", 
-                "name": "Mozilla Public License 1.1"
+                "name": "Mozilla Public License 1.1", 
+                "type": "Single"
             }
         ], 
         "verificationCode": {
@@ -207,7 +221,7 @@
     ],
     "annotations": [
         {
-            "id": null, 
+            "id": "SPDXRef-45", 
             "comment": "This is just an example. Some of the non-standard licenses look like they are actually BSD 3 clause licenses", 
             "type": "REVIEW", 
             "annotator": {

@@ -38,6 +38,9 @@ class BaseWriter(object):
         checksum_object['algorithm'] = 'checksumAlgorithm_' + checksum_field.identifier.lower()
         checksum_object['value'] = checksum_field.value
         return checksum_object
+    
+    def spdx_id(self, spdx_id_field):
+        return spdx_id_field.__str__().split('#')[-1]
 
 class CreationInfoWriter(BaseWriter):
     """
@@ -160,7 +163,7 @@ class FileWriter(BaseWriter):
             file_object = dict()
 
             file_object['name'] = file.name
-            file_object['id'] = str(file.spdx_id)
+            file_object['id'] = self.spdx_id(file.spdx_id)
             file_object['checksums'] = [self.checksum(file.chk_sum)]
             file_object['licenseConcluded'] = self.license(file.conc_lics)
             file_object['licenseInfoFromFiles'] = list(map(self.license, file.licenses_in_file))
@@ -329,7 +332,7 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
         self.document_object['namespace'] = self.document.namespace.__str__()
         self.document_object['creationInfo'] = self.create_creation_info()
         self.document_object['dataLicense'] = self.license(self.document.data_license)
-        self.document_object['id'] = str(self.document.spdx_id)
+        self.document_object['id'] = self.spdx_id(self.document.spdx_id)
         self.document_object['name'] = self.document.name
 
         package_info_object = self.create_package_info()
