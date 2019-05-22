@@ -575,7 +575,6 @@ class FileParser(LicenseParser):
 
     def p_file_artifact(self, f_term, predicate):
         """Handles file artifactOf.
-        Note: does not handle artifact of project URI.
         """
         for _, _, project in self.graph.triples((f_term, predicate, None)):
             if (project, RDF.type, self.doap_namespace['Project']):
@@ -586,7 +585,7 @@ class FileParser(LicenseParser):
                 self.logger.log(msg)
 
     def p_file_project(self, project):
-        """Helper function for parsing doap:project name and homepage.
+        """Helper function for parsing doap:project name, homepage and uri.
         and setting them using the file builder.
         """
         for _, _, name in self.graph.triples((project, self.doap_namespace['name'], None)):
@@ -594,6 +593,9 @@ class FileParser(LicenseParser):
         for _, _, homepage in self.graph.triples(
             (project, self.doap_namespace['homepage'], None)):
             self.builder.set_file_atrificat_of_project(self.doc, 'home', six.text_type(homepage))
+        for _, _, uri in self.graph.triples(
+            (project, self.doap_namespace['uri'], None)):
+            self.builder.set_file_atrificat_of_project(self.doc, 'uri', six.text_type(uri))
 
     def p_file_cr_text(self, f_term, predicate):
         """Sets file copyright text."""
