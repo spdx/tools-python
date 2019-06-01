@@ -92,6 +92,7 @@ class TestDocument(TestCase):
             'No creators defined, must have at least one.',
             'Creation info missing created date.',
             'Package checksum must be instance of spdx.checksum.Algorithm',
+            'Package download_location can not be None.',
             'Package verif_code can not be None.',
             'Package cr_text can not be None.',
             'Package must have at least one file.',

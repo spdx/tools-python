@@ -291,35 +291,26 @@ class ExternalPackageRef(object):
         Validate all fields of the ExternalPackageRef class and update the
         messages list with user friendly error messages for display.
         """
-        messages = messages if messages is not None else []
+        messages = self.validate_category(messages)
+        messages = self.validate_pkg_ext_ref_type(messages)
+        messages = self.validate_locator(messages)
 
-        return (self.validate_category(messages) and
-                self.validate_pkg_ext_ref_type(messages) and
-                self.validate_locator(messages))
+        return messages
 
     def validate_category(self, messages=None):
-        messages = messages if messages is not None else []
-
-        if self.category:
-            return True
-        else:
-            messages.append('ExternalPackageRef has no category.')
-            return False
+        if self.category is None:
+            messages = messages + ['ExternalPackageRef has no category.']
+        
+        return messages
 
     def validate_pkg_ext_ref_type(self, messages=None):
-        messages = messages if messages is not None else []
-
-        if self.pkg_ext_ref_type:
-            return True
-        else:
-            messages.append('ExternalPackageRef has no type.')
-            return False
+        if self.pkg_ext_ref_type is None:
+            messages = messages + ['ExternalPackageRef has no type.']
+        
+        return messages
 
     def validate_locator(self, messages=None):
-        messages = messages if messages is not None else []
+        if self.locator is None:
+            messages = messages + ['ExternalPackageRef has no locator.']
 
-        if self.locator:
-            return True
-        else:
-            messages.append('ExternalPackageRef has no locator.')
-            return False
+        return messages

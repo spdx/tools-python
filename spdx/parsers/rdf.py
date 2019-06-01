@@ -1077,7 +1077,6 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
                 self.more_than_one_error('Document comment')
                 break
 
-<<<<<<< HEAD
     def parse_ext_doc_ref(self, ext_doc_ref_term):
         """
         Parses the External Document ID, SPDX Document URI and Checksum.
@@ -1111,7 +1110,7 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
                 except SPDXValueError:
                     self.value_error('EXT_DOC_REF_VALUE', 'Checksum')
                     break
-=======
+
     def parse_pkg_ext_ref(self, pkg_ext_term):
         """
         Parses the category, type, locator, and comment.
@@ -1147,4 +1146,3 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
             except CardinalityError:
                 self.more_than_one_error('Package External Reference Comment')
                 break
->>>>>>> Add `ExternalPackageRef` class
