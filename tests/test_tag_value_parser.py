@@ -124,7 +124,7 @@ class TestLexer(TestCase):
         ExternalRefComment: <text>Some comment about the package.</text>
         '''
         self.l.input(data)
-        self.token_assert_helper(self.l.token(), 'PKG_SPDX_ID', 'SPDXID', 2)
+        self.token_assert_helper(self.l.token(), 'SPDX_ID', 'SPDXID', 2)
         self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-Package', 2)
         self.token_assert_helper(self.l.token(), 'PKG_FILES_ANALYZED', 'FilesAnalyzed', 3)
         self.token_assert_helper(self.l.token(), 'LINE', 'False', 3)

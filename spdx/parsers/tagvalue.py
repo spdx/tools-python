@@ -160,7 +160,6 @@ class Parser(object):
                   | annotation_type
                   | annotation_spdx_id
                   | package_name
-                  | pkg_spdx_id
                   | package_version
                   | pkg_down_location
                   | pkg_files_analyzed
@@ -593,6 +592,8 @@ class Parser(object):
             value = p[2]
         if not self.builder.doc_spdx_id_set:
             self.builder.set_doc_spdx_id(self.document, value)
+        elif not self.builder.package_spdx_id_set:
+            self.builder.set_pkg_spdx_id(self.document, value)
         else:
             self.builder.set_file_spdx_id(self.document, value)
 

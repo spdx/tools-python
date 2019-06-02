@@ -554,6 +554,7 @@ class PackageBuilder(object):
         if not self.package_spdx_id_set:
             if validations.validate_pkg_spdx_id(spdx_id):
                 doc.package.spdx_id = spdx_id
+                self.package_spdx_id_set = True
                 return True
             else:
                 raise SPDXValueError('Package::SPDXID')
