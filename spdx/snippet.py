@@ -58,77 +58,60 @@ class Snippet(object):
         Validate fields of the snippet and update the messages list with user
         friendly error messages for display.
         """
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
-        return (self.validate_spdx_id(messages) and
-                self.validate_copyright_text(messages) and
-                self.validate_snip_from_file_spdxid(messages) and
-                self.validate_concluded_license(messages) and
-                self.validate_licenses_in_snippet(messages))
+        messages = self.validate_spdx_id(messages)
+        messages = self.validate_copyright_text(messages)
+        messages = self.validate_snip_from_file_spdxid(messages)
+        messages = self.validate_concluded_license(messages)
+        messages = self.validate_licenses_in_snippet(messages)
+        
+        return messages
 
     def validate_spdx_id(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
-
         if self.spdx_id is None:
-            messages.append('Snippet has no SPDX Identifier.')
-            return False
-
-        else:
-            return True
+            messages = messages + ['Snippet has no SPDX Identifier.']
+        
+        return messages
 
     def validate_copyright_text(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
-        if isinstance(
+        if not isinstance(
             self.copyright,
                 (six.string_types, six.text_type, utils.NoAssert,
                  utils.SPDXNone)):
-            return True
-        else:
-            messages.append('Snippet copyright must be str or unicode or '
-                            'utils.NoAssert or utils.SPDXNone')
-            return False
+            messages = messages + [
+                'Snippet copyright must be str or unicode or utils.NoAssert or utils.SPDXNone'
+            ]
+        
+        return messages
 
     def validate_snip_from_file_spdxid(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
         if self.snip_from_file_spdxid is None:
-            messages.append('Snippet has no Snippet from File SPDX Identifier.')
-            return False
-
-        else:
-            return True
+            messages = messages + ['Snippet has no Snippet from File SPDX Identifier.']
+        
+        return messages
 
     def validate_concluded_license(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
-        if isinstance(self.conc_lics, (document.License, utils.NoAssert,
+        if not isinstance(self.conc_lics, (document.License, utils.NoAssert,
                                        utils.SPDXNone)):
-            return True
-        else:
-            messages.append(
+            messages = messages + [
                 'Snippet Concluded License must be one of '
-                'document.License, utils.NoAssert or utils.SPDXNone')
-            return False
+                'document.License, utils.NoAssert or utils.SPDXNone'
+            ]
+        
+        return messages
 
     def validate_licenses_in_snippet(self, messages=None):
-        # FIXME: we should return messages instead
-        messages = messages if messages is not None else []
-
         if len(self.licenses_in_snippet) == 0:
-            messages.append('Snippet must have at least one license in file.')
-            return False
+            messages = messages + ['Snippet must have at least one license in file.']
         else:
             for lic in self.licenses_in_snippet:
                 if not isinstance(lic, (document.License, utils.NoAssert,
                                         utils.SPDXNone)):
-                    return False
-            return True
+                    messages = messages + [
+                        'Licenses in Snippet must be one of '
+                        'document.License, utils.NoAssert or utils.SPDXNone'
+                    ]
+        
+        return messages
 
     def has_optional_field(self, field):
         return getattr(self, field, None) is not None

@@ -396,13 +396,10 @@ class Document(object):
         return messages
 
     def validate_snippet(self, messages=None):
-        # FIXME: messages should be returned
-        messages = messages if messages is not None else []
-
-        valid = True
         for snippet in self.snippet:
-            valid = snippet.validate(messages) and valid
-        return valid
+            messages = snippet.validate(messages)
+
+        return messages
 
     def validate_creation_info(self, messages):
         if self.creation_info is not None:
