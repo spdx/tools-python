@@ -99,6 +99,19 @@ ERROR_MESSAGES = {
     'LICS_COMMENT_VALUE' : 'LicenseComment must be free form text, line: {0}',
     'LICS_CRS_REF_VALUE' : 'LicenseCrossReference must be uri as single line of text, line: {0}',
     'PKG_CPY_TEXT_VALUE' : 'Package copyright text must be free form text, line: {0}',
+    'SNIP_SPDX_ID_VALUE' : 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string '
+                           'containing letters, numbers, ".", "-".',
+    'SNIPPET_NAME_VALUE' : 'SnippetName must be a single line of text, line: {0}',
+    'SNIP_COMMENT_VALUE' : 'SnippetComment must be free form text, line: {0}',
+    'SNIP_COPYRIGHT_VALUE' : 'SnippetCopyrightText must be one of NOASSERTION, NONE or free form text, line: {0}',
+    'SNIP_LICS_COMMENT_VALUE' : 'SnippetLicenseComments must be free form text, line: {0}',
+    'SNIP_FILE_SPDXID_VALUE' : 'SnippetFromFileSPDXID must be ["DocumentRef-"[idstring]":"] SPDXID '
+                               'where DocumentRef-[idstring]: is an optional reference to an external'
+                               'SPDX Document and SPDXID is a string containing letters, '
+                               'numbers, ".", "-".',
+    'SNIP_LICS_CONC_VALUE': 'SnippetLicenseConcluded must be NOASSERTION, NONE, license identifier '
+                            'or license list, line:{0}',
+    'SNIP_LICS_INFO_VALUE': 'LicenseInfoInSnippet must be NOASSERTION, NONE or license identifier, line: {0}',
 }
 
 
@@ -169,6 +182,14 @@ class Parser(object):
                   | file_contrib
                   | file_dep
                   | file_artifact
+                  | snip_spdx_id
+                  | snip_name
+                  | snip_comment
+                  | snip_cr_text
+                  | snip_lic_comment
+                  | snip_file_spdx_id
+                  | snip_lics_conc
+                  | snip_lics_info
                   | extr_lic_id
                   | extr_lic_text
                   | extr_lic_name
@@ -1026,6 +1047,201 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES['PACKAGE_NAME_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
+
+    def p_snip_spdx_id(self, p):
+        """snip_spdx_id : SNIPPET_SPDX_ID LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.create_snippet(self.document, value)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['SNIP_SPDX_ID_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+
+    def p_snip_spdx_id_1(self, p):
+        """snip_spdx_id : SNIPPET_SPDX_ID error"""
+        self.error = True
+        msg = ERROR_MESSAGES['SNIP_SPDX_ID_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snippet_name(self, p):
+        """snip_name : SNIPPET_NAME LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_snippet_name(self.document, value)
+        except OrderError:
+            self.order_error('SnippetName', 'SnippetSPDXID', p.lineno(1))
+        except CardinalityError:
+            self.more_than_one_error('SnippetName', p.lineno(1))
+
+    def p_snippet_name_1(self, p):
+        """snip_name : SNIPPET_NAME error"""
+        self.error = True
+        msg = ERROR_MESSAGES['SNIPPET_NAME_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snippet_comment(self, p):
+        """snip_comment : SNIPPET_COMMENT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_snippet_comment(self.document, value)
+        except OrderError:
+            self.order_error('SnippetComment', 'SnippetSPDXID', p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['SNIP_COMMENT_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('SnippetComment', p.lineno(1))
+
+    def p_snippet_comment_1(self, p):
+        """snip_comment : SNIPPET_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['SNIP_COMMENT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snippet_cr_text(self, p):
+        """snip_cr_text : SNIPPET_CR_TEXT snip_cr_value"""
+        try:
+            self.builder.set_snippet_copyright(self.document, p[2])
+        except OrderError:
+            self.order_error('SnippetCopyrightText', 'SnippetSPDXID', p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['SNIP_COPYRIGHT_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('SnippetCopyrightText', p.lineno(1))
+
+    def p_snippet_cr_text_1(self, p):
+        """snip_cr_text : SNIPPET_CR_TEXT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['SNIP_COPYRIGHT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snippet_cr_value_1(self, p):
+        """snip_cr_value : TEXT"""
+        if six.PY2:
+            p[0] = p[1].decode(encoding='utf-8')
+        else:
+            p[0] = p[1]
+
+    def p_snippet_cr_value_2(self, p):
+        """snip_cr_value : NONE"""
+        p[0] = utils.SPDXNone()
+
+    def p_snippet_cr_value_3(self, p):
+        """snip_cr_value : NO_ASSERT"""
+        p[0] = utils.NoAssert()
+
+    def p_snippet_lic_comment(self, p):
+        """snip_lic_comment : SNIPPET_LICS_COMMENT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_snippet_lic_comment(self.document, value)
+        except OrderError:
+            self.order_error('SnippetLicenseComments', 'SnippetSPDXID', p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['SNIP_LICS_COMMENT_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('SnippetLicenseComments', p.lineno(1))
+
+    def p_snippet_lic_comment_1(self, p):
+        """snip_lic_comment : SNIPPET_LICS_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['SNIP_LICS_COMMENT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snip_from_file_spdxid(self, p):
+        """snip_file_spdx_id : SNIPPET_FILE_SPDXID LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_snip_from_file_spdxid(self.document, value)
+        except OrderError:
+            self.order_error('SnippetFromFileSPDXID', 'SnippetSPDXID', p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['SNIP_FILE_SPDXID_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+        except CardinalityError:
+            self.more_than_one_error('SnippetFromFileSPDXID', p.lineno(1))
+
+    def p_snip_from_file_spdxid_1(self, p):
+        """snip_file_spdx_id : SNIPPET_FILE_SPDXID error"""
+        self.error = True
+        msg = ERROR_MESSAGES['SNIP_FILE_SPDXID_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snippet_concluded_license(self, p):
+        """snip_lics_conc : SNIPPET_LICS_CONC conc_license"""
+        try:
+            self.builder.set_snip_concluded_license(self.document, p[2])
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['SNIP_LICS_CONC_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+        except OrderError:
+            self.order_error('SnippetLicenseConcluded',
+                             'SnippetSPDXID', p.lineno(1))
+        except CardinalityError:
+            self.more_than_one_error('SnippetLicenseConcluded', p.lineno(1))
+
+    def p_snippet_concluded_license_1(self, p):
+        """snip_lics_conc : SNIPPET_LICS_CONC error"""
+        self.error = True
+        msg = ERROR_MESSAGES['SNIP_LICS_CONC_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snippet_lics_info(self, p):
+        """snip_lics_info : SNIPPET_LICS_INFO snip_lic_info_value"""
+        try:
+            self.builder.set_snippet_lics_info(self.document, p[2])
+        except OrderError:
+            self.order_error(
+                'LicenseInfoInSnippet', 'SnippetSPDXID', p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['SNIP_LICS_INFO_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+
+    def p_snippet_lics_info_1(self, p):
+        """snip_lics_info : SNIPPET_LICS_INFO error"""
+        self.error = True
+        msg = ERROR_MESSAGES['SNIP_LICS_INFO_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snip_lic_info_value_1(self, p):
+        """snip_lic_info_value : NONE"""
+        p[0] = utils.SPDXNone()
+
+    def p_snip_lic_info_value_2(self, p):
+        """snip_lic_info_value : NO_ASSERT"""
+        p[0] = utils.NoAssert()
+
+    def p_snip_lic_info_value_3(self, p):
+        """snip_lic_info_value : LINE"""
+        if six.PY2:
+            value = p[1].decode(encoding='utf-8')
+        else:
+            value = p[1]
+        p[0] = document.License.from_identifier(value)
 
     def p_reviewer_1(self, p):
         """reviewer : REVIEWER entity"""

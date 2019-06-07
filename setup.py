@@ -10,11 +10,15 @@ import unittest
 def test_suite():
     return unittest.TestLoader().discover('tests', pattern='test_*.py')
 
+with open('README.md', 'r') as fh:
+    long_description = fh.read()
 
 setup(
     name='spdx-tools',
     version='0.5.4',
     description='SPDX parser and tools.',
+    long_description=long_description,
+    long_description_content_type="text/markdown",
     packages=['spdx', 'spdx.parsers', 'spdx.writers', 'spdx.parsers.lexers'],
     package_data={'spdx': ['spdx_licenselist.csv']},
     include_package_data=True,

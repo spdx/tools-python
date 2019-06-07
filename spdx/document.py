@@ -266,6 +266,7 @@ class Document(object):
       Type: Review.
     - annotations: SPDX document annotation information, Optional zero or more.
       Type: Annotation.
+    - snippet: Snippet information. Optional zero or more. Type: Snippet.
     """
 
     def __init__(self, version=None, data_license=None, name=None, spdx_id=None,
@@ -284,6 +285,7 @@ class Document(object):
         self.extracted_licenses = []
         self.reviews = []
         self.annotations = []
+        self.snippet = []
 
     def add_review(self, review):
         self.reviews.append(review)
@@ -296,6 +298,9 @@ class Document(object):
 
     def add_ext_document_reference(self, ext_doc_ref):
         self.ext_document_references.append(ext_doc_ref)
+
+    def add_snippet(self, snip):
+        self.snippet.append(snip)
 
     @property
     def files(self):
@@ -324,6 +329,7 @@ class Document(object):
         messages = self.validate_package(messages)
         messages = self.validate_extracted_licenses(messages)
         messages = self.validate_reviews(messages)
+        messages = self.validate_snippet(messages)
 
         return messages
 
@@ -386,6 +392,12 @@ class Document(object):
     def validate_annotations(self, messages):
         for annotation in self.annotations:
             messages = annotation.validate(messages)
+
+        return messages
+
+    def validate_snippet(self, messages=None):
+        for snippet in self.snippet:
+            messages = snippet.validate(messages)
 
         return messages
 
