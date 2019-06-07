@@ -16,7 +16,7 @@
           }, 
           "ns1:name": "some/path", 
           "ns1:licenseInfoFromFiles": {
-            "@rdf:resource": "http://spdx.org/licenses/LGPL-2.1"
+            "@rdf:resource": "http://spdx.org/licenses/LGPL-2.1-only"
           }, 
           "ns1:licenseConcluded": {
             "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
@@ -41,7 +41,7 @@
         "ns1:File": {
           "@rdf:about": "http://www.spdx.org/files#SPDXRef-File",
           "ns1:licenseInfoInFile": {
-            "@rdf:resource": "http://spdx.org/licenses/LGPL-2.1"
+            "@rdf:resource": "http://spdx.org/licenses/LGPL-2.1-only"
           },
           "ns1:checksum": {
             "ns1:Checksum": {
