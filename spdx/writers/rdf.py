@@ -290,6 +290,65 @@ class FileWriter(LicenseWriter):
             self.add_file_dependencies_helper(doc_file)
 
 
+class SnippetWriter(LicenseWriter):
+
+    """
+    Write spdx.snippet.Snippet
+    """
+
+    def __init__(self, document, out):
+        super(SnippetWriter, self).__init__(document, out)
+
+    def create_snippet_node(self, snippet):
+        """
+        Return a snippet node.
+        """
+        snippet_node = URIRef('http://spdx.org/rdf/terms/Snippet#' + snippet.spdx_id)
+        type_triple = (snippet_node, RDF.type, self.spdx_namespace.Snippet)
+        self.graph.add(type_triple)
+
+        if snippet.has_optional_field('comment'):
+            comment_triple = (snippet_node, RDFS.comment, Literal(snippet.comment))
+            self.graph.add(comment_triple)
+
+        if snippet.has_optional_field('name'):
+            name_triple = (snippet_node, self.spdx_namespace.name, Literal(snippet.name))
+            self.graph.add(name_triple)
+
+        if snippet.has_optional_field('license_comment'):
+            lic_comment_triple = (snippet_node, self.spdx_namespace.licenseComments,
+                                  Literal(snippet.license_comment))
+            self.graph.add(lic_comment_triple)
+
+        cr_text_node = self.to_special_value(snippet.copyright)
+        cr_text_triple = (snippet_node, self.spdx_namespace.copyrightText, cr_text_node)
+        self.graph.add(cr_text_triple)
+
+        snip_from_file_triple = (snippet_node, self.spdx_namespace.snippetFromFile,
+                                 Literal(snippet.snip_from_file_spdxid))
+        self.graph.add(snip_from_file_triple)
+
+        conc_lic_node = self.license_or_special(snippet.conc_lics)
+        conc_lic_triple = (
+            snippet_node, self.spdx_namespace.licenseConcluded, conc_lic_node)
+        self.graph.add(conc_lic_triple)
+
+        license_info_nodes = map(self.license_or_special,
+                                 snippet.licenses_in_snippet)
+        for lic in license_info_nodes:
+            triple = (
+            snippet_node, self.spdx_namespace.licenseInfoInSnippet, lic)
+            self.graph.add(triple)
+
+        return snippet_node
+
+    def snippets(self):
+        """
+        Return list of snippet nodes.
+        """
+        return map(self.create_snippet_node, self.document.snippet)
+
+
 class ReviewInfoWriter(BaseWriter):
 
     """
@@ -576,7 +635,7 @@ class PackageWriter(LicenseWriter):
 
 
 class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
-             ExternalDocumentRefWriter, AnnotationInfoWriter):
+             ExternalDocumentRefWriter, AnnotationInfoWriter, SnippetWriter):
     """
     Warpper for other writers to write all fields of spdx.document.Document
     Call `write()` to start writing.
@@ -637,6 +696,10 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
         package_node = self.packages()
         package_triple = (doc_node, self.spdx_namespace.describesPackage, package_node)
         self.graph.add(package_triple)
+        # Add snippet
+        snippet_nodes = self.snippets()
+        for snippet in snippet_nodes:
+            self.graph.add((doc_node, self.spdx_namespace.Snippet, snippet))
 
         # normalize the graph to ensure that the sort order is stable
         self.graph = to_isomorphic(self.graph)
