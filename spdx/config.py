@@ -34,7 +34,7 @@ def load_license_list(file_name):
     licenses_map = {}
     with codecs.open(file_name, 'rb', encoding='utf-8') as lics:
         licenses = json.load(lics)
-        version = licenses['licenseListVersion']
+        version, _, _ = licenses['licenseListVersion'].split('-')
         for lic in licenses['licenses']:
             if lic.get('isDeprecatedLicenseId'):
                 continue
@@ -45,5 +45,28 @@ def load_license_list(file_name):
     return version, licenses_map
 
 
+def load_exception_list(file_name):
+    """
+    Return the exceptions list version tuple and a mapping of exceptions
+    name->id and id->name loaded from a JSON file
+    from https://github.com/spdx/license-list-data
+    """
+    exceptions_map = {}
+    with codecs.open(file_name, 'rb', encoding='utf-8') as excs:
+        exceptions = json.load(excs)
+        version, _, _  = exceptions['licenseListVersion'].split('-')
+        for exc in exceptions['exceptions']:
+            if exc.get('isDeprecatedLicenseId'):
+                continue
+            name = exc['name']
+            identifier = exc['licenseExceptionId']
+            exceptions_map[name] = identifier
+            exceptions_map[identifier] = name
+    return version, exceptions_map
+
+
 _version, LICENSE_MAP = load_license_list(_licenses)
 LICENSE_LIST_VERSION = Version.from_str(_version)
+
+_version, EXCEPTION_MAP = load_exception_list(_exceptions)
+EXCEPTION_LIST_VERSION = Version.from_str(_version)
