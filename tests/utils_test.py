@@ -212,6 +212,32 @@ def check_yaml_scan(expected_file, result_file, regen=False):
     expected = load_and_clean_yaml(expected_file)
     assert expected == result
 
+def load_and_clean_xml(location):
+    """
+    Return plain Python nested data for the SPDX XML file at location
+    suitable for comparison. The file content is cleaned from variable
+    parts such as dates, generated UUIDs and versions
+    """
+    content = codecs.open(location, encoding='utf-8').read()
+    data = xmltodict.parse(content, encoding='utf-8')
+
+    if 'creationInfo' in data['SpdxDocument']['Document']:
+        del(data['SpdxDocument']['Document']['creationInfo'])
+
+    return sort_nested(data)
+
+def check_xml_scan(expected_file, result_file, regen=False):
+    """
+    Check that expected_file and result_file are equal.
+    Both are paths to SPDX XML files, UTF-8 encoded.
+    """
+    result = load_and_clean_xml(result_file)
+    if regen:
+        with codecs.open(expected_file, 'w', encoding='utf-8') as o:
+            o.write(result)
+
+    expected = load_and_clean_xml(expected_file)
+    assert expected == result
 
 class TestParserUtils(object):
     """
@@ -414,7 +440,30 @@ class TestParserUtils(object):
             reviews_list.append(review_dict)
         
         return reviews_list
-    
+
+    @classmethod
+    def snippets_to_list(cls, snippets):
+        """
+        Represents a list of spdx.snippet.Snippet as a Python list of dictionaries
+        """
+        snippets_list = []
+
+        for snippet in snippets:
+            lics_from_snippet = sorted(snippet.licenses_in_snippet, key=lambda lic: lic.identifier)
+            snippet_dict = {
+                'id': snippet.spdx_id,
+                'name': snippet.name,
+                'comment': snippet.comment,
+                'copyrightText': snippet.copyright,
+                'licenseComments': snippet.license_comment,
+                'fileId': snippet.snip_from_file_spdxid,
+                'licenseConcluded': cls.license_to_dict(snippet.conc_lics),
+                'licenseInfoFromSnippet': [cls.license_to_dict(lic) for lic in lics_from_snippet]
+            }
+            snippets_list.append(snippet_dict)
+        
+        return snippets_list
+
     @classmethod
     def to_dict(cls, doc):
         """
@@ -436,5 +485,6 @@ class TestParserUtils(object):
             'externalDocumentRefs': cls.ext_document_references_to_list(sorted(doc.ext_document_references)), 
             'extractedLicenses': cls.extracted_licenses_to_list(sorted(doc.extracted_licenses)), 
             'annotations': cls.annotations_to_list(sorted(doc.annotations)), 
-            'reviews': cls.reviews_to_list(sorted(doc.reviews))
+            'reviews': cls.reviews_to_list(sorted(doc.reviews)),
+            'snippets': cls.snippets_to_list(sorted(doc.snippet))
         }

@@ -98,7 +98,7 @@
                 "dependencies": [], 
                 "artifactOfProjectName": ["Jena"], 
                 "artifactOfProjectHome": ["http://www.openjena.org/"], 
-                "artifactOfProjectURI": ["UNKNOWN"]
+                "artifactOfProjectURI": ["http://subversion.apache.org/doap.rdf"]
             }, 
             {
                 "id": "SPDXRef-File2", 
@@ -250,6 +250,28 @@
                 "email": null
             }, 
             "date": "2011-03-13T00:00:00Z"
+        }
+    ],
+    "snippets": [
+        {
+            "id": "SPDXRef-Snippet", 
+            "name": "from linux kernel", 
+            "comment": "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0-or-later.", 
+            "copyrightText": "Copyright 2008-2010 John Smith", 
+            "licenseComments": "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.", 
+            "fileId": "SPDXRef-DoapSource", 
+            "licenseConcluded": {
+                "identifier": "Apache-2.0", 
+                "name": "Apache License 2.0", 
+                "type": "Single"
+            }, 
+            "licenseInfoFromSnippet": [
+                {
+                    "identifier": "Apache-2.0", 
+                    "name": "Apache License 2.0", 
+                    "type": "Single"
+                }
+            ]
         }
     ]
 }

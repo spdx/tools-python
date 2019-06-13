@@ -15,6 +15,10 @@ class EntityBuilder(rdfbuilders.EntityBuilder):
     def __init__(self):
         super(EntityBuilder, self).__init__()
 
+class SnippetBuilder(rdfbuilders.SnippetBuilder):
+    def __init__(self):
+        super(SnippetBuilder, self).__init__()
+
 class ReviewBuilder(rdfbuilders.ReviewBuilder):
     def __init__(self):
         super(ReviewBuilder, self).__init__()
@@ -163,7 +167,9 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
         else:
             raise OrderError('AnnotationComment')
 
-class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, EntityBuilder, ReviewBuilder, LicenseBuilder, FileBuilder, PackageBuilder, AnnotationBuilder):
+class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, EntityBuilder, 
+            SnippetBuilder, ReviewBuilder, LicenseBuilder, FileBuilder, PackageBuilder, 
+            AnnotationBuilder):
     """SPDX document builder."""
 
     def __init__(self):

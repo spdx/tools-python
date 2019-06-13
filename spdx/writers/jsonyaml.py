@@ -249,6 +249,37 @@ class AnnotationInfoWriter(BaseWriter):
 
         return annotation_objects
 
+class SnippetWriter(BaseWriter):
+    """
+    Responsible for representing spdx.annotation as json-serializable objects
+    """
+    def __init__(self, document):
+        super(SnippetWriter, self).__init__(document)
+    
+    def create_snippet_info(self):
+        snippet_info_objects = []
+        snippets = self.document.snippet
+
+        for snippet in snippets:
+            snippet_object = dict()
+            snippet_object['id'] = self.spdx_id(snippet.spdx_id)
+            snippet_object['copyrightText'] = snippet.copyright
+            snippet_object['fileId'] = self.spdx_id(snippet.snip_from_file_spdxid)
+            snippet_object['licenseConcluded'] = self.license(snippet.conc_lics)
+            snippet_object['licenseInfoFromSnippet'] = list(map(self.license, snippet.licenses_in_snippet))
+
+            if snippet.has_optional_field('name'):
+                snippet_object['name'] = snippet.name
+                
+            if snippet.has_optional_field('comment'):
+                snippet_object['comment'] = snippet.comment
+
+            if snippet.has_optional_field('license_comment'):
+                snippet_object['licenseComments'] = snippet.license_comment
+            
+            snippet_info_objects.append(snippet_object)
+
+        return snippet_info_objects
 
 class ExtractedLicenseWriter(BaseWriter):
     """
@@ -298,7 +329,7 @@ class ExtractedLicenseWriter(BaseWriter):
         return extracted_license_objects
 
 class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter, 
-    AnnotationInfoWriter, ExtractedLicenseWriter):
+    AnnotationInfoWriter, SnippetWriter, ExtractedLicenseWriter):
     """
     Wrapper for the other writers.
     Responsible for representing a whole SPDX Document as json-serializable objects to then

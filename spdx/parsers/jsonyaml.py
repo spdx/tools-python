@@ -389,6 +389,147 @@ class AnnotationParser(BaseParser):
         else:
             self.value_error('ANNOTATION_ID', annotation_id)
 
+class SnippetParser(BaseParser):
+    def __init__(self, builder, logger):
+        super(SnippetParser, self).__init__(builder, logger)
+    
+    def parse_snippets(self, snippets):
+        """
+        Responsible for parsing Snippet Information fields
+        - snippets: Python list with Snippet Information dicts in it
+        """
+        if isinstance(snippets, list):
+            for snippet in snippets:
+                if isinstance(snippet, dict):
+                    if self.parse_snippet_id(snippet.get('id')):
+                        self.parse_snippet_name(snippet.get('name'))
+                        self.parse_snippet_comment(snippet.get('comment'))
+                        self.parse_snippet_copyright(snippet.get('copyrightText'))
+                        self.parse_snippet_license_comment(snippet.get('licenseComments'))
+                        self.parse_snippet_file_spdxid(snippet.get('fileId'))
+                        self.parse_snippet_concluded_license(snippet.get('licenseConcluded'))
+                        self.parse_snippet_license_info_from_snippet(snippet.get('licenseInfoFromSnippet'))
+                else:
+                    self.value_error('SNIPPET', snippet)
+    
+    def parse_snippet_id(self, snippet_id):
+        """
+        Responsible for parsing Snippet id
+        - snippet_id: Python str/unicode
+        """
+        if isinstance(snippet_id, six.string_types):
+            try:
+                return self.builder.create_snippet(self.document, snippet_id)
+            except SPDXValueError:
+                self.value_error('SNIPPET_SPDX_ID_VALUE', snippet_id)
+        else:
+            self.value_error('SNIPPET_SPDX_ID_VALUE', snippet_id)
+
+    def parse_snippet_name(self, snippet_name):
+        """
+        Responsible for parsing Snippet name
+        - snippet_name: Python str/unicode
+        """
+        if isinstance(snippet_name, six.string_types):
+            try:
+                return self.builder.set_snippet_name(self.document, snippet_name)
+            except CardinalityError:
+                self.more_than_one_error('SNIPPET_NAME')
+        elif snippet_name is not None:
+            self.value_error('SNIPPET_NAME', snippet_name)
+
+    def parse_snippet_comment(self, snippet_comment):
+        """
+        Responsible for parsing Snippet comment
+        - snippet_comment: Python str/unicode
+        """
+        if isinstance(snippet_comment, six.string_types):
+            try:
+                return self.builder.set_snippet_comment(self.document, snippet_comment)
+            except CardinalityError:
+                self.more_than_one_error('SNIPPET_COMMENT')
+        elif snippet_comment is not None:
+            self.value_error('SNIPPET_COMMENT', snippet_comment)
+
+    def parse_snippet_copyright(self, copyright_text):
+        """
+        Responsible for parsing Snippet copyright text
+        - copyright_text: Python str/unicode
+        """
+        if isinstance(copyright_text, six.string_types):
+            try:
+                return self.builder.set_snippet_copyright(self.document, copyright_text)
+            except CardinalityError:
+                self.more_than_one_error('SNIPPET_COPYRIGHT')
+        else:
+            self.value_error('SNIPPET_COPYRIGHT', copyright_text)
+
+    def parse_snippet_license_comment(self, license_comment):
+        """
+        Responsible for parsing Snippet license comment
+        - license_comment: Python str/unicode
+        """
+        if isinstance(license_comment, six.string_types):
+            try:
+                return self.builder.set_snippet_lic_comment(self.document, license_comment)
+            except CardinalityError:
+                self.more_than_one_error('SNIPPET_LIC_COMMENTS')
+        elif license_comment is not None:
+            self.value_error('SNIPPET_LIC_COMMENTS', license_comment)
+
+    def parse_snippet_file_spdxid(self, file_spdxid):
+        """
+        Responsible for parsing Snippet file id
+        - file_spdxid: Python str/unicode
+        """
+        if isinstance(file_spdxid, six.string_types):
+            try:
+                return self.builder.set_snip_from_file_spdxid(self.document, file_spdxid)
+            except SPDXValueError:
+                self.value_error('SNIPPET_FILE_ID', file_spdxid)
+            except CardinalityError:
+                self.more_than_one_error('SNIPPET_FILE_ID')
+        else:
+            self.value_error('SNIPPET_FILE_ID', file_spdxid)
+
+    def parse_snippet_concluded_license(self, concluded_license):
+        """
+        Responsible for parsing Snippet concluded license
+        - concluded_license: Python str/unicode
+        """
+        if isinstance(concluded_license, six.string_types):
+            lic_parser = utils.LicenseListParser()
+            lic_parser.build(write_tables=0, debug=0)
+            license_object = self.replace_license(lic_parser.parse(concluded_license))
+            try:
+                return self.builder.set_snip_concluded_license(self.document, license_object)
+            except SPDXValueError:
+                self.value_error('SNIPPET_SINGLE_LICS', concluded_license)
+            except CardinalityError:
+                self.more_than_one_error('SNIPPET_SINGLE_LICS')
+        else:
+            self.value_error('SNIPPET_SINGLE_LICS', concluded_license)
+
+    def parse_snippet_license_info_from_snippet(self, license_info_from_snippet):
+        """
+        Responsible for parsing Snippet license information from snippet
+        - license_info_from_snippet: Python list of licenses information from snippet (str/unicode)
+        """
+        if isinstance(license_info_from_snippet, list):
+            for lic_in_snippet in license_info_from_snippet:
+                if isinstance(lic_in_snippet, six.string_types):
+                    lic_parser = utils.LicenseListParser()
+                    lic_parser.build(write_tables=0, debug=0)
+                    license_object = self.replace_license(lic_parser.parse(lic_in_snippet))
+                    try:
+                        return self.builder.set_snippet_lics_info(self.document, license_object)
+                    except SPDXValueError:
+                        self.value_error('SNIPPET_LIC_INFO', lic_in_snippet)
+                else:
+                    self.value_error('SNIPPET_LIC_INFO', lic_in_snippet)
+        else:
+            self.value_error('SNIPPET_LIC_INFO_FIELD', license_info_from_snippet)
+
 class ReviewParser(BaseParser):
     def __init__(self, builder, logger):
         super(ReviewParser, self).__init__(builder, logger)
@@ -1076,7 +1217,8 @@ class PackageParser(BaseParser):
         elif pkg_chksum is not None:
             self.value_error('PKG_CHECKSUM', pkg_chksum)
 
-class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, AnnotationParser, ReviewParser, FileParser, PackageParser):
+class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, 
+            AnnotationParser, SnippetParser, ReviewParser, FileParser, PackageParser):
     def __init__(self, builder, logger):
         super(Parser, self).__init__(builder, logger)
 
@@ -1102,6 +1244,7 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser, Anno
         self.parse_extracted_license_info(self.document_object.get('extractedLicenseInfos'))
         self.parse_annotations(self.document_object.get('annotations'))
         self.parse_reviews(self.document_object.get('reviewers'))
+        self.parse_snippets(self.document_object.get('snippets'))
 
         self.parse_doc_described_objects(self.document_object.get('documentDescribes'))
 
