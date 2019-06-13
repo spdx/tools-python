@@ -35,12 +35,12 @@
                                 ],
                                 "licenseConcluded": "NOASSERTION",
                                 "copyrightText": "NOASSERTION",
-                                "licenseInfoFromFiles": ["LGPL-2.1+"],
+                                "licenseInfoFromFiles": ["LGPL-2.1-or-later"],
                                 "sha1": "SOME-SHA1"
                             }
                         }
                     ],
-                    "licenseInfoFromFiles": ["LGPL-2.1+"],
+                    "licenseInfoFromFiles": ["LGPL-2.1-or-later"],
                     "sha1": "SOME-SHA1"
                 }
             }

@@ -27,8 +27,8 @@ Document:
           licenseConcluded: "NOASSERTION"
           copyrightText: "NOASSERTION"
           licenseInfoFromFiles:
-          - "LGPL-2.1"
+          - "LGPL-2.1-only"
           sha1: "SOME-SHA1"
       licenseInfoFromFiles:
-      - "LGPL-2.1"
+      - "LGPL-2.1-only"
       sha1: "SOME-SHA1"
