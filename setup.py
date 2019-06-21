@@ -29,6 +29,7 @@ setup(
         'rdflib',
         'six',
         'pyyaml',
+        'xmltodict',
     ],
     entry_points={
         'console_scripts': [

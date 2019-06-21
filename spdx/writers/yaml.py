@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 import yaml
 from spdx.writers.tagvalue import InvalidDocumentError
-from spdx.writers.jsonyaml import Writer
+from spdx.writers.jsonyamlxml import Writer
 
 def write_document(document, out, validate=True):
 

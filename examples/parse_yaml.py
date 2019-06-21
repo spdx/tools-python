@@ -8,7 +8,7 @@ if __name__ == '__main__':
     import spdx.file as spdxfile
     from spdx.parsers.yamlparser import Parser
     from spdx.parsers.loggers import StandardLogger
-    from spdx.parsers.jsonyamlbuilders import Builder
+    from spdx.parsers.jsonyamlxmlbuilders import Builder
     file = sys.argv[1]
     p = Parser(Builder(), StandardLogger())
     with open(file) as f:
