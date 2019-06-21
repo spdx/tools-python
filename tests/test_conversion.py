@@ -27,11 +27,13 @@ from spdx.parsers.tagvalue import Parser as TVParser
 from spdx.parsers.tagvaluebuilders import Builder as TVBuilder
 from spdx.parsers.jsonparser import Parser as JSONParser
 from spdx.parsers.yamlparser import Parser as YAMLParser
-from spdx.parsers.jsonyamlbuilders import Builder as JSONYAMLBuilder
+from spdx.parsers.xmlparser import Parser as XMLParser
+from spdx.parsers.jsonyamlxmlbuilders import Builder as JSONYAMLXMLBuilder
 import spdx.writers.rdf as rdfwriter
 import spdx.writers.tagvalue as tvwriter
 import spdx.writers.json as jsonwriter
 import spdx.writers.yaml as yamlwriter
+import spdx.writers.xml as xmlwriter
 
 def get_temp_file(extension=''):
     """
@@ -65,14 +67,20 @@ class TestConversions(TestCase):
     def parse_json_file(self, file_name):
         """Returns tuple error, document."""
         with open(file_name, mode='r') as infile:
-            jsonparser = JSONParser(JSONYAMLBuilder(), StandardLogger())
+            jsonparser = JSONParser(JSONYAMLXMLBuilder(), StandardLogger())
             return jsonparser.parse(infile)
     
     def parse_yaml_file(self, file_name):
         """Returns tuple error, document."""
         with open(file_name, mode='r') as infile:
-            yamlparser = YAMLParser(JSONYAMLBuilder(), StandardLogger())
+            yamlparser = YAMLParser(JSONYAMLXMLBuilder(), StandardLogger())
             return yamlparser.parse(infile)
+    
+    def parse_xml_file(self, file_name):
+        """Returns tuple error, document."""
+        with open(file_name, mode='r') as infile:
+            xmlparser = XMLParser(JSONYAMLXMLBuilder(), StandardLogger())
+            return xmlparser.parse(infile)
 
     def write_tagvalue_file(self, document, file_name):
         with codecs.open(file_name, mode='w', encoding='utf-8') as out:
@@ -89,6 +97,10 @@ class TestConversions(TestCase):
     def write_yaml_file(self, document, file_name):
         with open(file_name, mode='w') as out:
             yamlwriter.write_document(document, out)
+    
+    def write_xml_file(self, document, file_name):
+        with open(file_name, mode='w') as out:
+            xmlwriter.write_document(document, out)
 
     def test_tagvalue_rdf(self):
         doc, error = self.parse_tagvalue_file('data/SPDXTagExample.tag')
@@ -112,6 +124,16 @@ class TestConversions(TestCase):
     
     def test_yaml_rdf(self):
         doc, error = self.parse_yaml_file('data/SPDXYamlExample.yaml')
+        assert not error
+        assert doc.validate([]) == []
+        filename = get_temp_file('.rdf')
+        self.write_rdf_file(doc, filename)
+        doc, error = self.parse_rdf_file(filename)
+        assert not error
+        assert doc.validate([]) == []
+
+    def test_xml_rdf(self):
+        doc, error = self.parse_xml_file('data/SPDXXmlExample.xml')
         assert not error
         assert doc.validate([]) == []
         filename = get_temp_file('.rdf')
@@ -171,6 +193,16 @@ class TestConversions(TestCase):
         doc, error = self.parse_tagvalue_file(filename)
         assert not error
         assert doc.validate([]) == []
+
+    def test_xml_tagvalue(self):
+        doc, error = self.parse_xml_file('data/SPDXXmlExample.xml')
+        assert not error
+        assert doc.validate([]) == []
+        filename = get_temp_file('.tag')
+        self.write_tagvalue_file(doc, filename)
+        doc, error = self.parse_tagvalue_file(filename)
+        assert not error
+        assert doc.validate([]) == []
     
     def test_tagvalue_json(self):
         doc, error = self.parse_tagvalue_file('data/SPDXTagExample.tag')
@@ -201,12 +233,22 @@ class TestConversions(TestCase):
         doc, error = self.parse_json_file(filename)
         assert not error
         assert doc.validate([]) == []
+
+    def test_xml_json(self):
+        doc, error = self.parse_xml_file('data/SPDXXmlExample.xml')
+        assert not error
+        assert doc.validate([]) == []
+        filename = get_temp_file('.json')
+        self.write_json_file(doc, filename)
+        doc, error = self.parse_json_file(filename)
+        assert not error
+        assert doc.validate([]) == []
     
     def test_json_json(self):
         doc, error = self.parse_json_file('data/SPDXJsonExample.json')
         assert not error
         assert doc.validate([]) == []
-        filename = get_temp_file('.tag')
+        filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
         doc, error = self.parse_json_file(filename)
         assert not error
@@ -241,14 +283,74 @@ class TestConversions(TestCase):
         doc, error = self.parse_yaml_file(filename)
         assert not error
         assert doc.validate([]) == []
+
+    def test_xml_yaml(self):
+        doc, error = self.parse_xml_file('data/SPDXXmlExample.xml')
+        assert not error
+        assert doc.validate([]) == []
+        filename = get_temp_file('.yaml')
+        self.write_yaml_file(doc, filename)
+        doc, error = self.parse_yaml_file(filename)
+        assert not error
+        assert doc.validate([]) == []
     
     def test_yaml_yaml(self):
         doc, error = self.parse_yaml_file('data/SPDXYamlExample.yaml')
         assert not error
         assert doc.validate([]) == []
-        filename = get_temp_file('.tag')
+        filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
         doc, error = self.parse_yaml_file(filename)
+        assert not error
+        assert doc.validate([]) == []
+    
+    def test_tagvalue_xml(self):
+        doc, error = self.parse_tagvalue_file('data/SPDXTagExample.tag')
+        assert not error
+        assert doc.validate([]) == []
+        filename = get_temp_file('.xml')
+        self.write_xml_file(doc, filename)
+        doc, error = self.parse_xml_file(filename)
+        assert not error
+        assert doc.validate([]) == []
+    
+    def test_rdf_xml(self):
+        doc, error = self.parse_rdf_file('data/SPDXRdfExample.rdf')
+        assert not error
+        assert doc.validate([]) == []
+        filename = get_temp_file('.xml')
+        self.write_xml_file(doc, filename)
+        doc, error = self.parse_xml_file(filename)
+        assert not error
+        assert doc.validate([]) == []
+    
+    def test_json_xml(self):
+        doc, error = self.parse_json_file('data/SPDXJsonExample.json')
+        assert not error
+        assert doc.validate([]) == []
+        filename = get_temp_file('.xml')
+        self.write_xml_file(doc, filename)
+        doc, error = self.parse_xml_file(filename)
+        assert not error
+        assert doc.validate([]) == []
+    
+    def test_yaml_xml(self):
+        doc, error = self.parse_yaml_file('data/SPDXYamlExample.yaml')
+        assert not error
+        assert doc.validate([]) == []
+        filename = get_temp_file('.xml')
+        self.write_xml_file(doc, filename)
+        doc, error = self.parse_xml_file(filename)
+        assert not error
+        assert doc.validate([]) == []
+
+    def test_xml_xml(self):
+        doc, error = self.parse_xml_file('data/SPDXXmlExample.xml')
+        assert not error
+        assert doc.validate([]) == []
+        filename = get_temp_file('.xml')
+        self.write_xml_file(doc, filename)
+        doc, error = self.parse_xml_file(filename)
         assert not error
         assert doc.validate([]) == []
 

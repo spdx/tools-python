@@ -333,6 +333,46 @@ class TestWriters(TestCase):
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
 
+    def test_write_document_xml_with_validate(self):
+        from spdx.writers.xml import write_document
+        doc = self._get_lgpl_doc()
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple.xml')
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=True)
+
+            expected_file = utils_test.get_test_loc(
+                'doc_write/xml-simple.xml',
+                test_data_dir=utils_test.test_data_dir)
+
+            utils_test.check_xml_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+
+    def test_write_document_xml_with_or_later_with_validate(self):
+        from spdx.writers.xml import write_document
+        doc = self._get_lgpl_doc(or_later=True)
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple-plus.xml')
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=True)
+
+            expected_file = utils_test.get_test_loc(
+                'doc_write/xml-simple-plus.xml',
+                test_data_dir=utils_test.test_data_dir)
+
+            utils_test.check_xml_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+
 
 class TestLicense(TestCase):
 
