@@ -95,13 +95,15 @@ def _add_parens(required, text):
 
 @total_ordering
 class License(object):
-    def __init__(self, full_name, identifier):
-        self._full_name = full_name
-        self._identifier = identifier
+    def __init__(self, full_name, identifier, is_exception=False):
+        self.full_name = full_name
+        self.identifier = self.key = identifier
+        self.is_exception = is_exception
 
     @classmethod
     def from_identifier(cls, identifier):
-        """If identifier exists in config.LICENSE_MAP
+        """
+        If identifier exists in config.LICENSE_MAP
         the full_name is retrieved from it. Otherwise
         the full_name is the same as the identifier.
         """
@@ -113,7 +115,7 @@ class License(object):
     @classmethod
     def from_full_name(cls, full_name):
         """
-        Returna new License for a full_name. If the full_name exists in
+        Return a new License for a full_name. If the full_name exists in
         config.LICENSE_MAP the identifier is retrieved from it.
         Otherwise the identifier is the same as the full_name.
         """
@@ -125,18 +127,6 @@ class License(object):
     @property
     def url(self):
         return "http://spdx.org/licenses/{0}".format(self.identifier)
-
-    @property
-    def full_name(self):
-        return self._full_name
-
-    @full_name.setter
-    def full_name(self, value):
-        self._full_name = value
-
-    @property
-    def identifier(self):
-        return self._identifier
 
     def __eq__(self, other):
         return (
@@ -162,10 +152,9 @@ class LicenseConjunction(License):
     def __init__(self, license_1, license_2):
         self.license_1 = license_1
         self.license_2 = license_2
-        super(LicenseConjunction, self).__init__(self.full_name, self.identifier)
+        super(LicenseConjunction, self).__init__(self.build_full_name(), self.build_identifier())
 
-    @property
-    def full_name(self):
+    def build_full_name(self):
         license_1_complex = type(self.license_1) == LicenseDisjunction
         license_2_complex = type(self.license_2) == LicenseDisjunction
 
@@ -173,8 +162,7 @@ class LicenseConjunction(License):
             _add_parens(license_1_complex, self.license_1.full_name),
             _add_parens(license_2_complex, self.license_2.full_name))
 
-    @property
-    def identifier(self):
+    def build_identifier(self):
         license_1_complex = type(self.license_1) == LicenseDisjunction
         license_2_complex = type(self.license_2) == LicenseDisjunction
 
@@ -191,10 +179,9 @@ class LicenseDisjunction(License):
     def __init__(self, license_1, license_2):
         self.license_1 = license_1
         self.license_2 = license_2
-        super(LicenseDisjunction, self).__init__(self.full_name, self.identifier)
+        super(LicenseDisjunction, self).__init__(self.build_full_name(), self.build_identifier())
 
-    @property
-    def full_name(self):
+    def build_full_name(self):
         license_1_complex = type(self.license_1) == LicenseConjunction
         license_2_complex = type(self.license_2) == LicenseConjunction
 
@@ -202,8 +189,7 @@ class LicenseDisjunction(License):
             _add_parens(license_1_complex, self.license_1.full_name),
             _add_parens(license_2_complex, self.license_2.full_name))
 
-    @property
-    def identifier(self):
+    def build_identifier(self):
         license_1_complex = type(self.license_1) == LicenseConjunction
         license_2_complex = type(self.license_2) == LicenseConjunction
 

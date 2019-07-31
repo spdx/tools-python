@@ -34,6 +34,7 @@ setup(
         'six',
         'pyyaml',
         'xmltodict',
+        'license-expression',
     ],
     entry_points={
         'console_scripts': [

@@ -26,6 +26,7 @@ from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.lexers.tagvalue import Lexer
 from spdx import document
+from spdx.document import License
 
 
 ERROR_MESSAGES = {
@@ -128,8 +129,7 @@ class Parser(object):
         self.builder = builder
         self.logger = logger
         self.error = False
-        self.license_list_parser = utils.LicenseListParser()
-        self.license_list_parser.build(write_tables=0, debug=0)
+        self.license_expression_parser = utils.build_license_expression_parser()
 
     def p_start_1(self, p):
         'start : start attrib '
@@ -565,7 +565,8 @@ class Parser(object):
         if (p[1] in config.LICENSE_MAP.keys()) or (ref_re.match(p[1]) is not None):
             p[0] = document.License.from_identifier(value)
         else:
-            p[0] = self.license_list_parser.parse(value)
+            license_expression = self.license_expression_parser.parse(value).render()
+            p[0] = License(license_expression, license_expression)
 
     def p_file_name_1(self, p):
         """file_name : FILE_NAME LINE"""
