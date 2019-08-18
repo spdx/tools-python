@@ -75,21 +75,18 @@ _exceptions = os.path.join(_base_dir, 'exceptions.json')
 
 
 def build_license_expression_parser():
-    licenses_file = codecs.open(_licenses, 'rb')
-    exceptions_file = codecs.open(_exceptions, 'rb')
-
-    licenses_sequence = json.load(licenses_file)['licenses']
-    exceptions_sequence = json.load(exceptions_file)['exceptions']
-
     symbols = []
+    with codecs.open(_licenses, 'rb') as licenses_file:
+        licenses_sequence = json.load(licenses_file)['licenses']
+        for lic in licenses_sequence:
+            if not lic['isDeprecatedLicenseId']:
+                symbols.append(LicenseSymbol(lic['licenseId']))
 
-    for lic in licenses_sequence:
-        if not lic['isDeprecatedLicenseId']:
-            symbols.append(LicenseSymbol(lic['licenseId']))
-
-    for excep in exceptions_sequence:
-        if not excep['isDeprecatedLicenseId']:
-            symbols.append(LicenseSymbol(excep['licenseExceptionId'], is_exception=True))
+    with codecs.open(_exceptions, 'rb') as exceptions_file:
+        exceptions_sequence = json.load(exceptions_file)['exceptions']
+        for excep in exceptions_sequence:
+            if not excep['isDeprecatedLicenseId']:
+                symbols.append(LicenseSymbol(excep['licenseExceptionId'], is_exception=True))
         
     return Licensing(symbols=symbols)
 
