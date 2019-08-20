@@ -28,6 +28,7 @@ setup(
         'ply',
         'rdflib',
         'six',
+        'pyyaml',
     ],
     entry_points={
         'console_scripts': [

@@ -118,7 +118,6 @@
     <referencesFile>
       <File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File2">
         <copyrightText>Copyright 2010, 2011 Source Auditor Inc.</copyrightText>
-        <licenseComments></licenseComments>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>

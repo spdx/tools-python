@@ -111,7 +111,7 @@ class BaseParser(object):
         elif value == self.spdx_namespace.unknown:
             return utils.UnKnown()
         else:
-            return value
+            return six.text_type(value)
 
 
 class LicenseParser(BaseParser):
@@ -140,7 +140,7 @@ class LicenseParser(BaseParser):
             if special == lics:
                 if self.LICS_REF_REGEX.match(lics):
                     # Is a license ref i.e LicenseRef-1
-                    return document.License.from_identifier(lics)
+                    return document.License.from_identifier(six.text_type(lics))
                 else:
                     # Not a known license form
                     raise SPDXValueError('License')
@@ -169,7 +169,7 @@ class LicenseParser(BaseParser):
 
         identifier_tripple = identifier_tripples[0]
         _s, _p, identifier = identifier_tripple
-        return identifier
+        return six.text_type(identifier)
 
     def get_extr_license_text(self, extr_lic):
         """
@@ -188,7 +188,7 @@ class LicenseParser(BaseParser):
 
         text_tripple = text_tripples[0]
         _s, _p, text = text_tripple
-        return text
+        return six.text_type(text)
 
     def get_extr_lic_name(self, extr_lic):
         """
@@ -200,14 +200,14 @@ class LicenseParser(BaseParser):
             return
         elif len(extr_name_list) == 0:
             return
-        return self.to_special_value(extr_name_list[0][2])
+        return six.text_type(self.to_special_value(extr_name_list[0][2]))
 
     def get_extr_lics_xref(self, extr_lic):
         """
         Return a list of cross references.
         """
         xrefs = list(self.graph.triples((extr_lic, RDFS.seeAlso, None)))
-        return map(lambda xref_triple: xref_triple[2], xrefs)
+        return map(lambda xref_triple: six.text_type(xref_triple[2]), xrefs)
 
     def get_extr_lics_comment(self, extr_lics):
         """
@@ -219,7 +219,7 @@ class LicenseParser(BaseParser):
             self.more_than_one_error('extracted license comment')
             return
         elif len(comment_list) == 1:
-            return comment_list[0][2]
+            return six.text_type(comment_list[0][2])
         else:
             return
 
@@ -249,7 +249,7 @@ class LicenseParser(BaseParser):
             lic.full_name = name
         if comment is not None:
             lic.comment = comment
-        lic.cross_ref = map(lambda x: six.text_type(x), xrefs)
+        lic.cross_ref = xrefs
         return lic
 
     def handle_extracted_license(self, extr_lic):
@@ -352,7 +352,7 @@ class PackageParser(LicenseParser):
     def p_pkg_cr_text(self, p_term, predicate):
         try:
             for _, _, text in self.graph.triples((p_term, predicate, None)):
-                self.builder.set_pkg_cr_text(self.doc, self.to_special_value(six.text_type(text)))
+                self.builder.set_pkg_cr_text(self.doc, six.text_type(self.to_special_value(text)))
         except CardinalityError:
             self.more_than_one_error('package copyright text')
 
@@ -653,7 +653,7 @@ class FileParser(LicenseParser):
     def p_file_spdx_id(self, f_term, predicate):
         try:
             try:
-                self.builder.set_file_spdx_id(self.doc, f_term)
+                self.builder.set_file_spdx_id(self.doc, six.text_type(f_term))
             except SPDXValueError:
                 self.value_error('FILE_SPDX_ID_VALUE', f_term)
         except CardinalityError:
@@ -878,7 +878,7 @@ class AnnotationParser(BaseParser):
             annotation_type = self.get_annotation_type(r_term)
             self.builder.add_annotation_type(self.doc, annotation_type)
             try:
-                self.builder.set_annotation_spdx_id(self.doc, r_term)
+                self.builder.set_annotation_spdx_id(self.doc, six.text_type(r_term))
             except CardinalityError:
                 self.more_than_one_error('SPDX Identifier Reference')
 
@@ -888,7 +888,7 @@ class AnnotationParser(BaseParser):
         for _, _, typ in self.graph.triples((
                 r_term, self.spdx_namespace['annotationType'], None)):
             if typ is not None:
-                return typ
+                return six.text_type(typ)
             else:
                 self.error = True
                 msg = 'Annotation must have exactly one annotation type.'
@@ -1034,7 +1034,7 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
         """Parses the version, data license, name, SPDX Identifier, namespace,
         and comment."""
         try:
-            self.builder.set_doc_spdx_id(self.doc, doc_term)
+            self.builder.set_doc_spdx_id(self.doc, six.text_type(doc_term))
         except SPDXValueError:
             self.value_error('DOC_SPDX_ID_VALUE', doc_term)
         try:
