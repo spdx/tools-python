@@ -132,9 +132,10 @@
       </File>
     </referencesFile>
     <describesPackage>
-      <Package rdf:about="http://www.spdx.org/tools#SPDXANALYSIS?package">
+      <Package rdf:about="http://www.spdx.org/tools#SPDXRef-Package">
         <licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/Apache-1.0"/>
         <downloadLocation>http://www.spdx.org/tools</downloadLocation>
+        <filesAnalyzed>false</filesAnalyzed>
         <supplier>Organization:Linux Foundation</supplier>
         <hasFile rdf:nodeID="A0"/>
         <licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
@@ -281,6 +282,14 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
         <licenseComments>The declared license information can be found in the NOTICE file at the root of the archive file</licenseComments>
         <summary>SPDX Translator utility</summary>
         <licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/MPL-1.1"/>
+        <externalRef>
+          <ExternalRef>
+            <referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_packageManager"/>
+            <referenceType rdf:resource="http://spdx.org/rdf/references/maven-central"/>
+            <referenceLocator>org.apache.commons:commons-lang:3.2.1</referenceLocator>
+            <rdfs:comment>NIST National Vulnerability Database (NVD) describes security vulnerabilities (CVEs) which affect Vendor Product Version acmecorp:acmenator:6.6.6</rdfs:comment>
+          </ExternalRef>
+        </externalRef>
       </Package>
     </describesPackage>
     <rdfs:comment>This is a sample spreadsheet</rdfs:comment>

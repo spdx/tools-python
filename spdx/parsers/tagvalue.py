@@ -61,11 +61,14 @@ ERROR_MESSAGES = {
                                 'SPDXID is a unique string containing letters, numbers, ".","-".',
     'A_BEFORE_B': '{0} Can not appear before {1}, line: {2}',
     'PACKAGE_NAME_VALUE': 'PackageName must be single line of text, line: {0}',
+    'PKG_SPDX_ID_VALUE': 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
+                             'letters, numbers, ".", "-".',
     'PKG_VERSION_VALUE': 'PackageVersion must be single line of text, line: {0}',
     'PKG_FILE_NAME_VALUE': 'PackageFileName must be single line of text, line: {0}',
     'PKG_SUPPL_VALUE': 'PackageSupplier must be Organization, Person or NOASSERTION, line: {0}',
     'PKG_ORIG_VALUE': 'PackageOriginator must be Organization, Person or NOASSERTION, line: {0}',
     'PKG_DOWN_VALUE': 'PackageDownloadLocation must be a url or NONE or NOASSERTION, line: {0}',
+    'PKG_FILES_ANALYZED_VALUE': 'FilesAnalyzed must be a boolean value, line: {0}',
     'PKG_HOME_VALUE': 'PackageHomePage must be a url or NONE or NOASSERTION, line: {0}',
     'PKG_SRC_INFO_VALUE': 'PackageSourceInfo must be free form text, line: {0}',
     'PKG_CHKSUM_VALUE': 'PackageChecksum must be a single line of text, line: {0}',
@@ -75,6 +78,9 @@ ERROR_MESSAGES = {
     'PKG_LICS_COMMENT_VALUE': 'PackageLicenseComments must be free form text, line: {0}',
     'PKG_SUM_VALUE': 'PackageSummary must be free form text, line: {0}',
     'PKG_DESC_VALUE': 'PackageDescription must be free form text, line: {0}',
+    'PKG_COMMENT_VALUE': 'PackageComment must be free form text, line: {0}',
+    'PKG_EXT_REF_VALUE': 'ExternalRef must contain category, type, and locator in the standard format, line:{0}.',
+    'PKG_EXT_REF_COMMENT_VALUE' : 'ExternalRefComment must be free form text, line:{0}',
     'FILE_NAME_VALUE': 'FileName must be a single line of text, line: {0}',
     'FILE_COMMENT_VALUE': 'FileComment must be free form text, line:{0}',
     'FILE_TYPE_VALUE': 'FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}',
@@ -156,6 +162,7 @@ class Parser(object):
                   | package_name
                   | package_version
                   | pkg_down_location
+                  | pkg_files_analyzed
                   | pkg_home
                   | pkg_summary
                   | pkg_src_info
@@ -165,11 +172,14 @@ class Parser(object):
                   | pkg_chksum
                   | pkg_verif
                   | pkg_desc
+                  | pkg_comment
                   | pkg_lic_decl
                   | pkg_lic_conc
                   | pkg_lic_ff
                   | pkg_lic_comment
                   | pkg_cr_text
+                  | pkg_ext_ref
+                  | pkg_ext_ref_comment
                   | file_name
                   | file_type
                   | file_chksum
@@ -582,6 +592,8 @@ class Parser(object):
             value = p[2]
         if not self.builder.doc_spdx_id_set:
             self.builder.set_doc_spdx_id(self.document, value)
+        elif not self.builder.package_spdx_id_set:
+            self.builder.set_pkg_spdx_id(self.document, value)
         else:
             self.builder.set_file_spdx_id(self.document, value)
 
@@ -687,6 +699,26 @@ class Parser(object):
         msg = ERROR_MESSAGES['PKG_DESC_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
+    def p_pkg_comment_1(self, p):
+        """pkg_comment : PKG_COMMENT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_pkg_comment(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('PackageComment', p.lineno(1))
+        except OrderError:
+            self.order_error('PackageComment', 'PackageFileName',
+                             p.lineno(1))
+
+    def p_pkg_comment_2(self, p):
+        """pkg_comment : PKG_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_COMMENT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
     def p_pkg_summary_1(self, p):
         """pkg_summary : PKG_SUM TEXT"""
         try:
@@ -719,6 +751,47 @@ class Parser(object):
         """pkg_cr_text : PKG_CPY_TEXT error"""
         self.error = True
         msg = ERROR_MESSAGES['PKG_CPY_TEXT_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_pkg_ext_refs_1(self, p):
+        """pkg_ext_ref : PKG_EXT_REF LINE"""
+        try:
+            if six.PY2:
+                pkg_ext_info = p[2].decode(encoding='utf-8')
+            else:
+                pkg_ext_info = p[2]
+            if len(pkg_ext_info.split()) != 3:
+                raise SPDXValueError
+            else:
+                pkg_ext_category, pkg_ext_type, pkg_ext_locator = pkg_ext_info.split()
+            self.builder.add_pkg_ext_refs(self.document, pkg_ext_category,
+                                          pkg_ext_type, pkg_ext_locator)
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['PKG_EXT_REF_VALUE'].format(p.lineno(2))
+            self.logger.log(msg)
+
+    def p_pkg_ext_refs_2(self, p):
+        """pkg_ext_ref : PKG_EXT_REF error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_EXT_REF_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_pkg_ext_ref_comment_1(self, p):
+        """pkg_ext_ref_comment : PKG_EXT_REF_COMMENT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.add_pkg_ext_ref_comment(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('ExternalRefComment', p.lineno(1))
+
+    def p_pkg_ext_ref_comment_2(self, p):
+        """pkg_ext_ref_comment : PKG_EXT_REF_COMMENT error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_EXT_REF_COMMENT_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_pkg_cr_text_value_1(self, p):
@@ -930,6 +1003,27 @@ class Parser(object):
         """pkg_down_location : PKG_DOWN error"""
         self.error = True
         msg = ERROR_MESSAGES['PKG_DOWN_VALUE'].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_pkg_files_analyzed_1(self, p):
+        """pkg_files_analyzed : PKG_FILES_ANALYZED LINE"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding='utf-8')
+            else:
+                value = p[2]
+            self.builder.set_pkg_files_analyzed(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error('FilesAnalyzed', p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = ERROR_MESSAGES['PKG_FILES_ANALYZED_VALUE'].format(p.lineno(1))
+            self.logger.log(msg)
+
+    def p_pkg_files_analyzed_2(self, p):
+        """pkg_files_analyzed : PKG_FILES_ANALYZED error"""
+        self.error = True
+        msg = ERROR_MESSAGES['PKG_FILES_ANALYZED_VALUE'].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_pkg_down_value_1(self, p):

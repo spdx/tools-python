@@ -551,6 +551,9 @@ class PackageWriter(LicenseWriter):
         self.handle_package_literal_optional(package, package_node, self.spdx_namespace.licenseComments, 'license_comment')
         self.handle_package_literal_optional(package, package_node, self.spdx_namespace.summary, 'summary')
         self.handle_package_literal_optional(package, package_node, self.spdx_namespace.description, 'description')
+        self.handle_package_literal_optional(package, package_node, self.spdx_namespace.comment, 'comment')
+        self.handle_package_literal_optional(package, package_node, self.spdx_namespace.filesAnalyzed, 'files_analyzed')
+
 
         if package.has_optional_field('check_sum'):
             checksum_node = self.create_checksum_node(package.check_sum)
@@ -566,9 +569,14 @@ class PackageWriter(LicenseWriter):
         Return a Node representing the package.
         Files must have been added to the graph before this method is called.
         """
-        package_node = BNode()
+        package_node = URIRef('http://www.spdx.org/tools#SPDXRef-Package')
         type_triple = (package_node, RDF.type, self.spdx_namespace.Package)
         self.graph.add(type_triple)
+        # Package SPDXID
+        pkg_spdx_id = URIRef(package.spdx_id)
+        pkg_spdx_id_triple = (package_node, self.spdx_namespace.Package,
+                              pkg_spdx_id)
+        self.graph.add(pkg_spdx_id_triple)
         # Handle optional fields:
         self.handle_pkg_optional_fields(package, package_node)
         # package name
@@ -634,8 +642,53 @@ class PackageWriter(LicenseWriter):
             self.graph.add(triple)
 
 
-class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
-             ExternalDocumentRefWriter, AnnotationInfoWriter, SnippetWriter):
+class PackageExternalRefWriter(BaseWriter):
+    """
+    Write class spdx.package.ExternalPackageRef
+    """
+
+    def __init__(self, document, out):
+        super(PackageExternalRefWriter, self).__init__(document, out)
+
+    def create_package_external_ref_node(self, pkg_ext_refs):
+        """
+        Add and return an external package reference node to graph.
+        """
+        pkg_ext_ref_node = BNode()
+        pkg_ext_ref_triple = (pkg_ext_ref_node, RDF.type, self.spdx_namespace.ExternalRef)
+        self.graph.add(pkg_ext_ref_triple)
+
+        pkg_ext_ref_category = Literal(pkg_ext_refs.category)
+        pkg_ext_ref_category_triple = (
+            pkg_ext_ref_node, self.spdx_namespace.referenceCategory, pkg_ext_ref_category)
+        self.graph.add(pkg_ext_ref_category_triple)
+
+        pkg_ext_ref_type = Literal(pkg_ext_refs.pkg_ext_ref_type)
+        pkg_ext_ref_type_triple = (
+            pkg_ext_ref_node, self.spdx_namespace.referenceType, pkg_ext_ref_type)
+        self.graph.add(pkg_ext_ref_type_triple)
+
+        pkg_ext_ref_locator = Literal(pkg_ext_refs.locator)
+        pkg_ext_ref_locator_triple = (
+            pkg_ext_ref_node, self.spdx_namespace.referenceLocator, pkg_ext_ref_locator)
+        self.graph.add(pkg_ext_ref_locator_triple)
+
+        pkg_ext_ref_comment = Literal(pkg_ext_refs.comment)
+        pkg_ext_ref_comment_triple = (
+            pkg_ext_ref_node, RDFS.comment, pkg_ext_ref_comment)
+        self.graph.add(pkg_ext_ref_comment_triple)
+
+        return pkg_ext_ref_node
+
+    def pkg_ext_refs(self):
+        """Returns a list of package external references."""
+        return map(self.create_package_external_ref_node,
+                   self.document.package.pkg_ext_refs)
+
+
+class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter, 
+            PackageExternalRefWriter, ExternalDocumentRefWriter, AnnotationInfoWriter, 
+            SnippetWriter):
     """
     Warpper for other writers to write all fields of spdx.document.Document
     Call `write()` to start writing.

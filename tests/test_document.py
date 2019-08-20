@@ -92,6 +92,7 @@ class TestDocument(TestCase):
             'No creators defined, must have at least one.',
             'Creation info missing created date.',
             'Package checksum must be instance of spdx.checksum.Algorithm',
+            'Package download_location can not be None.',
             'Package verif_code can not be None.',
             'Package cr_text can not be None.',
             'Package must have at least one file.',
@@ -110,6 +111,7 @@ class TestDocument(TestCase):
         doc.creation_info.set_created_now()
 
         package = doc.package = Package(name='some/path', download_location=NoAssert())
+        package.spdx_id = 'SPDXRef-Package'
         package.cr_text = 'Some copyrught'
         package.verif_code = 'SOME code'
         package.license_declared = NoAssert()
@@ -143,6 +145,7 @@ class TestWriters(TestCase):
         doc.creation_info.set_created_now()
 
         package = doc.package = Package(name='some/path', download_location=NoAssert())
+        package.spdx_id = 'SPDXRef-Package'
         package.cr_text = 'Some copyrught'
         package.verif_code = 'SOME code'
         package.check_sum = Algorithm('SHA1', 'SOME-SHA1')
