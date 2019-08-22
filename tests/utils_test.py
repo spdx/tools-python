@@ -314,6 +314,7 @@ class TestParserUtils(object):
         """
         lics_from_files = sorted(package.licenses_from_files, key=lambda lic: lic.identifier)
         return {
+            'id': package.spdx_id, 
             'name': package.name, 
             'packageFileName': package.file_name, 
             'summary': package.summary, 

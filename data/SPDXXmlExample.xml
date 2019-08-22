@@ -5,6 +5,7 @@
 		<name>Sample_Document-V2.1</name>
 		<documentDescribes>
 			<Package>
+				<id>SPDXRef-Package</id>
 				<originator>Organization: SPDX</originator>
 				<files>
 					<File>

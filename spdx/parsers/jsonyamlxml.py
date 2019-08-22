@@ -875,6 +875,7 @@ class PackageParser(BaseParser):
         """
         if isinstance(package, dict):
             self.parse_pkg_name(package.get('name'))
+            self.parse_pkg_id(package.get('id'))
             self.parse_pkg_version(package.get('versionInfo'))
             self.parse_pkg_file_name(package.get('packageFileName'))
             self.parse_pkg_supplier(package.get('supplier'))
@@ -908,6 +909,21 @@ class PackageParser(BaseParser):
         # pkg_name is set even if it is None or not string. If weren't, the other attributes  
         # would be added to the package previously added.
         # Another approach is to skip the whole package itself
+    
+    def parse_pkg_id(self, pkg_id):
+        """
+        Responsible for parsing Package id
+        - pkg_id: Python str/unicode
+        """
+        if isinstance(pkg_id, six.string_types):
+            try:
+                return self.builder.set_pkg_spdx_id(self.document, pkg_id)
+            except SPDXValueError:
+                self.value_error('PKG_ID', pkg_id)
+            except CardinalityError:
+                self.more_than_one_error('PKG_ID')
+        else:
+            self.value_error('PKG_ID', pkg_id)
     
     def parse_pkg_version(self, pkg_version):
         """

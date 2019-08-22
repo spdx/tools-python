@@ -5,6 +5,7 @@
         "documentDescribes": [
             {
                 "Package": {
+                    "id": "SPDXRef-Package", 
                     "originator": "Organization: SPDX", 
                     "files": [
                         {

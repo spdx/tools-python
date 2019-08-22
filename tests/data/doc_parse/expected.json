@@ -13,8 +13,8 @@
         "type": "Single"
     },
     "licenseListVersion": {
-        "major": 2,
-        "minor": 6
+        "major": 3,
+        "minor": 5
     }, 
     "creators": [
         {
@@ -35,6 +35,7 @@
     "created": "2010-02-03T00:00:00Z", 
     "creatorComment": "This is an example of an SPDX spreadsheet format", 
     "package": {
+        "id": "SPDXRef-Package", 
         "name": "SPDX Translator", 
         "packageFileName": "spdxtranslator-1.0.zip", 
         "summary": "SPDX Translator utility", 

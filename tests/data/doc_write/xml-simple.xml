@@ -8,6 +8,7 @@
 		<namespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</namespace>
         <documentDescribes>
             <Package>
+				<id>SPDXRef-Package</id>
                 <name>some/path</name>
                 <downloadLocation>NOASSERTION</downloadLocation>
                 <copyrightText>Some copyrught</copyrightText>

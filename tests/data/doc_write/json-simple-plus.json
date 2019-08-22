@@ -8,6 +8,7 @@
         "documentDescribes": [
             {
                 "Package": {
+                    "id": "SPDXRef-Package", 
                     "name": "some/path",
                     "downloadLocation": "NOASSERTION",
                     "copyrightText": "Some copyrught",

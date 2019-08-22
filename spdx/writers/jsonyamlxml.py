@@ -90,6 +90,7 @@ class PackageWriter(BaseWriter):
     def create_package_info(self):
         package_object = dict()
         package = self.document.package
+        package_object['id'] = self.spdx_id(package.spdx_id)
         package_object['name'] = package.name
         package_object['downloadLocation'] = package.download_location.__str__()
         package_object['packageVerificationCode'] = self.package_verification_code(package)
