@@ -30,8 +30,7 @@ Pypi: https://pypi.python.org/pypi/spdx-tools
 # Features
 
 * API to create and manipulate SPDX documents.
-* Parse and create Tag/Value format SPDX files
-* Parse and create RDF format SPDX files
+* Parse and create Tag/Value, RDF, JSON, YAML, XML format SPDX files
 
 
 # TODOs
@@ -54,7 +53,7 @@ Example tag/value parsing usage:
 
 ```
 
-The `examples` directory contains several code samples:
+The `examples` directory contains several code samples. Here some of them:
 
 * `parse_tv.py` is an example tag/value parsing usage.
   Try running `python parse_tv.py ../data/SPDXSimpleTag.tag `
@@ -119,7 +118,10 @@ If there is no issue for the changes that you want to make, create first an issu
 # Dependencies
 
 * PLY : https://pypi.python.org/pypi/ply/ used for parsing.
-* rdflib : https://pypi.python.org/pypi/rdflib/ for for handling RDF. 
+* rdflib : https://pypi.python.org/pypi/rdflib/ for handling RDF. 
+* PyYAML: https://pypi.org/project/PyYAML/ for handling YAML.
+* xmltodict: https://pypi.org/project/xmltodict/ for handling XML.
+
 
 # Support
 
