@@ -17,24 +17,24 @@ class TestParser(TestCase):
     def test_json_parser(self):
         parser = jsonparser.Parser(Builder(), StandardLogger())
         test_file = utils_test.get_test_loc('../../data/SPDXJsonExample.json', test_data_dir=utils_test.test_data_dir)
-        with open(test_file, 'r') as file:
-            document, _ = parser.parse(file)
+        with open(test_file, 'r') as f:
+            document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json', test_data_dir=utils_test.test_data_dir)
         self.check_document(document, expected_loc)
     
     def test_yaml_parser(self):
         parser = yamlparser.Parser(Builder(), StandardLogger())
         test_file = utils_test.get_test_loc('../../data/SPDXYamlExample.yaml', test_data_dir=utils_test.test_data_dir)
-        with open(test_file, 'r') as file:
-            document, _ = parser.parse(file)
+        with open(test_file, 'r') as f:
+            document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json', test_data_dir=utils_test.test_data_dir)
         self.check_document(document, expected_loc)
     
     def test_xml_parser(self):
         parser = xmlparser.Parser(Builder(), StandardLogger())
         test_file = utils_test.get_test_loc('../../data/SPDXXmlExample.xml', test_data_dir=utils_test.test_data_dir)
-        with open(test_file, 'r') as file:
-            document, _ = parser.parse(file)
+        with open(test_file, 'r') as f:
+            document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json', test_data_dir=utils_test.test_data_dir)
         self.check_document(document, expected_loc)
     
