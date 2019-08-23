@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from __future__ import print_function
 from __future__ import division
 
-import codecs
+import io
 import ntpath
 import os
 import posixpath
@@ -83,7 +83,8 @@ def load_and_clean_rdf(location):
     tool and lxml do not seem to return a consistent ordering that is
     needed for tests.
     """
-    content = codecs.open(location, encoding='utf-8').read()
+    with io.open(location, encoding='utf-8') as l:
+        content = l.read()
     content = strip_variable_text(content)
     data = xmltodict.parse(content, dict_constructor=dict)
     return sort_nested(data)
@@ -121,10 +122,10 @@ def check_rdf_scan(expected_file, result_file, regen=False):
     result = load_and_clean_rdf(result_file)
     if regen:
         expected = result
-        with codecs.open(expected_file, 'w', encoding='utf-8') as o:
+        with io.open(expected_file, 'w', encoding='utf-8') as o:
             json.dump(expected, o, indent=2)
     else:
-        with codecs.open(expected_file, 'r', encoding='utf-8') as i:
+        with io.open(expected_file, 'r', encoding='utf-8') as i:
             expected = sort_nested(json.load(i))
     assert expected == result
 
@@ -135,7 +136,8 @@ def load_and_clean_tv(location):
     comparison. The file content is cleaned from variable parts such as
     dates, generated UUIDs and versions
     """
-    content = codecs.open(location, encoding='utf-8').read()
+    with io.open(location, encoding='utf-8') as l:
+        content = l.read()
     content = [l for l in content.splitlines(False)
         if l and l.strip() and not l.startswith(('Creator: ', 'Created: ',))]
     return '\n'.join(content)
@@ -148,7 +150,7 @@ def check_tv_scan(expected_file, result_file, regen=False):
     """
     result = load_and_clean_tv(result_file)
     if regen:
-        with codecs.open(expected_file, 'w', encoding='utf-8') as o:
+        with io.open(expected_file, 'w') as o:
             o.write(result)
 
     expected = load_and_clean_tv(expected_file)
@@ -161,7 +163,8 @@ def load_and_clean_json(location):
     suitable for comparison. The file content is cleaned from variable
     parts such as dates, generated UUIDs and versions
     """
-    content = codecs.open(location, encoding='utf-8').read()
+    with io.open(location, encoding='utf-8') as l:
+        content = l.read()
     data = json.loads(content)
 
     if 'creationInfo' in data['Document']:
@@ -177,7 +180,7 @@ def check_json_scan(expected_file, result_file, regen=False):
     """
     result = load_and_clean_json(result_file)
     if regen:
-        with codecs.open(expected_file, 'w', encoding='utf-8') as o:
+        with io.open(expected_file, 'w', encoding='utf-8') as o:
             o.write(result)
 
     expected = load_and_clean_json(expected_file)
@@ -190,7 +193,8 @@ def load_and_clean_yaml(location):
     suitable for comparison. The file content is cleaned from variable
     parts such as dates, generated UUIDs and versions
     """
-    content = codecs.open(location, encoding='utf-8').read()
+    with io.open(location, encoding='utf-8') as l:
+        content = l.read()
     data = yaml.safe_load(content)
 
     if 'creationInfo' in data['Document']:
@@ -206,11 +210,12 @@ def check_yaml_scan(expected_file, result_file, regen=False):
     """
     result = load_and_clean_yaml(result_file)
     if regen:
-        with codecs.open(expected_file, 'w', encoding='utf-8') as o:
+        with io.open(expected_file, 'w', encoding='utf-8') as o:
             o.write(result)
 
     expected = load_and_clean_yaml(expected_file)
     assert expected == result
+
 
 def load_and_clean_xml(location):
     """
@@ -218,13 +223,15 @@ def load_and_clean_xml(location):
     suitable for comparison. The file content is cleaned from variable
     parts such as dates, generated UUIDs and versions
     """
-    content = codecs.open(location, encoding='utf-8').read()
+    with io.open(location, encoding='utf-8') as l:
+        content = l.read()
     data = xmltodict.parse(content, encoding='utf-8')
 
     if 'creationInfo' in data['SpdxDocument']['Document']:
         del(data['SpdxDocument']['Document']['creationInfo'])
 
     return sort_nested(data)
+
 
 def check_xml_scan(expected_file, result_file, regen=False):
     """
@@ -233,15 +240,16 @@ def check_xml_scan(expected_file, result_file, regen=False):
     """
     result = load_and_clean_xml(result_file)
     if regen:
-        with codecs.open(expected_file, 'w', encoding='utf-8') as o:
+        with io.open(expected_file, 'w', encoding='utf-8') as o:
             o.write(result)
 
     expected = load_and_clean_xml(expected_file)
     assert expected == result
 
+
 class TestParserUtils(object):
     """
-    Helper class to represent SPDX Document models as Python types after parsing to be 
+    Helper class to represent SPDX Document models as Python types after parsing to be
     compared to expected data from a JSON file.
     """
 
@@ -250,7 +258,7 @@ class TestParserUtils(object):
         """
         Represents spdx.document.License, spdx.document.LicenseConjunction or
         spdx.document.LicenseDisjunction as a Python dictionary
-        """ 
+        """
         CONJ_SEP = re.compile(' AND | and ')
         DISJ_SEP = re.compile(' OR | or ')
 
@@ -267,19 +275,19 @@ class TestParserUtils(object):
             license_dict['identifier'] = license.identifier
             license_dict['name'] = license.full_name
             return license_dict
-        
+
         license_dict['identifier'] = sorted(sep_regex.split(license.identifier))
         license_dict['name'] = sorted(sep_regex.split(license.full_name))
 
         return license_dict
-    
+
     @classmethod
     def version_to_dict(cls, version):
         """
         Represents spdx.version.Version as a Python dictionary
         """
         return {'major': int(version.major), 'minor': int(version.minor)}
-    
+
     @classmethod
     def entity_to_dict(cls, entity):
         """
@@ -290,23 +298,23 @@ class TestParserUtils(object):
         if isinstance(entity, spdx.creationinfo.Tool):
             entity_dict['type'] = 'Tool'
             return entity_dict
-        
+
         entity_dict['email'] = entity.email
         entity_dict['type'] = 'Person'
-        
+
         if isinstance(entity, spdx.creationinfo.Organization):
             entity_dict['type'] = 'Organization'
             return entity_dict
 
         return entity_dict
-    
+
     @classmethod
     def checksum_to_dict(cls, checksum):
         """
         Represents spdx.checksum.Algorithm as a Python dictionary
         """
         return {'identifier': checksum.identifier, 'value': checksum.value}
-    
+
     @classmethod
     def package_to_dict(cls, package):
         """
@@ -314,30 +322,30 @@ class TestParserUtils(object):
         """
         lics_from_files = sorted(package.licenses_from_files, key=lambda lic: lic.identifier)
         return {
-            'id': package.spdx_id, 
-            'name': package.name, 
-            'packageFileName': package.file_name, 
-            'summary': package.summary, 
-            'description': package.description, 
-            'versionInfo': package.version, 
-            'sourceInfo': package.source_info, 
-            'downloadLocation': package.download_location, 
-            'homepage': package.homepage, 
-            'originator': cls.entity_to_dict(package.originator), 
-            'supplier': cls.entity_to_dict(package.supplier), 
-            'licenseConcluded': cls.license_to_dict(package.conc_lics), 
-            'licenseDeclared': cls.license_to_dict(package.license_declared), 
-            'copyrightText': package.cr_text, 
-            'licenseComment': package.license_comment, 
-            'checksum': cls.checksum_to_dict(package.check_sum), 
-            'files': cls.files_to_list(sorted(package.files)), 
-            'licenseInfoFromFiles':[cls.license_to_dict(lic) for lic in lics_from_files], 
+            'id': package.spdx_id,
+            'name': package.name,
+            'packageFileName': package.file_name,
+            'summary': package.summary,
+            'description': package.description,
+            'versionInfo': package.version,
+            'sourceInfo': package.source_info,
+            'downloadLocation': package.download_location,
+            'homepage': package.homepage,
+            'originator': cls.entity_to_dict(package.originator),
+            'supplier': cls.entity_to_dict(package.supplier),
+            'licenseConcluded': cls.license_to_dict(package.conc_lics),
+            'licenseDeclared': cls.license_to_dict(package.license_declared),
+            'copyrightText': package.cr_text,
+            'licenseComment': package.license_comment,
+            'checksum': cls.checksum_to_dict(package.check_sum),
+            'files': cls.files_to_list(sorted(package.files)),
+            'licenseInfoFromFiles':[cls.license_to_dict(lic) for lic in lics_from_files],
             'verificationCode': {
-                'value': package.verif_code, 
+                'value': package.verif_code,
                 'excludedFilesNames': sorted(package.verif_exc_files)
             }
         }
-    
+
     @classmethod
     def files_to_list(cls, files):
         """
@@ -349,26 +357,26 @@ class TestParserUtils(object):
             lics_from_files = sorted(file.licenses_in_file, key=lambda lic: lic.identifier)
             contributors = sorted(file.contributors, key=lambda c: c.name)
             file_dict = {
-                'id': file.spdx_id, 
-                'name': file.name, 
-                'type': file.type, 
-                'comment': file.comment,  
-                'licenseConcluded': cls.license_to_dict(file.conc_lics), 
-                'copyrightText': file.copyright, 
-                'licenseComment': file.license_comment, 
-                'notice': file.notice, 
-                'checksum': cls.checksum_to_dict(file.chk_sum), 
-                'licenseInfoFromFiles': [cls.license_to_dict(lic) for lic in lics_from_files], 
-                'contributors': [cls.entity_to_dict(contributor) for contributor in contributors], 
-                'dependencies': sorted(file.dependencies), 
-                'artifactOfProjectName': file.artifact_of_project_name, 
-                'artifactOfProjectHome': file.artifact_of_project_home, 
+                'id': file.spdx_id,
+                'name': file.name,
+                'type': file.type,
+                'comment': file.comment,
+                'licenseConcluded': cls.license_to_dict(file.conc_lics),
+                'copyrightText': file.copyright,
+                'licenseComment': file.license_comment,
+                'notice': file.notice,
+                'checksum': cls.checksum_to_dict(file.chk_sum),
+                'licenseInfoFromFiles': [cls.license_to_dict(lic) for lic in lics_from_files],
+                'contributors': [cls.entity_to_dict(contributor) for contributor in contributors],
+                'dependencies': sorted(file.dependencies),
+                'artifactOfProjectName': file.artifact_of_project_name,
+                'artifactOfProjectHome': file.artifact_of_project_home,
                 'artifactOfProjectURI': file.artifact_of_project_uri
             }
             files_list.append(file_dict)
-        
+
         return files_list
-    
+
     @classmethod
     def ext_document_references_to_list(cls, ext_doc_refs):
         """
@@ -378,14 +386,14 @@ class TestParserUtils(object):
 
         for ext_doc_ref in ext_doc_refs:
             ext_doc_ref_dict = {
-                'externalDocumentId': ext_doc_ref.external_document_id, 
-                'spdxDocumentNamespace':ext_doc_ref.spdx_document_uri, 
+                'externalDocumentId': ext_doc_ref.external_document_id,
+                'spdxDocumentNamespace':ext_doc_ref.spdx_document_uri,
                 'checksum': cls.checksum_to_dict(ext_doc_ref.check_sum)
             }
             ext_doc_refs_list.append(ext_doc_ref_dict)
-        
+
         return ext_doc_refs_list
-    
+
     @classmethod
     def extracted_licenses_to_list(cls, extracted_licenses):
         """
@@ -403,9 +411,9 @@ class TestParserUtils(object):
             }
             if extracted_license_dict not in extracted_licenses_list:
                 extracted_licenses_list.append(extracted_license_dict)
-        
+
         return extracted_licenses_list
-    
+
     @classmethod
     def annotations_to_list(cls, annotations):
         """
@@ -415,16 +423,16 @@ class TestParserUtils(object):
 
         for annotation in annotations:
             annotation_dict = {
-                'id': annotation.spdx_id, 
+                'id': annotation.spdx_id,
                 'comment': annotation.comment,
                 'type': annotation.annotation_type,
-                'annotator': cls.entity_to_dict(annotation.annotator), 
+                'annotator': cls.entity_to_dict(annotation.annotator),
                 'date': utils.datetime_iso_format(annotation.annotation_date)
             }
             annotations_list.append(annotation_dict)
-        
+
         return annotations_list
-    
+
     @classmethod
     def reviews_to_list(cls, reviews):
         """
@@ -434,12 +442,12 @@ class TestParserUtils(object):
 
         for review in reviews:
             review_dict = {
-                'comment': review.comment, 
-                'reviewer': cls.entity_to_dict(review.reviewer), 
+                'comment': review.comment,
+                'reviewer': cls.entity_to_dict(review.reviewer),
                 'date': utils.datetime_iso_format(review.review_date)
             }
             reviews_list.append(review_dict)
-        
+
         return reviews_list
 
     @classmethod
@@ -462,7 +470,7 @@ class TestParserUtils(object):
                 'licenseInfoFromSnippet': [cls.license_to_dict(lic) for lic in lics_from_snippet]
             }
             snippets_list.append(snippet_dict)
-        
+
         return snippets_list
 
     @classmethod
@@ -472,20 +480,20 @@ class TestParserUtils(object):
         """
         creators = sorted(doc.creation_info.creators, key=lambda c: c.name)
         return {
-            'id': doc.spdx_id, 
-            'specVersion': cls.version_to_dict(doc.version), 
-            'namespace': doc.namespace, 
-            'name': doc.name, 
-            'comment': doc.comment, 
-            'dataLicense': cls.license_to_dict(doc.data_license), 
-            'licenseListVersion': cls.version_to_dict(doc.creation_info.license_list_version), 
-            'creators': [cls.entity_to_dict(creator) for creator in creators], 
-            'created': utils.datetime_iso_format(doc.creation_info.created), 
-            'creatorComment': doc.creation_info.comment, 
-            'package': cls.package_to_dict(doc.package), 
-            'externalDocumentRefs': cls.ext_document_references_to_list(sorted(doc.ext_document_references)), 
-            'extractedLicenses': cls.extracted_licenses_to_list(sorted(doc.extracted_licenses)), 
-            'annotations': cls.annotations_to_list(sorted(doc.annotations)), 
+            'id': doc.spdx_id,
+            'specVersion': cls.version_to_dict(doc.version),
+            'namespace': doc.namespace,
+            'name': doc.name,
+            'comment': doc.comment,
+            'dataLicense': cls.license_to_dict(doc.data_license),
+            'licenseListVersion': cls.version_to_dict(doc.creation_info.license_list_version),
+            'creators': [cls.entity_to_dict(creator) for creator in creators],
+            'created': utils.datetime_iso_format(doc.creation_info.created),
+            'creatorComment': doc.creation_info.comment,
+            'package': cls.package_to_dict(doc.package),
+            'externalDocumentRefs': cls.ext_document_references_to_list(sorted(doc.ext_document_references)),
+            'extractedLicenses': cls.extracted_licenses_to_list(sorted(doc.extracted_licenses)),
+            'annotations': cls.annotations_to_list(sorted(doc.annotations)),
             'reviews': cls.reviews_to_list(sorted(doc.reviews)),
             'snippets': cls.snippets_to_list(sorted(doc.snippet))
         }
