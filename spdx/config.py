@@ -20,6 +20,7 @@ import os
 
 from spdx.version import Version
 
+
 _base_dir = os.path.dirname(__file__)
 _licenses = os.path.join(_base_dir, 'licenses.json')
 _exceptions = os.path.join(_base_dir, 'exceptions.json')

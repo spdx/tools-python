@@ -35,6 +35,7 @@ import spdx.writers.json as jsonwriter
 import spdx.writers.yaml as yamlwriter
 import spdx.writers.xml as xmlwriter
 
+
 def get_temp_file(extension=''):
     """
     Return a unique new temporary file location to a non-existing

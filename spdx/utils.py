@@ -17,7 +17,8 @@ from __future__ import unicode_literals
 import datetime
 import re
 
-from ply import yacc, lex
+from ply import lex
+from ply import yacc
 
 from spdx import document
 
