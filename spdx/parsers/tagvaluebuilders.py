@@ -64,7 +64,7 @@ def str_from_text(text):
 
 class DocBuilder(object):
     """
-    Responsible for setting the fields of the top level document model.
+    Set the fields of the top level document model.
     """
     VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
 
@@ -75,8 +75,8 @@ class DocBuilder(object):
     def set_doc_version(self, doc, value):
         """
         Set the document version.
-        Raise SPDXValueError if malformed value, CardinalityError
-        if already defined
+        Raise SPDXValueError if malformed value. 
+        Raise CardinalityError if already defined.
         """
         if not self.doc_version_set:
             self.doc_version_set = True
@@ -91,9 +91,10 @@ class DocBuilder(object):
             raise CardinalityError('Document::Version')
 
     def set_doc_data_lics(self, doc, lics):
-        """Sets the document data license.
-        Raises value error if malformed value, CardinalityError
-        if already defined.
+        """
+        Set the document data license.
+        Raise value error if malformed value
+        Raise CardinalityError if already defined.
         """
         if not self.doc_data_lics_set:
             self.doc_data_lics_set = True
@@ -106,8 +107,9 @@ class DocBuilder(object):
             raise CardinalityError('Document::DataLicense')
 
     def set_doc_name(self, doc, name):
-        """Sets the document name.
-        Raises CardinalityError if already defined.
+        """
+        Set the document name.
+        Raise CardinalityError if already defined.
         """
         if not self.doc_name_set:
             doc.name = name
@@ -117,9 +119,10 @@ class DocBuilder(object):
             raise CardinalityError('Document::Name')
 
     def set_doc_spdx_id(self, doc, doc_spdx_id_line):
-        """Sets the document SPDX Identifier.
-        Raises value error if malformed value, CardinalityError
-        if already defined.
+        """
+        Set the document SPDX Identifier.
+        Raise value error if malformed value.
+        Raise CardinalityError if already defined.
         """
         if not self.doc_spdx_id_set:
             if doc_spdx_id_line == 'SPDXRef-DOCUMENT':
@@ -132,9 +135,10 @@ class DocBuilder(object):
             raise CardinalityError('Document::SPDXID')
 
     def set_doc_comment(self, doc, comment):
-        """Sets document comment, Raises CardinalityError if
-        comment already set.
-        Raises SPDXValueError if comment is not free form text.
+        """
+        Set document comment.
+        Raise CardinalityError if comment already set.
+        Raise SPDXValueError if comment is not free form text.
         """
         if not self.doc_comment_set:
             self.doc_comment_set = True
@@ -147,9 +151,10 @@ class DocBuilder(object):
             raise CardinalityError('Document::Comment')
 
     def set_doc_namespace(self, doc, namespace):
-        """Sets the document namespace.
-        Raise SPDXValueError if malformed value, CardinalityError
-        if already defined.
+        """
+        Set the document namespace.
+        Raise SPDXValueError if malformed value.
+        Raise CardinalityError if already defined.
         """
         if not self.doc_namespace_set:
             self.doc_namespace_set = True
@@ -162,7 +167,9 @@ class DocBuilder(object):
             raise CardinalityError('Document::Comment')
 
     def reset_document(self):
-        """Resets the state to allow building new documents"""
+        """
+        Reset the state to allow building new documents
+        """
         # FIXME: this state does not make sense
         self.doc_version_set = False
         self.doc_comment_set = False
@@ -176,8 +183,7 @@ class ExternalDocumentRefBuilder(object):
 
     def set_ext_doc_id(self, doc, ext_doc_id):
         """
-        Sets the `external_document_id` attribute of the `ExternalDocumentRef`
-        object.
+        Set the `external_document_id` attribute of the `ExternalDocumentRef` object.
         """
         doc.add_ext_document_reference(
             ExternalDocumentRef(
@@ -185,8 +191,7 @@ class ExternalDocumentRefBuilder(object):
 
     def set_spdx_doc_uri(self, doc, spdx_doc_uri):
         """
-        Sets the `spdx_document_uri` attribute of the `ExternalDocumentRef`
-        object.
+        Set the `spdx_document_uri` attribute of the `ExternalDocumentRef` object.
         """
         if validations.validate_doc_namespace(spdx_doc_uri):
             doc.ext_document_references[-1].spdx_document_uri = spdx_doc_uri
@@ -195,8 +200,7 @@ class ExternalDocumentRefBuilder(object):
 
     def set_chksum(self, doc, chksum):
         """
-        Sets the `check_sum` attribute of the `ExternalDocumentRef`
-        object.
+        Set the `check_sum` attribute of the `ExternalDocumentRef` object.
         """
         doc.ext_document_references[-1].check_sum = checksum_from_sha1(
             chksum)
@@ -219,9 +223,10 @@ class EntityBuilder(object):
     TOOL_NAME_GROUP = 1
 
     def build_tool(self, doc, entity):
-        """Builds a tool object out of a string representation.
-        Returns built tool. Raises SPDXValueError if failed to extract
-        tool name or name is malformed
+        """
+        Build a tool object out of a string representation.
+        Return built tool.
+        Raise SPDXValueError if failed to extract tool name or name is malformed
         """
         match = self.tool_re.match(entity)
         if match and validations.validate_tool_name(match.group(self.TOOL_NAME_GROUP)):
@@ -231,9 +236,10 @@ class EntityBuilder(object):
             raise SPDXValueError('Failed to extract tool name')
 
     def build_org(self, doc, entity):
-        """Builds an organization object of of a string representation.
-        Returns built organization. Raises SPDXValueError if failed to extract
-        name.
+        """
+        Build an organization object of of a string representation.
+        Return built organization.
+        Raise SPDXValueError if failed to extractname.
         """
         match = self.org_re.match(entity)
         if match and validations.validate_org_name(match.group(self.ORG_NAME_GROUP)):
@@ -247,9 +253,9 @@ class EntityBuilder(object):
             raise SPDXValueError('Failed to extract Organization name')
 
     def build_person(self, doc, entity):
-        """Builds an organization object of of a string representation.
-        Returns built organization. Raises SPDXValueError if failed to extract
-        name.
+        """
+        Build an organization object of of a string representation.
+        Return built organization. Raise SPDXValueError if failed to extract name.
         """
         match = self.person_re.match(entity)
         if match and validations.validate_person_name(match.group(self.PERSON_NAME_GROUP)):
@@ -270,10 +276,11 @@ class CreationInfoBuilder(object):
         self.reset_creation_info()
 
     def add_creator(self, doc, creator):
-        """Adds a creator to the document's creation info.
-        Returns true if creator is valid.
+        """
+        Add a creator to the document's creation info.
+        Return true if creator is valid.
         Creator must be built by an EntityBuilder.
-        Raises SPDXValueError if not a creator type.
+        Raise SPDXValueError if not a creator type.
         """
         if validations.validate_creator(creator):
             doc.creation_info.add_creator(creator)
@@ -282,9 +289,10 @@ class CreationInfoBuilder(object):
             raise SPDXValueError('CreationInfo::Creator')
 
     def set_created_date(self, doc, created):
-        """Sets created date, Raises CardinalityError if
-        created date already set.
-        Raises SPDXValueError if created is not a date.
+        """
+        Set created date.
+        Raise CardinalityError if created date already set.
+        Raise SPDXValueError if created is not a date.
         """
         if not self.created_date_set:
             self.created_date_set = True
@@ -298,9 +306,10 @@ class CreationInfoBuilder(object):
             raise CardinalityError('CreationInfo::Created')
 
     def set_creation_comment(self, doc, comment):
-        """Sets creation comment, Raises CardinalityError if
-        comment already set.
-        Raises SPDXValueError if not free form text.
+        """
+        Set creation comment.
+        Raise CardinalityError if comment already set.
+        Raise SPDXValueError if not free form text.
         """
         if not self.creation_comment_set:
             self.creation_comment_set = True
@@ -313,8 +322,10 @@ class CreationInfoBuilder(object):
             raise CardinalityError('CreationInfo::Comment')
 
     def set_lics_list_ver(self, doc, value):
-        """Sets the license list version, Raises CardinalityError if
-        already set, SPDXValueError if incorrect value.
+        """
+        Set the license list version.
+        Raise CardinalityError if already set.
+        Raise SPDXValueError if incorrect value.
         """
         if not self.lics_list_ver_set:
             self.lics_list_ver_set = True
@@ -329,7 +340,8 @@ class CreationInfoBuilder(object):
 
     def reset_creation_info(self):
         """
-        Resets builder state to allow building new creation info."""
+        Reset builder state to allow building new creation info.
+        """
         # FIXME: this state does not make sense
         self.created_date_set = False
         self.creation_comment_set = False
@@ -343,15 +355,18 @@ class ReviewBuilder(object):
         self.reset_reviews()
 
     def reset_reviews(self):
-        """Resets the builder's state to allow building new reviews."""
+        """
+        Reset the builder's state to allow building new reviews.
+        """
         # FIXME: this state does not make sense
         self.review_date_set = False
         self.review_comment_set = False
 
     def add_reviewer(self, doc, reviewer):
-        """Adds a reviewer to the SPDX Document.
+        """
+        Adds a reviewer to the SPDX Document.
         Reviwer is an entity created by an EntityBuilder.
-        Raises SPDXValueError if not a valid reviewer type.
+        Raise SPDXValueError if not a valid reviewer type.
         """
         # Each reviewer marks the start of a new review object.
         # FIXME: this state does not make sense
@@ -363,9 +378,11 @@ class ReviewBuilder(object):
             raise SPDXValueError('Review::Reviewer')
 
     def add_review_date(self, doc, reviewed):
-        """Sets the review date. Raises CardinalityError if
-        already set. OrderError if no reviewer defined before.
-        Raises SPDXValueError if invalid reviewed value.
+        """
+        Set the review date.
+        Raise CardinalityError if already set.
+        Raise OrderError if no reviewer defined before.
+        Raise SPDXValueError if invalid reviewed value.
         """
         if len(doc.reviews) != 0:
             if not self.review_date_set:
@@ -382,9 +399,11 @@ class ReviewBuilder(object):
             raise OrderError('Review::ReviewDate')
 
     def add_review_comment(self, doc, comment):
-        """Sets the review comment. Raises CardinalityError if
-        already set. OrderError if no reviewer defined before.
-        Raises SPDXValueError if comment is not free form text.
+        """
+        Set the review comment.
+        Raise CardinalityError if already set.
+        Raise OrderError if no reviewer defined before.
+        Raise SPDXValueError if comment is not free form text.
         """
         if len(doc.reviews) != 0:
             if not self.review_comment_set:
@@ -407,7 +426,9 @@ class AnnotationBuilder(object):
         self.reset_annotations()
 
     def reset_annotations(self):
-        """Resets the builder's state to allow building new annotations."""
+        """
+        Reset the builder's state to allow building new annotations.
+        """
         # FIXME: this state does not make sense
         self.annotation_date_set = False
         self.annotation_comment_set = False
@@ -415,9 +436,10 @@ class AnnotationBuilder(object):
         self.annotation_spdx_id_set = False
 
     def add_annotator(self, doc, annotator):
-        """Adds an annotator to the SPDX Document.
+        """
+        Add an annotator to the SPDX Document.
         Annotator is an entity created by an EntityBuilder.
-        Raises SPDXValueError if not a valid annotator type.
+        Raise SPDXValueError if not a valid annotator type.
         """
         # Each annotator marks the start of a new annotation object.
         # FIXME: this state does not make sense
@@ -429,9 +451,11 @@ class AnnotationBuilder(object):
             raise SPDXValueError('Annotation::Annotator')
 
     def add_annotation_date(self, doc, annotation_date):
-        """Sets the annotation date. Raises CardinalityError if
-        already set. OrderError if no annotator defined before.
-        Raises SPDXValueError if invalid value.
+        """
+        Set the annotation date.
+        Raise CardinalityError if already set.
+        Raise OrderError if no annotator defined before.
+        Raise SPDXValueError if invalid value.
         """
         if len(doc.annotations) != 0:
             if not self.annotation_date_set:
@@ -448,9 +472,11 @@ class AnnotationBuilder(object):
             raise OrderError('Annotation::AnnotationDate')
 
     def add_annotation_comment(self, doc, comment):
-        """Sets the annotation comment. Raises CardinalityError if
-        already set. OrderError if no annotator defined before.
-        Raises SPDXValueError if comment is not free form text.
+        """
+        Set the annotation comment.
+        Raise CardinalityError if already set.
+        Raise OrderError if no annotator defined before.
+        Raise SPDXValueError if comment is not free form text.
         """
         if len(doc.annotations) != 0:
             if not self.annotation_comment_set:
@@ -466,9 +492,11 @@ class AnnotationBuilder(object):
             raise OrderError('AnnotationComment::Comment')
 
     def add_annotation_type(self, doc, annotation_type):
-        """Sets the annotation type. Raises CardinalityError if
-        already set. OrderError if no annotator defined before.
-        Raises SPDXValueError if invalid value.
+        """
+        Set the annotation type.
+        Raise CardinalityError if already set.
+        Raise OrderError if no annotator defined before.
+        Raise SPDXValueError if invalid value.
         """
         if len(doc.annotations) != 0:
             if not self.annotation_type_set:
@@ -484,9 +512,10 @@ class AnnotationBuilder(object):
             raise OrderError('Annotation::AnnotationType')
 
     def set_annotation_spdx_id(self, doc, spdx_id):
-        """Sets the annotation SPDX Identifier.
-        Raises CardinalityError if already set. OrderError if no annotator
-        defined before.
+        """
+        Set the annotation SPDX Identifier.
+        Raise CardinalityError if already set.
+        Raise OrderError if no annotator defined before.
         """
         if len(doc.annotations) != 0:
             if not self.annotation_spdx_id_set:
@@ -533,9 +562,10 @@ class PackageBuilder(object):
         self.pkg_ext_comment_set = False
 
     def create_package(self, doc, name):
-        """Creates a package for the SPDX Document.
+        """
+        Create a package for the SPDX Document.
         name - any string.
-        Raises CardinalityError if package already defined.
+        Raise CardinalityError if package already defined.
         """
         if not self.package_set:
             self.package_set = True
@@ -546,9 +576,9 @@ class PackageBuilder(object):
 
     def set_pkg_spdx_id(self, doc, spdx_id):
         """
-        Sets the Package SPDX Identifier.
-        Raises SPDXValueError if malformed value, CardinalityError if
-        already defined.
+        Set the Package SPDX Identifier.
+        Raise SPDXValueError if malformed value.
+        Raise CardinalityError if already defined.
         """
         self.assert_package_exists()
         if not self.package_spdx_id_set:
@@ -562,10 +592,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::SPDXID')
 
     def set_pkg_vers(self, doc, version):
-        """Sets package version, if not already set.
+        """
+        Set package version, if not already set.
         version - Any string.
-        Raises CardinalityError if already has a version.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already has a version.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_vers_set:
@@ -576,10 +607,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::Version')
 
     def set_pkg_file_name(self, doc, name):
-        """Sets the package file name, if not already set.
+        """
+        Set the package file name, if not already set.
         name - Any string.
-        Raises CardinalityError if already has a file_name.
-        Raises OrderError if no pacakge previously defined.
+        Raise CardinalityError if already has a file_name.
+        Raise OrderError if no pacakge previously defined.
         """
         self.assert_package_exists()
         if not self.package_file_name_set:
@@ -590,10 +622,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::FileName')
 
     def set_pkg_supplier(self, doc, entity):
-        """Sets the package supplier, if not already set.
+        """
+        Set the package supplier, if not already set.
         entity - Organization, Person or NoAssert.
-        Raises CardinalityError if already has a supplier.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already has a supplier.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_supplier_set:
@@ -607,10 +640,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::Supplier')
 
     def set_pkg_originator(self, doc, entity):
-        """Sets the package originator, if not already set.
+        """
+        Set the package originator, if not already set.
         entity - Organization, Person or NoAssert.
-        Raises CardinalityError if already has an originator.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already has an originator.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_originator_set:
@@ -624,10 +658,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::Originator')
 
     def set_pkg_down_location(self, doc, location):
-        """Sets the package download location, if not already set.
+        """
+        Set the package download location, if not already set.
         location - A string
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_down_location_set:
@@ -639,8 +674,8 @@ class PackageBuilder(object):
 
     def set_pkg_files_analyzed(self, doc, files_analyzed):
         """
-        Sets the package files analyzed, if not already set.
-        Raises SPDXValueError if malformed value, CardinalityError if
+        Set the package files analyzed, if not already set.
+        Raise SPDXValueError if malformed value, CardinalityError if
         already defined.
         """
         self.assert_package_exists()
@@ -657,11 +692,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::FilesAnalyzed')
 
     def set_pkg_home(self, doc, location):
-        """Sets the package homepage location if not already set.
+        """Set the package homepage location if not already set.
         location - A string or None or NoAssert.
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
-        Raises SPDXValueError if location has incorrect value.
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
+        Raise SPDXValueError if location has incorrect value.
         """
         self.assert_package_exists()
         if not self.package_home_set:
@@ -675,11 +710,12 @@ class PackageBuilder(object):
             raise CardinalityError('Package::HomePage')
 
     def set_pkg_verif_code(self, doc, code):
-        """Sets the package verification code, if not already set.
+        """
+        Set the package verification code, if not already set.
         code - A string.
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
-        Raises Value error if doesn't match verifcode form
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
+        Raise Value error if doesn't match verifcode form
         """
         self.assert_package_exists()
         if not self.package_verif_set:
@@ -696,10 +732,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::VerificationCode')
 
     def set_pkg_chk_sum(self, doc, chk_sum):
-        """Sets the package check sum, if not already set.
+        """
+        Set the package check sum, if not already set.
         chk_sum - A string
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_chk_sum_set:
@@ -710,10 +747,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::CheckSum')
 
     def set_pkg_source_info(self, doc, text):
-        """Sets the package's source information, if not already set.
+        """
+        Set the package's source information, if not already set.
         text - Free form text.
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
         SPDXValueError if text is not free form text.
         """
         self.assert_package_exists()
@@ -728,11 +766,12 @@ class PackageBuilder(object):
             raise CardinalityError('Package::SourceInfo')
 
     def set_pkg_licenses_concluded(self, doc, licenses):
-        """Sets the package's concluded licenses.
+        """
+        Set the package's concluded licenses.
         licenses - License info.
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
-        Raises SPDXValueError if data malformed.
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
+        Raise SPDXValueError if data malformed.
         """
         self.assert_package_exists()
         if not self.package_conc_lics_set:
@@ -746,9 +785,10 @@ class PackageBuilder(object):
             raise CardinalityError('Package::ConcludedLicenses')
 
     def set_pkg_license_from_file(self, doc, lic):
-        """Adds a license from a file to the package.
-        Raises SPDXValueError if data malformed.
-        Raises OrderError if no package previously defined.
+        """
+        Add a license from a file to the package.
+        Raise SPDXValueError if data malformed.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if validations.validate_lics_from_file(lic):
@@ -758,10 +798,11 @@ class PackageBuilder(object):
             raise SPDXValueError('Package::LicensesFromFile')
 
     def set_pkg_license_declared(self, doc, lic):
-        """Sets the package's declared license.
-        Raises SPDXValueError if data malformed.
-        Raises OrderError if no package previously defined.
-        Raises CardinalityError if already set.
+        """
+        Set the package's declared license.
+        Raise SPDXValueError if data malformed.
+        Raise OrderError if no package previously defined.
+        Raise CardinalityError if already set.
         """
         self.assert_package_exists()
         if not self.package_license_declared_set:
@@ -775,10 +816,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::LicenseDeclared')
 
     def set_pkg_license_comment(self, doc, text):
-        """Sets the package's license comment.
-        Raises OrderError if no package previously defined.
-        Raises CardinalityError if already set.
-        Raises SPDXValueError if text is not free form text.
+        """
+        Set the package's license comment.
+        Raise OrderError if no package previously defined.
+        Raise CardinalityError if already set.
+        Raise SPDXValueError if text is not free form text.
         """
         self.assert_package_exists()
         if not self.package_license_comment_set:
@@ -792,10 +834,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::LicenseComment')
 
     def set_pkg_cr_text(self, doc, text):
-        """Sets the package's copyright text.
-        Raises OrderError if no package previously defined.
-        Raises CardinalityError if already set.
-        Raises value error if text is not one of [None, NOASSERT, TEXT].
+        """
+        Set the package's copyright text.
+        Raise OrderError if no package previously defined.
+        Raise CardinalityError if already set.
+        Raise value error if text is not one of [None, NOASSERT, TEXT].
         """
         self.assert_package_exists()
         if not self.package_cr_text_set:
@@ -811,10 +854,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::CopyrightText')
 
     def set_pkg_summary(self, doc, text):
-        """Set's the package summary.
-        Raises SPDXValueError if text is not free form text.
-        Raises CardinalityError if summary already set.
-        Raises OrderError if no package previously defined.
+        """
+        Set the package summary.
+        Raise SPDXValueError if text is not free form text.
+        Raise CardinalityError if summary already set.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_summary_set:
@@ -827,10 +871,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::Summary')
 
     def set_pkg_desc(self, doc, text):
-        """Set's the package's description.
-        Raises SPDXValueError if text is not free form text.
-        Raises CardinalityError if description already set.
-        Raises OrderError if no package previously defined.
+        """
+        Set the package's description.
+        Raise SPDXValueError if text is not free form text.
+        Raise CardinalityError if description already set.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_desc_set:
@@ -843,10 +888,11 @@ class PackageBuilder(object):
             raise CardinalityError('Package::Description')
 
     def set_pkg_comment(self, doc, text):
-        """Set's the package's comment.
-        Raises SPDXValueError if text is not free form text.
-        Raises CardinalityError if comment already set.
-        Raises OrderError if no package previously defined.
+        """
+        Set the package's comment.
+        Raise SPDXValueError if text is not free form text.
+        Raise CardinalityError if comment already set.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_comment_set:
@@ -860,7 +906,7 @@ class PackageBuilder(object):
 
     def set_pkg_ext_ref_category(self, doc, category):
         """
-        Sets the `category` attribute of the `ExternalPackageRef` object.
+        Set the `category` attribute of the `ExternalPackageRef` object.
         """
         self.assert_package_exists()
         if validations.validate_pkg_ext_ref_category(category):
@@ -875,7 +921,7 @@ class PackageBuilder(object):
 
     def set_pkg_ext_ref_type(self, doc, pkg_ext_ref_type):
         """
-        Sets the `pkg_ext_ref_type` attribute of the `ExternalPackageRef` object.
+        Set the `pkg_ext_ref_type` attribute of the `ExternalPackageRef` object.
         """
         self.assert_package_exists()
         if validations.validate_pkg_ext_ref_type(pkg_ext_ref_type):
@@ -890,7 +936,7 @@ class PackageBuilder(object):
 
     def set_pkg_ext_ref_locator(self, doc, locator):
         """
-        Sets the `locator` attribute of the `ExternalPackageRef` object.
+        Set the `locator` attribute of the `ExternalPackageRef` object.
         """
         self.assert_package_exists()
         if (len(doc.package.pkg_ext_refs) and
@@ -902,7 +948,7 @@ class PackageBuilder(object):
 
     def add_pkg_ext_ref_comment(self, doc, comment):
         """
-        Sets the `comment` attribute of the `ExternalPackageRef` object.
+        Set the `comment` attribute of the `ExternalPackageRef` object.
         """
         self.assert_package_exists()
         if not len(doc.package.pkg_ext_refs):
@@ -930,7 +976,8 @@ class FileBuilder(object):
         self.reset_file_stat()
 
     def set_file_name(self, doc, name):
-        """Raises OrderError if no package defined.
+        """
+        Raise OrderError if no package defined.
         """
         if self.has_package(doc):
             doc.package.files.append(file.File(name))
@@ -944,10 +991,10 @@ class FileBuilder(object):
 
     def set_file_spdx_id(self, doc, spdx_id):
         """
-        Sets the file SPDX Identifier.
-        Raises OrderError if no package or no file defined.
-        Raises SPDXValueError if malformed value.
-        Raises CardinalityError if more than one spdx_id set.
+        Set the file SPDX Identifier.
+        Raise OrderError if no package or no file defined.
+        Raise SPDXValueError if malformed value.
+        Raise CardinalityError if more than one spdx_id set.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_spdx_id_set:
@@ -964,9 +1011,9 @@ class FileBuilder(object):
 
     def set_file_comment(self, doc, text):
         """
-        Raises OrderError if no package or no file defined.
-        Raises CardinalityError if more than one comment set.
-        Raises SPDXValueError if text is not free form text.
+        Raise OrderError if no package or no file defined.
+        Raise CardinalityError if more than one comment set.
+        Raise SPDXValueError if text is not free form text.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_comment_set:
@@ -983,9 +1030,9 @@ class FileBuilder(object):
 
     def set_file_type(self, doc, type_value):
         """
-        Raises OrderError if no package or file defined.
-        Raises CardinalityError if more than one type set.
-        Raises SPDXValueError if type is unknown.
+        Raise OrderError if no package or file defined.
+        Raise CardinalityError if more than one type set.
+        Raise SPDXValueError if type is unknown.
         """
         type_dict = {
             'SOURCE': file.FileType.SOURCE,
@@ -1008,8 +1055,8 @@ class FileBuilder(object):
 
     def set_file_chksum(self, doc, chksum):
         """
-        Raises OrderError if no package or file defined.
-        Raises CardinalityError if more than one chksum set.
+        Raise OrderError if no package or file defined.
+        Raise CardinalityError if more than one chksum set.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_chksum_set:
@@ -1023,9 +1070,9 @@ class FileBuilder(object):
 
     def set_concluded_license(self, doc, lic):
         """
-        Raises OrderError if no package or file defined.
-        Raises CardinalityError if already set.
-        Raises SPDXValueError if malformed.
+        Raise OrderError if no package or file defined.
+        Raise CardinalityError if already set.
+        Raise SPDXValueError if malformed.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_conc_lics_set:
@@ -1042,8 +1089,8 @@ class FileBuilder(object):
 
     def set_file_license_in_file(self, doc, lic):
         """
-        Raises OrderError if no package or file defined.
-        Raises SPDXValueError if malformed value.
+        Raise OrderError if no package or file defined.
+        Raise SPDXValueError if malformed value.
         """
         if self.has_package(doc) and self.has_file(doc):
             if validations.validate_file_lics_in_file(lic):
@@ -1056,9 +1103,9 @@ class FileBuilder(object):
 
     def set_file_license_comment(self, doc, text):
         """
-        Raises OrderError if no package or file defined.
-        Raises SPDXValueError if text is not free form text.
-        Raises CardinalityError if more than one per file.
+        Raise OrderError if no package or file defined.
+        Raise SPDXValueError if text is not free form text.
+        Raise CardinalityError if more than one per file.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_license_comment_set:
@@ -1073,9 +1120,10 @@ class FileBuilder(object):
             raise OrderError('File::LicenseComment')
 
     def set_file_copyright(self, doc, text):
-        """Raises OrderError if no package or file defined.
-        Raises SPDXValueError if not free form text or NONE or NO_ASSERT.
-        Raises CardinalityError if more than one.
+        """
+        Raise OrderError if no package or file defined.
+        Raise SPDXValueError if not free form text or NONE or NO_ASSERT.
+        Raise CardinalityError if more than one.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_copytext_set:
@@ -1094,9 +1142,10 @@ class FileBuilder(object):
             raise OrderError('File::CopyRight')
 
     def set_file_notice(self, doc, text):
-        """Raises OrderError if no package or file defined.
-        Raises SPDXValueError if not free form text.
-        Raises CardinalityError if more than one.
+        """
+        Raise OrderError if no package or file defined.
+        Raise SPDXValueError if not free form text.
+        Raise CardinalityError if more than one.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_notice_set:
@@ -1111,7 +1160,8 @@ class FileBuilder(object):
             raise OrderError('File::Notice')
 
     def add_file_contribution(self, doc, value):
-        """Raises OrderError if no package or file defined.
+        """
+        Raise OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
             self.file(doc).add_contrib(value)
@@ -1119,7 +1169,8 @@ class FileBuilder(object):
             raise OrderError('File::Contributor')
 
     def add_file_dep(self, doc, value):
-        """Raises OrderError if no package or file defined.
+        """
+        Raise OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
             self.file(doc).add_depend(value)
@@ -1127,8 +1178,9 @@ class FileBuilder(object):
             raise OrderError('File::Dependency')
 
     def set_file_atrificat_of_project(self, doc, symbol, value):
-        """Sets a file name, uri or home artificat.
-        Raises OrderError if no package or file defined.
+        """
+        Set a file name, uri or home artificat.
+        Raise OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
             self.file(doc).add_artifact(symbol, value)
@@ -1137,21 +1189,28 @@ class FileBuilder(object):
 
 
     def file(self, doc):
-        """Returns the last file in the document's package's file list."""
+        """
+        Return the last file in the document's package's file list.
+        """
         return doc.package.files[-1]
 
     def has_file(self, doc):
-        """Returns true if the document's package has at least one file.
+        """
+        Return true if the document's package has at least one file.
         Does not test if the document has a package.
         """
         return len(doc.package.files) != 0
 
     def has_package(self, doc):
-        """Returns true if the document has a package."""
+        """
+        Return true if the document has a package.
+        """
         return doc.package is not None
 
     def reset_file_stat(self):
-        """Resets the builder's state to enable building new files."""
+        """
+        Reset the builder's state to enable building new files.
+        """
         # FIXME: this state does not make sense
         self.file_spdx_id_set = False
         self.file_comment_set = False
@@ -1170,15 +1229,18 @@ class LicenseBuilder(object):
         self.reset_extr_lics()
 
     def extr_lic(self, doc):
-        """Retrieves last license in extracted license list"""
+        """
+        Retrieve last license in extracted license list.
+        """
         return doc.extracted_licenses[-1]
 
     def has_extr_lic(self, doc):
         return len(doc.extracted_licenses) != 0
 
     def set_lic_id(self, doc, lic_id):
-        """Adds a new extracted license to the document.
-        Raises SPDXValueError if data format is incorrect.
+        """
+        Add a new extracted license to the document.
+        Raise SPDXValueError if data format is incorrect.
         """
         # FIXME: this state does not make sense
         self.reset_extr_lics()
@@ -1189,9 +1251,10 @@ class LicenseBuilder(object):
             raise SPDXValueError('ExtractedLicense::id')
 
     def set_lic_text(self, doc, text):
-        """Sets license extracted text.
-        Raises SPDXValueError if text is not free form text.
-        Raises OrderError if no license ID defined.
+        """
+        Set license extracted text.
+        Raise SPDXValueError if text is not free form text.
+        Raise OrderError if no license ID defined.
         """
         if self.has_extr_lic(doc):
             if not self.extr_text_set:
@@ -1207,9 +1270,10 @@ class LicenseBuilder(object):
             raise OrderError('ExtractedLicense::text')
 
     def set_lic_name(self, doc, name):
-        """Sets license name.
-        Raises SPDXValueError if name is not str or utils.NoAssert
-        Raises OrderError if no license id defined.
+        """
+        Set license name.
+        Raise SPDXValueError if name is not str or utils.NoAssert
+        Raise OrderError if no license id defined.
         """
         if self.has_extr_lic(doc):
             if not self.extr_lic_name_set:
@@ -1225,9 +1289,10 @@ class LicenseBuilder(object):
             raise OrderError('ExtractedLicense::Name')
 
     def set_lic_comment(self, doc, comment):
-        """Sets license comment.
-        Raises SPDXValueError if comment is not free form text.
-        Raises OrderError if no license ID defined.
+        """
+        Set license comment.
+        Raise SPDXValueError if comment is not free form text.
+        Raise OrderError if no license ID defined.
         """
         if self.has_extr_lic(doc):
             if not self.extr_lic_comment_set:
@@ -1243,8 +1308,9 @@ class LicenseBuilder(object):
             raise OrderError('ExtractedLicense::comment')
 
     def add_lic_xref(self, doc, ref):
-        """Adds a license cross reference.
-        Raises OrderError if no License ID defined.
+        """
+        Add a license cross reference.
+        Raise OrderError if no License ID defined.
         """
         if self.has_extr_lic(doc):
             self.extr_lic(doc).add_xref(ref)
@@ -1266,10 +1332,11 @@ class SnippetBuilder(object):
         self.reset_snippet()
 
     def create_snippet(self, doc, spdx_id):
-        """Creates a snippet for the SPDX Document.
+        """
+        Create a snippet for the SPDX Document.
         spdx_id - To uniquely identify any element in an SPDX document which
         may be referenced by other elements.
-        Raises SPDXValueError if the data is a malformed value.
+        Raise SPDXValueError if the data is a malformed value.
         """
         self.reset_snippet()
         spdx_id = spdx_id.split('#')[-1]
@@ -1282,9 +1349,9 @@ class SnippetBuilder(object):
 
     def set_snippet_name(self, doc, name):
         """
-        Sets name of the snippet.
-        Raises OrderError if no snippet previously defined.
-        Raises CardinalityError if the name is already set.
+        Set name of the snippet.
+        Raise OrderError if no snippet previously defined.
+        Raise CardinalityError if the name is already set.
         """
         self.assert_snippet_exists()
         if not self.snippet_name_set:
@@ -1296,10 +1363,10 @@ class SnippetBuilder(object):
 
     def set_snippet_comment(self, doc, comment):
         """
-        Sets general comments about the snippet.
-        Raises OrderError if no snippet previously defined.
-        Raises SPDXValueError if the data is a malformed value.
-        Raises CardinalityError if comment already set.
+        Set general comments about the snippet.
+        Raise OrderError if no snippet previously defined.
+        Raise SPDXValueError if the data is a malformed value.
+        Raise CardinalityError if comment already set.
         """
         self.assert_snippet_exists()
         if not self.snippet_comment_set:
@@ -1313,10 +1380,10 @@ class SnippetBuilder(object):
             raise CardinalityError('Snippet::SnippetComment')
 
     def set_snippet_copyright(self, doc, text):
-        """Sets the snippet's copyright text.
-        Raises OrderError if no snippet previously defined.
-        Raises CardinalityError if already set.
-        Raises SPDXValueError if text is not one of [None, NOASSERT, TEXT].
+        """Set the snippet's copyright text.
+        Raise OrderError if no snippet previously defined.
+        Raise CardinalityError if already set.
+        Raise SPDXValueError if text is not one of [None, NOASSERT, TEXT].
         """
         self.assert_snippet_exists()
         if not self.snippet_copyright_set:
@@ -1332,10 +1399,11 @@ class SnippetBuilder(object):
             raise CardinalityError('Snippet::SnippetCopyrightText')
 
     def set_snippet_lic_comment(self, doc, text):
-        """Sets the snippet's license comment.
-        Raises OrderError if no snippet previously defined.
-        Raises CardinalityError if already set.
-        Raises SPDXValueError if the data is a malformed value.
+        """
+        Set the snippet's license comment.
+        Raise OrderError if no snippet previously defined.
+        Raise CardinalityError if already set.
+        Raise SPDXValueError if the data is a malformed value.
         """
         self.assert_snippet_exists()
         if not self.snippet_lic_comment_set:
@@ -1349,10 +1417,11 @@ class SnippetBuilder(object):
             raise CardinalityError('Snippet::SnippetLicenseComments')
 
     def set_snip_from_file_spdxid(self, doc, snip_from_file_spdxid):
-        """Sets the snippet's 'Snippet from File SPDX Identifier'.
-        Raises OrderError if no snippet previously defined.
-        Raises CardinalityError if already set.
-        Raises SPDXValueError if the data is a malformed value.
+        """
+        Set the snippet's 'Snippet from File SPDX Identifier'.
+        Raise OrderError if no snippet previously defined.
+        Raise CardinalityError if already set.
+        Raise SPDXValueError if the data is a malformed value.
         """
         self.assert_snippet_exists()
         snip_from_file_spdxid = snip_from_file_spdxid.split('#')[-1]
@@ -1368,9 +1437,9 @@ class SnippetBuilder(object):
 
     def set_snip_concluded_license(self, doc, conc_lics):
         """
-        Raises OrderError if no snippet previously defined.
-        Raises CardinalityError if already set.
-        Raises SPDXValueError if the data is a malformed value.
+        Raise OrderError if no snippet previously defined.
+        Raise CardinalityError if already set.
+        Raise SPDXValueError if the data is a malformed value.
         """
         self.assert_snippet_exists()
         if not self.snippet_conc_lics_set:
@@ -1385,8 +1454,8 @@ class SnippetBuilder(object):
 
     def set_snippet_lics_info(self, doc, lics_info):
         """
-        Raises OrderError if no snippet previously defined.
-        Raises SPDXValueError if the data is a malformed value.
+        Raise OrderError if no snippet previously defined.
+        Raise SPDXValueError if the data is a malformed value.
         """
         self.assert_snippet_exists()
         if validations.validate_snip_lics_info(lics_info):
@@ -1414,7 +1483,9 @@ class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
               PackageBuilder, FileBuilder, LicenseBuilder, SnippetBuilder, 
               ExternalDocumentRefBuilder, AnnotationBuilder):
 
-    """SPDX document builder."""
+    """
+    SPDX document builder.
+    """
 
     def __init__(self):
         super(Builder, self).__init__()
@@ -1422,7 +1493,8 @@ class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
         self.reset()
 
     def reset(self):
-        """Resets builder's state for building new documents.
+        """
+        Reset builder's state for building new documents.
         Must be called between usage with different documents.
         """
         # FIXME: this state does not make sense

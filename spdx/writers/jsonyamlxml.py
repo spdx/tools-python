@@ -8,7 +8,7 @@ from rdflib import Literal
 class BaseWriter(object):
     """
     Base class for all Writer classes.
-    Provides utility functions and stores shared fields.
+    Provide utility functions and stores shared fields.
     - document: spdx.document class. Source of data to be written
     - document_object: python dictionary representation of the entire spdx.document
     """
@@ -19,7 +19,7 @@ class BaseWriter(object):
 
     def license(self, license_field):
         """
-        Returns a string representation of a license or spdx.utils special object
+        Return a string representation of a license or spdx.utils special object
         """
         if isinstance(license_field, (document.LicenseDisjunction, document.LicenseConjunction)):
             return '({})'.format(license_field)
@@ -32,7 +32,7 @@ class BaseWriter(object):
 
     def checksum(self, checksum_field):
         """
-        Returns a dictionary representation of a spdx.checksum.Algorithm object
+        Return a dictionary representation of a spdx.checksum.Algorithm object
         """
         checksum_object = dict()
         checksum_object['algorithm'] = 'checksumAlgorithm_' + checksum_field.identifier.lower()
@@ -44,7 +44,7 @@ class BaseWriter(object):
 
 class CreationInfoWriter(BaseWriter):
     """
-    Responsible for representing spdx.creationinfo as json-serializable objects
+    Represent spdx.creationinfo as json-serializable objects
     """
 
     def __init__(self, document):
@@ -66,7 +66,7 @@ class CreationInfoWriter(BaseWriter):
 
 class PackageWriter(BaseWriter):
     """
-    Responsible for representing spdx.package as python objects
+    Represent spdx.package as python objects
     """
 
     def __init__(self, document):
@@ -74,7 +74,7 @@ class PackageWriter(BaseWriter):
 
     def package_verification_code(self, package):
         """
-        Represents the package verification code information as 
+        Represent the package verification code information as 
         as python dictionary
         """
 
@@ -134,7 +134,7 @@ class PackageWriter(BaseWriter):
 
 class FileWriter(BaseWriter):
     """
-    Responsible for representing spdx.file as json-serializable objects
+    Represent spdx.file as json-serializable objects
     """
 
     def __init__(self, document):
@@ -142,7 +142,7 @@ class FileWriter(BaseWriter):
 
     def create_artifact_info(self, file):
         """
-        Creates the artifact json-serializable representation from a spdx.file.File object
+        Create the artifact json-serializable representation from a spdx.file.File object
         """
         artifact_of_objects = []
 
@@ -200,7 +200,7 @@ class FileWriter(BaseWriter):
 
 class ReviewInfoWriter(BaseWriter):
     """
-    Responsible for representing spdx.review as json-serializable objects
+    Represent spdx.review as json-serializable objects
     """
 
     def __init__(self, document):
@@ -223,7 +223,7 @@ class ReviewInfoWriter(BaseWriter):
 
 class AnnotationInfoWriter(BaseWriter):
     """
-    Responsible for representing spdx.annotation as json-serializable objects
+    Represent spdx.annotation as json-serializable objects
     """
 
     def __init__(self, document):
@@ -252,7 +252,7 @@ class AnnotationInfoWriter(BaseWriter):
 
 class SnippetWriter(BaseWriter):
     """
-    Responsible for representing spdx.annotation as json-serializable objects
+    Represent spdx.annotation as json-serializable objects
     """
     def __init__(self, document):
         super(SnippetWriter, self).__init__(document)
@@ -284,7 +284,7 @@ class SnippetWriter(BaseWriter):
 
 class ExtractedLicenseWriter(BaseWriter):
     """
-    Responsible for representing spdx.document.ExtractedLicense as json-serializable objects
+    Represent spdx.document.ExtractedLicense as json-serializable objects
     """
 
     def __init__(self, document):
@@ -333,7 +333,7 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
     AnnotationInfoWriter, SnippetWriter, ExtractedLicenseWriter):
     """
     Wrapper for the other writers.
-    Responsible for representing a whole SPDX Document as json-serializable objects to then
+    Represent a whole SPDX Document as json-serializable objects to then
     be written as json or yaml files.
     """
 
@@ -342,7 +342,7 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
 
     def create_ext_document_references(self):
         """
-        Creates the External Document References json-serializable representation
+        Create the External Document References json-serializable representation
         """
         ext_document_references_field = self.document.ext_document_references
         ext_document_reference_objects = []

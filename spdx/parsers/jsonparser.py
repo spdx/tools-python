@@ -6,7 +6,7 @@ class Parser(jsonyamlxml.Parser):
     """
     Wrapper class for jsonyamlxml.Parser to provide an interface similar to 
     RDF and TV Parser classes (i.e., spdx.parsers.<format name>.Parser) for JSON parser.
-    It also avoids to repeat jsonyamlxml.Parser.parse code for JSON and YAML parsers
+    It also avoids to repeat jsonyamlxml.Parser.parse code for JSON, YAML and XML parsers
     """
     def __init__(self, builder, logger):
         super(Parser, self).__init__(builder, logger)

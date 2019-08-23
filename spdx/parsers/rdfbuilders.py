@@ -37,9 +37,8 @@ class DocBuilder(object):
     def set_doc_version(self, doc, value):
         """
         Set the document version.
-        Raise exceptions:
-        - SPDXValueError if malformed value,
-        - CardinalityError if already defined,
+        Raise SPDXValueError if malformed value.
+        Raise CardinalityError if already defined.
         """
         if not self.doc_version_set:
             self.doc_version_set = True
@@ -56,9 +55,8 @@ class DocBuilder(object):
     def set_doc_data_lic(self, doc, res):
         """
         Set the document data license.
-        Raise exceptions:
-        - SPDXValueError if malformed value,
-        - CardinalityError if already defined.
+        Raise SPDXValueError if malformed value.
+        Raise CardinalityError if already defined.
         """
         if not self.doc_data_lics_set:
             self.doc_data_lics_set = True
@@ -74,7 +72,8 @@ class DocBuilder(object):
 
     def set_doc_name(self, doc, name):
         """
-        Sets the document name, raises CardinalityError if already defined.
+        Set the document name.
+        Raise CardinalityError if already defined.
         """
         if not self.doc_name_set:
             doc.name = name
@@ -84,9 +83,10 @@ class DocBuilder(object):
             raise CardinalityError('Document::Name')
 
     def set_doc_spdx_id(self, doc, doc_spdx_id_line):
-        """Sets the document SPDX Identifier.
-        Raises value error if malformed value, CardinalityError
-        if already defined.
+        """
+        Set the document SPDX Identifier.
+        Raise value error if malformed value.
+        Raise CardinalityError if already defined.
         """
         if not self.doc_spdx_id_set:
             if validations.validate_doc_spdx_id(doc_spdx_id_line):
@@ -99,8 +99,9 @@ class DocBuilder(object):
             raise CardinalityError('Document::SPDXID')
 
     def set_doc_comment(self, doc, comment):
-        """Sets document comment, Raises CardinalityError if
-        comment already set.
+        """
+        Set document comment.
+        Raise CardinalityError if comment already set.
         """
         if not self.doc_comment_set:
             self.doc_comment_set = True
@@ -109,9 +110,10 @@ class DocBuilder(object):
             raise CardinalityError('Document::Comment')
 
     def set_doc_namespace(self, doc, namespace):
-        """Sets the document namespace.
-        Raise SPDXValueError if malformed value, CardinalityError
-        if already defined.
+        """
+        Set the document namespace.
+        Raise SPDXValueError if malformed value.
+        Raise CardinalityError if already defined.
         """
         if not self.doc_namespace_set:
             self.doc_namespace_set = True
@@ -140,7 +142,7 @@ class ExternalDocumentRefBuilder(tagvaluebuilders.ExternalDocumentRefBuilder):
 
     def set_chksum(self, doc, chk_sum):
         """
-        Sets the external document reference's check sum, if not already set.
+        Set the external document reference's check sum, if not already set.
         chk_sum - The checksum value in the form of a string.
         """
         if chk_sum:
@@ -172,9 +174,10 @@ class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
         super(CreationInfoBuilder, self).__init__()
 
     def set_creation_comment(self, doc, comment):
-        """Sets creation comment, Raises CardinalityError if
-        comment already set.
-        Raises SPDXValueError if not free form text.
+        """
+        Set creation comment.
+        Raise CardinalityError if comment already set.
+        Raise SPDXValueError if not free form text.
         """
         if not self.creation_comment_set:
             self.creation_comment_set = True
@@ -190,10 +193,11 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         super(PackageBuilder, self).__init__()
 
     def set_pkg_chk_sum(self, doc, chk_sum):
-        """Sets the package check sum, if not already set.
+        """
+        Set the package check sum, if not already set.
         chk_sum - A string
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_chk_sum_set:
@@ -203,10 +207,11 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             raise CardinalityError('Package::CheckSum')
 
     def set_pkg_source_info(self, doc, text):
-        """Sets the package's source information, if not already set.
+        """
+        Set the package's source information, if not already set.
         text - Free form text.
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_source_info_set:
@@ -217,10 +222,11 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             raise CardinalityError('Package::SourceInfo')
 
     def set_pkg_verif_code(self, doc, code):
-        """Sets the package verification code, if not already set.
+        """
+        Set the package verification code, if not already set.
         code - A string.
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_verif_set:
@@ -230,16 +236,18 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             raise CardinalityError('Package::VerificationCode')
 
     def set_pkg_excl_file(self, doc, filename):
-        """Sets the package's verification code excluded file.
-        Raises OrderError if no package previously defined.
+        """
+        Set the package's verification code excluded file.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         doc.package.add_exc_file(filename)
 
     def set_pkg_license_comment(self, doc, text):
-        """Sets the package's license comment.
-        Raises OrderError if no package previously defined.
-        Raises CardinalityError if already set.
+        """
+        Set the package's license comment.
+        Raise OrderError if no package previously defined.
+        Raise CardinalityError if already set.
         """
         self.assert_package_exists()
         if not self.package_license_comment_set:
@@ -250,9 +258,10 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             raise CardinalityError('Package::LicenseComment')
 
     def set_pkg_cr_text(self, doc, text):
-        """Sets the package's license comment.
-        Raises OrderError if no package previously defined.
-        Raises CardinalityError if already set.
+        """
+        Set the package's license comment.
+        Raise OrderError if no package previously defined.
+        Raise CardinalityError if already set.
         """
         self.assert_package_exists()
         if not self.package_cr_text_set:
@@ -262,9 +271,10 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             raise CardinalityError('Package::CopyrightText')
 
     def set_pkg_summary(self, doc, text):
-        """Set's the package summary.
-        Raises CardinalityError if summary already set.
-        Raises OrderError if no package previously defined.
+        """
+        Set the package summary.
+        Raise CardinalityError if summary already set.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_summary_set:
@@ -274,9 +284,10 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             raise CardinalityError('Package::Summary')
 
     def set_pkg_desc(self, doc, text):
-        """Set's the package's description.
-        Raises CardinalityError if description already set.
-        Raises OrderError if no package previously defined.
+        """
+        Set the package's description.
+        Raise CardinalityError if description already set.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_desc_set:
@@ -286,9 +297,10 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             raise CardinalityError('Package::Description')
 
     def set_pkg_comment(self, doc, text):
-        """Set's the package's comment.
-        Raises CardinalityError if comment already set.
-        Raises OrderError if no package previously defined.
+        """
+        Set the package's comment.
+        Raise CardinalityError if comment already set.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_comment_set:
@@ -299,9 +311,9 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
 
     def set_pkg_ext_ref_category(self, doc, category):
         """
-        Sets the package's external reference locator.
-        Raises OrderError if no package previously defined.
-        Raises SPDXValueError if malformed value.
+        Set the package's external reference locator.
+        Raise OrderError if no package previously defined.
+        Raise SPDXValueError if malformed value.
         """
         self.assert_package_exists()
         category = category.split('_')[-1]
@@ -321,9 +333,9 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
 
     def set_pkg_ext_ref_type(self, doc, typ):
         """
-        Sets the package's external reference type.
-        Raises OrderError if no package previously defined.
-        Raises SPDXValueError if malformed value.
+        Set the package's external reference type.
+        Raise OrderError if no package previously defined.
+        Raise SPDXValueError if malformed value.
         """
         self.assert_package_exists()
         if '#' in typ:
@@ -343,9 +355,9 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
 
     def set_pkg_ext_ref_comment(self, doc, comment):
         """
-        Sets the package's external reference comment.
-        Raises CardinalityError if comment already set.
-        Raises OrderError if no package previously defined.
+        Set the package's external reference comment.
+        Raise CardinalityError if comment already set.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not len(doc.package.pkg_ext_refs):
@@ -364,10 +376,11 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         super(FileBuilder, self).__init__()
 
     def set_file_chksum(self, doc, chk_sum):
-        """Sets the file check sum, if not already set.
+        """
+        Set the file check sum, if not already set.
         chk_sum - A string
-        Raises CardinalityError if already defined.
-        Raises OrderError if no package previously defined.
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_chksum_set:
@@ -381,8 +394,8 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
 
     def set_file_license_comment(self, doc, text):
         """
-        Raises OrderError if no package or file defined.
-        Raises CardinalityError if more than one per file.
+        Raise OrderError if no package or file defined.
+        Raise CardinalityError if more than one per file.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_license_comment_set:
@@ -395,8 +408,9 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
             raise OrderError('File::LicenseComment')
 
     def set_file_copyright(self, doc, text):
-        """Raises OrderError if no package or file defined.
-        Raises CardinalityError if more than one.
+        """
+        Raise OrderError if no package or file defined.
+        Raise CardinalityError if more than one.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_copytext_set:
@@ -409,8 +423,9 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
             raise OrderError('File::CopyRight')
 
     def set_file_comment(self, doc, text):
-        """Raises OrderError if no package or no file defined.
-        Raises CardinalityError if more than one comment set.
+        """
+        Raise OrderError if no package or no file defined.
+        Raise CardinalityError if more than one comment set.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_comment_set:
@@ -423,8 +438,9 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
             raise OrderError('File::Comment')
 
     def set_file_notice(self, doc, text):
-        """Raises OrderError if no package or file defined.
-        Raises CardinalityError if more than one.
+        """
+        Raise OrderError if no package or file defined.
+        Raise CardinalityError if more than one.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_notice_set:
@@ -443,9 +459,10 @@ class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
         super(SnippetBuilder, self).__init__()
 
     def set_snippet_lic_comment(self, doc, lic_comment):
-        """Sets the snippet's license comment.
-        Raises OrderError if no snippet previously defined.
-        Raises CardinalityError if already set.
+        """
+        Set the snippet's license comment.
+        Raise OrderError if no snippet previously defined.
+        Raise CardinalityError if already set.
         """
         self.assert_snippet_exists()
         if not self.snippet_lic_comment_set:
@@ -456,9 +473,9 @@ class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
 
     def set_snippet_comment(self, doc, comment):
         """
-        Sets general comments about the snippet.
-        Raises OrderError if no snippet previously defined.
-        Raises CardinalityError if comment already set.
+        Set general comments about the snippet.
+        Raise OrderError if no snippet previously defined.
+        Raise CardinalityError if comment already set.
         """
         self.assert_snippet_exists()
         if not self.snippet_comment_set:
@@ -469,9 +486,10 @@ class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
             raise CardinalityError('Snippet::comment')
 
     def set_snippet_copyright(self, doc, copyright):
-        """Sets the snippet's copyright text.
-        Raises OrderError if no snippet previously defined.
-        Raises CardinalityError if already set.
+        """
+        Set the snippet's copyright text.
+        Raise OrderError if no snippet previously defined.
+        Raise CardinalityError if already set.
         """
         self.assert_snippet_exists()
         if not self.snippet_copyright_set:
@@ -487,8 +505,10 @@ class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
         super(ReviewBuilder, self).__init__()
 
     def add_review_comment(self, doc, comment):
-        """Sets the review comment. Raises CardinalityError if
-        already set. OrderError if no reviewer defined before.
+        """
+        Set the review comment.
+        Raise CardinalityError if already set.
+        Raise OrderError if no reviewer defined before.
         """
         if len(doc.reviews) != 0:
             if not self.review_comment_set:
@@ -507,8 +527,10 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
         super(AnnotationBuilder, self).__init__()
 
     def add_annotation_comment(self, doc, comment):
-        """Sets the annotation comment. Raises CardinalityError if
-        already set. OrderError if no annotator defined before.
+        """
+        Set the annotation comment.
+        Raise CardinalityError if already set.
+        Raise OrderError if no annotator defined before.
         """
         if len(doc.annotations) != 0:
             if not self.annotation_comment_set:
@@ -521,8 +543,10 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
             raise OrderError('AnnotationComment')
 
     def add_annotation_type(self, doc, annotation_type):
-        """Sets the annotation type. Raises CardinalityError if
-        already set. OrderError if no annotator defined before.
+        """
+        Set the annotation type.
+        Raise CardinalityError if already set.
+        Raise OrderError if no annotator defined before.
         """
         if len(doc.annotations) != 0:
             if not self.annotation_type_set:
@@ -552,7 +576,8 @@ class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder,
         self.reset()
 
     def reset(self):
-        """Resets builder's state for building new documents.
+        """
+        Reset builder's state for building new documents.
         Must be called between usage with different documents.
         """
         # FIXME: this state does not make sense

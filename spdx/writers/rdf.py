@@ -35,7 +35,7 @@ from spdx.writers.tagvalue import InvalidDocumentError
 class BaseWriter(object):
     """
     Base class for all Writer classes.
-    Provides utility functions and stores shared fields.
+    Provide utility functions and stores shared fields.
     """
 
     def __init__(self, document, out):
@@ -415,7 +415,9 @@ class AnnotationInfoWriter(BaseWriter):
         return annotation_node
 
     def annotations(self):
-        """Returns a list of annotation nodes"""
+        """
+        Return a list of annotation nodes
+        """
         return map(self.create_annotation_node, self.document.annotations)
 
 
@@ -496,7 +498,9 @@ class ExternalDocumentRefWriter(BaseWriter):
         return ext_doc_ref_node
 
     def ext_doc_refs(self):
-        "Returns a list of review nodes"
+        """
+        Return a list of review nodes
+        """
         return map(self.create_external_document_ref_node,
                    self.document.ext_document_references)
 
@@ -681,7 +685,9 @@ class PackageExternalRefWriter(BaseWriter):
         return pkg_ext_ref_node
 
     def pkg_ext_refs(self):
-        """Returns a list of package external references."""
+        """
+        Return a list of package external references.
+        """
         return map(self.create_package_external_ref_node,
                    self.document.package.pkg_ext_refs)
 

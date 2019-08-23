@@ -33,8 +33,8 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
     
     def set_doc_spdx_id(self, doc, doc_spdx_id_line):
         """
-        Sets the document SPDX Identifier.
-        Raises SPDXValueError if malformed value, CardinalityError
+        Set the document SPDX Identifier.
+        Raise SPDXValueError if malformed value, CardinalityError
         if already defined.
         """
         if not self.doc_spdx_id_set:
@@ -49,8 +49,8 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
     
     def set_doc_comment(self, doc, comment):
         """
-        Sets document comment, Raises CardinalityError if
-        comment already set.
+        Set document comment.
+        Raise CardinalityError if comment already set.
         """
         if not self.doc_comment_set:
             self.doc_comment_set = True
@@ -64,10 +64,10 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
     
     def set_lic_name(self, doc, name):
         """
-        Sets license name.
-        Raises SPDXValueError if name is not str or utils.NoAssert
-        Raises CardinalityError if it is already set
-        Raises OrderError if no license id defined.
+        Set license name.
+        Raise SPDXValueError if name is not str or utils.NoAssert
+        Raise CardinalityError if it is already set
+        Raise OrderError if no license id defined.
         """
         if self.has_extr_lic(doc):
             if not self.extr_lic_name_set:
@@ -84,9 +84,9 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
 
     def set_lic_text(self, doc, text):
         """
-        Sets license name.
-        Raises CardinalityError if it is already set.
-        Raises OrderError if no license id defined.
+        Set license name.
+        Raise CardinalityError if it is already set.
+        Raise OrderError if no license id defined.
         """
         if self.has_extr_lic(doc):
             if not self.extr_text_set:
@@ -100,9 +100,9 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
 
     def set_lic_comment(self, doc, comment):
         """
-        Sets license comment.
-        Raises CardinalityError if it is already set.
-        Raises OrderError if no license ID defined.
+        Set license comment.
+        Raise CardinalityError if it is already set.
+        Raise OrderError if no license ID defined.
         """
         if self.has_extr_lic(doc):
             if not self.extr_lic_comment_set:
@@ -120,8 +120,9 @@ class FileBuilder(rdfbuilders.FileBuilder):
     
     def set_file_notice(self, doc, text):
         """
-        Raises OrderError if no package or file defined.
-        Raises CardinalityError if more than one.
+        Set file notice
+        Raise OrderError if no package or file defined.
+        Raise CardinalityError if more than one.
         """
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_notice_set:
@@ -135,7 +136,7 @@ class FileBuilder(rdfbuilders.FileBuilder):
     
     def set_file_type(self, doc, type_value):
         """
-        Wraps rdfbuilders.FileBuilder.set_file_type to match the different 
+        Wrap rdfbuilders.FileBuilder.set_file_type to match the different 
         fileType representations.
         """
         
@@ -154,8 +155,9 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
     
     def add_annotation_comment(self, doc, comment):
         """
-        Sets the annotation comment. Raises CardinalityError if
-        already set. OrderError if no annotator defined before.
+        Set the annotation comment.
+        Raise CardinalityError if already set.
+        Raise OrderError if no annotator defined before.
         """
         if len(doc.annotations) != 0:
             if not self.annotation_comment_set:
@@ -170,7 +172,9 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
 class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, EntityBuilder, 
             SnippetBuilder, ReviewBuilder, LicenseBuilder, FileBuilder, PackageBuilder, 
             AnnotationBuilder):
-    """SPDX document builder."""
+    """
+    SPDX document builder.
+    """
 
     def __init__(self):
         super(Builder, self).__init__()
@@ -179,7 +183,7 @@ class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, Enti
 
     def reset(self):
         """
-        Resets builder's state for building new documents.
+        Reset builder's state for building new documents.
         Must be called between usage with different documents.
         """
         # FIXME: this state does not make sense

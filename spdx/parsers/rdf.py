@@ -83,7 +83,8 @@ class BaseParser(object):
         self.builder = builder
 
     def more_than_one_error(self, field):
-        """Logs a more than one error.
+        """
+        Logs a more than one error.
         field is the field/property that has more than one defined.
         """
         msg = 'More than one {0} defined.'.format(field)
@@ -91,7 +92,8 @@ class BaseParser(object):
         self.error = True
 
     def value_error(self, key, bad_value):
-        """Reports a value error using ERROR_MESSAGES dict.
+        """
+        Report a value error using ERROR_MESSAGES dict.
         key - key to use for ERROR_MESSAGES.
         bad_value - is passed to format which is called on what key maps to
         in ERROR_MESSAGES.
@@ -101,9 +103,11 @@ class BaseParser(object):
         self.error = True
 
     def to_special_value(self, value):
-        """Checks if value is a special SPDX value such as
+        """
+        Check if value is a special SPDX value such as
         NONE, NOASSERTION or UNKNOWN if so returns proper model.
-        else returns value"""
+        else returns value
+        """
         if value == self.spdx_namespace.none:
             return utils.SPDXNone()
         elif value == self.spdx_namespace.noassertion:
@@ -153,7 +157,7 @@ class LicenseParser(BaseParser):
 
     def get_extr_license_ident(self, extr_lic):
         """
-        Return an a license identifier from an ExtractedLicense or None.
+        Return a license identifier from an ExtractedLicense or None.
         """
         identifier_tripples = list(self.graph.triples((extr_lic, self.spdx_namespace['licenseId'], None)))
 
@@ -173,7 +177,7 @@ class LicenseParser(BaseParser):
 
     def get_extr_license_text(self, extr_lic):
         """
-        Return extracted text  from an ExtractedLicense or None.
+        Return extracted text from an ExtractedLicense or None.
         """
         text_tripples = list(self.graph.triples((extr_lic, self.spdx_namespace['extractedText'], None)))
         if not text_tripples:
@@ -305,7 +309,9 @@ class PackageParser(LicenseParser):
         super(PackageParser, self).__init__(builder, logger)
 
     def parse_package(self, p_term):
-        """Parses package fields."""
+        """
+        Parse package fields.
+        """
         # Check there is a pacakge name
         if not (p_term, self.spdx_namespace['name'], None) in self.graph:
             self.error = True
@@ -401,7 +407,9 @@ class PackageParser(LicenseParser):
         self.handle_pkg_lic(p_term, predicate, self.builder.set_pkg_license_declared)
 
     def handle_pkg_lic(self, p_term, predicate, builder_func):
-        """Handles package lics concluded or declared."""
+        """
+        Handle package lics concluded or declared.
+        """
         try:
             for _, _, licenses in self.graph.triples((p_term, predicate, None)):
                 if (licenses, RDF.type, self.spdx_namespace['ConjunctiveLicenseSet']) in self.graph:
@@ -571,7 +579,9 @@ class FileParser(LicenseParser):
         return
 
     def p_file_depends(self, f_term, predicate):
-        """Sets file dependencies."""
+        """
+        Set file dependencies.
+        """
         for _, _, other_file in self.graph.triples((f_term, predicate, None)):
             name = self.get_file_name(other_file)
             if name is not None:
@@ -589,7 +599,9 @@ class FileParser(LicenseParser):
             self.builder.add_file_contribution(self.doc, six.text_type(contributor))
 
     def p_file_notice(self, f_term, predicate):
-        """Sets file notice text."""
+        """
+        Set file notice text.
+        """
         try:
             for _, _, notice in self.graph.triples((f_term, predicate, None)):
                 self.builder.set_file_notice(self.doc, six.text_type(notice))
@@ -597,7 +609,9 @@ class FileParser(LicenseParser):
             self.more_than_one_error('file notice')
 
     def p_file_comment(self, f_term, predicate):
-        """Sets file comment text."""
+        """
+        Set file comment text.
+        """
         try:
             for _, _, comment in self.graph.triples((f_term, predicate, None)):
                 self.builder.set_file_comment(self.doc, six.text_type(comment))
@@ -606,7 +620,8 @@ class FileParser(LicenseParser):
 
 
     def p_file_artifact(self, f_term, predicate):
-        """Handles file artifactOf.
+        """
+        Handle file artifactOf.
         Note: does not handle artifact of project URI.
         """
         for _, _, project in self.graph.triples((f_term, predicate, None)):
@@ -618,7 +633,8 @@ class FileParser(LicenseParser):
                 self.logger.log(msg)
 
     def p_file_project(self, project):
-        """Helper function for parsing doap:project name and homepage.
+        """
+        Helper function for parsing doap:project name and homepage.
         and setting them using the file builder.
         """
         for _, _, name in self.graph.triples((project, self.doap_namespace['name'], None)):
@@ -628,7 +644,9 @@ class FileParser(LicenseParser):
             self.builder.set_file_atrificat_of_project(self.doc, 'home', six.text_type(homepage))
 
     def p_file_cr_text(self, f_term, predicate):
-        """Sets file copyright text."""
+        """
+        Set file copyright text.
+        """
         try:
             for _, _, cr_text in self.graph.triples((f_term, predicate, None)):
                 self.builder.set_file_copyright(self.doc, six.text_type(cr_text))
@@ -636,7 +654,9 @@ class FileParser(LicenseParser):
             self.more_than_one_error('file copyright text')
 
     def p_file_comments_on_lics(self, f_term, predicate):
-        """Sets file license comment."""
+        """
+        Set file license comment.
+        """
         try:
             for _, _, comment in self.graph.triples((f_term, predicate, None)):
                 self.builder.set_file_license_comment(self.doc, six.text_type(comment))
@@ -644,7 +664,9 @@ class FileParser(LicenseParser):
             self.more_than_one_error('file comments on license')
 
     def p_file_lic_info(self, f_term, predicate):
-        """Sets file license information."""
+        """
+        Set file license information.
+        """
         for _, _, info in self.graph.triples((f_term, predicate, None)):
             lic = self.handle_lics(info)
             if lic is not None:
@@ -660,7 +682,9 @@ class FileParser(LicenseParser):
             self.more_than_one_error('FILE_SPDX_ID_VALUE')
 
     def p_file_type(self, f_term, predicate):
-        """Sets file type."""
+        """
+        Set file type.
+        """
         try:
             for _, _, ftype in self.graph.triples((f_term, predicate, None)):
                 try:
@@ -679,7 +703,9 @@ class FileParser(LicenseParser):
             self.more_than_one_error('file type')
 
     def p_file_chk_sum(self, f_term, predicate):
-        """Sets file checksum. Assumes SHA1 algorithm without checking."""
+        """
+        Set file checksum. Assumes SHA1 algorithm without checking.
+        """
         try:
             for _s, _p, checksum in self.graph.triples((f_term, predicate, None)):
                 for _, _, value in self.graph.triples((checksum, self.spdx_namespace['checksumValue'], None)):
@@ -688,7 +714,9 @@ class FileParser(LicenseParser):
             self.more_than_one_error('File checksum')
 
     def p_file_lic_conc(self, f_term, predicate):
-        """Sets file licenses concluded."""
+        """
+        Set file licenses concluded.
+        """
         try:
             for _, _, licenses in self.graph.triples((f_term, predicate, None)):
                 if (licenses, RDF.type, self.spdx_namespace['ConjunctiveLicenseSet']) in self.graph:
@@ -813,8 +841,9 @@ class ReviewParser(BaseParser):
                 self.builder.add_review_comment(self.doc, comment)
 
     def get_review_comment(self, r_term):
-        """Returns review comment or None if found none or more than one.
-        Reports errors.
+        """
+        Return review comment or None if found none or more than one.
+        Report errors.
         """
         comment_list = list(self.graph.triples((r_term, RDFS.comment, None)))
         if len(comment_list) > 1:
@@ -826,8 +855,9 @@ class ReviewParser(BaseParser):
             return six.text_type(comment_list[0][2])
 
     def get_review_date(self, r_term):
-        """Returns review date or None if not found.
-        Reports error on failure.
+        """
+        Return review date or None if not found.
+        Report error on failure.
         Note does not check value format.
         """
         reviewed_list = list(self.graph.triples((r_term, self.spdx_namespace['reviewDate'], None)))
@@ -839,8 +869,9 @@ class ReviewParser(BaseParser):
         return six.text_type(reviewed_list[0][2])
 
     def get_reviewer(self, r_term):
-        """Returns reviewer as creator object or None if failed.
-        Reports errors on failure.
+        """
+        Return reviewer as creator object or None if failed.
+        Report errors on failure.
         """
         reviewer_list = list(self.graph.triples((r_term, self.spdx_namespace['reviewer'], None)))
         if len(reviewer_list) != 1:
@@ -883,8 +914,10 @@ class AnnotationParser(BaseParser):
                 self.more_than_one_error('SPDX Identifier Reference')
 
     def get_annotation_type(self, r_term):
-        """Returns annotation type or None if found none or more than one.
-        Reports errors on failure."""
+        """
+        Return annotation type or None if found none or more than one.
+        Report errors on failure.
+        """
         for _, _, typ in self.graph.triples((
                 r_term, self.spdx_namespace['annotationType'], None)):
             if typ is not None:
@@ -896,8 +929,9 @@ class AnnotationParser(BaseParser):
                 return
 
     def get_annotation_comment(self, r_term):
-        """Returns annotation comment or None if found none or more than one.
-        Reports errors.
+        """
+        Return annotation comment or None if found none or more than one.
+        Report errors.
         """
         comment_list = list(self.graph.triples((r_term, RDFS.comment, None)))
         if len(comment_list) > 1:
@@ -909,8 +943,9 @@ class AnnotationParser(BaseParser):
             return six.text_type(comment_list[0][2])
 
     def get_annotation_date(self, r_term):
-        """Returns annotation date or None if not found.
-        Reports error on failure.
+        """
+        Return annotation date or None if not found.
+        Report error on failure.
         Note does not check value format.
         """
         annotation_date_list = list(self.graph.triples((r_term, self.spdx_namespace['annotationDate'], None)))
@@ -922,8 +957,9 @@ class AnnotationParser(BaseParser):
         return six.text_type(annotation_date_list[0][2])
 
     def get_annotator(self, r_term):
-        """Returns annotator as creator object or None if failed.
-        Reports errors on failure.
+        """
+        Return annotator as creator object or None if failed.
+        Report errors on failure.
         """
         annotator_list = list(self.graph.triples((r_term, self.spdx_namespace['annotator'], None)))
         if len(annotator_list) != 1:
@@ -946,8 +982,9 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
         super(Parser, self).__init__(builder, logger)
 
     def parse(self, fil):
-        """Parses a file and returns a document object.
-        File, a file like object.
+        """
+        Parse a file and returns a document object.
+        fil is a file like object.
         """
         self.error = False
         self.graph = Graph()
@@ -1031,8 +1068,10 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
                 self.value_error('LL_VALUE', o)
 
     def parse_doc_fields(self, doc_term):
-        """Parses the version, data license, name, SPDX Identifier, namespace,
-        and comment."""
+        """
+        Parse the version, data license, name, SPDX Identifier, namespace,
+        and comment.
+        """
         try:
             self.builder.set_doc_spdx_id(self.doc, six.text_type(doc_term))
         except SPDXValueError:
@@ -1077,7 +1116,7 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
 
     def parse_ext_doc_ref(self, ext_doc_ref_term):
         """
-        Parses the External Document ID, SPDX Document URI and Checksum.
+        Parse the External Document ID, SPDX Document URI and Checksum.
         """
         for _s, _p, o in self.graph.triples(
                 (ext_doc_ref_term,
@@ -1111,7 +1150,7 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
 
     def parse_pkg_ext_ref(self, pkg_ext_term):
         """
-        Parses the category, type, locator, and comment.
+        Parse the category, type, locator, and comment.
         """
         for _s, _p, o in self.graph.triples((pkg_ext_term,
                                              self.spdx_namespace['referenceCategory'],
