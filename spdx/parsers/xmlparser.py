@@ -37,7 +37,7 @@ class Parser(jsonyamlxml.Parser):
         }
 
     def parse(self, file):
-        parsed_xml = xmltodict.parse(file.read(), strip_whitespace=False)
+        parsed_xml = xmltodict.parse(file.read(), strip_whitespace=False, encoding='utf-8')
         fixed_object = self._set_in_list(parsed_xml, self.LIST_LIKE_FIELDS)
         self.document_object = fixed_object.get('SpdxDocument').get('Document')
         return super(Parser, self).parse()
