@@ -66,38 +66,26 @@ class TestConversions(TestCase):
         with open(file_name, mode='r') as infile:
             tvparser = TVParser(TVBuilder(), StandardLogger())
             tvparser.build()
-<<<<<<< Upstream, based on spdx/master
             doc, error = tvparser.parse(infile.read())
         assert not error
         assert doc.validate([]) == []
         return doc
-=======
-            return tvparser.parse(infile.read())
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def parse_json_file(self, file_name):
         with open(file_name, mode='r') as infile:
             jsonparser = JSONParser(JSONYAMLXMLBuilder(), StandardLogger())
-<<<<<<< Upstream, based on spdx/master
             doc, error = jsonparser.parse(infile)
         assert not error
         assert doc.validate([]) == []
         return doc
-=======
-            return jsonparser.parse(infile)
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def parse_yaml_file(self, file_name):
         with open(file_name, mode='r') as infile:
             yamlparser = YAMLParser(JSONYAMLXMLBuilder(), StandardLogger())
-<<<<<<< Upstream, based on spdx/master
             doc, error = yamlparser.parse(infile)
         assert not error
         assert doc.validate([]) == []
         return doc
-=======
-            return yamlparser.parse(infile)
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def parse_xml_file(self, file_name):
         with open(file_name, mode='r') as infile:
@@ -131,25 +119,13 @@ class TestConversions(TestCase):
         doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
         filename = get_temp_file('.rdf')
         self.write_rdf_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_rdf_file(filename)
-=======
-        doc, error = self.parse_rdf_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_json_rdf(self):
         doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
         filename = get_temp_file('.rdf')
         self.write_rdf_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_rdf_file(filename)
-=======
-        doc, error = self.parse_rdf_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_yaml_rdf(self):
         doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
@@ -179,27 +155,13 @@ class TestConversions(TestCase):
         doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
         filename = get_temp_file('.tag')
         self.write_tagvalue_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_tagvalue_file(filename)
-=======
-        ###############################################
-        doc, error = self.parse_tagvalue_file(filename)
-        # print(doc.annotations[-1].annotation_type)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_json_tagvalue(self):
         doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
         filename = get_temp_file('.tag')
         self.write_tagvalue_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_tagvalue_file(filename)
-=======
-        doc, error = self.parse_tagvalue_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_yaml_tagvalue(self):
         doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
@@ -211,37 +173,19 @@ class TestConversions(TestCase):
         doc = self.parse_xml_file(utils_test.get_test_loc('formats/SPDXXmlExample.xml'))
         filename = get_temp_file('.tag')
         self.write_tagvalue_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_tagvalue_file(filename)
-=======
-        doc, error = self.parse_tagvalue_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_tagvalue_json(self):
         doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
         filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_json_file(filename)
-=======
-        doc, error = self.parse_json_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_rdf_json(self):
         doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
         filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_json_file(filename)
-=======
-        doc, error = self.parse_json_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_yaml_json(self):
         doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
@@ -253,49 +197,25 @@ class TestConversions(TestCase):
         doc = self.parse_xml_file(utils_test.get_test_loc('formats/SPDXXmlExample.xml'))
         filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_json_file(filename)
-=======
-        doc, error = self.parse_json_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_json_json(self):
         doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
         filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_json_file(filename)
-=======
-        doc, error = self.parse_json_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_tagvalue_yaml(self):
         doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
         filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_yaml_file(filename)
-=======
-        doc, error = self.parse_yaml_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_rdf_yaml(self):
         doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
         filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_yaml_file(filename)
-=======
-        doc, error = self.parse_yaml_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_json_yaml(self):
         doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
@@ -307,61 +227,31 @@ class TestConversions(TestCase):
         doc = self.parse_xml_file(utils_test.get_test_loc('formats/SPDXXmlExample.xml'))
         filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_yaml_file(filename)
-=======
-        doc, error = self.parse_yaml_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_yaml_yaml(self):
         doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
         filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_yaml_file(filename)
-=======
-        doc, error = self.parse_yaml_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_tagvalue_xml(self):
         doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
         filename = get_temp_file('.xml')
         self.write_xml_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_xml_file(filename)
-=======
-        doc, error = self.parse_xml_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_rdf_xml(self):
         doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
         filename = get_temp_file('.xml')
         self.write_xml_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_xml_file(filename)
-=======
-        doc, error = self.parse_xml_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_json_xml(self):
         doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
         filename = get_temp_file('.xml')
         self.write_xml_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_xml_file(filename)
-=======
-        doc, error = self.parse_xml_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
 
     def test_yaml_xml(self):
         doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
@@ -373,10 +263,4 @@ class TestConversions(TestCase):
         doc = self.parse_xml_file(utils_test.get_test_loc('formats/SPDXXmlExample.xml'))
         filename = get_temp_file('.xml')
         self.write_xml_file(doc, filename)
-<<<<<<< Upstream, based on spdx/master
         self.parse_xml_file(filename)
-=======
-        doc, error = self.parse_xml_file(filename)
-        assert not error
-        assert doc.validate([]) == []
->>>>>>> e152d93 Add maxDiff None to all tests and format code
