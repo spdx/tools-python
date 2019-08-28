@@ -14,9 +14,9 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from collections import OrderedDict
 import io
 import json
-import sys
 from unittest import TestCase
 
 from spdx.parsers import jsonparser, yamlparser, xmlparser
@@ -27,37 +27,8 @@ from tests import utils_test
 from tests.utils_test import TestParserUtils
 
 
-_sys_v0 = sys.version_info[0]
-py2 = _sys_v0 == 2
-py3 = _sys_v0 == 3
-
-
 class TestParser(TestCase):
     maxDiff = None
-
-    def test_json_parser(self):
-        parser = jsonparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('formats/SPDXJsonExample.json', test_data_dir=utils_test.test_data_dir)
-        with open(test_file, 'r') as f:
-            document, _ = parser.parse(f)
-        expected_loc = utils_test.get_test_loc('doc_parse/expected.json', test_data_dir=utils_test.test_data_dir)
-        self.check_document(document, expected_loc)
-
-    def test_yaml_parser(self):
-        parser = yamlparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('formats/SPDXYamlExample.yaml', test_data_dir=utils_test.test_data_dir)
-        with open(test_file, 'r') as f:
-            document, _ = parser.parse(f)
-        expected_loc = utils_test.get_test_loc('doc_parse/expected.json', test_data_dir=utils_test.test_data_dir)
-        self.check_document(document, expected_loc)
-
-    def test_xml_parser(self):
-        parser = xmlparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('formats/SPDXXmlExample.xml', test_data_dir=utils_test.test_data_dir)
-        with open(test_file, 'r') as f:
-            document, _ = parser.parse(f)
-        expected_loc = utils_test.get_test_loc('doc_parse/expected.json', test_data_dir=utils_test.test_data_dir)
-        self.check_document(document, expected_loc)
 
     def check_document(self, document, expected_loc, regen=False):
         result = TestParserUtils.to_dict(document)
@@ -67,6 +38,30 @@ class TestParser(TestCase):
                 o.write(json.dumps(result, indent=2))
 
         with io.open(expected_loc, encoding='utf-8') as ex:
-            expected = json.load(ex, encoding='utf-8',)
+            expected = json.load(ex, encoding='utf-8', object_pairs_hook=OrderedDict)
 
         self.assertEqual(expected, result)
+
+    def test_json_parser(self):
+        parser = jsonparser.Parser(Builder(), StandardLogger())
+        test_file = utils_test.get_test_loc('formats/SPDXJsonExample.json')
+        with open(test_file, 'r') as f:
+            document, _ = parser.parse(f)
+        expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
+        self.check_document(document, expected_loc)
+
+    def test_yaml_parser(self):
+        parser = yamlparser.Parser(Builder(), StandardLogger())
+        test_file = utils_test.get_test_loc('formats/SPDXYamlExample.yaml')
+        with open(test_file, 'r') as f:
+            document, _ = parser.parse(f)
+        expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
+        self.check_document(document, expected_loc)
+
+    def test_xml_parser(self):
+        parser = xmlparser.Parser(Builder(), StandardLogger())
+        test_file = utils_test.get_test_loc('formats/SPDXXmlExample.xml')
+        with open(test_file, 'r') as f:
+            document, _ = parser.parse(f)
+        expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
+        self.check_document(document, expected_loc)

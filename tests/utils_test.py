@@ -15,6 +15,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+from collections import OrderedDict
 import io
 import json
 import ntpath
@@ -273,7 +274,7 @@ class TestParserUtils(object):
         CONJ_SEP = re.compile(' AND | and ')
         DISJ_SEP = re.compile(' OR | or ')
 
-        license_dict = {}
+        license_dict = OrderedDict()
 
         if isinstance(license, spdx.document.LicenseConjunction):
             license_dict['type'] = 'Conjunction'
@@ -297,14 +298,17 @@ class TestParserUtils(object):
         """
         Represents spdx.version.Version as a Python dictionary
         """
-        return {'major': int(version.major), 'minor': int(version.minor)}
+        return OrderedDict([
+            ('major', int(version.major)),
+            ('minor', int(version.minor))
+        ])
 
     @classmethod
     def entity_to_dict(cls, entity):
         """
         Represents spdx.creationInfo.Creator subclasses as a dictionary
         """
-        entity_dict = {'name': entity.name}
+        entity_dict = OrderedDict(name=entity.name)
 
         if isinstance(entity, spdx.creationinfo.Tool):
             entity_dict['type'] = 'Tool'
@@ -324,7 +328,9 @@ class TestParserUtils(object):
         """
         Represents spdx.checksum.Algorithm as a Python dictionary
         """
-        return {'identifier': checksum.identifier, 'value': checksum.value}
+        return OrderedDict([
+            ('identifier', checksum.identifier),
+            ('value', checksum.value)])
 
     @classmethod
     def package_to_dict(cls, package):
@@ -332,30 +338,30 @@ class TestParserUtils(object):
         Represents spdx.package.Package as a Python dictionary
         """
         lics_from_files = sorted(package.licenses_from_files, key=lambda lic: lic.identifier)
-        return {
-            'id': package.spdx_id,
-            'name': package.name,
-            'packageFileName': package.file_name,
-            'summary': package.summary,
-            'description': package.description,
-            'versionInfo': package.version,
-            'sourceInfo': package.source_info,
-            'downloadLocation': package.download_location,
-            'homepage': package.homepage,
-            'originator': cls.entity_to_dict(package.originator),
-            'supplier': cls.entity_to_dict(package.supplier),
-            'licenseConcluded': cls.license_to_dict(package.conc_lics),
-            'licenseDeclared': cls.license_to_dict(package.license_declared),
-            'copyrightText': package.cr_text,
-            'licenseComment': package.license_comment,
-            'checksum': cls.checksum_to_dict(package.check_sum),
-            'files': cls.files_to_list(sorted(package.files)),
-            'licenseInfoFromFiles':[cls.license_to_dict(lic) for lic in lics_from_files],
-            'verificationCode': {
-                'value': package.verif_code,
-                'excludedFilesNames': sorted(package.verif_exc_files)
-            }
-        }
+        return OrderedDict([
+            ('id', package.spdx_id),
+            ('name', package.name),
+            ('packageFileName', package.file_name),
+            ('summary', package.summary),
+            ('description', package.description),
+            ('versionInfo', package.version),
+            ('sourceInfo', package.source_info),
+            ('downloadLocation', package.download_location),
+            ('homepage', package.homepage),
+            ('originator', cls.entity_to_dict(package.originator)),
+            ('supplier', cls.entity_to_dict(package.supplier)),
+            ('licenseConcluded', cls.license_to_dict(package.conc_lics)),
+            ('licenseDeclared', cls.license_to_dict(package.license_declared)),
+            ('copyrightText', package.cr_text),
+            ('licenseComment', package.license_comment),
+            ('checksum', cls.checksum_to_dict(package.check_sum)),
+            ('files', cls.files_to_list(sorted(package.files))),
+            ('licenseInfoFromFiles', [cls.license_to_dict(lic) for lic in lics_from_files]),
+            ('verificationCode', OrderedDict([
+                ('value', package.verif_code),
+                ('excludedFilesNames', sorted(package.verif_exc_files))])
+            )
+        ])
 
     @classmethod
     def files_to_list(cls, files):
@@ -367,23 +373,23 @@ class TestParserUtils(object):
         for file in files:
             lics_from_files = sorted(file.licenses_in_file, key=lambda lic: lic.identifier)
             contributors = sorted(file.contributors, key=lambda c: c.name)
-            file_dict = {
-                'id': file.spdx_id,
-                'name': file.name,
-                'type': file.type,
-                'comment': file.comment,
-                'licenseConcluded': cls.license_to_dict(file.conc_lics),
-                'copyrightText': file.copyright,
-                'licenseComment': file.license_comment,
-                'notice': file.notice,
-                'checksum': cls.checksum_to_dict(file.chk_sum),
-                'licenseInfoFromFiles': [cls.license_to_dict(lic) for lic in lics_from_files],
-                'contributors': [cls.entity_to_dict(contributor) for contributor in contributors],
-                'dependencies': sorted(file.dependencies),
-                'artifactOfProjectName': file.artifact_of_project_name,
-                'artifactOfProjectHome': file.artifact_of_project_home,
-                'artifactOfProjectURI': file.artifact_of_project_uri
-            }
+            file_dict = OrderedDict([
+                ('id', file.spdx_id),
+                ('name', file.name),
+                ('type', file.type),
+                ('comment', file.comment),
+                ('licenseConcluded', cls.license_to_dict(file.conc_lics)),
+                ('copyrightText', file.copyright),
+                ('licenseComment', file.license_comment),
+                ('notice', file.notice),
+                ('checksum', cls.checksum_to_dict(file.chk_sum)),
+                ('licenseInfoFromFiles', [cls.license_to_dict(lic) for lic in lics_from_files]),
+                ('contributors', [cls.entity_to_dict(contributor) for contributor in contributors]),
+                ('dependencies', sorted(file.dependencies)),
+                ('artifactOfProjectName', file.artifact_of_project_name),
+                ('artifactOfProjectHome', file.artifact_of_project_home),
+                ('artifactOfProjectURI', file.artifact_of_project_uri),
+            ])
             files_list.append(file_dict)
 
         return files_list
@@ -396,11 +402,11 @@ class TestParserUtils(object):
         ext_doc_refs_list = []
 
         for ext_doc_ref in ext_doc_refs:
-            ext_doc_ref_dict = {
-                'externalDocumentId': ext_doc_ref.external_document_id,
-                'spdxDocumentNamespace':ext_doc_ref.spdx_document_uri,
-                'checksum': cls.checksum_to_dict(ext_doc_ref.check_sum)
-            }
+            ext_doc_ref_dict = OrderedDict([
+                ('externalDocumentId', ext_doc_ref.external_document_id),
+                ('spdxDocumentNamespace', ext_doc_ref.spdx_document_uri),
+                ('checksum', cls.checksum_to_dict(ext_doc_ref.check_sum)),
+            ])
             ext_doc_refs_list.append(ext_doc_ref_dict)
 
         return ext_doc_refs_list
@@ -413,13 +419,13 @@ class TestParserUtils(object):
         extracted_licenses_list = []
 
         for extracted_license in extracted_licenses:
-            extracted_license_dict = {
-                'name': extracted_license.full_name,
-                'identifier': extracted_license.identifier,
-                'text': extracted_license.text,
-                'comment': extracted_license.comment,
-                'cross_refs': sorted(extracted_license.cross_ref)
-            }
+            extracted_license_dict = OrderedDict([
+                ('name', extracted_license.full_name),
+                ('identifier', extracted_license.identifier),
+                ('text', extracted_license.text),
+                ('comment', extracted_license.comment),
+                ('cross_refs', sorted(extracted_license.cross_ref)),
+            ])
             if extracted_license_dict not in extracted_licenses_list:
                 extracted_licenses_list.append(extracted_license_dict)
 
@@ -433,13 +439,13 @@ class TestParserUtils(object):
         annotations_list = []
 
         for annotation in annotations:
-            annotation_dict = {
-                'id': annotation.spdx_id,
-                'comment': annotation.comment,
-                'type': annotation.annotation_type,
-                'annotator': cls.entity_to_dict(annotation.annotator),
-                'date': utils.datetime_iso_format(annotation.annotation_date)
-            }
+            annotation_dict = OrderedDict([
+                ('id', annotation.spdx_id),
+                ('comment', annotation.comment),
+                ('type', annotation.annotation_type),
+                ('annotator', cls.entity_to_dict(annotation.annotator)),
+                ('date', utils.datetime_iso_format(annotation.annotation_date)),
+            ])
             annotations_list.append(annotation_dict)
 
         return annotations_list
@@ -452,11 +458,11 @@ class TestParserUtils(object):
         reviews_list = []
 
         for review in reviews:
-            review_dict = {
-                'comment': review.comment,
-                'reviewer': cls.entity_to_dict(review.reviewer),
-                'date': utils.datetime_iso_format(review.review_date)
-            }
+            review_dict = OrderedDict([
+                ('comment', review.comment),
+                ('reviewer', cls.entity_to_dict(review.reviewer)),
+                ('date', utils.datetime_iso_format(review.review_date))
+             ])
             reviews_list.append(review_dict)
 
         return reviews_list
@@ -470,16 +476,16 @@ class TestParserUtils(object):
 
         for snippet in snippets:
             lics_from_snippet = sorted(snippet.licenses_in_snippet, key=lambda lic: lic.identifier)
-            snippet_dict = {
-                'id': snippet.spdx_id,
-                'name': snippet.name,
-                'comment': snippet.comment,
-                'copyrightText': snippet.copyright,
-                'licenseComments': snippet.license_comment,
-                'fileId': snippet.snip_from_file_spdxid,
-                'licenseConcluded': cls.license_to_dict(snippet.conc_lics),
-                'licenseInfoFromSnippet': [cls.license_to_dict(lic) for lic in lics_from_snippet]
-            }
+            snippet_dict = OrderedDict([
+                ('id', snippet.spdx_id),
+                ('name', snippet.name),
+                ('comment', snippet.comment),
+                ('copyrightText', snippet.copyright),
+                ('licenseComments', snippet.license_comment),
+                ('fileId', snippet.snip_from_file_spdxid),
+                ('licenseConcluded', cls.license_to_dict(snippet.conc_lics)),
+                ('licenseInfoFromSnippet', [cls.license_to_dict(lic) for lic in lics_from_snippet]),
+            ])
             snippets_list.append(snippet_dict)
 
         return snippets_list
@@ -490,21 +496,21 @@ class TestParserUtils(object):
         Represents a SPDX Document (spdx.document.Document) as nested Python types
         """
         creators = sorted(doc.creation_info.creators, key=lambda c: c.name)
-        return {
-            'id': doc.spdx_id,
-            'specVersion': cls.version_to_dict(doc.version),
-            'namespace': doc.namespace,
-            'name': doc.name,
-            'comment': doc.comment,
-            'dataLicense': cls.license_to_dict(doc.data_license),
-            'licenseListVersion': cls.version_to_dict(doc.creation_info.license_list_version),
-            'creators': [cls.entity_to_dict(creator) for creator in creators],
-            'created': utils.datetime_iso_format(doc.creation_info.created),
-            'creatorComment': doc.creation_info.comment,
-            'package': cls.package_to_dict(doc.package),
-            'externalDocumentRefs': cls.ext_document_references_to_list(sorted(doc.ext_document_references)),
-            'extractedLicenses': cls.extracted_licenses_to_list(sorted(doc.extracted_licenses)),
-            'annotations': cls.annotations_to_list(sorted(doc.annotations)),
-            'reviews': cls.reviews_to_list(sorted(doc.reviews)),
-            'snippets': cls.snippets_to_list(sorted(doc.snippet))
-        }
+        return OrderedDict([
+            ('id', doc.spdx_id),
+            ('specVersion', cls.version_to_dict(doc.version)),
+            ('namespace', doc.namespace),
+            ('name', doc.name),
+            ('comment', doc.comment),
+            ('dataLicense', cls.license_to_dict(doc.data_license)),
+            ('licenseListVersion', cls.version_to_dict(doc.creation_info.license_list_version)),
+            ('creators', [cls.entity_to_dict(creator) for creator in creators]),
+            ('created', utils.datetime_iso_format(doc.creation_info.created)),
+            ('creatorComment', doc.creation_info.comment),
+            ('package', cls.package_to_dict(doc.package)),
+            ('externalDocumentRefs', cls.ext_document_references_to_list(sorted(doc.ext_document_references))),
+            ('extractedLicenses', cls.extracted_licenses_to_list(sorted(doc.extracted_licenses))),
+            ('annotations', cls.annotations_to_list(sorted(doc.annotations))),
+            ('reviews', cls.reviews_to_list(sorted(doc.reviews))),
+            ('snippets', cls.snippets_to_list(sorted(doc.snippet))),
+        ])
