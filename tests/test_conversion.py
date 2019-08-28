@@ -17,7 +17,6 @@ from __future__ import unicode_literals
 import codecs
 import os
 import tempfile
-import unittest
 from unittest import TestCase
 
 from spdx.parsers.rdf import Parser as RDFParser
@@ -51,6 +50,7 @@ def get_temp_file(extension=''):
 
 
 class TestConversions(TestCase):
+    maxDiff = None
 
     def parse_rdf_file(self, file_name):
         """Returns tuple error, document."""
@@ -64,19 +64,19 @@ class TestConversions(TestCase):
             tvparser = TVParser(TVBuilder(), StandardLogger())
             tvparser.build()
             return tvparser.parse(infile.read())
-    
+
     def parse_json_file(self, file_name):
         """Returns tuple error, document."""
         with open(file_name, mode='r') as infile:
             jsonparser = JSONParser(JSONYAMLXMLBuilder(), StandardLogger())
             return jsonparser.parse(infile)
-    
+
     def parse_yaml_file(self, file_name):
         """Returns tuple error, document."""
         with open(file_name, mode='r') as infile:
             yamlparser = YAMLParser(JSONYAMLXMLBuilder(), StandardLogger())
             return yamlparser.parse(infile)
-    
+
     def parse_xml_file(self, file_name):
         """Returns tuple error, document."""
         with open(file_name, mode='r') as infile:
@@ -90,15 +90,15 @@ class TestConversions(TestCase):
     def write_rdf_file(self, document, file_name):
         with open(file_name, mode='wb') as out:
             rdfwriter.write_document(document, out)
-    
+
     def write_json_file(self, document, file_name):
         with open(file_name, mode='w') as out:
             jsonwriter.write_document(document, out)
-    
+
     def write_yaml_file(self, document, file_name):
         with open(file_name, mode='w') as out:
             yamlwriter.write_document(document, out)
-    
+
     def write_xml_file(self, document, file_name):
         with open(file_name, mode='w') as out:
             xmlwriter.write_document(document, out)
@@ -112,7 +112,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_rdf_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_json_rdf(self):
         doc, error = self.parse_json_file('data/SPDXJsonExample.json')
         assert not error
@@ -122,7 +122,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_rdf_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_yaml_rdf(self):
         doc, error = self.parse_yaml_file('data/SPDXYamlExample.yaml')
         assert not error
@@ -174,7 +174,7 @@ class TestConversions(TestCase):
         # print(doc.annotations[-1].annotation_type)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_json_tagvalue(self):
         doc, error = self.parse_json_file('data/SPDXJsonExample.json')
         assert not error
@@ -184,7 +184,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_tagvalue_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_yaml_tagvalue(self):
         doc, error = self.parse_yaml_file('data/SPDXYamlExample.yaml')
         assert not error
@@ -204,7 +204,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_tagvalue_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_tagvalue_json(self):
         doc, error = self.parse_tagvalue_file('data/SPDXTagExample.tag')
         assert not error
@@ -214,7 +214,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_json_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_rdf_json(self):
         doc, error = self.parse_rdf_file('data/SPDXRdfExample.rdf')
         assert not error
@@ -224,7 +224,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_json_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_yaml_json(self):
         doc, error = self.parse_yaml_file('data/SPDXYamlExample.yaml')
         assert not error
@@ -244,7 +244,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_json_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_json_json(self):
         doc, error = self.parse_json_file('data/SPDXJsonExample.json')
         assert not error
@@ -254,7 +254,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_json_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_tagvalue_yaml(self):
         doc, error = self.parse_tagvalue_file('data/SPDXTagExample.tag')
         assert not error
@@ -264,7 +264,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_yaml_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_rdf_yaml(self):
         doc, error = self.parse_rdf_file('data/SPDXRdfExample.rdf')
         assert not error
@@ -274,7 +274,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_yaml_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_json_yaml(self):
         doc, error = self.parse_json_file('data/SPDXJsonExample.json')
         assert not error
@@ -294,7 +294,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_yaml_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_yaml_yaml(self):
         doc, error = self.parse_yaml_file('data/SPDXYamlExample.yaml')
         assert not error
@@ -304,7 +304,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_yaml_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_tagvalue_xml(self):
         doc, error = self.parse_tagvalue_file('data/SPDXTagExample.tag')
         assert not error
@@ -314,7 +314,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_xml_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_rdf_xml(self):
         doc, error = self.parse_rdf_file('data/SPDXRdfExample.rdf')
         assert not error
@@ -324,7 +324,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_xml_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_json_xml(self):
         doc, error = self.parse_json_file('data/SPDXJsonExample.json')
         assert not error
@@ -334,7 +334,7 @@ class TestConversions(TestCase):
         doc, error = self.parse_xml_file(filename)
         assert not error
         assert doc.validate([]) == []
-    
+
     def test_yaml_xml(self):
         doc, error = self.parse_yaml_file('data/SPDXYamlExample.yaml')
         assert not error
@@ -354,7 +354,3 @@ class TestConversions(TestCase):
         doc, error = self.parse_xml_file(filename)
         assert not error
         assert doc.validate([]) == []
-
-
-if __name__ == '__main__':
-    unittest.main()

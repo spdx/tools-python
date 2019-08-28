@@ -26,6 +26,7 @@ from tests.utils_test import TestParserUtils
 
 
 class TestParser(TestCase):
+    maxDiff = None
 
     def test_json_parser(self):
         parser = jsonparser.Parser(Builder(), StandardLogger())

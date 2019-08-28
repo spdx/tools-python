@@ -15,7 +15,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from datetime import datetime
-import unittest
 from unittest import TestCase
 
 import spdx.config as config
@@ -27,6 +26,7 @@ from spdx.version import Version
 
 
 class TestCreationInfo(TestCase):
+    maxDiff = None
 
     def test_timestamp(self):
         dt = datetime(2014, 4, 8, 13, 42, 12)
@@ -69,7 +69,3 @@ class TestCreationInfo(TestCase):
         ci = CreationInfo(license_list_version=Version(major=1, minor=0))
         assert ci.license_list_version == Version(major=1, minor=0)
         assert not ci.license_list_version == Version(major=1, minor=2)
-
-
-if __name__ == '__main__':
-    unittest.main()

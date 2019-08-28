@@ -21,13 +21,15 @@ import unittest
 import six
 
 from spdx.parsers import rdf
-from spdx.parsers.rdfbuilders import Builder as RDFBuilder
 from spdx.parsers.loggers import StandardLogger
+from spdx.parsers.rdfbuilders import Builder as RDFBuilder
+
 from tests import utils_test
 from tests.utils_test import TestParserUtils
 
 
 class TestParser(unittest.TestCase):
+    maxDiff = None
 
     def test_rdf_parser(self):
         parser = rdf.Parser(RDFBuilder(), StandardLogger())

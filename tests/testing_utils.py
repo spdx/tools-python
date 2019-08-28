@@ -20,6 +20,7 @@
 
 import six
 
+
 def make_decorator(func):
     """
     Wraps a test decorator so as to properly replicate metadata

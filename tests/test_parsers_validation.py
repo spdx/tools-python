@@ -21,6 +21,7 @@ from spdx import utils
 
 
 class TestValidations(TestCase):
+    maxDiff = None
 
     def test_validate_pkg_cr_text_does_not_crash_on_None(self):
         validations.validate_pkg_cr_text(None)

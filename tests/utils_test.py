@@ -11,9 +11,9 @@
 # limitations under the License.
 
 from __future__ import absolute_import
+from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
-from __future__ import division
 
 import io
 import json
@@ -262,8 +262,8 @@ def check_xml_scan(expected_file, result_file, regen=False):
 
 class TestParserUtils(object):
     """
-    Helper class to represent SPDX Document models as Python types after parsing to be
-    compared to expected data from a JSON file.
+    Helper class to represent SPDX Document models as Python types after parsing
+    to be compared to expected data from a JSON file.
     """
 
     @classmethod

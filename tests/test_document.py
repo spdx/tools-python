@@ -16,7 +16,6 @@ from __future__ import unicode_literals
 import os
 import shutil
 import tempfile
-import unittest
 from unittest import TestCase
 
 from spdx.checksum import Algorithm
@@ -33,6 +32,7 @@ from tests import utils_test
 
 
 class TestVersion(TestCase):
+    maxDiff = None
 
     def test_creation(self):
         v = Version(major=2, minor=1)
@@ -54,6 +54,7 @@ class TestVersion(TestCase):
 
 
 class TestDocument(TestCase):
+    maxDiff = None
 
     def test_creation(self):
         document = Document(
@@ -136,6 +137,7 @@ class TestDocument(TestCase):
 
 
 class TestWriters(TestCase):
+    maxDiff = None
 
     def _get_lgpl_doc(self, or_later=False):
         doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
@@ -252,7 +254,7 @@ class TestWriters(TestCase):
         finally:
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
-    
+
     def test_write_document_json_with_validate(self):
         from spdx.writers.json import write_document
         doc = self._get_lgpl_doc()
@@ -272,7 +274,7 @@ class TestWriters(TestCase):
         finally:
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
-    
+
     def test_write_document_json_with_or_later_with_validate(self):
         from spdx.writers.json import write_document
         doc = self._get_lgpl_doc(or_later=True)
@@ -292,7 +294,7 @@ class TestWriters(TestCase):
         finally:
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
-    
+
     def test_write_document_yaml_with_validate(self):
         from spdx.writers.yaml import write_document
         doc = self._get_lgpl_doc()
@@ -312,7 +314,7 @@ class TestWriters(TestCase):
         finally:
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
-    
+
     def test_write_document_yaml_with_or_later_with_validate(self):
         from spdx.writers.yaml import write_document
         doc = self._get_lgpl_doc(or_later=True)
@@ -375,6 +377,7 @@ class TestWriters(TestCase):
 
 
 class TestLicense(TestCase):
+    maxDiff = None
 
     def test_url(self):
         lic = License(full_name='Apache License 1.0', identifier='Apache-1.0')
@@ -400,13 +403,10 @@ class TestLicense(TestCase):
 
 
 class TestException(TestCase):
+    maxDiff = None
 
     def test_exception_list(self):
         assert EXCEPTION_MAP['Linux Syscall Note'] == 'Linux-syscall-note'
         assert EXCEPTION_MAP['Linux-syscall-note'] == 'Linux Syscall Note'
         assert EXCEPTION_MAP['GCC Runtime Library exception 3.1'] == 'GCC-exception-3.1'
         assert EXCEPTION_MAP['GCC-exception-3.1'] == 'GCC Runtime Library exception 3.1'
-
-
-if __name__ == '__main__':
-    unittest.main()

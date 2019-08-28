@@ -14,7 +14,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import unittest
 from unittest import TestCase
 
 import tests.testing_utils as testing_utils
@@ -24,7 +23,8 @@ import spdx.parsers.tagvaluebuilders as builders
 from spdx.version import Version
 
 
-class TestDocumentBuilder(unittest.case.TestCase):
+class TestDocumentBuilder(TestCase):
+    maxDiff = None
 
     def setUp(self):
         self.document = Document()
@@ -110,6 +110,7 @@ class TestDocumentBuilder(unittest.case.TestCase):
 
 
 class TestExternalDocumentRefBuilder(TestCase):
+    maxDiff = None
 
     def setUp(self):
         self.document = Document()
@@ -147,6 +148,7 @@ class TestExternalDocumentRefBuilder(TestCase):
 
 
 class TestEntityBuilder(TestCase):
+    maxDiff = None
 
     def setUp(self):
         self.builder = builders.EntityBuilder()
@@ -207,6 +209,7 @@ class TestEntityBuilder(TestCase):
 
 
 class TestCreationInfoBuilder(TestCase):
+    maxDiff = None
 
     def setUp(self):
         self.document = Document()
@@ -256,6 +259,7 @@ class TestCreationInfoBuilder(TestCase):
 
 
 class TestReviewBuilder(TestCase):
+    maxDiff = None
 
     def setUp(self):
         self.entity_builder = builders.EntityBuilder()
@@ -319,6 +323,7 @@ class TestReviewBuilder(TestCase):
 
 
 class TestAnnotationBuilder(TestCase):
+    maxDiff = None
 
     def setUp(self):
         self.entity_builder = builders.EntityBuilder()
@@ -422,6 +427,7 @@ class TestAnnotationBuilder(TestCase):
 
 
 class TestPackageBuilder(TestCase):
+    maxDiff = None
 
     def setUp(self):
         self.builder = builders.PackageBuilder()
@@ -604,6 +610,7 @@ class TestPackageBuilder(TestCase):
 
 
 class TestSnippetBuilder(TestCase):
+    maxDiff = None
 
     def setUp(self):
         self.entity_builder = builders.EntityBuilder()
@@ -739,8 +746,3 @@ class TestSnippetBuilder(TestCase):
         self.builder.set_snippet_lics_info(self.document,
                                            License.from_identifier(
                                                'Apache-2.0'))
-
-
-if __name__ == '__main__':
-    unittest.main()
-

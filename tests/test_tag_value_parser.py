@@ -14,7 +14,6 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import sys
-import unittest
 from unittest import TestCase
 
 import spdx
@@ -26,6 +25,7 @@ from spdx.version import Version
 
 
 class TestLexer(TestCase):
+    maxDiff = None
 
     def setUp(self):
         self.l = Lexer()
@@ -184,6 +184,7 @@ class TestLexer(TestCase):
 
 
 class TestParser(TestCase):
+    maxDiff = None
 
     document_str = '\n'.join([
         'SPDXVersion: SPDX-2.1',
@@ -350,7 +351,3 @@ class TestParser(TestCase):
         assert document.snippet[-1].snip_from_file_spdxid == 'SPDXRef-DoapSource'
         assert document.snippet[-1].conc_lics.identifier == 'Apache-2.0'
         assert document.snippet[-1].licenses_in_snippet[-1].identifier == 'Apache-2.0'
-
-
-if __name__ == '__main__':
-    unittest.main()
