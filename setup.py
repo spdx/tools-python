@@ -15,12 +15,16 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='spdx-tools',
-    version='0.5.4',
+    version='0.6.0',
     description='SPDX parser and tools.',
     long_description=long_description,
-    long_description_content_type="text/markdown",
-    packages=['spdx', 'spdx.parsers', 'spdx.writers', 'spdx.parsers.lexers'],
-    package_data={'spdx': ['spdx_licenselist.csv']},
+    long_description_content_type='text/markdown',
+    packages=[
+        'spdx',
+        'spdx.parsers',
+        'spdx.parsers.lexers',
+        'spdx.writers',
+    ],
     include_package_data=True,
     zip_safe=False,
     test_suite='setup.test_suite',
@@ -36,9 +40,6 @@ setup(
             'spdx-tv2rdf = spdx.tv_to_rdf:main',
         ],
     },
-    tests_require=[
-        'xmltodict',
-    ],
 
     author='Ahmed H. Ismail',
     author_email='ahm3d.hisham@gmail.com',
