@@ -257,7 +257,7 @@ class Package(object):
         hashes.sort()
 
         sha1 = hashlib.sha1()
-        sha1.update(''.join(hashes))
+        sha1.update(''.join(hashes).encode('utf-8'))
         return sha1.hexdigest()
 
     def has_optional_field(self, field):
