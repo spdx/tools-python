@@ -76,9 +76,10 @@ The `examples` directory contains several code samples. Here some of them:
 
 # Installation
 
-Clone or download the repository and run `python setup.py install`. (In a virtualenv, of course)
-
-or install from Pypi with `pip install spdx-tools`
+As always you should work in a virtualenv or venv.  You can install a local clone
+of this repo with `yourenv/bin/pip install .` or install from PyPI with
+`yourenv/bin/pip install spdx-tools`.  Note that on Windows it would be `Scripts`
+instead of `bin`.
 
 
 # How to run tests
