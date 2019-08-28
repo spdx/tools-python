@@ -14,7 +14,9 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import io
 import json
+import sys
 from unittest import TestCase
 
 from spdx.parsers import jsonparser, yamlparser, xmlparser
@@ -23,6 +25,11 @@ from spdx.parsers.loggers import StandardLogger
 
 from tests import utils_test
 from tests.utils_test import TestParserUtils
+
+
+_sys_v0 = sys.version_info[0]
+py2 = _sys_v0 == 2
+py3 = _sys_v0 == 3
 
 
 class TestParser(TestCase):
@@ -56,10 +63,10 @@ class TestParser(TestCase):
         result = TestParserUtils.to_dict(document)
 
         if regen:
-            with open(expected_loc, 'w', encoding='utf-8') as o:
+            with open(expected_loc, 'wb') as o:
                 o.write(json.dumps(result, indent=2))
 
-        with open(expected_loc, 'r') as ex:
+        with io.open(expected_loc, encoding='utf-8') as ex:
             expected = json.load(ex, encoding='utf-8',)
 
         self.assertEqual(expected, result)
