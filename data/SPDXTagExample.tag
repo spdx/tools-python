@@ -33,6 +33,7 @@ PackageName: SPDX Translator
 SPDXID: SPDXRef-Package
 PackageVersion: Version 0.9.2
 PackageDownloadLocation: http://www.spdx.org/tools
+PackageHomePage: http://www.spdx.org/tools
 PackageSummary: <text>SPDX Translator utility</text>
 PackageSourceInfo: <text>Version 1.0 of the SPDX Translator application</text>
 PackageFileName: spdxtranslator-1.0.zip
