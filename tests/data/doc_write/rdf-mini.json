@@ -1,0 +1,29 @@
+{
+  "rdf:RDF": {
+    "@xmlns:ns1": "http://spdx.org/rdf/terms#",
+    "@xmlns:rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "ns1:SpdxDocument": {
+      "@rdf:about": "http://www.spdx.org/tools#SPDXRef-DOCUMENT",
+      "ns1:specVersion": "SPDX-2.1",
+      "ns1:dataLicense": {
+        "@rdf:resource": "http://spdx.org/licenses/CC0-1.0"
+      },
+      "ns1:describesPackage": {
+        "ns1:Package": {
+          "@rdf:about": "http://www.spdx.org/tools#SPDXRef-Package",
+          "ns1:downloadLocation": {
+            "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
+          },
+          "ns1:licenseConcluded": {
+            "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
+          },
+          "ns1:name": "None",
+          "ns1:copyrightText": "None",
+          "ns1:licenseDeclared": {
+            "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
+          }
+        }
+      }
+    }
+  }
+}

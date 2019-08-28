@@ -85,7 +85,8 @@ def write_annotation(annotation, out):
     if annotation.has_comment:
         write_text_value('AnnotationComment', annotation.comment, out)
     write_value('AnnotationType', annotation.annotation_type, out)
-    write_value('SPDXREF', annotation.spdx_id, out)
+    if annotation.spdx_id:
+        write_value('SPDXREF', annotation.spdx_id, out)
 
 
 def write_file_type(ftype, out):
@@ -104,7 +105,8 @@ def write_file(spdx_file, out):
     """
     out.write('# File\n\n')
     write_value('FileName', spdx_file.name, out)
-    write_value('SPDXID', spdx_file.spdx_id, out)
+    if spdx_file.spdx_id:
+        write_value('SPDXID', spdx_file.spdx_id, out)
     if spdx_file.has_optional_field('type'):
         write_file_type(spdx_file.type, out)
     write_value('FileChecksum', spdx_file.chk_sum.to_tv(), out)
@@ -179,8 +181,10 @@ def write_package(package, out):
     Write a package fields to out.
     """
     out.write('# Package\n\n')
-    write_value('PackageName', package.name, out)
-    write_value('SPDXID', package.spdx_id, out)
+    if package.name:
+        write_value('PackageName', package.name, out)
+    if package.spdx_id:
+        write_value('SPDXID', package.spdx_id, out)
     if package.has_optional_field('version'):
         write_value('PackageVersion', package.version, out)
     write_value('PackageDownloadLocation', package.download_location, out)
@@ -234,10 +238,11 @@ def write_package(package, out):
         write_text_value('PackageLicenseComments', package.license_comment, out)
 
     # cr_text is either free form text or NONE or NOASSERTION.
-    if isinstance(package.cr_text, six.string_types):
-        write_text_value('PackageCopyrightText', package.cr_text, out)
-    else:
-        write_value('PackageCopyrightText', package.cr_text, out)
+    if package.cr_text:
+        if isinstance(package.cr_text, six.string_types):
+            write_text_value('PackageCopyrightText', package.cr_text, out)
+        else:
+            write_value('PackageCopyrightText', package.cr_text, out)
 
     if package.has_optional_field('homepage'):
         write_value('PackageHomePage', package.homepage, out)
@@ -291,9 +296,11 @@ def write_document(document, out, validate=True):
     out.write('# Document Information\n\n')
     write_value('SPDXVersion', str(document.version), out)
     write_value('DataLicense', document.data_license.identifier, out)
-    write_value('DocumentName', document.name, out)
+    if document.name:
+        write_value('DocumentName', document.name, out)
     write_value('SPDXID', 'SPDXRef-DOCUMENT', out)
-    write_value('DocumentNamespace', document.namespace, out)
+    if document.namespace:
+        write_value('DocumentNamespace', document.namespace, out)
     if document.has_comment:
         write_text_value('DocumentComment', document.comment, out)
     for doc_ref in document.ext_document_references:

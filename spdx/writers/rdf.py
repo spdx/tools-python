@@ -575,10 +575,11 @@ class PackageWriter(LicenseWriter):
         type_triple = (package_node, RDF.type, self.spdx_namespace.Package)
         self.graph.add(type_triple)
         # Package SPDXID
-        pkg_spdx_id = URIRef(package.spdx_id)
-        pkg_spdx_id_triple = (package_node, self.spdx_namespace.Package,
-                              pkg_spdx_id)
-        self.graph.add(pkg_spdx_id_triple)
+        if package.spdx_id:
+            pkg_spdx_id = URIRef(package.spdx_id)
+            pkg_spdx_id_triple = (package_node, self.spdx_namespace.Package,
+                                  pkg_spdx_id)
+            self.graph.add(pkg_spdx_id_triple)
         # Handle optional fields:
         self.handle_pkg_optional_fields(package, package_node)
         # package name
@@ -718,8 +719,9 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
         # Data license
         data_lics = URIRef(self.document.data_license.url)
         self.graph.add((doc_node, self.spdx_namespace.dataLicense, data_lics))
-        doc_name = URIRef(self.document.name)
-        self.graph.add((doc_node, self.spdx_namespace.name, doc_name))
+        if self.document.name:
+            doc_name = URIRef(self.document.name)
+            self.graph.add((doc_node, self.spdx_namespace.name, doc_name))
         return doc_node
 
     def write(self):

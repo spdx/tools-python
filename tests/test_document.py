@@ -375,6 +375,47 @@ class TestWriters(TestCase):
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
 
+    def _get_mini_doc(self,):
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
+        doc.creation_info.add_creator(Tool('ScanCode'))
+        doc.creation_info.set_created_now()
+
+        package = doc.package = Package(download_location=NoAssert())
+        package.license_declared = NoAssert()
+        package.conc_lics = NoAssert()
+        return doc
+
+    def test_write_document_tv_mini(self):
+        from spdx.writers.tagvalue import write_document
+        doc = self._get_mini_doc()
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple.tv')
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=False)
+            expected_file = utils_test.get_test_loc('doc_write/tv-mini.tv')
+            utils_test.check_tv_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+
+    def test_write_document_rdf_mini(self):
+        from spdx.writers.rdf import write_document
+        doc = self._get_mini_doc()
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple.rdf')
+            with open(result_file, 'wb') as output:
+                write_document(doc, output, validate=False)
+            expected_file = utils_test.get_test_loc('doc_write/rdf-mini.json')
+            utils_test.check_rdf_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+
 
 class TestLicense(TestCase):
     maxDiff = None
