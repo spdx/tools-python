@@ -75,7 +75,7 @@ class DocBuilder(object):
     def set_doc_version(self, doc, value):
         """
         Set the document version.
-        Raise SPDXValueError if malformed value. 
+        Raise SPDXValueError if malformed value.
         Raise CardinalityError if already defined.
         """
         if not self.doc_version_set:
@@ -1480,7 +1480,7 @@ class SnippetBuilder(object):
 
 
 class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
-              PackageBuilder, FileBuilder, LicenseBuilder, SnippetBuilder, 
+              PackageBuilder, FileBuilder, LicenseBuilder, SnippetBuilder,
               ExternalDocumentRefBuilder, AnnotationBuilder):
 
     """

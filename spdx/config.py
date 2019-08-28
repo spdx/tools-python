@@ -55,7 +55,7 @@ def load_exception_list(file_name):
     exceptions_map = {}
     with codecs.open(file_name, 'rb', encoding='utf-8') as excs:
         exceptions = json.load(excs)
-        version, _, _  = exceptions['licenseListVersion'].split('-')
+        version, _, _ = exceptions['licenseListVersion'].split('-')
         for exc in exceptions['exceptions']:
             if exc.get('isDeprecatedLicenseId'):
                 continue

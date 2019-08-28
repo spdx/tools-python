@@ -999,7 +999,7 @@ class Parser(PackageParser, FileParser, SnippetParser, ReviewParser, AnnotationP
 
         for s, _p, o in self.graph.triples((None, RDF.type, self.spdx_namespace['CreationInfo'])):
             self.parse_creation_info(s)
-        
+
         for s, _p, o in self.graph.triples((None, None, self.spdx_namespace['ExtractedLicensingInfo'])):
             self.handle_extracted_license(s)
 

@@ -39,7 +39,7 @@ class BaseWriter(object):
             return '({})'.format(license_field)
 
         if isinstance(license_field, document.License):
-            license_str =  license_field.identifier.__str__()
+            license_str = license_field.identifier.__str__()
         else:
             license_str = license_field.__str__()
         return license_str
@@ -52,7 +52,7 @@ class BaseWriter(object):
         checksum_object['algorithm'] = 'checksumAlgorithm_' + checksum_field.identifier.lower()
         checksum_object['value'] = checksum_field.value
         return checksum_object
-    
+
     def spdx_id(self, spdx_id_field):
         return spdx_id_field.__str__().split('#')[-1]
 
@@ -88,7 +88,7 @@ class PackageWriter(BaseWriter):
 
     def package_verification_code(self, package):
         """
-        Represent the package verification code information as 
+        Represent the package verification code information as
         as python dictionary
         """
 
@@ -98,7 +98,7 @@ class PackageWriter(BaseWriter):
 
         if package.verif_exc_files:
             package_verification_code_object['excludedFilesNames'] = package.verif_exc_files
-        
+
         return package_verification_code_object
 
     def create_package_info(self):
@@ -247,7 +247,7 @@ class AnnotationInfoWriter(BaseWriter):
         """
         The way how tools-python manages its models makes difficult to classify
         annotations (by document, files and packages) and some of them could end up omitted.
-        This method sets every annotation as part of the spdx document itself, 
+        This method sets every annotation as part of the spdx document itself,
         avoiding them to be omitted.
         """
         annotation_objects = []
@@ -270,7 +270,7 @@ class SnippetWriter(BaseWriter):
     """
     def __init__(self, document):
         super(SnippetWriter, self).__init__(document)
-    
+
     def create_snippet_info(self):
         snippet_info_objects = []
         snippets = self.document.snippet
@@ -285,13 +285,13 @@ class SnippetWriter(BaseWriter):
 
             if snippet.has_optional_field('name'):
                 snippet_object['name'] = snippet.name
-                
+
             if snippet.has_optional_field('comment'):
                 snippet_object['comment'] = snippet.comment
 
             if snippet.has_optional_field('license_comment'):
                 snippet_object['licenseComments'] = snippet.license_comment
-            
+
             snippet_info_objects.append(snippet_object)
 
         return snippet_info_objects
@@ -307,7 +307,7 @@ class ExtractedLicenseWriter(BaseWriter):
     def create_extracted_license(self):
         extracted_license_objects = []
         extracted_licenses = self.document.extracted_licenses
-        
+
         for extracted_license in extracted_licenses:
             extracted_license_object = dict()
 
@@ -326,7 +326,7 @@ class ExtractedLicenseWriter(BaseWriter):
                     extracted_license_object['name'] = extracted_license.full_name.toPython()
                 else:
                     extracted_license_object['name'] = extracted_license.full_name
-            
+
             if extracted_license.cross_ref:
                 if isinstance(extracted_license.cross_ref, Literal):
                     extracted_license_object['seeAlso'] = extracted_license.cross_ref.toPython()
@@ -343,7 +343,7 @@ class ExtractedLicenseWriter(BaseWriter):
 
         return extracted_license_objects
 
-class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter, 
+class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
     AnnotationInfoWriter, SnippetWriter, ExtractedLicenseWriter):
     """
     Wrapper for the other writers.
@@ -397,10 +397,10 @@ class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
 
         if self.document.reviews:
             self.document_object['reviewers'] = self.create_review_info()
-        
+
         if self.document.snippet:
             self.document_object['snippets'] = self.create_snippet_info()
-        
+
         if self.document.annotations:
             self.document_object['annotations'] = self.create_annotation_info()
 

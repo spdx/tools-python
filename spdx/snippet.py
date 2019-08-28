@@ -67,13 +67,13 @@ class Snippet(object):
         messages = self.validate_snip_from_file_spdxid(messages)
         messages = self.validate_concluded_license(messages)
         messages = self.validate_licenses_in_snippet(messages)
-        
+
         return messages
 
     def validate_spdx_id(self, messages=None):
         if self.spdx_id is None:
             messages = messages + ['Snippet has no SPDX Identifier.']
-        
+
         return messages
 
     def validate_copyright_text(self, messages=None):
@@ -84,13 +84,13 @@ class Snippet(object):
             messages = messages + [
                 'Snippet copyright must be str or unicode or utils.NoAssert or utils.SPDXNone'
             ]
-        
+
         return messages
 
     def validate_snip_from_file_spdxid(self, messages=None):
         if self.snip_from_file_spdxid is None:
             messages = messages + ['Snippet has no Snippet from File SPDX Identifier.']
-        
+
         return messages
 
     def validate_concluded_license(self, messages=None):
@@ -100,7 +100,7 @@ class Snippet(object):
                 'Snippet Concluded License must be one of '
                 'document.License, utils.NoAssert or utils.SPDXNone'
             ]
-        
+
         return messages
 
     def validate_licenses_in_snippet(self, messages=None):
@@ -114,7 +114,7 @@ class Snippet(object):
                         'Licenses in Snippet must be one of '
                         'document.License, utils.NoAssert or utils.SPDXNone'
                     ]
-        
+
         return messages
 
     def has_optional_field(self, field):

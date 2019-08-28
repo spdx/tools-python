@@ -690,8 +690,8 @@ class PackageExternalRefWriter(BaseWriter):
                    self.document.package.pkg_ext_refs)
 
 
-class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter, 
-            PackageExternalRefWriter, ExternalDocumentRefWriter, AnnotationInfoWriter, 
+class Writer(CreationInfoWriter, ReviewInfoWriter, FileWriter, PackageWriter,
+            PackageExternalRefWriter, ExternalDocumentRefWriter, AnnotationInfoWriter,
             SnippetWriter):
     """
     Warpper for other writers to write all fields of spdx.document.Document
@@ -773,7 +773,7 @@ def write_document(document, out, validate=True):
     Optionally `validate` the document before writing and raise
     InvalidDocumentError if document.validate returns False.
     """
-    
+
     if validate:
         messages = []
         messages = document.validate(messages)

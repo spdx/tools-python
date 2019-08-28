@@ -129,7 +129,7 @@ class Package(object):
                 'Package supplier must be instance of '
                 'spdx.utils.NoAssert or spdx.creationinfo.Creator'
             ]
-        
+
         return messages
 
     def validate_pkg_ext_refs(self, messages=None):
@@ -300,13 +300,13 @@ class ExternalPackageRef(object):
     def validate_category(self, messages=None):
         if self.category is None:
             messages = messages + ['ExternalPackageRef has no category.']
-        
+
         return messages
 
     def validate_pkg_ext_ref_type(self, messages=None):
         if self.pkg_ext_ref_type is None:
             messages = messages + ['ExternalPackageRef has no type.']
-        
+
         return messages
 
     def validate_locator(self, messages=None):

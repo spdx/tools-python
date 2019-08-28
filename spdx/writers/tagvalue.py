@@ -312,7 +312,7 @@ def write_document(document, out, validate=True):
         write_review(review, out)
         write_separators(out)
 
-    #Write sorted annotations
+    # Write sorted annotations
     for annotation in sorted(document.annotations):
         write_annotation(annotation, out)
         write_separators(out)

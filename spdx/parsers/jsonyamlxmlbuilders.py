@@ -48,7 +48,7 @@ class PackageBuilder(rdfbuilders.PackageBuilder):
 class DocBuilder(tagvaluebuilders.DocBuilder):
     def __init__(self):
         super(DocBuilder, self).__init__()
-    
+
     def set_doc_spdx_id(self, doc, doc_spdx_id_line):
         """
         Set the document SPDX Identifier.
@@ -64,7 +64,7 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
                 raise SPDXValueError('Document::SPDXID')
         else:
             raise CardinalityError('Document::SPDXID')
-    
+
     def set_doc_comment(self, doc, comment):
         """
         Set document comment.
@@ -79,7 +79,7 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
 class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
     def __init__(self):
         super(LicenseBuilder, self).__init__()
-    
+
     def set_lic_name(self, doc, name):
         """
         Set license name.
@@ -135,7 +135,7 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
 class FileBuilder(rdfbuilders.FileBuilder):
     def __init__(self):
         super(FileBuilder, self).__init__()
-    
+
     def set_file_notice(self, doc, text):
         """
         Set file notice
@@ -151,13 +151,13 @@ class FileBuilder(rdfbuilders.FileBuilder):
                 raise CardinalityError('File::Notice')
         else:
             raise OrderError('File::Notice')
-    
+
     def set_file_type(self, doc, type_value):
         """
-        Wrap rdfbuilders.FileBuilder.set_file_type to match the different 
+        Wrap rdfbuilders.FileBuilder.set_file_type to match the different
         fileType representations.
         """
-        
+
         type_dict = {
             'fileType_source': 'SOURCE',
             'fileType_binary': 'BINARY',
@@ -170,7 +170,7 @@ class FileBuilder(rdfbuilders.FileBuilder):
 class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
     def __init__(self):
         super(AnnotationBuilder, self).__init__()
-    
+
     def add_annotation_comment(self, doc, comment):
         """
         Set the annotation comment.
@@ -187,8 +187,8 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
         else:
             raise OrderError('AnnotationComment')
 
-class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, EntityBuilder, 
-            SnippetBuilder, ReviewBuilder, LicenseBuilder, FileBuilder, PackageBuilder, 
+class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, EntityBuilder,
+            SnippetBuilder, ReviewBuilder, LicenseBuilder, FileBuilder, PackageBuilder,
             AnnotationBuilder):
     """
     SPDX document builder.
