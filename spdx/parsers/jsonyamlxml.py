@@ -1178,10 +1178,6 @@ class PackageParser(BaseParser):
         elif pkg_license_comment is not None:
             self.value_error('PKG_LIC_COMMENT', pkg_license_comment)
 
-<<<<<<< Upstream, based on spdx/master
-=======
-
->>>>>>> 438d119 Format source code
     def parse_pkg_copyright_text(self, pkg_copyright_text):
         """
         Parse Package copyright text
@@ -1256,10 +1252,7 @@ class PackageParser(BaseParser):
         elif pkg_chksum is not None:
             self.value_error('PKG_CHECKSUM', pkg_chksum)
 
-<<<<<<< Upstream, based on spdx/master
 
-=======
->>>>>>> 438d119 Format source code
 class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
             AnnotationParser, SnippetParser, ReviewParser, FileParser, PackageParser):
 
