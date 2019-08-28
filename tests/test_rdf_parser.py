@@ -33,7 +33,7 @@ class TestParser(unittest.TestCase):
 
     def test_rdf_parser(self):
         parser = rdf.Parser(RDFBuilder(), StandardLogger())
-        test_file = utils_test.get_test_loc('../../data/SPDXRdfExample.rdf', test_data_dir=utils_test.test_data_dir)
+        test_file = utils_test.get_test_loc('formats/SPDXRdfExample.rdf', test_data_dir=utils_test.test_data_dir)
         with io.open(test_file, 'rb') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/spdx-expected.json', test_data_dir=utils_test.test_data_dir)

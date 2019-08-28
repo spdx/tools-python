@@ -30,7 +30,7 @@ class TestParser(TestCase):
 
     def test_json_parser(self):
         parser = jsonparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('../../data/SPDXJsonExample.json', test_data_dir=utils_test.test_data_dir)
+        test_file = utils_test.get_test_loc('formats/SPDXJsonExample.json', test_data_dir=utils_test.test_data_dir)
         with open(test_file, 'r') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json', test_data_dir=utils_test.test_data_dir)
@@ -38,7 +38,7 @@ class TestParser(TestCase):
 
     def test_yaml_parser(self):
         parser = yamlparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('../../data/SPDXYamlExample.yaml', test_data_dir=utils_test.test_data_dir)
+        test_file = utils_test.get_test_loc('formats/SPDXYamlExample.yaml', test_data_dir=utils_test.test_data_dir)
         with open(test_file, 'r') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json', test_data_dir=utils_test.test_data_dir)
@@ -46,7 +46,7 @@ class TestParser(TestCase):
 
     def test_xml_parser(self):
         parser = xmlparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('../../data/SPDXXmlExample.xml', test_data_dir=utils_test.test_data_dir)
+        test_file = utils_test.get_test_loc('formats/SPDXXmlExample.xml', test_data_dir=utils_test.test_data_dir)
         with open(test_file, 'r') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json', test_data_dir=utils_test.test_data_dir)
@@ -63,4 +63,3 @@ class TestParser(TestCase):
             expected = json.load(ex, encoding='utf-8',)
 
         self.assertEqual(expected, result)
-

@@ -32,11 +32,10 @@ from spdx import utils
 test_data_dir = os.path.join(os.path.dirname(__file__), 'data')
 
 
-def get_test_loc(test_path, test_data_dir, debug=False, exists=True):
+def get_test_loc(test_path, test_data_dir=test_data_dir, debug=False, exists=True):
     """
-    Given a `test_path` relative to the `test_data_dir` directory,
-    return the location to a test file or directory for this path. No
-    copy is done.
+    Given a `test_path` relative to the `test_data_dir` directory, return the
+    location to a test file or directory for this path. No copy is done.
     """
     if debug:
         import inspect
@@ -88,13 +87,12 @@ def strip_variable_text(rdf_text):
 
 def load_and_clean_rdf(location):
     """
-    Return plain Python nested data for the SPDX RDF file at location
-    suitable for comparison. The file content is cleaned from variable
-    parts such as dates, generated UUIDs and versions
+    Return plain Python nested data for the SPDX RDF file at location suitable
+    for comparison. The file content is cleaned from variable parts such as
+    dates, generated UUIDs and versions
 
-    NOTE: we use plain dicts to avoid ordering issues in XML. the SPDX
-    tool and lxml do not seem to return a consistent ordering that is
-    needed for tests.
+    NOTE: we use plain dicts to avoid ordering issues in XML. the SPDX tool and
+    lxml do not seem to return a consistent ordering that is needed for tests.
     """
     with io.open(location, encoding='utf-8') as l:
         content = l.read()
@@ -145,9 +143,9 @@ def check_rdf_scan(expected_file, result_file, regen=False):
 
 def load_and_clean_tv(location):
     """
-    Return a mapping for the SPDX TV file at location suitable for
-    comparison. The file content is cleaned from variable parts such as
-    dates, generated UUIDs and versions
+    Return a mapping for the SPDX TV file at location suitable for comparison.
+    The file content is cleaned from variable parts such as dates, generated
+    UUIDs and versions
     """
     with io.open(location, encoding='utf-8') as l:
         content = l.read()
@@ -172,9 +170,9 @@ def check_tv_scan(expected_file, result_file, regen=False):
 
 def load_and_clean_json(location):
     """
-    Return plain Python nested data for the SPDX JSON file at location
-    suitable for comparison. The file content is cleaned from variable
-    parts such as dates, generated UUIDs and versions
+    Return plain Python nested data for the SPDX JSON file at location suitable
+    for comparison. The file content is cleaned from variable parts such as
+    dates, generated UUIDs and versions
     """
     with io.open(location, encoding='utf-8') as l:
         content = l.read()
@@ -202,9 +200,9 @@ def check_json_scan(expected_file, result_file, regen=False):
 
 def load_and_clean_yaml(location):
     """
-    Return plain Python nested data for the SPDX YAML file at location
-    suitable for comparison. The file content is cleaned from variable
-    parts such as dates, generated UUIDs and versions
+    Return plain Python nested data for the SPDX YAML file at location suitable
+    for comparison. The file content is cleaned from variable parts such as
+    dates, generated UUIDs and versions
     """
     with io.open(location, encoding='utf-8') as l:
         content = l.read()
@@ -232,9 +230,9 @@ def check_yaml_scan(expected_file, result_file, regen=False):
 
 def load_and_clean_xml(location):
     """
-    Return plain Python nested data for the SPDX XML file at location
-    suitable for comparison. The file content is cleaned from variable
-    parts such as dates, generated UUIDs and versions
+    Return plain Python nested data for the SPDX XML file at location suitable
+    for comparison. The file content is cleaned from variable parts such as
+    dates, generated UUIDs and versions
     """
     with io.open(location, encoding='utf-8') as l:
         content = l.read()
