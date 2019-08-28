@@ -403,7 +403,6 @@ class TestLicense(TestCase):
 
 
 class TestException(TestCase):
-    maxDiff = None
 
     def test_exception_list(self):
         assert EXCEPTION_MAP['Linux Syscall Note'] == 'Linux-syscall-note'
