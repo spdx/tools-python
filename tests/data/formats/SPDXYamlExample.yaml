@@ -15,7 +15,7 @@ Document:
     - 'Tool: SourceAuditor-V1.2'
     - 'Organization: Source Auditor Inc.'
     - 'Person: Gary O''Neall'
-    licenseListVersion: 3.5-1-g1266c6b
+    licenseListVersion: '3.6'
   dataLicense: CC0-1.0
   documentDescribes:
   - Package:

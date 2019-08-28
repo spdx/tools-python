@@ -29,8 +29,8 @@ class Version(object):
     VERS_STR_REGEX = re.compile(r'(\d+)\.(\d+)')
 
     def __init__(self, major, minor):
-        self.major = major
-        self.minor = minor
+        self.major = int(major)
+        self.minor = int(minor)
 
     @classmethod
     def from_str(cls, value):
@@ -44,11 +44,18 @@ class Version(object):
         else:
             return None
 
+    def __repr__(self):
+        return 'Version' + repr((self.major, self.minor))
+
     def __str__(self):
         return 'SPDX-{major}.{minor}'.format(**self.__dict__)
 
     def __eq__(self, other):
-        return self.major == other.major and self.minor == other.minor
+        return (
+            isinstance(other, self.__class__) and
+            self.major == other.major and
+            self.minor == other.minor
+        )
 
     def __lt__(self, other):
         return (self.major < other.major

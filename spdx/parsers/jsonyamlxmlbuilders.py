@@ -21,29 +21,36 @@ from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 
+
 class CreationInfoBuilder(rdfbuilders.CreationInfoBuilder):
     def __init__(self):
         super(CreationInfoBuilder, self).__init__()
+
 
 class ExternalDocumentRefsBuilder(rdfbuilders.ExternalDocumentRefBuilder):
     def __init__(self):
         super(ExternalDocumentRefsBuilder, self).__init__()
 
+
 class EntityBuilder(rdfbuilders.EntityBuilder):
     def __init__(self):
         super(EntityBuilder, self).__init__()
+
 
 class SnippetBuilder(rdfbuilders.SnippetBuilder):
     def __init__(self):
         super(SnippetBuilder, self).__init__()
 
+
 class ReviewBuilder(rdfbuilders.ReviewBuilder):
     def __init__(self):
         super(ReviewBuilder, self).__init__()
 
+
 class PackageBuilder(rdfbuilders.PackageBuilder):
     def __init__(self):
         super(PackageBuilder, self).__init__()
+
 
 class DocBuilder(tagvaluebuilders.DocBuilder):
     def __init__(self):
@@ -75,6 +82,7 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
             doc.comment = comment
         else:
             raise CardinalityError('Document::Comment')
+
 
 class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
     def __init__(self):
@@ -167,6 +175,7 @@ class FileBuilder(rdfbuilders.FileBuilder):
 
         return super(FileBuilder, self).set_file_type(doc, type_dict.get(type_value))
 
+
 class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
     def __init__(self):
         super(AnnotationBuilder, self).__init__()
@@ -186,6 +195,7 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
                 raise CardinalityError('AnnotationComment')
         else:
             raise OrderError('AnnotationComment')
+
 
 class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, EntityBuilder,
             SnippetBuilder, ReviewBuilder, LicenseBuilder, FileBuilder, PackageBuilder,

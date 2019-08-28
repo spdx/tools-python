@@ -106,6 +106,7 @@ class CreationInfoParser(BaseParser):
             try:
                 return self.builder.set_lics_list_ver(self.document, license_list_version)
             except SPDXValueError:
+                raise
                 self.value_error('LL_VALUE', license_list_version)
             except CardinalityError:
                 self.more_than_one_error('CreationInfo licenseListVersion')
