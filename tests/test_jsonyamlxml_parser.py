@@ -45,7 +45,7 @@ class TestParser(TestCase):
     def test_json_parser(self):
         parser = jsonparser.Parser(Builder(), StandardLogger())
         test_file = utils_test.get_test_loc('formats/SPDXJsonExample.json')
-        with open(test_file, 'r') as f:
+        with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
         self.check_document(document, expected_loc)
@@ -53,7 +53,7 @@ class TestParser(TestCase):
     def test_yaml_parser(self):
         parser = yamlparser.Parser(Builder(), StandardLogger())
         test_file = utils_test.get_test_loc('formats/SPDXYamlExample.yaml')
-        with open(test_file, 'r') as f:
+        with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
         self.check_document(document, expected_loc)
@@ -61,7 +61,7 @@ class TestParser(TestCase):
     def test_xml_parser(self):
         parser = xmlparser.Parser(Builder(), StandardLogger())
         test_file = utils_test.get_test_loc('formats/SPDXXmlExample.xml')
-        with open(test_file, 'r') as f:
+        with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
         self.check_document(document, expected_loc)
