@@ -8,12 +8,47 @@ Thank you for your interest in `tools-python`. The project is open-source softwa
 
 If you would like to work on a fix for any issue, please assign the issue to yourself prior to creating a patch.
 
-## Patches
+## Development process
 
-The source code for `tools-python` is hosted on [github.com/spdx/tools-python](https://github.com/spdx/tools-python). Please review [open pull requests](https://github.com/spdx/tools-python/pulls) before committing time to a substantial revision. Work along similar lines may already be in progress.
+We use the GitHub flow that is described here: https://guides.github.com/introduction/flow/
 
-To submit a patch via GitHub, fork the repository, create a topic branch from `master` for your work, and send a pull request when your local tests pass (`./setup.py test`).
+Here's the process to make changes to the codebase:
 
-## Licensing
+0. Find or [file an issue](#issues) you'd like to address. Every change should be made to fix or close an issue.
 
-However you choose to contribute, please sign-off in each of your commits that you license your contributions under the terms of [the Developer Certificate of Origin](https://developercertificate.org/). Git has utilities for signing off on commits: `git commit -s` signs a current commit, and `git rebase --signoff <revision-range>` retroactively signs a range of past commits.
+1. Review [open pull requests](https://github.com/spdx/tools-python/pulls) before committing time to a substantial revision. Work along similar lines may already be in progress.
+
+1. Create a new branch:
+   ```sh
+   git checkout -b fix-or-improve-something
+   ```
+1. Make some changes and commit them to the branch:
+   ```sh
+   git commit --signoff -m 'description of my changes'
+   ```
+
+   #### Licensing
+
+   Please sign-off in each of your commits that you license your contributions under the terms of [the Developer Certificate of Origin](https://developercertificate.org/). Git has utilities for signing off on commits: `git commit -s` or `--signoff` signs a current commit, and `git rebase --signoff <revision-range>` retroactively signs a range of past commits.
+
+1. Test your changes:
+   ```sh
+   python setup.py test # in the repo root
+   ```
+   You may use other test runners, such as `pytest` or `nose` at your preference.
+1. Push the branch to your fork on GitHub:
+   ```sh
+   git push origin fix-or-improve-something
+   ```
+1. Make a pull request on GitHub.
+1. Continue making more changes and commits on the branch, with `git commit --signoff` and `git push`.
+1. When done, write a comment on the PR asking for a code review.
+1. Some other developer will review your changes and accept your PR. The merge should be done with `rebase`, if possible, or with `squash`.
+1. The temporary branch on GitHub should be deleted (there is a button for deleting it).
+1. Delete the local branch as well:
+   ```sh
+   git checkout master
+   git pull -p
+   git branch -a
+   git branch -d fix-or-improve-something
+   ```
