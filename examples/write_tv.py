@@ -22,6 +22,9 @@ if __name__ == '__main__':
     doc = Document()
     doc.version = Version(1, 2)
     doc.comment = 'Example Document'
+    doc.name = 'Sample_Document-V2.1'
+    doc.spdx_id = 'SPDXRef-DOCUMENT'
+    doc.namespace = 'https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301'
     doc.data_license = License.from_identifier('CC0-1.0')
     doc.creation_info.add_creator(Person('Alice', 'alice@example.com'))
     doc.creation_info.set_created_now()
@@ -31,6 +34,7 @@ if __name__ == '__main__':
     doc.add_review(review)
     # File
     testfile1 = File('TestFile1')
+    testfile1.spdx_id = 'SPDXRef-File1'
     testfile1.type = FileType.BINARY
     testfile1.comment = 'This is a test file.'
     testfile1.chk_sum = Algorithm('SHA1', 'c537c5d99eca5333f23491d47ededd083fefb7ad')
@@ -42,6 +46,7 @@ if __name__ == '__main__':
     testfile1.add_artifact('uri', 'http://tagwritetest.test')
 
     testfile2 = File('TestFile2')
+    testfile2.spdx_id = 'SPDXRef-File2'
     testfile2.type = FileType.SOURCE
     testfile2.comment = 'This is a test file.'
     testfile2.chk_sum = Algorithm('SHA1', 'bb154f28d1cf0646ae21bb0bec6c669a2b90e113')
@@ -54,6 +59,8 @@ if __name__ == '__main__':
     package = Package()
     package.name = 'TagWriteTest'
     package.version = '1.0'
+    package.check_sum = Algorithm('SHA1','2fd4e1c67a2d28fced849ee1bb76e7391b93eb12')
+    package.spdx_id = 'SPDXRef-Package'
     package.file_name = 'twt.jar'
     package.download_location = 'http://www.tagwritetest.test/download'
     package.homepage = SPDXNone()
