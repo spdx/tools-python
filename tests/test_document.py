@@ -115,6 +115,7 @@ class TestDocument(TestCase):
         package.spdx_id = 'SPDXRef-Package'
         package.cr_text = 'Some copyrught'
         package.verif_code = 'SOME code'
+        package.check_sum = Algorithm('SHA1', 'SOME-SHA1')
         package.license_declared = NoAssert()
         package.conc_lics = NoAssert()
 
@@ -131,8 +132,8 @@ class TestDocument(TestCase):
         package.add_lics_from_file(lic1)
         package.add_file(file1)
         messages = []
-        is_valid = doc.validate(messages)
-        assert is_valid
+        messages = doc.validate(messages)
+        # assert is_valid
         assert not messages
 
 
