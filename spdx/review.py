@@ -65,19 +65,19 @@ class Review(object):
         """Returns True if all the fields are valid.
         Appends any error messages to messages parameter.
         """
-        messages = self.validate_reviewer(messages)
-        messages = self.validate_review_date(messages)
+        self.validate_reviewer(messages)
+        self.validate_review_date(messages)
 
         return messages
 
     def validate_reviewer(self, messages):
         if self.reviewer is None:
-            messages = messages + ['Review missing reviewer.']
+            messages.append('Review missing reviewer.')
 
         return messages
 
     def validate_review_date(self, messages):
         if self.review_date is None:
-            messages = messages + ['Review missing review date.']
+            messages.append('Review missing review date.')
 
         return messages

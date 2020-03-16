@@ -76,35 +76,30 @@ class Annotation(object):
         """Returns True if all the fields are valid.
         Appends any error messages to messages parameter.
         """
-        messages = self.validate_annotator(messages)
-        messages = self.validate_annotation_date(messages)
-        messages = self.validate_annotation_type(messages)
-        messages = self.validate_spdx_id(messages)
-
+        self.validate_annotator(messages)
+        self.validate_annotation_date(messages)
+        self.validate_annotation_type(messages)
+        self.validate_spdx_id(messages)
         return messages
 
     def validate_annotator(self, messages):
         if self.annotator is None:
-            messages = messages + ['Annotation missing annotator.']
-
+            messages.append('Annotation missing annotator.')
         return messages
 
     def validate_annotation_date(self, messages):
         if self.annotation_date is None:
-            messages = messages + ['Annotation missing annotation date.']
-
+            messages.append('Annotation missing annotation date.')
         return messages
 
     def validate_annotation_type(self, messages):
         if self.annotation_type is None:
-            messages = messages + ['Annotation missing annotation type.']
-
+            messages.append('Annotation missing annotation type.')
         return messages
 
     def validate_spdx_id(self, messages):
         if self.spdx_id is None:
-            messages = messages + [
+            messages.append(
                 'Annotation missing SPDX Identifier Reference.'
-            ]
-
+            )
         return messages

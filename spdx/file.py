@@ -100,19 +100,19 @@ class File(object):
         """Validates the fields and appends user friendly messages
         to messages parameter if there are errors.
         """
-        messages = self.validate_concluded_license(messages)
-        messages = self.validate_type(messages)
-        messages = self.validate_checksum(messages)
-        messages = self.validate_licenses_in_file(messages)
-        messages = self.validate_copyright(messages)
-        messages = self.validate_artifacts(messages)
-        messages = self.validate_spdx_id(messages)
+        self.validate_concluded_license(messages)
+        self.validate_type(messages)
+        self.validate_checksum(messages)
+        self.validate_licenses_in_file(messages)
+        self.validate_copyright(messages)
+        self.validate_artifacts(messages)
+        self.validate_spdx_id(messages)
 
         return messages
 
     def validate_spdx_id(self, messages):
         if self.spdx_id is None:
-            messages = messages + ['File has no SPDX Identifier.']
+            messages.append('File has no SPDX Identifier.')
 
         return messages
 
@@ -121,10 +121,10 @@ class File(object):
             self.copyright,
             (six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone)
         ):
-            messages = messages + [
+            messages.append(
                 'File copyright must be str or unicode or '
                 'utils.NoAssert or utils.SPDXNone'
-            ]
+            )
 
         return messages
 
@@ -132,17 +132,18 @@ class File(object):
         if (len(self.artifact_of_project_home) <
             max(len(self.artifact_of_project_uri),
                 len(self.artifact_of_project_name))):
-            messages = messages + [
-                'File must have as much artifact of project as uri or homepage']
+            messages.append(
+                'File must have as much artifact of project as uri or homepage'
+            )
 
         return messages
 
     def validate_licenses_in_file(self, messages):
         # FIXME: what are we testing the length of a list? or?
         if len(self.licenses_in_file) == 0:
-            messages = messages + [
+            messages.append(
                 'File must have at least one license in file.'
-            ]
+            )
 
         return messages
 
@@ -150,10 +151,10 @@ class File(object):
         # FIXME: use isinstance instead??
         if not isinstance(self.conc_lics, (document.License, utils.NoAssert,
                                            utils.SPDXNone)):
-            messages = messages + [
+            messages.append(
                 'File concluded license must be one of '
                 'document.License, utils.NoAssert or utils.SPDXNone'
-            ]
+            )
 
         return messages
 
@@ -162,21 +163,21 @@ class File(object):
             None, FileType.SOURCE, FileType.OTHER, FileType.BINARY,
             FileType.ARCHIVE
         ]:
-            messages = messages + [
+            messages.append(
                 'File type must be one of the constants defined in '
                 'class spdx.file.FileType'
-            ]
+            )
 
         return messages
 
     def validate_checksum(self, messages):
         if not isinstance(self.chk_sum, checksum.Algorithm):
-            messages = messages + [
+            messages.append(
                 'File checksum must be instance of spdx.checksum.Algorithm'
-            ]
+            )
         else:
             if not self.chk_sum.identifier == 'SHA1':
-                messages = messages + ['File checksum algorithm must be SHA1']
+                messages.append('File checksum algorithm must be SHA1')
 
         return messages
 

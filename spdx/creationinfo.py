@@ -156,20 +156,18 @@ class CreationInfo(object):
         """Returns True if the fields are valid according to the SPDX standard.
         Appends user friendly messages to the messages parameter.
         """
-        messages = self.validate_creators(messages)
-        messages = self.validate_created(messages)
-
+        self.validate_creators(messages)
+        self.validate_created(messages)
         return messages
 
     def validate_creators(self, messages):
         if len(self.creators) == 0:
-            messages = messages + [
-                'No creators defined, must have at least one.']
-
+            messages.append(
+                'No creators defined, must have at least one.'
+            )
         return messages
 
     def validate_created(self, messages):
         if self.created is None:
-            messages = messages + ['Creation info missing created date.']
-
+            messages.append('Creation info missing created date.')
         return messages
