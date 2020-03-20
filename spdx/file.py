@@ -202,4 +202,4 @@ class File(object):
         return file_sha1.hexdigest()
 
     def has_optional_field(self, field):
-        return getattr(self, field, None) is not None
+        return bool (getattr(self, field, None))
