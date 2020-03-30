@@ -89,8 +89,10 @@ if __name__ == '__main__':
     with codecs.open(file, mode='w', encoding='utf-8') as out:
         try:
             write_document(doc, out)
-        except InvalidDocumentError:
-            print('Document is Invalid')
+        except InvalidDocumentError as e:
+            print('Document is Invalid:\n\t', end='')
+            #import pdb; pdb.set_trace()
+            print("\n\t".join(e.args[0]))
             messages = []
             doc.validate(messages)
             print('\n'.join(messages))
