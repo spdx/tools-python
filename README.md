@@ -126,6 +126,6 @@ If there is no issue for the changes that you want to make, create first an issu
 
 # Support
 
-* Submit issues, questions or feedback at: https://github.com/spdx/tools-python/issues
-* Join the dicussion on https://lists.spdx.org/mailman/listinfo/spdx-tech and 
+* Submit issues, questions or feedback at https://github.com/spdx/tools-python/issues
+* Join the discussion on https://lists.spdx.org/mailman/listinfo/spdx-tech and 
   https://spdx.org/WorkgroupTechnical
