@@ -35,6 +35,9 @@ class Lexer(object):
         'Reviewer': 'REVIEWER',
         'ReviewDate': 'REVIEW_DATE',
         'ReviewComment': 'REVIEW_COMMENT',
+        # Relationship info
+        'Relationship': 'RELATIONSHIP',
+        'RelationshipComment': 'RELATIONSHIP_COMMENT',
         # Annotation info
         'Annotator': 'ANNOTATOR',
         'AnnotationDate': 'ANNOTATION_DATE',
