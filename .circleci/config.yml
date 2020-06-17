@@ -31,7 +31,7 @@ jobs:
         brew update
         python --version
         sudo -H pip install --upgrade virtualenv
-        brew install pyenv
+        brew install pyenv -v 1.2.13
         echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
         source ~/.bash_profile
         pyenv install 3.4.8
