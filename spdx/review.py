@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,15 +38,17 @@ class Review(object):
 
     def __eq__(self, other):
         return (
-            isinstance(other, Review) and self.reviewer == other.reviewer
+            isinstance(other, Review)
+            and self.reviewer == other.reviewer
             and self.review_date == other.review_date
             and self.comment == other.comment
         )
 
     def __lt__(self, other):
-        return (
-            (self.reviewer, self.review_date, self.comment) <
-            (other.reviewer, other.review_date, other.comment,)
+        return (self.reviewer, self.review_date, self.comment) < (
+            other.reviewer,
+            other.review_date,
+            other.comment,
         )
 
     def set_review_date_now(self):
@@ -72,12 +73,12 @@ class Review(object):
 
     def validate_reviewer(self, messages):
         if self.reviewer is None:
-            messages = messages + ['Review missing reviewer.']
+            messages = messages + ["Review missing reviewer."]
 
         return messages
 
     def validate_review_date(self, messages):
         if self.review_date is None:
-            messages = messages + ['Review missing review date.']
+            messages = messages + ["Review missing review date."]
 
         return messages

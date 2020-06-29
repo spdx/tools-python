@@ -1,24 +1,24 @@
 {
     "Document": {
-        "specVersion": "SPDX-2.1",
+        "spdxVersion": "SPDX-2.1",
         "dataLicense": "CC0-1.0",
         "name": "Sample_Document-V2.1",
-        "id": "SPDXRef-DOCUMENT",
-        "namespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+        "SPDXID": "SPDXRef-DOCUMENT",
+        "documentNamespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
         "documentDescribes": [
             {
                 "Package": {
-                    "id": "SPDXRef-Package", 
+                    "SPDXID": "SPDXRef-Package", 
                     "name": "some/path",
                     "downloadLocation": "NOASSERTION",
                     "copyrightText": "Some copyrught",
                     "packageVerificationCode": {
-                        "value": "SOME code"
+                        "packageVerificationCodeValue": "SOME code"
                     },
                     "checksums": [
                         {
                             "algorithm": "checksumAlgorithm_sha1",
-                            "value": "SOME-SHA1"
+                            "checksumValue": "SOME-SHA1"
                         }
                     ],
                     "licenseDeclared": "NOASSERTION",
@@ -27,11 +27,11 @@
                         {
                             "File": {
                                 "name": "./some/path/tofile",
-                                "id": "SPDXRef-File",
+                                "SPDXID": "SPDXRef-File",
                                 "checksums": [
                                     {
                                         "algorithm": "checksumAlgorithm_sha1",
-                                        "value": "SOME-SHA1"
+                                        "checksumValue": "SOME-SHA1"
                                     }
                                 ],
                                 "licenseConcluded": "NOASSERTION",

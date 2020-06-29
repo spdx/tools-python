@@ -35,14 +35,14 @@ def tv_to_rdf(infile_name, outfile_name):
         data = infile.read()
         document, error = parser.parse(data)
         if not error:
-            with open(outfile_name, mode='w') as outfile:
+            with open(outfile_name, mode="w") as outfile:
                 write_document(document, outfile)
             return True
         else:
-            print('Errors encountered while parsing RDF file.')
+            print("Errors encountered while parsing RDF file.")
             messages = []
             document.validate(messages)
-            print('\n'.join(messages))
+            print("\n".join(messages))
             return False
 
 
@@ -50,8 +50,8 @@ def main():
     args = sys.argv[1:]
     if not args:
         print(
-            'Usage: spdx-tv2rdf <tag-value-file> <rdf-file>\n'
-            'Convert an SPDX tag/value document to RDF.'
+            "Usage: spdx-tv2rdf <tag-value-file> <rdf-file>\n"
+            "Convert an SPDX tag/value document to RDF."
         )
         sys.exit(1)
 
@@ -61,5 +61,5 @@ def main():
     sys.exit(0 if success else 1)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

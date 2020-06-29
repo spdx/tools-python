@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,8 +28,9 @@ class ExternalDocumentRef(object):
     - check_sum: The checksum of the referenced SPDX document.
     """
 
-    def __init__(self, external_document_id=None, spdx_document_uri=None,
-                 check_sum=None):
+    def __init__(
+        self, external_document_id=None, spdx_document_uri=None, check_sum=None
+    ):
         self.external_document_id = external_document_id
         self.spdx_document_uri = spdx_document_uri
         self.check_sum = check_sum
@@ -44,11 +44,10 @@ class ExternalDocumentRef(object):
         )
 
     def __lt__(self, other):
-        return (
-            (self.external_document_id, self.spdx_document_uri,
-             self.check_sum) <
-            (other.external_document_id, other.spdx_document_uri,
-             other.check_sum,)
+        return (self.external_document_id, self.spdx_document_uri, self.check_sum) < (
+            other.external_document_id,
+            other.spdx_document_uri,
+            other.check_sum,
         )
 
     def validate(self, messages):
@@ -64,23 +63,19 @@ class ExternalDocumentRef(object):
 
     def validate_ext_doc_id(self, messages):
         if not self.external_document_id:
-            messages = messages + [
-                'ExternalDocumentRef has no External Document ID.'
-            ]
+            messages = messages + ["ExternalDocumentRef has no External Document ID."]
 
         return messages
 
     def validate_spdx_doc_uri(self, messages):
         if not self.spdx_document_uri:
-            messages = messages + [
-                'ExternalDocumentRef has no SPDX Document URI.'
-            ]
+            messages = messages + ["ExternalDocumentRef has no SPDX Document URI."]
 
         return messages
 
     def validate_checksum(self, messages):
         if not self.check_sum:
-            messages = messages + ['ExternalDocumentRef has no Checksum.']
+            messages = messages + ["ExternalDocumentRef has no Checksum."]
 
         return messages
 
@@ -90,7 +85,7 @@ def _add_parens(required, text):
     Add parens around a license expression if `required` is True, otherwise
     return `text` unmodified.
     """
-    return '({})'.format(text) if required else text
+    return "({})".format(text) if required else text
 
 
 @total_ordering
@@ -142,7 +137,8 @@ class License(object):
         return (
             isinstance(other, License)
             and self.identifier == other.identifier
-            and self.full_name == other.full_name)
+            and self.full_name == other.full_name
+        )
 
     def __lt__(self, other):
         return isinstance(other, License) and self.identifier < other.identifier
@@ -169,18 +165,20 @@ class LicenseConjunction(License):
         license_1_complex = type(self.license_1) == LicenseDisjunction
         license_2_complex = type(self.license_2) == LicenseDisjunction
 
-        return '{0} AND {1}'.format(
+        return "{0} AND {1}".format(
             _add_parens(license_1_complex, self.license_1.full_name),
-            _add_parens(license_2_complex, self.license_2.full_name))
+            _add_parens(license_2_complex, self.license_2.full_name),
+        )
 
     @property
     def identifier(self):
         license_1_complex = type(self.license_1) == LicenseDisjunction
         license_2_complex = type(self.license_2) == LicenseDisjunction
 
-        return '{0} AND {1}'.format(
+        return "{0} AND {1}".format(
             _add_parens(license_1_complex, self.license_1.identifier),
-            _add_parens(license_2_complex, self.license_2.identifier))
+            _add_parens(license_2_complex, self.license_2.identifier),
+        )
 
 
 class LicenseDisjunction(License):
@@ -198,18 +196,20 @@ class LicenseDisjunction(License):
         license_1_complex = type(self.license_1) == LicenseConjunction
         license_2_complex = type(self.license_2) == LicenseConjunction
 
-        return '{0} OR {1}'.format(
+        return "{0} OR {1}".format(
             _add_parens(license_1_complex, self.license_1.full_name),
-            _add_parens(license_2_complex, self.license_2.full_name))
+            _add_parens(license_2_complex, self.license_2.full_name),
+        )
 
     @property
     def identifier(self):
         license_1_complex = type(self.license_1) == LicenseConjunction
         license_2_complex = type(self.license_2) == LicenseConjunction
 
-        return '{0} OR {1}'.format(
+        return "{0} OR {1}".format(
             _add_parens(license_1_complex, self.license_1.identifier),
-            _add_parens(license_2_complex, self.license_2.identifier))
+            _add_parens(license_2_complex, self.license_2.identifier),
+        )
 
 
 @total_ordering
@@ -221,6 +221,7 @@ class ExtractedLicense(License):
     - comment: license comment, str.
     - full_name: license name. str or utils.NoAssert.
     """
+
     def __init__(self, identifier):
         super(ExtractedLicense, self).__init__(None, identifier)
         self.text = None
@@ -231,17 +232,20 @@ class ExtractedLicense(License):
         return (
             isinstance(other, ExtractedLicense)
             and self.identifier == other.identifier
-            and self.full_name == other.full_name)
+            and self.full_name == other.full_name
+        )
 
     def __lt__(self, other):
-        return isinstance(other, ExtractedLicense) and self.identifier < other.identifier
+        return (
+            isinstance(other, ExtractedLicense) and self.identifier < other.identifier
+        )
 
     def add_xref(self, ref):
         self.cross_ref.append(ref)
 
     def validate(self, messages):
         if self.text is None:
-            messages = messages + ['ExtractedLicense text can not be None']
+            messages = messages + ["ExtractedLicense text can not be None"]
 
         return messages
 
@@ -257,7 +261,7 @@ class Document(object):
     - ext_document_references: External SPDX documents referenced within the
         given SPDX document. Optional, one or many. Type: ExternalDocumentRef
     - comment: Comments on the SPDX file, optional one. Type: str
-    - namespace: SPDX document specific namespace. Mandatory, one. Type: str
+    - documentNamespace: SPDX document specific namespace. Mandatory, one. Type: str
     - creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
     - package: Package described by this document. Mandatory, one. Type: Package
     - extracted_licenses: List of licenses extracted that are not part of the
@@ -267,12 +271,23 @@ class Document(object):
     - annotations: SPDX document annotation information, Optional zero or more.
       Type: Annotation.
     - snippet: Snippet information. Optional zero or more. Type: Snippet.
+    - relationships : Relationship between two SPDX elements. Optional zero or more.
+      Type: Relationship. 
     """
 
-    def __init__(self, version=None, data_license=None, name=None, spdx_id=None,
-                 namespace=None, comment=None, package=None):
-        # avoid recursive impor
+    def __init__(
+        self,
+        version=None,
+        data_license=None,
+        name=None,
+        spdx_id=None,
+        namespace=None,
+        comment=None,
+        package=None,
+    ):
+        # avoid recursive import
         from spdx.creationinfo import CreationInfo
+
         self.version = version
         self.data_license = data_license
         self.name = name
@@ -285,6 +300,7 @@ class Document(object):
         self.extracted_licenses = []
         self.reviews = []
         self.annotations = []
+        self.relationships = []
         self.snippet = []
 
     def add_review(self, review):
@@ -292,6 +308,9 @@ class Document(object):
 
     def add_annotation(self, annotation):
         self.annotations.append(annotation)
+
+    def add_relationships(self, relationship):
+        self.relationships.append(relationship)
 
     def add_extr_lic(self, lic):
         self.extracted_licenses.append(lic)
@@ -330,45 +349,45 @@ class Document(object):
         messages = self.validate_extracted_licenses(messages)
         messages = self.validate_reviews(messages)
         messages = self.validate_snippet(messages)
+        # messages = self.validate_annotations(messages)
+        # messages = self.validate_relationships(messages)
 
         return messages
 
     def validate_version(self, messages):
         if self.version is None:
-            messages = messages + ['Document has no version.']
+            messages = messages + ["Document has no version."]
 
         return messages
 
     def validate_data_lics(self, messages):
         if self.data_license is None:
-            messages = messages + ['Document has no data license.']
+            messages = messages + ["Document has no data license."]
         else:
-        # FIXME: REALLY? what if someone wants to use something else?
-            if self.data_license.identifier != 'CC0-1.0':
-                messages = messages + ['Document data license must be CC0-1.0.']
+            # FIXME: REALLY? what if someone wants to use something else?
+            if self.data_license.identifier != "CC0-1.0":
+                messages = messages + ["Document data license must be CC0-1.0."]
 
         return messages
 
     def validate_name(self, messages):
         if self.name is None:
-            messages = messages + ['Document has no name.']
+            messages = messages + ["Document has no name."]
 
         return messages
 
     def validate_namespace(self, messages):
         if self.namespace is None:
-            messages = messages + ['Document has no namespace.']
+            messages = messages + ["Document has no namespace."]
 
         return messages
 
     def validate_spdx_id(self, messages):
         if self.spdx_id is None:
-            messages = messages + ['Document has no SPDX Identifier.']
+            messages = messages + ["Document has no SPDX Identifier."]
         else:
-            if not self.spdx_id.endswith('SPDXRef-DOCUMENT'):
-                messages = messages + [
-                    'Invalid Document SPDX Identifier value.'
-                ]
+            if not self.spdx_id.endswith("SPDXRef-DOCUMENT"):
+                messages = messages + ["Invalid Document SPDX Identifier value."]
 
         return messages
 
@@ -378,8 +397,8 @@ class Document(object):
                 messages = doc.validate(messages)
             else:
                 messages = list(messages) + [
-                    'External document references must be of the type '
-                    'spdx.document.ExternalDocumentRef and not ' + str(type(doc))
+                    "External document references must be of the type "
+                    "spdx.document.ExternalDocumentRef and not " + str(type(doc))
                 ]
         return messages
 
@@ -395,6 +414,12 @@ class Document(object):
 
         return messages
 
+    def validate_relationships(self, messages):
+        for relationship in self.relationships:
+            messages = relationship.validate(messages)
+
+        return messages
+
     def validate_snippet(self, messages=None):
         for snippet in self.snippet:
             messages = snippet.validate(messages)
@@ -405,7 +430,7 @@ class Document(object):
         if self.creation_info is not None:
             messages = self.creation_info.validate(messages)
         else:
-            messages = messages + ['Document has no creation information.']
+            messages = messages + ["Document has no creation information."]
 
         return messages
 
@@ -413,7 +438,7 @@ class Document(object):
         if self.package is not None:
             messages = self.package.validate(messages)
         else:
-            messages = messages + ['Document has no package.']
+            messages = messages + ["Document has no package."]
 
         return messages
 
@@ -423,7 +448,7 @@ class Document(object):
                 messages = lic.validate(messages)
             else:
                 messages = messages + [
-                    'Document extracted licenses must be of type '
-                    'spdx.document.ExtractedLicense and not ' + type(lic)
+                    "Document extracted licenses must be of type "
+                    "spdx.document.ExtractedLicense and not " + type(lic)
                 ]
         return messages

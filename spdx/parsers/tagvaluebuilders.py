@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -24,6 +23,7 @@ from spdx import creationinfo
 from spdx import document
 from spdx import file
 from spdx import package
+from spdx import relationship
 from spdx import review
 from spdx import snippet
 from spdx import utils
@@ -42,10 +42,10 @@ def checksum_from_sha1(value):
     checksum or None if does not match CHECKSUM_RE.
     """
     # More constrained regex at lexer level
-    CHECKSUM_RE = re.compile('SHA1:\\s*([\\S]+)', re.UNICODE)
+    CHECKSUM_RE = re.compile("SHA1:\\s*([\\S]+)", re.UNICODE)
     match = CHECKSUM_RE.match(value)
     if match:
-        return checksum.Algorithm(identifier='SHA1', value=match.group(1))
+        return checksum.Algorithm(identifier="SHA1", value=match.group(1))
     else:
         return None
 
@@ -54,7 +54,7 @@ def str_from_text(text):
     """
     Return content of a free form text block as a string.
     """
-    REGEX = re.compile('<text>((.|\n)+)</text>', re.UNICODE)
+    REGEX = re.compile("<text>((.|\n)+)</text>", re.UNICODE)
     match = REGEX.match(text)
     if match:
         return match.group(1)
@@ -66,7 +66,8 @@ class DocBuilder(object):
     """
     Set the fields of the top level document model.
     """
-    VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
+
+    VERS_STR_REGEX = re.compile(r"SPDX-(\d+)\.(\d+)", re.UNICODE)
 
     def __init__(self):
         # FIXME: this state does not make sense
@@ -82,13 +83,14 @@ class DocBuilder(object):
             self.doc_version_set = True
             m = self.VERS_STR_REGEX.match(value)
             if m is None:
-                raise SPDXValueError('Document::Version')
+                raise SPDXValueError("Document::Version")
             else:
-                doc.version = version.Version(major=int(m.group(1)),
-                                              minor=int(m.group(2)))
+                doc.version = version.Version(
+                    major=int(m.group(1)), minor=int(m.group(2))
+                )
                 return True
         else:
-            raise CardinalityError('Document::Version')
+            raise CardinalityError("Document::Version")
 
     def set_doc_data_lics(self, doc, lics):
         """
@@ -102,9 +104,9 @@ class DocBuilder(object):
                 doc.data_license = document.License.from_identifier(lics)
                 return True
             else:
-                raise SPDXValueError('Document::DataLicense')
+                raise SPDXValueError("Document::DataLicense")
         else:
-            raise CardinalityError('Document::DataLicense')
+            raise CardinalityError("Document::DataLicense")
 
     def set_doc_name(self, doc, name):
         """
@@ -116,7 +118,7 @@ class DocBuilder(object):
             self.doc_name_set = True
             return True
         else:
-            raise CardinalityError('Document::Name')
+            raise CardinalityError("Document::Name")
 
     def set_doc_spdx_id(self, doc, doc_spdx_id_line):
         """
@@ -125,14 +127,14 @@ class DocBuilder(object):
         Raise CardinalityError if already defined.
         """
         if not self.doc_spdx_id_set:
-            if doc_spdx_id_line == 'SPDXRef-DOCUMENT':
+            if doc_spdx_id_line == "SPDXRef-DOCUMENT":
                 doc.spdx_id = doc_spdx_id_line
                 self.doc_spdx_id_set = True
                 return True
             else:
-                raise SPDXValueError('Document::SPDXID')
+                raise SPDXValueError("Document::SPDXID")
         else:
-            raise CardinalityError('Document::SPDXID')
+            raise CardinalityError("Document::SPDXID")
 
     def set_doc_comment(self, doc, comment):
         """
@@ -146,9 +148,9 @@ class DocBuilder(object):
                 doc.comment = str_from_text(comment)
                 return True
             else:
-                raise SPDXValueError('Document::Comment')
+                raise SPDXValueError("Document::Comment")
         else:
-            raise CardinalityError('Document::Comment')
+            raise CardinalityError("Document::Comment")
 
     def set_doc_namespace(self, doc, namespace):
         """
@@ -162,9 +164,9 @@ class DocBuilder(object):
                 doc.namespace = namespace
                 return True
             else:
-                raise SPDXValueError('Document::Namespace')
+                raise SPDXValueError("Document::Namespace")
         else:
-            raise CardinalityError('Document::Comment')
+            raise CardinalityError("Document::Comment")
 
     def reset_document(self):
         """
@@ -180,14 +182,13 @@ class DocBuilder(object):
 
 
 class ExternalDocumentRefBuilder(object):
-
     def set_ext_doc_id(self, doc, ext_doc_id):
         """
         Set the `external_document_id` attribute of the `ExternalDocumentRef` object.
         """
         doc.add_ext_document_reference(
-            ExternalDocumentRef(
-                external_document_id=ext_doc_id))
+            ExternalDocumentRef(external_document_id=ext_doc_id)
+        )
 
     def set_spdx_doc_uri(self, doc, spdx_doc_uri):
         """
@@ -196,14 +197,13 @@ class ExternalDocumentRefBuilder(object):
         if validations.validate_doc_namespace(spdx_doc_uri):
             doc.ext_document_references[-1].spdx_document_uri = spdx_doc_uri
         else:
-            raise SPDXValueError('Document::ExternalDocumentRef')
+            raise SPDXValueError("Document::ExternalDocumentRef")
 
     def set_chksum(self, doc, chksum):
         """
         Set the `check_sum` attribute of the `ExternalDocumentRef` object.
         """
-        doc.ext_document_references[-1].check_sum = checksum_from_sha1(
-            chksum)
+        doc.ext_document_references[-1].check_sum = checksum_from_sha1(chksum)
 
     def add_ext_doc_refs(self, doc, ext_doc_id, spdx_doc_uri, chksum):
         self.set_ext_doc_id(doc, ext_doc_id)
@@ -213,9 +213,9 @@ class ExternalDocumentRefBuilder(object):
 
 class EntityBuilder(object):
 
-    tool_re = re.compile(r'Tool:\s*(.+)', re.UNICODE)
-    person_re = re.compile(r'Person:\s*(([^(])+)(\((.*)\))?', re.UNICODE)
-    org_re = re.compile(r'Organization:\s*(([^(])+)(\((.*)\))?', re.UNICODE)
+    tool_re = re.compile(r"Tool:\s*(.+)", re.UNICODE)
+    person_re = re.compile(r"Person:\s*(([^(])+)(\((.*)\))?", re.UNICODE)
+    org_re = re.compile(r"Organization:\s*(([^(])+)(\((.*)\))?", re.UNICODE)
     PERSON_NAME_GROUP = 1
     PERSON_EMAIL_GROUP = 4
     ORG_NAME_GROUP = 1
@@ -233,7 +233,7 @@ class EntityBuilder(object):
             name = match.group(self.TOOL_NAME_GROUP)
             return creationinfo.Tool(name)
         else:
-            raise SPDXValueError('Failed to extract tool name')
+            raise SPDXValueError("Failed to extract tool name")
 
     def build_org(self, doc, entity):
         """
@@ -250,7 +250,7 @@ class EntityBuilder(object):
             else:
                 return creationinfo.Organization(name=name, email=None)
         else:
-            raise SPDXValueError('Failed to extract Organization name')
+            raise SPDXValueError("Failed to extract Organization name")
 
     def build_person(self, doc, entity):
         """
@@ -258,7 +258,9 @@ class EntityBuilder(object):
         Return built organization. Raise SPDXValueError if failed to extract name.
         """
         match = self.person_re.match(entity)
-        if match and validations.validate_person_name(match.group(self.PERSON_NAME_GROUP)):
+        if match and validations.validate_person_name(
+            match.group(self.PERSON_NAME_GROUP)
+        ):
             name = match.group(self.PERSON_NAME_GROUP).strip()
             email = match.group(self.PERSON_EMAIL_GROUP)
             if (email is not None) and (len(email) != 0):
@@ -266,11 +268,10 @@ class EntityBuilder(object):
             else:
                 return creationinfo.Person(name=name, email=None)
         else:
-            raise SPDXValueError('Failed to extract person name')
+            raise SPDXValueError("Failed to extract person name")
 
 
 class CreationInfoBuilder(object):
-
     def __init__(self):
         # FIXME: this state does not make sense
         self.reset_creation_info()
@@ -286,7 +287,7 @@ class CreationInfoBuilder(object):
             doc.creation_info.add_creator(creator)
             return True
         else:
-            raise SPDXValueError('CreationInfo::Creator')
+            raise SPDXValueError("CreationInfo::Creator")
 
     def set_created_date(self, doc, created):
         """
@@ -301,9 +302,9 @@ class CreationInfoBuilder(object):
                 doc.creation_info.created = date
                 return True
             else:
-                raise SPDXValueError('CreationInfo::Date')
+                raise SPDXValueError("CreationInfo::Date")
         else:
-            raise CardinalityError('CreationInfo::Created')
+            raise CardinalityError("CreationInfo::Created")
 
     def set_creation_comment(self, doc, comment):
         """
@@ -317,9 +318,9 @@ class CreationInfoBuilder(object):
                 doc.creation_info.comment = str_from_text(comment)
                 return True
             else:
-                raise SPDXValueError('CreationInfo::Comment')
+                raise SPDXValueError("CreationInfo::Comment")
         else:
-            raise CardinalityError('CreationInfo::Comment')
+            raise CardinalityError("CreationInfo::Comment")
 
     def set_lics_list_ver(self, doc, value):
         """
@@ -334,9 +335,9 @@ class CreationInfoBuilder(object):
                 doc.creation_info.license_list_version = vers
                 return True
             else:
-                raise SPDXValueError('CreationInfo::LicenseListVersion')
+                raise SPDXValueError("CreationInfo::LicenseListVersion")
         else:
-            raise CardinalityError('CreationInfo::LicenseListVersion')
+            raise CardinalityError("CreationInfo::LicenseListVersion")
 
     def reset_creation_info(self):
         """
@@ -349,7 +350,6 @@ class CreationInfoBuilder(object):
 
 
 class ReviewBuilder(object):
-
     def __init__(self):
         # FIXME: this state does not make sense
         self.reset_reviews()
@@ -375,7 +375,7 @@ class ReviewBuilder(object):
             doc.add_review(review.Review(reviewer=reviewer))
             return True
         else:
-            raise SPDXValueError('Review::Reviewer')
+            raise SPDXValueError("Review::Reviewer")
 
     def add_review_date(self, doc, reviewed):
         """
@@ -392,11 +392,11 @@ class ReviewBuilder(object):
                     doc.reviews[-1].review_date = date
                     return True
                 else:
-                    raise SPDXValueError('Review::ReviewDate')
+                    raise SPDXValueError("Review::ReviewDate")
             else:
-                raise CardinalityError('Review::ReviewDate')
+                raise CardinalityError("Review::ReviewDate")
         else:
-            raise OrderError('Review::ReviewDate')
+            raise OrderError("Review::ReviewDate")
 
     def add_review_comment(self, doc, comment):
         """
@@ -412,15 +412,14 @@ class ReviewBuilder(object):
                     doc.reviews[-1].comment = str_from_text(comment)
                     return True
                 else:
-                    raise SPDXValueError('ReviewComment::Comment')
+                    raise SPDXValueError("ReviewComment::Comment")
             else:
-                raise CardinalityError('ReviewComment')
+                raise CardinalityError("ReviewComment")
         else:
-            raise OrderError('ReviewComment')
+            raise OrderError("ReviewComment")
 
 
 class AnnotationBuilder(object):
-
     def __init__(self):
         # FIXME: this state does not make sense
         self.reset_annotations()
@@ -448,7 +447,7 @@ class AnnotationBuilder(object):
             doc.add_annotation(annotation.Annotation(annotator=annotator))
             return True
         else:
-            raise SPDXValueError('Annotation::Annotator')
+            raise SPDXValueError("Annotation::Annotator")
 
     def add_annotation_date(self, doc, annotation_date):
         """
@@ -465,11 +464,11 @@ class AnnotationBuilder(object):
                     doc.annotations[-1].annotation_date = date
                     return True
                 else:
-                    raise SPDXValueError('Annotation::AnnotationDate')
+                    raise SPDXValueError("Annotation::AnnotationDate")
             else:
-                raise CardinalityError('Annotation::AnnotationDate')
+                raise CardinalityError("Annotation::AnnotationDate")
         else:
-            raise OrderError('Annotation::AnnotationDate')
+            raise OrderError("Annotation::AnnotationDate")
 
     def add_annotation_comment(self, doc, comment):
         """
@@ -485,11 +484,11 @@ class AnnotationBuilder(object):
                     doc.annotations[-1].comment = str_from_text(comment)
                     return True
                 else:
-                    raise SPDXValueError('AnnotationComment::Comment')
+                    raise SPDXValueError("AnnotationComment::Comment")
             else:
-                raise CardinalityError('AnnotationComment::Comment')
+                raise CardinalityError("AnnotationComment::Comment")
         else:
-            raise OrderError('AnnotationComment::Comment')
+            raise OrderError("AnnotationComment::Comment")
 
     def add_annotation_type(self, doc, annotation_type):
         """
@@ -505,11 +504,11 @@ class AnnotationBuilder(object):
                     doc.annotations[-1].annotation_type = annotation_type
                     return True
                 else:
-                    raise SPDXValueError('Annotation::AnnotationType')
+                    raise SPDXValueError("Annotation::AnnotationType")
             else:
-                raise CardinalityError('Annotation::AnnotationType')
+                raise CardinalityError("Annotation::AnnotationType")
         else:
-            raise OrderError('Annotation::AnnotationType')
+            raise OrderError("Annotation::AnnotationType")
 
     def set_annotation_spdx_id(self, doc, spdx_id):
         """
@@ -523,9 +522,50 @@ class AnnotationBuilder(object):
                 doc.annotations[-1].spdx_id = spdx_id
                 return True
             else:
-                raise CardinalityError('Annotation::SPDXREF')
+                raise CardinalityError("Annotation::SPDXREF")
         else:
-            raise OrderError('Annotation::SPDXREF')
+            raise OrderError("Annotation::SPDXREF")
+
+
+class RelationshipBuilder(object):
+    def __init__(self):
+        # FIXME: this state does not make sense
+        self.reset_relationship()
+
+    def reset_relationship(self):
+        """
+        Reset the builder's state to allow building new relationships.
+        """
+        # FIXME: this state does not make sense
+        self.relationship_comment_set = False
+
+    def add_relationship(self, doc, relationship_term):
+        """
+        Raise SPDXValueError if type is unknown.
+        """
+        self.reset_relationship()
+        doc.add_relationships(relationship.Relationship(relationship_term))
+        return True
+
+    def add_relationship_comment(self, doc, comment):
+        """
+        Set the annotation comment.
+        Raise CardinalityError if already set.
+        Raise OrderError if no relationship defined before it.
+        Raise SPDXValueError if comment is not free form text.
+        """
+        if len(doc.relationships) != 0:
+            if not self.relationship_comment_set:
+                self.relationship_comment_set = True
+                if validations.validate_relationship_comment(comment):
+                    doc.relationships[-1].comment = str_from_text(comment)
+                    return True
+                else:
+                    raise SPDXValueError("RelationshipComment::Comment")
+            else:
+                raise CardinalityError("RelationshipComment::Comment")
+        else:
+            raise OrderError("RelationshipComment::Comment")
 
 
 class PackageBuilder(object):
@@ -559,6 +599,7 @@ class PackageBuilder(object):
         self.package_summary_set = False
         self.package_desc_set = False
         self.package_comment_set = False
+        # self.package_attribution_text_set = False
         self.pkg_ext_comment_set = False
 
     def create_package(self, doc, name):
@@ -572,7 +613,7 @@ class PackageBuilder(object):
             doc.package = package.Package(name=name)
             return True
         else:
-            raise CardinalityError('Package::Name')
+            raise CardinalityError("Package::Name")
 
     def set_pkg_spdx_id(self, doc, spdx_id):
         """
@@ -587,9 +628,9 @@ class PackageBuilder(object):
                 self.package_spdx_id_set = True
                 return True
             else:
-                raise SPDXValueError('Package::SPDXID')
+                raise SPDXValueError("Package::SPDXID")
         else:
-            raise CardinalityError('Package::SPDXID')
+            raise CardinalityError("Package::SPDXID")
 
     def set_pkg_vers(self, doc, version):
         """
@@ -604,7 +645,7 @@ class PackageBuilder(object):
             doc.package.version = version
             return True
         else:
-            raise CardinalityError('Package::Version')
+            raise CardinalityError("Package::Version")
 
     def set_pkg_file_name(self, doc, name):
         """
@@ -619,7 +660,7 @@ class PackageBuilder(object):
             doc.package.file_name = name
             return True
         else:
-            raise CardinalityError('Package::FileName')
+            raise CardinalityError("Package::FileName")
 
     def set_pkg_supplier(self, doc, entity):
         """
@@ -635,9 +676,9 @@ class PackageBuilder(object):
                 doc.package.supplier = entity
                 return True
             else:
-                raise SPDXValueError('Package::Supplier')
+                raise SPDXValueError("Package::Supplier")
         else:
-            raise CardinalityError('Package::Supplier')
+            raise CardinalityError("Package::Supplier")
 
     def set_pkg_originator(self, doc, entity):
         """
@@ -653,9 +694,9 @@ class PackageBuilder(object):
                 doc.package.originator = entity
                 return True
             else:
-                raise SPDXValueError('Package::Originator')
+                raise SPDXValueError("Package::Originator")
         else:
-            raise CardinalityError('Package::Originator')
+            raise CardinalityError("Package::Originator")
 
     def set_pkg_down_location(self, doc, location):
         """
@@ -670,7 +711,7 @@ class PackageBuilder(object):
             doc.package.download_location = location
             return True
         else:
-            raise CardinalityError('Package::DownloadLocation')
+            raise CardinalityError("Package::DownloadLocation")
 
     def set_pkg_files_analyzed(self, doc, files_analyzed):
         """
@@ -687,9 +728,9 @@ class PackageBuilder(object):
                     print(doc.package.files_analyzed)
                     return True
                 else:
-                    raise SPDXValueError('Package::FilesAnalyzed')
+                    raise SPDXValueError("Package::FilesAnalyzed")
         else:
-            raise CardinalityError('Package::FilesAnalyzed')
+            raise CardinalityError("Package::FilesAnalyzed")
 
     def set_pkg_home(self, doc, location):
         """Set the package homepage location if not already set.
@@ -705,9 +746,9 @@ class PackageBuilder(object):
                 doc.package.homepage = location
                 return True
             else:
-                raise SPDXValueError('Package::HomePage')
+                raise SPDXValueError("Package::HomePage")
         else:
-            raise CardinalityError('Package::HomePage')
+            raise CardinalityError("Package::HomePage")
 
     def set_pkg_verif_code(self, doc, code):
         """
@@ -724,12 +765,14 @@ class PackageBuilder(object):
             if match:
                 doc.package.verif_code = match.group(self.VERIF_CODE_CODE_GRP)
                 if match.group(self.VERIF_CODE_EXC_FILES_GRP) is not None:
-                    doc.package.verif_exc_files = match.group(self.VERIF_CODE_EXC_FILES_GRP).split(',')
+                    doc.package.verif_exc_files = match.group(
+                        self.VERIF_CODE_EXC_FILES_GRP
+                    ).split(",")
                 return True
             else:
-                raise SPDXValueError('Package::VerificationCode')
+                raise SPDXValueError("Package::VerificationCode")
         else:
-            raise CardinalityError('Package::VerificationCode')
+            raise CardinalityError("Package::VerificationCode")
 
     def set_pkg_chk_sum(self, doc, chk_sum):
         """
@@ -744,7 +787,7 @@ class PackageBuilder(object):
             doc.package.check_sum = checksum_from_sha1(chk_sum)
             return True
         else:
-            raise CardinalityError('Package::CheckSum')
+            raise CardinalityError("Package::CheckSum")
 
     def set_pkg_source_info(self, doc, text):
         """
@@ -761,9 +804,9 @@ class PackageBuilder(object):
                 doc.package.source_info = str_from_text(text)
                 return True
             else:
-                raise SPDXValueError('Pacckage::SourceInfo')
+                raise SPDXValueError("Pacckage::SourceInfo")
         else:
-            raise CardinalityError('Package::SourceInfo')
+            raise CardinalityError("Package::SourceInfo")
 
     def set_pkg_licenses_concluded(self, doc, licenses):
         """
@@ -780,9 +823,9 @@ class PackageBuilder(object):
                 doc.package.conc_lics = licenses
                 return True
             else:
-                raise SPDXValueError('Package::ConcludedLicenses')
+                raise SPDXValueError("Package::ConcludedLicenses")
         else:
-            raise CardinalityError('Package::ConcludedLicenses')
+            raise CardinalityError("Package::ConcludedLicenses")
 
     def set_pkg_license_from_file(self, doc, lic):
         """
@@ -795,7 +838,7 @@ class PackageBuilder(object):
             doc.package.licenses_from_files.append(lic)
             return True
         else:
-            raise SPDXValueError('Package::LicensesFromFile')
+            raise SPDXValueError("Package::LicensesFromFile")
 
     def set_pkg_license_declared(self, doc, lic):
         """
@@ -811,9 +854,9 @@ class PackageBuilder(object):
                 doc.package.license_declared = lic
                 return True
             else:
-                raise SPDXValueError('Package::LicenseDeclared')
+                raise SPDXValueError("Package::LicenseDeclared")
         else:
-            raise CardinalityError('Package::LicenseDeclared')
+            raise CardinalityError("Package::LicenseDeclared")
 
     def set_pkg_license_comment(self, doc, text):
         """
@@ -829,9 +872,21 @@ class PackageBuilder(object):
                 doc.package.license_comment = str_from_text(text)
                 return True
             else:
-                raise SPDXValueError('Package::LicenseComment')
+                raise SPDXValueError("Package::LicenseComment")
         else:
-            raise CardinalityError('Package::LicenseComment')
+            raise CardinalityError("Package::LicenseComment")
+
+    def set_pkg_attribution_text(self, doc, text):
+        """
+        Set the package's attribution text .
+        Raise SPDXValueError if text is not free form text.
+        """
+        self.assert_package_exists()
+        if validations.validate_pkg_attribution_text(text):
+            doc.package.attribution_text = str_from_text(text)
+            return True
+        else:
+            raise SPDXValueError("Package::AttributionText")
 
     def set_pkg_cr_text(self, doc, text):
         """
@@ -849,9 +904,9 @@ class PackageBuilder(object):
                 else:
                     doc.package.cr_text = text  # None or NoAssert
             else:
-                raise SPDXValueError('Package::CopyrightText')
+                raise SPDXValueError("Package::CopyrightText")
         else:
-            raise CardinalityError('Package::CopyrightText')
+            raise CardinalityError("Package::CopyrightText")
 
     def set_pkg_summary(self, doc, text):
         """
@@ -866,9 +921,9 @@ class PackageBuilder(object):
             if validations.validate_pkg_summary(text):
                 doc.package.summary = str_from_text(text)
             else:
-                raise SPDXValueError('Package::Summary')
+                raise SPDXValueError("Package::Summary")
         else:
-            raise CardinalityError('Package::Summary')
+            raise CardinalityError("Package::Summary")
 
     def set_pkg_desc(self, doc, text):
         """
@@ -883,9 +938,9 @@ class PackageBuilder(object):
             if validations.validate_pkg_desc(text):
                 doc.package.description = str_from_text(text)
             else:
-                raise SPDXValueError('Package::Description')
+                raise SPDXValueError("Package::Description")
         else:
-            raise CardinalityError('Package::Description')
+            raise CardinalityError("Package::Description")
 
     def set_pkg_comment(self, doc, text):
         """
@@ -900,9 +955,9 @@ class PackageBuilder(object):
             if validations.validate_pkg_comment(text):
                 doc.package.comment = str_from_text(text)
             else:
-                raise SPDXValueError('Package::Comment')
+                raise SPDXValueError("Package::Comment")
         else:
-            raise CardinalityError('Package::Comment')
+            raise CardinalityError("Package::Comment")
 
     def set_pkg_ext_ref_category(self, doc, category):
         """
@@ -910,14 +965,17 @@ class PackageBuilder(object):
         """
         self.assert_package_exists()
         if validations.validate_pkg_ext_ref_category(category):
-            if (len(doc.package.pkg_ext_refs) and
-                    doc.package.pkg_ext_refs[-1].category is None):
+            if (
+                len(doc.package.pkg_ext_refs)
+                and doc.package.pkg_ext_refs[-1].category is None
+            ):
                 doc.package.pkg_ext_refs[-1].category = category
             else:
                 doc.package.add_pkg_ext_refs(
-                    package.ExternalPackageRef(category=category))
+                    package.ExternalPackageRef(category=category)
+                )
         else:
-            raise SPDXValueError('ExternalRef::Category')
+            raise SPDXValueError("ExternalRef::Category")
 
     def set_pkg_ext_ref_type(self, doc, pkg_ext_ref_type):
         """
@@ -925,26 +983,30 @@ class PackageBuilder(object):
         """
         self.assert_package_exists()
         if validations.validate_pkg_ext_ref_type(pkg_ext_ref_type):
-            if (len(doc.package.pkg_ext_refs) and
-                    doc.package.pkg_ext_refs[-1].pkg_ext_ref_type is None):
+            if (
+                len(doc.package.pkg_ext_refs)
+                and doc.package.pkg_ext_refs[-1].pkg_ext_ref_type is None
+            ):
                 doc.package.pkg_ext_refs[-1].pkg_ext_ref_type = pkg_ext_ref_type
             else:
-                doc.package.add_pkg_ext_refs(package.ExternalPackageRef(
-                    pkg_ext_ref_type=pkg_ext_ref_type))
+                doc.package.add_pkg_ext_refs(
+                    package.ExternalPackageRef(pkg_ext_ref_type=pkg_ext_ref_type)
+                )
         else:
-            raise SPDXValueError('ExternalRef::Type')
+            raise SPDXValueError("ExternalRef::Type")
 
     def set_pkg_ext_ref_locator(self, doc, locator):
         """
         Set the `locator` attribute of the `ExternalPackageRef` object.
         """
         self.assert_package_exists()
-        if (len(doc.package.pkg_ext_refs) and
-                doc.package.pkg_ext_refs[-1].locator is None):
+        if (
+            len(doc.package.pkg_ext_refs)
+            and doc.package.pkg_ext_refs[-1].locator is None
+        ):
             doc.package.pkg_ext_refs[-1].locator = locator
         else:
-            doc.package.add_pkg_ext_refs(package.ExternalPackageRef(
-                locator=locator))
+            doc.package.add_pkg_ext_refs(package.ExternalPackageRef(locator=locator))
 
     def add_pkg_ext_ref_comment(self, doc, comment):
         """
@@ -952,12 +1014,12 @@ class PackageBuilder(object):
         """
         self.assert_package_exists()
         if not len(doc.package.pkg_ext_refs):
-            raise OrderError('Package::ExternalRef')
+            raise OrderError("Package::ExternalRef")
         else:
             if validations.validate_pkg_ext_ref_comment(comment):
                 doc.package.pkg_ext_refs[-1].comment = str_from_text(comment)
             else:
-                raise SPDXValueError('ExternalRef::Comment')
+                raise SPDXValueError("ExternalRef::Comment")
 
     def add_pkg_ext_refs(self, doc, category, pkg_ext_ref_type, locator):
         self.set_pkg_ext_ref_category(doc, category)
@@ -966,11 +1028,10 @@ class PackageBuilder(object):
 
     def assert_package_exists(self):
         if not self.package_set:
-            raise OrderError('Package')
+            raise OrderError("Package")
 
 
 class FileBuilder(object):
-
     def __init__(self):
         # FIXME: this state does not make sense
         self.reset_file_stat()
@@ -987,7 +1048,7 @@ class FileBuilder(object):
             self.reset_file_stat()
             return True
         else:
-            raise OrderError('File::Name')
+            raise OrderError("File::Name")
 
     def set_file_spdx_id(self, doc, spdx_id):
         """
@@ -1003,11 +1064,11 @@ class FileBuilder(object):
                     self.file(doc).spdx_id = spdx_id
                     return True
                 else:
-                    raise SPDXValueError('File::SPDXID')
+                    raise SPDXValueError("File::SPDXID")
             else:
-                raise CardinalityError('File::SPDXID')
+                raise CardinalityError("File::SPDXID")
         else:
-            raise OrderError('File::SPDXID')
+            raise OrderError("File::SPDXID")
 
     def set_file_comment(self, doc, text):
         """
@@ -1022,11 +1083,23 @@ class FileBuilder(object):
                     self.file(doc).comment = str_from_text(text)
                     return True
                 else:
-                    raise SPDXValueError('File::Comment')
+                    raise SPDXValueError("File::Comment")
             else:
-                raise CardinalityError('File::Comment')
+                raise CardinalityError("File::Comment")
         else:
-            raise OrderError('File::Comment')
+            raise OrderError("File::Comment")
+
+    def set_file_attribution_text(self, doc, text):
+        """
+        Set the file's attribution text .
+        Raise SPDXValueError if text is not free form text.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if validations.validate_file_attribution_text(text):
+                self.file(doc).comment = str_from_text(text)
+                return True
+            else:
+                raise SPDXValueError("File::AttributionText")
 
     def set_file_type(self, doc, type_value):
         """
@@ -1035,10 +1108,10 @@ class FileBuilder(object):
         Raise SPDXValueError if type is unknown.
         """
         type_dict = {
-            'SOURCE': file.FileType.SOURCE,
-            'BINARY': file.FileType.BINARY,
-            'ARCHIVE': file.FileType.ARCHIVE,
-            'OTHER': file.FileType.OTHER
+            "SOURCE": file.FileType.SOURCE,
+            "BINARY": file.FileType.BINARY,
+            "ARCHIVE": file.FileType.ARCHIVE,
+            "OTHER": file.FileType.OTHER,
         }
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_type_set:
@@ -1047,11 +1120,11 @@ class FileBuilder(object):
                     self.file(doc).type = type_dict[type_value]
                     return True
                 else:
-                    raise SPDXValueError('File::Type')
+                    raise SPDXValueError("File::Type")
             else:
-                raise CardinalityError('File::Type')
+                raise CardinalityError("File::Type")
         else:
-            raise OrderError('File::Type')
+            raise OrderError("File::Type")
 
     def set_file_chksum(self, doc, chksum):
         """
@@ -1064,9 +1137,9 @@ class FileBuilder(object):
                 self.file(doc).chk_sum = checksum_from_sha1(chksum)
                 return True
             else:
-                raise CardinalityError('File::CheckSum')
+                raise CardinalityError("File::CheckSum")
         else:
-            raise OrderError('File::CheckSum')
+            raise OrderError("File::CheckSum")
 
     def set_concluded_license(self, doc, lic):
         """
@@ -1081,11 +1154,11 @@ class FileBuilder(object):
                     self.file(doc).conc_lics = lic
                     return True
                 else:
-                    raise SPDXValueError('File::ConcludedLicense')
+                    raise SPDXValueError("File::ConcludedLicense")
             else:
-                raise CardinalityError('File::ConcludedLicense')
+                raise CardinalityError("File::ConcludedLicense")
         else:
-            raise OrderError('File::ConcludedLicense')
+            raise OrderError("File::ConcludedLicense")
 
     def set_file_license_in_file(self, doc, lic):
         """
@@ -1097,9 +1170,9 @@ class FileBuilder(object):
                 self.file(doc).add_lics(lic)
                 return True
             else:
-                raise SPDXValueError('File::LicenseInFile')
+                raise SPDXValueError("File::LicenseInFile")
         else:
-            raise OrderError('File::LicenseInFile')
+            raise OrderError("File::LicenseInFile")
 
     def set_file_license_comment(self, doc, text):
         """
@@ -1113,11 +1186,11 @@ class FileBuilder(object):
                 if validations.validate_file_lics_comment(text):
                     self.file(doc).license_comment = str_from_text(text)
                 else:
-                    raise SPDXValueError('File::LicenseComment')
+                    raise SPDXValueError("File::LicenseComment")
             else:
-                raise CardinalityError('File::LicenseComment')
+                raise CardinalityError("File::LicenseComment")
         else:
-            raise OrderError('File::LicenseComment')
+            raise OrderError("File::LicenseComment")
 
     def set_file_copyright(self, doc, text):
         """
@@ -1135,11 +1208,11 @@ class FileBuilder(object):
                         self.file(doc).copyright = text  # None or NoAssert
                     return True
                 else:
-                    raise SPDXValueError('File::CopyRight')
+                    raise SPDXValueError("File::CopyRight")
             else:
-                raise CardinalityError('File::CopyRight')
+                raise CardinalityError("File::CopyRight")
         else:
-            raise OrderError('File::CopyRight')
+            raise OrderError("File::CopyRight")
 
     def set_file_notice(self, doc, text):
         """
@@ -1153,11 +1226,11 @@ class FileBuilder(object):
                 if validations.validate_file_notice(text):
                     self.file(doc).notice = str_from_text(text)
                 else:
-                    raise SPDXValueError('File::Notice')
+                    raise SPDXValueError("File::Notice")
             else:
-                raise CardinalityError('File::Notice')
+                raise CardinalityError("File::Notice")
         else:
-            raise OrderError('File::Notice')
+            raise OrderError("File::Notice")
 
     def add_file_contribution(self, doc, value):
         """
@@ -1166,7 +1239,7 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             self.file(doc).add_contrib(value)
         else:
-            raise OrderError('File::Contributor')
+            raise OrderError("File::Contributor")
 
     def add_file_dep(self, doc, value):
         """
@@ -1175,7 +1248,7 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             self.file(doc).add_depend(value)
         else:
-            raise OrderError('File::Dependency')
+            raise OrderError("File::Dependency")
 
     def set_file_atrificat_of_project(self, doc, symbol, value):
         """
@@ -1185,8 +1258,7 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             self.file(doc).add_artifact(symbol, value)
         else:
-            raise OrderError('File::Artificat')
-
+            raise OrderError("File::Artificat")
 
     def file(self, doc):
         """
@@ -1223,7 +1295,6 @@ class FileBuilder(object):
 
 
 class LicenseBuilder(object):
-
     def __init__(self):
         # FIXME: this state does not make sense
         self.reset_extr_lics()
@@ -1248,7 +1319,7 @@ class LicenseBuilder(object):
             doc.add_extr_lic(document.ExtractedLicense(lic_id))
             return True
         else:
-            raise SPDXValueError('ExtractedLicense::id')
+            raise SPDXValueError("ExtractedLicense::id")
 
     def set_lic_text(self, doc, text):
         """
@@ -1263,11 +1334,11 @@ class LicenseBuilder(object):
                     self.extr_lic(doc).text = str_from_text(text)
                     return True
                 else:
-                    raise SPDXValueError('ExtractedLicense::text')
+                    raise SPDXValueError("ExtractedLicense::text")
             else:
-                raise CardinalityError('ExtractedLicense::text')
+                raise CardinalityError("ExtractedLicense::text")
         else:
-            raise OrderError('ExtractedLicense::text')
+            raise OrderError("ExtractedLicense::text")
 
     def set_lic_name(self, doc, name):
         """
@@ -1282,11 +1353,11 @@ class LicenseBuilder(object):
                     self.extr_lic(doc).full_name = name
                     return True
                 else:
-                    raise SPDXValueError('ExtractedLicense::Name')
+                    raise SPDXValueError("ExtractedLicense::Name")
             else:
-                raise CardinalityError('ExtractedLicense::Name')
+                raise CardinalityError("ExtractedLicense::Name")
         else:
-            raise OrderError('ExtractedLicense::Name')
+            raise OrderError("ExtractedLicense::Name")
 
     def set_lic_comment(self, doc, comment):
         """
@@ -1301,11 +1372,11 @@ class LicenseBuilder(object):
                     self.extr_lic(doc).comment = str_from_text(comment)
                     return True
                 else:
-                    raise SPDXValueError('ExtractedLicense::comment')
+                    raise SPDXValueError("ExtractedLicense::comment")
             else:
-                raise CardinalityError('ExtractedLicense::comment')
+                raise CardinalityError("ExtractedLicense::comment")
         else:
-            raise OrderError('ExtractedLicense::comment')
+            raise OrderError("ExtractedLicense::comment")
 
     def add_lic_xref(self, doc, ref):
         """
@@ -1316,7 +1387,7 @@ class LicenseBuilder(object):
             self.extr_lic(doc).add_xref(ref)
             return True
         else:
-            raise OrderError('ExtractedLicense::CrossRef')
+            raise OrderError("ExtractedLicense::CrossRef")
 
     def reset_extr_lics(self):
         # FIXME: this state does not make sense
@@ -1326,7 +1397,6 @@ class LicenseBuilder(object):
 
 
 class SnippetBuilder(object):
-
     def __init__(self):
         # FIXME: this state does not make sense
         self.reset_snippet()
@@ -1339,13 +1409,13 @@ class SnippetBuilder(object):
         Raise SPDXValueError if the data is a malformed value.
         """
         self.reset_snippet()
-        spdx_id = spdx_id.split('#')[-1]
+        spdx_id = spdx_id.split("#")[-1]
         if validations.validate_snippet_spdx_id(spdx_id):
             doc.add_snippet(snippet.Snippet(spdx_id=spdx_id))
             self.snippet_spdx_id_set = True
             return True
         else:
-            raise SPDXValueError('Snippet::SnippetSPDXID')
+            raise SPDXValueError("Snippet::SnippetSPDXID")
 
     def set_snippet_name(self, doc, name):
         """
@@ -1359,7 +1429,7 @@ class SnippetBuilder(object):
             doc.snippet[-1].name = name
             return True
         else:
-            raise CardinalityError('SnippetName')
+            raise CardinalityError("SnippetName")
 
     def set_snippet_comment(self, doc, comment):
         """
@@ -1375,9 +1445,21 @@ class SnippetBuilder(object):
                 doc.snippet[-1].comment = str_from_text(comment)
                 return True
             else:
-                raise SPDXValueError('Snippet::SnippetComment')
+                raise SPDXValueError("Snippet::SnippetComment")
         else:
-            raise CardinalityError('Snippet::SnippetComment')
+            raise CardinalityError("Snippet::SnippetComment")
+
+    def set_snippet_attribution_text(self, doc, text):
+        """
+        Set the snippet's attribution text .
+        Raise SPDXValueError if text is not free form text.
+        """
+        self.assert_snippet_exists()
+        if validations.validate_snippet_attribution_text(text):
+            doc.snippet[-1].attribution_text = str_from_text(text)
+            return True
+        else:
+            raise SPDXValueError("Snippet::AttributionText")
 
     def set_snippet_copyright(self, doc, text):
         """Set the snippet's copyright text.
@@ -1394,9 +1476,9 @@ class SnippetBuilder(object):
                 else:
                     doc.snippet[-1].copyright = text  # None or NoAssert
             else:
-                raise SPDXValueError('Snippet::SnippetCopyrightText')
+                raise SPDXValueError("Snippet::SnippetCopyrightText")
         else:
-            raise CardinalityError('Snippet::SnippetCopyrightText')
+            raise CardinalityError("Snippet::SnippetCopyrightText")
 
     def set_snippet_lic_comment(self, doc, text):
         """
@@ -1412,9 +1494,9 @@ class SnippetBuilder(object):
                 doc.snippet[-1].license_comment = str_from_text(text)
                 return True
             else:
-                raise SPDXValueError('Snippet::SnippetLicenseComments')
+                raise SPDXValueError("Snippet::SnippetLicenseComments")
         else:
-            raise CardinalityError('Snippet::SnippetLicenseComments')
+            raise CardinalityError("Snippet::SnippetLicenseComments")
 
     def set_snip_from_file_spdxid(self, doc, snip_from_file_spdxid):
         """
@@ -1424,16 +1506,16 @@ class SnippetBuilder(object):
         Raise SPDXValueError if the data is a malformed value.
         """
         self.assert_snippet_exists()
-        snip_from_file_spdxid = snip_from_file_spdxid.split('#')[-1]
+        snip_from_file_spdxid = snip_from_file_spdxid.split("#")[-1]
         if not self.snip_file_spdxid_set:
             self.snip_file_spdxid_set = True
             if validations.validate_snip_file_spdxid(snip_from_file_spdxid):
                 doc.snippet[-1].snip_from_file_spdxid = snip_from_file_spdxid
                 return True
             else:
-                raise SPDXValueError('Snippet::SnippetFromFileSPDXID')
+                raise SPDXValueError("Snippet::SnippetFromFileSPDXID")
         else:
-            raise CardinalityError('Snippet::SnippetFromFileSPDXID')
+            raise CardinalityError("Snippet::SnippetFromFileSPDXID")
 
     def set_snip_concluded_license(self, doc, conc_lics):
         """
@@ -1448,9 +1530,9 @@ class SnippetBuilder(object):
                 doc.snippet[-1].conc_lics = conc_lics
                 return True
             else:
-                raise SPDXValueError('Snippet::SnippetLicenseConcluded')
+                raise SPDXValueError("Snippet::SnippetLicenseConcluded")
         else:
-            raise CardinalityError('Snippet::SnippetLicenseConcluded')
+            raise CardinalityError("Snippet::SnippetLicenseConcluded")
 
     def set_snippet_lics_info(self, doc, lics_info):
         """
@@ -1462,7 +1544,7 @@ class SnippetBuilder(object):
             doc.snippet[-1].add_lics(lics_info)
             return True
         else:
-            raise SPDXValueError('Snippet::LicenseInfoInSnippet')
+            raise SPDXValueError("Snippet::LicenseInfoInSnippet")
 
     def reset_snippet(self):
         # FIXME: this state does not make sense
@@ -1476,12 +1558,22 @@ class SnippetBuilder(object):
 
     def assert_snippet_exists(self):
         if not self.snippet_spdx_id_set:
-            raise OrderError('Snippet')
+            raise OrderError("Snippet")
 
 
-class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
-              PackageBuilder, FileBuilder, LicenseBuilder, SnippetBuilder,
-              ExternalDocumentRefBuilder, AnnotationBuilder):
+class Builder(
+    DocBuilder,
+    CreationInfoBuilder,
+    EntityBuilder,
+    ReviewBuilder,
+    PackageBuilder,
+    FileBuilder,
+    LicenseBuilder,
+    SnippetBuilder,
+    ExternalDocumentRefBuilder,
+    AnnotationBuilder,
+    RelationshipBuilder,
+):
 
     """
     SPDX document builder.
@@ -1506,3 +1598,4 @@ class Builder(DocBuilder, CreationInfoBuilder, EntityBuilder, ReviewBuilder,
         self.reset_annotations()
         self.reset_extr_lics()
         self.reset_snippet()
+        self.reset_relationship()

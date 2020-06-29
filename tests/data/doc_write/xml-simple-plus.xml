@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <SpdxDocument>
 	<Document>
-        <specVersion>SPDX-2.1</specVersion>
+        <spdxVersion>SPDX-2.1</spdxVersion>
         <dataLicense>CC0-1.0</dataLicense>
 		<name>Sample_Document-V2.1</name>
-		<id>SPDXRef-DOCUMENT</id>
-		<namespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</namespace>
+		<SPDXID>SPDXRef-DOCUMENT</SPDXID>
+		<documentNamespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</documentNamespace>
         <documentDescribes>
             <Package>
-				<id>SPDXRef-Package</id>
+				<SPDXID>SPDXRef-Package</SPDXID>
                 <name>some/path</name>
                 <downloadLocation>NOASSERTION</downloadLocation>
                 <copyrightText>Some copyrught</copyrightText>
                 <packageVerificationCode>
-					<value>SOME code</value>
+					<packageVerificationCodeValue>SOME code</packageVerificationCodeValue>
 				</packageVerificationCode>
                 <checksums>
-					<value>SOME-SHA1</value>
+					<checksumValue>SOME-SHA1</checksumValue>
 					<algorithm>checksumAlgorithm_sha1</algorithm>
 				</checksums>
                 <licenseDeclared>NOASSERTION</licenseDeclared>
@@ -24,9 +24,9 @@
                 <files>
 					<File>
 						<name>./some/path/tofile</name>
-						<id>SPDXRef-File</id>
+						<SPDXID>SPDXRef-File</SPDXID>
 						<checksums>
-							<value>SOME-SHA1</value>
+							<checksumValue>SOME-SHA1</checksumValue>
 							<algorithm>checksumAlgorithm_sha1</algorithm>
 						</checksums>
                         <licenseConcluded>NOASSERTION</licenseConcluded>

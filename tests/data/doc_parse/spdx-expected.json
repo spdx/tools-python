@@ -6,7 +6,7 @@
         "identifier": "SHA1", 
         "value": "d6a770ba38583ed4bb4525bd96e50461655d2759"
       }, 
-      "spdxDocumentNamespace": "https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301", 
+      "spdxDocument": "https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301", 
       "externalDocumentId": "DocumentRef-spdx-tool-2.1"
     }
   ], 
@@ -199,7 +199,7 @@
     "downloadLocation": "http://www.spdx.org/tools", 
     "description": "This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document."
   }, 
-  "namespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301", 
+  "documentNamespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301", 
   "reviews": [
     {
       "comment": "This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses", 

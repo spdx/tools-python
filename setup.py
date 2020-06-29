@@ -24,6 +24,7 @@ setup(
         'spdx.parsers',
         'spdx.parsers.lexers',
         'spdx.writers',
+        'examples',
     ],
     include_package_data=True,
     zip_safe=False,
@@ -33,13 +34,16 @@ setup(
         'pyparsing<=1.5.7;python_version<="2.8"',
         'rdflib',
         'six',
+        'enum34',
+        'Click',
         'pyyaml',
         'xmltodict',
     ],
     python_requires='>=2.7',
     entry_points={
         'console_scripts': [
-            'spdx-tv2rdf = spdx.tv_to_rdf:main',
+            'convertor = spdx.cli_tools.convertor:main',
+            'parser = spdx.cli_tools.parser:main',
         ],
     },
 

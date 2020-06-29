@@ -90,7 +90,7 @@ class TestConversions(TestCase):
     def parse_xml_file(self, file_name):
         with open(file_name, mode='r') as infile:
             xmlparser = XMLParser(JSONYAMLXMLBuilder(), StandardLogger())
-            doc, error = xmlparser.parse(infile)
+            doc, error = xmlparser.parse(infile)        
         assert not error
         assert doc.validate([]) == []
         return doc

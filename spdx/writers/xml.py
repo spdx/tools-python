@@ -1,4 +1,3 @@
-
 # Copyright (c) the SPDX tools authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,6 +28,6 @@ def write_document(document, out, validate=True):
             raise InvalidDocumentError(messages)
 
     writer = Writer(document)
-    document_object = {'SpdxDocument': writer.create_document()}
+    document_object = {"SpdxDocument": writer.create_document()}
 
-    xmltodict.unparse(document_object, out, encoding='utf-8', pretty=True)
+    xmltodict.unparse(document_object, out, encoding="utf-8", pretty=True)

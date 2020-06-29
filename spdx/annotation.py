@@ -1,4 +1,3 @@
-
 # Copyright (c) 2018 Yash M. Nisar
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,8 +39,14 @@ class Annotation(object):
     Type: str.
     """
 
-    def __init__(self, annotator=None, annotation_date=None, comment=None,
-                 annotation_type=None, spdx_id=None):
+    def __init__(
+        self,
+        annotator=None,
+        annotation_date=None,
+        comment=None,
+        annotation_type=None,
+        spdx_id=None,
+    ):
         self.annotator = annotator
         self.annotation_date = annotation_date
         self.comment = comment
@@ -50,15 +55,17 @@ class Annotation(object):
 
     def __eq__(self, other):
         return (
-            isinstance(other, Annotation) and self.annotator == other.annotator
+            isinstance(other, Annotation)
+            and self.annotator == other.annotator
             and self.annotation_date == other.annotation_date
             and self.comment == other.comment
         )
 
     def __lt__(self, other):
-        return (
-            (self.annotator, self.annotation_date, self.comment) <
-            (other.annotator, other.annotation_date, other.comment,)
+        return (self.annotator, self.annotation_date, self.comment) < (
+            other.annotator,
+            other.annotation_date,
+            other.comment,
         )
 
     def set_annotation_date_now(self):
@@ -85,26 +92,24 @@ class Annotation(object):
 
     def validate_annotator(self, messages):
         if self.annotator is None:
-            messages = messages + ['Annotation missing annotator.']
+            messages = messages + ["Annotation missing annotator."]
 
         return messages
 
     def validate_annotation_date(self, messages):
         if self.annotation_date is None:
-            messages = messages + ['Annotation missing annotation date.']
+            messages = messages + ["Annotation missing annotation date."]
 
         return messages
 
     def validate_annotation_type(self, messages):
         if self.annotation_type is None:
-            messages = messages + ['Annotation missing annotation type.']
+            messages = messages + ["Annotation missing annotation type."]
 
         return messages
 
     def validate_spdx_id(self, messages):
         if self.spdx_id is None:
-            messages = messages + [
-                'Annotation missing SPDX Identifier Reference.'
-            ]
+            messages = messages + ["Annotation missing SPDX Identifier Reference."]
 
         return messages

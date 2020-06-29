@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -22,24 +21,24 @@ from spdx.version import Version
 
 
 _base_dir = os.path.dirname(__file__)
-_licenses = os.path.join(_base_dir, 'licenses.json')
-_exceptions = os.path.join(_base_dir, 'exceptions.json')
+_licenses = os.path.join(_base_dir, "licenses.json")
+_exceptions = os.path.join(_base_dir, "exceptions.json")
 
 
-def _load_list(file_name, object_type='licenses', id_attribute='licenseId'):
+def _load_list(file_name, object_type="licenses", id_attribute="licenseId"):
     """
     Return a list version tuple and a mapping of licenses
     name->id and id->name loaded from a JSON file
     from https://github.com/spdx/license-list-data
     """
     licenses_map = {}
-    with codecs.open(file_name, 'rb', encoding='utf-8') as lics:
+    with codecs.open(file_name, "rb", encoding="utf-8") as lics:
         licenses = json.load(lics)
-    version = tuple(licenses['licenseListVersion'].split('.'))
+    version = tuple(licenses["licenseListVersion"].split("."))
     for lic in licenses[object_type]:
-        if lic.get('isDeprecatedLicenseId'):
+        if lic.get("isDeprecatedLicenseId"):
             continue
-        name = lic['name']
+        name = lic["name"]
         identifier = lic[id_attribute]
         licenses_map[name] = identifier
         licenses_map[identifier] = name
@@ -52,7 +51,7 @@ def load_license_list(file_name):
     name->id and id->name loaded from a JSON file
     from https://github.com/spdx/license-list-data
     """
-    return _load_list(file_name, object_type='licenses', id_attribute='licenseId')
+    return _load_list(file_name, object_type="licenses", id_attribute="licenseId")
 
 
 def load_exception_list(file_name):
@@ -61,7 +60,9 @@ def load_exception_list(file_name):
     name->id and id->name loaded from a JSON file
     from https://github.com/spdx/license-list-data
     """
-    return _load_list(file_name, object_type='exceptions', id_attribute='licenseExceptionId')
+    return _load_list(
+        file_name, object_type="exceptions", id_attribute="licenseExceptionId"
+    )
 
 
 (_lmajor, _lminor), LICENSE_MAP = load_license_list(_licenses)
