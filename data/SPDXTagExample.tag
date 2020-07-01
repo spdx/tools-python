@@ -24,9 +24,15 @@ ReviewComment: <text>Another example reviewer.</text>
 ## Annotation Information
 Annotator: Person: Jim Annotator
 AnnotationType: REVIEW
-AnnotationDate: 2012-03-11T00:00:00Z
+AnnotationDate: 2010-01-29T18:30:22Z
 AnnotationComment: <text>An example annotation comment.</text>
 SPDXREF: SPDXRef-45
+
+## Relationships
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package
+Relationship: SPDXRef-DOCUMENT COPY_OF DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement
+Relationship: SPDXRef-DOCUMENT CONTAINS SPDXRef-Package
 
 ## Package Information
 PackageName: SPDX Translator

@@ -28,6 +28,12 @@ AnnotationDate: 2012-03-11T00:00:00Z
 AnnotationComment: <text>An example annotation comment.</text>
 SPDXREF: SPDXRef-45
 
+## Relationships
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package
+Relationship: SPDXRef-DOCUMENT COPY_OF DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement
+Relationship: SPDXRef-DOCUMENT CONTAINS SPDXRef-Package
+
 ## Package Information
 PackageName: SPDX Translator
 SPDXID: SPDXRef-Package

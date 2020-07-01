@@ -115,6 +115,12 @@
         <annotator>Person: Jim Reviewer</annotator>
       </Annotation>
     </annotation>
+    <relationship>
+      <Relationship>
+        <relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>
+        <relatedSpdxElement rdf:resource="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package"/>
+      </Relationship>
+    </relationship>
     <referencesFile>
       <File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File2">
         <copyrightText>Copyright 2010, 2011 Source Auditor Inc.</copyrightText>

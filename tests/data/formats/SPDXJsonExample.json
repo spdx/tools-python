@@ -127,7 +127,44 @@
                 "annotationDate": "2012-06-13T00:00:00Z", 
                 "annotator": "Person: Jim Reviewer"
             }
-        ], 
+        ],
+        "relationships" : [ {
+    "spdxElementId" : "SPDXRef-DOCUMENT",
+    "relatedSpdxElement" : "SPDXRef-Package",
+    "relationshipType" : "CONTAINS"
+  }, {
+    "spdxElementId" : "SPDXRef-DOCUMENT",
+    "relatedSpdxElement" : "SPDXRef-File",
+    "relationshipType" : "DESCRIBES"
+  }, {
+    "spdxElementId" : "SPDXRef-DOCUMENT",
+    "relatedSpdxElement" : "DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement",
+    "relationshipType" : "COPY_OF"
+  }, {
+    "spdxElementId" : "SPDXRef-DOCUMENT",
+    "relatedSpdxElement" : "SPDXRef-Package",
+    "relationshipType" : "DESCRIBES"
+  }, {
+    "spdxElementId" : "SPDXRef-Package",
+    "relatedSpdxElement" : "SPDXRef-Saxon",
+    "relationshipType" : "DYNAMIC_LINK"
+  }, {
+    "spdxElementId" : "SPDXRef-Package",
+    "relatedSpdxElement" : "SPDXRef-JenaLib",
+    "relationshipType" : "CONTAINS"
+  }, {
+    "spdxElementId" : "SPDXRef-CommonsLangSrc",
+    "relatedSpdxElement" : "NOASSERTION",
+    "relationshipType" : "GENERATED_FROM"
+  }, {
+    "spdxElementId" : "SPDXRef-JenaLib",
+    "relatedSpdxElement" : "SPDXRef-Package",
+    "relationshipType" : "CONTAINS"
+  }, {
+    "spdxElementId" : "SPDXRef-File",
+    "relatedSpdxElement" : "SPDXRef-fromDoap-0",
+    "relationshipType" : "GENERATED_FROM"
+  } ], 
         "dataLicense": "CC0-1.0", 
         "reviewers": [
             {
