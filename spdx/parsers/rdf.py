@@ -1087,141 +1087,142 @@ class RelationshipParser(BaseParser):
         if relationship_comment is not None:
             self.builder.add_relationship_comment(self.doc, relationship_comment)
 
-        def get_relationship(self, subject_term, relation_term):
-            """
-            Returns a string with relationship type and the related elements.
-            """
-            relation_subject = six.text_type(subject_term.split("#")[1])
+    def get_relationship(self, subject_term, relation_term):
+        """
+        Returns a string with relationship type and the related elements.
+        """
+        relation_subject = six.text_type(subject_term.split("#")[1])
 
-            for _, _, rtype in self.graph.triples(
-                (relation_term, self.spdx_namespace["relationshipType"], None)
-            ):
-                try:
-                    if rtype.endswith("describes"):
-                        rtype = "DESCRIBES"
-                    elif rtype.endswith("describedBy"):
-                        rtype = "DESCRIBED_BY"
-                    elif rtype.endswith("contains"):
-                        rtype = "CONTAINS"
-                    elif rtype.endswith("containedBy"):
-                        rtype = "CONTAINED_BY"
-                    elif rtype.endswith("dependsOn"):
-                        rtype = "DEPENDS_ON"
-                    elif rtype.endswith("dependencyOf"):
-                        rtype = "DEPENDENCY_OF"
-                    elif rtype.endswith("dependencyManifestOf"):
-                        rtype = "DEPENDENCY_MANIFEST_OF"
-                    elif rtype.endswith("buildDependencyOf"):
-                        rtype = "BUILD_DEPENDENCY_OF"
-                    elif rtype.endswith("devDependencyOf"):
-                        rtype = "DEV_DEPENDENCY_OF"
-                    elif rtype.endswith("optionalDependencyOf"):
-                        rtype = "OPTIONAL_DEPENDENCY_OF"
-                    elif rtype.endswith("providedDependencyOf"):
-                        rtype = "PROVIDED_DEPENDENCY_OF"
-                    elif rtype.endswith("testDependencyOf"):
-                        rtype = "TEST_DEPENDENCY_OF"
-                    elif rtype.endswith("runtimeDependencyOf"):
-                        rtype = "RUNTIME_DEPENDENCY_OF"
-                    elif rtype.endswith("exampleOf"):
-                        rtype = "EXAMPLE_OF"
-                    elif rtype.endswith("generates"):
-                        rtype = "GENERATES"
-                    elif rtype.endswith("generatedFrom"):
-                        rtype = "GENERATED_FROM"
-                    elif rtype.endswith("ancestorOf"):
-                        rtype = "ANCESTOR_OF"
-                    elif rtype.endswith("descendantOf"):
-                        rtype = "DESCENDANT_OF"
-                    elif rtype.endswith("variantOf"):
-                        rtype = "VARIANT_OF"
-                    elif rtype.endswith("distributionArtifact"):
-                        rtype = "DISTRIBUTION_ARTIFACT"
-                    elif rtype.endswith("patchFor"):
-                        rtype = "PATCH_FOR"
-                    elif rtype.endswith("patchApplied"):
-                        rtype = "PATCH_APPLIED"
-                    elif rtype.endswith("copyOf"):
-                        rtype = "COPY_OF"
-                    elif rtype.endswith("fileAdded"):
-                        rtype = "FILE_ADDED"
-                    elif rtype.endswith("fileDeleted"):
-                        rtype = "FILE_DELETED"
-                    elif rtype.endswith("fileModified"):
-                        rtype = "FILE_MODIFIED"
-                    elif rtype.endswith("expandedFromArchive"):
-                        rtype = "EXPANDED_FROM_ARCHIVE"
-                    elif rtype.endswith("dynamicLink"):
-                        rtype = "DYNAMIC_LINK"
-                    elif rtype.endswith("staticLink"):
-                        rtype = "STATIC_LINK"
-                    elif rtype.endswith("dataFileOf"):
-                        rtype = "DATA_FILE_OF"
-                    elif rtype.endswith("testCaseOf"):
-                        rtype = "TEST_CASE_OF"
-                    elif rtype.endswith("buildToolOf"):
-                        rtype = "BUILD_TOOL_OF"
-                    elif rtype.endswith("devToolOf"):
-                        rtype = "DEV_TOOL_OF"
-                    elif rtype.endswith("testOf"):
-                        rtype = "TEST_OF"
-                    elif rtype.endswith("testToolOf"):
-                        rtype = "TEST_TOOL_OF"
-                    elif rtype.endswith("documentationOf"):
-                        rtype = "DOCUMENTATION_OF"
-                    elif rtype.endswith("optionalComponentOf"):
-                        rtype = "OPTIONAL_COMPONENT_OF"
-                    elif rtype.endswith("metafileOf"):
-                        rtype = "METAFILE_OF"
-                    elif rtype.endswith("packageOf"):
-                        rtype = "PACKAGE_OF"
-                    elif rtype.endswith("amends"):
-                        rtype = "AMENDS"
-                    elif rtype.endswith("prerequisiteFor"):
-                        rtype = "PREREQUISITE_FOR"
-                    elif rtype.endswith("hasPrerequisite"):
-                        rtype = "HAS_PREREQUISITE"
-                    elif rtype.endswith("other"):
-                        rtype = "OTHER"
-
-                except SPDXValueError:
-                    self.value_error("RELATIONSHIP", rtype)
-
+        for _, _, rtype in self.graph.triples(
+            (relation_term, self.spdx_namespace["relationshipType"], None)
+        ):
             try:
-                for sub, pre, rel_ele in self.graph.triples(
-                    (relation_term, self.spdx_namespace["relatedSpdxElement"], None)
-                ):
-                    related_element = six.text_type(rel_ele.split("#")[1])
-            except:
-                related_element = None
+                if rtype.endswith("describes"):
+                    rtype = "DESCRIBES"
+                elif rtype.endswith("describedBy"):
+                    rtype = "DESCRIBED_BY"
+                elif rtype.endswith("contains"):
+                    rtype = "CONTAINS"
+                elif rtype.endswith("containedBy"):
+                    rtype = "CONTAINED_BY"
+                elif rtype.endswith("dependsOn"):
+                    rtype = "DEPENDS_ON"
+                elif rtype.endswith("dependencyOf"):
+                    rtype = "DEPENDENCY_OF"
+                elif rtype.endswith("dependencyManifestOf"):
+                    rtype = "DEPENDENCY_MANIFEST_OF"
+                elif rtype.endswith("buildDependencyOf"):
+                    rtype = "BUILD_DEPENDENCY_OF"
+                elif rtype.endswith("devDependencyOf"):
+                    rtype = "DEV_DEPENDENCY_OF"
+                elif rtype.endswith("optionalDependencyOf"):
+                    rtype = "OPTIONAL_DEPENDENCY_OF"
+                elif rtype.endswith("providedDependencyOf"):
+                    rtype = "PROVIDED_DEPENDENCY_OF"
+                elif rtype.endswith("testDependencyOf"):
+                    rtype = "TEST_DEPENDENCY_OF"
+                elif rtype.endswith("runtimeDependencyOf"):
+                    rtype = "RUNTIME_DEPENDENCY_OF"
+                elif rtype.endswith("exampleOf"):
+                    rtype = "EXAMPLE_OF"
+                elif rtype.endswith("generates"):
+                    rtype = "GENERATES"
+                elif rtype.endswith("generatedFrom"):
+                    rtype = "GENERATED_FROM"
+                elif rtype.endswith("ancestorOf"):
+                    rtype = "ANCESTOR_OF"
+                elif rtype.endswith("descendantOf"):
+                    rtype = "DESCENDANT_OF"
+                elif rtype.endswith("variantOf"):
+                    rtype = "VARIANT_OF"
+                elif rtype.endswith("distributionArtifact"):
+                    rtype = "DISTRIBUTION_ARTIFACT"
+                elif rtype.endswith("patchFor"):
+                    rtype = "PATCH_FOR"
+                elif rtype.endswith("patchApplied"):
+                    rtype = "PATCH_APPLIED"
+                elif rtype.endswith("copyOf"):
+                    rtype = "COPY_OF"
+                elif rtype.endswith("fileAdded"):
+                    rtype = "FILE_ADDED"
+                elif rtype.endswith("fileDeleted"):
+                    rtype = "FILE_DELETED"
+                elif rtype.endswith("fileModified"):
+                    rtype = "FILE_MODIFIED"
+                elif rtype.endswith("expandedFromArchive"):
+                    rtype = "EXPANDED_FROM_ARCHIVE"
+                elif rtype.endswith("dynamicLink"):
+                    rtype = "DYNAMIC_LINK"
+                elif rtype.endswith("staticLink"):
+                    rtype = "STATIC_LINK"
+                elif rtype.endswith("dataFileOf"):
+                    rtype = "DATA_FILE_OF"
+                elif rtype.endswith("testCaseOf"):
+                    rtype = "TEST_CASE_OF"
+                elif rtype.endswith("buildToolOf"):
+                    rtype = "BUILD_TOOL_OF"
+                elif rtype.endswith("devToolOf"):
+                    rtype = "DEV_TOOL_OF"
+                elif rtype.endswith("testOf"):
+                    rtype = "TEST_OF"
+                elif rtype.endswith("testToolOf"):
+                    rtype = "TEST_TOOL_OF"
+                elif rtype.endswith("documentationOf"):
+                    rtype = "DOCUMENTATION_OF"
+                elif rtype.endswith("optionalComponentOf"):
+                    rtype = "OPTIONAL_COMPONENT_OF"
+                elif rtype.endswith("metafileOf"):
+                    rtype = "METAFILE_OF"
+                elif rtype.endswith("packageOf"):
+                    rtype = "PACKAGE_OF"
+                elif rtype.endswith("amends"):
+                    rtype = "AMENDS"
+                elif rtype.endswith("prerequisiteFor"):
+                    rtype = "PREREQUISITE_FOR"
+                elif rtype.endswith("hasPrerequisite"):
+                    rtype = "HAS_PREREQUISITE"
+                elif rtype.endswith("other"):
+                    rtype = "OTHER"
 
-            try:
-                if related_element == None:
-                    return self.builder.create_entity(self.doc, six.text_type(relation_subject + " " + rtype))
-                else:
-                    return  self.builder.create_entity(self.doc, six.text_type(relation_subject + " " + rtype + " " + related_element))
-            
             except SPDXValueError:
-                self.value_error('RELATIONSHIP_VALUE', relation_subject + " " + rtype)
+                self.value_error("RELATIONSHIP", rtype)
 
+        try:
+            for sub, pre, rel_ele in self.graph.triples(
+                (relation_term, self.spdx_namespace["relatedSpdxElement"], None)
+            ):
+                related_element = six.text_type(rel_ele.split("#")[1])
+        except:
+            related_element = None
 
-        def relationship_comment(self, relation_term):
-            """
-            Returns relationship comment or None if found none or more than one.
-            Reports errors.
-            """
-
-            comment_list = list(self.graph.triples((relation_term, RDFS.comment, None)))
-            if len(comment_list) == 0:
-                return None
+        try:
+            if related_element == None:
+                return six.text_type(relation_subject + " " + rtype)
             else:
-                if len(comment_list) > 1:
-                    self.error = True
-                    msg = "Relationship can have at most one comment."
-                    self.logger.log(msg)
-                    return
-                else:
-                    return six.text_type(comment_list[0][2])
+                return six.text_type(
+                    relation_subject + " " + rtype + " " + related_element
+                )
+
+        except SPDXValueError:
+            self.value_error("RELATIONSHIP_VALUE", relation_subject + " " + rtype)
+
+    def get_relationship_comment(self, relation_term):
+        """
+        Returns relationship comment or None if found none or more than one.
+        Reports errors.
+        """
+
+        comment_list = list(self.graph.triples((relation_term, RDFS.comment, None)))
+        if len(comment_list) == 0:
+            return None
+        else:
+            if len(comment_list) > 1:
+                self.error = True
+                msg = "Relationship can have at most one comment."
+                self.logger.log(msg)
+                return
+            else:
+                return six.text_type(comment_list[0][2])
 
 
 class Parser(

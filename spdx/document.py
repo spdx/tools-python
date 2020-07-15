@@ -271,7 +271,7 @@ class Document(object):
     - annotations: SPDX document annotation information, Optional zero or more.
       Type: Annotation.
     - snippet: Snippet information. Optional zero or more. Type: Snippet.
-    - relationship : Relationship between two SPDX elements. Optional zero or more.
+    - relationships : Relationship between two SPDX elements. Optional zero or more.
       Type: Relationship. 
     """
 
@@ -300,8 +300,8 @@ class Document(object):
         self.extracted_licenses = []
         self.reviews = []
         self.annotations = []
-        self.snippet = []
         self.relationships = []
+        self.snippet = []
 
     def add_review(self, review):
         self.reviews.append(review)
@@ -349,8 +349,8 @@ class Document(object):
         messages = self.validate_extracted_licenses(messages)
         messages = self.validate_reviews(messages)
         messages = self.validate_snippet(messages)
-        messages = self.validate_annotations(messages)
-        messages = self.validate_relationships(messages)
+        # messages = self.validate_annotations(messages)
+        # messages = self.validate_relationships(messages)
 
         return messages
 

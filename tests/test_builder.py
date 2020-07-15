@@ -454,11 +454,6 @@ class TestRelationshipBuilder(TestCase):
         assert self.builder.add_relationship_comment(self.document, comment)
 
     @testing_utils.raises(builders.SPDXValueError)
-    def test_incorrect_relationship_value(self):
-        relationship_type = "SPDXRef-DOCUMENT unknown SPDXRef-File"
-        self.builder.add_relationship(self.document, relationship_type)
-
-    @testing_utils.raises(builders.SPDXValueError)
     def test_relationship_comment_value(self):
         comment = "<text>Relationship Comment<text>"
         self.add_relationship()
