@@ -14,10 +14,55 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from functools import total_ordering
+from enum import Enum, auto
 
 
-@total_ordering
+class RelationshipType(Enum):
+    AMENDS = auto()
+    OTHER = auto()
+    COPY_OF = auto()
+    TEST_OF = auto()
+    ANCESTOR_OF = auto()
+    BUILD_DEPENDENCY_OF = auto()
+    BUILD_TOOL_OF = auto()
+    CONTAINED_BY = auto()
+    CONTAINS = auto()
+    DATA_FILE_OF = auto()
+    DEPENDENCY_MANIFEST_OF = auto()
+    DEPENDENCY_OF = auto()
+    DEPENDS_ON = auto()
+    DESCENDANT_OF = auto()
+    DESCRIBED_BY = auto()
+    DESCRIBES = auto()
+    DEV_DEPENDENCY_OF = auto()
+    DEV_TOOL_OF = auto()
+    DISTRIBUTION_ARTIFACT = auto()
+    DOCUMENTATION_OF = auto()
+    DYNAMIC_LINK = auto()
+    EXAMPLE_OF = auto()
+    EXPANDED_FROM_ARCHIVE = auto()
+    FILE_ADDED = auto()
+    FILE_DELETED = auto()
+    FILE_MODIFIED = auto()
+    GENERATED_FROM = auto()
+    GENERATES = auto()
+    HAS_PREREQUISITE = auto()
+    METAFILE_OF = auto()
+    OPTIONAL_COMPONENT_OF = auto()
+    OPTIONAL_DEPENDENCY_OF = auto()
+    PACKAGE_OF = auto()
+    PATCH_APPLIED = auto()
+    PATCH_FOR = auto()
+    PREREQUISITE_FOR = auto()
+    PROVIDED_DEPENDENCY_OF = auto()
+    RUNTIME_DEPENDENCY_OF = auto()
+    STATIC_LINK = auto()
+    TEST_CASE_OF = auto()
+    TEST_DEPENDENCY_OF = auto()
+    TEST_TOOL_OF = auto()
+    VARIANT_OF = auto()
+
+
 class Relationship(object):
     """
     Document relationship information
@@ -29,19 +74,6 @@ class Relationship(object):
     def __init__(self, relationship=None, relationship_comment=None):
         self.relationship = relationship
         self.relationship_comment = relationship_comment
-
-    def __eq__(self, other):
-        return (
-            isinstance(other, Relationship)
-            and self.relationship == other.relationship
-            and self.relationship_comment == other.relationship_comment
-        )
-
-    def __lt__(self, other):
-        return (self.relationship, self.relationship_comment) < (
-            other.relationship,
-            other.relationship_comment,
-        )
 
     @property
     def has_comment(self):
@@ -58,53 +90,7 @@ class Relationship(object):
     def validate_relationship(self, messages):
         messages = messages if messages is not None else []
         r_type = self.relationship.split(" ")[1]
-        if r_type not in [
-            None,
-            "AMENDS",
-            "OTHER",
-            "COPY_OF",
-            "TEST_OF",
-            "ANCESTOR_OF",
-            "BUILD_DEPENDENCY_OF",
-            "BUILD_TOOL_OF",
-            "CONTAINED_BY",
-            "CONTAINS",
-            "DATA_FILE_OF",
-            "DEPENDENCY_MANIFEST_OF",
-            "DEPENDENCY_OF",
-            "DEPENDS_ON",
-            "DESCENDANT_OF",
-            "DESCRIBED_BY",
-            "DESCRIBES",
-            "DEV_DEPENDENCY_OF",
-            "DEV_TOOL_OF",
-            "DISTRIBUTION_ARTIFACT",
-            "DOCUMENTATION_OF",
-            "DYNAMIC_LINK",
-            "EXAMPLE_OF",
-            "EXPANDED_FROM_ARCHIVE",
-            "FILE_ADDED",
-            "FILE_DELETED",
-            "FILE_MODIFIED",
-            "GENERATED_FROM",
-            "GENERATES",
-            "HAS_PREREQUISITE",
-            "METAFILE_OF",
-            "OPTIONAL_COMPONENT_OF",
-            "OPTIONAL_DEPENDENCY_OF",
-            "PACKAGE_OF",
-            "PATCH_APPLIED",
-            "PATCH_FOR",
-            "PREREQUISITE_FOR",
-            "PROVIDED_DEPENDENCY_OF",
-            "RUNTIME_DEPENDENCY_OF",
-            "STATIC_LINK",
-            "TEST_CASE_OF",
-            "TEST_DEPENDENCY_OF",
-            "TEST_TOOL_OF",
-            "VARIANT_OF",
-        ]:
-
+        if r_type not in [name for name, _ in RelationshipType.__members__.items()]:
             messages = messages + [
                 "Relationship type must be one of the constants defined in "
                 "class spdx.relationship.Relationship"
