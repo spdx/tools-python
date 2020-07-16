@@ -461,9 +461,8 @@ class RelationshipParser(BaseParser):
         """
         if isinstance(relationshiptype, six.string_types):
             relate = spdxelementid + " " + relationshiptype + " " + relatedspdxelement
-            entity = self.builder.create_entity(self.document, relate)
             try:
-                return self.builder.add_relationship(self.document, entity)
+                return self.builder.add_relationship(self.document, relate)
             except SPDXValueError:
                 self.value_error("RELATIONSHIP_VALUE", relate)
         else:
