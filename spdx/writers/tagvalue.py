@@ -89,14 +89,16 @@ def write_annotation(annotation, out):
         write_value("SPDXREF", annotation.spdx_id, out)
 
 
-def write_relationship(relationship, out):
+def write_relationship(relationship_term, out):
     """
     Write the fields of relationships to out.
     """
     out.write("# Relationships\n\n")
-    write_value("Relationship", relationship.relationship, out)
-    if relationship.has_comment:
-        write_text_value("RelationshipComment", relationship.relationship_comment, out)
+    write_value("Relationship", relationship_term.relationship, out)
+    if relationship_term.has_comment:
+        write_text_value(
+            "RelationshipComment", relationship_term.relationship_comment, out
+        )
 
 
 def write_file_type(ftype, out):
@@ -344,8 +346,8 @@ def write_document(document, out, validate=True):
         write_annotation(annotation, out)
         write_separators(out)
 
-    # Write sorted relationships
-    for relationship in sorted(document.relationships):
+    # Write relationships
+    for relationship in document.relationships:
         write_relationship(relationship, out)
         write_separators(out)
 

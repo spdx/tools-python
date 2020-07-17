@@ -523,12 +523,11 @@ class RelationshipInfoWriter(BaseWriter):
         """
         Return an relationship node.
         """
-        relationship_node = BNode()
+        relationship_node = URIRef(str(relationship.spdxelementid))
         type_triple = (relationship_node, RDF.type, self.spdx_namespace.Relationship)
         self.graph.add(type_triple)
 
-        relationship_split = relationship.relationship
-        relationship_type_node = Literal(relationship_split.split(" ")[1])
+        relationship_type_node = Literal(relationship.relationshiptype)
         self.graph.add(
             (
                 relationship_node,
@@ -536,7 +535,7 @@ class RelationshipInfoWriter(BaseWriter):
                 relationship_type_node,
             )
         )
-        related_spdx_node = Literal(relationship_split.split(" ")[2])
+        related_spdx_node = Literal(relationship.relatedspdxelement)
         related_spdx_triple = (
             relationship_node,
             self.spdx_namespace.relatedSpdxElement,
@@ -994,10 +993,10 @@ class Writer(
         package_node = self.packages()
         package_triple = (doc_node, self.spdx_namespace.describesPackage, package_node)
         self.graph.add(package_triple)
-        # Add relationship
+        """# Add relationship
         relate_node = self.relationships()
         relate_triple = (doc_node, self.spdx_namespace.relationship, relate_node)
-        self.graph.add(relate_triple)
+        self.graph.add(relate_triple)"""
         # Add snippet
         snippet_nodes = self.snippets()
         for snippet in snippet_nodes:

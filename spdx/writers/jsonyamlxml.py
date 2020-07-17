@@ -306,14 +306,15 @@ class RelationshipInfoWriter(BaseWriter):
     def create_relationship_info(self):
         relationship_objects = []
 
-        for relationship in self.document.relationships:
+        for relationship_term in self.document.relationships:
             relationship_object = dict()
-            relationship_split = relationship.relationship.split(" ")
-            relationship_object["spdxElementId"] = relationship_split[0]
-            relationship_object["relatedSpdxElement"] = relationship_split[2]
-            relationship_object["relationshipType"] = relationship_split[1]
-            if relationship.has_comment:
-                relationship_object["comment"] = relationship.relationship_comment
+            relationship_object["spdxElementId"] = relationship_term.spdxelementid
+            relationship_object[
+                "relatedSpdxElement"
+            ] = relationship_term.relatedspdxelement
+            relationship_object["relationshipType"] = relationship_term.relationshiptype
+            if relationship_term.has_comment:
+                relationship_object["comment"] = relationship_term.relationship_comment
 
             relationship_objects.append(relationship_object)
 

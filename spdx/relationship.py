@@ -89,6 +89,18 @@ class Relationship(object):
     def has_comment(self):
         return self.relationship_comment is not None
 
+    @property
+    def spdxelementid(self):
+        return self.relationship.split(" ")[0]
+
+    @property
+    def relationshiptype(self):
+        return self.relationship.split(" ")[1]
+
+    @property
+    def relatedspdxelement(self):
+        return self.relationship.split(" ")[2]
+
     def validate(self, messages):
         """Returns True if all the fields are valid.
         Appends any error messages to messages parameter.
