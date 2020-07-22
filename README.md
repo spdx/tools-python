@@ -11,6 +11,15 @@
 [5]: https://ci.appveyor.com/api/projects/status/0bf9glha2yg9x8ef/branch/master?svg=true
 [6]: https://ci.appveyor.com/project/spdx/tools-python/branch/master
 
+# Project Details
+This is a local branch made from SPDX-tools-python. This branch is produced to show the results of CommunityBirdge Project by Yash Varshney.
+FOR MORE DETAILS: [project_details.md](https://github.com/Yash-Varshney/tools-python/blob/community-2/project_details.md)
+
+
+
+
+# Information
+
 This library implements an SPDX tag/value and RDF parser, validator and handler in Python.
 This is the result of an initial GSoC contribution by @[ah450](https://github.com/ah450) (or https://github.com/a-h-i) and 
 is maintained by a community of SPDX adopters and enthusiasts.
