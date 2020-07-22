@@ -10,6 +10,8 @@ NOTE : Using BLACK linter for formatting python code.
 ### Tasks
 * The first task is to add 'Relationship' class in the tool, so that all the parsers i.e. rdf/xml parser, json parser, yaml parser can now also  
   parse the relationship attribute in the format provided.
+
+* Starting with adding attribute text in package, files and snippets. ( NEW FEATURE IN 2.2 specs. )
        
  **( Will be adding details of new tasks after completing the previous ones )**
 
@@ -57,6 +59,8 @@ Creating this to keep track of my own work .
 |Day 11| added builders for relationship in jsonyamlxmlbuilders.py (NOT WORKING)|
 |Day 12| added relationship writer for rdf, tagvalue, jsonyamlxml.|
 |Day 13| added tests for relationships in tests.test_builder.py , also coding for eval 1 is complete, DEBUGGING phase begins.|
+|----|----FIRST EVALUATION------- |
+|Day 22 | added attribution_text in package.py |
 
 
 
