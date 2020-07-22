@@ -1,4 +1,3 @@
-
 # Copyright (c) Xavier Figueroa
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,19 +26,35 @@ class Parser(jsonyamlxml.Parser):
     RDF and TV Parser classes (i.e., spdx.parsers.<format name>.Parser) for XML parser.
     It also avoids to repeat jsonyamlxml.Parser.parse code for JSON, YAML and XML parsers
     """
+
     def __init__(self, builder, logger):
         super(Parser, self).__init__(builder, logger)
         self.LIST_LIKE_FIELDS = {
-            'creators', 'externalDocumentRefs', 'extractedLicenseInfos',
-            'seeAlso', 'annotations', 'snippets', 'licenseInfoFromSnippet', 'reviewers', 'fileTypes',
-            'licenseInfoFromFiles', 'artifactOf', 'fileContributors', 'fileDependencies',
-            'excludedFilesNames', 'files', 'documentDescribes'
+            "creators",
+            "externalDocumentRefs",
+            "extractedLicenseInfos",
+            "seeAlso",
+            "annotations",
+            "relationships",
+            "snippets",
+            "licenseInfoFromSnippet",
+            "reviewers",
+            "fileTypes",
+            "licenseInfoFromFiles",
+            "artifactOf",
+            "fileContributors",
+            "fileDependencies",
+            "excludedFilesNames",
+            "files",
+            "documentDescribes",
         }
 
     def parse(self, file):
-        parsed_xml = xmltodict.parse(file.read(), strip_whitespace=False, encoding='utf-8')
+        parsed_xml = xmltodict.parse(
+            file.read(), strip_whitespace=False, encoding="utf-8"
+        )
         fixed_object = self._set_in_list(parsed_xml, self.LIST_LIKE_FIELDS)
-        self.document_object = fixed_object.get('SpdxDocument').get('Document')
+        self.document_object = fixed_object.get("SpdxDocument").get("Document")
         return super(Parser, self).parse()
 
     def _set_in_list(self, data, keys):
