@@ -358,6 +358,7 @@ class PackageParser(LicenseParser):
         self.p_pkg_chk_sum(p_term, self.spdx_namespace["checksum"])
         self.p_pkg_src_info(p_term, self.spdx_namespace["sourceInfo"])
         self.p_pkg_verif_code(p_term, self.spdx_namespace["packageVerificationCode"])
+        self.p_pkg_attribution_text(p_term, self.spdx_namespace["attributionText"])
         self.p_pkg_lic_conc(p_term, self.spdx_namespace["licenseConcluded"])
         self.p_pkg_lic_decl(p_term, self.spdx_namespace["licenseDeclared"])
         self.p_pkg_lics_info_from_files(
@@ -398,6 +399,15 @@ class PackageParser(LicenseParser):
                 self.builder.set_pkg_comment(self.doc, six.text_type(comment))
         except CardinalityError:
             self.more_than_one_error("package comment")
+
+    def p_pkg_attribution_text(self, p_term, predicate):
+        try:
+            for _, _, attribute_text in self.graph.triples((p_term, predicate, None)):
+                self.builder.set_pkg_attribution_text(
+                    self.doc, six.text_type(attribute_text)
+                )
+        except CardinalityError:
+            self.more_than_one_error("package attribution text")
 
     def p_pkg_comments_on_lics(self, p_term, predicate):
         for _, _, comment in self.graph.triples((p_term, predicate, None)):
