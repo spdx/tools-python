@@ -65,6 +65,7 @@ class Lexer(object):
         "PackageHomePage": "PKG_HOME",
         "ExternalRef": "PKG_EXT_REF",
         "ExternalRefComment": "PKG_EXT_REF_COMMENT",
+        "PackageAttributionText": "PKG_ATTRIBUTION_TEXT",
         # Files
         "FileName": "FILE_NAME",
         "FileType": "FILE_TYPE",

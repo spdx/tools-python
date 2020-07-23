@@ -75,6 +75,7 @@ ERROR_MESSAGES = {
     "PKG_LIC_FFILE_VALUE": "PackageLicenseInfoFromFiles must be, line: {0}",
     "PKG_LICS_DECL_VALUE": "PackageLicenseDeclared must be NOASSERTION, NONE, license identifier or license list, line: {0}",
     "PKG_LICS_COMMENT_VALUE": "PackageLicenseComments must be free form text, line: {0}",
+    "PKG_ATTRIBUTION_TEXT_VALUE": "PackageAttributionText must be free form text, line: {0}",
     "PKG_SUM_VALUE": "PackageSummary must be free form text, line: {0}",
     "PKG_DESC_VALUE": "PackageDescription must be free form text, line: {0}",
     "PKG_COMMENT_VALUE": "PackageComment must be free form text, line: {0}",
@@ -175,6 +176,7 @@ class Parser(object):
                   | pkg_verif
                   | pkg_desc
                   | pkg_comment
+                  | pkg_attribution_text
                   | pkg_lic_decl
                   | pkg_lic_conc
                   | pkg_lic_ff
@@ -720,6 +722,27 @@ class Parser(object):
         """pkg_comment : PKG_COMMENT error"""
         self.error = True
         msg = ERROR_MESSAGES["PKG_COMMENT_VALUE"].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_pkg_attribution_text_1(self, p):
+        """pkg_attribution_text : PKG_ATTRIBUTION TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding="utf-8")
+            else:
+                value = p[2]
+            self.builder.set_pkg_attribution_text(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error("PackageAttributionText", p.lineno(1))
+        except OrderError:
+            self.order_error(
+                "PackageAttributionText", "PackageAttributionText", p.lineno(1)
+            )
+
+    def p_pkg_attribution_text_2(self, p):
+        """pkg_attribution_text : PKG_ATTRIBUTION_TEXT error"""
+        self.error = True
+        msg = ERROR_MESSAGES["PKG_ATTRIBUTION_TEXT_VALUE"].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_pkg_summary_1(self, p):

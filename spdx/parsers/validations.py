@@ -105,6 +105,10 @@ def validate_pkg_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
+def validate_pkg_attribution_text(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
 def validate_pkg_ext_ref_category(value, optional=False):
     if value.upper() in ["SECURITY", "OTHER", "PACKAGE-MANAGER"]:
         return True

@@ -60,7 +60,8 @@ Creating this to keep track of my own work .
 |Day 12| added relationship writer for rdf, tagvalue, jsonyamlxml.|
 |Day 13| added tests for relationships in tests.test_builder.py , also coding for eval 1 is complete, DEBUGGING phase begins.|
 |----|----FIRST EVALUATION------- |
-|Day 22 | added attribution_text in package.py |
+|Day 22| added attribution_text in package.py |
+|Day 23| added attribution_text in rdf, tagvalue parsers & builders. |
 
 
 
