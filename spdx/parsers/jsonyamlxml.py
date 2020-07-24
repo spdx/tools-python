@@ -1020,6 +1020,7 @@ class PackageParser(BaseParser):
             self.parse_pkg_summary(package.get("summary"))
             self.parse_pkg_description(package.get("description"))
             self.parse_annotations(package.get("annotations"))
+            self.parse_pkg_attribution_text(package.get("attributionTexts"))
             self.parse_pkg_files(package.get("files"))
             self.parse_pkg_chksum(package.get("sha1"))
         else:
@@ -1264,6 +1265,12 @@ class PackageParser(BaseParser):
                     self.value_error("PKG_LIC_FRM_FILES", license_info_from_file)
         else:
             self.value_error("PKG_LIC_FRM_FILES_FIELD", license_info_from_files)
+
+    def parse_pkg_attribution_text(self, pkg_attribution_text):
+        """
+        TBC, raise an issue about the dataformat and name of attributionText in json format
+        use license_comment
+        """
 
     def parse_pkg_declared_license(self, pkg_declared_license):
         """
