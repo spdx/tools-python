@@ -28,6 +28,12 @@ Document:
         translates a spreadsheet to an SPDX RDF XML document and translates an SPDX
         RDFa document to an SPDX RDF XML document.
       downloadLocation: http://www.spdx.org/tools
+      attributionTexts:
+      - "The GNU C Library is free software.  See the file COPYING.LIB for copying conditions,\
+        \ and LICENSES for notices about a few contributions that require these additional\
+        \ notices to be distributed.  License copyright years may be listed using range\
+        \ notation, e.g., 1996-2015, indicating that every year in the range, inclusive,\
+        \ is a copyrightable year that would otherwise be listed individually."
       files:
       - File:
           checksums:
@@ -196,6 +202,16 @@ Document:
   id: SPDXRef-DOCUMENT
   name: Sample_Document-V2.1
   namespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
+  relationships:
+  - spdxElementId: "SPDXRef-DOCUMENT"
+    relatedSpdxElement: "SPDXRef-Package"
+    relationshipType: "DESCRIBES"
+  - spdxElementId: "SPDXRef-DOCUMENT"
+    relatedSpdxElement: "SPDXRef-Package"
+    relationshipType: "CONTAINS"
+  - spdxElementId: "SPDXRef-DOCUMENT"
+    relatedSpdxElement: "SPDXRef-File"
+    relationshipType: "DESCRIBES"
   reviewers:
   - comment: Another example reviewer.
     reviewDate: '2011-03-13T00:00:00Z'

@@ -42,6 +42,7 @@ PackageDownloadLocation: http://www.spdx.org/tools
 PackageSummary: <text>SPDX Translator utility</text>
 PackageSourceInfo: <text>Version 1.0 of the SPDX Translator application</text>
 PackageFileName: spdxtranslator-1.0.zip
+PackageAttributionText: <text>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</text>
 PackageSupplier: Organization:Linux Foundation
 PackageOriginator: Organization:SPDX
 PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12

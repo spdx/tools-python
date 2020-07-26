@@ -725,7 +725,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_pkg_attribution_text_1(self, p):
-        """pkg_attribution_text : PKG_ATTRIBUTION TEXT"""
+        """pkg_attribution_text : PKG_ATTRIBUTION_TEXT TEXT"""
         try:
             if six.PY2:
                 value = p[2].decode(encoding="utf-8")

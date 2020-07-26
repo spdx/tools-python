@@ -6,7 +6,8 @@
 		<documentDescribes>
 			<Package>
 				<id>SPDXRef-Package</id>
-				<originator>Organization: SPDX</originator>
+                <originator>Organization: SPDX</originator>
+                 <attributionTexts>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</attributionTexts>
 				<files>
 					<File>
 						<licenseInfoFromFiles>Apache-2.0</licenseInfoFromFiles>
@@ -100,7 +101,8 @@
 			<annotationDate>2012-06-13T00:00:00Z</annotationDate>
 			<annotator>Person: Jim Reviewer</annotator>
 		</annotations>
-		<dataLicense>CC0-1.0</dataLicense>
+        <dataLicense>CC0-1.0</dataLicense>
+        
 		<reviewers>
 			<comment>This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses</comment>
 			<reviewer>Person: Joe Reviewer</reviewer>
@@ -242,6 +244,21 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
 			<licenseComments>The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.</licenseComments>
 			<id>SPDXRef-Snippet</id>
 			<fileId>SPDXRef-DoapSource</fileId>
-		</snippets>
+        </snippets>
+        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-File</relatedSpdxElement>
+            <relationshipType>DESCRIBES</relationshipType>
+        </relationships>
+        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-Package</relatedSpdxElement>
+            <relationshipType>DESCRIBES</relationshipType>
+        </relationships>
+        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-Package</relatedSpdxElement>
+            <relationshipType>CONTAINS</relationshipType>
+        </relationships>
 	</Document>
 </SpdxDocument>
