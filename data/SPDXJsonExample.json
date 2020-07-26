@@ -84,7 +84,8 @@
                         ]
                     }, 
                     "licenseConcluded": "(Apache-1.0 AND LicenseRef-2 AND MPL-1.1 AND LicenseRef-3 AND LicenseRef-4 AND Apache-2.0 AND LicenseRef-1)", 
-                    "supplier": "Organization: Linux Foundation", 
+                    "supplier": "Organization: Linux Foundation",
+                    "attributionTexts" : [ "The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually." ], 
                     "checksums": [
                         {
                             "value": "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12", 
@@ -138,32 +139,8 @@
     "relationshipType" : "DESCRIBES"
   }, {
     "spdxElementId" : "SPDXRef-DOCUMENT",
-    "relatedSpdxElement" : "DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement",
-    "relationshipType" : "COPY_OF"
-  }, {
-    "spdxElementId" : "SPDXRef-DOCUMENT",
     "relatedSpdxElement" : "SPDXRef-Package",
     "relationshipType" : "DESCRIBES"
-  }, {
-    "spdxElementId" : "SPDXRef-Package",
-    "relatedSpdxElement" : "SPDXRef-Saxon",
-    "relationshipType" : "DYNAMIC_LINK"
-  }, {
-    "spdxElementId" : "SPDXRef-Package",
-    "relatedSpdxElement" : "SPDXRef-JenaLib",
-    "relationshipType" : "CONTAINS"
-  }, {
-    "spdxElementId" : "SPDXRef-CommonsLangSrc",
-    "relatedSpdxElement" : "NOASSERTION",
-    "relationshipType" : "GENERATED_FROM"
-  }, {
-    "spdxElementId" : "SPDXRef-JenaLib",
-    "relatedSpdxElement" : "SPDXRef-Package",
-    "relationshipType" : "CONTAINS"
-  }, {
-    "spdxElementId" : "SPDXRef-File",
-    "relatedSpdxElement" : "SPDXRef-fromDoap-0",
-    "relationshipType" : "GENERATED_FROM"
   } ],
         "dataLicense": "CC0-1.0", 
         "reviewers": [

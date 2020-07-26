@@ -1266,11 +1266,27 @@ class PackageParser(BaseParser):
         else:
             self.value_error("PKG_LIC_FRM_FILES_FIELD", license_info_from_files)
 
-    def parse_pkg_attribution_text(self, pkg_attribution_text):
+    def parse_pkg_attribution_text(self, pkg_attribution_texts):
         """
-        TBC, raise an issue about the dataformat and name of attributionText in json format
-        use license_comment
+        Parse Package attribution texts
+        - pkg_attribution_texts : list
+        - pkg_attribution_text : Python str/unicode
         """
+        if isinstance(pkg_attribution_texts, list):
+            for pkg_attribution_text in pkg_attribution_texts:
+                if isinstance(pkg_attribution_text, six.string_types):
+                    try:
+                        return self.builder.set_pkg_attribution_text(
+                            self.document, pkg_attribution_text
+                        )
+                    except CardinalityError:
+                        self.more_than_one_error("PKG_ATTRIBUTION_TEXT")
+                    except OrderError:
+                        self.order_error("PKG_ATTRIBUTION_TEXT", "PKG_NAME")
+                elif pkg_attribution_text is not None:
+                    self.value_error("PKG_ATTRIBUTION_TEXT", pkg_attribution_text)
+        else:
+            self.value_error("PKG_ATTRIBUTION_TEXT", pkg_attribution_texts)
 
     def parse_pkg_declared_license(self, pkg_declared_license):
         """

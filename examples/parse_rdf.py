@@ -35,6 +35,7 @@ if __name__ == "__main__":
             )
             print("Package Homepage: {0}".format(doc.package.homepage))
             print("Package Checksum: {0}".format(doc.package.check_sum.value))
+            print("Package Attribution Text: {0}".format(doc.package.attribution_text))
             print("Package verification code: {0}".format(doc.package.verif_code))
             print(
                 "Package excluded from verif: {0}".format(
