@@ -53,6 +53,7 @@ Creating this to keep track of my own work .
 |Day 23| added attribution_text in rdf, tagvalue parsers & builders. |
 |Day 24| raised an ISSUE on spdx/specs regarding attributionText in JSON format. (related to its data format & name)|
 |Day 25| package attribution text now working in parsers and builders of all formats.|
+|Day 28| wrote tests for package attribution text in test_builder.py file.|
 
 
 

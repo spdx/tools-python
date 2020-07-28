@@ -244,5 +244,20 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
 			<id>SPDXRef-Snippet</id>
 			<fileId>SPDXRef-DoapSource</fileId>
 		</snippets>
+        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-File</relatedSpdxElement>
+            <relationshipType>DESCRIBES</relationshipType>
+        </relationships>
+        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-Package</relatedSpdxElement>
+            <relationshipType>DESCRIBES</relationshipType>
+        </relationships>
+        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-Package</relatedSpdxElement>
+            <relationshipType>CONTAINS</relationshipType>
+        </relationships>
 	</Document>
 </SpdxDocument>

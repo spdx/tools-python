@@ -542,6 +542,19 @@ class TestPackageBuilder(TestCase):
         self.builder.set_pkg_license_comment(self.document, "<text>hello</text>")
 
     @testing_utils.raises(builders.OrderError)
+    def test_pkg_attribution_text_order(self):
+        self.builder.set_pkg_attribution_text(self.document, "<text>hello</text>")
+
+    def test_correct_pkg_attribution_text(self):
+        self.builder.create_package(self.document, "pkg")
+        self.builder.set_pkg_attribution_text(self.document, "<text>something</text>")
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_incorrect_pkg_attribution_text(self):
+        self.builder.create_package(self.document, "pkg")
+        self.builder.set_pkg_attribution_text(self.document, "not_free_form_text")
+
+    @testing_utils.raises(builders.OrderError)
     def test_pkg_cr_text_order(self):
         self.builder.set_pkg_cr_text(self.document, "<text>Something</text>")
 
