@@ -25,7 +25,7 @@ NOTE : Using BLACK linter for formatting python code.
 | Week 2 | Relationship working in rdf, tagvalue. |
 | Week 3 | Relationship Completely in working condition in every format. ( shows some inconsistency in writing because of different issues ).    |
 | EVALUATION 1 | **PASSED** |
-| Week 4 |  **STARTED**           |
+| Week 4 |  Package Attribution Text in completely working condition in all formats for parsers, builders and writers. |
 | Week 5 |             |
 | Week 6 |             |
 | Week 7 |             |
@@ -54,6 +54,7 @@ Creating this to keep track of my own work .
 |Day 24| raised an ISSUE on spdx/specs regarding attributionText in JSON format. (related to its data format & name)|
 |Day 25| package attribution text now working in parsers and builders of all formats.|
 |Day 28| wrote tests for package attribution text in test_builder.py file.|
+|Day 29| added package_attribution_text.py in all formats in parsers, builders and writers.|
 
 
 

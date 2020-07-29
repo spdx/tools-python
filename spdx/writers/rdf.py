@@ -722,6 +722,12 @@ class PackageWriter(LicenseWriter):
             package, package_node, self.spdx_namespace.summary, "summary"
         )
         self.handle_package_literal_optional(
+            package,
+            package_node,
+            self.spdx_namespace.attributionText,
+            "attribution_text",
+        )
+        self.handle_package_literal_optional(
             package, package_node, self.spdx_namespace.description, "description"
         )
         self.handle_package_literal_optional(

@@ -257,16 +257,10 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
     def set_pkg_attribution_text(self, doc, text):
         """
         Set the package's attribution text.
-        Raise OrderError if no package previously defined.
-        Raise CardinalityError if already set.
         """
         self.assert_package_exists()
-        if not self.package_attribution_text_set:
-            self.package_attribution_text_set = True
-            doc.package.attribution_text = text
-            return True
-        else:
-            raise CardinalityError("Package::AttributionText")
+        doc.package.attribution_text = text
+        return True
 
     def set_pkg_cr_text(self, doc, text):
         """

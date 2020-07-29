@@ -209,6 +209,9 @@ def write_package(package, out):
     if package.has_optional_field("summary"):
         write_text_value("PackageSummary", package.summary, out)
 
+    if package.has_optional_field("attribution_text"):
+        write_text_value("PackageAttributionText", package.attribution_text, out)
+
     if package.has_optional_field("source_info"):
         write_text_value("PackageSourceInfo", package.source_info, out)
 

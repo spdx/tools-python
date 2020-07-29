@@ -133,6 +133,9 @@ class PackageWriter(BaseWriter):
         if package.has_optional_field("summary"):
             package_object["summary"] = package.summary
 
+        if package.has_optional_field("attribution_text"):
+            package_object["attributionTexts"] = [package.attribution_text]
+
         if package.has_optional_field("source_info"):
             package_object["sourceInfo"] = package.source_info
 

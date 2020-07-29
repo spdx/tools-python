@@ -599,7 +599,7 @@ class PackageBuilder(object):
         self.package_summary_set = False
         self.package_desc_set = False
         self.package_comment_set = False
-        self.package_attribution_text_set = False
+        # self.package_attribution_text_set = False
         self.pkg_ext_comment_set = False
 
     def create_package(self, doc, name):
@@ -879,20 +879,14 @@ class PackageBuilder(object):
     def set_pkg_attribution_text(self, doc, text):
         """
         Set the package's attribution text .
-        Raise OrderError if no package previously defined.
-        Raise CardinalityError if already set.
         Raise SPDXValueError if text is not free form text.
         """
         self.assert_package_exists()
-        if not self.package_attribution_text_set:
-            self.package_attribution_text_set = True
-            if validations.validate_pkg_attribution_text(text):
-                doc.package.attribution_text = str_from_text(text)
-                return True
-            else:
-                raise SPDXValueError("Package::AttributionText")
+        if validations.validate_pkg_attribution_text(text):
+            doc.package.attribution_text = str_from_text(text)
+            return True
         else:
-            raise CardinalityError("Package::AttributionText")
+            raise SPDXValueError("Package::AttributionText")
 
     def set_pkg_cr_text(self, doc, text):
         """
