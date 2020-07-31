@@ -1088,6 +1088,19 @@ class FileBuilder(object):
                 raise CardinalityError("File::Comment")
         else:
             raise OrderError("File::Comment")
+    
+    def set_file_attribution_text(self, doc, text):
+        """
+        Set the file's attribution text .
+        Raise SPDXValueError if text is not free form text.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if validations.validate_file_attribution_text(text):
+                self.file(doc).comment = str_from_text(text)
+                return True
+            else:
+                raise SPDXValueError("File::AttributionText")
+    
 
     def set_file_type(self, doc, type_value):
         """

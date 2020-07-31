@@ -416,6 +416,15 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
                 raise CardinalityError("File::LicenseComment")
         else:
             raise OrderError("File::LicenseComment")
+    
+    def set_file_attribution_text(self, doc, text):
+        """
+        Set the file's attribution text.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            self.assert_package_exists()
+            self.file(doc).attribution_text = text
+            return True
 
     def set_file_copyright(self, doc, text):
         """

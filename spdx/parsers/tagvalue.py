@@ -86,6 +86,7 @@ ERROR_MESSAGES = {
     "FILE_TYPE_VALUE": "FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}",
     "FILE_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
     'letters, numbers, ".", "-".',
+    "FILE_ATTRIBUTION_TEXT_VALUE": "FileAttributionText must be free form text, line: {0}",
     "FILE_CHKSUM_VALUE": "FileChecksum must be a single line of text starting with 'SHA1:', line:{0}",
     "FILE_LICS_CONC_VALUE": "LicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line:{0}",
     "FILE_LICS_INFO_VALUE": "LicenseInfoInFile must be NOASSERTION, NONE or license identifier, line: {0}",
@@ -191,6 +192,7 @@ class Parser(object):
                   | file_lics_info
                   | file_cr_text
                   | file_lics_comment
+                  | file_attribution_text
                   | file_notice
                   | file_comment
                   | file_contrib
@@ -518,6 +520,29 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES["FILE_LICS_COMMENT_VALUE"].format(p.lineno(1))
         self.logger.log(msg)
+    
+    def p_file_attribution_text_1(self, p):
+        """file_attribution_text : FILE_ATTRIBUTION_TEXT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding="utf-8")
+            else:
+                value = p[2]
+            self.builder.set_file_attribution_text(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error("FileAttributionText", p.lineno(1))
+        except OrderError:
+            self.order_error(
+                "FileAttributionText", "FileAttributionText", p.lineno(1)
+            )
+
+    def p_file_attribution_text_2(self, p):
+        """file_attribution_text : FILE_ATTRIBUTION_TEXT error"""
+        self.error = True
+        msg = ERROR_MESSAGES["FILE_ATTRIBUTION_TEXT_VALUE"].format(p.lineno(1))
+        self.logger.log(msg)
+
+
 
     def p_file_lics_info_1(self, p):
         """file_lics_info : FILE_LICS_INFO file_lic_info_value"""

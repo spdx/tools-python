@@ -81,6 +81,7 @@ class Lexer(object):
         "ArtifactOfProjectName": "ART_PRJ_NAME",
         "ArtifactOfProjectHomePage": "ART_PRJ_HOME",
         "ArtifactOfProjectURI": "ART_PRJ_URI",
+        "FileAttributionText": "FILE_ATTRIBUTION_TEXT",
         # License
         "LicenseID": "LICS_ID",
         "ExtractedText": "LICS_TEXT",

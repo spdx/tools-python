@@ -730,6 +730,7 @@ class FileParser(BaseParser):
             self.parse_file_comment(file.get("comment"))
             self.parse_file_notice_text(file.get("noticeText"))
             self.parse_file_contributors(file.get("fileContributors"))
+            self.parse_file_attribution_text(file.get("fileAttributeTexts"))
             self.parse_file_dependencies(file.get("fileDependencies"))
             self.parse_annotations(file.get("annotations"))
             self.parse_file_chksum(file.get("sha1"))
@@ -859,6 +860,28 @@ class FileParser(BaseParser):
                 self.order_error("FILE_LIC_COMMENTS", "FILE_NAME")
         elif license_comments is not None:
             self.value_error("FILE_LIC_COMMENTS", license_comments)
+
+    def parse_file_attribution_text(self, file_attribution_texts):
+        """
+        Parse File attribution texts
+        - file_attribution_texts : list in yaml, json and string in xml format
+        """
+        if isinstance(file_attribution_texts, list) or isinstance(
+            file_attribution_texts, six.string_types
+        ):
+            for file_attribution_text in file_attribution_texts:
+                try:
+                    return self.builder.set_file_attribution_text(
+                        self.document, file_attribution_texts
+                    )
+                except CardinalityError:
+                    self.more_than_one_error("FILE_ATTRIBUTION_TEXT")
+                except OrderError:
+                    self.order_error("FILE_ATTRIBUTION_TEXT", "FILE_NAME")
+            else:
+                self.value_error("FILE_ATTRIBUTION_TEXT", file_attribution_texts)
+
+
 
     def parse_file_copyright_text(self, copyright_text):
         """
