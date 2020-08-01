@@ -56,6 +56,7 @@ Creating this to keep track of my own work .
 |Day 28| wrote tests for package attribution text in test_builder.py file.|
 |Day 29| added package_attribution_text.py in all formats in parsers, builders and writers.|
 |Day 31| added parsers & builders for file_attribution_text in all formats. |
+|Day 32| added writers for file_attribution_text in all formats. |
 
 
 

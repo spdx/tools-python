@@ -141,6 +141,9 @@ def write_file(spdx_file, out):
     if spdx_file.has_optional_field("license_comment"):
         write_text_value("LicenseComments", spdx_file.license_comment, out)
 
+    if spdx_file.has_optional_field("attribution_text"):
+        write_text_value("FileAttributionText", spdx_file.attribution_text, out)
+
     if spdx_file.has_optional_field("comment"):
         write_text_value("FileComment", spdx_file.comment, out)
 

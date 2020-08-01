@@ -219,6 +219,9 @@ class FileWriter(BaseWriter):
             if file.has_optional_field("license_comment"):
                 file_object["licenseComments"] = file.license_comment
 
+            if file.has_optional_field("attribution_text"):
+                file_object["attributionTexts"] = [file.attribution_text]
+
             if file.has_optional_field("notice"):
                 file_object["noticeText"] = file.notice
 

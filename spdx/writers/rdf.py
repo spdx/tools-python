@@ -288,6 +288,14 @@ class FileWriter(LicenseWriter):
             )
             self.graph.add(comment_triple)
 
+        if doc_file.has_optional_field("attribution_text"):
+            file_attribution_text_triple = (
+                file_node,
+                self.spdx_namespace.attributionText,
+                Literal(doc_file.attribution_text),
+            )
+            self.graph.add(file_attribution_text_triple)
+
         cr_text_node = self.to_special_value(doc_file.copyright)
         cr_text_triple = (file_node, self.spdx_namespace.copyrightText, cr_text_node)
         self.graph.add(cr_text_triple)
