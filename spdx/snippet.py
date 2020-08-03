@@ -41,15 +41,18 @@ class Snippet(object):
      - licenses_in_snippet: The list of licenses found in the snippet.
      Mandatory, one or more. Type: document.License or utils.SPDXNone or
      utils.NoAssert.
+     - attribution_text : optional string.
     """
 
-    def __init__(self, spdx_id=None, copyright=None,
-                 snip_from_file_spdxid=None, conc_lics=None):
+    def __init__(
+        self, spdx_id=None, copyright=None, snip_from_file_spdxid=None, conc_lics=None
+    ):
         self.spdx_id = spdx_id
         self.name = None
         self.comment = None
         self.copyright = copyright
         self.license_comment = None
+        self.attribution_text = None
         self.snip_from_file_spdxid = snip_from_file_spdxid
         self.conc_lics = conc_lics
         self.licenses_in_snippet = []
@@ -72,47 +75,49 @@ class Snippet(object):
 
     def validate_spdx_id(self, messages=None):
         if self.spdx_id is None:
-            messages = messages + ['Snippet has no SPDX Identifier.']
+            messages = messages + ["Snippet has no SPDX Identifier."]
 
         return messages
 
     def validate_copyright_text(self, messages=None):
         if not isinstance(
             self.copyright,
-                (six.string_types, six.text_type, utils.NoAssert,
-                 utils.SPDXNone)):
+            (six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone),
+        ):
             messages = messages + [
-                'Snippet copyright must be str or unicode or utils.NoAssert or utils.SPDXNone'
+                "Snippet copyright must be str or unicode or utils.NoAssert or utils.SPDXNone"
             ]
 
         return messages
 
     def validate_snip_from_file_spdxid(self, messages=None):
         if self.snip_from_file_spdxid is None:
-            messages = messages + ['Snippet has no Snippet from File SPDX Identifier.']
+            messages = messages + ["Snippet has no Snippet from File SPDX Identifier."]
 
         return messages
 
     def validate_concluded_license(self, messages=None):
-        if not isinstance(self.conc_lics, (document.License, utils.NoAssert,
-                                       utils.SPDXNone)):
+        if not isinstance(
+            self.conc_lics, (document.License, utils.NoAssert, utils.SPDXNone)
+        ):
             messages = messages + [
-                'Snippet Concluded License must be one of '
-                'document.License, utils.NoAssert or utils.SPDXNone'
+                "Snippet Concluded License must be one of "
+                "document.License, utils.NoAssert or utils.SPDXNone"
             ]
 
         return messages
 
     def validate_licenses_in_snippet(self, messages=None):
         if len(self.licenses_in_snippet) == 0:
-            messages = messages + ['Snippet must have at least one license in file.']
+            messages = messages + ["Snippet must have at least one license in file."]
         else:
             for lic in self.licenses_in_snippet:
-                if not isinstance(lic, (document.License, utils.NoAssert,
-                                        utils.SPDXNone)):
+                if not isinstance(
+                    lic, (document.License, utils.NoAssert, utils.SPDXNone)
+                ):
                     messages = messages + [
-                        'Licenses in Snippet must be one of '
-                        'document.License, utils.NoAssert or utils.SPDXNone'
+                        "Licenses in Snippet must be one of "
+                        "document.License, utils.NoAssert or utils.SPDXNone"
                     ]
 
         return messages

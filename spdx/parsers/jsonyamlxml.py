@@ -509,6 +509,9 @@ class SnippetParser(BaseParser):
                         self.parse_snippet_concluded_license(
                             snippet.get("licenseConcluded")
                         )
+                        self.parse_snippet_attribution_text(
+                            snippet.get("attributionTexts")
+                        )
                         self.parse_snippet_license_info_from_snippet(
                             snippet.get("licenseInfoFromSnippet")
                         )
@@ -553,6 +556,26 @@ class SnippetParser(BaseParser):
                 self.more_than_one_error("SNIPPET_COMMENT")
         elif snippet_comment is not None:
             self.value_error("SNIPPET_COMMENT", snippet_comment)
+
+    def parse_snippet_attribution_text(self, snippet_attribution_texts):
+        """
+        Parse Snippet attribution texts
+        - snippet_attribution_texts : list in yaml, json and string in xml format
+        """
+        if isinstance(snippet_attribution_texts, list) or isinstance(
+            snippet_attribution_texts, six.string_types
+        ):
+            for snippet_attribution_text in snippet_attribution_texts:
+                try:
+                    return self.builder.set_snippet_attribution_text(
+                        self.document, snippet_attribution_texts
+                    )
+                except CardinalityError:
+                    self.more_than_one_error("SNIPPET_ATTRIBUTION_TEXT")
+                except OrderError:
+                    self.order_error("SNIPPET_ATTRIBUTION_TEXT", "SNIPPET_NAME")
+            else:
+                self.value_error("SNIPPET_ATTRIBUTION_TEXT", snippet_attribution_texts)
 
     def parse_snippet_copyright(self, copyright_text):
         """
@@ -880,8 +903,6 @@ class FileParser(BaseParser):
                     self.order_error("FILE_ATTRIBUTION_TEXT", "FILE_NAME")
             else:
                 self.value_error("FILE_ATTRIBUTION_TEXT", file_attribution_texts)
-
-
 
     def parse_file_copyright_text(self, copyright_text):
         """

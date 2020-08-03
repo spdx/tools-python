@@ -416,7 +416,7 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
                 raise CardinalityError("File::LicenseComment")
         else:
             raise OrderError("File::LicenseComment")
-    
+
     def set_file_attribution_text(self, doc, text):
         """
         Set the file's attribution text.
@@ -502,6 +502,14 @@ class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
             return True
         else:
             raise CardinalityError("Snippet::comment")
+
+    def set_snippet_attribution_text(self, doc, text):
+        """
+        Set the snippet's attribution text.
+        """
+        self.assert_snippet_exists()
+        doc.snippet[-1].attribution_text = text
+        return True
 
     def set_snippet_copyright(self, doc, copyright):
         """

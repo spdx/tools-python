@@ -114,6 +114,7 @@ ERROR_MESSAGES = {
     "SNIP_COMMENT_VALUE": "SnippetComment must be free form text, line: {0}",
     "SNIP_COPYRIGHT_VALUE": "SnippetCopyrightText must be one of NOASSERTION, NONE or free form text, line: {0}",
     "SNIP_LICS_COMMENT_VALUE": "SnippetLicenseComments must be free form text, line: {0}",
+    "SNIPPET_ATTRIBUTION_TEXT_VALUE": "SnippetAttributionText must be free form text, line: {0}",
     "SNIP_FILE_SPDXID_VALUE": 'SnippetFromFileSPDXID must be ["DocumentRef-"[idstring]":"] SPDXID '
     "where DocumentRef-[idstring]: is an optional reference to an external"
     "SPDX Document and SPDXID is a string containing letters, "
@@ -520,7 +521,7 @@ class Parser(object):
         self.error = True
         msg = ERROR_MESSAGES["FILE_LICS_COMMENT_VALUE"].format(p.lineno(1))
         self.logger.log(msg)
-    
+
     def p_file_attribution_text_1(self, p):
         """file_attribution_text : FILE_ATTRIBUTION_TEXT TEXT"""
         try:
@@ -532,17 +533,13 @@ class Parser(object):
         except CardinalityError:
             self.more_than_one_error("FileAttributionText", p.lineno(1))
         except OrderError:
-            self.order_error(
-                "FileAttributionText", "FileAttributionText", p.lineno(1)
-            )
+            self.order_error("FileAttributionText", "FileAttributionText", p.lineno(1))
 
     def p_file_attribution_text_2(self, p):
         """file_attribution_text : FILE_ATTRIBUTION_TEXT error"""
         self.error = True
         msg = ERROR_MESSAGES["FILE_ATTRIBUTION_TEXT_VALUE"].format(p.lineno(1))
         self.logger.log(msg)
-
-
 
     def p_file_lics_info_1(self, p):
         """file_lics_info : FILE_LICS_INFO file_lic_info_value"""
@@ -1253,6 +1250,27 @@ class Parser(object):
         """snip_comment : SNIPPET_COMMENT error"""
         self.error = True
         msg = ERROR_MESSAGES["SNIP_COMMENT_VALUE"].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snippet_attribution_text_1(self, p):
+        """snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT TEXT"""
+        try:
+            if six.PY2:
+                value = p[2].decode(encoding="utf-8")
+            else:
+                value = p[2]
+            self.builder.set_snippet_attribution_text(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error("SnippetAttributionText", p.lineno(1))
+        except OrderError:
+            self.order_error(
+                "SnippetAttributionText", "SnippetAttributionText", p.lineno(1)
+            )
+
+    def p_snippet_attribution_text_2(self, p):
+        """snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT error"""
+        self.error = True
+        msg = ERROR_MESSAGES["SNIPPET_ATTRIBUTION_TEXT_VALUE"].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_snippet_cr_text(self, p):

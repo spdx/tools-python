@@ -622,7 +622,7 @@ class FileParser(LicenseParser):
         self.p_file_lic_conc(f_term, self.spdx_namespace["licenseConcluded"])
         self.p_file_lic_info(f_term, self.spdx_namespace["licenseInfoInFile"])
         self.p_file_comments_on_lics(f_term, self.spdx_namespace["licenseComments"])
-        self.p_file_attribution_text(f_term,self.spdx_namespace["attributionText"])
+        self.p_file_attribution_text(f_term, self.spdx_namespace["attributionText"])
         self.p_file_cr_text(f_term, self.spdx_namespace["copyrightText"])
         self.p_file_artifact(f_term, self.spdx_namespace["artifactOf"])
         self.p_file_comment(f_term, RDFS.comment)
@@ -677,7 +677,7 @@ class FileParser(LicenseParser):
                 self.builder.set_file_comment(self.doc, six.text_type(comment))
         except CardinalityError:
             self.more_than_one_error("file comment")
-    
+
     def p_file_attribution_text(self, f_term, predicate):
         """
         Set file attribution text
@@ -689,7 +689,6 @@ class FileParser(LicenseParser):
                 )
         except CardinalityError:
             self.more_than_one_error("file attribution text")
-
 
     def p_file_artifact(self, f_term, predicate):
         """
@@ -925,6 +924,16 @@ class SnippetParser(LicenseParser):
             except CardinalityError:
                 self.more_than_one_error("snippetFromFile")
                 break
+
+        try:
+            for _, _, attribute_text in self.graph.triples(
+                (snippet_term, self.spdx_namespace["attributionText"], None)
+            ):
+                self.builder.set_snippet_attribution_text(
+                    self.doc, six.text_type(attribute_text)
+                )
+        except CardinalityError:
+            self.more_than_one_error("snippetAttributionText")
 
 
 class ReviewParser(BaseParser):

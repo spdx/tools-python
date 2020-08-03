@@ -1088,7 +1088,7 @@ class FileBuilder(object):
                 raise CardinalityError("File::Comment")
         else:
             raise OrderError("File::Comment")
-    
+
     def set_file_attribution_text(self, doc, text):
         """
         Set the file's attribution text .
@@ -1100,7 +1100,6 @@ class FileBuilder(object):
                 return True
             else:
                 raise SPDXValueError("File::AttributionText")
-    
 
     def set_file_type(self, doc, type_value):
         """
@@ -1449,6 +1448,18 @@ class SnippetBuilder(object):
                 raise SPDXValueError("Snippet::SnippetComment")
         else:
             raise CardinalityError("Snippet::SnippetComment")
+
+    def set_snippet_attribution_text(self, doc, text):
+        """
+        Set the snippet's attribution text .
+        Raise SPDXValueError if text is not free form text.
+        """
+        self.assert_snippet_exists()
+        if validations.validate_snippet_attribution_text(text):
+            doc.snippet[-1].attribution_text = str_from_text(text)
+            return True
+        else:
+            raise SPDXValueError("Snippet::AttributionText")
 
     def set_snippet_copyright(self, doc, text):
         """Set the snippet's copyright text.

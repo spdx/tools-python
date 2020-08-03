@@ -97,6 +97,7 @@ class Lexer(object):
         "SnippetFromFileSPDXID": "SNIPPET_FILE_SPDXID",
         "SnippetLicenseConcluded": "SNIPPET_LICS_CONC",
         "LicenseInfoInSnippet": "SNIPPET_LICS_INFO",
+        "SnippetAttributionText": "SNIPPET_ATTRIBUTION_TEXT",
         # Common
         "NOASSERTION": "NO_ASSERT",
         "UNKNOWN": "UN_KNOWN",

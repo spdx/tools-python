@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,13 +27,14 @@ def datetime_iso_format(date):
     Return an ISO-8601 representation of a datetime object.
     """
     return "{0:0>4}-{1:0>2}-{2:0>2}T{3:0>2}:{4:0>2}:{5:0>2}Z".format(
-        date.year, date.month, date.day, date.hour,
-        date.minute, date.second)
+        date.year, date.month, date.day, date.hour, date.minute, date.second
+    )
 
 
 # Matches an iso 8601 date representation
 DATE_ISO_REGEX = re.compile(
-    r'(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z', re.UNICODE)
+    r"(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z", re.UNICODE
+)
 
 
 # Groups for retrivieng values from DATE_ISO_REGEX matches.
@@ -53,12 +53,14 @@ def datetime_from_iso_format(string):
     """
     match = DATE_ISO_REGEX.match(string)
     if match:
-        date = datetime.datetime(year=int(match.group(DATE_ISO_YEAR_GRP)),
-                                 month=int(match.group(DATE_ISO_MONTH_GRP)),
-                                 day=int(match.group(DATE_ISO_DAY_GRP)),
-                                 hour=int(match.group(DATE_ISO_HOUR_GRP)),
-                                 second=int(match.group(DATE_ISO_SEC_GRP)),
-                                 minute=int(match.group(DATE_ISO_MIN_GRP)))
+        date = datetime.datetime(
+            year=int(match.group(DATE_ISO_YEAR_GRP)),
+            month=int(match.group(DATE_ISO_MONTH_GRP)),
+            day=int(match.group(DATE_ISO_DAY_GRP)),
+            hour=int(match.group(DATE_ISO_HOUR_GRP)),
+            second=int(match.group(DATE_ISO_SEC_GRP)),
+            minute=int(match.group(DATE_ISO_MIN_GRP)),
+        )
         return date
     else:
         return None
@@ -68,8 +70,9 @@ class NoAssert(object):
     """
     Represent SPDX NOASSERTION value.
     """
+
     def to_value(self):
-        return 'NOASSERTION'
+        return "NOASSERTION"
 
     def __str__(self):
         return self.to_value()
@@ -79,18 +82,21 @@ class UnKnown(object):
     """
     Represent SPDX UNKNOWN value.
     """
+
     def to_value(self):
-        return 'UNKNOWN'
+        return "UNKNOWN"
 
     def __str__(self):
         return self.to_value()
+
 
 class SPDXNone(object):
     """
     Represent SPDX None value.
     """
+
     def to_value(self):
-        return 'NONE'
+        return "NONE"
 
     def __str__(self):
         return self.to_value()
@@ -98,32 +104,32 @@ class SPDXNone(object):
 
 class LicenseListLexer(object):
 
-    tokens = ['LP', 'RP', 'AND', 'OR', 'LICENSE']
+    tokens = ["LP", "RP", "AND", "OR", "LICENSE"]
 
     def t_LP(self, t):
-        r'\('
+        r"\("
         return t
 
     def t_RP(self, t):
-        r'\)'
+        r"\)"
         return t
 
     def t_AND(self, t):
-        r'\s(and|AND)\s'
+        r"\s(and|AND)\s"
         t.value = t.value.strip()
         return t
 
     def t_OR(self, t):
-        r'\s(or|OR)\s'
+        r"\s(or|OR)\s"
         t.value = t.value.strip()
         return t
 
     def t_whitespace(self, t):
-        r'\s+'
+        r"\s+"
         pass
 
     def t_LICENSE(self, t):
-        r'[A-Za-z.0-9\-+]+'
+        r"[A-Za-z.0-9\-+]+"
         t.value = t.value.strip()
         return t
 
@@ -146,7 +152,6 @@ class LicenseListLexer(object):
 
 
 class LicenseListParser(object):
-
     def __init__(self):
         self.lex = LicenseListLexer()
         self.lex.build(reflags=re.UNICODE)

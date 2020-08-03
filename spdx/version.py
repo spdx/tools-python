@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -26,7 +25,8 @@ class Version(object):
     - major: Major number, int.
     - minor: Minor number, int.
     """
-    VERS_STR_REGEX = re.compile(r'(\d+)\.(\d+)')
+
+    VERS_STR_REGEX = re.compile(r"(\d+)\.(\d+)")
 
     def __init__(self, major, minor):
         self.major = int(major)
@@ -45,18 +45,19 @@ class Version(object):
             return None
 
     def __repr__(self):
-        return 'Version' + repr((self.major, self.minor))
+        return "Version" + repr((self.major, self.minor))
 
     def __str__(self):
-        return 'SPDX-{major}.{minor}'.format(**self.__dict__)
+        return "SPDX-{major}.{minor}".format(**self.__dict__)
 
     def __eq__(self, other):
         return (
-            isinstance(other, self.__class__) and
-            self.major == other.major and
-            self.minor == other.minor
+            isinstance(other, self.__class__)
+            and self.major == other.major
+            and self.minor == other.minor
         )
 
     def __lt__(self, other):
-        return (self.major < other.major
-            or (self.major == other.major and self.minor < other.minor))
+        return self.major < other.major or (
+            self.major == other.major and self.minor < other.minor
+        )

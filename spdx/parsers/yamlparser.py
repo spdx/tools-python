@@ -1,4 +1,3 @@
-
 # Copyright (c) Xavier Figueroa
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,9 +24,10 @@ class Parser(jsonyamlxml.Parser):
     RDF and TV Parser classes (i.e., spdx.parsers.<format name>.Parser) for YAML parser.
     It also avoids to repeat jsonyamlxml.Parser.parse code for JSON, YAML and XML parsers
     """
+
     def __init__(self, builder, logger):
         super(Parser, self).__init__(builder, logger)
 
     def parse(self, file):
-        self.document_object = yaml.safe_load(file).get('Document')
+        self.document_object = yaml.safe_load(file).get("Document")
         return super(Parser, self).parse()
