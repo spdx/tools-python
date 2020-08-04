@@ -402,6 +402,14 @@ class SnippetWriter(LicenseWriter):
             )
             self.graph.add(lic_comment_triple)
 
+        if snippet.has_optional_field("attribution_text"):
+            lic_attribution_text_triple = (
+                snippet_node,
+                self.spdx_namespace.attributionText,
+                Literal(snippet.attribution_text),
+            )
+            self.graph.add(lic_attribution_text_triple)
+
         cr_text_node = self.to_special_value(snippet.copyright)
         cr_text_triple = (snippet_node, self.spdx_namespace.copyrightText, cr_text_node)
         self.graph.add(cr_text_triple)

@@ -355,6 +355,9 @@ class SnippetWriter(BaseWriter):
             if snippet.has_optional_field("comment"):
                 snippet_object["comment"] = snippet.comment
 
+            if snippet.has_optional_field("attribution_text"):
+                snippet_object["attributionTexts"] = [snippet.attribution_text]
+
             if snippet.has_optional_field("license_comment"):
                 snippet_object["licenseComments"] = snippet.license_comment
 

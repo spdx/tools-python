@@ -202,6 +202,7 @@ class Parser(object):
                   | snip_spdx_id
                   | snip_name
                   | snip_comment
+                  | snippet_attribution_text
                   | snip_cr_text
                   | snip_lic_comment
                   | snip_file_spdx_id

@@ -699,6 +699,21 @@ class TestSnippetBuilder(TestCase):
         self.builder.create_snippet(self.document, "SPDXRef-Snippet")
         self.builder.set_snippet_comment(self.document, "Comment.")
 
+    @testing_utils.raises(builders.OrderError)
+    def test_snippet_attribution_text_order(self):
+        self.builder.set_snippet_attribution_text(self.document, "<text>hello</text>")
+
+    def test_correct_snippet_attribution_text(self):
+        self.builder.create_snippet(self.document, "SPDXRef-Snippet")
+        self.builder.set_snippet_attribution_text(
+            self.document, "<text>something</text>"
+        )
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_incorrect_snippet_attribution_text(self):
+        self.builder.create_snippet(self.document, "SPDXRef-Package")
+        self.builder.set_snippet_attribution_text(self.document, "not_free_form_text")
+
     def test_snippet_copyright(self):
         self.builder.create_snippet(self.document, "SPDXRef-Snippet")
         self.builder.set_snippet_copyright(

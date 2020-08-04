@@ -182,6 +182,8 @@ def write_snippet(snippet, out):
         write_text_value("SnippetComment", snippet.comment, out)
     if snippet.has_optional_field("license_comment"):
         write_text_value("SnippetLicenseComments", snippet.license_comment, out)
+    if snippet.has_optional_field("attribution_text"):
+        write_text_value("SnippetAttributionText", snippet.attribution_text, out)
     if isinstance(
         snippet.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
     ):
