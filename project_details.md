@@ -14,6 +14,7 @@ NOTE : Using BLACK linter for formatting python code.
 * Due to availability of time (so that I can achieve stretch goals), I've merged the Task-2 and Task-3 which is to update document, package, file and snippets class. I will be adding the new feature to all the formats
   parsers, builders and writers. 
    * adding attribute text support for all the formats in package, files and snippets class. ( NEW FEATURE IN 2.2 specs. )
+   * addressing the issue #123 by Gary about reviewing and updating json and yaml file generation to match the spdx 2.2 spec.
        
  **( Will be adding details of new tasks after completing the previous ones )**
 
@@ -59,5 +60,6 @@ Creating this to keep track of my own work .
 |Day 32| added writers for file_attribution_text in all formats. |
 |Day 34| added snippet_attribution_text builder and parsers in all formats also reformatted all the python files using BLACK formatter.|
 |Day 35| added writers and test_builder for snippet_attribution_text.|
+|Day 37| addressing the issue#123, changed the name of spdxDocumentNamespace in ExternalDocumentRef to spdxDocument and namespace to documentNamespace in JSON, YAML and XML format. (NOTE: change all the parsers, builders and writers for jsonyamlxml for the made changes.) |
 
 
