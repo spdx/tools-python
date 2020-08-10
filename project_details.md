@@ -60,6 +60,7 @@ Creating this to keep track of my own work .
 |Day 32| added writers for file_attribution_text in all formats. |
 |Day 34| added snippet_attribution_text builder and parsers in all formats also reformatted all the python files using BLACK formatter.|
 |Day 35| added writers and test_builder for snippet_attribution_text.|
-|Day 37| addressing the issue#123, changed the name of spdxDocumentNamespace in ExternalDocumentRef to spdxDocument and namespace to documentNamespace in JSON, YAML and XML format. (NOTE: change all the parsers, builders and writers for jsonyamlxml for the made changes.) |
+|Day 37| addressing the issue#123, changed the name of spdxDocumentNamespace in ExternalDocumentRef to spdxDocument and namespace to documentNamespace in JSON, YAML and XML format.|
+|Day 39| resolved the name issue. |
 
 

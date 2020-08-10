@@ -404,7 +404,7 @@ class TestParserUtils(object):
         for ext_doc_ref in ext_doc_refs:
             ext_doc_ref_dict = OrderedDict([
                 ('externalDocumentId', ext_doc_ref.external_document_id),
-                ('spdxDocumentNamespace', ext_doc_ref.spdx_document_uri),
+                ('spdxDocument', ext_doc_ref.spdx_document_uri),
                 ('checksum', cls.checksum_to_dict(ext_doc_ref.check_sum)),
             ])
             ext_doc_refs_list.append(ext_doc_ref_dict)
@@ -499,7 +499,7 @@ class TestParserUtils(object):
         return OrderedDict([
             ('id', doc.spdx_id),
             ('specVersion', cls.version_to_dict(doc.version)),
-            ('namespace', doc.namespace),
+            ('documentNamespace', doc.namespace),
             ('name', doc.name),
             ('comment', doc.comment),
             ('dataLicense', cls.license_to_dict(doc.data_license)),

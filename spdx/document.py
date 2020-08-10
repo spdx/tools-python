@@ -261,7 +261,7 @@ class Document(object):
     - ext_document_references: External SPDX documents referenced within the
         given SPDX document. Optional, one or many. Type: ExternalDocumentRef
     - comment: Comments on the SPDX file, optional one. Type: str
-    - namespace: SPDX document specific namespace. Mandatory, one. Type: str
+    - documentNamespace: SPDX document specific namespace. Mandatory, one. Type: str
     - creation_info: SPDX file creation info. Mandatory, one. Type: CreationInfo
     - package: Package described by this document. Mandatory, one. Type: Package
     - extracted_licenses: List of licenses extracted that are not part of the

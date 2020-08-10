@@ -455,7 +455,7 @@ class Writer(
                 "externalDocumentId"
             ] = ext_document_reference.external_document_id
             ext_document_reference_object[
-                "spdxDocumentNamespace"
+                "spdxDocument"
             ] = ext_document_reference.spdx_document_uri
 
             ext_document_reference_object["checksum"] = self.checksum(
@@ -470,7 +470,7 @@ class Writer(
         self.document_object = dict()
 
         self.document_object["specVersion"] = self.document.version.__str__()
-        self.document_object["namespace"] = self.document.namespace.__str__()
+        self.document_object["documentNamespace"] = self.document.namespace.__str__()
         self.document_object["creationInfo"] = self.create_creation_info()
         self.document_object["dataLicense"] = self.license(self.document.data_license)
         self.document_object["id"] = self.spdx_id(self.document.spdx_id)

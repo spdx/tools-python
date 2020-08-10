@@ -167,7 +167,7 @@ class ExternalDocumentRefsParser(BaseParser):
                         external_document_ref.get("externalDocumentId")
                     )
                     self.parse_ext_doc_ref_namespace(
-                        external_document_ref.get("spdxDocumentNamespace")
+                        external_document_ref.get("spdxDocument")
                     )
                     self.parse_ext_doc_ref_chksum(external_document_ref.get("checksum"))
                 else:
@@ -1475,7 +1475,7 @@ class Parser(
         self.parse_doc_data_license(self.document_object.get("dataLicense"))
         self.parse_doc_id(self.document_object.get("id"))
         self.parse_doc_name(self.document_object.get("name"))
-        self.parse_doc_namespace(self.document_object.get("namespace"))
+        self.parse_doc_namespace(self.document_object.get("documentNamespace"))
         self.parse_doc_comment(self.document_object.get("comment"))
         self.parse_creation_info(self.document_object.get("creationInfo"))
         self.parse_external_document_refs(

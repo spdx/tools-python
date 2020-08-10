@@ -84,6 +84,22 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
             doc.comment = comment
         else:
             raise CardinalityError("Document::Comment")
+    
+    def set_doc_namespace(self, doc, namespace):
+        """
+        Set the document namespace.
+        Raise SPDXValueError if malformed value.
+        Raise CardinalityError if already defined.
+        """
+        if not self.doc_namespace_set:
+            self.doc_namespace_set = True
+            if validations.validate_doc_namespace(namespace):
+                doc.namespace = namespace
+                return True
+            else:
+                raise SPDXValueError("Document::Namespace")
+        else:
+            raise CardinalityError("Document::Comment")
 
 
 class LicenseBuilder(tagvaluebuilders.LicenseBuilder):

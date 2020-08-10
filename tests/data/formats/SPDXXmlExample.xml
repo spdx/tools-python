@@ -90,10 +90,10 @@
 				<value>d6a770ba38583ed4bb4525bd96e50461655d2759</value>
 				<algorithm>checksumAlgorithm_sha1</algorithm>
 			</checksum>
-			<spdxDocumentNamespace>https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301</spdxDocumentNamespace>
+			<spdxDocument>https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301</spdxDocument>
 			<externalDocumentId>DocumentRef-spdx-tool-2.1</externalDocumentId>
 		</externalDocumentRefs>
-		<namespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</namespace>
+		<documentNamespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</documentNamespace>
 		<annotations>
 			<comment>This is just an example. Some of the non-standard licenses look like they are actually BSD 3 clause licenses</comment>
 			<annotationType>REVIEW</annotationType>
