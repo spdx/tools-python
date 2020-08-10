@@ -15,6 +15,10 @@ NOTE : Using BLACK linter for formatting python code.
   parsers, builders and writers. 
    * adding attribute text support for all the formats in package, files and snippets class. ( NEW FEATURE IN 2.2 specs. )
    * addressing the issue #123 by Gary about reviewing and updating json and yaml file generation to match the spdx 2.2 spec.
+        * first issue : introduction of relatedSpdxElement in relationship class in JSON and related formats.
+        * second issue : changed the name of namespace to documentNamespace for JSON and related formats.
+        * third issue : changed the name of spdxDocumentNamespace in ExternalDocumentRef to spdxDocument.
+        * Other issues will be solved in task-4 timeframe.
        
  **( Will be adding details of new tasks after completing the previous ones )**
 
@@ -28,7 +32,8 @@ NOTE : Using BLACK linter for formatting python code.
 | EVALUATION 1 | **PASSED** |
 | Week 4 |  Package Attribution Text in completely working condition in all formats for parsers, builders and writers. |
 | Week 5 | File Attribution Text as well as Snippet Attribution Text in completely working condition in all formats for parsers, builders and writers.|          
-| Week 6 |  **STARTED**           |
+| Week 6 | Finished with task-2 work i.e. to add attribution text in files, snippets and packages for all formats as well as solving 2-3 issues regarding JSON, YAML and XML format.   |
+| EVALUATION 2 | **STARTED** |
 | Week 7 |             |
 | Week 8 |             |
 | Week 9 |             |
