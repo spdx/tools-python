@@ -14,17 +14,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from enum import Enum
-
-# Implement the auto feature that becomes available in 3.6
-autoinc = 0
-
-
-def auto():
-    global autoinc
-    autoval = autoinc
-    autoinc += 1
-    return autoval
+from enum import Enum, auto
 
 
 class RelationshipType(Enum):
