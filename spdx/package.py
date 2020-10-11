@@ -43,7 +43,8 @@ class Package(object):
      If set to "false", the package must not contain any files.
      Optional, boolean.
      - homepage: Optional, URL as string or NONE or NO_ASSERTION.
-     - verif_code: Mandatory string.
+     - verif_code: string. Mandatory if files_analyzed is True or None (omitted)
+     Must be None (omitted) if files_analyzed is False
      - check_sum: Optional , spdx.checksum.Algorithm.
      - source_info: Optional string.
      - conc_lics: Mandatory spdx.document.License or spdx.utils.SPDXNone or
@@ -107,6 +108,7 @@ class Package(object):
         Validate the package fields.
         Append user friendly error messages to the `messages` list.
         """
+        messages = self.validate_files_analyzed(messages)
         messages = self.validate_checksum(messages)
         messages = self.validate_optional_str_fields(messages)
         messages = self.validate_mandatory_str_fields(messages)
@@ -114,6 +116,18 @@ class Package(object):
         messages = self.validate_pkg_ext_refs(messages)
         messages = self.validate_mandatory_fields(messages)
         messages = self.validate_optional_fields(messages)
+
+        return messages
+
+    def validate_files_analyzed(self, messages):
+        if self.files_analyzed not in [ True, False, None ]:
+            messages = messages + [
+                'Package files_analyzed must be True or False or None (omitted)'
+            ]
+        if self.files_analyzed == False and self.verif_code is not None:
+            messages = messages + [
+                'Package verif_code must be None (omitted) when files_analyzed is False'
+            ]
 
         return messages
 
@@ -176,13 +190,14 @@ class Package(object):
         return messages
 
     def validate_files(self, messages):
-        if not self.files:
-            messages = messages + [
-                'Package must have at least one file.'
-            ]
-        else:
-            for f in self.files:
-                messages = f.validate(messages)
+        if self.files_analyzed != False:
+            if not self.files:
+                messages = messages + [
+                    'Package must have at least one file.'
+                ]
+            else:
+                for f in self.files:
+                    messages = f.validate(messages)
 
         return messages
 
@@ -207,7 +222,9 @@ class Package(object):
         """Fields marked as Mandatory and of type string in class
         docstring must be of a type that provides __str__ method.
         """
-        FIELDS = ['name', 'spdx_id', 'download_location', 'verif_code', 'cr_text']
+        FIELDS = ['name', 'spdx_id', 'download_location', 'cr_text']
+        if self.files_analyzed != False:
+            FIELDS = FIELDS + ['verif_code']
         messages = self.validate_str_fields(FIELDS, False, messages)
 
         return messages
@@ -233,13 +250,14 @@ class Package(object):
         return messages
 
     def validate_checksum(self, messages):
-        if not isinstance(self.check_sum, checksum.Algorithm):
-            messages = messages + [
-                'Package checksum must be instance of spdx.checksum.Algorithm'
-            ]
-        else:
-            if self.check_sum.identifier != 'SHA1':
-                messages = messages + ['File checksum algorithm must be SHA1']
+        if self.check_sum is not None: # optional
+            if not isinstance(self.check_sum, checksum.Algorithm):
+                messages = messages + [
+                    'Package checksum must be instance of spdx.checksum.Algorithm'
+                ]
+            else:
+                if self.check_sum.identifier != 'SHA1':
+                    messages = messages + ['File checksum algorithm must be SHA1']
 
         return messages
 
