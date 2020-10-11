@@ -683,8 +683,10 @@ class PackageBuilder(object):
             if files_analyzed:
                 if validations.validate_pkg_files_analyzed(files_analyzed):
                     self.package_files_analyzed_set = True
-                    doc.package.files_analyzed = files_analyzed
-                    print(doc.package.files_analyzed)
+                    doc.package.files_analyzed = (files_analyzed.lower() == 'true')
+                    # convert to boolean;
+                    # validate_pkg_files_analyzed already checked if
+                    # files_analyzed is in ['True', 'true', 'False', 'false']
                     return True
                 else:
                     raise SPDXValueError('Package::FilesAnalyzed')
