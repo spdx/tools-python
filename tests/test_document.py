@@ -80,6 +80,7 @@ class TestDocument(TestCase):
                        'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
                        namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
         pack = doc.package = Package('some/path', NoAssert())
+        pack.check_sum = 'SOME-SHA1'
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
         file1.spdx_id = 'SPDXRef-File'
@@ -102,7 +103,7 @@ class TestDocument(TestCase):
             'Package declared license must be instance of spdx.utils.SPDXNone '
             'or spdx.utils.NoAssert or spdx.document.License'
         ]
-        assert expected == messages
+        assert sorted(expected) == sorted(messages)
 
     def test_document_is_valid_when_using_or_later_licenses(self):
         doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
@@ -131,8 +132,7 @@ class TestDocument(TestCase):
         package.add_lics_from_file(lic1)
         package.add_file(file1)
         messages = []
-        is_valid = doc.validate(messages)
-        assert is_valid
+        messages = doc.validate(messages)
         assert not messages
 
 
