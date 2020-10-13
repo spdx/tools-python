@@ -210,7 +210,8 @@ def write_package(package, out):
     if package.has_optional_field('check_sum'):
         write_value('PackageChecksum', package.check_sum.to_tv(), out)
 
-    write_value('PackageVerificationCode', format_verif_code(package), out)
+    if package.has_optional_field('verif_code'):
+        write_value('PackageVerificationCode', format_verif_code(package), out)
 
     if package.has_optional_field('description'):
         write_text_value('PackageDescription', package.description, out)

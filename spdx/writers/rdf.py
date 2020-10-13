@@ -589,7 +589,8 @@ class PackageWriter(LicenseWriter):
         down_loc_node = (package_node, self.spdx_namespace.downloadLocation, self.to_special_value(package.download_location))
         self.graph.add(down_loc_node)
         # Handle package verification
-        verif_node = self.package_verif_node(package)
+        if package.files_analyzed != False:
+            verif_node = self.package_verif_node(package)
         verif_triple = (package_node, self.spdx_namespace.packageVerificationCode, verif_node)
         self.graph.add(verif_triple)
         # Handle concluded license
