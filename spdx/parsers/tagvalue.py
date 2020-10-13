@@ -41,12 +41,12 @@ ERROR_MESSAGES = {
     "DOC_NAME_VALUE": "DocumentName must be single line of text, line: {0}",
     "DOC_SPDX_ID_VALUE": "Invalid SPDXID value, SPDXID must be SPDXRef-DOCUMENT, line: {0}",
     "EXT_DOC_REF_VALUE": "ExternalDocumentRef must contain External Document ID, SPDX Document URI and Checksum"
-    "in the standard format, line:{0}.",
+                         "in the standard format, line:{0}.",
     "DOC_COMMENT_VALUE_TYPE": "DocumentComment value must be free form text between <text></text> tags, line:{0}",
     "DOC_NAMESPACE_VALUE": 'Invalid DocumentNamespace value {0}, must contain a scheme (e.g. "https:") '
-    'and should not contain the "#" delimiter, line:{1}',
+                           'and should not contain the "#" delimiter, line:{1}',
     "DOC_NAMESPACE_VALUE_TYPE": 'Invalid DocumentNamespace value, must contain a scheme (e.g. "https:") '
-    'and should not contain the "#" delimiter, line: {0}',
+                                'and should not contain the "#" delimiter, line: {0}',
     "REVIEWER_VALUE_TYPE": "Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}",
     "CREATOR_VALUE_TYPE": "Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}",
     "REVIEW_DATE_VALUE_TYPE": "ReviewDate value must be date in ISO 8601 format, line: {0}",
@@ -56,8 +56,8 @@ ERROR_MESSAGES = {
     "ANNOTATION_COMMENT_VALUE_TYPE": "AnnotationComment value must be free form text between <text></text> tags, line:{0}",
     "ANNOTATION_TYPE_VALUE": 'AnnotationType must be "REVIEW" or "OTHER". Line: {0}',
     "ANNOTATION_SPDX_ID_VALUE": 'SPDXREF must be ["DocumentRef-"[idstring]":"]SPDXID where'
-    '["DocumentRef-"[idstring]":"] is an optional reference to an external SPDX document and'
-    'SPDXID is a unique string containing letters, numbers, ".","-".',
+                                '["DocumentRef-"[idstring]":"] is an optional reference to an external SPDX document and'
+                                'SPDXID is a unique string containing letters, numbers, ".","-".',
     "A_BEFORE_B": "{0} Can not appear before {1}, line: {2}",
     "PACKAGE_NAME_VALUE": "PackageName must be single line of text, line: {0}",
     "PKG_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
@@ -81,11 +81,12 @@ ERROR_MESSAGES = {
     "PKG_COMMENT_VALUE": "PackageComment must be free form text, line: {0}",
     "PKG_EXT_REF_VALUE": "ExternalRef must contain category, type, and locator in the standard format, line:{0}.",
     "PKG_EXT_REF_COMMENT_VALUE": "ExternalRefComment must be free form text, line:{0}",
+    "PKG_VERF_CODE_VALUE": "VerificationCode doesn't match verifcode form, line:{0}",
     "FILE_NAME_VALUE": "FileName must be a single line of text, line: {0}",
     "FILE_COMMENT_VALUE": "FileComment must be free form text, line:{0}",
     "FILE_TYPE_VALUE": "FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}",
     "FILE_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
-    'letters, numbers, ".", "-".',
+                          'letters, numbers, ".", "-".',
     "FILE_ATTRIBUTION_TEXT_VALUE": "FileAttributionText must be free form text, line: {0}",
     "FILE_CHKSUM_VALUE": "FileChecksum must be a single line of text starting with 'SHA1:', line:{0}",
     "FILE_LICS_CONC_VALUE": "LicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line:{0}",
@@ -109,18 +110,18 @@ ERROR_MESSAGES = {
     "RELATIONSHIP_COMMENT_VALUE": "RelationshipComment value must be free form text between <text></text> tags, line:{0}",
     "PKG_CPY_TEXT_VALUE": "Package copyright text must be free form text, line: {0}",
     "SNIP_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string '
-    'containing letters, numbers, ".", "-".',
+                          'containing letters, numbers, ".", "-".',
     "SNIPPET_NAME_VALUE": "SnippetName must be a single line of text, line: {0}",
     "SNIP_COMMENT_VALUE": "SnippetComment must be free form text, line: {0}",
     "SNIP_COPYRIGHT_VALUE": "SnippetCopyrightText must be one of NOASSERTION, NONE or free form text, line: {0}",
     "SNIP_LICS_COMMENT_VALUE": "SnippetLicenseComments must be free form text, line: {0}",
     "SNIPPET_ATTRIBUTION_TEXT_VALUE": "SnippetAttributionText must be free form text, line: {0}",
     "SNIP_FILE_SPDXID_VALUE": 'SnippetFromFileSPDXID must be ["DocumentRef-"[idstring]":"] SPDXID '
-    "where DocumentRef-[idstring]: is an optional reference to an external"
-    "SPDX Document and SPDXID is a string containing letters, "
-    'numbers, ".", "-".',
+                              "where DocumentRef-[idstring]: is an optional reference to an external"
+                              "SPDX Document and SPDXID is a string containing letters, "
+                              'numbers, ".", "-".',
     "SNIP_LICS_CONC_VALUE": "SnippetLicenseConcluded must be NOASSERTION, NONE, license identifier "
-    "or license list, line:{0}",
+                            "or license list, line:{0}",
     "SNIP_LICS_INFO_VALUE": "LicenseInfoInSnippet must be NOASSERTION, NONE or license identifier, line: {0}",
 }
 
