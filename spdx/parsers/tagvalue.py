@@ -81,6 +81,7 @@ ERROR_MESSAGES = {
     'PKG_COMMENT_VALUE': 'PackageComment must be free form text, line: {0}',
     'PKG_EXT_REF_VALUE': 'ExternalRef must contain category, type, and locator in the standard format, line:{0}.',
     'PKG_EXT_REF_COMMENT_VALUE' : 'ExternalRefComment must be free form text, line:{0}',
+    'PKG_VERF_CODE_VALUE': 'VerificationCode doesn\'t match verifcode form, line:{0}',
     'FILE_NAME_VALUE': 'FileName must be a single line of text, line: {0}',
     'FILE_COMMENT_VALUE': 'FileComment must be free form text, line:{0}',
     'FILE_TYPE_VALUE': 'FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}',
