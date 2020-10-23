@@ -34,9 +34,11 @@ PackageSourceInfo: <text>Version 1.0 of test</text>
 PackageFileName: test-1.0.zip
 PackageSupplier: Organization:ACME
 PackageOriginator: Organization:ACME
+PackageAttributionText: <text>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</text>
 PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
 PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (something.rdf, something.txt)
 PackageDescription: <text>A package.</text>
+PackageAttributionText: <text>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</text>
 PackageCopyrightText: <text> Copyright 2010, 2011 Acme Inc.</text>
 PackageLicenseDeclared: Apache-2.0
 PackageLicenseConcluded: (LicenseRef-2.0 and Apache-2.0)

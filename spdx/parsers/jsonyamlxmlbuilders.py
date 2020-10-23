@@ -1,4 +1,3 @@
-
 # Copyright (c) Xavier Figueroa
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -63,14 +62,17 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
         if already defined.
         """
         if not self.doc_spdx_id_set:
-            if doc_spdx_id_line == 'SPDXRef-DOCUMENT' or validations.validate_doc_spdx_id(doc_spdx_id_line):
+            if (
+                doc_spdx_id_line == "SPDXRef-DOCUMENT"
+                or validations.validate_doc_spdx_id(doc_spdx_id_line)
+            ):
                 doc.spdx_id = doc_spdx_id_line
                 self.doc_spdx_id_set = True
                 return True
             else:
-                raise SPDXValueError('Document::SPDXID')
+                raise SPDXValueError("Document::SPDXID")
         else:
-            raise CardinalityError('Document::SPDXID')
+            raise CardinalityError("Document::SPDXID")
 
     def set_doc_comment(self, doc, comment):
         """
@@ -81,7 +83,23 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
             self.doc_comment_set = True
             doc.comment = comment
         else:
-            raise CardinalityError('Document::Comment')
+            raise CardinalityError("Document::Comment")
+    
+    def set_doc_namespace(self, doc, namespace):
+        """
+        Set the document namespace.
+        Raise SPDXValueError if malformed value.
+        Raise CardinalityError if already defined.
+        """
+        if not self.doc_namespace_set:
+            self.doc_namespace_set = True
+            if validations.validate_doc_namespace(namespace):
+                doc.namespace = namespace
+                return True
+            else:
+                raise SPDXValueError("Document::Namespace")
+        else:
+            raise CardinalityError("Document::Comment")
 
 
 class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
@@ -102,11 +120,11 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
                     self.extr_lic(doc).full_name = name
                     return True
                 else:
-                    raise SPDXValueError('ExtractedLicense::Name')
+                    raise SPDXValueError("ExtractedLicense::Name")
             else:
-                raise CardinalityError('ExtractedLicense::Name')
+                raise CardinalityError("ExtractedLicense::Name")
         else:
-            raise OrderError('ExtractedLicense::Name')
+            raise OrderError("ExtractedLicense::Name")
 
     def set_lic_text(self, doc, text):
         """
@@ -120,9 +138,9 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
                 self.extr_lic(doc).text = text
                 return True
             else:
-                raise CardinalityError('ExtractedLicense::text')
+                raise CardinalityError("ExtractedLicense::text")
         else:
-            raise OrderError('ExtractedLicense::text')
+            raise OrderError("ExtractedLicense::text")
 
     def set_lic_comment(self, doc, comment):
         """
@@ -136,9 +154,10 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
                 self.extr_lic(doc).comment = comment
                 return True
             else:
-                raise CardinalityError('ExtractedLicense::comment')
+                raise CardinalityError("ExtractedLicense::comment")
         else:
-            raise OrderError('ExtractedLicense::comment')
+            raise OrderError("ExtractedLicense::comment")
+
 
 class FileBuilder(rdfbuilders.FileBuilder):
     def __init__(self):
@@ -156,9 +175,9 @@ class FileBuilder(rdfbuilders.FileBuilder):
                 self.file(doc).notice = text
                 return True
             else:
-                raise CardinalityError('File::Notice')
+                raise CardinalityError("File::Notice")
         else:
-            raise OrderError('File::Notice')
+            raise OrderError("File::Notice")
 
     def set_file_type(self, doc, type_value):
         """
@@ -167,10 +186,10 @@ class FileBuilder(rdfbuilders.FileBuilder):
         """
 
         type_dict = {
-            'fileType_source': 'SOURCE',
-            'fileType_binary': 'BINARY',
-            'fileType_archive': 'ARCHIVE',
-            'fileType_other': 'OTHER'
+            "fileType_source": "SOURCE",
+            "fileType_binary": "BINARY",
+            "fileType_archive": "ARCHIVE",
+            "fileType_other": "OTHER",
         }
 
         return super(FileBuilder, self).set_file_type(doc, type_dict.get(type_value))
@@ -192,14 +211,45 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
                 doc.annotations[-1].comment = comment
                 return True
             else:
-                raise CardinalityError('AnnotationComment')
+                raise CardinalityError("AnnotationComment")
         else:
-            raise OrderError('AnnotationComment')
+            raise OrderError("AnnotationComment")
 
 
-class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, EntityBuilder,
-            SnippetBuilder, ReviewBuilder, LicenseBuilder, FileBuilder, PackageBuilder,
-            AnnotationBuilder):
+class RelationshipBuilder(tagvaluebuilders.RelationshipBuilder):
+    def __init__(self):
+        super(RelationshipBuilder, self).__init__()
+
+    def add_relationship_comment(self, doc, comment):
+        """
+        Set the relationship comment.
+        Raise CardinalityError if already set.
+        Raise OrderError if no annotator defined before.
+        """
+        if len(doc.relationships) != 0:
+            if not self.relationship_comment_set:
+                self.relationship_comment_set = True
+                doc.relationships[-1].comment = comment
+                return True
+            else:
+                raise CardinalityError("RelationshipComment")
+        else:
+            raise OrderError("RelationshipComment")
+
+
+class Builder(
+    DocBuilder,
+    CreationInfoBuilder,
+    ExternalDocumentRefsBuilder,
+    EntityBuilder,
+    SnippetBuilder,
+    ReviewBuilder,
+    LicenseBuilder,
+    FileBuilder,
+    PackageBuilder,
+    AnnotationBuilder,
+    RelationshipBuilder,
+):
     """
     SPDX document builder.
     """
@@ -221,4 +271,5 @@ class Builder(DocBuilder, CreationInfoBuilder, ExternalDocumentRefsBuilder, Enti
         self.reset_file_stat()
         self.reset_reviews()
         self.reset_annotations()
+        self.reset_relationship()
         self.reset_extr_lics()

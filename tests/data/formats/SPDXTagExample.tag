@@ -28,6 +28,12 @@ AnnotationDate: 2012-03-11T00:00:00Z
 AnnotationComment: <text>An example annotation comment.</text>
 SPDXREF: SPDXRef-45
 
+## Relationships
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package
+Relationship: SPDXRef-DOCUMENT COPY_OF DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement
+Relationship: SPDXRef-DOCUMENT CONTAINS SPDXRef-Package
+
 ## Package Information
 PackageName: SPDX Translator
 SPDXID: SPDXRef-Package
@@ -36,11 +42,13 @@ PackageDownloadLocation: http://www.spdx.org/tools
 PackageSummary: <text>SPDX Translator utility</text>
 PackageSourceInfo: <text>Version 1.0 of the SPDX Translator application</text>
 PackageFileName: spdxtranslator-1.0.zip
+PackageAttributionText: <text>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</text>
 PackageSupplier: Organization:Linux Foundation
 PackageOriginator: Organization:SPDX
 PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
 PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (SpdxTranslatorSpdx.rdf, SpdxTranslatorSpdx.txt)
 PackageDescription: <text>This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document.</text>
+PackageAttributionText: <text>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</text>
 PackageComment: <text>This package includes several sub-packages.</text>
 
 PackageCopyrightText: <text> Copyright 2010, 2011 Source Auditor Inc.</text>

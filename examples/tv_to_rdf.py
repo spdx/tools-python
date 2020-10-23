@@ -11,7 +11,8 @@ from spdx.parsers.loggers import StandardLogger
 from spdx.parsers.tagvaluebuilders import Builder
 from spdx.writers.rdf import write_document, InvalidDocumentError
 
-def convert(infile_name, outfile_name):
+
+def TAG_to_RDF(infile_name, outfile_name):
     tagvalueparser = Parser(Builder(), StandardLogger())
     tagvalueparser.build()
     with open(infile_name) as infile:
@@ -19,17 +20,17 @@ def convert(infile_name, outfile_name):
         document, error = tagvalueparser.parse(data)
         if not error:
             # print(map(lambda c: c.name, document.creation_info.creators))
-            print('Parsing Successful')
-            with open(outfile_name, mode='w') as out:
-                write_document(document,out,validate = True)
+            print("Parsing Successful")
+            with open(outfile_name, mode="w") as out:
+                write_document(document, out, validate=True)
         else:
-            print('Errors encountered while parsing tag value file.')
+            print("Errors encountered while parsing tag value file.")
             messages = []
             document.validate(messages)
-            print('\n'.join(messages))
+            print("\n".join(messages))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     infile_name = sys.argv[1]
     outfile_name = sys.argv[2]
-    convert(infile_name, outfile_name)
+    TAG_to_RDF(infile_name, outfile_name)

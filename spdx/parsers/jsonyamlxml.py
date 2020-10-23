@@ -1,4 +1,3 @@
-
 # Copyright (c) Xavier Figueroa
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -40,7 +39,7 @@ class BaseParser(object):
         - second_tag: required field
         """
         self.error = True
-        msg = '{0} Can not appear before {1}'.format(first_tag, second_tag)
+        msg = "{0} Can not appear before {1}".format(first_tag, second_tag)
         self.logger.log(msg)
 
     def more_than_one_error(self, field):
@@ -48,7 +47,7 @@ class BaseParser(object):
         Helper method for logging an CardinalityError raised.
         - field: field/property that has been already defined.
         """
-        msg = 'More than one {0} defined.'.format(field)
+        msg = "More than one {0} defined.".format(field)
         self.logger.log(msg)
         self.error = True
 
@@ -67,6 +66,7 @@ class BaseParser(object):
             self.logger.log(msg)
         self.error = True
 
+
 class CreationInfoParser(BaseParser):
     def __init__(self, builder, logger):
         super(CreationInfoParser, self).__init__(builder, logger)
@@ -77,12 +77,14 @@ class CreationInfoParser(BaseParser):
         - creation_info: Python dict with Creation Information fields in it
         """
         if isinstance(creation_info, dict):
-            self.parse_creation_info_comment(creation_info.get('comment'))
-            self.parse_creation_info_lic_list_version(creation_info.get('licenseListVersion'))
-            self.parse_creation_info_created(creation_info.get('created'))
-            self.parse_creation_info_creators(creation_info.get('creators'))
+            self.parse_creation_info_comment(creation_info.get("comment"))
+            self.parse_creation_info_lic_list_version(
+                creation_info.get("licenseListVersion")
+            )
+            self.parse_creation_info_created(creation_info.get("created"))
+            self.parse_creation_info_creators(creation_info.get("creators"))
         else:
-            self.value_error('CREATION_INFO_SECTION', creation_info)
+            self.value_error("CREATION_INFO_SECTION", creation_info)
 
     def parse_creation_info_comment(self, comment):
         """
@@ -93,9 +95,9 @@ class CreationInfoParser(BaseParser):
             try:
                 return self.builder.set_creation_comment(self.document, comment)
             except CardinalityError:
-                self.more_than_one_error('CreationInfo comment')
+                self.more_than_one_error("CreationInfo comment")
         elif comment is not None:
-            self.value_error('CREATION_COMMENT', comment)
+            self.value_error("CREATION_COMMENT", comment)
 
     def parse_creation_info_lic_list_version(self, license_list_version):
         """
@@ -104,14 +106,16 @@ class CreationInfoParser(BaseParser):
         """
         if isinstance(license_list_version, six.string_types):
             try:
-                return self.builder.set_lics_list_ver(self.document, license_list_version)
+                return self.builder.set_lics_list_ver(
+                    self.document, license_list_version
+                )
             except SPDXValueError:
                 raise
-                self.value_error('LL_VALUE', license_list_version)
+                self.value_error("LL_VALUE", license_list_version)
             except CardinalityError:
-                self.more_than_one_error('CreationInfo licenseListVersion')
+                self.more_than_one_error("CreationInfo licenseListVersion")
         elif license_list_version is not None:
-            self.value_error('LL_VALUE', license_list_version)
+            self.value_error("LL_VALUE", license_list_version)
 
     def parse_creation_info_created(self, created):
         """
@@ -122,11 +126,11 @@ class CreationInfoParser(BaseParser):
             try:
                 return self.builder.set_created_date(self.document, created)
             except SPDXValueError:
-                self.value_error('CREATED_VALUE', created)
+                self.value_error("CREATED_VALUE", created)
             except CardinalityError:
-                self.more_than_one_error('CreationInfo created')
+                self.more_than_one_error("CreationInfo created")
         else:
-            self.value_error('CREATED_VALUE', created)
+            self.value_error("CREATED_VALUE", created)
 
     def parse_creation_info_creators(self, creators):
         """
@@ -140,13 +144,14 @@ class CreationInfoParser(BaseParser):
                     try:
                         self.builder.add_creator(self.document, entity)
                     except SPDXValueError:
-                        self.value_error('CREATOR_VALUE', creator)
+                        self.value_error("CREATOR_VALUE", creator)
                 else:
-                    self.value_error('CREATOR_VALUE', creator)
+                    self.value_error("CREATOR_VALUE", creator)
         else:
-            self.value_error('CREATORS_SECTION', creators)
+            self.value_error("CREATORS_SECTION", creators)
 
-class  ExternalDocumentRefsParser(BaseParser):
+
+class ExternalDocumentRefsParser(BaseParser):
     def __init__(self, builder, logger):
         super(ExternalDocumentRefsParser, self).__init__(builder, logger)
 
@@ -158,13 +163,17 @@ class  ExternalDocumentRefsParser(BaseParser):
         if isinstance(external_document_refs, list):
             for external_document_ref in external_document_refs:
                 if isinstance(external_document_ref, dict):
-                    self.parse_ext_doc_ref_id(external_document_ref.get('externalDocumentId'))
-                    self.parse_ext_doc_ref_namespace(external_document_ref.get('spdxDocumentNamespace'))
-                    self.parse_ext_doc_ref_chksum(external_document_ref.get('checksum'))
+                    self.parse_ext_doc_ref_id(
+                        external_document_ref.get("externalDocumentId")
+                    )
+                    self.parse_ext_doc_ref_namespace(
+                        external_document_ref.get("spdxDocument")
+                    )
+                    self.parse_ext_doc_ref_chksum(external_document_ref.get("checksum"))
                 else:
-                    self.value_error('EXT_DOC_REF', external_document_ref)
+                    self.value_error("EXT_DOC_REF", external_document_ref)
         elif external_document_refs is not None:
-            self.value_error('EXT_DOC_REFS_SECTION', external_document_refs)
+            self.value_error("EXT_DOC_REFS_SECTION", external_document_refs)
 
     def parse_ext_doc_ref_id(self, ext_doc_ref_id):
         """
@@ -173,8 +182,8 @@ class  ExternalDocumentRefsParser(BaseParser):
         """
         if isinstance(ext_doc_ref_id, six.string_types):
             return self.builder.set_ext_doc_id(self.document, ext_doc_ref_id)
-        self.value_error('EXT_DOC_REF_ID', ext_doc_ref_id)
-        return self.builder.set_ext_doc_id(self.document, 'dummy_ext_doc_ref')
+        self.value_error("EXT_DOC_REF_ID", ext_doc_ref_id)
+        return self.builder.set_ext_doc_id(self.document, "dummy_ext_doc_ref")
         # ext_doc_ref_id is set even if it is None or not string. If weren't, the other attributes
         # would be added to the ex_doc_ref previously added.
         # Another approach is to skip the whole ex_doc_ref itself
@@ -188,9 +197,9 @@ class  ExternalDocumentRefsParser(BaseParser):
             try:
                 return self.builder.set_spdx_doc_uri(self.document, namespace)
             except SPDXValueError:
-                self.value_error('EXT_DOC_REF_VALUE', namespace)
+                self.value_error("EXT_DOC_REF_VALUE", namespace)
         else:
-            self.value_error('EXT_DOC_REF_VALUE', namespace)
+            self.value_error("EXT_DOC_REF_VALUE", namespace)
 
     def parse_ext_doc_ref_chksum(self, chksum):
         """
@@ -198,19 +207,19 @@ class  ExternalDocumentRefsParser(BaseParser):
         chksum: Python dict('algorithm':str/unicode, 'value':str/unicode)
         """
         if isinstance(chksum, dict):
-            value = chksum.get('value')
+            value = chksum.get("checksumValue")
             if isinstance(value, six.string_types):
                 try:
                     return self.builder.set_chksum(self.document, value)
                 except SPDXValueError:
-                    self.value_error('CHECKSUM_VALUE', value)
+                    self.value_error("CHECKSUM_VALUE", value)
             else:
-                self.value_error('CHECKSUM_VALUE', value)
+                self.value_error("CHECKSUM_VALUE", value)
         else:
-            self.value_error('CHECKSUM_FIELD', chksum)
+            self.value_error("CHECKSUM_FIELD", chksum)
+
 
 class LicenseParser(BaseParser):
-
     def __init__(self, builder, logger):
         super(LicenseParser, self).__init__(builder, logger)
 
@@ -222,13 +231,13 @@ class LicenseParser(BaseParser):
         if isinstance(extracted_license_info, list):
             for extracted_license in extracted_license_info:
                 if isinstance(extracted_license, dict):
-                    if self.parse_ext_lic_id(extracted_license.get('licenseId')):
-                        self.parse_ext_lic_name(extracted_license.get('name'))
-                        self.parse_ext_lic_comment(extracted_license.get('comment'))
-                        self.parse_ext_lic_text(extracted_license.get('extractedText'))
-                        self.parse_ext_lic_cross_refs(extracted_license.get('seeAlso'))
+                    if self.parse_ext_lic_id(extracted_license.get("licenseId")):
+                        self.parse_ext_lic_name(extracted_license.get("name"))
+                        self.parse_ext_lic_comment(extracted_license.get("comment"))
+                        self.parse_ext_lic_text(extracted_license.get("extractedText"))
+                        self.parse_ext_lic_cross_refs(extracted_license.get("seeAlso"))
                 else:
-                    self.value_error('EXTR_LIC', extracted_license)
+                    self.value_error("EXTR_LIC", extracted_license)
 
     def parse_ext_lic_id(self, ext_lic_id):
         """
@@ -239,9 +248,9 @@ class LicenseParser(BaseParser):
             try:
                 return self.builder.set_lic_id(self.document, ext_lic_id)
             except SPDXValueError:
-                self.value_error('EXTR_LIC_ID', ext_lic_id)
+                self.value_error("EXTR_LIC_ID", ext_lic_id)
         else:
-            self.value_error('EXTR_LIC_ID', ext_lic_id)
+            self.value_error("EXTR_LIC_ID", ext_lic_id)
 
     def parse_ext_lic_name(self, ext_lic_name):
         """
@@ -251,11 +260,11 @@ class LicenseParser(BaseParser):
         try:
             return self.builder.set_lic_name(self.document, ext_lic_name)
         except SPDXValueError:
-            self.value_error('EXTR_LIC_NAME', ext_lic_name)
+            self.value_error("EXTR_LIC_NAME", ext_lic_name)
         except CardinalityError:
-            self.more_than_one_error('ExtractedLicense name')
+            self.more_than_one_error("ExtractedLicense name")
         except OrderError:
-            self.order_error('ExtractedLicense name', 'ExtractedLicense id')
+            self.order_error("ExtractedLicense name", "ExtractedLicense id")
 
     def parse_ext_lic_comment(self, ext_lic_comment):
         """
@@ -266,11 +275,11 @@ class LicenseParser(BaseParser):
             try:
                 return self.builder.set_lic_comment(self.document, ext_lic_comment)
             except CardinalityError:
-                self.more_than_one_error('ExtractedLicense comment')
+                self.more_than_one_error("ExtractedLicense comment")
             except OrderError:
-                self.order_error('ExtractedLicense comment', 'ExtractedLicense id')
+                self.order_error("ExtractedLicense comment", "ExtractedLicense id")
         elif ext_lic_comment is not None:
-            self.value_error('EXTR_LIC_COMMENT', ext_lic_comment)
+            self.value_error("EXTR_LIC_COMMENT", ext_lic_comment)
 
     def parse_ext_lic_text(self, ext_lic_text):
         """
@@ -281,11 +290,11 @@ class LicenseParser(BaseParser):
             try:
                 return self.builder.set_lic_text(self.document, ext_lic_text)
             except CardinalityError:
-                self.more_than_one_error('ExtractedLicense text')
+                self.more_than_one_error("ExtractedLicense text")
             except OrderError:
-                self.order_error('ExtractedLicense text', 'ExtractedLicense id')
+                self.order_error("ExtractedLicense text", "ExtractedLicense id")
         else:
-            self.value_error('EXTR_LIC_TXT', ext_lic_text)
+            self.value_error("EXTR_LIC_TXT", ext_lic_text)
 
     def parse_ext_lic_cross_refs(self, cross_refs):
         """
@@ -298,18 +307,32 @@ class LicenseParser(BaseParser):
                     try:
                         self.builder.add_lic_xref(self.document, cross_ref)
                     except OrderError:
-                        self.order_error('ExtractedLicense cross references', 'ExtractedLicense id')
+                        self.order_error(
+                            "ExtractedLicense cross references", "ExtractedLicense id"
+                        )
                 else:
-                    self.value_error('CROSS_REF', cross_ref)
+                    self.value_error("CROSS_REF", cross_ref)
 
     def replace_license(self, license_object):
         if isinstance(license_object, LicenseConjunction):
-            return LicenseConjunction(self.replace_license(license_object.license_1), self.replace_license(license_object.license_2))
+            return LicenseConjunction(
+                self.replace_license(license_object.license_1),
+                self.replace_license(license_object.license_2),
+            )
         elif isinstance(license_object, LicenseDisjunction):
-            return LicenseDisjunction(self.replace_license(license_object.license_1), self.replace_license(license_object.license_2))
+            return LicenseDisjunction(
+                self.replace_license(license_object.license_1),
+                self.replace_license(license_object.license_2),
+            )
         else:
-            license_objects = list(filter(lambda lic: lic.identifier == license_object.identifier, self.document.extracted_licenses))
+            license_objects = list(
+                filter(
+                    lambda lic: lic.identifier == license_object.identifier,
+                    self.document.extracted_licenses,
+                )
+            )
             return license_objects[-1] if license_objects else license_object
+
 
 class AnnotationParser(BaseParser):
     def __init__(self, builder, logger):
@@ -323,13 +346,13 @@ class AnnotationParser(BaseParser):
         if isinstance(annotations, list):
             for annotation in annotations:
                 if isinstance(annotation, dict):
-                    if self.parse_annotation_annotator(annotation.get('annotator')):
-                        self.parse_annotation_date(annotation.get('annotationDate'))
-                        self.parse_annotation_comment(annotation.get('comment'))
-                        self.parse_annotation_type(annotation.get('annotationType'))
-                        self.parse_annotation_id(annotation.get('id'))
+                    if self.parse_annotation_annotator(annotation.get("annotator")):
+                        self.parse_annotation_date(annotation.get("annotationDate"))
+                        self.parse_annotation_comment(annotation.get("comment"))
+                        self.parse_annotation_type(annotation.get("annotationType"))
+                        self.parse_annotation_id(annotation.get("SPDXID"))
                 else:
-                    self.value_error('ANNOTATION', annotation)
+                    self.value_error("ANNOTATION", annotation)
 
     def parse_annotation_annotator(self, annotator):
         """
@@ -341,10 +364,9 @@ class AnnotationParser(BaseParser):
             try:
                 return self.builder.add_annotator(self.document, entity)
             except SPDXValueError:
-                self.value_error('ANNOTATOR_VALUE', annotator)
+                self.value_error("ANNOTATOR_VALUE", annotator)
         else:
-            self.value_error('ANNOTATOR_VALUE', annotator)
-
+            self.value_error("ANNOTATOR_VALUE", annotator)
 
     def parse_annotation_date(self, date):
         """
@@ -355,13 +377,13 @@ class AnnotationParser(BaseParser):
             try:
                 return self.builder.add_annotation_date(self.document, date)
             except SPDXValueError:
-                self.value_error('ANNOTATION_DATE', date)
+                self.value_error("ANNOTATION_DATE", date)
             except CardinalityError:
-                self.more_than_one_error('Annotation date')
+                self.more_than_one_error("Annotation date")
             except OrderError:
-                self.order_error('ANNOTATION_DATE', 'ANNOTATOR_VALUE')
+                self.order_error("ANNOTATION_DATE", "ANNOTATOR_VALUE")
         else:
-            self.value_error('ANNOTATION_DATE', date)
+            self.value_error("ANNOTATION_DATE", date)
 
     def parse_annotation_comment(self, comment):
         """
@@ -372,11 +394,11 @@ class AnnotationParser(BaseParser):
             try:
                 return self.builder.add_annotation_comment(self.document, comment)
             except CardinalityError:
-                self.more_than_one_error('Annotation comment')
+                self.more_than_one_error("Annotation comment")
             except OrderError:
-                self.order_error('ANNOTATION_COMMENT', 'ANNOTATOR_VALUE')
+                self.order_error("ANNOTATION_COMMENT", "ANNOTATOR_VALUE")
         else:
-            self.value_error('ANNOTATION_COMMENT', comment)
+            self.value_error("ANNOTATION_COMMENT", comment)
 
     def parse_annotation_type(self, annotation_type):
         """
@@ -387,13 +409,13 @@ class AnnotationParser(BaseParser):
             try:
                 return self.builder.add_annotation_type(self.document, annotation_type)
             except SPDXValueError:
-                self.value_error('ANNOTATION_TYPE', annotation_type)
+                self.value_error("ANNOTATION_TYPE", annotation_type)
             except CardinalityError:
-                self.more_than_one_error('ANNOTATION_TYPE')
+                self.more_than_one_error("ANNOTATION_TYPE")
             except OrderError:
-                self.order_error('ANNOTATION_TYPE', 'ANNOTATOR_VALUE')
+                self.order_error("ANNOTATION_TYPE", "ANNOTATOR_VALUE")
         else:
-            self.value_error('ANNOTATION_TYPE', annotation_type)
+            self.value_error("ANNOTATION_TYPE", annotation_type)
 
     def parse_annotation_id(self, annotation_id):
         """
@@ -404,11 +426,65 @@ class AnnotationParser(BaseParser):
             try:
                 return self.builder.set_annotation_spdx_id(self.document, annotation_id)
             except CardinalityError:
-                self.more_than_one_error('ANNOTATION_ID')
+                self.more_than_one_error("ANNOTATION_ID")
             except OrderError:
-                self.order_error('ANNOTATION_ID', 'ANNOTATOR_VALUE')
+                self.order_error("ANNOTATION_ID", "ANNOTATOR_VALUE")
         else:
-            self.value_error('ANNOTATION_ID', annotation_id)
+            self.value_error("ANNOTATION_ID", annotation_id)
+
+
+class RelationshipParser(BaseParser):
+    def __init__(self, builder, logger):
+        super(RelationshipParser, self).__init__(builder, logger)
+
+    def parse_relationships(self, relationships):
+        """
+        Parse Relationship Information fields
+        - relationships: Python list with Relationship Information dicts in it
+        """
+        if isinstance(relationships, list):
+            for relationship in relationships:
+                if isinstance(relationship, dict):
+                    if self.parse_relationship(
+                        relationship.get("spdxElementId"),
+                        relationship.get("relationshipType"),
+                        relationship.get("relatedSpdxElement"),
+                    ):
+                        self.parse_relationship_comment(relationship.get("comment"))
+                else:
+                    self.value_error("RELATIONSHIP", relationship)
+
+    def parse_relationship(self, spdxelementid, relationshiptype, relatedspdxelement):
+        """
+        Parse Relationshiptype, spdxElementId and relatedSpdxElement
+        - relationship : Python str/unicode
+        """
+        if isinstance(relationshiptype, six.string_types):
+            relate = spdxelementid + " " + relationshiptype + " " + relatedspdxelement
+            try:
+                return self.builder.add_relationship(self.document, relate)
+            except SPDXValueError:
+                self.value_error("RELATIONSHIP_VALUE", relate)
+        else:
+            self.value_error("RELATIONSHIP_VALUE", relate)
+
+    def parse_relationship_comment(self, relationship_comment):
+        """
+        Parse relationship comment
+        - relationship_comment: Python str/unicode
+        """
+        if isinstance(relationship_comment, six.string_types):
+            try:
+                return self.builder.add_relationship_comment(
+                    self.document, relationship_comment
+                )
+            except CardinalityError:
+                self.more_than_one_error("RELATIONSHIP_COMMENT")
+            except OrderError:
+                self.order_error("RELATIONSHIP_COMMENT", "RELATIONSHIP")
+        elif relationship_comment is not None:
+            self.value_error("RELATIONSHIP_COMMENT", relationship_comment)
+
 
 class SnippetParser(BaseParser):
     def __init__(self, builder, logger):
@@ -422,16 +498,25 @@ class SnippetParser(BaseParser):
         if isinstance(snippets, list):
             for snippet in snippets:
                 if isinstance(snippet, dict):
-                    if self.parse_snippet_id(snippet.get('id')):
-                        self.parse_snippet_name(snippet.get('name'))
-                        self.parse_snippet_comment(snippet.get('comment'))
-                        self.parse_snippet_copyright(snippet.get('copyrightText'))
-                        self.parse_snippet_license_comment(snippet.get('licenseComments'))
-                        self.parse_snippet_file_spdxid(snippet.get('fileId'))
-                        self.parse_snippet_concluded_license(snippet.get('licenseConcluded'))
-                        self.parse_snippet_license_info_from_snippet(snippet.get('licenseInfoFromSnippet'))
+                    if self.parse_snippet_id(snippet.get("SPDXID")):
+                        self.parse_snippet_name(snippet.get("name"))
+                        self.parse_snippet_comment(snippet.get("comment"))
+                        self.parse_snippet_copyright(snippet.get("copyrightText"))
+                        self.parse_snippet_license_comment(
+                            snippet.get("licenseComments")
+                        )
+                        self.parse_snippet_file_spdxid(snippet.get("fileId"))
+                        self.parse_snippet_concluded_license(
+                            snippet.get("licenseConcluded")
+                        )
+                        self.parse_snippet_attribution_text(
+                            snippet.get("attributionTexts")
+                        )
+                        self.parse_snippet_license_info_from_snippet(
+                            snippet.get("licenseInfoFromSnippet")
+                        )
                 else:
-                    self.value_error('SNIPPET', snippet)
+                    self.value_error("SNIPPET", snippet)
 
     def parse_snippet_id(self, snippet_id):
         """
@@ -442,9 +527,9 @@ class SnippetParser(BaseParser):
             try:
                 return self.builder.create_snippet(self.document, snippet_id)
             except SPDXValueError:
-                self.value_error('SNIPPET_SPDX_ID_VALUE', snippet_id)
+                self.value_error("SNIPPET_SPDX_ID_VALUE", snippet_id)
         else:
-            self.value_error('SNIPPET_SPDX_ID_VALUE', snippet_id)
+            self.value_error("SNIPPET_SPDX_ID_VALUE", snippet_id)
 
     def parse_snippet_name(self, snippet_name):
         """
@@ -455,9 +540,9 @@ class SnippetParser(BaseParser):
             try:
                 return self.builder.set_snippet_name(self.document, snippet_name)
             except CardinalityError:
-                self.more_than_one_error('SNIPPET_NAME')
+                self.more_than_one_error("SNIPPET_NAME")
         elif snippet_name is not None:
-            self.value_error('SNIPPET_NAME', snippet_name)
+            self.value_error("SNIPPET_NAME", snippet_name)
 
     def parse_snippet_comment(self, snippet_comment):
         """
@@ -468,9 +553,29 @@ class SnippetParser(BaseParser):
             try:
                 return self.builder.set_snippet_comment(self.document, snippet_comment)
             except CardinalityError:
-                self.more_than_one_error('SNIPPET_COMMENT')
+                self.more_than_one_error("SNIPPET_COMMENT")
         elif snippet_comment is not None:
-            self.value_error('SNIPPET_COMMENT', snippet_comment)
+            self.value_error("SNIPPET_COMMENT", snippet_comment)
+
+    def parse_snippet_attribution_text(self, snippet_attribution_texts):
+        """
+        Parse Snippet attribution texts
+        - snippet_attribution_texts : list in yaml, json and string in xml format
+        """
+        if isinstance(snippet_attribution_texts, list) or isinstance(
+            snippet_attribution_texts, six.string_types
+        ):
+            for snippet_attribution_text in snippet_attribution_texts:
+                try:
+                    return self.builder.set_snippet_attribution_text(
+                        self.document, snippet_attribution_texts
+                    )
+                except CardinalityError:
+                    self.more_than_one_error("SNIPPET_ATTRIBUTION_TEXT")
+                except OrderError:
+                    self.order_error("SNIPPET_ATTRIBUTION_TEXT", "SNIPPET_NAME")
+            else:
+                self.value_error("SNIPPET_ATTRIBUTION_TEXT", snippet_attribution_texts)
 
     def parse_snippet_copyright(self, copyright_text):
         """
@@ -481,9 +586,9 @@ class SnippetParser(BaseParser):
             try:
                 return self.builder.set_snippet_copyright(self.document, copyright_text)
             except CardinalityError:
-                self.more_than_one_error('SNIPPET_COPYRIGHT')
+                self.more_than_one_error("SNIPPET_COPYRIGHT")
         else:
-            self.value_error('SNIPPET_COPYRIGHT', copyright_text)
+            self.value_error("SNIPPET_COPYRIGHT", copyright_text)
 
     def parse_snippet_license_comment(self, license_comment):
         """
@@ -492,11 +597,13 @@ class SnippetParser(BaseParser):
         """
         if isinstance(license_comment, six.string_types):
             try:
-                return self.builder.set_snippet_lic_comment(self.document, license_comment)
+                return self.builder.set_snippet_lic_comment(
+                    self.document, license_comment
+                )
             except CardinalityError:
-                self.more_than_one_error('SNIPPET_LIC_COMMENTS')
+                self.more_than_one_error("SNIPPET_LIC_COMMENTS")
         elif license_comment is not None:
-            self.value_error('SNIPPET_LIC_COMMENTS', license_comment)
+            self.value_error("SNIPPET_LIC_COMMENTS", license_comment)
 
     def parse_snippet_file_spdxid(self, file_spdxid):
         """
@@ -505,13 +612,15 @@ class SnippetParser(BaseParser):
         """
         if isinstance(file_spdxid, six.string_types):
             try:
-                return self.builder.set_snip_from_file_spdxid(self.document, file_spdxid)
+                return self.builder.set_snip_from_file_spdxid(
+                    self.document, file_spdxid
+                )
             except SPDXValueError:
-                self.value_error('SNIPPET_FILE_ID', file_spdxid)
+                self.value_error("SNIPPET_FILE_ID", file_spdxid)
             except CardinalityError:
-                self.more_than_one_error('SNIPPET_FILE_ID')
+                self.more_than_one_error("SNIPPET_FILE_ID")
         else:
-            self.value_error('SNIPPET_FILE_ID', file_spdxid)
+            self.value_error("SNIPPET_FILE_ID", file_spdxid)
 
     def parse_snippet_concluded_license(self, concluded_license):
         """
@@ -523,13 +632,15 @@ class SnippetParser(BaseParser):
             lic_parser.build(write_tables=0, debug=0)
             license_object = self.replace_license(lic_parser.parse(concluded_license))
             try:
-                return self.builder.set_snip_concluded_license(self.document, license_object)
+                return self.builder.set_snip_concluded_license(
+                    self.document, license_object
+                )
             except SPDXValueError:
-                self.value_error('SNIPPET_SINGLE_LICS', concluded_license)
+                self.value_error("SNIPPET_SINGLE_LICS", concluded_license)
             except CardinalityError:
-                self.more_than_one_error('SNIPPET_SINGLE_LICS')
+                self.more_than_one_error("SNIPPET_SINGLE_LICS")
         else:
-            self.value_error('SNIPPET_SINGLE_LICS', concluded_license)
+            self.value_error("SNIPPET_SINGLE_LICS", concluded_license)
 
     def parse_snippet_license_info_from_snippet(self, license_info_from_snippet):
         """
@@ -541,15 +652,20 @@ class SnippetParser(BaseParser):
                 if isinstance(lic_in_snippet, six.string_types):
                     lic_parser = utils.LicenseListParser()
                     lic_parser.build(write_tables=0, debug=0)
-                    license_object = self.replace_license(lic_parser.parse(lic_in_snippet))
+                    license_object = self.replace_license(
+                        lic_parser.parse(lic_in_snippet)
+                    )
                     try:
-                        return self.builder.set_snippet_lics_info(self.document, license_object)
+                        return self.builder.set_snippet_lics_info(
+                            self.document, license_object
+                        )
                     except SPDXValueError:
-                        self.value_error('SNIPPET_LIC_INFO', lic_in_snippet)
+                        self.value_error("SNIPPET_LIC_INFO", lic_in_snippet)
                 else:
-                    self.value_error('SNIPPET_LIC_INFO', lic_in_snippet)
+                    self.value_error("SNIPPET_LIC_INFO", lic_in_snippet)
         else:
-            self.value_error('SNIPPET_LIC_INFO_FIELD', license_info_from_snippet)
+            self.value_error("SNIPPET_LIC_INFO_FIELD", license_info_from_snippet)
+
 
 class ReviewParser(BaseParser):
     def __init__(self, builder, logger):
@@ -563,11 +679,11 @@ class ReviewParser(BaseParser):
         if isinstance(reviews, list):
             for review in reviews:
                 if isinstance(review, dict):
-                    if self.parse_review_reviewer(review.get('reviewer')):
-                        self.parse_review_date(review.get('reviewDate'))
-                        self.parse_review_comment(review.get('comment'))
+                    if self.parse_review_reviewer(review.get("reviewer")):
+                        self.parse_review_date(review.get("reviewDate"))
+                        self.parse_review_comment(review.get("comment"))
                 else:
-                    self.value_error('REVIEW', review)
+                    self.value_error("REVIEW", review)
 
     def parse_review_reviewer(self, reviewer):
         """
@@ -579,9 +695,9 @@ class ReviewParser(BaseParser):
             try:
                 return self.builder.add_reviewer(self.document, entity)
             except SPDXValueError:
-                self.value_error('REVIEWER_VALUE', reviewer)
+                self.value_error("REVIEWER_VALUE", reviewer)
         else:
-            self.value_error('REVIEWER_VALUE', reviewer)
+            self.value_error("REVIEWER_VALUE", reviewer)
 
     def parse_review_date(self, review_date):
         """
@@ -592,13 +708,13 @@ class ReviewParser(BaseParser):
             try:
                 return self.builder.add_review_date(self.document, review_date)
             except SPDXValueError:
-                self.value_error('REVIEW_DATE', review_date)
+                self.value_error("REVIEW_DATE", review_date)
             except CardinalityError:
-                self.more_than_one_error('REVIEW_DATE')
+                self.more_than_one_error("REVIEW_DATE")
             except OrderError:
-                self.order_error('REVIEW_DATE', 'REVIEWER_VALUE')
+                self.order_error("REVIEW_DATE", "REVIEWER_VALUE")
         else:
-            self.value_error('REVIEW_DATE', review_date)
+            self.value_error("REVIEW_DATE", review_date)
 
     def parse_review_comment(self, review_comment):
         """
@@ -609,11 +725,12 @@ class ReviewParser(BaseParser):
             try:
                 return self.builder.add_review_comment(self.document, review_comment)
             except CardinalityError:
-                self.more_than_one_error('REVIEW_COMMENT')
+                self.more_than_one_error("REVIEW_COMMENT")
             except OrderError:
-                self.order_error('REVIEW_COMMENT', 'REVIEWER_VALUE')
+                self.order_error("REVIEW_COMMENT", "REVIEWER_VALUE")
         elif review_comment is not None:
-            self.value_error('REVIEW_COMMENT', review_comment)
+            self.value_error("REVIEW_COMMENT", review_comment)
+
 
 class FileParser(BaseParser):
     def __init__(self, builder, logger):
@@ -625,22 +742,23 @@ class FileParser(BaseParser):
         - file: Python dict with File Information fields in it
         """
         if isinstance(file, dict):
-            self.parse_file_name(file.get('name'))
-            self.parse_file_id(file.get('id'))
-            self.parse_file_types(file.get('fileTypes'))
-            self.parse_file_concluded_license(file.get('licenseConcluded'))
-            self.parse_file_license_info_from_files(file.get('licenseInfoFromFiles'))
-            self.parse_file_license_comments(file.get('licenseComments'))
-            self.parse_file_copyright_text(file.get('copyrightText'))
-            self.parse_file_artifacts(file.get('artifactOf'))
-            self.parse_file_comment(file.get('comment'))
-            self.parse_file_notice_text(file.get('noticeText'))
-            self.parse_file_contributors(file.get('fileContributors'))
-            self.parse_file_dependencies(file.get('fileDependencies'))
-            self.parse_annotations(file.get('annotations'))
-            self.parse_file_chksum(file.get('sha1'))
+            self.parse_file_name(file.get("name"))
+            self.parse_file_id(file.get("SPDXID"))
+            self.parse_file_types(file.get("fileTypes"))
+            self.parse_file_concluded_license(file.get("licenseConcluded"))
+            self.parse_file_license_info_from_files(file.get("licenseInfoFromFiles"))
+            self.parse_file_license_comments(file.get("licenseComments"))
+            self.parse_file_copyright_text(file.get("copyrightText"))
+            self.parse_file_artifacts(file.get("artifactOf"))
+            self.parse_file_comment(file.get("comment"))
+            self.parse_file_notice_text(file.get("noticeText"))
+            self.parse_file_contributors(file.get("fileContributors"))
+            self.parse_file_attribution_text(file.get("fileAttributeTexts"))
+            self.parse_file_dependencies(file.get("fileDependencies"))
+            self.parse_annotations(file.get("annotations"))
+            self.parse_file_chksum(file.get("sha1"))
         else:
-            self.value_error('FILE', file)
+            self.value_error("FILE", file)
 
     def parse_file_name(self, file_name):
         """
@@ -649,8 +767,8 @@ class FileParser(BaseParser):
         """
         if isinstance(file_name, six.string_types):
             return self.builder.set_file_name(self.document, file_name)
-        self.value_error('FILE_NAME', file_name)
-        return self.builder.set_file_name(self.document, 'dummy_file')
+        self.value_error("FILE_NAME", file_name)
+        return self.builder.set_file_name(self.document, "dummy_file")
         # file_name is set even if it is None or not string. If weren't, the other attributes
         # would be added to the file previously added.
         # Another approach is to skip the whole file itself
@@ -664,13 +782,13 @@ class FileParser(BaseParser):
             try:
                 return self.builder.set_file_spdx_id(self.document, file_id)
             except SPDXValueError:
-                self.value_error('FILE_ID', file_id)
+                self.value_error("FILE_ID", file_id)
             except CardinalityError:
-                self.more_than_one_error('FILE_ID')
+                self.more_than_one_error("FILE_ID")
             except OrderError:
-                self.order_error('FILE_ID', 'FILE_NAME')
+                self.order_error("FILE_ID", "FILE_NAME")
         else:
-            self.value_error('FILE_ID', file_id)
+            self.value_error("FILE_ID", file_id)
 
     def parse_file_types(self, file_types):
         """
@@ -684,7 +802,7 @@ class FileParser(BaseParser):
         elif isinstance(file_types, six.string_types):
             return self.parse_file_type(file_types)
         elif file_types is not None:
-            self.value_error('FILE_TYPES', file_types)
+            self.value_error("FILE_TYPES", file_types)
 
     def parse_file_type(self, file_type):
         """
@@ -695,13 +813,13 @@ class FileParser(BaseParser):
             try:
                 return self.builder.set_file_type(self.document, file_type)
             except SPDXValueError:
-                self.value_error('FILE_TYPE', file_type)
+                self.value_error("FILE_TYPE", file_type)
             except CardinalityError:
-                self.more_than_one_error('FILE_TYPE')
+                self.more_than_one_error("FILE_TYPE")
             except OrderError:
-                self.order_error('FILE_TYPE', 'FILE_NAME')
+                self.order_error("FILE_TYPE", "FILE_NAME")
         else:
-            self.value_error('FILE_TYPE', file_type)
+            self.value_error("FILE_TYPE", file_type)
 
     def parse_file_concluded_license(self, concluded_license):
         """
@@ -715,13 +833,13 @@ class FileParser(BaseParser):
             try:
                 return self.builder.set_concluded_license(self.document, license_object)
             except SPDXValueError:
-                self.value_error('FILE_SINGLE_LICS', concluded_license)
+                self.value_error("FILE_SINGLE_LICS", concluded_license)
             except CardinalityError:
-                self.more_than_one_error('FILE_SINGLE_LICS')
+                self.more_than_one_error("FILE_SINGLE_LICS")
             except OrderError:
-                self.order_error('FILE_SINGLE_LICS', 'FILE_NAME')
+                self.order_error("FILE_SINGLE_LICS", "FILE_NAME")
         else:
-            self.value_error('FILE_SINGLE_LICS', concluded_license)
+            self.value_error("FILE_SINGLE_LICS", concluded_license)
 
     def parse_file_license_info_from_files(self, license_info_from_files):
         """
@@ -733,17 +851,21 @@ class FileParser(BaseParser):
                 if isinstance(license_info_from_file, six.string_types):
                     lic_parser = utils.LicenseListParser()
                     lic_parser.build(write_tables=0, debug=0)
-                    license_object = self.replace_license(lic_parser.parse(license_info_from_file))
+                    license_object = self.replace_license(
+                        lic_parser.parse(license_info_from_file)
+                    )
                     try:
-                        self.builder.set_file_license_in_file(self.document, license_object)
+                        self.builder.set_file_license_in_file(
+                            self.document, license_object
+                        )
                     except SPDXValueError:
-                        self.value_error('FILE_LIC_FRM_FILES', license_info_from_file)
+                        self.value_error("FILE_LIC_FRM_FILES", license_info_from_file)
                     except OrderError:
-                        self.order_error('FILE_LIC_FRM_FILES', 'FILE_NAME')
+                        self.order_error("FILE_LIC_FRM_FILES", "FILE_NAME")
                 else:
-                    self.value_error('FILE_LIC_FRM_FILES', license_info_from_file)
+                    self.value_error("FILE_LIC_FRM_FILES", license_info_from_file)
         else:
-            self.value_error('FILE_LIC_FRM_FILES_FIELD', license_info_from_files)
+            self.value_error("FILE_LIC_FRM_FILES_FIELD", license_info_from_files)
 
     def parse_file_license_comments(self, license_comments):
         """
@@ -752,13 +874,35 @@ class FileParser(BaseParser):
         """
         if isinstance(license_comments, six.string_types):
             try:
-                return self.builder.set_file_license_comment(self.document, license_comments)
+                return self.builder.set_file_license_comment(
+                    self.document, license_comments
+                )
             except CardinalityError:
-                self.more_than_one_error('FILE_LIC_COMMENTS')
+                self.more_than_one_error("FILE_LIC_COMMENTS")
             except OrderError:
-                self.order_error('FILE_LIC_COMMENTS', 'FILE_NAME')
+                self.order_error("FILE_LIC_COMMENTS", "FILE_NAME")
         elif license_comments is not None:
-            self.value_error('FILE_LIC_COMMENTS', license_comments)
+            self.value_error("FILE_LIC_COMMENTS", license_comments)
+
+    def parse_file_attribution_text(self, file_attribution_texts):
+        """
+        Parse File attribution texts
+        - file_attribution_texts : list in yaml, json and string in xml format
+        """
+        if isinstance(file_attribution_texts, list) or isinstance(
+            file_attribution_texts, six.string_types
+        ):
+            for file_attribution_text in file_attribution_texts:
+                try:
+                    return self.builder.set_file_attribution_text(
+                        self.document, file_attribution_texts
+                    )
+                except CardinalityError:
+                    self.more_than_one_error("FILE_ATTRIBUTION_TEXT")
+                except OrderError:
+                    self.order_error("FILE_ATTRIBUTION_TEXT", "FILE_NAME")
+            else:
+                self.value_error("FILE_ATTRIBUTION_TEXT", file_attribution_texts)
 
     def parse_file_copyright_text(self, copyright_text):
         """
@@ -769,11 +913,11 @@ class FileParser(BaseParser):
             try:
                 return self.builder.set_file_copyright(self.document, copyright_text)
             except CardinalityError:
-                self.more_than_one_error('FILE_COPYRIGHT_TEXT')
+                self.more_than_one_error("FILE_COPYRIGHT_TEXT")
             except OrderError:
-                self.order_error('FILE_COPYRIGHT_TEXT', 'FILE_NAME')
+                self.order_error("FILE_COPYRIGHT_TEXT", "FILE_NAME")
         else:
-            self.value_error('FILE_COPYRIGHT_TEXT', copyright_text)
+            self.value_error("FILE_COPYRIGHT_TEXT", copyright_text)
 
     def parse_file_artifacts(self, file_artifacts):
         """
@@ -783,14 +927,20 @@ class FileParser(BaseParser):
         if isinstance(file_artifacts, list):
             for artifact in file_artifacts:
                 if isinstance(artifact, dict):
-                    self.builder.set_file_atrificat_of_project(self.document, 'name', artifact.get('name', UnKnown()))
-                    self.builder.set_file_atrificat_of_project(self.document, 'home', artifact.get('homePage', UnKnown()))
-                    self.builder.set_file_atrificat_of_project(self.document, 'uri', artifact.get('projectUri', UnKnown()))
+                    self.builder.set_file_atrificat_of_project(
+                        self.document, "name", artifact.get("name", UnKnown())
+                    )
+                    self.builder.set_file_atrificat_of_project(
+                        self.document, "home", artifact.get("homePage", UnKnown())
+                    )
+                    self.builder.set_file_atrificat_of_project(
+                        self.document, "uri", artifact.get("projectUri", UnKnown())
+                    )
                     return True
                 else:
-                    self.value_error('ARTIFACT_OF_VALUE', artifact)
+                    self.value_error("ARTIFACT_OF_VALUE", artifact)
         elif file_artifacts is not None:
-            self.value_error('ARTIFACT_OF_FIELD', file_artifacts)
+            self.value_error("ARTIFACT_OF_FIELD", file_artifacts)
 
     def parse_file_comment(self, file_comment):
         """
@@ -801,11 +951,11 @@ class FileParser(BaseParser):
             try:
                 return self.builder.set_file_comment(self.document, file_comment)
             except CardinalityError:
-                self.more_than_one_error('FILE_COMMENT')
+                self.more_than_one_error("FILE_COMMENT")
             except OrderError:
-                self.order_error('FILE_COMMENT', 'FILE_NAME')
+                self.order_error("FILE_COMMENT", "FILE_NAME")
         elif file_comment is not None:
-            self.value_error('FILE_COMMENT', file_comment)
+            self.value_error("FILE_COMMENT", file_comment)
 
     def parse_file_notice_text(self, notice_text):
         """
@@ -816,11 +966,11 @@ class FileParser(BaseParser):
             try:
                 return self.builder.set_file_notice(self.document, notice_text)
             except CardinalityError:
-                self.more_than_one_error('FILE_NOTICE_TEXT')
+                self.more_than_one_error("FILE_NOTICE_TEXT")
             except OrderError:
-                self.order_error('FILE_NOTICE_TEXT', 'FILE_NAME')
+                self.order_error("FILE_NOTICE_TEXT", "FILE_NAME")
         elif notice_text is not None:
-            self.value_error('FILE_NOTICE_TEXT', notice_text)
+            self.value_error("FILE_NOTICE_TEXT", notice_text)
 
     def parse_file_contributors(self, file_contributors):
         """
@@ -833,11 +983,11 @@ class FileParser(BaseParser):
                     try:
                         self.builder.add_file_contribution(self.document, contributor)
                     except OrderError:
-                        self.order_error('FILE_CONTRIBUTOR', 'FILE_NAME')
+                        self.order_error("FILE_CONTRIBUTOR", "FILE_NAME")
                 else:
-                    self.value_error('FILE_CONTRIBUTOR', contributor)
+                    self.value_error("FILE_CONTRIBUTOR", contributor)
         elif file_contributors is not None:
-            self.value_error('FILE_CONTRIBUTORS', file_contributors)
+            self.value_error("FILE_CONTRIBUTORS", file_contributors)
 
     def parse_file_dependencies(self, file_dependencies):
         """
@@ -851,11 +1001,11 @@ class FileParser(BaseParser):
                     try:
                         self.builder.add_file_dep(self.document, dependency)
                     except OrderError:
-                        self.order_error('FILE_DEPENDENCY', 'FILE_NAME')
+                        self.order_error("FILE_DEPENDENCY", "FILE_NAME")
                 else:
-                    self.value_error('FILE_DEPENDENCY', dependency)
+                    self.value_error("FILE_DEPENDENCY", dependency)
         elif file_dependencies is not None:
-            self.value_error('FILE_DEPENDENCIES', file_dependencies)
+            self.value_error("FILE_DEPENDENCIES", file_dependencies)
 
     def _handle_file_dependency(self, file_dependency):
         """
@@ -864,9 +1014,9 @@ class FileParser(BaseParser):
         return: file name (str/unicode) or None
         """
         if isinstance(file_dependency, dict):
-            filelike_dependency = file_dependency.get('File')
+            filelike_dependency = file_dependency.get("File")
             if isinstance(filelike_dependency, dict):
-                return filelike_dependency.get('name')
+                return filelike_dependency.get("name")
             return None
         return None
 
@@ -879,11 +1029,12 @@ class FileParser(BaseParser):
             try:
                 return self.builder.set_file_chksum(self.document, file_chksum)
             except CardinalityError:
-                self.more_than_one_error('FILE_CHECKSUM')
+                self.more_than_one_error("FILE_CHECKSUM")
             except OrderError:
-                self.order_error('FILE_CHECKSUM', 'FILE_NAME')
+                self.order_error("FILE_CHECKSUM", "FILE_NAME")
         else:
-            self.value_error('FILE_CHECKSUM', file_chksum)
+            self.value_error("FILE_CHECKSUM", file_chksum)
+
 
 class PackageParser(BaseParser):
     def __init__(self, builder, logger):
@@ -895,28 +1046,29 @@ class PackageParser(BaseParser):
         - package: Python dict with Package Information fields in it
         """
         if isinstance(package, dict):
-            self.parse_pkg_name(package.get('name'))
-            self.parse_pkg_id(package.get('id'))
-            self.parse_pkg_version(package.get('versionInfo'))
-            self.parse_pkg_file_name(package.get('packageFileName'))
-            self.parse_pkg_supplier(package.get('supplier'))
-            self.parse_pkg_originator(package.get('originator'))
-            self.parse_pkg_down_location(package.get('downloadLocation'))
-            self.parse_pkg_verif_code_field(package.get('packageVerificationCode'))
-            self.parse_pkg_homepage(package.get('homepage'))
-            self.parse_pkg_source_info(package.get('sourceInfo'))
-            self.parse_pkg_concluded_license(package.get('licenseConcluded'))
-            self.parse_pkg_license_info_from_files(package.get('licenseInfoFromFiles'))
-            self.parse_pkg_declared_license(package.get('licenseDeclared'))
-            self.parse_pkg_license_comment(package.get('licenseComments'))
-            self.parse_pkg_copyright_text(package.get('copyrightText'))
-            self.parse_pkg_summary(package.get('summary'))
-            self.parse_pkg_description(package.get('description'))
-            self.parse_annotations(package.get('annotations'))
-            self.parse_pkg_files(package.get('files'))
-            self.parse_pkg_chksum(package.get('sha1'))
+            self.parse_pkg_name(package.get("name"))
+            self.parse_pkg_id(package.get("SPDXID"))
+            self.parse_pkg_version(package.get("versionInfo"))
+            self.parse_pkg_file_name(package.get("packageFileName"))
+            self.parse_pkg_supplier(package.get("supplier"))
+            self.parse_pkg_originator(package.get("originator"))
+            self.parse_pkg_down_location(package.get("downloadLocation"))
+            self.parse_pkg_verif_code_field(package.get("packageVerificationCode"))
+            self.parse_pkg_homepage(package.get("homepage"))
+            self.parse_pkg_source_info(package.get("sourceInfo"))
+            self.parse_pkg_concluded_license(package.get("licenseConcluded"))
+            self.parse_pkg_license_info_from_files(package.get("licenseInfoFromFiles"))
+            self.parse_pkg_declared_license(package.get("licenseDeclared"))
+            self.parse_pkg_license_comment(package.get("licenseComments"))
+            self.parse_pkg_copyright_text(package.get("copyrightText"))
+            self.parse_pkg_summary(package.get("summary"))
+            self.parse_pkg_description(package.get("description"))
+            self.parse_annotations(package.get("annotations"))
+            self.parse_pkg_attribution_text(package.get("attributionTexts"))
+            self.parse_pkg_files(package.get("files"))
+            self.parse_pkg_chksum(package.get("sha1"))
         else:
-            self.value_error('PACKAGE', package)
+            self.value_error("PACKAGE", package)
 
     def parse_pkg_name(self, pkg_name):
         """
@@ -925,8 +1077,8 @@ class PackageParser(BaseParser):
         """
         if isinstance(pkg_name, six.string_types):
             return self.builder.create_package(self.document, pkg_name)
-        self.value_error('PKG_NAME', pkg_name)
-        return self.builder.create_package(self.document, 'dummy_package')
+        self.value_error("PKG_NAME", pkg_name)
+        return self.builder.create_package(self.document, "dummy_package")
         # pkg_name is set even if it is None or not string. If weren't, the other attributes
         # would be added to the package previously added.
         # Another approach is to skip the whole package itself
@@ -940,11 +1092,11 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_spdx_id(self.document, pkg_id)
             except SPDXValueError:
-                self.value_error('PKG_ID', pkg_id)
+                self.value_error("PKG_ID", pkg_id)
             except CardinalityError:
-                self.more_than_one_error('PKG_ID')
+                self.more_than_one_error("PKG_ID")
         else:
-            self.value_error('PKG_ID', pkg_id)
+            self.value_error("PKG_ID", pkg_id)
 
     def parse_pkg_version(self, pkg_version):
         """
@@ -955,11 +1107,11 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_vers(self.document, pkg_version)
             except CardinalityError:
-                self.more_than_one_error('PKG_VERSION')
+                self.more_than_one_error("PKG_VERSION")
             except OrderError:
-                self.order_error('PKG_VERSION', 'PKG_NAME')
+                self.order_error("PKG_VERSION", "PKG_NAME")
         elif pkg_version is not None:
-            self.value_error('PKG_VERSION', pkg_version)
+            self.value_error("PKG_VERSION", pkg_version)
 
     def parse_pkg_file_name(self, pkg_file_name):
         """
@@ -970,11 +1122,11 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_file_name(self.document, pkg_file_name)
             except CardinalityError:
-                self.more_than_one_error('PKG_FILE_NAME')
+                self.more_than_one_error("PKG_FILE_NAME")
             except OrderError:
-                self.order_error('PKG_FILE_NAME', 'PKG_NAME')
+                self.order_error("PKG_FILE_NAME", "PKG_NAME")
         elif pkg_file_name is not None:
-            self.value_error('PKG_FILE_NAME', pkg_file_name)
+            self.value_error("PKG_FILE_NAME", pkg_file_name)
 
     def parse_pkg_supplier(self, pkg_supplier):
         """
@@ -986,13 +1138,13 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_supplier(self.document, entity)
             except SPDXValueError:
-                self.value_error('PKG_SUPPL_VALUE', pkg_supplier)
+                self.value_error("PKG_SUPPL_VALUE", pkg_supplier)
             except CardinalityError:
-                self.more_than_one_error('PKG_SUPPL_VALUE')
+                self.more_than_one_error("PKG_SUPPL_VALUE")
             except OrderError:
-                self.order_error('PKG_SUPPL_VALUE', 'PKG_NAME')
+                self.order_error("PKG_SUPPL_VALUE", "PKG_NAME")
         elif pkg_supplier is not None:
-            self.value_error('PKG_SUPPL_VALUE', pkg_supplier)
+            self.value_error("PKG_SUPPL_VALUE", pkg_supplier)
 
     def parse_pkg_originator(self, pkg_originator):
         """
@@ -1004,13 +1156,13 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_originator(self.document, entity)
             except SPDXValueError:
-                self.value_error('PKG_ORIGINATOR_VALUE', pkg_originator)
+                self.value_error("PKG_ORIGINATOR_VALUE", pkg_originator)
             except CardinalityError:
-                self.more_than_one_error('PKG_ORIGINATOR_VALUE')
+                self.more_than_one_error("PKG_ORIGINATOR_VALUE")
             except OrderError:
-                self.order_error('PKG_ORIGINATOR_VALUE', 'PKG_NAME')
+                self.order_error("PKG_ORIGINATOR_VALUE", "PKG_NAME")
         elif pkg_originator is not None:
-            self.value_error('PKG_ORIGINATOR_VALUE', pkg_originator)
+            self.value_error("PKG_ORIGINATOR_VALUE", pkg_originator)
 
     def parse_pkg_down_location(self, pkg_down_location):
         """
@@ -1019,13 +1171,15 @@ class PackageParser(BaseParser):
         """
         if isinstance(pkg_down_location, six.string_types):
             try:
-                return self.builder.set_pkg_down_location(self.document, pkg_down_location)
+                return self.builder.set_pkg_down_location(
+                    self.document, pkg_down_location
+                )
             except CardinalityError:
-                self.more_than_one_error('PKG_DOWN_LOC')
+                self.more_than_one_error("PKG_DOWN_LOC")
             except OrderError:
-                self.order_error('PKG_DOWN_LOC', 'PKG_NAME')
+                self.order_error("PKG_DOWN_LOC", "PKG_NAME")
         else:
-            self.value_error('PKG_DOWN_LOC', pkg_down_location)
+            self.value_error("PKG_DOWN_LOC", pkg_down_location)
 
     def parse_pkg_verif_code_field(self, pkg_verif_code_field):
         """
@@ -1033,10 +1187,12 @@ class PackageParser(BaseParser):
         - pkg_verif_code_field: Python dict('value':str/unicode, 'excludedFilesNames':list)
         """
         if isinstance(pkg_verif_code_field, dict):
-            self.parse_pkg_verif_exc_files(pkg_verif_code_field.get('excludedFilesNames'))
-            return self.parse_pkg_verif_code(pkg_verif_code_field.get('value'))
+            self.parse_pkg_verif_exc_files(
+                pkg_verif_code_field.get("packageVerificationCodeExcludedFiles")
+            )
+            return self.parse_pkg_verif_code(pkg_verif_code_field.get("packageVerificationCodeValue"))
         else:
-            self.value_error('PKG_VERIF_CODE_FIELD', pkg_verif_code_field)
+            self.value_error("PKG_VERIF_CODE_FIELD", pkg_verif_code_field)
 
     def parse_pkg_verif_code(self, pkg_verif_code):
         """
@@ -1047,11 +1203,11 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_verif_code(self.document, pkg_verif_code)
             except CardinalityError:
-                self.more_than_one_error('PKG_VERIF_CODE')
+                self.more_than_one_error("PKG_VERIF_CODE")
             except OrderError:
-                self.order_error('PKG_VERIF_CODE', 'PKG_NAME')
+                self.order_error("PKG_VERIF_CODE", "PKG_NAME")
         else:
-            self.value_error('PKG_VERIF_CODE', pkg_verif_code)
+            self.value_error("PKG_VERIF_CODE", pkg_verif_code)
 
     def parse_pkg_verif_exc_files(self, pkg_verif_exc_files):
         """
@@ -1062,13 +1218,15 @@ class PackageParser(BaseParser):
             for pkg_verif_exc_file in pkg_verif_exc_files:
                 if isinstance(pkg_verif_exc_file, six.string_types):
                     try:
-                        self.builder.set_pkg_excl_file(self.document, pkg_verif_exc_file)
+                        self.builder.set_pkg_excl_file(
+                            self.document, pkg_verif_exc_file
+                        )
                     except OrderError:
-                        self.order_error('PKG_VERIF_EXC_FILE', 'PKG_NAME')
+                        self.order_error("PKG_VERIF_EXC_FILE", "PKG_NAME")
                 else:
-                    self.value_error('PKG_VERIF_EXC_FILE', pkg_verif_exc_file)
+                    self.value_error("PKG_VERIF_EXC_FILE", pkg_verif_exc_file)
         elif pkg_verif_exc_files is not None:
-            self.value_error('PKG_VERIF_EXC_FILE_FIELD', pkg_verif_exc_files)
+            self.value_error("PKG_VERIF_EXC_FILE_FIELD", pkg_verif_exc_files)
 
     def parse_pkg_homepage(self, pkg_homepage):
         """
@@ -1079,13 +1237,13 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_home(self.document, pkg_homepage)
             except SPDXValueError:
-                self.value_error('PKG_HOMEPAGE', pkg_homepage)
+                self.value_error("PKG_HOMEPAGE", pkg_homepage)
             except CardinalityError:
-                self.more_than_one_error('PKG_HOMEPAGE')
+                self.more_than_one_error("PKG_HOMEPAGE")
             except OrderError:
-                self.order_error('PKG_HOMEPAGE', 'PKG_NAME')
+                self.order_error("PKG_HOMEPAGE", "PKG_NAME")
         elif pkg_homepage is not None:
-            self.value_error('PKG_HOMEPAGE', pkg_homepage)
+            self.value_error("PKG_HOMEPAGE", pkg_homepage)
 
     def parse_pkg_source_info(self, pkg_source_info):
         """
@@ -1096,11 +1254,11 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_source_info(self.document, pkg_source_info)
             except CardinalityError:
-                self.more_than_one_error('PKG_SRC_INFO')
+                self.more_than_one_error("PKG_SRC_INFO")
             except OrderError:
-                self.order_error('PKG_SRC_INFO', 'PKG_NAME')
+                self.order_error("PKG_SRC_INFO", "PKG_NAME")
         elif pkg_source_info is not None:
-            self.value_error('PKG_SRC_INFO', pkg_source_info)
+            self.value_error("PKG_SRC_INFO", pkg_source_info)
 
     def parse_pkg_concluded_license(self, pkg_concluded_license):
         """
@@ -1110,17 +1268,21 @@ class PackageParser(BaseParser):
         if isinstance(pkg_concluded_license, six.string_types):
             lic_parser = utils.LicenseListParser()
             lic_parser.build(write_tables=0, debug=0)
-            license_object = self.replace_license(lic_parser.parse(pkg_concluded_license))
+            license_object = self.replace_license(
+                lic_parser.parse(pkg_concluded_license)
+            )
             try:
-                return self.builder.set_pkg_licenses_concluded(self.document, license_object)
+                return self.builder.set_pkg_licenses_concluded(
+                    self.document, license_object
+                )
             except SPDXValueError:
-                self.value_error('PKG_SINGLE_LICS', pkg_concluded_license)
+                self.value_error("PKG_SINGLE_LICS", pkg_concluded_license)
             except CardinalityError:
-                self.more_than_one_error('PKG_SINGLE_LICS')
+                self.more_than_one_error("PKG_SINGLE_LICS")
             except OrderError:
-                self.order_error('PKG_SINGLE_LICS', 'PKG_NAME')
+                self.order_error("PKG_SINGLE_LICS", "PKG_NAME")
         else:
-            self.value_error('PKG_SINGLE_LICS', pkg_concluded_license)
+            self.value_error("PKG_SINGLE_LICS", pkg_concluded_license)
 
     def parse_pkg_license_info_from_files(self, license_info_from_files):
         """
@@ -1132,17 +1294,41 @@ class PackageParser(BaseParser):
                 if isinstance(license_info_from_file, six.string_types):
                     lic_parser = utils.LicenseListParser()
                     lic_parser.build(write_tables=0, debug=0)
-                    license_object = self.replace_license(lic_parser.parse(license_info_from_file))
+                    license_object = self.replace_license(
+                        lic_parser.parse(license_info_from_file)
+                    )
                     try:
-                        self.builder.set_pkg_license_from_file(self.document, license_object)
+                        self.builder.set_pkg_license_from_file(
+                            self.document, license_object
+                        )
                     except SPDXValueError:
-                        self.value_error('PKG_LIC_FRM_FILES', license_info_from_file)
+                        self.value_error("PKG_LIC_FRM_FILES", license_info_from_file)
                     except OrderError:
-                        self.order_error('PKG_LIC_FRM_FILES', 'PKG_NAME')
+                        self.order_error("PKG_LIC_FRM_FILES", "PKG_NAME")
                 else:
-                    self.value_error('PKG_LIC_FRM_FILES', license_info_from_file)
+                    self.value_error("PKG_LIC_FRM_FILES", license_info_from_file)
         else:
-            self.value_error('PKG_LIC_FRM_FILES_FIELD', license_info_from_files)
+            self.value_error("PKG_LIC_FRM_FILES_FIELD", license_info_from_files)
+
+    def parse_pkg_attribution_text(self, pkg_attribution_texts):
+        """
+        Parse Package attribution texts
+        - pkg_attribution_texts : list in yaml, json and string in xml format
+        """
+        if isinstance(pkg_attribution_texts, list) or isinstance(
+            pkg_attribution_texts, six.string_types
+        ):
+            for pkg_attribution_text in pkg_attribution_texts:
+                try:
+                    return self.builder.set_pkg_attribution_text(
+                        self.document, pkg_attribution_texts
+                    )
+                except CardinalityError:
+                    self.more_than_one_error("PKG_ATTRIBUTION_TEXT")
+                except OrderError:
+                    self.order_error("PKG_ATTRIBUTION_TEXT", "PKG_NAME")
+            else:
+                self.value_error("PKG_ATTRIBUTION_TEXT", pkg_attribution_texts)
 
     def parse_pkg_declared_license(self, pkg_declared_license):
         """
@@ -1152,17 +1338,21 @@ class PackageParser(BaseParser):
         if isinstance(pkg_declared_license, six.string_types):
             lic_parser = utils.LicenseListParser()
             lic_parser.build(write_tables=0, debug=0)
-            license_object = self.replace_license(lic_parser.parse(pkg_declared_license))
+            license_object = self.replace_license(
+                lic_parser.parse(pkg_declared_license)
+            )
             try:
-                return self.builder.set_pkg_license_declared(self.document, license_object)
+                return self.builder.set_pkg_license_declared(
+                    self.document, license_object
+                )
             except SPDXValueError:
-                self.value_error('PKG_DECL_LIC', pkg_declared_license)
+                self.value_error("PKG_DECL_LIC", pkg_declared_license)
             except CardinalityError:
-                self.more_than_one_error('PKG_DECL_LIC')
+                self.more_than_one_error("PKG_DECL_LIC")
             except OrderError:
-                self.order_error('PKG_DECL_LIC', 'PKG_NAME')
+                self.order_error("PKG_DECL_LIC", "PKG_NAME")
         else:
-            self.value_error('PKG_DECL_LIC', pkg_declared_license)
+            self.value_error("PKG_DECL_LIC", pkg_declared_license)
 
     def parse_pkg_license_comment(self, pkg_license_comment):
         """
@@ -1171,13 +1361,15 @@ class PackageParser(BaseParser):
         """
         if isinstance(pkg_license_comment, six.string_types):
             try:
-                return self.builder.set_pkg_license_comment(self.document, pkg_license_comment)
+                return self.builder.set_pkg_license_comment(
+                    self.document, pkg_license_comment
+                )
             except CardinalityError:
-                self.more_than_one_error('PKG_LIC_COMMENT')
+                self.more_than_one_error("PKG_LIC_COMMENT")
             except OrderError:
-                self.order_error('PKG_LIC_COMMENT', 'PKG_NAME')
+                self.order_error("PKG_LIC_COMMENT", "PKG_NAME")
         elif pkg_license_comment is not None:
-            self.value_error('PKG_LIC_COMMENT', pkg_license_comment)
+            self.value_error("PKG_LIC_COMMENT", pkg_license_comment)
 
     def parse_pkg_copyright_text(self, pkg_copyright_text):
         """
@@ -1188,11 +1380,11 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_cr_text(self.document, pkg_copyright_text)
             except CardinalityError:
-                self.more_than_one_error('PKG_COPYRIGHT_TEXT')
+                self.more_than_one_error("PKG_COPYRIGHT_TEXT")
             except OrderError:
-                self.order_error('PKG_COPYRIGHT_TEXT', 'PKG_NAME')
+                self.order_error("PKG_COPYRIGHT_TEXT", "PKG_NAME")
         else:
-            self.value_error('PKG_COPYRIGHT_TEXT', pkg_copyright_text)
+            self.value_error("PKG_COPYRIGHT_TEXT", pkg_copyright_text)
 
     def parse_pkg_summary(self, pkg_summary):
         """
@@ -1203,11 +1395,11 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_summary(self.document, pkg_summary)
             except CardinalityError:
-                self.more_than_one_error('PKG_SUMMARY')
+                self.more_than_one_error("PKG_SUMMARY")
             except OrderError:
-                self.order_error('PKG_SUMMARY', 'PKG_NAME')
+                self.order_error("PKG_SUMMARY", "PKG_NAME")
         elif pkg_summary is not None:
-            self.value_error('PKG_SUMMARY', pkg_summary)
+            self.value_error("PKG_SUMMARY", pkg_summary)
 
     def parse_pkg_description(self, pkg_description):
         """
@@ -1218,11 +1410,11 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_desc(self.document, pkg_description)
             except CardinalityError:
-                self.more_than_one_error('PKG_DESCRIPTION')
+                self.more_than_one_error("PKG_DESCRIPTION")
             except OrderError:
-                self.order_error('PKG_DESCRIPTION', 'PKG_NAME')
+                self.order_error("PKG_DESCRIPTION", "PKG_NAME")
         elif pkg_description is not None:
-            self.value_error('PKG_DESCRIPTION', pkg_description)
+            self.value_error("PKG_DESCRIPTION", pkg_description)
 
     def parse_pkg_files(self, pkg_files):
         """
@@ -1232,11 +1424,11 @@ class PackageParser(BaseParser):
         if isinstance(pkg_files, list):
             for pkg_file in pkg_files:
                 if isinstance(pkg_file, dict):
-                    self.parse_file(pkg_file.get('File'))
+                    self.parse_file(pkg_file.get("File"))
                 else:
-                    self.value_error('PKG_FILE', pkg_file)
+                    self.value_error("PKG_FILE", pkg_file)
         else:
-            self.value_error('PKG_FILES', pkg_files)
+            self.value_error("PKG_FILES", pkg_files)
 
     def parse_pkg_chksum(self, pkg_chksum):
         """
@@ -1247,16 +1439,24 @@ class PackageParser(BaseParser):
             try:
                 return self.builder.set_pkg_chk_sum(self.document, pkg_chksum)
             except CardinalityError:
-                self.more_than_one_error('PKG_CHECKSUM')
+                self.more_than_one_error("PKG_CHECKSUM")
             except OrderError:
-                self.order_error('PKG_CHECKSUM', 'PKG_NAME')
+                self.order_error("PKG_CHECKSUM", "PKG_NAME")
         elif pkg_chksum is not None:
-            self.value_error('PKG_CHECKSUM', pkg_chksum)
+            self.value_error("PKG_CHECKSUM", pkg_chksum)
 
 
-class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
-            AnnotationParser, SnippetParser, ReviewParser, FileParser, PackageParser):
-
+class Parser(
+    CreationInfoParser,
+    ExternalDocumentRefsParser,
+    LicenseParser,
+    AnnotationParser,
+    RelationshipParser,
+    SnippetParser,
+    ReviewParser,
+    FileParser,
+    PackageParser,
+):
     def __init__(self, builder, logger):
         super(Parser, self).__init__(builder, logger)
 
@@ -1267,24 +1467,29 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
         self.error = False
         self.document = document.Document()
         if not isinstance(self.document_object, dict):
-            self.logger.log('Empty or not valid SPDX Document')
+            self.logger.log("Empty or not valid SPDX Document")
             self.error = True
             return self.document, self.error
 
-        self.parse_doc_version(self.document_object.get('specVersion'))
-        self.parse_doc_data_license(self.document_object.get('dataLicense'))
-        self.parse_doc_id(self.document_object.get('id'))
-        self.parse_doc_name(self.document_object.get('name'))
-        self.parse_doc_namespace(self.document_object.get('namespace'))
-        self.parse_doc_comment(self.document_object.get('comment'))
-        self.parse_creation_info(self.document_object.get('creationInfo'))
-        self.parse_external_document_refs(self.document_object.get('externalDocumentRefs'))
-        self.parse_extracted_license_info(self.document_object.get('extractedLicenseInfos'))
-        self.parse_annotations(self.document_object.get('annotations'))
-        self.parse_reviews(self.document_object.get('reviewers'))
-        self.parse_snippets(self.document_object.get('snippets'))
+        self.parse_doc_version(self.document_object.get("spdxVersion"))
+        self.parse_doc_data_license(self.document_object.get("dataLicense"))
+        self.parse_doc_id(self.document_object.get("SPDXID"))
+        self.parse_doc_name(self.document_object.get("name"))
+        self.parse_doc_namespace(self.document_object.get("documentNamespace"))
+        self.parse_doc_comment(self.document_object.get("comment"))
+        self.parse_creation_info(self.document_object.get("creationInfo"))
+        self.parse_external_document_refs(
+            self.document_object.get("externalDocumentRefs")
+        )
+        self.parse_extracted_license_info(
+            self.document_object.get("hasExtractedLicensingInfos")
+        )
+        self.parse_annotations(self.document_object.get("annotations"))
+        self.parse_relationships(self.document_object.get("relationships"))
+        self.parse_reviews(self.document_object.get("reviewers"))
+        self.parse_snippets(self.document_object.get("snippets"))
 
-        self.parse_doc_described_objects(self.document_object.get('documentDescribes'))
+        self.parse_doc_described_objects(self.document_object.get("documentDescribes"))
 
         validation_messages = []
         # Report extra errors if self.error is False otherwise there will be
@@ -1307,11 +1512,11 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
             try:
                 return self.builder.set_doc_version(self.document, doc_version)
             except SPDXValueError:
-                self.value_error('DOC_VERS_VALUE', doc_version)
+                self.value_error("DOC_VERS_VALUE", doc_version)
             except CardinalityError:
-                self.more_than_one_error('DOC_VERS_VALUE')
+                self.more_than_one_error("DOC_VERS_VALUE")
         else:
-            self.value_error('DOC_VERS_VALUE', doc_version)
+            self.value_error("DOC_VERS_VALUE", doc_version)
 
     def parse_doc_data_license(self, doc_data_license):
         """
@@ -1321,9 +1526,9 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
         try:
             return self.builder.set_doc_data_lics(self.document, doc_data_license)
         except SPDXValueError:
-            self.value_error('DOC_D_LICS', doc_data_license)
+            self.value_error("DOC_D_LICS", doc_data_license)
         except CardinalityError:
-            self.more_than_one_error('DOC_D_LICS')
+            self.more_than_one_error("DOC_D_LICS")
 
     def parse_doc_id(self, doc_id):
         """
@@ -1334,11 +1539,11 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
             try:
                 return self.builder.set_doc_spdx_id(self.document, doc_id)
             except SPDXValueError:
-                self.value_error('DOC_SPDX_ID_VALUE', doc_id)
+                self.value_error("DOC_SPDX_ID_VALUE", doc_id)
             except CardinalityError:
-                self.more_than_one_error('DOC_SPDX_ID_VALUE')
+                self.more_than_one_error("DOC_SPDX_ID_VALUE")
         else:
-            self.value_error('DOC_SPDX_ID_VALUE', doc_id)
+            self.value_error("DOC_SPDX_ID_VALUE", doc_id)
 
     def parse_doc_name(self, doc_name):
         """
@@ -1349,9 +1554,9 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
             try:
                 return self.builder.set_doc_name(self.document, doc_name)
             except CardinalityError:
-                self.more_than_one_error('DOC_NAME_VALUE')
+                self.more_than_one_error("DOC_NAME_VALUE")
         else:
-            self.value_error('DOC_NAME_VALUE', doc_name)
+            self.value_error("DOC_NAME_VALUE", doc_name)
 
     def parse_doc_namespace(self, doc_namespace):
         """
@@ -1362,11 +1567,11 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
             try:
                 return self.builder.set_doc_namespace(self.document, doc_namespace)
             except SPDXValueError:
-                self.value_error('DOC_NAMESPACE_VALUE', doc_namespace)
+                self.value_error("DOC_NAMESPACE_VALUE", doc_namespace)
             except CardinalityError:
-                self.more_than_one_error('DOC_NAMESPACE_VALUE')
+                self.more_than_one_error("DOC_NAMESPACE_VALUE")
         else:
-            self.value_error('DOC_NAMESPACE_VALUE', doc_namespace)
+            self.value_error("DOC_NAMESPACE_VALUE", doc_namespace)
 
     def parse_doc_comment(self, doc_comment):
         """
@@ -1377,9 +1582,9 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
             try:
                 return self.builder.set_doc_comment(self.document, doc_comment)
             except CardinalityError:
-                self.more_than_one_error('DOC_COMMENT_VALUE')
+                self.more_than_one_error("DOC_COMMENT_VALUE")
         elif doc_comment is not None:
-            self.value_error('DOC_COMMENT_VALUE', doc_comment)
+            self.value_error("DOC_COMMENT_VALUE", doc_comment)
 
     def parse_doc_described_objects(self, doc_described_objects):
         """
@@ -1387,13 +1592,21 @@ class Parser(CreationInfoParser, ExternalDocumentRefsParser, LicenseParser,
         - doc_described_objects: Python list of dicts as in FileParser.parse_file or PackageParser.parse_package
         """
         if isinstance(doc_described_objects, list):
-            packages = filter(lambda described: isinstance(described, dict) and described.get('Package') is not None, doc_described_objects)
-            files = filter(lambda described: isinstance(described, dict) and described.get('File') is not None, doc_described_objects)
+            packages = filter(
+                lambda described: isinstance(described, dict)
+                and described.get("Package") is not None,
+                doc_described_objects,
+            )
+            files = filter(
+                lambda described: isinstance(described, dict)
+                and described.get("File") is not None,
+                doc_described_objects,
+            )
             # At the moment, only single-package documents are supported, so just the last package will be stored.
             for package in packages:
-                self.parse_package(package.get('Package'))
+                self.parse_package(package.get("Package"))
             for file in files:
-                self.parse_file(file.get('File'))
+                self.parse_file(file.get("File"))
             return True
         else:
-            self.value_error('DOC_DESCRIBES', doc_described_objects)
+            self.value_error("DOC_DESCRIBES", doc_described_objects)

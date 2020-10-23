@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,15 +15,13 @@ from __future__ import unicode_literals
 
 
 class StandardLogger(object):
-
     def log(self, msg):
         print(msg)
 
 
 class FileLogger(object):
-
     def __init__(self, logfile):
         self.dest = logfile
 
     def log(self, msg):
-        self.dest.write(msg + '\n')
+        self.dest.write(msg + "\n")

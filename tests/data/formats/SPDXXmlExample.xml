@@ -5,8 +5,9 @@
 		<name>Sample_Document-V2.1</name>
 		<documentDescribes>
 			<Package>
-				<id>SPDXRef-Package</id>
-				<originator>Organization: SPDX</originator>
+				<SPDXID>SPDXRef-Package</SPDXID>
+                <originator>Organization: SPDX</originator>
+                                 <attributionTexts>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</attributionTexts>
 				<files>
 					<File>
 						<licenseInfoFromFiles>Apache-2.0</licenseInfoFromFiles>
@@ -16,11 +17,11 @@
 						<licenseConcluded>Apache-2.0</licenseConcluded>
 						<licenseComments></licenseComments>
 						<checksums>
-							<value>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</value>
+							<checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</checksumValue>
 							<algorithm>checksumAlgorithm_sha1</algorithm>
 						</checksums>
 						<fileTypes>fileType_source</fileTypes>
-						<id>SPDXRef-File2</id>
+						<SPDXID>SPDXRef-File2</SPDXID>
 					</File>
 				</files>
 				<files>
@@ -38,11 +39,11 @@
 						<licenseConcluded>LicenseRef-1</licenseConcluded>
 						<licenseComments>This license is used by Jena</licenseComments>
 						<checksums>
-							<value>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</value>
+							<checksumValue>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</checksumValue>
 							<algorithm>checksumAlgorithm_sha1</algorithm>
 						</checksums>
 						<fileTypes>fileType_archive</fileTypes>
-						<id>SPDXRef-File1</id>
+						<SPDXID>SPDXRef-File1</SPDXID>
 					</File>
 				</files>
 				<licenseInfoFromFiles>LicenseRef-3</licenseInfoFromFiles>
@@ -60,14 +61,14 @@
 				<sourceInfo>Version 1.0 of the SPDX Translator application</sourceInfo>
 				<copyrightText> Copyright 2010, 2011 Source Auditor Inc.</copyrightText>
 				<packageVerificationCode>
-					<value>4e3211c67a2d28fced849ee1bb76e7391b93feba</value>
-					<excludedFilesNames>SpdxTranslatorSpdx.rdf</excludedFilesNames>
-					<excludedFilesNames>SpdxTranslatorSpdx.txt</excludedFilesNames>
+					<packageVerificationCodeValue>4e3211c67a2d28fced849ee1bb76e7391b93feba</packageVerificationCodeValue>
+					<packageVerificationCodeExcludedFiles>SpdxTranslatorSpdx.rdf</packageVerificationCodeExcludedFiles>
+					<packageVerificationCodeExcludedFiles>SpdxTranslatorSpdx.txt</packageVerificationCodeExcludedFiles>
 				</packageVerificationCode>
 				<licenseConcluded>(LicenseRef-1 AND MPL-1.1 AND LicenseRef-2 AND LicenseRef-3 AND Apache-2.0 AND LicenseRef-4 AND Apache-1.0)</licenseConcluded>
 				<supplier>Organization: Linux Foundation</supplier>
 				<checksums>
-					<value>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</value>
+					<checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</checksumValue>
 					<algorithm>checksumAlgorithm_sha1</algorithm>
 				</checksums>
 				<versionInfo>Version 0.9.2</versionInfo>
@@ -86,17 +87,17 @@
 		</creationInfo>
 		<externalDocumentRefs>
 			<checksum>
-				<value>d6a770ba38583ed4bb4525bd96e50461655d2759</value>
+				<checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</checksumValue>
 				<algorithm>checksumAlgorithm_sha1</algorithm>
 			</checksum>
-			<spdxDocumentNamespace>https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301</spdxDocumentNamespace>
+			<spdxDocument>https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301</spdxDocument>
 			<externalDocumentId>DocumentRef-spdx-tool-2.1</externalDocumentId>
 		</externalDocumentRefs>
-		<namespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</namespace>
+		<documentNamespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</documentNamespace>
 		<annotations>
 			<comment>This is just an example. Some of the non-standard licenses look like they are actually BSD 3 clause licenses</comment>
 			<annotationType>REVIEW</annotationType>
-			<id>SPDXRef-45</id>
+			<SPDXID>SPDXRef-45</SPDXID>
 			<annotationDate>2012-06-13T00:00:00Z</annotationDate>
 			<annotator>Person: Jim Reviewer</annotator>
 		</annotations>
@@ -111,7 +112,7 @@
 			<reviewer>Person: Suzanne Reviewer</reviewer>
 			<reviewDate>2011-03-13T00:00:00Z</reviewDate>
 		</reviewers>
-		<extractedLicenseInfos>
+		<hasExtractedLicensingInfos>
 			<extractedText>/*
  * (c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP
  * All rights reserved.
@@ -139,8 +140,8 @@
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */</extractedText>
 			<licenseId>LicenseRef-1</licenseId>
-		</extractedLicenseInfos>
-		<extractedLicenseInfos>
+		</hasExtractedLicensingInfos>
+		<hasExtractedLicensingInfos>
 			<extractedText>This package includes the GRDDL parser developed by Hewlett Packard under the following license:
 © Copyright 2007 Hewlett-Packard Development Company, LP
 
@@ -151,8 +152,8 @@ Redistributions in binary form must reproduce the above copyright notice, this l
 The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission. 
 THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </extractedText>
 			<licenseId>LicenseRef-2</licenseId>
-		</extractedLicenseInfos>
-		<extractedLicenseInfos>
+		</hasExtractedLicensingInfos>
+		<hasExtractedLicensingInfos>
 			<extractedText>The CyberNeko Software License, Version 1.0
 
  
@@ -201,8 +202,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
 			<name>CyberNeko License</name>
 			<seeAlso>http://justasample.url.com</seeAlso>
 			<seeAlso>http://people.apache.org/~andyc/neko/LICENSE</seeAlso>
-		</extractedLicenseInfos>
-		<extractedLicenseInfos>
+		</hasExtractedLicensingInfos>
+		<hasExtractedLicensingInfos>
 			<extractedText>/*
  * (c) Copyright 2009 University of Bristol
  * All rights reserved.
@@ -230,9 +231,9 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
  * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */  </extractedText>
 			<licenseId>LicenseRef-4</licenseId>
-		</extractedLicenseInfos>
-		<specVersion>SPDX-2.1</specVersion>
-		<id>SPDXRef-DOCUMENT</id>
+		</hasExtractedLicensingInfos>
+		<spdxVersion>SPDX-2.1</spdxVersion>
+		<SPDXID>SPDXRef-DOCUMENT</SPDXID>
 		<snippets>
 			<comment>This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0-or-later.</comment>
 			<name>from linux kernel</name>
@@ -240,8 +241,23 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
 			<licenseConcluded>Apache-2.0</licenseConcluded>
 			<licenseInfoFromSnippet>Apache-2.0</licenseInfoFromSnippet>
 			<licenseComments>The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.</licenseComments>
-			<id>SPDXRef-Snippet</id>
+			<SPDXID>SPDXRef-Snippet</SPDXID>
 			<fileId>SPDXRef-DoapSource</fileId>
 		</snippets>
+        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-File</relatedSpdxElement>
+            <relationshipType>DESCRIBES</relationshipType>
+        </relationships>
+        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-Package</relatedSpdxElement>
+            <relationshipType>DESCRIBES</relationshipType>
+        </relationships>
+        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-Package</relatedSpdxElement>
+            <relationshipType>CONTAINS</relationshipType>
+        </relationships>
 	</Document>
 </SpdxDocument>

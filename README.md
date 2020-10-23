@@ -11,6 +11,9 @@
 [5]: https://ci.appveyor.com/api/projects/status/0bf9glha2yg9x8ef/branch/master?svg=true
 [6]: https://ci.appveyor.com/project/spdx/tools-python/branch/master
 
+
+# Information
+
 This library implements an SPDX tag/value and RDF parser, validator and handler in Python.
 This is the result of an initial GSoC contribution by @[ah450](https://github.com/ah450) (or https://github.com/a-h-i) and 
 is maintained by a community of SPDX adopters and enthusiasts.
@@ -41,37 +44,35 @@ Pypi: https://pypi.python.org/pypi/spdx-tools
 
 # How to use
 
-Example tag/value parsing usage:
-```Python
-    from spdx.parsers.tagvalue import Parser
-    from spdx.parsers.tagvaluebuilders import Builder
-    from spdx.parsers.loggers import StandardLogger
-    p = Parser(Builder(), StandardLogger())
-    p.build()
-    # data is a string containing the SPDX file.
-    document, error = p.parse(data)
+## Command-line usage:
 
-```
+1. **PARSER** (for parsing any format):
+* Use   `parser --file <filename>`   where  `<filename>`  is the location of the file.              
+Try running :   `parser --file data/SPDXRdfExample.rdf`.
+       
+* Or you can use  `parser`  only and then it will automatically prompt/ask for  `filename`. 
 
-The `examples` directory contains several code samples. Here some of them:
+* for help - use `parser --help` 
 
-* `parse_tv.py` is an example tag/value parsing usage.
-  Try running `python parse_tv.py ../data/SPDXSimpleTag.tag `
 
-* `write_tv.py` provides an example of writing tag/value files.
-  Run `python write_tv.py sample.tag` to test it.
+2. **CONVERTOR** (for converting one format to another):
+* If I/O formats are known:
+    
+    * Use `convertor --infile/-i <input_file> --outfile/-o <output_file>` where `<input_file>` is the location of the file to be converted 
+    (Note: only RDF and Tag formated supported) and `<output_file>` is the location of the output file.  
+    Try running : `convertor --infile data/SPDXRdfExample.rdf --outfile output.json` 
 
-* `pp_tv.py` demonstrates how to pretty-print a tag/value file.
-   To test it run `python pp_tv.py ../data/SPDXTagExample.tag pretty.tag`.
+* If I/O formats are not known:
 
-* `parse_rdf.py` demonstrates how to parse an RDF file and print out document 
-   information. To test it run `python parse_rdf.py ../data/SPDXRdfExample.rdf`
+    * Use `convertor --from/-f <input_format> <input_file> --to/-t <output_format> <output_file>` where `<input_format>` is the manually enterred format of the input file (can be either rdf or tag)
+    and `<out_format>` (can be tag, rdf, json, yaml, xml) is the manually enterred format of the output file. 
+    Try running : `convertor --from tag data/SPDXTagExample.in --to yaml output.out` 
 
-* `rdf_to_tv.py` demonstrates how to convert an RDF file to a tag/value one.
-   To test it run `python rdf_to_tv.py ../data/SPDXRdfExample.rdf converted.tag`
+* If anyone format is known and other is not, you can use the mixture of the above two points.      
+Ex. : `convertor -f rdf data/SPDXRdfExample.xyz -o output.xml`
 
-* `pp_rdf.py` demonstrates how to pretty-print an RDF file, to test it run 
-  `python pp_rdf.py ../data/SPDXRdfExample.rdf pretty.rdf`
+* for help - use `convertor --help`
+
 
 
 # Installation

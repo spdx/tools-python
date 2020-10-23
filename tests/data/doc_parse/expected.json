@@ -4,7 +4,7 @@
     "major": 2, 
     "minor": 1
   }, 
-  "namespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301", 
+  "documentNamespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301", 
   "name": "Sample_Document-V2.1", 
   "comment": "This is a sample spreadsheet", 
   "dataLicense": {
@@ -216,7 +216,7 @@
   "externalDocumentRefs": [
     {
       "externalDocumentId": "DocumentRef-spdx-tool-2.1", 
-      "spdxDocumentNamespace": "https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301", 
+      "spdxDocument": "https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301", 
       "checksum": {
         "identifier": "SHA1", 
         "value": "d6a770ba38583ed4bb4525bd96e50461655d2759"

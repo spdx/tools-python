@@ -62,7 +62,7 @@ class TestParser(unittest.TestCase):
         """
         assert expected['id'] == result['id']
         assert expected['specVersion'] == result['specVersion']
-        assert expected['namespace'] == result['namespace']
+        assert expected['documentNamespace'] == result['documentNamespace']
         assert expected['name'] == result['name']
         assert expected['comment'] == result['comment']
         assert expected['dataLicense'] == result['dataLicense']

@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,7 +27,7 @@ from spdx.parsers import validations
 
 
 class DocBuilder(object):
-    VERS_STR_REGEX = re.compile(r'SPDX-(\d+)\.(\d+)', re.UNICODE)
+    VERS_STR_REGEX = re.compile(r"SPDX-(\d+)\.(\d+)", re.UNICODE)
 
     def __init__(self):
         # FIXME: this state does not make sense
@@ -44,13 +43,14 @@ class DocBuilder(object):
             self.doc_version_set = True
             m = self.VERS_STR_REGEX.match(value)
             if m is None:
-                raise SPDXValueError('Document::Version')
+                raise SPDXValueError("Document::Version")
             else:
-                doc.version = version.Version(major=int(m.group(1)),
-                                              minor=int(m.group(2)))
+                doc.version = version.Version(
+                    major=int(m.group(1)), minor=int(m.group(2))
+                )
                 return True
         else:
-            raise CardinalityError('Document::Version')
+            raise CardinalityError("Document::Version")
 
     def set_doc_data_lic(self, doc, res):
         """
@@ -61,14 +61,14 @@ class DocBuilder(object):
         if not self.doc_data_lics_set:
             self.doc_data_lics_set = True
             # TODO: what is this split?
-            res_parts = res.split('/')
+            res_parts = res.split("/")
             if len(res_parts) != 0:
                 identifier = res_parts[-1]
                 doc.data_license = document.License.from_identifier(identifier)
             else:
-                raise SPDXValueError('Document::License')
+                raise SPDXValueError("Document::License")
         else:
-            raise CardinalityError('Document::License')
+            raise CardinalityError("Document::License")
 
     def set_doc_name(self, doc, name):
         """
@@ -80,7 +80,7 @@ class DocBuilder(object):
             self.doc_name_set = True
             return True
         else:
-            raise CardinalityError('Document::Name')
+            raise CardinalityError("Document::Name")
 
     def set_doc_spdx_id(self, doc, doc_spdx_id_line):
         """
@@ -94,9 +94,9 @@ class DocBuilder(object):
                 self.doc_spdx_id_set = True
                 return True
             else:
-                raise SPDXValueError('Document::SPDXID')
+                raise SPDXValueError("Document::SPDXID")
         else:
-            raise CardinalityError('Document::SPDXID')
+            raise CardinalityError("Document::SPDXID")
 
     def set_doc_comment(self, doc, comment):
         """
@@ -107,7 +107,7 @@ class DocBuilder(object):
             self.doc_comment_set = True
             doc.comment = comment
         else:
-            raise CardinalityError('Document::Comment')
+            raise CardinalityError("Document::Comment")
 
     def set_doc_namespace(self, doc, namespace):
         """
@@ -121,9 +121,9 @@ class DocBuilder(object):
                 doc.namespace = namespace
                 return True
             else:
-                raise SPDXValueError('Document::Namespace')
+                raise SPDXValueError("Document::Namespace")
         else:
-            raise CardinalityError('Document::Comment')
+            raise CardinalityError("Document::Comment")
 
     def reset_document(self):
         """
@@ -139,7 +139,6 @@ class DocBuilder(object):
 
 
 class ExternalDocumentRefBuilder(tagvaluebuilders.ExternalDocumentRefBuilder):
-
     def set_chksum(self, doc, chk_sum):
         """
         Set the external document reference's check sum, if not already set.
@@ -147,13 +146,13 @@ class ExternalDocumentRefBuilder(tagvaluebuilders.ExternalDocumentRefBuilder):
         """
         if chk_sum:
             doc.ext_document_references[-1].check_sum = checksum.Algorithm(
-                'SHA1', chk_sum)
+                "SHA1", chk_sum
+            )
         else:
-            raise SPDXValueError('ExternalDocumentRef::Checksum')
+            raise SPDXValueError("ExternalDocumentRef::Checksum")
 
 
 class EntityBuilder(tagvaluebuilders.EntityBuilder):
-
     def __init__(self):
         super(EntityBuilder, self).__init__()
 
@@ -165,11 +164,10 @@ class EntityBuilder(tagvaluebuilders.EntityBuilder):
         elif self.org_re.match(value):
             return self.build_org(doc, value)
         else:
-            raise SPDXValueError('Entity')
+            raise SPDXValueError("Entity")
 
 
 class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
-
     def __init__(self):
         super(CreationInfoBuilder, self).__init__()
 
@@ -184,11 +182,10 @@ class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
             doc.creation_info.comment = comment
             return True
         else:
-            raise CardinalityError('CreationInfo::Comment')
+            raise CardinalityError("CreationInfo::Comment")
 
 
 class PackageBuilder(tagvaluebuilders.PackageBuilder):
-
     def __init__(self):
         super(PackageBuilder, self).__init__()
 
@@ -202,9 +199,9 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_chk_sum_set:
             self.package_chk_sum_set = True
-            doc.package.check_sum = checksum.Algorithm('SHA1', chk_sum)
+            doc.package.check_sum = checksum.Algorithm("SHA1", chk_sum)
         else:
-            raise CardinalityError('Package::CheckSum')
+            raise CardinalityError("Package::CheckSum")
 
     def set_pkg_source_info(self, doc, text):
         """
@@ -219,7 +216,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             doc.package.source_info = text
             return True
         else:
-            raise CardinalityError('Package::SourceInfo')
+            raise CardinalityError("Package::SourceInfo")
 
     def set_pkg_verif_code(self, doc, code):
         """
@@ -233,7 +230,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             self.package_verif_set = True
             doc.package.verif_code = code
         else:
-            raise CardinalityError('Package::VerificationCode')
+            raise CardinalityError("Package::VerificationCode")
 
     def set_pkg_excl_file(self, doc, filename):
         """
@@ -255,7 +252,15 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             doc.package.license_comment = text
             return True
         else:
-            raise CardinalityError('Package::LicenseComment')
+            raise CardinalityError("Package::LicenseComment")
+
+    def set_pkg_attribution_text(self, doc, text):
+        """
+        Set the package's attribution text.
+        """
+        self.assert_package_exists()
+        doc.package.attribution_text = text
+        return True
 
     def set_pkg_cr_text(self, doc, text):
         """
@@ -268,7 +273,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             self.package_cr_text_set = True
             doc.package.cr_text = text
         else:
-            raise CardinalityError('Package::CopyrightText')
+            raise CardinalityError("Package::CopyrightText")
 
     def set_pkg_summary(self, doc, text):
         """
@@ -281,7 +286,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             self.package_summary_set = True
             doc.package.summary = text
         else:
-            raise CardinalityError('Package::Summary')
+            raise CardinalityError("Package::Summary")
 
     def set_pkg_desc(self, doc, text):
         """
@@ -294,7 +299,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             self.package_desc_set = True
             doc.package.description = text
         else:
-            raise CardinalityError('Package::Description')
+            raise CardinalityError("Package::Description")
 
     def set_pkg_comment(self, doc, text):
         """
@@ -307,7 +312,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             self.package_comment_set = True
             doc.package.comment = text
         else:
-            raise CardinalityError('Package::Comment')
+            raise CardinalityError("Package::Comment")
 
     def set_pkg_ext_ref_category(self, doc, category):
         """
@@ -316,20 +321,23 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         Raise SPDXValueError if malformed value.
         """
         self.assert_package_exists()
-        category = category.split('_')[-1]
+        category = category.split("_")[-1]
 
-        if category.lower() == 'packagemanager':
-            category = 'PACKAGE-MANAGER'
+        if category.lower() == "packagemanager":
+            category = "PACKAGE-MANAGER"
 
         if validations.validate_pkg_ext_ref_category(category):
-            if (len(doc.package.pkg_ext_refs) and
-                    doc.package.pkg_ext_refs[-1].category is None):
+            if (
+                len(doc.package.pkg_ext_refs)
+                and doc.package.pkg_ext_refs[-1].category is None
+            ):
                 doc.package.pkg_ext_refs[-1].category = category
             else:
                 doc.package.add_pkg_ext_refs(
-                    package.ExternalPackageRef(category=category))
+                    package.ExternalPackageRef(category=category)
+                )
         else:
-            raise SPDXValueError('ExternalRef::Category')
+            raise SPDXValueError("ExternalRef::Category")
 
     def set_pkg_ext_ref_type(self, doc, typ):
         """
@@ -338,20 +346,23 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         Raise SPDXValueError if malformed value.
         """
         self.assert_package_exists()
-        if '#' in typ:
-            typ = typ.split('#')[-1]
+        if "#" in typ:
+            typ = typ.split("#")[-1]
         else:
-            typ = typ.split('/')[-1]
+            typ = typ.split("/")[-1]
 
         if validations.validate_pkg_ext_ref_type(typ):
-            if (len(doc.package.pkg_ext_refs) and
-                    doc.package.pkg_ext_refs[-1].pkg_ext_ref_type is None):
+            if (
+                len(doc.package.pkg_ext_refs)
+                and doc.package.pkg_ext_refs[-1].pkg_ext_ref_type is None
+            ):
                 doc.package.pkg_ext_refs[-1].pkg_ext_ref_type = typ
             else:
                 doc.package.add_pkg_ext_refs(
-                    package.ExternalPackageRef(pkg_ext_ref_type=typ))
+                    package.ExternalPackageRef(pkg_ext_ref_type=typ)
+                )
         else:
-            raise SPDXValueError('ExternalRef::Type')
+            raise SPDXValueError("ExternalRef::Type")
 
     def set_pkg_ext_ref_comment(self, doc, comment):
         """
@@ -361,17 +372,16 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         """
         self.assert_package_exists()
         if not len(doc.package.pkg_ext_refs):
-            raise OrderError('Package::ExternalRef')
+            raise OrderError("Package::ExternalRef")
         if not self.pkg_ext_comment_set:
             self.pkg_ext_comment_set = True
             doc.package.pkg_ext_refs[-1].comment = comment
             return True
         else:
-            raise CardinalityError('ExternalRef::Comment')
+            raise CardinalityError("ExternalRef::Comment")
 
 
 class FileBuilder(tagvaluebuilders.FileBuilder):
-
     def __init__(self):
         super(FileBuilder, self).__init__()
 
@@ -385,12 +395,12 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_chksum_set:
                 self.file_chksum_set = True
-                self.file(doc).chk_sum = checksum.Algorithm('SHA1', chk_sum)
+                self.file(doc).chk_sum = checksum.Algorithm("SHA1", chk_sum)
                 return True
             else:
-                raise CardinalityError('File::CheckSum')
+                raise CardinalityError("File::CheckSum")
         else:
-            raise OrderError('File::CheckSum')
+            raise OrderError("File::CheckSum")
 
     def set_file_license_comment(self, doc, text):
         """
@@ -403,9 +413,18 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
                 self.file(doc).license_comment = text
                 return True
             else:
-                raise CardinalityError('File::LicenseComment')
+                raise CardinalityError("File::LicenseComment")
         else:
-            raise OrderError('File::LicenseComment')
+            raise OrderError("File::LicenseComment")
+
+    def set_file_attribution_text(self, doc, text):
+        """
+        Set the file's attribution text.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            self.assert_package_exists()
+            self.file(doc).attribution_text = text
+            return True
 
     def set_file_copyright(self, doc, text):
         """
@@ -418,9 +437,9 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
                 self.file(doc).copyright = text
                 return True
             else:
-                raise CardinalityError('File::CopyRight')
+                raise CardinalityError("File::CopyRight")
         else:
-            raise OrderError('File::CopyRight')
+            raise OrderError("File::CopyRight")
 
     def set_file_comment(self, doc, text):
         """
@@ -433,9 +452,9 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
                 self.file(doc).comment = text
                 return True
             else:
-                raise CardinalityError('File::Comment')
+                raise CardinalityError("File::Comment")
         else:
-            raise OrderError('File::Comment')
+            raise OrderError("File::Comment")
 
     def set_file_notice(self, doc, text):
         """
@@ -448,13 +467,12 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
                 self.file(doc).notice = tagvaluebuilders.str_from_text(text)
                 return True
             else:
-                raise CardinalityError('File::Notice')
+                raise CardinalityError("File::Notice")
         else:
-            raise OrderError('File::Notice')
+            raise OrderError("File::Notice")
 
 
 class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
-
     def __init__(self):
         super(SnippetBuilder, self).__init__()
 
@@ -469,7 +487,7 @@ class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
             self.snippet_lic_comment_set = True
             doc.snippet[-1].license_comment = lic_comment
         else:
-            CardinalityError('Snippet::licenseComments')
+            CardinalityError("Snippet::licenseComments")
 
     def set_snippet_comment(self, doc, comment):
         """
@@ -483,7 +501,15 @@ class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
             doc.snippet[-1].comment = comment
             return True
         else:
-            raise CardinalityError('Snippet::comment')
+            raise CardinalityError("Snippet::comment")
+
+    def set_snippet_attribution_text(self, doc, text):
+        """
+        Set the snippet's attribution text.
+        """
+        self.assert_snippet_exists()
+        doc.snippet[-1].attribution_text = text
+        return True
 
     def set_snippet_copyright(self, doc, copyright):
         """
@@ -496,11 +522,10 @@ class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
             self.snippet_copyright_set = True
             doc.snippet[-1].copyright = copyright
         else:
-            raise CardinalityError('Snippet::copyrightText')
+            raise CardinalityError("Snippet::copyrightText")
 
 
 class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
-
     def __init__(self):
         super(ReviewBuilder, self).__init__()
 
@@ -516,13 +541,12 @@ class ReviewBuilder(tagvaluebuilders.ReviewBuilder):
                 doc.reviews[-1].comment = comment
                 return True
             else:
-                raise CardinalityError('ReviewComment')
+                raise CardinalityError("ReviewComment")
         else:
-            raise OrderError('ReviewComment')
+            raise OrderError("ReviewComment")
 
 
 class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
-
     def __init__(self):
         super(AnnotationBuilder, self).__init__()
 
@@ -538,9 +562,9 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
                 doc.annotations[-1].comment = comment
                 return True
             else:
-                raise CardinalityError('AnnotationComment')
+                raise CardinalityError("AnnotationComment")
         else:
-            raise OrderError('AnnotationComment')
+            raise OrderError("AnnotationComment")
 
     def add_annotation_type(self, doc, annotation_type):
         """
@@ -550,26 +574,55 @@ class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
         """
         if len(doc.annotations) != 0:
             if not self.annotation_type_set:
-                if annotation_type.endswith('annotationType_other'):
+                if annotation_type.endswith("annotationType_other"):
                     self.annotation_type_set = True
-                    doc.annotations[-1].annotation_type = 'OTHER'
+                    doc.annotations[-1].annotation_type = "OTHER"
                     return True
-                elif annotation_type.endswith('annotationType_review'):
+                elif annotation_type.endswith("annotationType_review"):
                     self.annotation_type_set = True
-                    doc.annotations[-1].annotation_type = 'REVIEW'
+                    doc.annotations[-1].annotation_type = "REVIEW"
                     return True
                 else:
-                    raise SPDXValueError('Annotation::AnnotationType')
+                    raise SPDXValueError("Annotation::AnnotationType")
             else:
-                raise CardinalityError('Annotation::AnnotationType')
+                raise CardinalityError("Annotation::AnnotationType")
         else:
-            raise OrderError('Annotation::AnnotationType')
+            raise OrderError("Annotation::AnnotationType")
 
 
-class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder,
-              FileBuilder, SnippetBuilder, ReviewBuilder, ExternalDocumentRefBuilder,
-              AnnotationBuilder):
+class RelationshipBuilder(tagvaluebuilders.RelationshipBuilder):
+    def __init__(self):
+        super(RelationshipBuilder, self).__init__()
 
+    def add_relationship_comment(self, doc, comment):
+        """
+        Set the relationship comment.
+        Raise CardinalityError if already set.
+        Raise OrderError if no annotator defined before.
+        """
+        if len(doc.relationships) != 0:
+            if not self.relationship_comment_set:
+                self.relationship_comment_set = True
+                doc.relationships[-1].comment = comment
+                return True
+            else:
+                raise CardinalityError("RelationshipComment")
+        else:
+            raise OrderError("RelationshipComment")
+
+
+class Builder(
+    DocBuilder,
+    EntityBuilder,
+    CreationInfoBuilder,
+    PackageBuilder,
+    FileBuilder,
+    SnippetBuilder,
+    ReviewBuilder,
+    ExternalDocumentRefBuilder,
+    AnnotationBuilder,
+    RelationshipBuilder,
+):
     def __init__(self):
         super(Builder, self).__init__()
         # FIXME: this state does not make sense
@@ -587,3 +640,4 @@ class Builder(DocBuilder, EntityBuilder, CreationInfoBuilder, PackageBuilder,
         self.reset_file_stat()
         self.reset_reviews()
         self.reset_annotations()
+        self.reset_relationship()

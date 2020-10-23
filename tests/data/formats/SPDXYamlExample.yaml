@@ -6,7 +6,7 @@ Document:
     annotator: 'Person: Jim Reviewer'
     comment: This is just an example. Some of the non-standard licenses look like
       they are actually BSD 3 clause licenses
-    id: SPDXRef-45
+    SPDXID: SPDXRef-45
   comment: This is a sample spreadsheet
   creationInfo:
     comment: This is an example of an SPDX spreadsheet format
@@ -19,20 +19,26 @@ Document:
   dataLicense: CC0-1.0
   documentDescribes:
   - Package:
-      id: SPDXRef-Package
+      SPDXID: SPDXRef-Package
       checksums:
       - algorithm: checksumAlgorithm_sha1
-        value: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
+        checksumValue: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
       copyrightText: ' Copyright 2010, 2011 Source Auditor Inc.'
       description: This utility translates and SPDX RDF XML document to a spreadsheet,
         translates a spreadsheet to an SPDX RDF XML document and translates an SPDX
         RDFa document to an SPDX RDF XML document.
       downloadLocation: http://www.spdx.org/tools
+      attributionTexts:
+      - "The GNU C Library is free software.  See the file COPYING.LIB for copying conditions,\
+        \ and LICENSES for notices about a few contributions that require these additional\
+        \ notices to be distributed.  License copyright years may be listed using range\
+        \ notation, e.g., 1996-2015, indicating that every year in the range, inclusive,\
+        \ is a copyrightable year that would otherwise be listed individually."
       files:
       - File:
           checksums:
           - algorithm: checksumAlgorithm_sha1
-            value: 3ab4e1c67a2d28fced849ee1bb76e7391b93f125
+            checksumValue: 3ab4e1c67a2d28fced849ee1bb76e7391b93f125
           comment: This file belongs to Jena
           copyrightText: (c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007,
             2008, 2009 Hewlett-Packard Development Company, LP
@@ -42,7 +48,7 @@ Document:
               projectUri: "http://subversion.apache.org/doap.rdf"
           fileTypes:
           - fileType_archive
-          id: SPDXRef-File1
+          SPDXID: SPDXRef-File1
           licenseComments: This license is used by Jena
           licenseConcluded: LicenseRef-1
           licenseInfoFromFiles:
@@ -52,11 +58,11 @@ Document:
       - File:
           checksums:
           - algorithm: checksumAlgorithm_sha1
-            value: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
+            checksumValue: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
           copyrightText: Copyright 2010, 2011 Source Auditor Inc.
           fileTypes:
           - fileType_source
-          id: SPDXRef-File2
+          SPDXID: SPDXRef-File2
           licenseConcluded: Apache-2.0
           licenseInfoFromFiles:
           - Apache-2.0
@@ -80,10 +86,10 @@ Document:
       originator: 'Organization: SPDX'
       packageFileName: spdxtranslator-1.0.zip
       packageVerificationCode:
-        excludedFilesNames:
+        packageVerificationCodeExcludedFiles:
         - SpdxTranslatorSpdx.txt
         - SpdxTranslatorSpdx.rdf
-        value: 4e3211c67a2d28fced849ee1bb76e7391b93feba
+        packageVerificationCodeValue: 4e3211c67a2d28fced849ee1bb76e7391b93feba
       sha1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
       sourceInfo: Version 1.0 of the SPDX Translator application
       summary: SPDX Translator utility
@@ -92,10 +98,10 @@ Document:
   externalDocumentRefs:
   - checksum:
       algorithm: checksumAlgorithm_sha1
-      value: d6a770ba38583ed4bb4525bd96e50461655d2759
+      checksumValue: d6a770ba38583ed4bb4525bd96e50461655d2759
     externalDocumentId: DocumentRef-spdx-tool-2.1
-    spdxDocumentNamespace: https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301
-  extractedLicenseInfos:
+    spdxDocument: https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301
+  hasExtractedLicensingInfos:
   - comment: This is tye CyperNeko License
     extractedText: "The CyberNeko Software License, Version 1.0\n\n \n(C) Copyright\
       \ 2002-2005, Andy Clark.  All rights reserved.\n \nRedistribution and use in\
@@ -193,9 +199,19 @@ Document:
       \ ARISING IN ANY WAY OUT OF THE USE OF\n * THIS SOFTWARE, EVEN IF ADVISED OF\
       \ THE POSSIBILITY OF SUCH DAMAGE.\n */  "
     licenseId: LicenseRef-4
-  id: SPDXRef-DOCUMENT
+  SPDXID: SPDXRef-DOCUMENT
   name: Sample_Document-V2.1
-  namespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
+  documentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
+  relationships:
+  - spdxElementId: "SPDXRef-DOCUMENT"
+    relatedSpdxElement: "SPDXRef-Package"
+    relationshipType: "DESCRIBES"
+  - spdxElementId: "SPDXRef-DOCUMENT"
+    relatedSpdxElement: "SPDXRef-Package"
+    relationshipType: "CONTAINS"
+  - spdxElementId: "SPDXRef-DOCUMENT"
+    relatedSpdxElement: "SPDXRef-File"
+    relationshipType: "DESCRIBES"
   reviewers:
   - comment: Another example reviewer.
     reviewDate: '2011-03-13T00:00:00Z'
@@ -210,7 +226,7 @@ Document:
       in package xyz which is licensed under GPL-2.0-or-later.
     copyrightText: Copyright 2008-2010 John Smith
     fileId: SPDXRef-DoapSource
-    id: SPDXRef-Snippet
+    SPDXID: SPDXRef-Snippet
     licenseComments: The concluded license was taken from package xyz, from which
       the snippet was copied into the current file. The concluded license information
       was found in the COPYING.txt file in package xyz.
@@ -218,4 +234,4 @@ Document:
     licenseInfoFromSnippet:
     - Apache-2.0
     name: from linux kernel
-  specVersion: SPDX-2.1
+  spdxVersion: SPDX-2.1

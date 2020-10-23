@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,6 +16,7 @@ from __future__ import unicode_literals
 
 class BuilderException(Exception):
     """Builder exception base class."""
+
     pass
 
 
@@ -32,4 +32,8 @@ class SPDXValueError(BuilderException):
 
 class OrderError(BuilderException):
     def __init__(self, msg):
+        self.msg = msg
+
+class FileTypeError(BuilderException):
+    def __init__(self,msg):
         self.msg = msg

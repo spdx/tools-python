@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -25,7 +24,7 @@ from spdx import document
 
 
 def validate_is_free_form_text(value, optional=False):
-    TEXT_RE = re.compile(r'<text>(.|\n)*</text>', re.UNICODE)
+    TEXT_RE = re.compile(r"<text>(.|\n)*</text>", re.UNICODE)
     if value is None:
         return optional
     else:
@@ -52,7 +51,7 @@ def validate_org_name(value, optional=False):
 
 
 def validate_data_lics(value):
-    return value == 'CC0-1.0'
+    return value == "CC0-1.0"
 
 
 def validate_doc_name(value, optional=False):
@@ -62,7 +61,9 @@ def validate_doc_name(value, optional=False):
 def validate_pkg_supplier(value, optional=False):
     if optional and value is None:
         return True
-    elif isinstance(value, (utils.NoAssert, creationinfo.Person, creationinfo.Organization)):
+    elif isinstance(
+        value, (utils.NoAssert, creationinfo.Person, creationinfo.Organization)
+    ):
         return True
     else:
         return False
@@ -104,15 +105,27 @@ def validate_pkg_comment(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
 
+def validate_pkg_attribution_text(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
+def validate_file_attribution_text(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
+def validate_snippet_attribution_text(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
 def validate_pkg_ext_ref_category(value, optional=False):
-    if value.upper() in ['SECURITY', 'OTHER', 'PACKAGE-MANAGER']:
+    if value.upper() in ["SECURITY", "OTHER", "PACKAGE-MANAGER"]:
         return True
     else:
         return False
 
 
 def validate_pkg_ext_ref_type(value, optional=False):
-    if re.match(r'^[A-Za-z0-9.\-]+$', value) is not None:
+    if re.match(r"^[A-Za-z0-9.\-]+$", value) is not None:
         return True
     else:
         return False
@@ -129,7 +142,7 @@ def validate_doc_comment(value, optional=False):
 def validate_doc_spdx_id(value, optional=False):
     if value is None:
         return optional
-    elif value.endswith('#SPDXRef-DOCUMENT'):
+    elif value.endswith("#SPDXRef-DOCUMENT"):
         return True
     else:
         return False
@@ -138,9 +151,11 @@ def validate_doc_spdx_id(value, optional=False):
 def validate_doc_namespace(value, optional=False):
     if value is None:
         return optional
-    elif ((value.startswith('http://') or value.startswith(
-            'https://') or
-           value.startswith('ftp://')) and ('#' not in value)):
+    elif (
+        value.startswith("http://")
+        or value.startswith("https://")
+        or value.startswith("ftp://")
+    ) and ("#" not in value):
         return True
     else:
         return False
@@ -175,15 +190,19 @@ def validate_annotation_comment(value, optional=False):
 
 def validate_annotation_type(value, optional=False):
     value = value.strip()
-    if value == 'REVIEW' or value == 'OTHER':
+    if value == "REVIEW" or value == "OTHER":
         return True
     else:
         return False
 
 
+def validate_relationship_comment(value, optional=False):
+    return validate_is_free_form_text(value, optional)
+
+
 def validate_pkg_spdx_id(value, optional=False):
-    value = value.split('#')[-1]
-    TEXT_RE = re.compile(r'SPDXRef-([A-Za-z0-9\.\-]+)', re.UNICODE)
+    value = value.split("#")[-1]
+    TEXT_RE = re.compile(r"SPDXRef-([A-Za-z0-9\.\-]+)", re.UNICODE)
     if value is None:
         return optional
     else:
@@ -191,7 +210,7 @@ def validate_pkg_spdx_id(value, optional=False):
 
 
 def validate_pkg_files_analyzed(value, optional=False):
-    if value in ['True', 'true', 'False', 'false']:
+    if value in ["True", "true", "False", "false"]:
         return True
     else:
         return optional
@@ -206,8 +225,8 @@ def validate_pkg_lics_comment(value, optional=False):
 
 
 def validate_file_spdx_id(value, optional=False):
-    value = value.split('#')[-1]
-    TEXT_RE = re.compile(r'SPDXRef-([A-Za-z0-9.\-]+)', re.UNICODE)
+    value = value.split("#")[-1]
+    TEXT_RE = re.compile(r"SPDXRef-([A-Za-z0-9.\-]+)", re.UNICODE)
     if value is None:
         return optional
     else:
@@ -239,6 +258,7 @@ def validate_lics_from_file(value, optional=False):
     else:
         return False
 
+
 def validate_file_notice(value, optional=False):
     return validate_is_free_form_text(value, optional)
 
@@ -265,7 +285,7 @@ def validate_extracted_lic_id(value, optional=False):
     if value is None:
         return optional
     else:
-        return value.startswith('LicenseRef-')
+        return value.startswith("LicenseRef-")
 
 
 def validate_extr_lic_name(value, optional=False):
@@ -276,8 +296,8 @@ def validate_extr_lic_name(value, optional=False):
 
 
 def validate_snippet_spdx_id(value, optional=False):
-    value = value.split('#')[-1]
-    if re.match(r'^SPDXRef[A-Za-z0-9.\-]+$', value) is not None:
+    value = value.split("#")[-1]
+    if re.match(r"^SPDXRef[A-Za-z0-9.\-]+$", value) is not None:
         return True
     else:
         return False
@@ -303,8 +323,10 @@ def validate_snip_lic_comment(value, optional=False):
 
 
 def validate_snip_file_spdxid(value, optional=False):
-    if re.match(
-            r'(DocumentRef[A-Za-z0-9.\-]+:){0,1}SPDXRef[A-Za-z0-9.\-]+', value) is not None:
+    if (
+        re.match(r"(DocumentRef[A-Za-z0-9.\-]+:){0,1}SPDXRef[A-Za-z0-9.\-]+", value)
+        is not None
+    ):
         return True
     else:
         return False

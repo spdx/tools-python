@@ -1,4 +1,3 @@
-
 # Copyright (c) 2014 Ahmed H. Ismail
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,6 +27,7 @@ class Creator(object):
     Fields:
     - name: creator's name/identifier
     """
+
     def __init__(self, name):
         self.name = name
 
@@ -54,16 +54,22 @@ class Organization(Creator):
 
     # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
-        return isinstance(other, Organization) and (self.name, self.email) == (other.name, other.email)
+        return isinstance(other, Organization) and (self.name, self.email) == (
+            other.name,
+            other.email,
+        )
 
     def __lt__(self, other):
-        return isinstance(other, Organization) and (self.name, self.email) < (other.name, other.email)
+        return isinstance(other, Organization) and (self.name, self.email) < (
+            other.name,
+            other.email,
+        )
 
     def to_value(self):
         if self.email:
-            return 'Organization: {0} ({1})'.format(self.name, self.email)
+            return "Organization: {0} ({1})".format(self.name, self.email)
         else:
-            return 'Organization: {0}'.format(self.name)
+            return "Organization: {0}".format(self.name)
 
     def __str__(self):
         return self.to_value()
@@ -84,16 +90,22 @@ class Person(Creator):
 
     # FIXME: do not overrride eq and not hash
     def __eq__(self, other):
-        return isinstance(other, Person) and (self.name, self.email) == (other.name, other.email)
+        return isinstance(other, Person) and (self.name, self.email) == (
+            other.name,
+            other.email,
+        )
 
     def __lt__(self, other):
-        return isinstance(other, Person) and (self.name, self.email) < (other.name, other.email)
+        return isinstance(other, Person) and (self.name, self.email) < (
+            other.name,
+            other.email,
+        )
 
     def to_value(self):
         if self.email is not None:
-            return 'Person: {0} ({1})'.format(self.name, self.email)
+            return "Person: {0} ({1})".format(self.name, self.email)
         else:
-            return 'Person: {0}'.format(self.name)
+            return "Person: {0}".format(self.name)
 
     def __str__(self):
         return self.to_value()
@@ -110,7 +122,7 @@ class Tool(Creator):
         super(Tool, self).__init__(name)
 
     def to_value(self):
-        return 'Tool: {0}'.format(self.name)
+        return "Tool: {0}".format(self.name)
 
     def __str__(self):
         return self.to_value()
@@ -128,8 +140,12 @@ class CreationInfo(object):
     - created: Creation date. Mandatory one. Type: datetime.
     """
 
-    def __init__(self, created=None, comment=None,
-                 license_list_version=config.LICENSE_LIST_VERSION):
+    def __init__(
+        self,
+        created=None,
+        comment=None,
+        license_list_version=config.LICENSE_LIST_VERSION,
+    ):
         self.creators = []
         self.created = created
         self.comment = comment
@@ -163,13 +179,12 @@ class CreationInfo(object):
 
     def validate_creators(self, messages):
         if len(self.creators) == 0:
-            messages = messages + [
-                'No creators defined, must have at least one.']
+            messages = messages + ["No creators defined, must have at least one."]
 
         return messages
 
     def validate_created(self, messages):
         if self.created is None:
-            messages = messages + ['Creation info missing created date.']
+            messages = messages + ["Creation info missing created date."]
 
         return messages
