@@ -10,8 +10,9 @@ environment:
 
 install:
   - "%PYTHON_EXE% --version"
-  - "%PYTHON_EXE% setup.py install"
-  - "%PYTHON_EXE% -m pip install pytest"
+  - "%PYTHON_EXE% -m pip install --upgrade pip"
+  - "%PYTHON_EXE% -m pip install --upgrade setuptools setuptools_scm wheel build pytest"
+  - "%PYTHON_EXE% -m pip install --upgrade -e ."
 
 build: off
 

@@ -26,13 +26,13 @@ def determine_infile_and_outfile(infile, outfile, src, from_, to):
     if infile is not None and outfile is not None:
         """
         when the CLI is of given format:
-        ' convertor ---infile <input_file> ---outfile <output_file>.
+        ' pyspdxtools_convertor ---infile <input_file> ---outfile <output_file>.
         """
         return infile, outfile
 
     elif infile is None and outfile is None and len(src) == 2:
         """
-        ' convertor -f/--from <type> <input_file> -t/--to <type> <output_file>.
+        ' pyspdxtools_convertor -f/--from <type> <input_file> -t/--to <type> <output_file>.
         """
         infile = src[0]
         outfile = src[1]
@@ -47,7 +47,7 @@ def determine_infile_and_outfile(infile, outfile, src, from_, to):
 
     elif infile is None and outfile is not None:
         """
-        ' convertor -f/--from <type> <input_file> --outfile <output_file> '
+        ' pyspdxtools_convertor -f/--from <type> <input_file> --outfile <output_file> '
         """
         infile = src[0]
         if from_ is not None:
@@ -57,7 +57,7 @@ def determine_infile_and_outfile(infile, outfile, src, from_, to):
 
     elif infile is not None and outfile is None:
         """
-        ' convertor --infile <input_file> -t/--to <type> <output_file>'
+        ' pyspdxtools_convertor --infile <input_file> -t/--to <type> <output_file>'
         """
         outfile = src[0]
         if to is not None:
@@ -88,7 +88,7 @@ def main(infile, outfile, src, from_, to, force):
     """
     CLI-TOOL for converting a RDF or TAG file to RDF, JSON, YAML, TAG or XML format.
 
-    To use : run 'convertor -f <from_TYPE> <input file> -t <to_TYPE> <output_file>' command on terminal or use ' convertor --infile <input file name> --outfile <output file name> '
+    To use : run 'pyspdxtools_convertor -f <from_TYPE> <input file> -t <to_TYPE> <output_file>' command on terminal or use ' pyspdxtools_convertor --infile <input file name> --outfile <output file name> '
 
     """
     try:

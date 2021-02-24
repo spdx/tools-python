@@ -1,0 +1,6 @@
+[build-system]
+requires = ["setuptools>=44", "wheel", "setuptools_scm[toml]>=3.4.3"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools_scm]
+git_describe_command = ["git", "describe", "--dirty", "--tags", "--long", "--match",  "v[0-9]*"]  # `python3.6` tag falsely matches to the default one, clrearly a bug in setuptools_scm
