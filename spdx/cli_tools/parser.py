@@ -25,7 +25,7 @@ def main(file, force):
     """
     COMMAND-LINE TOOL for parsing file of RDF, XML, JSON, YAML and XML format.
 
-    To use : run `parser` using terminal or run `parser --file <file name>`
+    To use : run `pyspdxtools_parser` using terminal or run `pyspdxtools_parser --file <file name>`
 
     """
     doc, errors = parse_file(file)
