@@ -1340,7 +1340,7 @@ class Parser(
 
         validation_messages = []
         # Report extra errors if self.error is False otherwise there will be
-        # redundent messages
+        # redundant messages
         validation_messages = self.doc.validate(validation_messages)
         if not self.error:
             if validation_messages:
