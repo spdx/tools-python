@@ -12,6 +12,7 @@ jobs:
         python --version
         sudo -H pip install --upgrade virtualenv
         brew install pyenv
+        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
         echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
         source ~/.bash_profile
         pyenv install 2.7.15
@@ -31,7 +32,8 @@ jobs:
         brew update
         python --version
         sudo -H pip install --upgrade virtualenv
-        brew install pyenv -v 1.2.13
+        brew install pyenv
+        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
         echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
         source ~/.bash_profile
         pyenv install 3.4.8
@@ -52,6 +54,7 @@ jobs:
         python --version
         sudo -H pip install --upgrade virtualenv
         brew install pyenv
+        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
         echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
         source ~/.bash_profile
         pyenv install 3.5.5
@@ -72,6 +75,7 @@ jobs:
         python --version
         sudo -H pip install --upgrade virtualenv
         brew install pyenv
+        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
         echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
         source ~/.bash_profile
         pyenv install 3.6.5
