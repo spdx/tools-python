@@ -38,7 +38,7 @@ class TestParser(TestCase):
                 o.write(json.dumps(result, indent=2))
 
         with io.open(expected_loc, encoding='utf-8') as ex:
-            expected = json.load(ex, encoding='utf-8', object_pairs_hook=OrderedDict)
+            expected = json.load(ex, object_pairs_hook=OrderedDict)
 
         self.assertEqual(expected, result)
 
