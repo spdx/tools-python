@@ -250,7 +250,7 @@ class Package(object):
         return messages
 
     def validate_checksum(self, messages):
-        if self.check_sum is not None: # optional
+        if self.check_sum is not None:
             if not isinstance(self.check_sum, checksum.Algorithm):
                 messages = messages + [
                     'Package checksum must be instance of spdx.checksum.Algorithm'
