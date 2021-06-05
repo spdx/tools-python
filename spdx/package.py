@@ -134,7 +134,7 @@ class Package(object):
             messages = messages + [
                 'Package files_analyzed must be True or False or None (omitted)'
             ]
-        if self.files_analyzed == False and self.verif_code is not None:
+        if self.files_analyzed is False and self.verif_code is not None:
             messages = messages + [
                 'Package verif_code must be None (omitted) when files_analyzed is False'
             ]
