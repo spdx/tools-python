@@ -1,70 +1,10 @@
 version: 2
 
 jobs:
-  python_2_7_15:
-    shell: /bin/bash --login
-    macos:
-      xcode: '9.0'
-    steps:
-    - checkout
-    - run: |
-        brew update
-        python --version
-        sudo -H pip install --upgrade virtualenv
-        brew install pyenv
-        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
-        source ~/.bash_profile
-        pyenv install 2.7.15
-        pyenv versions
-        pyenv global 2.7.15
-        python --version
-    - run: python setup.py install
-    - run: python setup.py test
-
-  python_3_4_8:
-    shell: /bin/bash --login
-    macos:
-      xcode: '9.0'
-    steps:
-    - checkout
-    - run: |
-        brew update
-        python --version
-        sudo -H pip install --upgrade virtualenv
-        brew install pyenv -v 1.2.13
-        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
-        source ~/.bash_profile
-        pyenv install 3.4.8
-        pyenv versions
-        pyenv global 3.4.8
-        python --version
-    - run: python setup.py install
-    - run: python setup.py test
-
-  python_3_5_5:
-    shell: /bin/bash --login
-    macos:
-      xcode: '9.0'
-    steps:
-    - checkout
-    - run: |
-        brew update
-        python --version
-        sudo -H pip install --upgrade virtualenv
-        brew install pyenv
-        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
-        source ~/.bash_profile
-        pyenv install 3.5.5
-        pyenv versions
-        pyenv global 3.5.5
-        python --version
-    - run: python setup.py install
-    - run: python setup.py test
-
   python_3_6_5:
     shell: /bin/bash --login
     macos:
-      xcode: '9.0'
+      xcode: '9.4.1'
     steps:
     - checkout
     - run: |
@@ -72,6 +12,7 @@ jobs:
         python --version
         sudo -H pip install --upgrade virtualenv
         brew install pyenv
+        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
         echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
         source ~/.bash_profile
         pyenv install 3.6.5
@@ -81,11 +22,74 @@ jobs:
     - run: python setup.py install
     - run: python setup.py test
 
+  python_3_7_10:
+    shell: /bin/bash --login
+    macos:
+      xcode: '9.4.1'
+    steps:
+    - checkout
+    - run: |
+        brew update
+        python --version
+        sudo -H pip install --upgrade virtualenv
+        brew install pyenv
+        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
+        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+        source ~/.bash_profile
+        pyenv install 3.7.10
+        pyenv versions
+        pyenv global 3.7.10
+        python --version
+    - run: python setup.py install
+    - run: python setup.py test
+
+  python_3_8_10:
+    shell: /bin/bash --login
+    macos:
+      xcode: '9.4.1'
+    steps:
+    - checkout
+    - run: |
+        brew update
+        python --version
+        sudo -H pip install --upgrade virtualenv
+        brew install pyenv
+        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
+        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+        source ~/.bash_profile
+        pyenv install 3.8.10
+        pyenv versions
+        pyenv global 3.8.10
+        python --version
+    - run: python setup.py install
+    - run: python setup.py test
+
+  python_3_9_5:
+    shell: /bin/bash --login
+    macos:
+      xcode: '9.4.1'
+    steps:
+    - checkout
+    - run: |
+        brew update
+        python --version
+        sudo -H pip install --upgrade virtualenv
+        brew install pyenv
+        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
+        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+        source ~/.bash_profile
+        pyenv install 3.9.5
+        pyenv versions
+        pyenv global 3.9.5
+        python --version
+    - run: python setup.py install
+    - run: python setup.py test
+
 workflows:
   version: 2
   python_matrix_build:
     jobs:
-      - python_2_7_15
-      - python_3_4_8
-      - python_3_5_5
       - python_3_6_5
+      - python_3_7_10
+      - python_3_8_10
+      - python_3_9_5
