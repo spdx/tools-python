@@ -1833,7 +1833,7 @@ class Parser(object):
         self.builder.reset()
         validation_messages = []
         # Report extra errors if self.error is False otherwise there will be
-        # redundent messages
+        # redundant messages
         validation_messages = self.document.validate(validation_messages)
         if not self.error:
             if validation_messages:
