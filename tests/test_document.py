@@ -135,6 +135,31 @@ class TestDocument(TestCase):
         assert is_valid
         assert not messages
 
+    def test_document_multiple_packages(self):
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
+        doc.creation_info.add_creator(Tool('ScanCode'))
+        doc.creation_info.set_created_now()
+
+        package1 = Package(name='some/path1', download_location=NoAssert())
+        package1.spdx_id = 'SPDXRef-Package1'
+        package1.cr_text = 'Some copyrught'
+        package1.files_verified = False
+        package1.license_declared = NoAssert()
+        package1.conc_lics = NoAssert()
+        doc.add_package(package1)
+
+        package2 = Package(name='some/path2', download_location=NoAssert())
+        package2.spdx_id = 'SPDXRef-Package2'
+        package2.cr_text = 'Some copyrught'
+        package2.files_verified = False
+        package2.license_declared = NoAssert()
+        package2.conc_lics = NoAssert()
+        doc.add_package(package2)
+
+        assert len(doc.packages) == 2
+
 
 class TestWriters(TestCase):
     maxDiff = None

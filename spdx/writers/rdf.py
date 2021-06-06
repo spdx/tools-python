@@ -843,8 +843,8 @@ class PackageWriter(LicenseWriter):
         Return a node that represents the package in the graph.
         Call this function to write package info.
         """
-        # TODO: In the future this may be a list to support SPDX 2.0
-        return self.create_package_node(self.document.package)
+        return [self.create_package_node(x)
+                for x in self.document.packages]
 
     def handle_package_has_file_helper(self, pkg_file):
         """
@@ -1012,9 +1012,9 @@ class Writer(
             self.graph.add((doc_node, self.spdx_namespace.referencesFile, file_node))
         self.add_file_dependencies()
         # Add package
-        package_node = self.packages()
-        package_triple = (doc_node, self.spdx_namespace.describesPackage, package_node)
-        self.graph.add(package_triple)
+        for package_node in self.packages():
+            package_triple = (doc_node, self.spdx_namespace.describesPackage, package_node)
+            self.graph.add(package_triple)
         """# Add relationship
         relate_node = self.relationships()
         relate_triple = (doc_node, self.spdx_namespace.relationship, relate_node)

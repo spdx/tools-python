@@ -360,8 +360,9 @@ def write_document(document, out, validate=True):
         write_separators(out)
 
     # Write out package info
-    write_package(document.package, out)
-    write_separators(out)
+    for package in document.packages:
+        write_package(package, out)
+        write_separators(out)
 
     # Write out snippet info
     for snippet in document.snippet:
