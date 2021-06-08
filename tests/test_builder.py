@@ -476,7 +476,6 @@ class TestPackageBuilder(TestCase):
         self.document = Document()
         self.entity_builder = builders.EntityBuilder()
 
-    @testing_utils.raises(builders.CardinalityError)
     def test_package_cardinality(self):
         assert self.builder.create_package(self.document, "pkg1")
         self.builder.create_package(self.document, "pkg2")
