@@ -199,7 +199,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_chk_sum_set:
             self.package_chk_sum_set = True
-            doc.package.check_sum = checksum.Algorithm("SHA1", chk_sum)
+            doc.packages[-1].check_sum = checksum.Algorithm("SHA1", chk_sum)
         else:
             raise CardinalityError("Package::CheckSum")
 
@@ -213,7 +213,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_source_info_set:
             self.package_source_info_set = True
-            doc.package.source_info = text
+            doc.packages[-1].source_info = text
             return True
         else:
             raise CardinalityError("Package::SourceInfo")
@@ -228,7 +228,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_verif_set:
             self.package_verif_set = True
-            doc.package.verif_code = code
+            doc.packages[-1].verif_code = code
         else:
             raise CardinalityError("Package::VerificationCode")
 
@@ -238,7 +238,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
-        doc.package.add_exc_file(filename)
+        doc.packages[-1].add_exc_file(filename)
 
     def set_pkg_license_comment(self, doc, text):
         """
@@ -249,7 +249,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_license_comment_set:
             self.package_license_comment_set = True
-            doc.package.license_comment = text
+            doc.packages[-1].license_comment = text
             return True
         else:
             raise CardinalityError("Package::LicenseComment")
@@ -259,7 +259,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         Set the package's attribution text.
         """
         self.assert_package_exists()
-        doc.package.attribution_text = text
+        doc.packages[-1].attribution_text = text
         return True
 
     def set_pkg_cr_text(self, doc, text):
@@ -271,7 +271,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_cr_text_set:
             self.package_cr_text_set = True
-            doc.package.cr_text = text
+            doc.packages[-1].cr_text = text
         else:
             raise CardinalityError("Package::CopyrightText")
 
@@ -284,7 +284,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_summary_set:
             self.package_summary_set = True
-            doc.package.summary = text
+            doc.packages[-1].summary = text
         else:
             raise CardinalityError("Package::Summary")
 
@@ -297,7 +297,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_desc_set:
             self.package_desc_set = True
-            doc.package.description = text
+            doc.packages[-1].description = text
         else:
             raise CardinalityError("Package::Description")
 
@@ -310,7 +310,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_comment_set:
             self.package_comment_set = True
-            doc.package.comment = text
+            doc.packages[-1].comment = text
         else:
             raise CardinalityError("Package::Comment")
 
@@ -328,12 +328,12 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
 
         if validations.validate_pkg_ext_ref_category(category):
             if (
-                len(doc.package.pkg_ext_refs)
-                and doc.package.pkg_ext_refs[-1].category is None
+                len(doc.packages[-1].pkg_ext_refs)
+                and doc.packages[-1].pkg_ext_refs[-1].category is None
             ):
-                doc.package.pkg_ext_refs[-1].category = category
+                doc.packages[-1].pkg_ext_refs[-1].category = category
             else:
-                doc.package.add_pkg_ext_refs(
+                doc.packages[-1].add_pkg_ext_refs(
                     package.ExternalPackageRef(category=category)
                 )
         else:
@@ -353,12 +353,12 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
 
         if validations.validate_pkg_ext_ref_type(typ):
             if (
-                len(doc.package.pkg_ext_refs)
-                and doc.package.pkg_ext_refs[-1].pkg_ext_ref_type is None
+                len(doc.packages[-1].pkg_ext_refs)
+                and doc.packages[-1].pkg_ext_refs[-1].pkg_ext_ref_type is None
             ):
-                doc.package.pkg_ext_refs[-1].pkg_ext_ref_type = typ
+                doc.packages[-1].pkg_ext_refs[-1].pkg_ext_ref_type = typ
             else:
-                doc.package.add_pkg_ext_refs(
+                doc.packages[-1].add_pkg_ext_refs(
                     package.ExternalPackageRef(pkg_ext_ref_type=typ)
                 )
         else:
@@ -371,11 +371,11 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
-        if not len(doc.package.pkg_ext_refs):
+        if not len(doc.packages[-1].pkg_ext_refs):
             raise OrderError("Package::ExternalRef")
         if not self.pkg_ext_comment_set:
             self.pkg_ext_comment_set = True
-            doc.package.pkg_ext_refs[-1].comment = comment
+            doc.packages[-1].pkg_ext_refs[-1].comment = comment
             return True
         else:
             raise CardinalityError("ExternalRef::Comment")

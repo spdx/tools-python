@@ -111,9 +111,8 @@ class PackageWriter(BaseWriter):
 
         return package_verification_code_object
 
-    def create_package_info(self):
+    def create_package_info(self, package):
         package_object = dict()
-        package = self.document.package
         package_object["SPDXID"] = self.spdx_id(package.spdx_id)
         package_object["name"] = package.name
         package_object["downloadLocation"] = package.download_location.__str__()
@@ -187,7 +186,7 @@ class FileWriter(BaseWriter):
 
         return artifact_of_objects
 
-    def create_file_info(self):
+    def create_file_info(self, package):
         file_types = {
             1: "fileType_source",
             2: "fileType_binary",
@@ -195,7 +194,7 @@ class FileWriter(BaseWriter):
             4: "fileType_other",
         }
         file_objects = []
-        files = self.document.files
+        files = package.files
 
         for file in files:
             file_object = dict()
@@ -476,10 +475,13 @@ class Writer(
         self.document_object["SPDXID"] = self.spdx_id(self.document.spdx_id)
         self.document_object["name"] = self.document.name
 
-        package_info_object = self.create_package_info()
-        package_info_object["files"] = self.create_file_info()
+        package_objects = []
+        for package in self.document.packages:
+            package_info_object = self.create_package_info(package)
+            package_info_object["files"] = self.create_file_info(package)
+            package_objects.append({"Package": package_info_object})
 
-        self.document_object["documentDescribes"] = [{"Package": package_info_object}]
+        self.document_object["documentDescribes"] = package_objects
 
         if self.document.has_comment:
             self.document_object["comment"] = self.document.comment

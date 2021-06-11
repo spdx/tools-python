@@ -170,12 +170,9 @@ class FileBuilder(rdfbuilders.FileBuilder):
         Raise CardinalityError if more than one.
         """
         if self.has_package(doc) and self.has_file(doc):
-            if not self.file_notice_set:
-                self.file_notice_set = True
-                self.file(doc).notice = text
-                return True
-            else:
-                raise CardinalityError("File::Notice")
+            self.file_notice_set = True
+            self.file(doc).notice = text
+            return True
         else:
             raise OrderError("File::Notice")
 

@@ -13,6 +13,8 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import warnings
+
 from functools import total_ordering
 
 from spdx import config
@@ -296,7 +298,9 @@ class Document(object):
         self.comment = comment
         self.namespace = namespace
         self.creation_info = CreationInfo()
-        self.package = package
+        self.packages = []
+        if package is not None:
+            self.packages.append(package)
         self.extracted_licenses = []
         self.reviews = []
         self.annotations = []
@@ -320,6 +324,34 @@ class Document(object):
 
     def add_snippet(self, snip):
         self.snippet.append(snip)
+
+    def add_package(self, package):
+        self.packages.append(package)
+
+    # For backwards compatibility with older versions, we support a
+    # mode where the first package in a document may be referred to as
+    # the document's "package", and the files it contains may be
+    # referred to as the document's files.  This usage is deprecated.
+
+    @property
+    def package(self):
+        warnings.warn('document.package and document.files are deprecated; '
+                      'use document.packages instead',
+                      DeprecationWarning)
+        if len(self.packages) == 0:
+            return None
+        else:
+            return self.packages[0]
+
+    @package.setter
+    def package(self, value):
+        warnings.warn('document.package and document.files are deprecated; '
+                      'use document.packages instead',
+                      DeprecationWarning)
+        if len(self.packages) == 0:
+            self.packages.append(value)
+        else:
+            self.packages[0] = value
 
     @property
     def files(self):
@@ -345,7 +377,7 @@ class Document(object):
         messages = self.validate_namespace(messages)
         messages = self.validate_ext_document_references(messages)
         messages = self.validate_creation_info(messages)
-        messages = self.validate_package(messages)
+        messages = self.validate_packages(messages)
         messages = self.validate_extracted_licenses(messages)
         messages = self.validate_reviews(messages)
         messages = self.validate_snippet(messages)
@@ -434,11 +466,20 @@ class Document(object):
 
         return messages
 
+    def validate_packages(self, messages):
+        if len(self.packages) > 0:
+            for package in self.packages:
+                messages = package.validate(messages)
+        else:
+            messages = messages + ["Document has no packages."]
+
+        return messages
+
     def validate_package(self, messages):
         if self.package is not None:
             messages = self.package.validate(messages)
         else:
-            messages = messages + ["Document has no package."]
+            messages = messages + ["Document has no packages."]
 
         return messages
 
