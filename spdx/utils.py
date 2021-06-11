@@ -13,13 +13,18 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import os
+import codecs
 import datetime
 import re
+import json
 
 from ply import lex
 from ply import yacc
 
 from spdx import document
+from license_expression import Licensing
+from license_expression import LicenseSymbol
 
 
 def datetime_iso_format(date):
@@ -64,6 +69,28 @@ def datetime_from_iso_format(string):
         return date
     else:
         return None
+
+
+_base_dir = os.path.dirname(__file__)
+_licenses = os.path.join(_base_dir, 'licenses.json')
+_exceptions = os.path.join(_base_dir, 'exceptions.json')
+
+
+def build_license_expression_parser():
+    symbols = []
+    with codecs.open(_licenses, 'rb') as licenses_file:
+        licenses_sequence = json.load(licenses_file)['licenses']
+        for lic in licenses_sequence:
+            if not lic['isDeprecatedLicenseId']:
+                symbols.append(LicenseSymbol(lic['licenseId']))
+
+    with codecs.open(_exceptions, 'rb') as exceptions_file:
+        exceptions_sequence = json.load(exceptions_file)['exceptions']
+        for excep in exceptions_sequence:
+            if not excep['isDeprecatedLicenseId']:
+                symbols.append(LicenseSymbol(excep['licenseExceptionId'], is_exception=True))
+        
+    return Licensing(symbols=symbols)
 
 
 class NoAssert(object):

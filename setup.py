@@ -38,6 +38,7 @@ setup(
         'Click',
         'pyyaml',
         'xmltodict',
+        'license-expression',
     ],
     python_requires='>=2.7',
     entry_points={

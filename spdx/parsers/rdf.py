@@ -25,6 +25,7 @@ from rdflib import RDFS
 
 from spdx import document
 from spdx import utils
+from spdx.document import License
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import SPDXValueError
 
@@ -48,6 +49,8 @@ ERROR_MESSAGES = {
     "PKG_FILES_ANALYZED_VALUE": "FilesAnalyzed must be a boolean value, line: {0}",
     "PKG_CONC_LIST": "Package concluded license list must have more than one member",
     "LICS_LIST_MEMBER": "Declaritive or Conjunctive license set member must be a license url or identifier",
+    "LIC_EXPRESSION": "Invalid symbol '{0}' in license expression must be a known SPDX license or "
+                      "an extracted license.", 
     "PKG_SINGLE_LICS": "Package concluded license must be a license url or spdx:noassertion or spdx:none.",
     "PKG_LICS_INFO_FILES": "Package licenseInfoFromFiles must be a license or spdx:none or spdx:noassertion",
     "FILE_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
@@ -81,6 +84,7 @@ class BaseParser(object):
         self.doap_namespace = Namespace("http://usefulinc.com/ns/doap#")
         self.spdx_namespace = Namespace("http://spdx.org/rdf/terms#")
         self.builder = builder
+        self.license_expression_parser = utils.build_license_expression_parser()
 
     def more_than_one_error(self, field):
         """
@@ -139,25 +143,35 @@ class LicenseParser(BaseParser):
             self.spdx_namespace["ExtractedLicensingInfo"],
         ) in self.graph:
             return self.parse_only_extr_license(lics)
-
         # Assume resource, hence the path separator
         ident_start = lics.rfind("/") + 1
         if ident_start == 0:
             # special values such as spdx:noassertion
             special = self.to_special_value(lics)
-            if special == lics:
-                if self.LICS_REF_REGEX.match(lics):
-                    # Is a license ref i.e LicenseRef-1
-                    return document.License.from_identifier(six.text_type(lics))
-                else:
-                    # Not a known license form
-                    raise SPDXValueError("License")
-            else:
-                # is a special value
+            if isinstance(special, (utils.SPDXNone, utils.NoAssert, utils.UnKnown)):
                 return special
+            else:
+                license_expression = self.license_expression_parser.parse(special)
+                wrong_symbols = self.validate_license_expression(license_expression)
+                for symbol in wrong_symbols:
+                    self.value_error('LIC_EXPRESSION', symbol)
+                return License(license_expression.render(), license_expression.render())
         else:
             # license url
             return document.License.from_identifier(lics[ident_start:])
+
+    def validate_license_expression(self, license_expression):
+        """
+        Return a list of symbols present in license_expression if they are not valid licenses
+        """
+        unknown_symbols = self.license_expression_parser.unknown_license_keys(license_expression)
+        extracted_licenses = list(map(lambda lic: str(lic.identifier), self.doc.extracted_licenses))
+
+        wrong_symbols = []
+        for symbol in unknown_symbols:
+            if symbol not in extracted_licenses:
+                wrong_symbols.append(symbol)
+        return wrong_symbols
 
     def get_extr_license_ident(self, extr_lic):
         """
@@ -275,10 +289,9 @@ class LicenseParser(BaseParser):
             self.doc.add_extr_lic(lic)
         return lic
 
-    def _handle_license_list(self, lics_set, cls=None):
+    def _handle_license_list(self, lics_set, operator=None):
         """
-        Return a license representing a `cls` object (LicenseConjunction
-        or LicenseDisjunction) from a list of license resources or None.
+        Return a License from a list of license resources or None.
         """
         licenses = []
         for _, _, lics_member in self.graph.triples(
@@ -290,7 +303,9 @@ class LicenseParser(BaseParser):
                 self.value_error("LICS_LIST_MEMBER", lics_member)
                 break
         if len(licenses) > 1:
-            return reduce(lambda a, b: cls(a, b), licenses)
+            licenses = map(lambda lic: lic.identifier, licenses)
+            license_expression = ' {} '.format(operator).join(licenses)
+            return License(license_expression, license_expression)
         else:
             self.value_error("PKG_CONC_LIST", "")
             return
@@ -300,14 +315,14 @@ class LicenseParser(BaseParser):
         Return a license representing the conjunction from a list of
         license resources or None.
         """
-        return self._handle_license_list(lics_set, cls=document.LicenseConjunction)
+        return self._handle_license_list(lics_set, operator='AND')
 
     def handle_disjunctive_list(self, lics_set):
         """
         Return a license representing the disjunction from a list of
         license resources or None.
         """
-        return self._handle_license_list(lics_set, cls=document.LicenseDisjunction)
+        return self._handle_license_list(lics_set, operator='OR')
 
 
 class PackageParser(LicenseParser):
@@ -631,7 +646,9 @@ class FileParser(LicenseParser):
         self.p_file_depends(f_term, self.spdx_namespace["fileDependency"])
 
     def get_file_name(self, f_term):
-        """Returns first found fileName property or None if not found."""
+        """
+        Returns first found fileName property or None if not found.
+        """
         for _, _, name in self.graph.triples(
             (f_term, self.spdx_namespace["fileName"], None)
         ):
@@ -1297,6 +1314,9 @@ class Parser(
             (None, RDF.type, self.spdx_namespace["CreationInfo"])
         ):
             self.parse_creation_info(s)
+        
+        for s, _p, o in self.graph.triples((None, None, self.spdx_namespace['ExtractedLicensingInfo'])):
+            self.handle_extracted_license(s)
 
         for s, _p, o in self.graph.triples(
             (None, None, self.spdx_namespace["ExtractedLicensingInfo"])

@@ -102,6 +102,7 @@ class LicenseWriter(BaseWriter):
         self.licenses_from_tree_helper(tree, licenses)
         return licenses
 
+    # FIXME: This method is problably no longer needed
     def create_conjunction_node(self, conjunction):
         """
         Return a node representing a conjunction of licenses.
@@ -115,6 +116,7 @@ class LicenseWriter(BaseWriter):
             self.graph.add(member_triple)
         return node
 
+    # FIXME: This method is problably no longer needed
     def create_disjunction_node(self, disjunction):
         """
         Return a node representing a disjunction of licenses.
@@ -128,10 +130,10 @@ class LicenseWriter(BaseWriter):
             self.graph.add(member_triple)
         return node
 
-    def create_license_helper(self, lic):
+    def create_license_node(self, lic):
         """
-        Handle single(no conjunction/disjunction) licenses.
-        Return the created node.
+        Return a node representing a license.
+        Could be a single license (extracted or part of license list.) or a license expression
         """
         if isinstance(lic, document.ExtractedLicense):
             return self.create_extracted_license(lic)
@@ -194,8 +196,9 @@ class LicenseWriter(BaseWriter):
                 comment_triple = (license_node, RDFS.comment, Literal(lic.comment))
                 self.graph.add(comment_triple)
             return license_node
-
-    def create_license_node(self, lic):
+    
+    # FIXME: This method is problably no longer needed
+    def old_create_license_node(self, lic):
         """
         Return a node representing a license.
         Could be a single license (extracted or part of license list.) or
