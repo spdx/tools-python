@@ -34,15 +34,15 @@ ERROR_MESSAGES = {
     "DOC_VERS_VALUE": "Invalid specVersion '{0}' must be SPDX-M.N where M and N are numbers.",
     "DOC_D_LICS": "Invalid dataLicense '{0}' must be http://spdx.org/licenses/CC0-1.0.",
     "DOC_SPDX_ID_VALUE": "Invalid SPDXID value, SPDXID must be the document namespace appended "
-    'by "#SPDXRef-DOCUMENT", line: {0}',
+                         'by "#SPDXRef-DOCUMENT", line: {0}',
     "DOC_NAMESPACE_VALUE": 'Invalid DocumentNamespace value {0}, must contain a scheme (e.g. "https:") '
-    'and should not contain the "#" delimiter.',
+                           'and should not contain the "#" delimiter.',
     "LL_VALUE": "Invalid licenseListVersion '{0}' must be of the format N.N where N is a number",
     "CREATED_VALUE": "Invalid created value '{0}' must be date in ISO 8601 format.",
     "CREATOR_VALUE": "Invalid creator value '{0}' must be Organization, Tool or Person.",
     "EXT_DOC_REF_VALUE": "Failed to extract {0} from ExternalDocumentRef.",
     "PKG_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
-    'letters, numbers, ".", "-".',
+                         'letters, numbers, ".", "-".',
     "PKG_SUPPL_VALUE": "Invalid package supplier value '{0}' must be Organization, Person or NOASSERTION.",
     "PKG_ORIGINATOR_VALUE": "Invalid package supplier value '{0}'  must be Organization, Person or NOASSERTION.",
     "PKG_DOWN_LOC": "Invalid package download location value '{0}'  must be a url or NONE or NOASSERTION",
@@ -54,7 +54,7 @@ ERROR_MESSAGES = {
     "PKG_SINGLE_LICS": "Package concluded license must be a license url or spdx:noassertion or spdx:none.",
     "PKG_LICS_INFO_FILES": "Package licenseInfoFromFiles must be a license or spdx:none or spdx:noassertion",
     "FILE_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
-    'letters, numbers, ".", "-".',
+                          'letters, numbers, ".", "-".',
     "PKG_EXT_REF_CATEGORY": '\'{0}\' must be "SECURITY", "PACKAGE-MANAGER", or "OTHER".',
     "PKG_EXT_REF_TYPE": '{0} must be a unique string containing letters, numbers, ".", or "-".',
     "FILE_TYPE": "File type must be binary, other, source or archive term.",
@@ -64,10 +64,10 @@ ERROR_MESSAGES = {
     "ANNOTATOR_VALUE": "Invalid annotator value '{0}' must be Organization, Tool or Person.",
     "ANNOTATION_DATE": "Invalid annotation date value '{0}' must be date in ISO 8601 format.",
     "SNIPPET_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string '
-    'containing letters, numbers, ".", "-".',
+                             'containing letters, numbers, ".", "-".',
     "SNIPPET_SINGLE_LICS": "Snippet Concluded License must be a license url or spdx:noassertion or spdx:none.",
     "SNIPPET_LIC_INFO": "License Information in Snippet must be a license url or a reference "
-    "to the license, denoted by LicenseRef-[idstring] or spdx:noassertion or spdx:none.",
+                        "to the license, denoted by LicenseRef-[idstring] or spdx:noassertion or spdx:none.",
     "RELATIONSHIP": "relationship type must be of supported type",
 }
 

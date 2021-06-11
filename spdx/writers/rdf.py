@@ -140,17 +140,7 @@ class LicenseWriter(BaseWriter):
         if lic.identifier.rstrip("+") in config.LICENSE_MAP:
             return URIRef(lic.url)
         else:
-            matches = [
-                l
-                for l in self.document.extracted_licenses
-                if l.identifier == lic.identifier
-            ]
-            if len(matches) != 0:
-                return self.create_extracted_license(matches[0])
-            else:
-                raise InvalidDocumentError(
-                    "Missing extracted license: {0}".format(lic.identifier)
-                )
+            return Literal(lic.identifier)
 
     def create_extracted_license(self, lic):
         """
