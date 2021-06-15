@@ -74,6 +74,12 @@ Ex. : `convertor -f rdf data/SPDXRdfExample.xyz -o output.xml`
 * for help - use `convertor --help`
 
 
+3. **SBOM GENERATOR** (for generating a software bill of materials):
+* Use   `sbom_generator <project>`   where  `<project>`  is the name of the top-level project.
+Try running :   `sbom_generator spdx-tools`.
+
+* for help - use `parser --help`
+
 
 # Installation
 

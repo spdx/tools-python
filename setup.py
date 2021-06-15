@@ -44,6 +44,7 @@ setup(
         'console_scripts': [
             'convertor = spdx.cli_tools.convertor:main',
             'parser = spdx.cli_tools.parser:main',
+            'sbom_generator = spdx.cli_tools.sbom_generator:main'
         ],
     },
 
