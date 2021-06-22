@@ -53,29 +53,21 @@ class ExternalDocumentRef(object):
         Validate all fields of the ExternalDocumentRef class and update the
         messages list with user friendly error messages for display.
         """
-        messages = self.validate_ext_doc_id(messages)
-        messages = self.validate_spdx_doc_uri(messages)
-        messages = self.validate_checksum(messages)
-
-        return messages
+        self.validate_ext_doc_id(messages)
+        self.validate_spdx_doc_uri(messages)
+        self.validate_checksum(messages)
 
     def validate_ext_doc_id(self, messages):
         if not self.external_document_id:
-            messages = messages + ["ExternalDocumentRef has no External Document ID."]
-
-        return messages
+            messages.append("ExternalDocumentRef has no External Document ID.")
 
     def validate_spdx_doc_uri(self, messages):
         if not self.spdx_document_uri:
-            messages = messages + ["ExternalDocumentRef has no SPDX Document URI."]
-
-        return messages
+            messages.append("ExternalDocumentRef has no SPDX Document URI.")
 
     def validate_checksum(self, messages):
         if not self.check_sum:
-            messages = messages + ["ExternalDocumentRef has no Checksum."]
-
-        return messages
+            messages.append("ExternalDocumentRef has no Checksum.")
 
 
 def _add_parens(required, text):
@@ -268,9 +260,7 @@ class ExtractedLicense(License):
 
     def validate(self, messages):
         if self.text is None:
-            messages = messages + ["ExtractedLicense text can not be None"]
-
-        return messages
+            messages.append("ExtractedLicense text can not be None")
 
 
 class Document(object):
@@ -391,58 +381,47 @@ class Document(object):
         Validate all fields of the document and update the
         messages list with user friendly error messages for display.
         """
-        messages = self.validate_version(messages)
-        messages = self.validate_data_lics(messages)
-        messages = self.validate_name(messages)
-        messages = self.validate_spdx_id(messages)
-        messages = self.validate_namespace(messages)
-        messages = self.validate_ext_document_references(messages)
-        messages = self.validate_creation_info(messages)
-        messages = self.validate_packages(messages)
-        messages = self.validate_extracted_licenses(messages)
-        messages = self.validate_reviews(messages)
-        messages = self.validate_snippet(messages)
-        # messages = self.validate_annotations(messages)
-        # messages = self.validate_relationships(messages)
-
+        self.validate_version(messages)
+        self.validate_data_lics(messages)
+        self.validate_name(messages)
+        self.validate_spdx_id(messages)
+        self.validate_namespace(messages)
+        self.validate_ext_document_references(messages)
+        self.validate_creation_info(messages)
+        self.validate_packages(messages)
+        self.validate_extracted_licenses(messages)
+        self.validate_reviews(messages)
+        self.validate_snippet(messages)
+        # self.validate_annotations(messages)
+        # self.validate_relationships(messages)
         return messages
-
+        
     def validate_version(self, messages):
         if self.version is None:
-            messages = messages + ["Document has no version."]
-
-        return messages
+            messages.append("Document has no version.")
 
     def validate_data_lics(self, messages):
         if self.data_license is None:
-            messages = messages + ["Document has no data license."]
+            messages.append("Document has no data license.")
         else:
             # FIXME: REALLY? what if someone wants to use something else?
             if self.data_license.identifier != "CC0-1.0":
-                messages = messages + ["Document data license must be CC0-1.0."]
-
-        return messages
+                messages.append("Document data license must be CC0-1.0.")
 
     def validate_name(self, messages):
         if self.name is None:
-            messages = messages + ["Document has no name."]
-
-        return messages
+            messages.append("Document has no name.")
 
     def validate_namespace(self, messages):
         if self.namespace is None:
-            messages = messages + ["Document has no namespace."]
-
-        return messages
+            messages.append("Document has no namespace.")
 
     def validate_spdx_id(self, messages):
         if self.spdx_id is None:
-            messages = messages + ["Document has no SPDX Identifier."]
+            messages.append("Document has no SPDX Identifier.")
         else:
             if not self.spdx_id.endswith("SPDXRef-DOCUMENT"):
-                messages = messages + ["Invalid Document SPDX Identifier value."]
-
-        return messages
+                messages.append("Invalid Document SPDX Identifier value.")
 
     def validate_ext_document_references(self, messages):
         for doc in self.ext_document_references:
@@ -453,64 +432,47 @@ class Document(object):
                     "External document references must be of the type "
                     "spdx.document.ExternalDocumentRef and not " + str(type(doc))
                 ]
-        return messages
-
     def validate_reviews(self, messages):
         for review in self.reviews:
             messages = review.validate(messages)
-
-        return messages
 
     def validate_annotations(self, messages):
         for annotation in self.annotations:
             messages = annotation.validate(messages)
 
-        return messages
-
     def validate_relationships(self, messages):
         for relationship in self.relationships:
             messages = relationship.validate(messages)
 
-        return messages
-
     def validate_snippet(self, messages=None):
         for snippet in self.snippet:
-            messages = snippet.validate(messages)
-
-        return messages
+            snippet.validate(messages)
 
     def validate_creation_info(self, messages):
         if self.creation_info is not None:
-            messages = self.creation_info.validate(messages)
+            self.creation_info.validate(messages)
         else:
-            messages = messages + ["Document has no creation information."]
-
-        return messages
+            messages.append("Document has no creation information.")
 
     def validate_packages(self, messages):
         if len(self.packages) > 0:
             for package in self.packages:
                 messages = package.validate(messages)
         else:
-            messages = messages + ["Document has no packages."]
-
-        return messages
+            messages.append("Document has no packages.")
 
     def validate_package(self, messages):
         if self.package is not None:
-            messages = self.package.validate(messages)
+            self.package.validate(messages)
         else:
-            messages = messages + ["Document has no packages."]
-
-        return messages
+            messages.append("Document has no packages.")
 
     def validate_extracted_licenses(self, messages):
         for lic in self.extracted_licenses:
             if isinstance(lic, ExtractedLicense):
                 messages = lic.validate(messages)
             else:
-                messages = messages + [
+                messages.append(
                     "Document extracted licenses must be of type "
                     "spdx.document.ExtractedLicense and not " + type(lic)
-                ]
-        return messages
+                )

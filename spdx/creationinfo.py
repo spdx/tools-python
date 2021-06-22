@@ -175,12 +175,12 @@ class CreationInfo(object):
 
     def validate_creators(self, messages):
         if len(self.creators) == 0:
-            messages = messages + ["No creators defined, must have at least one."]
+            messages.append("No creators defined, must have at least one.")
 
         return messages
 
     def validate_created(self, messages):
         if self.created is None:
-            messages = messages + ["Creation info missing created date."]
+            messages.append("Creation info missing created date.")
 
         return messages

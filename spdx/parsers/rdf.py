@@ -22,6 +22,7 @@ from spdx import document
 from spdx import utils
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import SPDXValueError
+from spdx.parsers.loggers import ErrorMessages
 
 
 ERROR_MESSAGES = {

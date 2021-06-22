@@ -69,7 +69,7 @@ class Snippet(object):
 
     def validate_spdx_id(self, messages=None):
         if self.spdx_id is None:
-            messages = messages + ["Snippet has no SPDX Identifier."]
+            messages.append("Snippet has no SPDX Identifier.")
 
         return messages
 
@@ -78,15 +78,15 @@ class Snippet(object):
             self.copyright,
             (str, utils.NoAssert, utils.SPDXNone),
         ):
-            messages = messages + [
+            messages.append(
                 "Snippet copyright must be str or unicode or utils.NoAssert or utils.SPDXNone"
-            ]
+            )
 
         return messages
 
     def validate_snip_from_file_spdxid(self, messages=None):
         if self.snip_from_file_spdxid is None:
-            messages = messages + ["Snippet has no Snippet from File SPDX Identifier."]
+            messages.append("Snippet has no Snippet from File SPDX Identifier.")
 
         return messages
 
@@ -94,25 +94,25 @@ class Snippet(object):
         if not isinstance(
             self.conc_lics, (document.License, utils.NoAssert, utils.SPDXNone)
         ):
-            messages = messages + [
+            messages.append(
                 "Snippet Concluded License must be one of "
                 "document.License, utils.NoAssert or utils.SPDXNone"
-            ]
+            )
 
         return messages
 
     def validate_licenses_in_snippet(self, messages=None):
         if len(self.licenses_in_snippet) == 0:
-            messages = messages + ["Snippet must have at least one license in file."]
+            messages.append("Snippet must have at least one license in file.")
         else:
             for lic in self.licenses_in_snippet:
                 if not isinstance(
                     lic, (document.License, utils.NoAssert, utils.SPDXNone)
                 ):
-                    messages = messages + [
+                    messages.append(
                         "Licenses in Snippet must be one of "
                         "document.License, utils.NoAssert or utils.SPDXNone"
-                    ]
+                    )
 
         return messages
 

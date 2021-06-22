@@ -114,26 +114,26 @@ class Package(object):
         Validate the package fields.
         Append user friendly error messages to the `messages` list.
         """
-        messages = self.validate_files_analyzed(messages)
-        messages = self.validate_checksum(messages)
-        messages = self.validate_optional_str_fields(messages)
-        messages = self.validate_mandatory_str_fields(messages)
-        messages = self.validate_files(messages)
-        messages = self.validate_pkg_ext_refs(messages)
-        messages = self.validate_mandatory_fields(messages)
-        messages = self.validate_optional_fields(messages)
+        self.validate_files_analyzed(messages)
+        self.validate_checksum(messages)
+        self.validate_optional_str_fields(messages)
+        self.validate_mandatory_str_fields(messages)
+        self.validate_files(messages)
+        self.validate_pkg_ext_refs(messages)
+        self.validate_mandatory_fields(messages)
+        self.validate_optional_fields(messages)
 
         return messages
 
     def validate_files_analyzed(self, messages):
         if self.files_analyzed not in [ True, False, None ]:
-            messages = messages + [
+            messages.append(
                 'Package files_analyzed must be True or False or None (omitted)'
-            ]
+            )
         if self.files_analyzed is False and self.verif_code is not None:
-            messages = messages + [
+            messages.append(
                 'Package verif_code must be None (omitted) when files_analyzed is False'
-            ]
+            )
 
         return messages
 
@@ -141,18 +141,18 @@ class Package(object):
         if self.originator and not isinstance(
             self.originator, (utils.NoAssert, creationinfo.Creator)
         ):
-            messages = messages + [
+            messages.append(
                 "Package originator must be instance of "
                 "spdx.utils.NoAssert or spdx.creationinfo.Creator"
-            ]
+            )
 
         if self.supplier and not isinstance(
             self.supplier, (utils.NoAssert, creationinfo.Creator)
         ):
-            messages = messages + [
+            messages.append(
                 "Package supplier must be instance of "
                 "spdx.utils.NoAssert or spdx.creationinfo.Creator"
-            ]
+            )
 
         return messages
 
@@ -161,10 +161,10 @@ class Package(object):
             if isinstance(ref, ExternalPackageRef):
                 messages = ref.validate(messages)
             else:
-                messages = messages + [
+                messages.append(
                     "External package references must be of the type "
                     "spdx.package.ExternalPackageRef and not " + str(type(ref))
-                ]
+                )
 
         return messages
 
@@ -172,43 +172,43 @@ class Package(object):
         if not isinstance(
             self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)
         ):
-            messages = messages + [
+            messages.append(
                 "Package concluded license must be instance of "
                 "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
                 "spdx.document.License"
-            ]
+            )
 
         if not isinstance(
             self.license_declared, (utils.SPDXNone, utils.NoAssert, document.License)
         ):
-            messages = messages + [
+            messages.append(
                 "Package declared license must be instance of "
                 "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
                 "spdx.document.License"
-            ]
+            )
 
         # FIXME: this is obscure and unreadable
         license_from_file_check = lambda prev, el: prev and isinstance(
             el, (document.License, utils.SPDXNone, utils.NoAssert)
         )
         if not reduce(license_from_file_check, self.licenses_from_files, True):
-            messages = messages + [
+            messages.append(
                 "Each element in licenses_from_files must be instance of "
                 "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
                 "spdx.document.License"
-            ]
+            )
 
         if not self.licenses_from_files:
-            messages = messages + ["Package licenses_from_files can not be empty"]
+            messages.append("Package licenses_from_files can not be empty")
 
         return messages
 
     def validate_files(self, messages):
         if self.files_analyzed != False:
             if not self.files:
-                messages = messages + [
+                messages.append(
                     "Package must have at least one file."
-                ]
+                )
             else:
                 for f in self.files:
                     messages = f.validate(messages)
@@ -229,7 +229,7 @@ class Package(object):
             "attribution_text",
             "comment",
         ]
-        messages = self.validate_str_fields(FIELDS, True, messages)
+        self.validate_str_fields(FIELDS, True, messages)
 
         return messages
 
@@ -240,7 +240,7 @@ class Package(object):
         FIELDS = ["name", "spdx_id", "download_location", "cr_text"]
         if self.files_analyzed != False:
             FIELDS = FIELDS + ["verif_code"]
-        messages = self.validate_str_fields(FIELDS, False, messages)
+        self.validate_str_fields(FIELDS, False, messages)
 
         return messages
 
@@ -253,24 +253,24 @@ class Package(object):
                 # FIXME: this does not make sense???
                 attr = getattr(field, "__str__", None)
                 if not callable(attr):
-                    messages = messages + [
+                    messages.append(
                         "{0} must provide __str__ method.".format(field)
-                    ]
+                    )
                     # Continue checking.
             elif not optional:
-                messages = messages + ["Package {0} can not be None.".format(field_str)]
+                messages.append("Package {0} can not be None.".format(field_str))
 
         return messages
 
     def validate_checksum(self, messages):
         if self.check_sum is not None:
             if not isinstance(self.check_sum, checksum.Algorithm):
-                messages = messages + [
+                messages.append(
                     "Package checksum must be instance of spdx.checksum.Algorithm"
-                ]
+                )
             else:
                 if self.check_sum.identifier != "SHA1":
-                    messages = messages + ["File checksum algorithm must be SHA1"]
+                    messages.append("File checksum algorithm must be SHA1")
 
         return messages
 
@@ -325,26 +325,26 @@ class ExternalPackageRef(object):
         Validate all fields of the ExternalPackageRef class and update the
         messages list with user friendly error messages for display.
         """
-        messages = self.validate_category(messages)
-        messages = self.validate_pkg_ext_ref_type(messages)
-        messages = self.validate_locator(messages)
+        self.validate_category(messages)
+        self.validate_pkg_ext_ref_type(messages)
+        self.validate_locator(messages)
 
         return messages
 
     def validate_category(self, messages=None):
         if self.category is None:
-            messages = messages + ["ExternalPackageRef has no category."]
+            messages.append("ExternalPackageRef has no category.")
 
         return messages
 
     def validate_pkg_ext_ref_type(self, messages=None):
         if self.pkg_ext_ref_type is None:
-            messages = messages + ["ExternalPackageRef has no type."]
+            messages.append("ExternalPackageRef has no type.")
 
         return messages
 
     def validate_locator(self, messages=None):
         if self.locator is None:
-            messages = messages + ["ExternalPackageRef has no locator."]
+            messages.append("ExternalPackageRef has no locator.")
 
         return messages

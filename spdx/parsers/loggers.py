@@ -44,3 +44,12 @@ class ErrorMessages:
         message = message.format(*args, **kwargs)
         message = "".join([c + ": " for c in self.context]) + message
         self.messages.append(message)
+
+    def __iter__(self):
+        return self.messages.__iter__()
+
+    def __bool__(self):
+        return len(self.messages)>0
+
+    def __nonzero__(self):
+        return len(self.messages)>0
