@@ -9,6 +9,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from spdx.parsers.loggers import ErrorMessages
+
 import warnings
 
 from functools import total_ordering
@@ -381,6 +383,10 @@ class Document(object):
         Validate all fields of the document and update the
         messages list with user friendly error messages for display.
         """
+        if isinstance(messages, list):
+            messages = ErrorMessages()
+
+        messages.push_context(self.name)
         self.validate_version(messages)
         self.validate_data_lics(messages)
         self.validate_name(messages)
@@ -394,8 +400,9 @@ class Document(object):
         self.validate_snippet(messages)
         # self.validate_annotations(messages)
         # self.validate_relationships(messages)
+        messages.pop_context()
         return messages
-        
+
     def validate_version(self, messages):
         if self.version is None:
             messages.append("Document has no version.")

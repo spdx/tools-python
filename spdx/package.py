@@ -109,11 +109,12 @@ class Package(object):
     def add_pkg_ext_refs(self, pkg_ext_ref):
         self.pkg_ext_refs.append(pkg_ext_ref)
 
-    def validate(self, messages=None):
+    def validate(self, messages):
         """
         Validate the package fields.
         Append user friendly error messages to the `messages` list.
         """
+        messages.push_context(self.name)
         self.validate_files_analyzed(messages)
         self.validate_checksum(messages)
         self.validate_optional_str_fields(messages)
@@ -122,6 +123,7 @@ class Package(object):
         self.validate_pkg_ext_refs(messages)
         self.validate_mandatory_fields(messages)
         self.validate_optional_fields(messages)
+        messages.pop_context()
 
         return messages
 
@@ -156,7 +158,7 @@ class Package(object):
 
         return messages
 
-    def validate_pkg_ext_refs(self, messages=None):
+    def validate_pkg_ext_refs(self, messages):
         for ref in self.pkg_ext_refs:
             if isinstance(ref, ExternalPackageRef):
                 messages = ref.validate(messages)
@@ -320,7 +322,7 @@ class ExternalPackageRef(object):
         self.locator = locator
         self.comment = comment
 
-    def validate(self, messages=None):
+    def validate(self, messages):
         """
         Validate all fields of the ExternalPackageRef class and update the
         messages list with user friendly error messages for display.
@@ -331,19 +333,19 @@ class ExternalPackageRef(object):
 
         return messages
 
-    def validate_category(self, messages=None):
+    def validate_category(self, messages):
         if self.category is None:
             messages.append("ExternalPackageRef has no category.")
 
         return messages
 
-    def validate_pkg_ext_ref_type(self, messages=None):
+    def validate_pkg_ext_ref_type(self, messages):
         if self.pkg_ext_ref_type is None:
             messages.append("ExternalPackageRef has no type.")
 
         return messages
 
-    def validate_locator(self, messages=None):
+    def validate_locator(self, messages):
         if self.locator is None:
             messages.append("ExternalPackageRef has no locator.")
 

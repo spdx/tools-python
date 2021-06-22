@@ -103,6 +103,7 @@ class File(object):
         """Validates the fields and appends user friendly messages
         to messages parameter if there are errors.
         """
+        messages.push_context(self.name)
         self.validate_concluded_license(messages)
         self.validate_type(messages)
         self.validate_checksum(messages)
@@ -110,7 +111,7 @@ class File(object):
         self.validate_copyright(messages)
         self.validate_artifacts(messages)
         self.validate_spdx_id(messages)
-
+        messages.pop_context()
         return messages
 
     def validate_spdx_id(self, messages):

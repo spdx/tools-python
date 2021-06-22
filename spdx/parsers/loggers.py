@@ -42,7 +42,7 @@ class ErrorMessages:
         the current context is prefixed to the message
         """
         message = message.format(*args, **kwargs)
-        message = "".join([c + ": " for c in self.context]) + message
+        message = "".join([c + ": " for c in self.context if c]) + message
         self.messages.append(message)
 
     def __iter__(self):
@@ -53,3 +53,8 @@ class ErrorMessages:
 
     def __nonzero__(self):
         return len(self.messages)>0
+    
+    def __eq__(self, b):
+        if isinstance(b, ErrorMessages):
+            return self.messages == b.messages
+        return self.messages == b

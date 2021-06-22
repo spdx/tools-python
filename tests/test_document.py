@@ -88,17 +88,18 @@ class TestDocument(TestCase):
         messages = ErrorMessages()
         messages = doc.validate(messages)
         expected = [
-            'No creators defined, must have at least one.',
-            'Creation info missing created date.',
-            'Package checksum must be instance of spdx.checksum.Algorithm',
-            'Package download_location can not be None.',
-            'Package verif_code can not be None.',
-            'Package cr_text can not be None.',
-            'Package must have at least one file.',
-            'Package concluded license must be instance of spdx.utils.SPDXNone '
-            'or spdx.utils.NoAssert or spdx.document.License',
-            'Package declared license must be instance of spdx.utils.SPDXNone '
-            'or spdx.utils.NoAssert or spdx.document.License'
+            'Sample_Document-V2.1: Creation info missing created date.',
+            'Sample_Document-V2.1: No creators defined, must have at least one.',
+            'Sample_Document-V2.1: some/path: Package checksum must be instance of '
+            'spdx.checksum.Algorithm',
+            'Sample_Document-V2.1: some/path: Package concluded license must be instance '
+            'of spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License',
+            'Sample_Document-V2.1: some/path: Package cr_text can not be None.',
+            'Sample_Document-V2.1: some/path: Package declared license must be instance '
+            'of spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License',
+            'Sample_Document-V2.1: some/path: Package download_location can not be None.',
+            'Sample_Document-V2.1: some/path: Package must have at least one file.',
+            'Sample_Document-V2.1: some/path: Package verif_code can not be None.'
         ]
         assert sorted(expected) == sorted(messages)
 
