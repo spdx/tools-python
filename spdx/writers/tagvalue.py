@@ -13,6 +13,7 @@ from itertools import zip_longest
 
 from spdx import document
 from spdx import file as spdx_file
+from spdx.parsers.loggers import ErrorMessages
 
 
 class InvalidDocumentError(Exception):
@@ -310,7 +311,7 @@ def write_document(document, out, validate=True):
     Optionally `validate` the document before writing and raise
     InvalidDocumentError if document.validate returns False.
     """
-    messages = []
+    messages = ErrorMessages()
     messages = document.validate(messages)
     if validate and messages:
         raise InvalidDocumentError(messages)

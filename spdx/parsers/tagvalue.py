@@ -18,6 +18,7 @@ from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.lexers.tagvalue import Lexer
+from spdx.parsers.loggers import ErrorMessages
 from spdx import document
 
 
@@ -1619,7 +1620,7 @@ class Parser(object):
         self.yacc.parse(text, lexer=self.lex)
         # FIXME: this state does not make sense
         self.builder.reset()
-        validation_messages = []
+        validation_messages = ErrorMessages()
         # Report extra errors if self.error is False otherwise there will be
         # redundant messages
         validation_messages = self.document.validate(validation_messages)

@@ -13,12 +13,13 @@ import json
 
 from spdx.writers.tagvalue import InvalidDocumentError
 from spdx.writers.jsonyamlxml import Writer
+from spdx.parsers.loggers import ErrorMessages
 
 
 def write_document(document, out, validate=True):
 
     if validate:
-        messages = []
+        messages = ErrorMessages()
         messages = document.validate(messages)
         if messages:
             raise InvalidDocumentError(messages)

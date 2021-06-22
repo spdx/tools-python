@@ -21,6 +21,7 @@ from spdx.document import Document, ExternalDocumentRef
 from spdx.document import License
 from spdx.file import File
 from spdx.package import Package
+from spdx.parsers.loggers import ErrorMessages
 from spdx.utils import NoAssert
 from spdx.version import Version
 
@@ -84,7 +85,7 @@ class TestDocument(TestCase):
         lic1 = License.from_identifier('LGPL-2.1-only')
         file1.add_lics(lic1)
         pack.add_lics_from_file(lic1)
-        messages = []
+        messages = ErrorMessages()
         messages = doc.validate(messages)
         expected = [
             'No creators defined, must have at least one.',
@@ -127,7 +128,7 @@ class TestDocument(TestCase):
 
         package.add_lics_from_file(lic1)
         package.add_file(file1)
-        messages = []
+        messages = ErrorMessages()
         messages = doc.validate(messages)
         assert not messages
 
