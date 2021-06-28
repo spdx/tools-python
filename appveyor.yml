@@ -1,5 +1,6 @@
 version: "{build}"
-
+image:
+  - Visual Studio 2019
 environment:
   matrix:
     - PYTHON_EXE: "C:\\Python36-x64\\python.exe"
