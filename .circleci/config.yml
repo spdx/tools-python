@@ -72,29 +72,29 @@ jobs:
     - install_run_tests
 
   linux_python_3_6:
-    machine:
-      image: python:3.6
+    docker:
+      - image: python:3.6
     steps:
     - checkout
     - install_run_tests
 
   linux_python_3_7:
-    machine:
-      image: python:3.7
+    docker:
+      - image: python:3.7
     steps:
     - checkout
     - install_run_tests
 
   linux_python_3_8:
-    machine:
-      image: python:3.8
+    docker:
+      - image: python:3.8
     steps:
     - checkout
     - install_run_tests
 
   linux_python_3_9:
-    machine:
-      image: python:3.9
+    docker:
+      - image: python:3.9
     steps:
     - checkout
     - install_run_tests
