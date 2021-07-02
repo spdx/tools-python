@@ -2,10 +2,6 @@
 
 # Parses an RDF file and prints out some basic information.
 # Usage: parse_rdf.py <rdffile>
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 
 def parse_RDF(file):
     import spdx.file as spdxfile

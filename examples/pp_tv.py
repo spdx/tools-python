@@ -2,10 +2,6 @@
 
 # Parses a tag/value file and writes it out pretty-printed.
 # Usage: pp_tv <infile> <outfile>
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 if __name__ == "__main__":
     import sys
     import codecs

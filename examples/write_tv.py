@@ -2,10 +2,6 @@
 
 # Writes a new tag/value file from scratch.
 # Usage: write_tv <tagvaluefile>
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 if __name__ == "__main__":
     import sys
     import codecs
