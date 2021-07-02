@@ -38,9 +38,6 @@ setup(
         'pyyaml',
         'xmltodict',
     ],
-    extra_requires={
-        "tests": ["pytest"]
-    },
     python_requires='>=3.6',
     entry_points={
         'console_scripts': [
