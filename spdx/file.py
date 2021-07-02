@@ -121,7 +121,7 @@ class File(object):
     def validate_copyright(self, messages):
         if not isinstance(
             self.copyright,
-            (six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone),
+            (str, utils.NoAssert, utils.SPDXNone),
         ):
             messages = messages + [
                 "File copyright must be str or unicode or "

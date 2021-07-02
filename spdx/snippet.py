@@ -82,7 +82,7 @@ class Snippet(object):
     def validate_copyright_text(self, messages=None):
         if not isinstance(
             self.copyright,
-            (six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone),
+            (str, utils.NoAssert, utils.SPDXNone),
         ):
             messages = messages + [
                 "Snippet copyright must be str or unicode or utils.NoAssert or utils.SPDXNone"
