@@ -14,7 +14,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import six
-from six.moves import zip_longest
+from itertools import zip_longest
 
 from spdx import document
 from spdx import file as spdx_file
