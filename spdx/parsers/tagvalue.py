@@ -524,10 +524,7 @@ class Parser(object):
     # License Identifier
     def p_file_lic_info_value_3(self, p):
         """file_lic_info_value : LINE"""
-        if six.PY2:
-            value = p[1].decode(encoding="utf-8")
-        else:
-            value = p[1]
+        value = p[1]
         p[0] = document.License.from_identifier(value)
 
     def p_conc_license_1(self, p):
@@ -540,10 +537,7 @@ class Parser(object):
 
     def p_conc_license_3(self, p):
         """conc_license : LINE"""
-        if six.PY2:
-            value = p[1].decode(encoding="utf-8")
-        else:
-            value = p[1]
+        value = p[1]
         ref_re = re.compile("LicenseRef-.+", re.UNICODE)
         if (p[1] in config.LICENSE_MAP.keys()) or (ref_re.match(p[1]) is not None):
             p[0] = document.License.from_identifier(value)
@@ -566,10 +560,7 @@ class Parser(object):
 
     def p_spdx_id(self, p):
         """spdx_id : SPDX_ID LINE"""
-        if six.PY2:
-            value = p[2].decode(encoding="utf-8")
-        else:
-            value = p[2]
+        value = p[2]
         if not self.builder.doc_spdx_id_set:
             self.builder.set_doc_spdx_id(self.document, value)
         elif not self.builder.package_spdx_id_set:
@@ -734,10 +725,7 @@ class Parser(object):
     def p_pkg_ext_refs_1(self, p):
         """pkg_ext_ref : PKG_EXT_REF LINE"""
         try:
-            if six.PY2:
-                pkg_ext_info = p[2].decode(encoding="utf-8")
-            else:
-                pkg_ext_info = p[2]
+            pkg_ext_info = p[2]
             if len(pkg_ext_info.split()) != 3:
                 raise SPDXValueError
             else:
@@ -837,10 +825,7 @@ class Parser(object):
 
     def p_pkg_lic_ff_value_3(self, p):
         """pkg_lic_ff_value : LINE"""
-        if six.PY2:
-            value = p[1].decode(encoding="utf-8")
-        else:
-            value = p[1]
+        value = p[1]
         p[0] = document.License.from_identifier(value)
 
     def p_pkg_lic_ff_2(self, p):
@@ -1268,10 +1253,7 @@ class Parser(object):
 
     def p_snip_lic_info_value_3(self, p):
         """snip_lic_info_value : LINE"""
-        if six.PY2:
-            value = p[1].decode(encoding="utf-8")
-        else:
-            value = p[1]
+        value = p[1]
         p[0] = document.License.from_identifier(value)
 
     def p_reviewer_1(self, p):
@@ -1513,14 +1495,9 @@ class Parser(object):
     def p_ext_doc_refs_1(self, p):
         """ext_doc_ref : EXT_DOC_REF DOC_REF_ID DOC_URI EXT_DOC_REF_CHKSUM"""
         try:
-            if six.PY2:
-                doc_ref_id = p[2].decode(encoding="utf-8")
-                doc_uri = p[3].decode(encoding="utf-8")
-                ext_doc_chksum = p[4].decode(encoding="utf-8")
-            else:
-                doc_ref_id = p[2]
-                doc_uri = p[3]
-                ext_doc_chksum = p[4]
+            doc_ref_id = p[2]
+            doc_uri = p[3]
+            ext_doc_chksum = p[4]
 
             self.builder.add_ext_doc_refs(
                 self.document, doc_ref_id, doc_uri, ext_doc_chksum
@@ -1596,10 +1573,7 @@ class Parser(object):
         """entity : TOOL_VALUE
         """
         try:
-            if six.PY2:
-                value = p[1].decode(encoding="utf-8")
-            else:
-                value = p[1]
+            value = p[1]
             p[0] = self.builder.build_tool(self.document, value)
         except SPDXValueError:
             msg = ERROR_MESSAGES["TOOL_VALUE"].format(p[1], p.lineno(1))
@@ -1611,10 +1585,7 @@ class Parser(object):
         """entity : ORG_VALUE
         """
         try:
-            if six.PY2:
-                value = p[1].decode(encoding="utf-8")
-            else:
-                value = p[1]
+            value = p[1]
             p[0] = self.builder.build_org(self.document, value)
         except SPDXValueError:
             msg = ERROR_MESSAGES["ORG_VALUE"].format(p[1], p.lineno(1))
@@ -1626,10 +1597,7 @@ class Parser(object):
         """entity : PERSON_VALUE
         """
         try:
-            if six.PY2:
-                value = p[1].decode(encoding="utf-8")
-            else:
-                value = p[1]
+            value = p[1]
             p[0] = self.builder.build_person(self.document, value)
         except SPDXValueError:
             msg = ERROR_MESSAGES["PERSON_VALUE"].format(p[1], p.lineno(1))

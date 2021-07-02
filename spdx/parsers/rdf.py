@@ -11,7 +11,6 @@
 
 import re
 
-import six
 from functools import reduce
 
 from rdflib import Graph

@@ -38,9 +38,7 @@ class TestParser(unittest.TestCase):
 
         if regen:
             data = json.dumps(result, indent=2)
-            if six.PY3:
-                data = data.encode('utf-8')
-            with io.open(expected_loc, 'wb') as o:
+            with io.open(expected_loc, 'w') as o:
                 o.write(data)
 
         with io.open(expected_loc, 'r', encoding='utf-8') as ex:

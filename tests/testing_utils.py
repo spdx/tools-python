@@ -18,7 +18,6 @@
 
 """Tools not exempt from being descended into in tracebacks"""
 
-
 def make_decorator(func):
     """
     Wraps a test decorator so as to properly replicate metadata
@@ -34,7 +33,7 @@ def make_decorator(func):
         newfunc.__doc__ = func.__doc__
         newfunc.__module__ = func.__module__
         if not hasattr(newfunc, 'compat_co_firstlineno'):
-            newfunc.compat_co_firstlineno = six.get_function_code(func).co_firstlineno
+            newfunc.compat_co_firstlineno = func.__code__.co_firstlineno
         try:
             newfunc.__name__ = name
         except TypeError:
