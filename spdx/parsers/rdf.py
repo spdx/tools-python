@@ -16,7 +16,7 @@ from __future__ import unicode_literals
 import re
 
 import six
-from six.moves import reduce
+from functools import reduce
 
 from rdflib import Graph
 from rdflib import Namespace

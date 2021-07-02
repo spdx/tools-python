@@ -15,7 +15,7 @@ from __future__ import unicode_literals
 
 import hashlib
 
-from six.moves import reduce
+from functools import reduce
 
 from spdx import checksum
 from spdx import creationinfo
