@@ -15,8 +15,6 @@ from __future__ import unicode_literals
 
 import re
 
-from six import string_types
-
 from spdx import annotation
 from spdx import checksum
 from spdx import creationinfo
@@ -898,7 +896,7 @@ class PackageBuilder(object):
         if not self.package_cr_text_set:
             self.package_cr_text_set = True
             if validations.validate_pkg_cr_text(text):
-                if isinstance(text, string_types):
+                if isinstance(text, str):
                     doc.packages[-1].cr_text = str_from_text(text)
                 else:
                     doc.packages[-1].cr_text = text  # None or NoAssert
@@ -1201,7 +1199,7 @@ class FileBuilder(object):
             if not self.file_copytext_set:
                 self.file_copytext_set = True
                 if validations.validate_file_cpyright(text):
-                    if isinstance(text, string_types):
+                    if isinstance(text, str):
                         self.file(doc).copyright = str_from_text(text)
                     else:
                         self.file(doc).copyright = text  # None or NoAssert
@@ -1470,7 +1468,7 @@ class SnippetBuilder(object):
         if not self.snippet_copyright_set:
             self.snippet_copyright_set = True
             if validations.validate_snippet_copyright(text):
-                if isinstance(text, string_types):
+                if isinstance(text, str):
                     doc.snippet[-1].copyright = str_from_text(text)
                 else:
                     doc.snippet[-1].copyright = text  # None or NoAssert
