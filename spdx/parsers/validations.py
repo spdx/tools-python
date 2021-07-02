@@ -16,8 +16,6 @@ from __future__ import unicode_literals
 import re
 
 import rdflib
-import six
-
 from spdx import creationinfo
 from spdx import utils
 from spdx import document

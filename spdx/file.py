@@ -16,8 +16,6 @@ from __future__ import unicode_literals
 from functools import total_ordering
 import hashlib
 
-import six
-
 from spdx import checksum
 from spdx import document
 from spdx import utils

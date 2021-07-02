@@ -18,8 +18,6 @@
 
 """Tools not exempt from being descended into in tracebacks"""
 
-import six
-
 
 def make_decorator(func):
     """

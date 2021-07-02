@@ -16,8 +16,6 @@ from __future__ import unicode_literals
 import re
 
 from ply import yacc
-import six
-
 from spdx import config
 from spdx import utils
 from spdx.parsers.builderexceptions import CardinalityError

@@ -18,8 +18,6 @@ import io
 import json
 import unittest
 
-import six
-
 from spdx.parsers import rdf
 from spdx.parsers.loggers import StandardLogger
 from spdx.parsers.rdfbuilders import Builder as RDFBuilder
