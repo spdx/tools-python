@@ -1188,12 +1188,15 @@ class PackageParser(BaseParser):
     def parse_pkg_files_analyzed(self, pkg_files_analyzed):
         """
         Parse Package files analyzed
-        - pkg_files_analyzed: Python str/unicode
+        - pkg_files_analyzed: Python boolean or str/unicode
         """
-        if isinstance(pkg_files_analyzed, six.string_types):
+        # Files Analyzed optional
+        if pkg_files_analyzed is None:
+            return
+        if isinstance(pkg_files_analyzed, six.string_types) or isinstance(pkg_files_analyzed, bool):
             try:
                 return self.builder.set_pkg_files_analyzed(
-                    self.document, pkg_files_analyzed
+                    self.document, six.text_type(pkg_files_analyzed)
                 )
             except CardinalityError:
                 self.more_than_one_error("PKG_FILES_ANALYZED")
@@ -1205,7 +1208,7 @@ class PackageParser(BaseParser):
         Parse Package verification code dict
         - pkg_verif_code_field: Python dict('value':str/unicode, 'excludedFilesNames':list)
         """
-        if not self.document.packages[-1].files_analyzed:
+        if self.document.packages[-1].files_analyzed == False:
             return
         if isinstance(pkg_verif_code_field, dict):
             self.parse_pkg_verif_exc_files(
@@ -1220,6 +1223,8 @@ class PackageParser(BaseParser):
         Parse Package verification code value
         - pkg_verif_code: Python str/unicode
         """
+        if self.document.packages[-1].files_analyzed == False:
+            return
         if isinstance(pkg_verif_code, six.string_types):
             try:
                 return self.builder.set_pkg_verif_code(self.document, pkg_verif_code)
@@ -1442,7 +1447,7 @@ class PackageParser(BaseParser):
         Parse Package files
         - pkg_files: Python list of dicts as in FileParser.parse_file
         """
-        if not self.document.packages[-1].files_analyzed:
+        if self.document.packages[-1].files_analyzed == False:
             return
         if isinstance(pkg_files, list):
             for pkg_file in pkg_files:
