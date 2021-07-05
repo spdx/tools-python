@@ -1046,6 +1046,9 @@ class PackageParser(BaseParser):
         - package: Python dict with Package Information fields in it
         """
         if isinstance(package, dict):
+            # Avoid CardinalityError on the next package
+            self.builder.reset_package()
+
             self.parse_pkg_name(package.get("name"))
             self.parse_pkg_id(package.get("SPDXID"))
             self.parse_pkg_version(package.get("versionInfo"))
@@ -1053,6 +1056,7 @@ class PackageParser(BaseParser):
             self.parse_pkg_supplier(package.get("supplier"))
             self.parse_pkg_originator(package.get("originator"))
             self.parse_pkg_down_location(package.get("downloadLocation"))
+            self.parse_pkg_files_analyzed(package.get("filesAnalyzed"))
             self.parse_pkg_verif_code_field(package.get("packageVerificationCode"))
             self.parse_pkg_homepage(package.get("homepage"))
             self.parse_pkg_source_info(package.get("sourceInfo"))
@@ -1181,11 +1185,28 @@ class PackageParser(BaseParser):
         else:
             self.value_error("PKG_DOWN_LOC", pkg_down_location)
 
+    def parse_pkg_files_analyzed(self, pkg_files_analyzed):
+        """
+        Parse Package files analyzed
+        - pkg_files_analyzed: Python str/unicode
+        """
+        if isinstance(pkg_files_analyzed, six.string_types):
+            try:
+                return self.builder.set_pkg_files_analyzed(
+                    self.document, pkg_files_analyzed
+                )
+            except CardinalityError:
+                self.more_than_one_error("PKG_FILES_ANALYZED")
+        else:
+            self.value_error("PKG_FILES_ANALYZED", pkg_files_analyzed)
+
     def parse_pkg_verif_code_field(self, pkg_verif_code_field):
         """
         Parse Package verification code dict
         - pkg_verif_code_field: Python dict('value':str/unicode, 'excludedFilesNames':list)
         """
+        if not self.document.packages[-1].files_analyzed:
+            return
         if isinstance(pkg_verif_code_field, dict):
             self.parse_pkg_verif_exc_files(
                 pkg_verif_code_field.get("packageVerificationCodeExcludedFiles")
@@ -1421,6 +1442,8 @@ class PackageParser(BaseParser):
         Parse Package files
         - pkg_files: Python list of dicts as in FileParser.parse_file
         """
+        if not self.document.packages[-1].files_analyzed:
+            return
         if isinstance(pkg_files, list):
             for pkg_file in pkg_files:
                 if isinstance(pkg_file, dict):

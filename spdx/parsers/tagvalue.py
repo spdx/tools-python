@@ -1183,6 +1183,7 @@ class Parser(object):
                 value = p[2].decode(encoding="utf-8")
             else:
                 value = p[2]
+            self.builder.reset_package()
             self.builder.create_package(self.document, value)
         except CardinalityError:
             self.more_than_one_error("PackageName", p.lineno(1))
