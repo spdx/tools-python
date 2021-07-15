@@ -11,10 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import os
 from examples.rdf_to_json import RDF_to_JSON
 from examples.rdf_to_tv import RDF_to_TAG

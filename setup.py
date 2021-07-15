@@ -33,17 +33,17 @@ setup(
         'ply',
         'pyparsing<=1.5.7;python_version<="2.8"',
         'rdflib',
-        'six',
         'enum34',
         'Click',
         'pyyaml',
         'xmltodict',
     ],
-    python_requires='>=2.7',
+    python_requires='>=3.6',
     entry_points={
         'console_scripts': [
             'convertor = spdx.cli_tools.convertor:main',
             'parser = spdx.cli_tools.parser:main',
+            'generate_notice_file = spdx.cli_tools.generate_notice_file:main',
         ],
     },
 
@@ -56,6 +56,9 @@ setup(
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 2.7'
+        'Programming Language :: Python :: 3.6'
+        'Programming Language :: Python :: 3.7'
+        'Programming Language :: Python :: 3.8'
+        'Programming Language :: Python :: 3.9'
     ]
 )

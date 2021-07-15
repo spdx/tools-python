@@ -2,10 +2,6 @@
 
 # Converts an RDF file to tag/value format.
 # Usage: rdf_to_tv <rdffile> <tagvaluefile>
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 
 def RDF_to_TAG(infile_name, outfile_name):
     # if __name__ == "__main__":

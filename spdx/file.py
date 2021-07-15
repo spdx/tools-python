@@ -9,14 +9,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 from functools import total_ordering
 import hashlib
-
-import six
 
 from spdx import checksum
 from spdx import document
@@ -121,7 +115,7 @@ class File(object):
     def validate_copyright(self, messages):
         if not isinstance(
             self.copyright,
-            (six.string_types, six.text_type, utils.NoAssert, utils.SPDXNone),
+            (str, utils.NoAssert, utils.SPDXNone),
         ):
             messages = messages + [
                 "File copyright must be str or unicode or "
