@@ -268,9 +268,6 @@ class Package(object):
                 messages = messages + [
                     "Package checksum must be instance of spdx.checksum.Algorithm"
                 ]
-            else:
-                if self.check_sum.identifier != "SHA1":
-                    messages = messages + ["File checksum algorithm must be SHA1"]
 
         return messages
 
