@@ -37,12 +37,11 @@ UNSTABLE_CONVERSIONS = [
     "yaml->tag",
     "xml->tag",
     "json->tag",
-    "tag->tag"
 ]
 
 @pytest.mark.parametrize("in_format", ['rdf', 'yaml', 'xml', 'json', 'tag'])
 @pytest.mark.parametrize("out_format", ['rdf', 'yaml', 'xml', 'json', 'tag'])
-def test_parse_anything(in_format, out_format, tmpdir):
+def test_write_anything(in_format, out_format, tmpdir):
 
     for in_file in test_files:
         if in_file.endswith(in_format):
@@ -61,9 +60,10 @@ def test_parse_anything(in_format, out_format, tmpdir):
     
     test = in_format + "->" + out_format
     if test not in UNSTABLE_CONVERSIONS:
-        assert result2 == result
+        for k, v in result.items():
+            assert v == result2[k], k + " differs"
     else:
-        # if this test failed, this means we are more stable \o/
+        # if this test fails, this means we are more stable \o/
         # in that case, please remove the test from UNSTABLE_CONVERSIONS list
         assert result2 != result, test
 
