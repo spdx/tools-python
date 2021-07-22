@@ -60,8 +60,7 @@ def test_write_anything(in_format, out_format, tmpdir):
     
     test = in_format + "->" + out_format
     if test not in UNSTABLE_CONVERSIONS:
-        for k, v in result.items():
-            assert v == result2[k], k + " differs"
+        utils_test.compare(result, result2)
     else:
         # if this test fails, this means we are more stable \o/
         # in that case, please remove the test from UNSTABLE_CONVERSIONS list

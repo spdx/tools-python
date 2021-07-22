@@ -29,6 +29,12 @@ import yaml
 import spdx
 from spdx import utils
 
+try:
+    from testfixtures import compare
+except ImportError:
+    def compare(a, b):
+        assert a == b, "for better comparaison results, please pip install testfixtures"
+
 
 test_data_dir = os.path.join(os.path.dirname(__file__), 'data')
 
