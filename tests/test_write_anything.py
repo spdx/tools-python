@@ -21,31 +21,29 @@ from tests import utils_test
 
 dirname = os.path.join(os.path.dirname(__file__), "data", "formats")
 test_files = [os.path.join(dirname, fn) for fn in os.listdir(dirname)]
-UNSTABLE_CONVERSIONS = [
-    "rdf->rdf",
-    "yaml->rdf",
-    "xml->rdf",
-    "json->rdf",
-    "tag->rdf",
-    "rdf->yaml",
-    "tag->yaml",
-    "rdf->xml",
-    "tag->xml",
-    "rdf->json",
-    "tag->json",
-    "rdf->tag",
-    "yaml->tag",
-    "xml->tag",
-    "json->tag",
-]
+UNSTABLE_CONVERSIONS = {
+    "SPDXTagExample.tag-rdf",
+    "SPDXTagExample.tag-yaml",
+    "SPDXTagExample.tag-xml",
+    "SPDXTagExample.tag-json",
+    "SPDXSimpleTag.tag-rdf",
+    "SPDXXmlExample.xml-rdf",
+    "SPDXXmlExample.xml-tag",
+    "SPDXJsonExample.json-rdf",
+    "SPDXJsonExample.json-tag",
+    "SPDXYamlExample.yaml-rdf",
+    "SPDXYamlExample.yaml-tag",
+    "SPDXRdfExample.rdf-rdf",
+    "SPDXRdfExample.rdf-yaml",
+    "SPDXRdfExample.rdf-xml",
+    "SPDXRdfExample.rdf-json",
+    "SPDXRdfExample.rdf-tag",
+}
 
-@pytest.mark.parametrize("in_format", ['rdf', 'yaml', 'xml', 'json', 'tag'])
 @pytest.mark.parametrize("out_format", ['rdf', 'yaml', 'xml', 'json', 'tag'])
-def test_write_anything(in_format, out_format, tmpdir):
-
-    for in_file in test_files:
-        if in_file.endswith(in_format):
-            break
+@pytest.mark.parametrize("in_file", test_files, ids=lambda x: os.path.basename(x))
+def test_write_anything(in_file, out_format, tmpdir):
+    in_basename = os.path.basename(in_file)
     doc, error = parse_anything.parse_file(in_file)
 
     assert not error
@@ -58,7 +56,7 @@ def test_write_anything(in_format, out_format, tmpdir):
     result2 = utils_test.TestParserUtils.to_dict(doc2)
     assert not error2
     
-    test = in_format + "->" + out_format
+    test = in_basename + "-" + out_format
     if test not in UNSTABLE_CONVERSIONS:
         utils_test.compare(result, result2)
     else:
