@@ -22,6 +22,13 @@ class FileType(object):
     BINARY = 2
     ARCHIVE = 3
     OTHER = 4
+    APPLICATION = 5
+    AUDIO = 6
+    IMAGE = 7
+    TEXT = 8
+    VIDEO = 9
+    DOCUMENTATION = 9
+    SPDX = 10
 
 
 @total_ordering
