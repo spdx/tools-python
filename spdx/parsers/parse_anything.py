@@ -41,7 +41,7 @@ def parse_file(fn):
     elif fn.endswith(".yaml"):
         parsing_module = yamlparser
     else:
-        raise FileTypeError("FileType Not Supported")
+        raise FileTypeError("FileType Not Supported" + str(fn))
 
     p = parsing_module.Parser(buildermodule.Builder(), StandardLogger())
     if hasattr(p, "build"):

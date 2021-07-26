@@ -20,7 +20,7 @@ import click
 
 @click.command()
 @click.option("--file", prompt="File name", help="The file to be parsed")
-@click.option("--force", action="store_true", help="print information even if there are some parsing errors")
+@click.option("--force", is_flag=True, help="print information even if there are some parsing errors")
 def main(file, force):
     """
     COMMAND-LINE TOOL for parsing file of RDF, XML, JSON, YAML and XML format.

@@ -18,25 +18,25 @@ from spdx.writers.write_anything import write_file
 
 import click
 
+def print_help_msg(command):
+    with click.Context(command) as ctx:
+        click.echo(command.get_help(ctx))
 
 @click.command()
 @click.argument("src", nargs=-1)
-@click.option("--infile", "-i", help="The file to be converted ", default="undefined")
-@click.option("--outfile", "-o", help="The file after converting", default="undefined")
+@click.option("--infile", "-i", help="The file to be converted ")
+@click.option("--outfile", "-o", help="The file after converting")
 @click.option(
     "--to",
     "-t",
-    type=click.Choice(["json", "rdf", "yaml", "xml", "tag"], case_sensitive=False),
-    default="undefined",
+    type=click.Choice(["json", "rdf", "yaml", "xml", "tag"], case_sensitive=False)
 )
 @click.option(
     "--from",
     "-f",
     "from_",
-    type=click.Choice(["tag", "rdf"], case_sensitive=False),
-    default="undefined",
-)
-@click.option("--force", action="store_true", help="convert even if there are some parsing errors or inconsistencies")
+    type=click.Choice(["tag", "rdf"], case_sensitive=False))
+@click.option("--force", is_flag=True, help="convert even if there are some parsing errors or inconsistencies")
 def main(infile, outfile, src, from_, to, force):
     """
     CLI-TOOL for converting a RDF or TAG file to RDF, JSON, YAML, TAG or XML format.
@@ -44,7 +44,7 @@ def main(infile, outfile, src, from_, to, force):
     To use : run 'convertor -f <from_TYPE> <input file> -t <to_TYPE> <output_file>' command on terminal or use ' convertor --infile <input file name> --outfile <output file name> '
 
     """
-    if infile is None and outfile is None:
+    if infile is None and outfile is None and len(src) == 2:
         """
         when the CLI is of given format:
         ' convertor -f/--from <type> <input_file> -t/--to <type> <output_file>.
@@ -76,7 +76,9 @@ def main(infile, outfile, src, from_, to, force):
         if to is not None:
             outfile_path = os.path.splitext(outfile)[0]
             outfile = outfile_path + "." + to
-
+    else:
+        print_help_msg(main)
+        return
     doc, errors = parse_file(infile)
     if errors:
         print("Errors while parsing: ", errors)
