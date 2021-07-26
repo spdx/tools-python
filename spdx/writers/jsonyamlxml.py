@@ -50,9 +50,7 @@ class BaseWriter(object):
         Return a dictionary representation of a spdx.checksum.Algorithm object
         """
         checksum_object = dict()
-        checksum_object["algorithm"] = (
-            "checksumAlgorithm_" + checksum_field.identifier.lower()
-        )
+        checksum_object["algorithm"] = checksum_field.identifier.upper()
         checksum_object["checksumValue"] = checksum_field.value
         return checksum_object
 
@@ -121,11 +119,13 @@ class PackageWriter(BaseWriter):
                 package
             )
         package_object["licenseConcluded"] = self.license(package.conc_lics)
-        package_object["licenseInfoFromFiles"] = list(
+        package_object["licenseInfoInFiles"] = list(
             map(self.license, package.licenses_from_files)
         )
         package_object["licenseDeclared"] = self.license(package.license_declared)
         package_object["copyrightText"] = package.cr_text.__str__()
+
+        package_object["hasFiles"] = [file.spdx_id for file in package.files]
 
         if package.has_optional_field("files_analyzed"):
             package_object["filesAnalyzed"] = package.files_analyzed
@@ -203,7 +203,7 @@ class FileWriter(BaseWriter):
         for file in files:
             file_object = dict()
 
-            file_object["name"] = file.name
+            file_object["fileName"] = file.name
             file_object["SPDXID"] = self.spdx_id(file.spdx_id)
             file_object["checksums"] = [self.checksum(file.chk_sum)]
             file_object["licenseConcluded"] = self.license(file.conc_lics)
@@ -211,7 +211,6 @@ class FileWriter(BaseWriter):
                 map(self.license, file.licenses_in_file)
             )
             file_object["copyrightText"] = file.copyright.__str__()
-            file_object["sha1"] = file.chk_sum.value
 
             if file.has_optional_field("comment"):
                 file_object["comment"] = file.comment
@@ -245,7 +244,7 @@ class FileWriter(BaseWriter):
             if valid_artifacts:
                 file_object["artifactOf"] = self.create_artifact_info(file)
 
-            file_objects.append({"File": file_object})
+            file_objects.append(file_object)
 
         return file_objects
 
@@ -480,12 +479,20 @@ class Writer(
         self.document_object["name"] = self.document.name
 
         package_objects = []
+        file_objects = []
         for package in self.document.packages:
             package_info_object = self.create_package_info(package)
-            package_info_object["files"] = self.create_file_info(package)
-            package_objects.append({"Package": package_info_object})
+            package_objects.append(package_info_object)
 
-        self.document_object["documentDescribes"] = package_objects
+            package_file_info = self.create_file_info(package)
+            file_objects.extend(package_file_info)
+
+        document_types = {package.spdx_id for package in self.document.packages}
+        document_types |= {file["SPDXID"] for file in file_objects}
+
+        self.document_object["documentDescribes"] = list(document_types)
+        self.document_object["packages"] = package_objects
+        self.document_object["files"] = file_objects
 
         if self.document.has_comment:
             self.document_object["comment"] = self.document.comment
@@ -512,4 +519,4 @@ class Writer(
         if self.document.relationships:
             self.document_object["relationships"] = self.create_relationship_info()
 
-        return {"Document": self.document_object}
+        return self.document_object
