@@ -207,7 +207,7 @@ class FileWriter(BaseWriter):
             file_object["SPDXID"] = self.spdx_id(file.spdx_id)
             file_object["checksums"] = [self.checksum(file.chk_sum)]
             file_object["licenseConcluded"] = self.license(file.conc_lics)
-            file_object["licenseInfoFromFiles"] = list(
+            file_object["licenseInfoInFiles"] = list(
                 map(self.license, file.licenses_in_file)
             )
             file_object["copyrightText"] = file.copyright.__str__()
