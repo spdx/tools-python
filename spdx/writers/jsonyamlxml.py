@@ -119,7 +119,7 @@ class PackageWriter(BaseWriter):
                 package
             )
         package_object["licenseConcluded"] = self.license(package.conc_lics)
-        package_object["licenseInfoInFiles"] = list(
+        package_object["licenseInfoFromFiles"] = list(
             map(self.license, package.licenses_from_files)
         )
         package_object["licenseDeclared"] = self.license(package.license_declared)
