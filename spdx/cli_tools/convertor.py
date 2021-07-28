@@ -12,44 +12,39 @@
 # limitations under the License.
 
 import os
-from examples.rdf_to_json import RDF_to_JSON
-from examples.rdf_to_tv import RDF_to_TAG
-from examples.rdf_to_xml import RDF_to_XML
-from examples.rdf_to_yaml import RDF_to_YAML
-from examples.tv_to_json import TAG_to_JSON
-from examples.tv_to_rdf import TAG_to_RDF
-from examples.tv_to_xml import TAG_to_XML
-from examples.tv_to_yaml import TAG_to_YAML
 from spdx.parsers.builderexceptions import FileTypeError
+from spdx.parsers.parse_anything import parse_file
+from spdx.writers.write_anything import write_file
 
 import click
 
+def print_help_msg(command):
+    with click.Context(command) as ctx:
+        click.echo(command.get_help(ctx))
 
 @click.command()
 @click.argument("src", nargs=-1)
-@click.option("--infile", "-i", help="The file to be converted ", default="undefined")
-@click.option("--outfile", "-o", help="The file after converting", default="undefined")
+@click.option("--infile", "-i", help="The file to be converted ")
+@click.option("--outfile", "-o", help="The file after converting")
 @click.option(
     "--to",
     "-t",
-    type=click.Choice(["json", "rdf", "yaml", "xml", "tag"], case_sensitive=False),
-    default="undefined",
+    type=click.Choice(["json", "rdf", "yaml", "xml", "tag"], case_sensitive=False)
 )
 @click.option(
     "--from",
     "-f",
     "from_",
-    type=click.Choice(["tag", "rdf"], case_sensitive=False),
-    default="undefined",
-)
-def main(infile, outfile, src, from_, to):
+    type=click.Choice(["tag", "rdf"], case_sensitive=False))
+@click.option("--force", is_flag=True, help="convert even if there are some parsing errors or inconsistencies")
+def main(infile, outfile, src, from_, to, force):
     """
     CLI-TOOL for converting a RDF or TAG file to RDF, JSON, YAML, TAG or XML format.
 
     To use : run 'convertor -f <from_TYPE> <input file> -t <to_TYPE> <output_file>' command on terminal or use ' convertor --infile <input file name> --outfile <output file name> '
 
     """
-    if infile is None and outfile is None:
+    if infile is None and outfile is None and len(src) == 2:
         """
         when the CLI is of given format:
         ' convertor -f/--from <type> <input_file> -t/--to <type> <output_file>.
@@ -81,112 +76,16 @@ def main(infile, outfile, src, from_, to):
         if to is not None:
             outfile_path = os.path.splitext(outfile)[0]
             outfile = outfile_path + "." + to
-
-    if infile.endswith(".rdf"):
-        infile_format = "rdf"
-    elif infile.endswith(".tag"):
-        infile_format = "tag"
     else:
-        raise FileTypeError(
-            "INPUT FILETYPE NOT SUPPORTED. (only RDF and TAG format supported)"
-        )
+        print_help_msg(main)
+        return
+    doc, errors = parse_file(infile)
+    if errors:
+        print("Errors while parsing: ", errors)
+        if not force:
+            return 1
 
-    if outfile.endswith(".rdf"):
-        outfile_format = "rdf"
-    elif outfile.endswith(".tag"):
-        outfile_format = "tag"
-    elif outfile.endswith(".json"):
-        outfile_format = "json"
-    elif outfile.endswith(".xml"):
-        outfile_format = "xml"
-    elif outfile.endswith(".yaml"):
-        outfile_format = "yaml"
-    elif outfile.endswith(".spdx"):
-        outfile_format = "tag"
-    elif outfile.endswith(".rdf.xml"):
-        outfile_format = "rdf"
-    else:
-        raise FileTypeError("OUTFILE FILETYPE NOT SUPPORTED")
-
-    try:
-        func_to_call = infile_format + "_to_" + outfile_format
-        result = globals()[func_to_call](infile, outfile)
-        click.echo(result)
-    except EnvironmentError as e:
-        print(os.strerror(e.errno))
-
-
-def rdf_to_json(infile, outfile):
-    infile = str(infile)
-    outfile = str(outfile)
-    try:
-        return RDF_to_JSON(os.path.join(infile), os.path.join(outfile))
-    except EnvironmentError as e:
-        print(os.strerror(e.errno))
-
-
-def rdf_to_tag(infile, outfile):
-    infile = str(infile)
-    outfile = str(outfile)
-    try:
-        return RDF_to_TAG(os.path.join(infile), os.path.join(outfile))
-    except EnvironmentError as e:
-        print(os.strerror(e.errno))
-
-
-def rdf_to_yaml(infile, outfile):
-    infile = str(infile)
-    outfile = str(outfile)
-    try:
-        return RDF_to_YAML(os.path.join(infile), os.path.join(outfile))
-    except EnvironmentError as e:
-        # OSError or IOError...
-        print(os.strerror(e.errno))
-
-
-def rdf_to_xml(infile, outfile):
-    infile = str(infile)
-    outfile = str(outfile)
-    try:
-        return RDF_to_XML(os.path.join(infile), os.path.join(outfile))
-    except EnvironmentError as e:
-        print(os.strerror(e.errno))
-
-
-def tag_to_json(infile, outfile):
-    infile = str(infile)
-    outfile = str(outfile)
-    try:
-        return TAG_to_JSON(os.path.join(infile), os.path.join(outfile))
-    except EnvironmentError as e:
-        print(os.strerror(e.errno))
-
-
-def tag_to_rdf(infile, outfile):
-    infile = str(infile)
-    outfile = str(outfile)
-    try:
-        return TAG_to_RDF(os.path.join(infile), os.path.join(outfile))
-    except EnvironmentError as e:
-        print(os.strerror(e.errno))
-
-
-def tag_to_yaml(infile, outfile):
-    infile = str(infile)
-    outfile = str(outfile)
-    try:
-        return TAG_to_YAML(os.path.join(infile), os.path.join(outfile))
-    except EnvironmentError as e:
-        print(os.strerror(e.errno))
-
-
-def tag_to_xml(infile, outfile):
-    infile = str(infile)
-    outfile = str(outfile)
-    try:
-        return TAG_to_XML(os.path.join(infile), os.path.join(outfile))
-    except EnvironmentError as e:
-        print(os.strerror(e.errno))
+    write_file(doc, outfile)
 
 
 if __name__ == "__main__":

@@ -460,7 +460,7 @@ class RelationshipParser(BaseParser):
             except SPDXValueError:
                 self.value_error("RELATIONSHIP_VALUE", relate)
         else:
-            self.value_error("RELATIONSHIP_VALUE", relate)
+            self.value_error("RELATIONSHIP_VALUE", relationshiptype)
 
     def parse_relationship_comment(self, relationship_comment):
         """

@@ -11,7 +11,7 @@ environment:
 install:
   - "%PYTHON_EXE% --version"
   - "%PYTHON_EXE% setup.py install"
-  - "%PYTHON_EXE% -m pip install pytest"
+  - "%PYTHON_EXE% -m pip install pytest testfixtures"
 
 build: off
 
