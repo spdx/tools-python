@@ -1,5 +1,6 @@
 version: "{build}"
-
+image:
+  - Visual Studio 2019
 environment:
   matrix:
     - PYTHON_EXE: "C:\\Python36-x64\\python.exe"
@@ -10,8 +11,9 @@ environment:
 install:
   - "%PYTHON_EXE% --version"
   - "%PYTHON_EXE% setup.py install"
+  - "%PYTHON_EXE% -m pip install pytest testfixtures"
 
 build: off
 
 test_script:
-  - "%PYTHON_EXE% setup.py test"
+  - "%PYTHON_EXE% -m pytest"

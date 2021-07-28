@@ -9,10 +9,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import warnings
 
 from functools import total_ordering
@@ -93,8 +89,12 @@ def _add_parens(required, text):
 @total_ordering
 class License(object):
     def __init__(self, full_name, identifier):
-        self._full_name = full_name
-        self._identifier = identifier
+        """if one of the argument is None, we try to map as much as possible
+        """
+        self._full_name = None
+        self._identifier = None
+        self.set_full_name(full_name)
+        self.set_identifier(identifier)
 
     @classmethod
     def from_identifier(cls, identifier):
@@ -102,10 +102,7 @@ class License(object):
         the full_name is retrieved from it. Otherwise
         the full_name is the same as the identifier.
         """
-        if identifier in config.LICENSE_MAP.keys():
-            return cls(config.LICENSE_MAP[identifier], identifier)
-        else:
-            return cls(identifier, identifier)
+        return cls(None, identifier)
 
     @classmethod
     def from_full_name(cls, full_name):
@@ -114,10 +111,7 @@ class License(object):
         config.LICENSE_MAP the identifier is retrieved from it.
         Otherwise the identifier is the same as the full_name.
         """
-        if full_name in config.LICENSE_MAP.keys():
-            return cls(full_name, config.LICENSE_MAP[full_name])
-        else:
-            return cls(full_name, full_name)
+        return cls(full_name, None)
 
     @property
     def url(self):
@@ -129,11 +123,38 @@ class License(object):
 
     @full_name.setter
     def full_name(self, value):
+        self.set_full_name(value)
+
+    def set_full_name(self, value):
+
+        if value is None:
+            return
+        if self._identifier is None:
+            if value in config.LICENSE_MAP:
+                self._identifier = config.LICENSE_MAP[value]
+            else:
+                self._identifier = value
         self._full_name = value
 
     @property
     def identifier(self):
         return self._identifier
+
+    @identifier.setter
+    def identifier(self, value):
+        self.set_identifier(value)
+
+    def set_identifier(self, value):
+        if value is None:
+            return
+        if self._full_name is None:
+            if value in config.LICENSE_MAP:
+                self._full_name = config.LICENSE_MAP[value]
+            else:
+                self._full_name = value
+
+        self._identifier = value
+
 
     def __eq__(self, other):
         return (

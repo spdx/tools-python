@@ -9,10 +9,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 from rdflib import BNode
 from rdflib import Graph
 from rdflib import Literal
@@ -28,6 +24,7 @@ from spdx import config
 from spdx import utils
 from spdx.writers.tagvalue import InvalidDocumentError
 
+import warnings
 
 class BaseWriter(object):
     """
@@ -146,9 +143,11 @@ class LicenseWriter(BaseWriter):
             if len(matches) != 0:
                 return self.create_extracted_license(matches[0])
             else:
-                raise InvalidDocumentError(
+                lic = document.ExtractedLicense(lic.identifier)
+                warnings.warn(
                     "Missing extracted license: {0}".format(lic.identifier)
                 )
+                return self.create_extracted_license(lic)
 
     def create_extracted_license(self, lic):
         """

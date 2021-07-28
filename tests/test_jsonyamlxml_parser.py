@@ -10,10 +10,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 from collections import OrderedDict
 import io
 import json
@@ -34,13 +30,13 @@ class TestParser(TestCase):
         result = TestParserUtils.to_dict(document)
 
         if regen:
-            with open(expected_loc, 'wb') as o:
+            with open(expected_loc, 'w') as o:
                 o.write(json.dumps(result, indent=2))
 
         with io.open(expected_loc, encoding='utf-8') as ex:
             expected = json.load(ex, object_pairs_hook=OrderedDict)
 
-        self.assertEqual(expected, result)
+        utils_test.compare(expected, result)
 
     def test_json_parser(self):
         parser = jsonparser.Parser(Builder(), StandardLogger())
