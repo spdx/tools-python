@@ -43,7 +43,6 @@ setup(
         'console_scripts': [
             'convertor = spdx.cli_tools.convertor:main',
             'parser = spdx.cli_tools.parser:main',
-            'generate_notice_file = spdx.cli_tools.generate_notice_file:main',
         ],
     },
 

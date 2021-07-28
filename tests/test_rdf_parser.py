@@ -25,7 +25,7 @@ from tests.utils_test import TestParserUtils
 class TestParser(unittest.TestCase):
     maxDiff = None
 
-    def test_rdf_parser(self):
+    def test_rdf_parser(self, regen=False):
         parser = rdf.Parser(RDFBuilder(), StandardLogger())
         test_file = utils_test.get_test_loc('formats/SPDXRdfExample.rdf', test_data_dir=utils_test.test_data_dir)
         with io.open(test_file, 'rb') as f:
@@ -44,27 +44,4 @@ class TestParser(unittest.TestCase):
         with io.open(expected_loc, 'r', encoding='utf-8') as ex:
             expected = json.load(ex)
 
-        self.check_fields(result, expected)
-        assert expected == result
-
-    def check_fields(self, result, expected):
-        """
-        Test result and expected objects field by field
-        to provide more specific error messages when failing
-        """
-        assert expected['id'] == result['id']
-        assert expected['specVersion'] == result['specVersion']
-        assert expected['documentNamespace'] == result['documentNamespace']
-        assert expected['name'] == result['name']
-        assert expected['comment'] == result['comment']
-        assert expected['dataLicense'] == result['dataLicense']
-        assert expected['licenseListVersion'] == result['licenseListVersion']
-        assert expected['creators'] == result['creators']
-        assert expected['created'] == result['created']
-        assert expected['creatorComment'] == result['creatorComment']
-        assert expected['package']['files'] == result['package']['files']
-        assert expected['package'] == result['package']
-        assert expected['externalDocumentRefs'] == result['externalDocumentRefs']
-        assert expected['extractedLicenses'] == result['extractedLicenses']
-        assert expected['annotations'] == result['annotations']
-        assert expected['reviews'] == result['reviews']
+        utils_test.compare(result, expected)

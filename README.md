@@ -85,8 +85,13 @@ instead of `bin`.
 
 # How to run tests
 
-From the project root directory run: `python setup.py test`.
-You can use another test runner such as pytest or nose at your preference.
+Tests framework is using pytest and testfixtures
+
+```
+pip install pytest testfixtures
+pytest
+```
+
 
 
 # Development process

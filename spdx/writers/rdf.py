@@ -24,6 +24,7 @@ from spdx import config
 from spdx import utils
 from spdx.writers.tagvalue import InvalidDocumentError
 
+import warnings
 
 class BaseWriter(object):
     """
@@ -142,9 +143,11 @@ class LicenseWriter(BaseWriter):
             if len(matches) != 0:
                 return self.create_extracted_license(matches[0])
             else:
-                raise InvalidDocumentError(
+                lic = document.ExtractedLicense(lic.identifier)
+                warnings.warn(
                     "Missing extracted license: {0}".format(lic.identifier)
                 )
+                return self.create_extracted_license(lic)
 
     def create_extracted_license(self, lic):
         """
