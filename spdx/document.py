@@ -52,8 +52,8 @@ class ExternalDocumentRef(object):
 
     def validate(self, messages):
         """
-        Validate all fields of the ExternalDocumentRef class and update the
-        messages list with user friendly error messages for display.
+        Check that all the fields are valid.
+        Appends any error messages to messages parameter shall be a ErrorMessages.
         """
         self.validate_ext_doc_id(messages)
         self.validate_spdx_doc_uri(messages)
@@ -378,12 +378,14 @@ class Document(object):
     def has_comment(self):
         return self.comment is not None
 
-    def validate(self, messages):
+    def validate(self, messages=None):
         """
         Validate all fields of the document and update the
         messages list with user friendly error messages for display.
         """
         if isinstance(messages, list):
+            raise TypeError("messages should be None or an instance of ErrorMessages")
+        if messages is None:
             messages = ErrorMessages()
 
         messages.push_context(self.name)
@@ -398,8 +400,8 @@ class Document(object):
         self.validate_extracted_licenses(messages)
         self.validate_reviews(messages)
         self.validate_snippet(messages)
-        # self.validate_annotations(messages)
-        # self.validate_relationships(messages)
+        self.validate_annotations(messages)
+        self.validate_relationships(messages)
         messages.pop_context()
         return messages
 

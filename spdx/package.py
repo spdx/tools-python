@@ -324,8 +324,8 @@ class ExternalPackageRef(object):
 
     def validate(self, messages):
         """
-        Validate all fields of the ExternalPackageRef class and update the
-        messages list with user friendly error messages for display.
+        Check that all the fields are valid.
+        Appends any error messages to messages parameter shall be a ErrorMessages.
         """
         self.validate_category(messages)
         self.validate_pkg_ext_ref_type(messages)

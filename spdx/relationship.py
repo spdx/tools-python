@@ -99,10 +99,11 @@ class Relationship(object):
         return self.relationship.split(" ")[2]
 
     def validate(self, messages):
-        """Returns True if all the fields are valid.
-        Appends any error messages to messages parameter.
         """
-        return self.validate_relationship(messages)
+        Check that all the fields are valid.
+        Appends any error messages to messages parameter shall be a ErrorMessages.
+        """
+        self.validate_relationship(messages)
 
     def validate_relationship(self, messages):
         r_type = self.relationship.split(" ")[1]
@@ -111,6 +112,3 @@ class Relationship(object):
                 "Relationship type must be one of the constants defined in "
                 "class spdx.relationship.Relationship"
             )
-            return False
-        else:
-            return True

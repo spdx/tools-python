@@ -100,8 +100,9 @@ class File(object):
         artifact.append(value)
 
     def validate(self, messages):
-        """Validates the fields and appends user friendly messages
-        to messages parameter if there are errors.
+        """
+        Check that all the fields are valid.
+        Appends any error messages to messages parameter shall be a ErrorMessages.
         """
         messages.push_context(self.name)
         self.validate_concluded_license(messages)

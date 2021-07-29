@@ -76,8 +76,9 @@ class Annotation(object):
         return self.comment is not None
 
     def validate(self, messages):
-        """Returns True if all the fields are valid.
-        Appends any error messages to messages parameter.
+        """
+        Check that all the fields are valid.
+        Appends any error messages to messages parameter shall be a ErrorMessages.
         """
         self.validate_annotator(messages)
         self.validate_annotation_date(messages)
