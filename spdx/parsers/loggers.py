@@ -21,3 +21,40 @@ class FileLogger(object):
 
     def log(self, msg):
         self.dest.write(msg + "\n")
+
+
+class ErrorMessages:
+
+    def __init__(self):
+        self.messages = []
+        self.context = []
+    
+    def push_context(self, context):
+        """push some context information to better indentify where is the problem"""
+        self.context.append(context)
+
+    def pop_context(self):
+        """pop the last context information"""
+        self.context.pop()
+    
+    def append(self, message, *args, **kwargs):
+        """add a message with standard python format
+        the current context is prefixed to the message
+        """
+        message = message.format(*args, **kwargs)
+        message = "".join([c + ": " for c in self.context if c]) + message
+        self.messages.append(message)
+
+    def __iter__(self):
+        return self.messages.__iter__()
+
+    def __bool__(self):
+        return len(self.messages)>0
+
+    def __nonzero__(self):
+        return len(self.messages)>0
+    
+    def __eq__(self, b):
+        if isinstance(b, ErrorMessages):
+            return self.messages == b.messages
+        return self.messages == b

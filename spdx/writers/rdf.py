@@ -22,6 +22,7 @@ from spdx import file
 from spdx import document
 from spdx import config
 from spdx import utils
+from spdx.parsers.loggers import ErrorMessages
 from spdx.writers.tagvalue import InvalidDocumentError
 
 import warnings
@@ -1041,7 +1042,7 @@ def write_document(document, out, validate=True):
     """
 
     if validate:
-        messages = []
+        messages = ErrorMessages()
         messages = document.validate(messages)
         if messages:
             raise InvalidDocumentError(messages)

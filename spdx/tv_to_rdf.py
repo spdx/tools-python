@@ -18,6 +18,7 @@ from spdx.parsers.loggers import StandardLogger
 from spdx.writers.rdf import write_document
 from spdx.parsers.tagvalue import Parser
 from spdx.parsers.tagvaluebuilders import Builder
+from spdx.parsers.loggers import ErrorMessages
 
 
 def tv_to_rdf(infile_name, outfile_name):
@@ -36,9 +37,9 @@ def tv_to_rdf(infile_name, outfile_name):
             return True
         else:
             print("Errors encountered while parsing RDF file.")
-            messages = []
+            messages = ErrorMessages()
             document.validate(messages)
-            print("\n".join(messages))
+            print("\n".join(messages.messages))
             return False
 
 
