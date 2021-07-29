@@ -61,3 +61,12 @@ class TestParser(TestCase):
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
         self.check_document(document, expected_loc)
+
+    def test_sbomyaml_parser(self):
+        parser = yamlparser.Parser(Builder(), StandardLogger())
+        test_file = utils_test.get_test_loc('formats/SPDXSBOMExample.spdx.yml')
+        with io.open(test_file, encoding='utf-8') as f:
+            document, errors = parser.parse(f)
+            assert not errors
+        expected_loc = utils_test.get_test_loc('doc_parse/SBOMexpected.json')
+        self.check_document(document, expected_loc)

@@ -712,10 +712,12 @@ class PackageBuilder(object):
         """
         self.assert_package_exists()
         if not self.package_files_analyzed_set:
-            if files_analyzed:
+            if files_analyzed is not None:
                 if validations.validate_pkg_files_analyzed(files_analyzed):
                     self.package_files_analyzed_set = True
-                    doc.packages[-1].files_analyzed = (files_analyzed.lower() == "true")
+                    if isinstance(files_analyzed, str):
+                        files_analyzed = files_analyzed.lower() == "true"
+                    doc.packages[-1].files_analyzed = files_analyzed
                     # convert to boolean;
                     # validate_pkg_files_analyzed already checked if
                     # files_analyzed is in ['True', 'true', 'False', 'false']

@@ -25,5 +25,5 @@ class Parser(jsonyamlxml.Parser):
         super(Parser, self).__init__(builder, logger)
 
     def parse(self, file):
-        self.document_object = yaml.safe_load(file).get("Document")
+        self.json_yaml_set_document(yaml.safe_load(file))
         return super(Parser, self).parse()

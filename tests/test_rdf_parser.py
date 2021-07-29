@@ -31,7 +31,7 @@ class TestParser(unittest.TestCase):
         with io.open(test_file, 'rb') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/spdx-expected.json', test_data_dir=utils_test.test_data_dir)
-        self.check_document(document, expected_loc)
+        self.check_document(document, expected_loc, regen=regen)
 
     def check_document(self, document, expected_loc, regen=False):
         result = TestParserUtils.to_dict(document)

@@ -204,7 +204,7 @@ def validate_pkg_spdx_id(value, optional=False):
 
 
 def validate_pkg_files_analyzed(value, optional=False):
-    if value in ["True", "true", "False", "false"]:
+    if value in ["True", "true", "False", "false", True, False]:
         return True
     else:
         return optional
