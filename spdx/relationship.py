@@ -11,6 +11,7 @@
 # limitations under the License.
 
 from enum import Enum
+from spdx.parsers.loggers import ErrorMessages
 
 # Implement the auto feature that becomes available in 3.6	
 autoinc = 0	
@@ -98,21 +99,16 @@ class Relationship(object):
         return self.relationship.split(" ")[2]
 
     def validate(self, messages):
-        """Returns True if all the fields are valid.
-        Appends any error messages to messages parameter.
         """
-        messages = self.validate_relationship(messages)
-
-        return messages
+        Check that all the fields are valid.
+        Appends any error messages to messages parameter shall be a ErrorMessages.
+        """
+        self.validate_relationship(messages)
 
     def validate_relationship(self, messages):
-        messages = messages if messages is not None else []
         r_type = self.relationship.split(" ")[1]
         if r_type not in [name for name, _ in RelationshipType.__members__.items()]:
-            messages = messages + [
+            messages.append(
                 "Relationship type must be one of the constants defined in "
                 "class spdx.relationship.Relationship"
-            ]
-            return messages
-        else:
-            return True
+            )
