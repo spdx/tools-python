@@ -22,6 +22,7 @@ from spdx import document
 from spdx import utils
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import SPDXValueError
+from spdx.parsers.loggers import ErrorMessages
 
 
 ERROR_MESSAGES = {
@@ -1333,7 +1334,7 @@ class Parser(
         ):
             self.parse_relationship(s, o)
 
-        validation_messages = []
+        validation_messages = ErrorMessages()
         # Report extra errors if self.error is False otherwise there will be
         # redundant messages
         validation_messages = self.doc.validate(validation_messages)
