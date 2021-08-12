@@ -269,7 +269,7 @@ class Package(object):
             if not isinstance(self.check_sum, checksum.Algorithm):
                 messages.append(
                     "Package checksum must be instance of spdx.checksum.Algorithm"
-                ]
+                )
 
         return messages
 
