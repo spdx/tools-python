@@ -97,6 +97,12 @@ class Package(object):
         self.verif_exc_files = []
         self.pkg_ext_refs = []
 
+    @property
+    def are_files_analyzed(self):
+        return self.files_analyzed is not False
+        # as default None Value is False, previous line is simplification of
+        # return self.files_analyzed or self.files_analyzed is None
+
     def add_file(self, fil):
         self.files.append(fil)
 
@@ -132,7 +138,7 @@ class Package(object):
             messages.append(
                 'Package files_analyzed must be True or False or None (omitted)'
             )
-        if self.files_analyzed is False and self.verif_code is not None:
+        if not self.are_files_analyzed and self.verif_code is not None:
             messages.append(
                 'Package verif_code must be None (omitted) when files_analyzed is False'
             )
@@ -200,13 +206,13 @@ class Package(object):
                 "spdx.document.License"
             )
 
-        if not self.licenses_from_files:
+        if not self.licenses_from_files and self.are_files_analyzed:
             messages.append("Package licenses_from_files can not be empty")
 
         return messages
 
     def validate_files(self, messages):
-        if self.files_analyzed != False:
+        if self.are_files_analyzed:
             if not self.files:
                 messages.append(
                     "Package must have at least one file."
@@ -240,7 +246,7 @@ class Package(object):
         docstring must be of a type that provides __str__ method.
         """
         FIELDS = ["name", "spdx_id", "download_location", "cr_text"]
-        if self.files_analyzed != False:
+        if self.are_files_analyzed:
             FIELDS = FIELDS + ["verif_code"]
         self.validate_str_fields(FIELDS, False, messages)
 

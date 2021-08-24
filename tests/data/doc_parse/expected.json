@@ -34,185 +34,187 @@
   ],
   "created": "2010-02-03T00:00:00Z",
   "creatorComment": "This is an example of an SPDX spreadsheet format",
-  "package": {
-    "id": "SPDXRef-Package",
-    "name": "SPDX Translator",
-    "packageFileName": "spdxtranslator-1.0.zip",
-    "summary": "SPDX Translator utility",
-    "description": "This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document.",
-    "versionInfo": "Version 0.9.2",
-    "sourceInfo": "Version 1.0 of the SPDX Translator application",
-    "downloadLocation": "http://www.spdx.org/tools",
-    "homepage": null,
-    "originator": {
-      "name": "SPDX",
-      "email": null,
-      "type": "Organization"
-    },
-    "supplier": {
-      "name": "Linux Foundation",
-      "email": null,
-      "type": "Organization"
-    },
-    "licenseConcluded": {
-      "type": "Conjunction",
-      "identifier": [
-        "Apache-1.0",
-        "Apache-2.0",
-        "LicenseRef-1",
-        "LicenseRef-2",
-        "LicenseRef-3",
-        "LicenseRef-4",
-        "MPL-1.1"
-      ],
-      "name": [
-        "Apache License 1.0",
-        "Apache License 2.0",
-        "CyberNeko License",
-        "LicenseRef-1",
-        "LicenseRef-2",
-        "LicenseRef-4",
-        "Mozilla Public License 1.1"
-      ]
-    },
-    "licenseDeclared": {
-      "type": "Conjunction",
-      "identifier": [
-        "Apache-2.0",
-        "LicenseRef-1",
-        "LicenseRef-2",
-        "LicenseRef-3",
-        "LicenseRef-4",
-        "MPL-1.1"
-      ],
-      "name": [
-        "Apache License 2.0",
-        "CyberNeko License",
-        "LicenseRef-1",
-        "LicenseRef-2",
-        "LicenseRef-4",
-        "Mozilla Public License 1.1"
-      ]
-    },
-    "copyrightText": " Copyright 2010, 2011 Source Auditor Inc.",
-    "licenseComment": "The declared license information can be found in the NOTICE file at the root of the archive file",
-    "checksum": {
-      "identifier": "SHA1",
-      "value": "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
-    },
-    "files": [
-      {
-        "id": "SPDXRef-File1",
-        "name": "Jenna-2.6.3/jena-2.6.3-sources.jar",
-        "type": 3,
-        "comment": "This file belongs to Jena",
-        "licenseConcluded": {
-          "type": "Single",
-          "identifier": "LicenseRef-1",
-          "name": "LicenseRef-1"
-        },
-        "copyrightText": "(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP",
-        "licenseComment": "This license is used by Jena",
-        "notice": null,
-        "checksum": {
-          "identifier": "SHA1",
-          "value": "3ab4e1c67a2d28fced849ee1bb76e7391b93f125"
-        },
-        "licenseInfoFromFiles": [
-          {
+  "packages": [
+    {
+      "id": "SPDXRef-Package",
+      "name": "SPDX Translator",
+      "packageFileName": "spdxtranslator-1.0.zip",
+      "summary": "SPDX Translator utility",
+      "description": "This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document.",
+      "versionInfo": "Version 0.9.2",
+      "sourceInfo": "Version 1.0 of the SPDX Translator application",
+      "downloadLocation": "http://www.spdx.org/tools",
+      "homepage": null,
+      "originator": {
+        "name": "SPDX",
+        "email": null,
+        "type": "Organization"
+      },
+      "supplier": {
+        "name": "Linux Foundation",
+        "email": null,
+        "type": "Organization"
+      },
+      "licenseConcluded": {
+        "type": "Conjunction",
+        "identifier": [
+          "Apache-1.0",
+          "Apache-2.0",
+          "LicenseRef-1",
+          "LicenseRef-2",
+          "LicenseRef-3",
+          "LicenseRef-4",
+          "MPL-1.1"
+        ],
+        "name": [
+          "Apache License 1.0",
+          "Apache License 2.0",
+          "CyberNeko License",
+          "LicenseRef-1",
+          "LicenseRef-2",
+          "LicenseRef-4",
+          "Mozilla Public License 1.1"
+        ]
+      },
+      "licenseDeclared": {
+        "type": "Conjunction",
+        "identifier": [
+          "Apache-2.0",
+          "LicenseRef-1",
+          "LicenseRef-2",
+          "LicenseRef-3",
+          "LicenseRef-4",
+          "MPL-1.1"
+        ],
+        "name": [
+          "Apache License 2.0",
+          "CyberNeko License",
+          "LicenseRef-1",
+          "LicenseRef-2",
+          "LicenseRef-4",
+          "Mozilla Public License 1.1"
+        ]
+      },
+      "copyrightText": " Copyright 2010, 2011 Source Auditor Inc.",
+      "licenseComment": "The declared license information can be found in the NOTICE file at the root of the archive file",
+      "checksum": {
+        "identifier": "SHA1",
+        "value": "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
+      },
+      "files": [
+        {
+          "id": "SPDXRef-File1",
+          "name": "Jenna-2.6.3/jena-2.6.3-sources.jar",
+          "type": 3,
+          "comment": "This file belongs to Jena",
+          "licenseConcluded": {
             "type": "Single",
             "identifier": "LicenseRef-1",
             "name": "LicenseRef-1"
-          }
-        ],
-        "contributors": [],
-        "dependencies": [],
-        "artifactOfProjectName": [
-          "Jena"
-        ],
-        "artifactOfProjectHome": [
-          "http://www.openjena.org/"
-        ],
-        "artifactOfProjectURI": [
-          "http://subversion.apache.org/doap.rdf"
-        ]
-      },
-      {
-        "id": "SPDXRef-File2",
-        "name": "src/org/spdx/parser/DOAPProject.java",
-        "type": 1,
-        "comment": null,
-        "licenseConcluded": {
+          },
+          "copyrightText": "(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP",
+          "licenseComment": "This license is used by Jena",
+          "notice": null,
+          "checksum": {
+            "identifier": "SHA1",
+            "value": "3ab4e1c67a2d28fced849ee1bb76e7391b93f125"
+          },
+          "licenseInfoFromFiles": [
+            {
+              "type": "Single",
+              "identifier": "LicenseRef-1",
+              "name": "LicenseRef-1"
+            }
+          ],
+          "contributors": [],
+          "dependencies": [],
+          "artifactOfProjectName": [
+            "Jena"
+          ],
+          "artifactOfProjectHome": [
+            "http://www.openjena.org/"
+          ],
+          "artifactOfProjectURI": [
+            "http://subversion.apache.org/doap.rdf"
+          ]
+        },
+        {
+          "id": "SPDXRef-File2",
+          "name": "src/org/spdx/parser/DOAPProject.java",
+          "type": 1,
+          "comment": null,
+          "licenseConcluded": {
+            "type": "Single",
+            "identifier": "Apache-2.0",
+            "name": "Apache License 2.0"
+          },
+          "copyrightText": "Copyright 2010, 2011 Source Auditor Inc.",
+          "licenseComment": null,
+          "notice": null,
+          "checksum": {
+            "identifier": "SHA1",
+            "value": "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
+          },
+          "licenseInfoFromFiles": [
+            {
+              "type": "Single",
+              "identifier": "Apache-2.0",
+              "name": "Apache License 2.0"
+            }
+          ],
+          "contributors": [],
+          "dependencies": [],
+          "artifactOfProjectName": [],
+          "artifactOfProjectHome": [],
+          "artifactOfProjectURI": []
+        }
+      ],
+      "licenseInfoFromFiles": [
+        {
+          "type": "Single",
+          "identifier": "Apache-1.0",
+          "name": "Apache License 1.0"
+        },
+        {
           "type": "Single",
           "identifier": "Apache-2.0",
           "name": "Apache License 2.0"
         },
-        "copyrightText": "Copyright 2010, 2011 Source Auditor Inc.",
-        "licenseComment": null,
-        "notice": null,
-        "checksum": {
-          "identifier": "SHA1",
-          "value": "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
+        {
+          "type": "Single",
+          "identifier": "LicenseRef-1",
+          "name": "LicenseRef-1"
         },
-        "licenseInfoFromFiles": [
-          {
-            "type": "Single",
-            "identifier": "Apache-2.0",
-            "name": "Apache License 2.0"
-          }
-        ],
-        "contributors": [],
-        "dependencies": [],
-        "artifactOfProjectName": [],
-        "artifactOfProjectHome": [],
-        "artifactOfProjectURI": []
+        {
+          "type": "Single",
+          "identifier": "LicenseRef-2",
+          "name": "LicenseRef-2"
+        },
+        {
+          "type": "Single",
+          "identifier": "LicenseRef-3",
+          "name": "CyberNeko License"
+        },
+        {
+          "type": "Single",
+          "identifier": "LicenseRef-4",
+          "name": "LicenseRef-4"
+        },
+        {
+          "type": "Single",
+          "identifier": "MPL-1.1",
+          "name": "Mozilla Public License 1.1"
+        }
+      ],
+      "verificationCode": {
+        "value": "4e3211c67a2d28fced849ee1bb76e7391b93feba",
+        "excludedFilesNames": [
+          "SpdxTranslatorSpdx.rdf",
+          "SpdxTranslatorSpdx.txt"
+        ]
       }
-    ],
-    "licenseInfoFromFiles": [
-      {
-        "type": "Single",
-        "identifier": "Apache-1.0",
-        "name": "Apache License 1.0"
-      },
-      {
-        "type": "Single",
-        "identifier": "Apache-2.0",
-        "name": "Apache License 2.0"
-      },
-      {
-        "type": "Single",
-        "identifier": "LicenseRef-1",
-        "name": "LicenseRef-1"
-      },
-      {
-        "type": "Single",
-        "identifier": "LicenseRef-2",
-        "name": "LicenseRef-2"
-      },
-      {
-        "type": "Single",
-        "identifier": "LicenseRef-3",
-        "name": "CyberNeko License"
-      },
-      {
-        "type": "Single",
-        "identifier": "LicenseRef-4",
-        "name": "LicenseRef-4"
-      },
-      {
-        "type": "Single",
-        "identifier": "MPL-1.1",
-        "name": "Mozilla Public License 1.1"
-      }
-    ],
-    "verificationCode": {
-      "value": "4e3211c67a2d28fced849ee1bb76e7391b93feba",
-      "excludedFilesNames": [
-        "SpdxTranslatorSpdx.rdf",
-        "SpdxTranslatorSpdx.txt"
-      ]
     }
-  },
+  ],
   "externalDocumentRefs": [
     {
       "externalDocumentId": "DocumentRef-spdx-tool-2.1",

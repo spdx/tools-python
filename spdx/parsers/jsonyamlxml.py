@@ -1035,14 +1035,22 @@ class PackageParser(BaseParser):
     def __init__(self, builder, logger):
         super(PackageParser, self).__init__(builder, logger)
 
+    @property
+    def package(self):
+        # current package being parsed is the last one
+        return self.document.packages[-1]
+
     def parse_package(self, package):
         """
         Parse Package Information fields
         - package: Python dict with Package Information fields in it
         """
         if isinstance(package, dict):
+            # The builder has the notion of current package, here, we force to start a new one
+            self.builder.reset_package()
             self.parse_pkg_name(package.get("name"))
             self.parse_pkg_id(package.get("SPDXID"))
+            self.parse_pkg_files_analyzed(package.get("filesAnalyzed"))
             self.parse_pkg_version(package.get("versionInfo"))
             self.parse_pkg_file_name(package.get("packageFileName"))
             self.parse_pkg_supplier(package.get("supplier"))
@@ -1176,11 +1184,34 @@ class PackageParser(BaseParser):
         else:
             self.value_error("PKG_DOWN_LOC", pkg_down_location)
 
+    def parse_pkg_files_analyzed(self, pkg_files_analyzed):
+        """
+        Parse Package files analyzed
+        - pkg_files_analyzed: Python boolean
+        """
+        # Files Analyzed optional
+        if pkg_files_analyzed is None:
+            return
+        if isinstance(pkg_files_analyzed, bool):
+            try:
+                return self.builder.set_pkg_files_analyzed(
+                    self.document, pkg_files_analyzed
+                )
+            except CardinalityError:
+                self.more_than_one_error("PKG_FILES_ANALYZED")
+        else:
+            self.value_error("PKG_FILES_ANALYZED", pkg_files_analyzed)
+
     def parse_pkg_verif_code_field(self, pkg_verif_code_field):
         """
         Parse Package verification code dict
         - pkg_verif_code_field: Python dict('value':str/unicode, 'excludedFilesNames':list)
         """
+        if not self.package.are_files_analyzed:
+            if pkg_verif_code_field is not None:
+                self.value_error("PKG_VERIF_CODE_FIELD", pkg_verif_code_field)
+            return
+
         if isinstance(pkg_verif_code_field, dict):
             self.parse_pkg_verif_exc_files(
                 pkg_verif_code_field.get("packageVerificationCodeExcludedFiles")
@@ -1194,6 +1225,11 @@ class PackageParser(BaseParser):
         Parse Package verification code value
         - pkg_verif_code: Python str/unicode
         """
+        if not self.package.are_files_analyzed:
+            if pkg_verif_code is not None:
+                self.value_error("PKG_VERIF_CODE", pkg_verif_code)
+            return
+
         if isinstance(pkg_verif_code, str):
             try:
                 return self.builder.set_pkg_verif_code(self.document, pkg_verif_code)
@@ -1284,6 +1320,10 @@ class PackageParser(BaseParser):
         Parse Package license information from files
         - license_info_from_files: Python list of licenses information from files (str/unicode)
         """
+        if not self.package.are_files_analyzed:
+            if license_info_from_files is not None:
+                self.value_error("PKG_LIC_FRM_FILES", license_info_from_files)
+            return
         if isinstance(license_info_from_files, list):
             for license_info_from_file in license_info_from_files:
                 if isinstance(license_info_from_file, str):
@@ -1416,6 +1456,11 @@ class PackageParser(BaseParser):
         Parse Package files
         - pkg_files: Python list of dicts as in FileParser.parse_file
         """
+        if not self.package.are_files_analyzed:
+            if pkg_files is not None:
+                self.value_error("PKG_FILES", pkg_files)
+            return
+
         if isinstance(pkg_files, list):
             for pkg_file in pkg_files:
                 if isinstance(pkg_file, dict):
@@ -1455,6 +1500,13 @@ class Parser(
     def __init__(self, builder, logger):
         super(Parser, self).__init__(builder, logger)
 
+    def json_yaml_set_document(self, data):
+        # we could verify that the spdxVersion >= 2.2, but we try to be resilient in parsing
+        if data.get("spdxVersion"):
+            self.document_object = data
+            return
+        self.document_object = data.get("Document")
+
     def parse(self):
         """
         Parse Document Information fields
@@ -1483,6 +1535,8 @@ class Parser(
         self.parse_relationships(self.document_object.get("relationships"))
         self.parse_reviews(self.document_object.get("reviewers"))
         self.parse_snippets(self.document_object.get("snippets"))
+
+        self.parse_packages(self.document_object.get("packages"))
 
         self.parse_doc_described_objects(self.document_object.get("documentDescribes"))
 
@@ -1605,3 +1659,17 @@ class Parser(
             return True
         else:
             self.value_error("DOC_DESCRIBES", doc_described_objects)
+
+
+    def parse_packages(self, packages):
+        """
+        Parse SPDXLite packages list
+        """
+        if packages is None:
+            return
+        if isinstance(packages, list):
+            for package in packages:
+                self.parse_package(package)
+            return True
+        else:
+            self.value_error("PACKAGES", packages)
