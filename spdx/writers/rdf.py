@@ -798,12 +798,12 @@ class PackageWriter(LicenseWriter):
         # Handle package verification
         if package.files_analyzed != False:
             verif_node = self.package_verif_node(package)
-        verif_triple = (
-            package_node,
-            self.spdx_namespace.packageVerificationCode,
-            verif_node,
-        )
-        self.graph.add(verif_triple)
+            verif_triple = (
+                package_node,
+                self.spdx_namespace.packageVerificationCode,
+                verif_node,
+            )
+            self.graph.add(verif_triple)
         # Handle concluded license
         conc_lic_node = self.license_or_special(package.conc_lics)
         conc_lic_triple = (

@@ -30,5 +30,5 @@ def test_parse_anything(test_file):
     assert not error
 
     # test a few fields, the core of the tests are per parser
-    assert doc.name == 'Sample_Document-V2.1'
-    assert doc.comment in ('This is a sample spreadsheet', 'Sample Comment')
+    assert doc.name in ('Sample_Document-V2.1', 'xyz-0.1.0')
+    assert doc.comment in (None, 'This is a sample spreadsheet', 'Sample Comment')

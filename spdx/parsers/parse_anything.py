@@ -38,7 +38,7 @@ def parse_file(fn):
         parsing_module = jsonparser
     elif fn.endswith(".xml"):
         parsing_module = xmlparser
-    elif fn.endswith(".yaml"):
+    elif fn.endswith(".yaml") or fn.endswith(".yml"):
         parsing_module = yamlparser
     else:
         raise FileTypeError("FileType Not Supported" + str(fn))
