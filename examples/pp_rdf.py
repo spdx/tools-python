@@ -5,7 +5,6 @@
 
 if __name__ == "__main__":
     import sys
-    import spdx.file as spdxfile
     from spdx.parsers.rdf import Parser
     from spdx.parsers.loggers import StandardLogger
     from spdx.parsers.rdfbuilders import Builder
