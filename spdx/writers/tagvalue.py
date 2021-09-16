@@ -320,12 +320,13 @@ def write_document(document, out, validate=True):
     out.write("# Document Information\n\n")
     write_value("SPDXVersion", str(document.version), out)
     write_value("DataLicense", document.data_license.identifier, out)
-    if document.name:
-        write_value("DocumentName", document.name, out)
-    write_value("LicenseListVersion", str(document.license_list_version), out)
-    write_value("SPDXID", "SPDXRef-DOCUMENT", out)
     if document.namespace:
         write_value("DocumentNamespace", document.namespace, out)
+    if document.name:
+        write_value("DocumentName", document.name, out)
+    if document.license_list_version:
+        write_value("LicenseListVersion", str(document.license_list_version), out)
+    write_value("SPDXID", "SPDXRef-DOCUMENT", out)
     if document.has_comment:
         write_text_value("DocumentComment", document.comment, out)
     for doc_ref in document.ext_document_references:
