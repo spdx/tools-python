@@ -13,7 +13,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='spdx-tools',
-    version='0.6.1',
+    version='0.7.0a1',
     description='SPDX parser and tools.',
     long_description=long_description,
     long_description_content_type='text/markdown',
