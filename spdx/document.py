@@ -299,6 +299,7 @@ class Document(object):
         namespace=None,
         comment=None,
         package=None,
+        license_list_version=None,
     ):
         # avoid recursive import
         from spdx.creationinfo import CreationInfo
@@ -306,6 +307,7 @@ class Document(object):
         self.version = version
         self.data_license = data_license
         self.name = name
+        self.license_list_version=license_list_version
         self.spdx_id = spdx_id
         self.ext_document_references = []
         self.comment = comment

@@ -322,6 +322,7 @@ def write_document(document, out, validate=True):
     write_value("DataLicense", document.data_license.identifier, out)
     if document.name:
         write_value("DocumentName", document.name, out)
+    write_value("LicenseListVersion", str(document.license_list_version), out)
     write_value("SPDXID", "SPDXRef-DOCUMENT", out)
     if document.namespace:
         write_value("DocumentNamespace", document.namespace, out)
