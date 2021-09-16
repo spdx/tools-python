@@ -5,9 +5,13 @@ Changelog
 v0.7.0 (2021-09-16)
 ---------------------
 
-Initial start of Changelog.
+Starting a Changelog.
 
-Many thanks to these contributors:
+- Drop Python 2 support
+- Add new LicenseListVersion tag
+- Move version to SPDX version 2.2 
+
+Thank you to these contributors:
 
 - Pierre Tardy @tardyp
 - Kyle Altendorf @altendky
@@ -19,4 +23,4 @@ Many thanks to these contributors:
 - Jeff Licquia @licquia
 - Alberto Pianon @alpianon
 - Nathan Voss @njv299
-
+- Philippe Ombredanne @pombredanne
