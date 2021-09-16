@@ -30,8 +30,7 @@ setup(
     install_requires=[
         'ply',
         'rdflib',
-        'enum34',
-        'Click',
+        'click',
         'pyyaml',
         'xmltodict',
     ],
