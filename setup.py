@@ -13,7 +13,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='spdx-tools',
-    version='0.7.0a1',
+    version='0.7.0a2',
     description='SPDX parser and tools.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -51,9 +51,9 @@ setup(
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 3.6'
-        'Programming Language :: Python :: 3.7'
-        'Programming Language :: Python :: 3.8'
-        'Programming Language :: Python :: 3.9'
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ]
 )
