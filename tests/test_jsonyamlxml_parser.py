@@ -36,7 +36,7 @@ class TestParser(TestCase):
         with io.open(expected_loc, encoding='utf-8') as ex:
             expected = json.load(ex, object_pairs_hook=OrderedDict)
 
-        utils_test.compare(expected, result)
+        assert result == expected
 
     def test_json_parser(self):
         parser = jsonparser.Parser(Builder(), StandardLogger())

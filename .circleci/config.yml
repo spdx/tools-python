@@ -25,7 +25,7 @@ commands:
     steps:
       - run: |
           python setup.py install
-          python -m pip install pytest testfixtures
+          python -m pip install pytest
       - run: pytest
         
 jobs:

@@ -44,4 +44,4 @@ class TestParser(unittest.TestCase):
         with io.open(expected_loc, 'r', encoding='utf-8') as ex:
             expected = json.load(ex)
 
-        utils_test.compare(result, expected)
+        assert result == expected
