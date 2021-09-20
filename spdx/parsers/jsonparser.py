@@ -9,10 +9,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import json
 
 from spdx.parsers import jsonyamlxml
@@ -29,5 +25,5 @@ class Parser(jsonyamlxml.Parser):
         super(Parser, self).__init__(builder, logger)
 
     def parse(self, file):
-        self.document_object = json.load(file).get("Document")
+        self.json_yaml_set_document(json.load(file))
         return super(Parser, self).parse()

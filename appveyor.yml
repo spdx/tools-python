@@ -11,8 +11,9 @@ environment:
 install:
   - "%PYTHON_EXE% --version"
   - "%PYTHON_EXE% setup.py install"
+  - "%PYTHON_EXE% -m pip install pytest"
 
 build: off
 
 test_script:
-  - "%PYTHON_EXE% setup.py test"
+  - "%PYTHON_EXE% -m pytest"

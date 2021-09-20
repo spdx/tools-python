@@ -10,10 +10,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 from collections import OrderedDict
 import io
 import json
@@ -34,13 +30,13 @@ class TestParser(TestCase):
         result = TestParserUtils.to_dict(document)
 
         if regen:
-            with open(expected_loc, 'wb') as o:
+            with open(expected_loc, 'w') as o:
                 o.write(json.dumps(result, indent=2))
 
         with io.open(expected_loc, encoding='utf-8') as ex:
             expected = json.load(ex, object_pairs_hook=OrderedDict)
 
-        self.assertEqual(expected, result)
+        assert result == expected
 
     def test_json_parser(self):
         parser = jsonparser.Parser(Builder(), StandardLogger())
@@ -64,4 +60,13 @@ class TestParser(TestCase):
         with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
+        self.check_document(document, expected_loc)
+
+    def test_sbomyaml_parser(self):
+        parser = yamlparser.Parser(Builder(), StandardLogger())
+        test_file = utils_test.get_test_loc('formats/SPDXSBOMExample.spdx.yml')
+        with io.open(test_file, encoding='utf-8') as f:
+            document, errors = parser.parse(f)
+            assert not errors
+        expected_loc = utils_test.get_test_loc('doc_parse/SBOMexpected.json')
         self.check_document(document, expected_loc)

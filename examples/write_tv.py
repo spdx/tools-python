@@ -2,14 +2,11 @@
 
 # Writes a new tag/value file from scratch.
 # Usage: write_tv <tagvaluefile>
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 if __name__ == "__main__":
     import sys
     import codecs
     from spdx.writers.tagvalue import write_document, InvalidDocumentError
+    from spdx.parsers.loggers import ErrorMessages
     from spdx.document import Document, License, LicenseConjunction, ExtractedLicense
     from spdx.version import Version
     from spdx.creationinfo import Person
@@ -92,6 +89,6 @@ if __name__ == "__main__":
         except InvalidDocumentError as e:
             print("Document is Invalid:\n\t", end="")
             print("\n\t".join(e.args[0]))
-            messages = []
+            messages = ErrorMessages()
             doc.validate(messages)
-            print("\n".join(messages))
+            print("\n".join(messages.messages))

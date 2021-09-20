@@ -1,95 +1,113 @@
-version: 2
+version: 2.1
 
+commands:
+  mac_install_python:
+    parameters:
+      python_version:
+        description: "version of python to install"
+        type: string
+        default: 3.6.5
+    steps:
+      - run: |
+          brew update
+          python --version
+          sudo -H pip install --upgrade virtualenv
+          brew install pyenv
+          echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
+          echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
+          source ~/.bash_profile
+          pyenv install << parameters.python_version >>
+          pyenv versions
+          pyenv global << parameters.python_version >>
+          python --version
+
+  install_run_tests:
+    steps:
+      - run: |
+          python setup.py install
+          python -m pip install pytest
+      - run: pytest
+        
 jobs:
-  python_3_6_5:
+  mac_python_3_6:
     shell: /bin/bash --login
     macos:
       xcode: '9.4.1'
     steps:
     - checkout
-    - run: |
-        brew update
-        python --version
-        sudo -H pip install --upgrade virtualenv
-        brew install pyenv
-        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
-        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
-        source ~/.bash_profile
-        pyenv install 3.6.5
-        pyenv versions
-        pyenv global 3.6.5
-        python --version
-    - run: python setup.py install
-    - run: python setup.py test
+    - mac_install_python:
+        python_version: "3.6.5"
+    - install_run_tests
 
-  python_3_7_10:
-    shell: /bin/bash --login
-    macos:
-      xcode: '9.4.1'
-    steps:
-    - checkout
-    - run: |
-        brew update
-        python --version
-        sudo -H pip install --upgrade virtualenv
-        brew install pyenv
-        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
-        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
-        source ~/.bash_profile
-        pyenv install 3.7.10
-        pyenv versions
-        pyenv global 3.7.10
-        python --version
-    - run: python setup.py install
-    - run: python setup.py test
 
-  python_3_8_10:
+  mac_python_3_7:
     shell: /bin/bash --login
     macos:
       xcode: '9.4.1'
     steps:
     - checkout
-    - run: |
-        brew update
-        python --version
-        sudo -H pip install --upgrade virtualenv
-        brew install pyenv
-        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
-        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
-        source ~/.bash_profile
-        pyenv install 3.8.10
-        pyenv versions
-        pyenv global 3.8.10
-        python --version
-    - run: python setup.py install
-    - run: python setup.py test
+    - mac_install_python:
+        python_version: "3.7.10"
+    - install_run_tests
 
-  python_3_9_5:
+
+  mac_python_3_8:
     shell: /bin/bash --login
     macos:
       xcode: '9.4.1'
     steps:
     - checkout
-    - run: |
-        brew update
-        python --version
-        sudo -H pip install --upgrade virtualenv
-        brew install pyenv
-        echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
-        echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
-        source ~/.bash_profile
-        pyenv install 3.9.5
-        pyenv versions
-        pyenv global 3.9.5
-        python --version
-    - run: python setup.py install
-    - run: python setup.py test
+    - mac_install_python:
+        python_version: "3.8.10"
+    - install_run_tests
+
+  mac_python_3_9:
+    shell: /bin/bash --login
+    macos:
+      xcode: '9.4.1'
+    steps:
+    - checkout
+    - mac_install_python:
+        python_version: "3.9.5"
+    - install_run_tests
+
+  linux_python_3_6:
+    docker:
+      - image: python:3.6
+    steps:
+    - checkout
+    - install_run_tests
+
+  linux_python_3_7:
+    docker:
+      - image: python:3.7
+    steps:
+    - checkout
+    - install_run_tests
+
+  linux_python_3_8:
+    docker:
+      - image: python:3.8
+    steps:
+    - checkout
+    - install_run_tests
+
+  linux_python_3_9:
+    docker:
+      - image: python:3.9
+    steps:
+    - checkout
+    - install_run_tests
 
 workflows:
   version: 2
   python_matrix_build:
     jobs:
-      - python_3_6_5
-      - python_3_7_10
-      - python_3_8_10
-      - python_3_9_5
+      - mac_python_3_6
+      - mac_python_3_7
+      - mac_python_3_8
+      - mac_python_3_9
+      - linux_python_3_6
+      - linux_python_3_7
+      - linux_python_3_8
+      - linux_python_3_9

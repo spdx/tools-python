@@ -9,10 +9,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 from datetime import datetime
 from functools import total_ordering
 
@@ -63,11 +59,12 @@ class Review(object):
         return self.comment is not None
 
     def validate(self, messages):
-        """Returns True if all the fields are valid.
-        Appends any error messages to messages parameter.
         """
-        messages = self.validate_reviewer(messages)
-        messages = self.validate_review_date(messages)
+        Check that all the fields are valid.
+        Appends any error messages to messages parameter shall be a ErrorMessages.
+        """
+        self.validate_reviewer(messages)
+        self.validate_review_date(messages)
 
         return messages
 

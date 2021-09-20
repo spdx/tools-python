@@ -2,16 +2,13 @@
 
 # Parses a tag/value file and writes it out pretty-printed.
 # Usage: pp_tv <infile> <outfile>
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 if __name__ == "__main__":
     import sys
     import codecs
     from spdx.writers.tagvalue import write_document, InvalidDocumentError
     from spdx.parsers.tagvalue import Parser
     from spdx.parsers.loggers import StandardLogger
+    from spdx.parsers.loggers import ErrorMessages
     from spdx.parsers.tagvaluebuilders import Builder
 
     source = sys.argv[1]
@@ -28,8 +25,8 @@ if __name__ == "__main__":
                     write_document(document, out)
                 except InvalidDocumentError:
                     print("Document is Invalid")
-                    messages = []
+                    messages = ErrorMessages()
                     document.validate(messages)
-                    print("\n".join(messages))
+                    print("\n".join(messages.messages))
         else:
             print("Errors encountered while parsing")

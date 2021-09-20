@@ -9,20 +9,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import json
 
 from spdx.writers.tagvalue import InvalidDocumentError
 from spdx.writers.jsonyamlxml import Writer
+from spdx.parsers.loggers import ErrorMessages
 
 
 def write_document(document, out, validate=True):
 
     if validate:
-        messages = []
+        messages = ErrorMessages()
         messages = document.validate(messages)
         if messages:
             raise InvalidDocumentError(messages)

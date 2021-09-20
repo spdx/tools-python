@@ -1,7 +1,5 @@
 #!/usr/bin/env python
 # -*- encoding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import print_function
 
 from setuptools import setup
 import unittest
@@ -15,7 +13,7 @@ with open('README.md', 'r') as fh:
 
 setup(
     name='spdx-tools',
-    version='0.6.1',
+    version='0.7.0a3',
     description='SPDX parser and tools.',
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -31,15 +29,12 @@ setup(
     test_suite='setup.test_suite',
     install_requires=[
         'ply',
-        'pyparsing<=1.5.7;python_version<="2.8"',
         'rdflib',
-        'six',
-        'enum34',
-        'Click',
+        'click',
         'pyyaml',
         'xmltodict',
     ],
-    python_requires='>=2.7',
+    python_requires='>=3.6',
     entry_points={
         'console_scripts': [
             'convertor = spdx.cli_tools.convertor:main',
@@ -57,6 +52,9 @@ setup(
     classifiers=[
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
-        'Programming Language :: Python :: 2.7'
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
     ]
 )

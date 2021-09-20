@@ -9,10 +9,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import datetime
 import re
 
@@ -89,6 +85,11 @@ class UnKnown(object):
     def __str__(self):
         return self.to_value()
 
+    def __repr__(self):
+        return self.to_value()
+
+    def __eq__(self, other):
+        return self.to_value() == other.to_value()
 
 class SPDXNone(object):
     """

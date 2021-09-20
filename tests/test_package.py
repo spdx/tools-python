@@ -9,13 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import unittest
 from unittest import TestCase
 
+from spdx.checksum import Algorithm
 from spdx.package import Package
 
 
@@ -24,6 +21,14 @@ class TestPackage(TestCase):
     def test_calc_verif_code(self):
         package = Package()
         package.calc_verif_code()
+
+    def test_package_with_non_sha1_check_sum(self):
+        package = Package()
+        package.check_sum = Algorithm("SHA256", '')
+
+        # Make sure that validation still works despite the checksum not being SHA1
+        messages = []
+        messages = package.validate_checksum(messages)
 
 
 if __name__ == '__main__':

@@ -9,15 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
-import six
-from six.moves import zip_longest
+from itertools import zip_longest
 
 from spdx import document
 from spdx import file as spdx_file
+from spdx.parsers.loggers import ErrorMessages
 
 
 class InvalidDocumentError(Exception):
@@ -133,7 +129,7 @@ def write_file(spdx_file, out):
     for lics in sorted(spdx_file.licenses_in_file):
         write_value("LicenseInfoInFile", lics, out)
 
-    if isinstance(spdx_file.copyright, six.string_types):
+    if isinstance(spdx_file.copyright, str):
         write_text_value("FileCopyrightText", spdx_file.copyright, out)
     else:
         write_value("FileCopyrightText", spdx_file.copyright, out)
@@ -267,7 +263,7 @@ def write_package(package, out):
 
     # cr_text is either free form text or NONE or NOASSERTION.
     if package.cr_text:
-        if isinstance(package.cr_text, six.string_types):
+        if isinstance(package.cr_text, str):
             write_text_value("PackageCopyrightText", package.cr_text, out)
         else:
             write_value("PackageCopyrightText", package.cr_text, out)
@@ -315,7 +311,7 @@ def write_document(document, out, validate=True):
     Optionally `validate` the document before writing and raise
     InvalidDocumentError if document.validate returns False.
     """
-    messages = []
+    messages = ErrorMessages()
     messages = document.validate(messages)
     if validate and messages:
         raise InvalidDocumentError(messages)
@@ -324,11 +320,13 @@ def write_document(document, out, validate=True):
     out.write("# Document Information\n\n")
     write_value("SPDXVersion", str(document.version), out)
     write_value("DataLicense", document.data_license.identifier, out)
-    if document.name:
-        write_value("DocumentName", document.name, out)
-    write_value("SPDXID", "SPDXRef-DOCUMENT", out)
     if document.namespace:
         write_value("DocumentNamespace", document.namespace, out)
+    if document.name:
+        write_value("DocumentName", document.name, out)
+    if document.license_list_version:
+        write_value("LicenseListVersion", str(document.license_list_version), out)
+    write_value("SPDXID", "SPDXRef-DOCUMENT", out)
     if document.has_comment:
         write_text_value("DocumentComment", document.comment, out)
     for doc_ref in document.ext_document_references:

@@ -9,10 +9,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 from rdflib import BNode
 from rdflib import Graph
 from rdflib import Literal
@@ -26,8 +22,10 @@ from spdx import file
 from spdx import document
 from spdx import config
 from spdx import utils
+from spdx.parsers.loggers import ErrorMessages
 from spdx.writers.tagvalue import InvalidDocumentError
 
+import warnings
 
 class BaseWriter(object):
     """
@@ -146,9 +144,11 @@ class LicenseWriter(BaseWriter):
             if len(matches) != 0:
                 return self.create_extracted_license(matches[0])
             else:
-                raise InvalidDocumentError(
+                lic = document.ExtractedLicense(lic.identifier)
+                warnings.warn(
                     "Missing extracted license: {0}".format(lic.identifier)
                 )
+                return self.create_extracted_license(lic)
 
     def create_extracted_license(self, lic):
         """
@@ -798,12 +798,12 @@ class PackageWriter(LicenseWriter):
         # Handle package verification
         if package.files_analyzed != False:
             verif_node = self.package_verif_node(package)
-        verif_triple = (
-            package_node,
-            self.spdx_namespace.packageVerificationCode,
-            verif_node,
-        )
-        self.graph.add(verif_triple)
+            verif_triple = (
+                package_node,
+                self.spdx_namespace.packageVerificationCode,
+                verif_node,
+            )
+            self.graph.add(verif_triple)
         # Handle concluded license
         conc_lic_node = self.license_or_special(package.conc_lics)
         conc_lic_triple = (
@@ -1042,7 +1042,7 @@ def write_document(document, out, validate=True):
     """
 
     if validate:
-        messages = []
+        messages = ErrorMessages()
         messages = document.validate(messages)
         if messages:
             raise InvalidDocumentError(messages)

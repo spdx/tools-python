@@ -10,10 +10,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import codecs
 import os
 import tempfile
@@ -59,7 +55,7 @@ class TestConversions(TestCase):
             rdfparser = RDFParser(RDFBuilder(), StandardLogger())
             doc, error = rdfparser.parse(infile)
         assert not error
-        assert doc.validate([]) == []
+        assert doc.validate() == []
         return doc
 
     def parse_tagvalue_file(self, file_name):
@@ -68,7 +64,7 @@ class TestConversions(TestCase):
             tvparser.build()
             doc, error = tvparser.parse(infile.read())
         assert not error
-        assert doc.validate([]) == []
+        assert doc.validate() == []
         return doc
 
     def parse_json_file(self, file_name):
@@ -76,7 +72,7 @@ class TestConversions(TestCase):
             jsonparser = JSONParser(JSONYAMLXMLBuilder(), StandardLogger())
             doc, error = jsonparser.parse(infile)
         assert not error
-        assert doc.validate([]) == []
+        assert doc.validate() == []
         return doc
 
     def parse_yaml_file(self, file_name):
@@ -84,7 +80,7 @@ class TestConversions(TestCase):
             yamlparser = YAMLParser(JSONYAMLXMLBuilder(), StandardLogger())
             doc, error = yamlparser.parse(infile)
         assert not error
-        assert doc.validate([]) == []
+        assert doc.validate() == []
         return doc
 
     def parse_xml_file(self, file_name):
@@ -92,7 +88,7 @@ class TestConversions(TestCase):
             xmlparser = XMLParser(JSONYAMLXMLBuilder(), StandardLogger())
             doc, error = xmlparser.parse(infile)        
         assert not error
-        assert doc.validate([]) == []
+        assert doc.validate() == []
         return doc
 
     def write_tagvalue_file(self, document, file_name):
