@@ -112,6 +112,7 @@ class PackageWriter(BaseWriter):
         package_object["SPDXID"] = self.spdx_id(package.spdx_id)
         package_object["name"] = package.name
         package_object["downloadLocation"] = package.download_location.__str__()
+        package_object["filesAnalyzed"] = package.files_analyzed
         package_object["packageVerificationCode"] = self.package_verification_code(
             package
         )
