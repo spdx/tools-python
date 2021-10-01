@@ -112,13 +112,16 @@ class PackageWriter(BaseWriter):
         package_object["SPDXID"] = self.spdx_id(package.spdx_id)
         package_object["name"] = package.name
         package_object["downloadLocation"] = package.download_location.__str__()
-        package_object["packageVerificationCode"] = self.package_verification_code(
-            package
-        )
+        if package.files_analyzed is not None:
+            package_object["filesAnalyzed"] = package.files_analyzed
+        if package.files_analyzed is None or package.files_analyzed is True:
+            package_object["packageVerificationCode"] = self.package_verification_code(
+                package
+            )
+            package_object["licenseInfoFromFiles"] = list(
+                map(self.license, package.licenses_from_files)
+            )
         package_object["licenseConcluded"] = self.license(package.conc_lics)
-        package_object["licenseInfoFromFiles"] = list(
-            map(self.license, package.licenses_from_files)
-        )
         package_object["licenseDeclared"] = self.license(package.license_declared)
         package_object["copyrightText"] = package.cr_text.__str__()
 
@@ -474,7 +477,9 @@ class Writer(
         package_objects = []
         for package in self.document.packages:
             package_info_object = self.create_package_info(package)
-            package_info_object["files"] = self.create_file_info(package)
+            # SPDX 2.2 says to omit if filesAnalyzed = False
+            if package.files:
+                package_info_object["files"] = self.create_file_info(package)
             package_objects.append({"Package": package_info_object})
 
         self.document_object["documentDescribes"] = package_objects
