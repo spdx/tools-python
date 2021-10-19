@@ -86,7 +86,7 @@ ERROR_MESSAGES = {
     "FILE_CHKSUM_VALUE": "FileChecksum must be a single line of text starting with 'SHA1:', line:{0}",
     "FILE_LICS_CONC_VALUE": "LicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line:{0}",
     "FILE_LICS_INFO_VALUE": "LicenseInfoInFile must be NOASSERTION, NONE or license identifier, line: {0}",
-    "FILE_LICS_COMMENT_VALUE": "LicenseComments must be free form lext, line: {0}",
+    "FILE_LICS_COMMENT_VALUE": "LicenseComments must be free form text, line: {0}",
     "FILE_CR_TEXT_VALUE": "FileCopyrightText must be one of NOASSERTION, NONE or free form text, line: {0}",
     "FILE_NOTICE_VALUE": "FileNotice must be free form text, line: {0}",
     "FILE_CONTRIB_VALUE": "FileContributor must be a single line, line: {0}",
