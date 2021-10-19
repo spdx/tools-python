@@ -1192,6 +1192,15 @@ class PackageParser(BaseParser):
         # Files Analyzed optional
         if pkg_files_analyzed is None:
             return
+
+        # For XML, this is a string, not a boolean.
+        # xmltodict doesn't do this translation for us, so we do it here.
+        if isinstance(pkg_files_analyzed, str):
+            if pkg_files_analyzed.lower() in ['true', '1']:
+                pkg_files_analyzed = True
+            elif pkg_files_analyzed.lower() in ['false', '0']:
+                pkg_files_analyzed = False
+
         if isinstance(pkg_files_analyzed, bool):
             try:
                 return self.builder.set_pkg_files_analyzed(
