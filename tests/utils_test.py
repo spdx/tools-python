@@ -106,7 +106,10 @@ def sort_nested(data):
         new_data = {}
         for k, v in data.items():
             if isinstance(v, list):
-                v = sorted(v)
+                try:
+                    v = sort_nested(v)
+                except TypeError:
+                    pass
             if isinstance(v, dict):
                 v = sort_nested(v)
             new_data[k] = v
