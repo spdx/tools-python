@@ -194,6 +194,50 @@ class TestWriters(TestCase):
         package.add_file(file1)
         return doc
 
+    def _get_lgpl_multi_package_doc(self, or_later=False):
+        doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
+                       'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
+        doc.creation_info.add_creator(Tool('ScanCode'))
+        doc.creation_info.set_created_now()
+
+        # This package does not have files analyzed
+        package1 = Package(name='some/path1', download_location=NoAssert())
+        package1.spdx_id = 'SPDXRef-Package1'
+        package1.cr_text = 'Some copyright'
+        package1.files_analyzed = False
+        package1.license_declared = NoAssert()
+        package1.conc_lics = NoAssert()
+        doc.add_package(package1)
+
+        # This one does, which is the default
+        package2 = Package(name='some/path2', download_location=NoAssert())
+        package2.spdx_id = 'SPDXRef-Package2'
+        package2.cr_text = 'Some copyright'
+        package2.license_declared = NoAssert()
+        package2.conc_lics = NoAssert()
+        package2.verif_code = 'SOME code'
+
+        file1 = File('./some/path/tofile')
+        file1.name = './some/path/tofile'
+        file1.spdx_id = 'SPDXRef-File'
+        file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
+        file1.conc_lics = NoAssert()
+        file1.copyright = NoAssert()
+
+        lic1 = License.from_identifier('LGPL-2.1-only')
+        if or_later:
+            lic1 = License.from_identifier('LGPL-2.1-or-later')
+
+        file1.add_lics(lic1)
+
+        package2.add_lics_from_file(lic1)
+        package2.add_file(file1)
+
+        doc.add_package(package2)
+
+        return doc
+
     def test_write_document_rdf_with_validate(self):
         from spdx.writers.rdf import write_document
         doc = self._get_lgpl_doc()
@@ -318,6 +362,28 @@ class TestWriters(TestCase):
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
 
+    def test_write_document_json_multi_package_with_validate(self):
+        from spdx.writers.json import write_document
+        doc = self._get_lgpl_multi_package_doc(or_later=True)
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple-multi-package.json')
+            result_file = 'spdx-simple-multi-package.json'
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=True)
+
+            expected_file = utils_test.get_test_loc(
+                'doc_write/json-simple-multi-package.json',
+                test_data_dir=utils_test.test_data_dir)
+
+            utils_test.check_json_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+
+
     def test_write_document_yaml_with_validate(self):
         from spdx.writers.yaml import write_document
         doc = self._get_lgpl_doc()
@@ -358,6 +424,26 @@ class TestWriters(TestCase):
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
 
+    def test_write_document_yaml_multi_package_with_validate(self):
+        from spdx.writers.yaml import write_document
+        doc = self._get_lgpl_multi_package_doc(or_later=True)
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple-multi-package.yaml')
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=True)
+
+            expected_file = utils_test.get_test_loc(
+                'doc_write/yaml-simple-multi-package.yaml',
+                test_data_dir=utils_test.test_data_dir)
+
+            utils_test.check_yaml_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+
     def test_write_document_xml_with_validate(self):
         from spdx.writers.xml import write_document
         doc = self._get_lgpl_doc()
@@ -391,6 +477,26 @@ class TestWriters(TestCase):
 
             expected_file = utils_test.get_test_loc(
                 'doc_write/xml-simple-plus.xml',
+                test_data_dir=utils_test.test_data_dir)
+
+            utils_test.check_xml_scan(expected_file, result_file, regen=False)
+        finally:
+            if temp_dir and os.path.exists(temp_dir):
+                shutil.rmtree(temp_dir)
+
+    def test_write_document_xml_multi_package_with_validate(self):
+        from spdx.writers.xml import write_document
+        doc = self._get_lgpl_multi_package_doc(or_later=True)
+
+        temp_dir = ''
+        try:
+            temp_dir = tempfile.mkdtemp(prefix='test_spdx')
+            result_file = os.path.join(temp_dir, 'spdx-simple-multi-package.xml')
+            with open(result_file, 'w') as output:
+                write_document(doc, output, validate=True)
+
+            expected_file = utils_test.get_test_loc(
+                'doc_write/xml-simple-multi-package.xml',
                 test_data_dir=utils_test.test_data_dir)
 
             utils_test.check_xml_scan(expected_file, result_file, regen=False)
