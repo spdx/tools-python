@@ -16,6 +16,19 @@ from spdx.writers.jsonyamlxml import Writer
 from spdx.parsers.loggers import ErrorMessages
 
 
+class XMLWriter(Writer):
+    def checksum(self, checksum_field):
+        """
+        Return a dictionary representation of a spdx.checksum.Algorithm object
+        """
+        checksum_object = dict()
+        checksum_object["algorithm"] = (
+            "checksumAlgorithm_" + checksum_field.identifier.lower()
+        )
+        checksum_object["checksumValue"] = checksum_field.value
+        return checksum_object
+
+
 def write_document(document, out, validate=True):
 
     if validate:
@@ -24,7 +37,7 @@ def write_document(document, out, validate=True):
         if messages:
             raise InvalidDocumentError(messages)
 
-    writer = Writer(document)
+    writer = XMLWriter(document)
     document_object = {"SpdxDocument": writer.create_document()}
 
     xmltodict.unparse(document_object, out, encoding="utf-8", pretty=True)

@@ -47,7 +47,7 @@ class BaseWriter(object):
         """
         checksum_object = dict()
         checksum_object["algorithm"] = (
-            "checksumAlgorithm_" + checksum_field.identifier.lower()
+            checksum_field.identifier.upper()
         )
         checksum_object["checksumValue"] = checksum_field.value
         return checksum_object
@@ -142,13 +142,14 @@ class PackageWriter(BaseWriter):
             package_object["packageFileName"] = package.file_name
 
         if package.has_optional_field("supplier"):
-            package_object["supplier"] = package.supplier.__str__()
+            package_object["supplier"] = package.supplier.to_value()
 
         if package.has_optional_field("originator"):
-            package_object["originator"] = package.originator.__str__()
+            package_object["originator"] = package.originator.to_value()
 
         if package.has_optional_field("check_sum"):
-            package_object["checksums"] = [self.checksum(package.check_sum)]
+            package_object["checksums"] = [self.checksum(checksum) for checksum in package.checksums if checksum]
+            assert package.check_sum.identifier == "SHA1", "First checksum must be SHA1"
             package_object["sha1"] = package.check_sum.value
 
         if package.has_optional_field("description"):
@@ -201,12 +202,14 @@ class FileWriter(BaseWriter):
 
             file_object["name"] = file.name
             file_object["SPDXID"] = self.spdx_id(file.spdx_id)
-            file_object["checksums"] = [self.checksum(file.chk_sum)]
+            file_object["checksums"] = [self.checksum(checksum) for checksum in file.checksums if checksum]
             file_object["licenseConcluded"] = self.license(file.conc_lics)
             file_object["licenseInfoFromFiles"] = list(
                 map(self.license, file.licenses_in_file)
             )
             file_object["copyrightText"] = file.copyright.__str__()
+
+            assert file.chk_sum.identifier == "SHA1", "First checksum must be SHA1"
             file_object["sha1"] = file.chk_sum.value
 
             if file.has_optional_field("comment"):
@@ -511,3 +514,45 @@ class Writer(
             self.document_object["relationships"] = self.create_relationship_info()
 
         return {"Document": self.document_object}
+
+
+def flatten_document(document_object):
+    """
+    Move nested Package -> Files to top level to conform with schema.
+    """
+
+    document = document_object["Document"]
+
+    # replace documentDescribes with SPDXID references
+    package_objects = document["documentDescribes"]
+
+    document["documentDescribes"] = [package["Package"]["SPDXID"] for package in package_objects]
+
+    document["packages"] = [package["Package"] for package in package_objects]
+
+    file_objects = []
+
+    for package_info_object in document.get("packages", []):
+        if not "files" in package_info_object:
+            continue
+        if "sha1" in package_info_object:
+            del package_info_object["sha1"]
+        package_info_object["hasFiles"] = [file_object["File"]["SPDXID"] for file_object in package_info_object["files"]]
+        file_objects.extend(file_object["File"] for file_object in package_info_object.pop("files"))
+
+    for file_object in file_objects:
+        file_object["fileName"] = file_object.pop("name")
+        if "licenseInfoFromFiles" in file_object:
+            file_object["licenseInfoInFiles"] = file_object.pop("licenseInfoFromFiles")
+        del file_object["sha1"]
+
+    document["files"] = file_objects
+
+    return document
+
+
+class JsonYamlWriter(Writer):
+
+    def create_document(self):
+        document_object = super().create_document()
+        return flatten_document(document_object)

@@ -1,0 +1,59 @@
+{
+    "spdxVersion": "SPDX-2.1",
+    "dataLicense": "CC0-1.0",
+    "name": "Sample_Document-V2.1",
+    "SPDXID": "SPDXRef-DOCUMENT",
+    "documentNamespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+    "creationInfo": {
+        "creators": [
+            "Organization: SPDX"
+        ],
+        "created": "2021-11-15T00:00:00Z",
+        "licenseListVersion": "3.6"
+    },
+    "documentDescribes": [
+        "SPDXRef-Package"
+    ],
+    "packages": [
+        {
+            "SPDXID": "SPDXRef-Package",
+            "name": "some/path",
+            "downloadLocation": "NOASSERTION",
+            "copyrightText": "Some copyrught",
+            "packageVerificationCode": {
+                "packageVerificationCodeValue": "SOME code"
+            },
+            "checksums": [
+                {
+                    "algorithm": "SHA1",
+                    "checksumValue": "SOME-SHA1"
+                }
+            ],
+            "licenseDeclared": "NOASSERTION",
+            "licenseConcluded": "NOASSERTION",
+            "licenseInfoFromFiles": [
+                "LGPL-2.1-or-later"
+            ],
+            "hasFiles": [
+                "SPDXRef-File"
+            ]
+        }
+    ],
+    "files": [
+        {
+            "SPDXID": "SPDXRef-File",
+            "checksums": [
+                {
+                    "algorithm": "SHA1",
+                    "checksumValue": "SOME-SHA1"
+                }
+            ],
+            "licenseConcluded": "NOASSERTION",
+            "copyrightText": "NOASSERTION",
+            "fileName": "./some/path/tofile",
+            "licenseInfoInFiles": [
+                "LGPL-2.1-or-later"
+            ]
+        }
+    ]
+}
