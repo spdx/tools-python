@@ -344,7 +344,7 @@ class TestWriters(TestCase):
                 write_document(doc, output, validate=True)
 
             expected_file = utils_test.get_test_loc(
-                'doc_write/json-simple.json',
+                'doc_write/json-simple.new.json',
                 test_data_dir=utils_test.test_data_dir)
 
             utils_test.check_json_scan(expected_file, result_file, regen=False)
@@ -364,7 +364,7 @@ class TestWriters(TestCase):
                 write_document(doc, output, validate=True)
 
             expected_file = utils_test.get_test_loc(
-                'doc_write/json-simple-plus.json',
+                'doc_write/json-simple-plus.new.json',
                 test_data_dir=utils_test.test_data_dir)
 
             utils_test.check_json_scan(expected_file, result_file, regen=False)
@@ -406,7 +406,7 @@ class TestWriters(TestCase):
                 write_document(doc, output, validate=True)
 
             expected_file = utils_test.get_test_loc(
-                'doc_write/yaml-simple.yaml',
+                'doc_write/yaml-simple.new.yaml',
                 test_data_dir=utils_test.test_data_dir)
 
             utils_test.check_yaml_scan(expected_file, result_file, regen=False)
@@ -426,7 +426,7 @@ class TestWriters(TestCase):
                 write_document(doc, output, validate=True)
 
             expected_file = utils_test.get_test_loc(
-                'doc_write/yaml-simple-plus.yaml',
+                'doc_write/yaml-simple-plus.new.yaml',
                 test_data_dir=utils_test.test_data_dir)
 
             utils_test.check_yaml_scan(expected_file, result_file, regen=False)

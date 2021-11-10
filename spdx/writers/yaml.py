@@ -12,7 +12,7 @@
 import yaml
 
 from spdx.writers.tagvalue import InvalidDocumentError
-from spdx.writers.jsonyamlxml import Writer
+from spdx.writers.jsonyamlxml import JsonYamlWriter
 from spdx.parsers.loggers import ErrorMessages
 
 
@@ -24,7 +24,7 @@ def write_document(document, out, validate=True):
         if messages:
             raise InvalidDocumentError(messages)
 
-    writer = Writer(document)
+    writer = JsonYamlWriter(document)
     document_object = writer.create_document()
 
     yaml.safe_dump(document_object, out, indent=2, explicit_start=True)

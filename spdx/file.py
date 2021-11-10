@@ -63,7 +63,7 @@ class File(object):
         self.spdx_id = spdx_id
         self.comment = None
         self.type = None
-        self.chk_sum = chk_sum
+        self.checksums = [None]
         self.conc_lics = None
         self.licenses_in_file = []
         self.license_comment = None
@@ -81,6 +81,18 @@ class File(object):
 
     def __lt__(self, other):
         return self.name < other.name
+
+    @property
+    def chk_sum(self):
+        """
+        Backwards compatibility, return first checksum.
+        """
+        # NOTE Package.check_sum but File.chk_sum
+        return self.checksums[0]
+
+    @chk_sum.setter
+    def chk_sum(self, value):
+        self.checksums[0] = value
 
     def add_lics(self, lics):
         self.licenses_in_file.append(lics)

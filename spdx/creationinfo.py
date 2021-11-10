@@ -44,7 +44,7 @@ class Organization(Creator):
     - email: Org's email address. Optional. Type: str.
     """
 
-    def __init__(self, name, email):
+    def __init__(self, name, email=None):
         super(Organization, self).__init__(name)
         self.email = email
 
@@ -80,7 +80,7 @@ class Person(Creator):
     - email: person's email address. Optional. Type: str.
     """
 
-    def __init__(self, name, email):
+    def __init__(self, name, email=None):
         super(Person, self).__init__(name)
         self.email = email
 

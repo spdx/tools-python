@@ -5,6 +5,13 @@ Document:
   name: "Sample_Document-V2.1"
   SPDXID: "SPDXRef-DOCUMENT"
   documentNamespace: "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301"
+  creationInfo: {
+            "creators": [
+                "Organization: SPDX"
+            ],
+            "created": "2021-11-15T00:00:00Z",
+            "licenseListVersion": "3.6"
+        }
   documentDescribes:
   - Package:
       SPDXID: "SPDXRef-Package"
@@ -14,7 +21,7 @@ Document:
       packageVerificationCode:
         packageVerificationCodeValue: "SOME code"
       checksums:
-      - algorithm: "checksumAlgorithm_sha1"
+      - algorithm: "SHA1"
         checksumValue: "SOME-SHA1"
       licenseDeclared: "NOASSERTION"
       licenseConcluded: "NOASSERTION"
@@ -22,8 +29,8 @@ Document:
       - File:
           name: "./some/path/tofile"
           SPDXID: "SPDXRef-File"
-          checksums: 
-          - algorithm: "checksumAlgorithm_sha1"
+          checksums:
+          - algorithm: "SHA1"
             checksumValue: "SOME-SHA1"
           licenseConcluded: "NOASSERTION"
           copyrightText: "NOASSERTION"

@@ -22,6 +22,7 @@ from spdx import file
 from spdx import document
 from spdx import config
 from spdx import utils
+from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
 from spdx.writers.tagvalue import InvalidDocumentError
 
@@ -709,7 +710,7 @@ class PackageWriter(LicenseWriter):
             triple = (package_node, predicate, value_node)
             self.graph.add(triple)
 
-    def handle_pkg_optional_fields(self, package, package_node):
+    def handle_pkg_optional_fields(self, package: Package, package_node):
         """
         Write package optional fields.
         """

@@ -84,7 +84,7 @@ class Package(object):
         self.files_analyzed = None
         self.homepage = None
         self.verif_code = None
-        self.check_sum = None
+        self.checksums = [None]
         self.source_info = None
         self.conc_lics = None
         self.license_declared = None
@@ -104,6 +104,18 @@ class Package(object):
         return self.files_analyzed is not False
         # as default None Value is False, previous line is simplification of
         # return self.files_analyzed or self.files_analyzed is None
+
+    @property
+    def check_sum(self):
+        """
+        Backwards compatibility, return first checksum.
+        """
+        # NOTE Package.check_sum but File.chk_sum
+        return self.checksums[0]
+
+    @check_sum.setter
+    def check_sum(self, value):
+        self.checksums[0] = value
 
     def add_file(self, fil):
         self.files.append(fil)
