@@ -35,7 +35,9 @@ UNSTABLE_CONVERSIONS = {
     "SPDXRdfExample.rdf-yaml",
     "SPDXRdfExample.rdf-xml",
     "SPDXRdfExample.rdf-json",
-    "SPDXRdfExample.rdf-tag"
+    "SPDXRdfExample.rdf-tag",
+    "SPDXJsonExample2.2.json-rdf",
+    "SPDXJsonExample2.2.json-tag",
 }
 
 @pytest.mark.parametrize("out_format", ['rdf', 'yaml', 'xml', 'json', 'tag'])
@@ -56,7 +58,7 @@ def test_write_anything(in_file, out_format, tmpdir):
     doc2, error2 = parse_anything.parse_file(out_fn)
     result2 = utils_test.TestParserUtils.to_dict(doc2)
     assert not error2
-    
+
     test = in_basename + "-" + out_format
     if test not in UNSTABLE_CONVERSIONS:
         assert result==result2

@@ -1486,6 +1486,39 @@ class PackageParser(BaseParser):
             self.value_error("PKG_CHECKSUM", pkg_chksum)
 
 
+def unflatten_document(document):
+    """
+    Inverse of spdx.writers.jsonyamlxml.flatten_document
+    """
+    files_by_id = {}
+    if "files" in document:
+        for f in document.pop("files"):
+            f["name"] = f.pop("fileName")
+            # XXX must downstream rely on "sha1" property?
+            for checksum in f["checksums"]:
+                if checksum["algorithm"] == "SHA1":
+                    f["sha1"] = checksum["checksumValue"]
+                    break
+            if "licenseInfoInFiles" in f:
+                f["licenseInfoFromFiles"] = f.pop("licenseInfoInFiles")
+            files_by_id[f["SPDXID"]] = f
+
+    packages = document.pop("packages")
+    for package in packages:
+        if "hasFiles" in package:
+            package["files"] = [{
+                "File": files_by_id[spdxid]} for spdxid in package["hasFiles"]
+            ]
+        # XXX must downstream rely on "sha1" property?
+        for checksum in package.get("checksums", []):
+            if checksum["algorithm"] == "SHA1":
+                package["sha1"] = checksum["checksumValue"]
+                break
+
+    document["documentDescribes"] = [{ "Package": package} for package in packages ]
+
+    return document
+
 class Parser(
     CreationInfoParser,
     ExternalDocumentRefsParser,
@@ -1503,7 +1536,7 @@ class Parser(
     def json_yaml_set_document(self, data):
         # we could verify that the spdxVersion >= 2.2, but we try to be resilient in parsing
         if data.get("spdxVersion"):
-            self.document_object = data
+            self.document_object = unflatten_document(data)
             return
         self.document_object = data.get("Document")
 

@@ -173,7 +173,7 @@ def load_and_clean_json(location):
     """
     with io.open(location, encoding='utf-8') as l:
         content = l.read()
-    data = json.loads(content)
+    data = {'Document': json.loads(content)}
 
     if 'creationInfo' in data['Document']:
         del(data['Document']['creationInfo'])
@@ -203,7 +203,7 @@ def load_and_clean_yaml(location):
     """
     with io.open(location, encoding='utf-8') as l:
         content = l.read()
-    data = yaml.safe_load(content)
+    data = {'Document': yaml.safe_load(content)}
 
     if 'creationInfo' in data['Document']:
         del(data['Document']['creationInfo'])

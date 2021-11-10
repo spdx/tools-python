@@ -1,0 +1,38 @@
+SPDXID: SPDXRef-DOCUMENT
+creationInfo:
+  created: '2021-11-15T00:00:00Z'
+  creators:
+  - 'Organization: SPDX'
+  licenseListVersion: '3.6'
+dataLicense: CC0-1.0
+documentDescribes:
+- SPDXRef-Package
+documentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
+files:
+- SPDXID: SPDXRef-File
+  checksums:
+  - algorithm: SHA1
+    checksumValue: SOME-SHA1
+  copyrightText: NOASSERTION
+  fileName: ./some/path/tofile
+  licenseConcluded: NOASSERTION
+  licenseInfoInFiles:
+  - LGPL-2.1-only
+name: Sample_Document-V2.1
+packages:
+- SPDXID: SPDXRef-Package
+  checksums:
+  - algorithm: SHA1
+    checksumValue: SOME-SHA1
+  copyrightText: Some copyrught
+  downloadLocation: NOASSERTION
+  hasFiles:
+  - SPDXRef-File
+  licenseConcluded: NOASSERTION
+  licenseDeclared: NOASSERTION
+  licenseInfoFromFiles:
+  - LGPL-2.1-only
+  name: some/path
+  packageVerificationCode:
+    packageVerificationCodeValue: SOME code
+spdxVersion: SPDX-2.1
