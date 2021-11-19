@@ -982,8 +982,9 @@ class Writer(
             self.graph.add((doc_node, self.spdx_namespace.name, doc_name))
         return doc_node
 
-    def write(self):
-        doc_node = self.create_doc()
+    def write(self, doc_node=None):
+        if not doc_node:
+            doc_node = self.create_doc()
         # Add creation info
         creation_info_node = self.create_creation_info()
         ci_triple = (doc_node, self.spdx_namespace.creationInfo, creation_info_node)
