@@ -1016,6 +1016,14 @@ class Writer(
         for package_node in self.packages():
             package_triple = (doc_node, self.spdx_namespace.describesPackage, package_node)
             self.graph.add(package_triple)
+        # Add external package reference
+        for pkg_ext_ref_node in self.pkg_ext_refs():
+            pkg_ext_ref_triple = (
+                doc_node,
+                self.spdx_namespace.ExternalRef,
+                pkg_ext_ref_node,
+            )
+            self.graph.add(pkg_ext_ref_triple)
         """# Add relationship
         relate_node = self.relationships()
         relate_triple = (doc_node, self.spdx_namespace.relationship, relate_node)
