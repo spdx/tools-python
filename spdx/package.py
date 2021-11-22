@@ -39,7 +39,7 @@ class Package(object):
      If set to "false", the package must not contain any files.
      Optional, boolean.
      - homepage: Optional, URL as string or NONE or NO_ASSERTION.
-     - verif_code: string. Mandatory if files_analyzed is True or None (omitted)
+     - verif_code: string. 0..1 if files_analyzed is True or None (omitted)
        Must be None (omitted) if files_analyzed is False
      - check_sum: Optional , spdx.checksum.Algorithm.
      - source_info: Optional string.
