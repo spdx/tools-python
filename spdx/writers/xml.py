@@ -185,7 +185,8 @@ def write_document(document, out, validate=True):
         add_not_empty(relationships_element, 'relatedSpdxElement', relationship.relatedspdxelement)
         add_not_empty(relationships_element, 'relationshipType', relationship.relationshiptype)
 
-    ET.indent(spdx_doc_element)
+    if hasattr(ET, 'indent'):
+        ET.indent(spdx_doc_element)
 
     xml_text = ET.tostring(spdx_doc_element)
 
