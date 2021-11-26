@@ -882,8 +882,6 @@ class FileParser(BaseParser):
                 return self.builder.set_file_type(self.document, file_type)
             except SPDXValueError:
                 self.value_error("FILE_TYPE", file_type)
-            except CardinalityError:
-                self.more_than_one_error("FILE_TYPE")
             except OrderError:
                 self.order_error("FILE_TYPE", "FILE_NAME")
         else:

@@ -21,7 +21,7 @@ from spdx.config import LICENSE_MAP, EXCEPTION_MAP
 from spdx.creationinfo import Tool
 from spdx.document import Document, ExternalDocumentRef
 from spdx.license import License
-from spdx.file import File
+from spdx.file import File, FileType
 from spdx.package import Package, PackagePurpose
 from spdx.parsers.loggers import ErrorMessages
 from spdx.relationship import Relationship, RelationshipType
@@ -114,6 +114,7 @@ class TestDocument(TestCase):
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
         file1.spdx_id = 'SPDXRef-File'
+        file1.file_types = [FileType.OTHER]
         file1.chksum = Algorithm('SHA1', 'SOME-SHA1')
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
@@ -193,6 +194,7 @@ class TestWriters(TestCase):
         file1.chksum = Algorithm('SHA1', 'SOME-SHA1')
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
+        file1.file_types = [FileType.OTHER, FileType.SOURCE]
 
         lic1 = License.from_identifier('LGPL-2.1-only')
         if or_later:

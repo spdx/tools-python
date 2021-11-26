@@ -79,7 +79,8 @@
         }
       ],
       "fileTypes": [
-        "fileType_archive"
+        "ARCHIVE",
+        "OTHER"
       ],
       "SPDXID": "SPDXRef-File1"
     },
@@ -97,7 +98,8 @@
         }
       ],
       "fileTypes": [
-        "fileType_source"
+        "SOURCE",
+        "TEXT"
       ],
       "SPDXID": "SPDXRef-File2"
     }

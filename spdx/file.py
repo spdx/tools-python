@@ -13,7 +13,7 @@ from functools import total_ordering
 import hashlib
 
 from spdx import checksum
-from spdx import license
+from spdx import document
 from spdx import utils
 
 
@@ -26,9 +26,9 @@ class FileType(object):
     AUDIO = 6
     IMAGE = 7
     TEXT = 8
-    VIDEO = 9
     DOCUMENTATION = 9
     SPDX = 10
+    VIDEO = 11
 
 
 @total_ordering
@@ -40,13 +40,12 @@ class File(object):
     - spdx_id: Uniquely identify any element in an SPDX document which may be
     referenced by other elements. Mandatory, one. Type: str.
     - comment: File comment str, Optional zero or one.
-    - type: one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
-      and FileType.OTHER, optional zero or one.
+    - file_types: list of file types.  cardinality 1..#FILE_TYPES
     - chksum: SHA1, Mandatory one.
     - conc_lics: Mandatory one. license.License or utils.NoAssert or utils.SPDXNone.
     - licenses_in_file: list of licenses found in file, mandatory one or more.
-      license.License or utils.SPDXNone or utils.NoAssert.
-    - license.License or utils.NoAssert or utils.SPDXNone.
+      document.License or utils.SPDXNone or utils.NoAssert.
+    - document.license or utils.NoAssert or utils.SPDXNone.
     - license_comment: Optional.
     - copyright: Copyright text, Mandatory one. utils.NoAssert or utils.SPDXNone or str.
     - notice: optional One, str.
@@ -62,7 +61,7 @@ class File(object):
         self.name = name
         self.spdx_id = spdx_id
         self.comment = None
-        self.type = None
+        self.file_types = []
         self.checksums = [chksum]
         self.conc_lics = None
         self.licenses_in_file = []
@@ -118,7 +117,7 @@ class File(object):
         """
         messages.push_context(self.name)
         self.validate_concluded_license(messages)
-        self.validate_type(messages)
+        self.validate_file_types(messages)
         self.validate_checksum(messages)
         self.validate_licenses_in_file(messages)
         self.validate_copyright(messages)
@@ -180,19 +179,9 @@ class File(object):
 
         return messages
 
-    def validate_type(self, messages):
-        if self.type not in [
-            None,
-            FileType.SOURCE,
-            FileType.OTHER,
-            FileType.BINARY,
-            FileType.ARCHIVE,
-        ]:
-            messages.append(
-                "File type must be one of the constants defined in "
-                "class spdx.file.FileType"
-            )
-
+    def validate_file_types(self, messages):
+        if len(self.file_types) < 1:
+            messages.append('At least one file type must be specified.')
         return messages
 
     def validate_checksum(self, messages):

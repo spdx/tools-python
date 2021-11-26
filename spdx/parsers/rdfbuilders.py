@@ -466,6 +466,23 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         else:
             raise OrderError("File::Notice")
 
+    def set_file_type(self, doc, filetype):
+        """
+        Set the file type for RDF values.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            ss = filetype.split('#')
+            if len(ss) != 2:
+                raise SPDXValueError('Unknown file type {}'.format(filetype))
+            file_type = file.FILE_TYPE_FROM_XML_DICT.get(ss[1]) or file.FileType.OTHER
+            spdx_file = self.file(doc)
+            if file_type not in spdx_file.file_types:
+                spdx_file.file_types.append(file_type)
+            else:
+                raise CardinalityError("File::Type")
+        else:
+            raise OrderError("File::Type")
+
 
 class SnippetBuilder(tagvaluebuilders.SnippetBuilder):
     def __init__(self):

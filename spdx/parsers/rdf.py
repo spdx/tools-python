@@ -51,7 +51,7 @@ ERROR_MESSAGES = {
     'letters, numbers, ".", "-".',
     "PKG_EXT_REF_CATEGORY": '\'{0}\' must be "SECURITY", "PACKAGE-MANAGER", or "OTHER".',
     "PKG_EXT_REF_TYPE": '{0} must be a unique string containing letters, numbers, ".", or "-".',
-    "FILE_TYPE": "File type must be binary, other, source or archive term.",
+    "FILE_TYPE": "There must be at least one file type specified.",
     "FILE_SINGLE_LICS": "File concluded license must be a license url or spdx:noassertion or spdx:none.",
     "REVIEWER_VALUE": "Invalid reviewer value '{0}' must be Organization, Tool or Person.",
     "REVIEW_DATE": "Invalid review date value '{0}' must be date in ISO 8601 format.",

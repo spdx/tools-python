@@ -80,6 +80,7 @@
         <licenseComments>This license is used by Jena</licenseComments>
         <fileName>Jenna-2.6.3/jena-2.6.3-sources.jar</fileName>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_archive"/>
+        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <copyrightText>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP</copyrightText>
         <licenseInfoInFile rdf:nodeID="A1"/>
         <rdfs:comment>This file belongs to Jena</rdfs:comment>
@@ -127,6 +128,7 @@
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_text"/>
         <checksum>
           <Checksum>
             <checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</checksumValue>
