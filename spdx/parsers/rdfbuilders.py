@@ -388,14 +388,14 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         Raise OrderError if no package previously defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-            if not self.file_chksum_set:
-                self.file_chksum_set = True
-                self.file(doc).chksum = checksum.Algorithm("SHA1", chk_sum)
-                return True
+            if isinstance(chk_sum, dict):
+                self.file(doc).set_checksum(checksum.Algorithm(chk_sum.get('algorithm'),
+                                                               chk_sum.get('checksumValue')))
+            elif isinstance(chk_sum, checksum.Algorithm):
+                self.file(doc).set_checksum(chk_sum)
             else:
-                raise CardinalityError("File::CheckSum")
-        else:
-            raise OrderError("File::CheckSum")
+                self.file(doc).set_checksum(checksum.Algorithm("SHA1", chk_sum))
+            return True
 
     def set_file_license_comment(self, doc, text):
         """

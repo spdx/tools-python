@@ -48,8 +48,12 @@
             "SPDXID": "SPDXRef-File",
             "checksums": [
                 {
-                    "algorithm": "SHA1",
+                    "algorithm": "checksumAlgorithm_sha1",
                     "checksumValue": "SOME-SHA1"
+                },
+                {
+                    "algorithm": "checksumAlgorithm_sha256",
+                    "checksumValue": "SOME-SHA256"
                 }
             ],
             "licenseConcluded": "NOASSERTION",

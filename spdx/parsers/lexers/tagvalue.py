@@ -165,7 +165,7 @@ class Lexer(object):
         print("Lexer error in text state")
 
     def t_CHKSUM(self, t):
-        r":\s*SHA1:\s*[a-f0-9]{40,40}"
+        r":\s*(SHA.*):\s*([a-f0-9]{40,128})"
         t.value = t.value[1:].strip()
         return t
 

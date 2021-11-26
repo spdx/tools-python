@@ -27,6 +27,7 @@ SPDXID: SPDXRef-File
 FileType: OTHER
 FileType: SOURCE
 FileChecksum: SHA1: SOME-SHA1
+FileChecksum: SHA256: SOME-SHA256
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: LGPL-2.1-or-later
 FileCopyrightText: NOASSERTION

@@ -368,10 +368,10 @@ class TestParserUtils(object):
 
         if package.built_date:
             package_dict['builtDate'] = utils.datetime_iso_format(package.built_date)
-            
+
         if package.release_date:
             package_dict['releaseDate'] = utils.datetime_iso_format(package.release_date)
-            
+
         if package.valid_until_date:
             package_dict['validUntilDate'] = utils.datetime_iso_format(package.valid_until_date)
 
@@ -391,6 +391,10 @@ class TestParserUtils(object):
         for file in files:
             lics_in_files = sorted(file.licenses_in_file, key=lambda lic: lic.identifier)
             contributors = sorted(file.contributors, key=lambda c: c.name)
+            chk_sums = []
+            for chk_sum in file.chk_sums:
+                chk_sums.append(cls.checksum_to_dict(chk_sum))
+
             file_dict = OrderedDict([
                 ('id', file.spdx_id),
                 ('fileName', file.name),
@@ -400,7 +404,7 @@ class TestParserUtils(object):
                 ('copyrightText', file.copyright),
                 ('licenseComment', file.license_comment),
                 ('notice', file.notice),
-                ('checksum', cls.checksum_to_dict(file.chksum)),
+                ('checksums', chk_sums),
                 ('licenseInfoInFiles', [cls.license_to_dict(lic) for lic in lics_in_files]),
                 ('contributors', [cls.entity_to_dict(contributor) for contributor in contributors]),
                 ('dependencies', sorted(file.dependencies)),

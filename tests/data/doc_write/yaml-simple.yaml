@@ -13,6 +13,8 @@ files:
   checksums:
   - algorithm: SHA1
     checksumValue: SOME-SHA1
+  - algorithm: "checksumAlgorithm_sha256"
+    checksumValue: "SOME-SHA256"
   copyrightText: NOASSERTION
   fileName: ./some/path/tofile
   licenseConcluded: NOASSERTION
