@@ -9,11 +9,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+CHECKSUM_ALGORITHMS = ['SHA1', 'SHA256', 'SHA512']
+CHECKSUM_ALGORITHM_FROM_XML_DICT = {
+    'checksumAlgorithm_sha1': 'SHA1',
+    'checksumAlgorithm_sha256': 'SHA256',
+    'checksumAlgorithm_sha512': 'SHA512',
+}
+CHECKSUM_ALGORITHM_TO_XML_DICT = {
+    'SHA1': 'checksumAlgorithm_sha1',
+    'SHA256': 'checksumAlgorithm_sha256',
+    'SHA512': 'checksumAlgorithm_sha512',
+}
+
 
 class Algorithm(object):
     """Generic checksum algorithm."""
 
     def __init__(self, identifier, value):
+        if identifier not in CHECKSUM_ALGORITHMS:
+            raise ValueError('checksum algorithm: {}'.format(identifier))
         self.identifier = identifier
         self.value = value
 

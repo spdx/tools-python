@@ -17,7 +17,7 @@ from rdflib import RDF
 from rdflib import RDFS
 from rdflib import URIRef
 from rdflib.compare import to_isomorphic
-
+from spdx import checksum
 from spdx import file
 from spdx import document
 from spdx import config
@@ -26,6 +26,7 @@ from spdx.parsers.loggers import ErrorMessages
 from spdx.writers.tagvalue import InvalidDocumentError
 
 import warnings
+
 
 class BaseWriter(object):
     """
@@ -44,13 +45,14 @@ class BaseWriter(object):
         """
         Return a node representing spdx.checksum.
         """
+        algo = checksum.CHECKSUM_ALGORITHM_TO_XML_DICT.get(chksum.identifier) or 'checksumAlgorithm_sha1'
         chksum_node = BNode()
         type_triple = (chksum_node, RDF.type, self.spdx_namespace.Checksum)
         self.graph.add(type_triple)
         algorithm_triple = (
             chksum_node,
             self.spdx_namespace.algorithm,
-            Literal(chksum.identifier),
+            Literal('http://spdx.org/rdf/terms#' + algo),
         )
         self.graph.add(algorithm_triple)
         value_triple = (
@@ -227,13 +229,6 @@ class FileWriter(LicenseWriter):
     Write spdx.file.File
     """
 
-    FILE_TYPES = {
-        file.FileType.SOURCE: "fileType_source",
-        file.FileType.OTHER: "fileType_other",
-        file.FileType.BINARY: "fileType_binary",
-        file.FileType.ARCHIVE: "fileType_archive",
-    }
-
     def __init__(self, document, out):
         super(FileWriter, self).__init__(document, out)
 
@@ -254,18 +249,20 @@ class FileWriter(LicenseWriter):
             comment_triple = (file_node, RDFS.comment, Literal(doc_file.comment))
             self.graph.add(comment_triple)
 
-        if doc_file.has_optional_field("type"):
-            ftype = self.spdx_namespace[self.FILE_TYPES[doc_file.type]]
-            ftype_triple = (file_node, self.spdx_namespace.fileType, ftype)
-            self.graph.add(ftype_triple)
+        if doc_file.has_optional_field("file_types"):
+            for f_type in doc_file.file_types:
+                ftype = self.spdx_namespace[file.FILE_TYPE_TO_XML_DICT[f_type]]
+                ftype_triple = (file_node, self.spdx_namespace.fileType, ftype)
+                self.graph.add(ftype_triple)
 
-        self.graph.add(
-            (
-                file_node,
-                self.spdx_namespace.checksum,
-                self.create_checksum_node(doc_file.chk_sum),
+        for chk_sum in doc_file.chk_sums:
+            self.graph.add(
+                (
+                    file_node,
+                    self.spdx_namespace.checksum,
+                    self.create_checksum_node(chk_sum),
+                )
             )
-        )
 
         conc_lic_node = self.license_or_special(doc_file.conc_lics)
         conc_lic_triple = (

@@ -19,7 +19,7 @@ from spdx.config import LICENSE_MAP, EXCEPTION_MAP
 from spdx.creationinfo import Tool
 from spdx.document import Document, ExternalDocumentRef
 from spdx.document import License
-from spdx.file import File
+from spdx.file import File, FileType
 from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
 from spdx.utils import NoAssert
@@ -112,7 +112,7 @@ class TestDocument(TestCase):
 
         package = doc.package = Package(name='some/path', download_location=NoAssert())
         package.spdx_id = 'SPDXRef-Package'
-        package.cr_text = 'Some copyrught'
+        package.cr_text = 'Some copyright'
         package.verif_code = 'SOME code'
         package.license_declared = NoAssert()
         package.conc_lics = NoAssert()
@@ -120,7 +120,8 @@ class TestDocument(TestCase):
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
         file1.spdx_id = 'SPDXRef-File'
-        file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
+        file1.set_checksum(Algorithm('SHA1', 'SOME-SHA1'))
+        file1.file_types = [FileType.OTHER]
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
 
@@ -142,7 +143,7 @@ class TestDocument(TestCase):
 
         package1 = Package(name='some/path1', download_location=NoAssert())
         package1.spdx_id = 'SPDXRef-Package1'
-        package1.cr_text = 'Some copyrught'
+        package1.cr_text = 'Some copyright'
         package1.files_verified = False
         package1.license_declared = NoAssert()
         package1.conc_lics = NoAssert()
@@ -150,7 +151,7 @@ class TestDocument(TestCase):
 
         package2 = Package(name='some/path2', download_location=NoAssert())
         package2.spdx_id = 'SPDXRef-Package2'
-        package2.cr_text = 'Some copyrught'
+        package2.cr_text = 'Some copyright'
         package2.files_verified = False
         package2.license_declared = NoAssert()
         package2.conc_lics = NoAssert()
@@ -171,7 +172,7 @@ class TestWriters(TestCase):
 
         package = doc.package = Package(name='some/path', download_location=NoAssert())
         package.spdx_id = 'SPDXRef-Package'
-        package.cr_text = 'Some copyrught'
+        package.cr_text = 'Some copyright'
         package.verif_code = 'SOME code'
         package.check_sum = Algorithm('SHA1', 'SOME-SHA1')
         package.license_declared = NoAssert()
@@ -180,9 +181,11 @@ class TestWriters(TestCase):
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
         file1.spdx_id = 'SPDXRef-File'
-        file1.chk_sum = Algorithm('SHA1', 'SOME-SHA1')
+        file1.set_checksum(Algorithm('SHA1', 'SOME-SHA1'))
+        file1.set_checksum(Algorithm('SHA256', 'SOME-SHA256'))
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
+        file1.file_types = [FileType.OTHER, FileType.SOURCE]
 
         lic1 = License.from_identifier('LGPL-2.1-only')
         if or_later:

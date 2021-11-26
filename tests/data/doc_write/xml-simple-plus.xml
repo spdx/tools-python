@@ -11,7 +11,7 @@
 				<SPDXID>SPDXRef-Package</SPDXID>
                 <name>some/path</name>
                 <downloadLocation>NOASSERTION</downloadLocation>
-                <copyrightText>Some copyrught</copyrightText>
+                <copyrightText>Some copyright</copyrightText>
                 <packageVerificationCode>
 					<packageVerificationCodeValue>SOME code</packageVerificationCodeValue>
 				</packageVerificationCode>
@@ -21,20 +21,24 @@
 				</checksums>
                 <licenseDeclared>NOASSERTION</licenseDeclared>
                 <licenseConcluded>NOASSERTION</licenseConcluded>
-                <files>
-					<File>
-						<name>./some/path/tofile</name>
-						<SPDXID>SPDXRef-File</SPDXID>
-						<checksums>
-							<checksumValue>SOME-SHA1</checksumValue>
-							<algorithm>checksumAlgorithm_sha1</algorithm>
-						</checksums>
-                        <licenseConcluded>NOASSERTION</licenseConcluded>
-                        <copyrightText>NOASSERTION</copyrightText>
-						<licenseInfoFromFiles>LGPL-2.1-or-later</licenseInfoFromFiles>
-						<sha1>SOME-SHA1</sha1>
-					</File>
-				</files>
+				<File>
+					<name>./some/path/tofile</name>
+					<SPDXID>SPDXRef-File</SPDXID>
+					<checksum>
+						<checksumValue>SOME-SHA1</checksumValue>
+						<algorithm>checksumAlgorithm_sha1</algorithm>
+					</checksum>
+					<checksum>
+						<checksumValue>SOME-SHA256</checksumValue>
+						<algorithm>checksumAlgorithm_sha256</algorithm>
+					</checksum>
+					<licenseConcluded>NOASSERTION</licenseConcluded>
+					<copyrightText>NOASSERTION</copyrightText>
+					<licenseInfoFromFiles>LGPL-2.1-or-later</licenseInfoFromFiles>
+					<sha1>SOME-SHA1</sha1>
+					<fileType>fileType_other</fileType>
+					<fileType>fileType_source</fileType>
+				</File>
                 <licenseInfoFromFiles>LGPL-2.1-or-later</licenseInfoFromFiles>
                 <sha1>SOME-SHA1</sha1>
             </Package>

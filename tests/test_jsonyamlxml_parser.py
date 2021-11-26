@@ -23,20 +23,22 @@ from tests import utils_test
 from tests.utils_test import TestParserUtils
 
 
+def check_document(document, expected_loc, regen=False):
+    result = TestParserUtils.to_dict(document)
+
+    if regen:
+        with open(expected_loc, 'w') as o:
+            o.write(json.dumps(result, indent=2))
+
+    with io.open(expected_loc, encoding='utf-8') as ex:
+        expected = json.load(ex, object_pairs_hook=OrderedDict)
+    expected_json = json.dumps(expected, sort_keys=True, indent=2)
+    result_json = json.dumps(result, sort_keys=True, indent=2)
+    assert result_json == expected_json
+
+
 class TestParser(TestCase):
     maxDiff = None
-
-    def check_document(self, document, expected_loc, regen=False):
-        result = TestParserUtils.to_dict(document)
-
-        if regen:
-            with open(expected_loc, 'w') as o:
-                o.write(json.dumps(result, indent=2))
-
-        with io.open(expected_loc, encoding='utf-8') as ex:
-            expected = json.load(ex, object_pairs_hook=OrderedDict)
-
-        assert result == expected
 
     def test_json_parser(self):
         parser = jsonparser.Parser(Builder(), StandardLogger())
@@ -44,7 +46,7 @@ class TestParser(TestCase):
         with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
-        self.check_document(document, expected_loc)
+        check_document(document, expected_loc)
 
     def test_yaml_parser(self):
         parser = yamlparser.Parser(Builder(), StandardLogger())
@@ -52,7 +54,7 @@ class TestParser(TestCase):
         with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
-        self.check_document(document, expected_loc)
+        check_document(document, expected_loc)
 
     def test_xml_parser(self):
         parser = xmlparser.Parser(Builder(), StandardLogger())
@@ -60,7 +62,7 @@ class TestParser(TestCase):
         with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
-        self.check_document(document, expected_loc)
+        check_document(document, expected_loc)
 
     def test_sbomyaml_parser(self):
         parser = yamlparser.Parser(Builder(), StandardLogger())
@@ -69,4 +71,4 @@ class TestParser(TestCase):
             document, errors = parser.parse(f)
             assert not errors
         expected_loc = utils_test.get_test_loc('doc_parse/SBOMexpected.json')
-        self.check_document(document, expected_loc)
+        check_document(document, expected_loc)

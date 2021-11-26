@@ -12,6 +12,7 @@
 from rdflib import Literal
 
 from spdx import document
+from spdx.file import FILE_TYPE_TO_XML_DICT
 
 
 class BaseWriter(object):
@@ -22,8 +23,8 @@ class BaseWriter(object):
     - document_object: python dictionary representation of the entire spdx.document
     """
 
-    def __init__(self, document):
-        self.document = document
+    def __init__(self, dokument):
+        self.document = dokument
         self.document_object = dict()
 
     def license(self, license_field):
@@ -45,11 +46,8 @@ class BaseWriter(object):
         """
         Return a dictionary representation of a spdx.checksum.Algorithm object
         """
-        checksum_object = dict()
-        checksum_object["algorithm"] = (
-            "checksumAlgorithm_" + checksum_field.identifier.lower()
-        )
-        checksum_object["checksumValue"] = checksum_field.value
+        checksum_object = {'algorithm': "checksumAlgorithm_" + checksum_field.identifier.lower(),
+                           'checksumValue': checksum_field.value}
         return checksum_object
 
     def spdx_id(self, spdx_id_field):
@@ -183,12 +181,6 @@ class FileWriter(BaseWriter):
         return artifact_of_objects
 
     def create_file_info(self, package):
-        file_types = {
-            1: "fileType_source",
-            2: "fileType_binary",
-            3: "fileType_archive",
-            4: "fileType_other",
-        }
         file_objects = []
         files = package.files
 
@@ -197,19 +189,24 @@ class FileWriter(BaseWriter):
 
             file_object["name"] = file.name
             file_object["SPDXID"] = self.spdx_id(file.spdx_id)
-            file_object["checksums"] = [self.checksum(file.chk_sum)]
+            file_object["checksums"] = []
+            for chk_sum in file.chk_sums:
+                file_object["checksums"].append(self.checksum(chk_sum))
             file_object["licenseConcluded"] = self.license(file.conc_lics)
             file_object["licenseInfoFromFiles"] = list(
                 map(self.license, file.licenses_in_file)
             )
             file_object["copyrightText"] = file.copyright.__str__()
-            file_object["sha1"] = file.chk_sum.value
+            file_object["sha1"] = file.get_checksum().value
 
             if file.has_optional_field("comment"):
                 file_object["comment"] = file.comment
 
-            if file.has_optional_field("type"):
-                file_object["fileTypes"] = [file_types.get(file.type)]
+            if file.has_optional_field("file_types"):
+                types = []
+                for file_type in file.file_types:
+                    types.append(FILE_TYPE_TO_XML_DICT.get(file_type))
+                file_object["fileTypes"] = types
 
             if file.has_optional_field("license_comment"):
                 file_object["licenseComments"] = file.license_comment

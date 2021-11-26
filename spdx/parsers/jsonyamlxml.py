@@ -26,6 +26,7 @@ class BaseParser(object):
     def __init__(self, builder, logger):
         self.builder = builder
         self.logger = logger
+        self.error = False
 
     def order_error(self, first_tag, second_tag):
         """
@@ -751,7 +752,7 @@ class FileParser(BaseParser):
             self.parse_file_attribution_text(file.get("fileAttributeTexts"))
             self.parse_file_dependencies(file.get("fileDependencies"))
             self.parse_annotations(file.get("annotations"))
-            self.parse_file_chksum(file.get("sha1"))
+            self.parse_file_chksum(file.get("checksums"))
         else:
             self.value_error("FILE", file)
 
@@ -809,8 +810,6 @@ class FileParser(BaseParser):
                 return self.builder.set_file_type(self.document, file_type)
             except SPDXValueError:
                 self.value_error("FILE_TYPE", file_type)
-            except CardinalityError:
-                self.more_than_one_error("FILE_TYPE")
             except OrderError:
                 self.order_error("FILE_TYPE", "FILE_NAME")
         else:
@@ -1017,9 +1016,13 @@ class FileParser(BaseParser):
 
     def parse_file_chksum(self, file_chksum):
         """
-        Parse File checksum
+        Parse File checksums
         - file_chksum: Python str/unicode
         """
+        if isinstance(file_chksum, list):
+            for chk_sum in file_chksum:
+                self.builder.set_file_chksum(self.document, chk_sum)
+            return True
         if isinstance(file_chksum, str):
             try:
                 return self.builder.set_file_chksum(self.document, file_chksum)
@@ -1542,7 +1545,7 @@ class Parser(
 
         validation_messages = ErrorMessages()
         # Report extra errors if self.error is False otherwise there will be
-        # redundent messages
+        # redundant messages
         validation_messages = self.document.validate(validation_messages)
         if not self.error:
             if validation_messages:
@@ -1659,7 +1662,6 @@ class Parser(
             return True
         else:
             self.value_error("DOC_DESCRIBES", doc_described_objects)
-
 
     def parse_packages(self, packages):
         """

@@ -314,7 +314,12 @@ class TestParser(TestCase):
         spdx_file = document.package.files[0]
         assert spdx_file.name == 'testfile.java'
         assert spdx_file.spdx_id == 'SPDXRef-File'
-        assert spdx_file.type == spdx.file.FileType.SOURCE
+        found_source_file_type = False
+        for file_type in spdx_file.file_types:
+            if file_type == spdx.file.FileType.SOURCE:
+                found_source_file_type = True
+                break
+        assert found_source_file_type
         assert len(spdx_file.artifact_of_project_name) == 1
         assert len(spdx_file.artifact_of_project_home) == 1
         assert len(spdx_file.artifact_of_project_uri) == 1

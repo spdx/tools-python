@@ -44,4 +44,6 @@ class TestParser(unittest.TestCase):
         with io.open(expected_loc, 'r', encoding='utf-8') as ex:
             expected = json.load(ex)
 
-        assert result == expected
+        expected_json = json.dumps(expected, sort_keys=True, indent=2)
+        result_json = json.dumps(result, sort_keys=True, indent=2)
+        assert result_json == expected_json

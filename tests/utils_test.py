@@ -24,7 +24,9 @@ import yaml
 
 import spdx
 from spdx import utils
-
+from spdx.parsers import xmlparser
+from spdx.parsers.jsonyamlxmlbuilders import Builder
+from spdx.parsers.loggers import StandardLogger
 
 test_data_dir = os.path.join(os.path.dirname(__file__), 'data')
 
@@ -106,7 +108,10 @@ def sort_nested(data):
         new_data = {}
         for k, v in data.items():
             if isinstance(v, list):
-                v = sorted(v)
+                if isinstance(v[0], dict):
+                    v = sorted(v, key=lambda x: json.dumps(x, sort_keys=True))
+                else:
+                    v = sorted(v)
             if isinstance(v, dict):
                 v = sort_nested(v)
             new_data[k] = v
@@ -135,7 +140,10 @@ def check_rdf_scan(expected_file, result_file, regen=False):
     else:
         with io.open(expected_file, 'r', encoding='utf-8') as i:
             expected = sort_nested(json.load(i))
-    assert expected == result
+
+    expected_json = json.dumps(expected, sort_keys=True, indent=2)
+    result_json = json.dumps(result, sort_keys=True, indent=2)
+    assert result_json == expected_json
 
 
 def load_and_clean_tv(location):
@@ -231,14 +239,19 @@ def load_and_clean_xml(location):
     for comparison. The file content is cleaned from variable parts such as
     dates, generated UUIDs and versions
     """
-    with io.open(location, encoding='utf-8') as l:
-        content = l.read()
-    data = xmltodict.parse(content, encoding='utf-8')
 
-    if 'creationInfo' in data['SpdxDocument']['Document']:
-        del(data['SpdxDocument']['Document']['creationInfo'])
+    parser = xmlparser.Parser(Builder(), StandardLogger())
+    with io.open(location, encoding='utf-8') as f:
+        document, _ = parser.parse(f)
 
-    return sort_nested(data)
+    data = {'SpdxDocument': {'Document':  TestParserUtils.to_dict(document)}}
+
+    if 'created' in data['SpdxDocument']['Document']:
+        del(data['SpdxDocument']['Document']['created'])
+    if 'creators' in data['SpdxDocument']['Document']:
+        del(data['SpdxDocument']['Document']['creators'])
+
+    return data
 
 
 def check_xml_scan(expected_file, result_file, regen=False):
@@ -252,7 +265,9 @@ def check_xml_scan(expected_file, result_file, regen=False):
             o.write(result)
 
     expected = load_and_clean_xml(expected_file)
-    assert expected == result
+    expected_json = json.dumps(expected, sort_keys=True, indent=2)
+    result_json = json.dumps(result, sort_keys=True, indent=2)
+    assert result_json == expected_json
 
 
 class TestParserUtils(object):
@@ -376,16 +391,20 @@ class TestParserUtils(object):
         for file in files:
             lics_from_files = sorted(file.licenses_in_file, key=lambda lic: lic.identifier)
             contributors = sorted(file.contributors, key=lambda c: c.name)
+            chk_sums = []
+            for chk_sum in file.chk_sums:
+                chk_sums.append(cls.checksum_to_dict(chk_sum))
+
             file_dict = OrderedDict([
                 ('id', file.spdx_id),
                 ('name', file.name),
-                ('type', file.type),
+                ('fileTypes', file.file_types),
                 ('comment', file.comment),
                 ('licenseConcluded', cls.license_to_dict(file.conc_lics)),
                 ('copyrightText', file.copyright),
                 ('licenseComment', file.license_comment),
                 ('notice', file.notice),
-                ('checksum', cls.checksum_to_dict(file.chk_sum)),
+                ('checksums', chk_sums),
                 ('licenseInfoFromFiles', [cls.license_to_dict(lic) for lic in lics_from_files]),
                 ('contributors', [cls.entity_to_dict(contributor) for contributor in contributors]),
                 ('dependencies', sorted(file.dependencies)),
@@ -508,7 +527,7 @@ class TestParserUtils(object):
             ('dataLicense', cls.license_to_dict(doc.data_license)),
             ('licenseListVersion', cls.version_to_dict(doc.creation_info.license_list_version)),
             ('creators', [cls.entity_to_dict(creator) for creator in creators]),
-            ('created', utils.datetime_iso_format(doc.creation_info.created)),
+            ('created', utils.datetime_iso_format(doc.creation_info.created or 'None')),
             ('creatorComment', doc.creation_info.comment),
             ('packages', [cls.package_to_dict(p) for p in doc.packages]),
             ('externalDocumentRefs', cls.ext_document_references_to_list(sorted(doc.ext_document_references))),

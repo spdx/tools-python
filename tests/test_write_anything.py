@@ -8,11 +8,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import json
 import os
 
 import pytest
 from spdx.parsers import parse_anything
+from spdx.utils import UnKnown
 from spdx.writers import write_anything
 
 from tests import utils_test
@@ -35,8 +36,15 @@ UNSTABLE_CONVERSIONS = {
     "SPDXRdfExample.rdf-yaml",
     "SPDXRdfExample.rdf-xml",
     "SPDXRdfExample.rdf-json",
-    "SPDXRdfExample.rdf-tag"
+    "SPDXRdfExample.rdf-tag",
 }
+
+
+def handle_unserializable(obj):
+    if isinstance(obj, UnKnown):
+        return obj.to_value()
+    return obj
+
 
 @pytest.mark.parametrize("out_format", ['rdf', 'yaml', 'xml', 'json', 'tag'])
 @pytest.mark.parametrize("in_file", test_files, ids=lambda x: os.path.basename(x))
@@ -48,20 +56,34 @@ def test_write_anything(in_file, out_format, tmpdir):
     doc, error = parse_anything.parse_file(in_file)
 
     assert not error
-    result = utils_test.TestParserUtils.to_dict(doc)
+    expected_dict = utils_test.TestParserUtils.to_dict(doc)
 
     out_fn = os.path.join(tmpdir, "test." + out_format)
     write_anything.write_file(doc, out_fn)
 
     doc2, error2 = parse_anything.parse_file(out_fn)
-    result2 = utils_test.TestParserUtils.to_dict(doc2)
     assert not error2
-    
+
+    written_file_dict = utils_test.TestParserUtils.to_dict(doc2)
+
+    try:
+        expected_json = json.dumps(expected_dict, sort_keys=True, indent=2, default=handle_unserializable)
+    except TypeError:
+        expected_json = None
+    try:
+        written_file_json = json.dumps(written_file_dict, sort_keys=True, indent=2, default=handle_unserializable)
+    except TypeError:
+        written_file_json = None
+
+    assert written_file_json is not None
+
     test = in_basename + "-" + out_format
     if test not in UNSTABLE_CONVERSIONS:
-        assert result==result2
+        if written_file_json != expected_json:
+            print('uhoh')
+        assert expected_json == written_file_json
     else:
         # if this test fails, this means we are more stable \o/
         # in that case, please remove the test from UNSTABLE_CONVERSIONS list
-        assert result2 != result, test
+        assert expected_json != written_file_json, test
 

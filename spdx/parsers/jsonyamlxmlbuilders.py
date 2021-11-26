@@ -12,9 +12,25 @@
 from spdx.parsers import rdfbuilders
 from spdx.parsers import tagvaluebuilders
 from spdx.parsers import validations
+from spdx import checksum
+from spdx import file
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
+
+file_types_dict = {
+    "fileType_source": "SOURCE",
+    "fileType_binary": "BINARY",
+    "fileType_archive": "ARCHIVE",
+    "fileType_other": "OTHER",
+    "fileType_application": "APPLICATION",
+    "fileType_audio": "AUDIO",
+    "fileType_image": "IMAGE",
+    "fileType_text": "TEXT",
+    "fileType_documentation": "DOCUMENTATION",
+    "fileType_spdx": "SPDX",
+    "fileType_video": "VIDEO",
+}
 
 
 class CreationInfoBuilder(rdfbuilders.CreationInfoBuilder):
@@ -159,6 +175,23 @@ class FileBuilder(rdfbuilders.FileBuilder):
     def __init__(self):
         super(FileBuilder, self).__init__()
 
+    def set_file_chksum(self, doc, chk_sum):
+        """
+        Set the file check sum, if not already set.
+        chk_sum - A string
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if isinstance(chk_sum, dict):
+                algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(chk_sum.get('algorithm') or 'SHA1')
+                self.file(doc).set_checksum(checksum.Algorithm(algo, chk_sum.get('checksumValue')))
+            elif isinstance(chk_sum, checksum.Algorithm):
+                self.file(doc).set_checksum(chk_sum)
+            else:
+                self.file(doc).set_checksum(checksum.Algorithm("SHA1", chk_sum))
+            return True
+
     def set_file_notice(self, doc, text):
         """
         Set file notice
@@ -177,15 +210,15 @@ class FileBuilder(rdfbuilders.FileBuilder):
         Wrap rdfbuilders.FileBuilder.set_file_type to match the different
         fileType representations.
         """
-
-        type_dict = {
-            "fileType_source": "SOURCE",
-            "fileType_binary": "BINARY",
-            "fileType_archive": "ARCHIVE",
-            "fileType_other": "OTHER",
-        }
-
-        return super(FileBuilder, self).set_file_type(doc, type_dict.get(type_value))
+        if self.has_package(doc) and self.has_file(doc):
+            file_type = file.FILE_TYPE_FROM_XML_DICT.get(type_value) or file.FileType.OTHER
+            spdx_file = self.file(doc)
+            if file_type not in spdx_file.file_types:
+                spdx_file.file_types.append(file_type)
+            else:
+                raise CardinalityError("File::Type")
+        else:
+            raise OrderError("File::Type")
 
 
 class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):

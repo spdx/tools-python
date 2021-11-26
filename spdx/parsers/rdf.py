@@ -19,11 +19,12 @@ from rdflib import RDF
 from rdflib import RDFS
 
 from spdx import document
+from spdx import file
 from spdx import utils
+from spdx import checksum
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.loggers import ErrorMessages
-
 
 ERROR_MESSAGES = {
     "DOC_VERS_VALUE": "Invalid specVersion '{0}' must be SPDX-M.N where M and N are numbers.",
@@ -50,7 +51,7 @@ ERROR_MESSAGES = {
     'letters, numbers, ".", "-".',
     "PKG_EXT_REF_CATEGORY": '\'{0}\' must be "SECURITY", "PACKAGE-MANAGER", or "OTHER".',
     "PKG_EXT_REF_TYPE": '{0} must be a unique string containing letters, numbers, ".", or "-".',
-    "FILE_TYPE": "File type must be binary, other, source or archive term.",
+    "FILE_TYPE": "There must be at least one file type specified.",
     "FILE_SINGLE_LICS": "File concluded license must be a license url or spdx:noassertion or spdx:none.",
     "REVIEWER_VALUE": "Invalid reviewer value '{0}' must be Organization, Tool or Person.",
     "REVIEW_DATE": "Invalid review date value '{0}' must be date in ISO 8601 format.",
@@ -63,6 +64,16 @@ ERROR_MESSAGES = {
     "to the license, denoted by LicenseRef-[idstring] or spdx:noassertion or spdx:none.",
     "RELATIONSHIP": "relationship type must be of supported type",
 }
+
+
+def convert_rdf_checksum_algorithm(algo):
+    ss = algo.split('#')
+    if len(ss) != 2:
+        raise SPDXValueError('Unknown checksum algorithm {}'.format(algo))
+    algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(ss[1])
+    if algo is None:
+        raise SPDXValueError('Unknown checksum algorithm {}'.format(algo))
+    return algo
 
 
 class BaseParser(object):
@@ -762,14 +773,6 @@ class FileParser(LicenseParser):
         try:
             for _, _, ftype in self.graph.triples((f_term, predicate, None)):
                 try:
-                    if ftype.endswith("binary"):
-                        ftype = "BINARY"
-                    elif ftype.endswith("source"):
-                        ftype = "SOURCE"
-                    elif ftype.endswith("other"):
-                        ftype = "OTHER"
-                    elif ftype.endswith("archive"):
-                        ftype = "ARCHIVE"
                     self.builder.set_file_type(self.doc, ftype)
                 except SPDXValueError:
                     self.value_error("FILE_TYPE", ftype)
@@ -778,14 +781,19 @@ class FileParser(LicenseParser):
 
     def p_file_chk_sum(self, f_term, predicate):
         """
-        Set file checksum. Assumes SHA1 algorithm without checking.
+        Set file checksum.
         """
         try:
-            for _s, _p, checksum in self.graph.triples((f_term, predicate, None)):
+            for _s, _p, file_checksum in self.graph.triples((f_term, predicate, None)):
                 for _, _, value in self.graph.triples(
-                    (checksum, self.spdx_namespace["checksumValue"], None)
+                    (file_checksum, self.spdx_namespace["checksumValue"], None)
                 ):
-                    self.builder.set_file_chksum(self.doc, str(value))
+                    for _, _, algo in self.graph.triples(
+                            (file_checksum, self.spdx_namespace["algorithm"], None)
+                    ):
+                        algo = convert_rdf_checksum_algorithm(str(algo))
+                        chk_sum = checksum.Algorithm(str(algo), str(value))
+                        self.builder.set_file_chksum(self.doc, chk_sum)
         except CardinalityError:
             self.more_than_one_error("File checksum")
 

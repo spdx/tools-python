@@ -14,11 +14,14 @@ PackageVerificationCode: SOME code
 PackageLicenseDeclared: NOASSERTION
 PackageLicenseConcluded: NOASSERTION
 PackageLicenseInfoFromFiles: LGPL-2.1-only
-PackageCopyrightText: <text>Some copyrught</text>
+PackageCopyrightText: <text>Some copyright</text>
 # File
 FileName: ./some/path/tofile
 SPDXID: SPDXRef-File
+FileType: OTHER
+FileType: SOURCE
 FileChecksum: SHA1: SOME-SHA1
+FileChecksum: SHA256: SOME-SHA256
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: LGPL-2.1-only
 FileCopyrightText: NOASSERTION

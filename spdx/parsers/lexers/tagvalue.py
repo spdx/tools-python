@@ -99,10 +99,17 @@ class Lexer(object):
         "NOASSERTION": "NO_ASSERT",
         "UNKNOWN": "UN_KNOWN",
         "NONE": "NONE",
-        "SOURCE": "SOURCE",
-        "BINARY": "BINARY",
-        "ARCHIVE": "ARCHIVE",
-        "OTHER": "OTHER",
+        "APPLICATION": "FILE_TYPE_APPLICATION",
+        "ARCHIVE": "FILE_TYPE_ARCHIVE",
+        "AUDIO": "FILE_TYPE_AUDIO",
+        "BINARY": "FILE_TYPE_BINARY",
+        "DOCUMENTATION": "FILE_TYPE_DOCUMENTATION",
+        "IMAGE": "FILE_TYPE_IMAGE",
+        "OTHER": "FILE_TYPE_OTHER",
+        "SOURCE": "FILE_TYPE_SOURCE",
+        "SPDX": "FILE_TYPE_SPDX",
+        "TEXT": "FILE_TYPE_TEXT",
+        "VIDEO": "FILE_TYPE_VIDEO",
     }
     states = (("text", "exclusive"),)
 
@@ -142,7 +149,7 @@ class Lexer(object):
         print("Lexer error in text state")
 
     def t_CHKSUM(self, t):
-        r":\s*SHA1:\s*[a-f0-9]{40,40}"
+        r":\s*(SHA.*):\s*([a-f0-9]{40,128})"
         t.value = t.value[1:].strip()
         return t
 

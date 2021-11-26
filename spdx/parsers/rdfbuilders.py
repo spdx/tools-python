@@ -13,6 +13,7 @@ import re
 
 from spdx import checksum
 from spdx import document
+from spdx import file
 from spdx import package
 from spdx import version
 from spdx.parsers.builderexceptions import CardinalityError
@@ -389,14 +390,14 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         Raise OrderError if no package previously defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-            if not self.file_chksum_set:
-                self.file_chksum_set = True
-                self.file(doc).chk_sum = checksum.Algorithm("SHA1", chk_sum)
-                return True
+            if isinstance(chk_sum, dict):
+                self.file(doc).set_checksum(checksum.Algorithm(chk_sum.get('algorithm'),
+                                                               chk_sum.get('checksumValue')))
+            elif isinstance(chk_sum, checksum.Algorithm):
+                self.file(doc).set_checksum(chk_sum)
             else:
-                raise CardinalityError("File::CheckSum")
-        else:
-            raise OrderError("File::CheckSum")
+                self.file(doc).set_checksum(checksum.Algorithm("SHA1", chk_sum))
+            return True
 
     def set_file_license_comment(self, doc, text):
         """
@@ -466,6 +467,24 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
                 raise CardinalityError("File::Notice")
         else:
             raise OrderError("File::Notice")
+
+    def set_file_type(self, doc, filetype):
+        """
+        Set the file type for XML and RDF values.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            ss = filetype.split('#')
+            if len(ss) != 2:
+                raise SPDXValueError('Unknown file type {}'.format(filetype))
+            file_type = file.FILE_TYPE_FROM_XML_DICT.get(ss[1]) or file.FileType.OTHER
+            spdx_file = self.file(doc)
+            if file_type not in spdx_file.file_types:
+                spdx_file.file_types.append(file_type)
+            else:
+                raise CardinalityError("File::Type")
+        else:
+            raise OrderError("File::Type")
+
 
 
 class SnippetBuilder(tagvaluebuilders.SnippetBuilder):

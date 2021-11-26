@@ -636,12 +636,20 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_file_type_value(self, p):
-        """file_type_value : OTHER
-                           | SOURCE
-                           | ARCHIVE
-                           | BINARY
+        """file_type_value : FILE_TYPE_APPLICATION
+                           | FILE_TYPE_ARCHIVE
+                           | FILE_TYPE_AUDIO
+                           | FILE_TYPE_BINARY
+                           | FILE_TYPE_DOCUMENTATION
+                           | FILE_TYPE_IMAGE
+                           | FILE_TYPE_OTHER
+                           | FILE_TYPE_SOURCE
+                           | FILE_TYPE_SPDX
+                           | FILE_TYPE_TEXT
+                           | FILE_TYPE_VIDEO
         """
         p[0] = p[1]
+
     def p_pkg_desc_1(self, p):
         """pkg_desc : PKG_DESC TEXT"""
         try:

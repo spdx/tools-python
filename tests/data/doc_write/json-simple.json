@@ -11,7 +11,7 @@
                     "SPDXID": "SPDXRef-Package", 
                     "name": "some/path",
                     "downloadLocation": "NOASSERTION",
-                    "copyrightText": "Some copyrught",
+                    "copyrightText": "Some copyright",
                     "packageVerificationCode": {
                         "packageVerificationCodeValue": "SOME code"
                     },
@@ -32,10 +32,15 @@
                                     {
                                         "algorithm": "checksumAlgorithm_sha1",
                                         "checksumValue": "SOME-SHA1"
+                                    },
+                                    {
+                                        "algorithm": "checksumAlgorithm_sha256",
+                                        "checksumValue": "SOME-SHA256"
                                     }
                                 ],
                                 "licenseConcluded": "NOASSERTION",
                                 "copyrightText": "NOASSERTION",
+                                "fileTypes": ["fileType_other", "fileType_source"],
                                 "licenseInfoFromFiles": ["LGPL-2.1-only"],
                                 "sha1": "SOME-SHA1"
                             }

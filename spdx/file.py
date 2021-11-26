@@ -26,9 +26,65 @@ class FileType(object):
     AUDIO = 6
     IMAGE = 7
     TEXT = 8
-    VIDEO = 9
     DOCUMENTATION = 9
     SPDX = 10
+    VIDEO = 11
+
+
+FILE_TYPE_TO_XML_DICT = {
+    FileType.SOURCE: "fileType_source",
+    FileType.OTHER: "fileType_other",
+    FileType.BINARY: "fileType_binary",
+    FileType.ARCHIVE: "fileType_archive",
+    FileType.APPLICATION: "fileType_application",
+    FileType.AUDIO: "fileType_audio",
+    FileType.DOCUMENTATION: "fileType_documentation",
+    FileType.IMAGE: "fileType_image",
+    FileType.SPDX: "fileType_spdx",
+    FileType.TEXT: "fileType_text",
+    FileType.VIDEO: "fileType_video"
+}
+FILE_TYPE_TO_STRING_DICT = {
+    FileType.SOURCE: "SOURCE",
+    FileType.OTHER: "OTHER",
+    FileType.BINARY: "BINARY",
+    FileType.ARCHIVE: "ARCHIVE",
+    FileType.APPLICATION: "APPLICATION",
+    FileType.AUDIO: "AUDIO",
+    FileType.DOCUMENTATION: "DOCUMENTATION",
+    FileType.IMAGE: "IMAGE",
+    FileType.SPDX: "SPDX",
+    FileType.TEXT: "TEXT",
+    FileType.VIDEO: "VIDEO",
+}
+
+FILE_TYPE_FROM_XML_DICT = {
+    "fileType_source": FileType.SOURCE,
+    "fileType_binary": FileType.BINARY,
+    "fileType_archive": FileType.ARCHIVE,
+    "fileType_other": FileType.OTHER,
+    "fileType_application": FileType.APPLICATION,
+    "fileType_audio": FileType.AUDIO,
+    "fileType_image": FileType.IMAGE,
+    "fileType_text": FileType.TEXT,
+    "fileType_documentation": FileType.DOCUMENTATION,
+    "fileType_spdx": FileType.SPDX,
+    "fileType_video": FileType.VIDEO,
+}
+
+FILE_TYPE_FROM_STRING_DICT = {
+    "SOURCE": FileType.SOURCE,
+    "BINARY": FileType.BINARY,
+    "ARCHIVE": FileType.ARCHIVE,
+    "OTHER": FileType.OTHER,
+    "APPLICATION": FileType.APPLICATION,
+    "AUDIO": FileType.AUDIO,
+    "IMAGE": FileType.IMAGE,
+    "TEXT": FileType.TEXT,
+    "DOCUMENTATION": FileType.DOCUMENTATION,
+    "SPDX": FileType.SPDX,
+    "VIDEO": FileType.VIDEO,
+}
 
 
 @total_ordering
@@ -40,9 +96,8 @@ class File(object):
     - spdx_id: Uniquely identify any element in an SPDX document which may be
     referenced by other elements. Mandatory, one. Type: str.
     - comment: File comment str, Optional zero or one.
-    - type: one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
-      and FileType.OTHER, optional zero or one.
-    - chk_sum: SHA1, Mandatory one.
+      file_types: list of file types.  cardinality 1..#FILE_TYPES
+    - chk_sums: list of checksums, there must be a SHA1 hash, at least.
     - conc_lics: Mandatory one. document.License or utils.NoAssert or utils.SPDXNone.
     - licenses_in_file: list of licenses found in file, mandatory one or more.
       document.License or utils.SPDXNone or utils.NoAssert.
@@ -58,12 +113,12 @@ class File(object):
     -attribution_text: optional string.
     """
 
-    def __init__(self, name, spdx_id=None, chk_sum=None):
+    def __init__(self, name, spdx_id=None):
         self.name = name
         self.spdx_id = spdx_id
         self.comment = None
-        self.type = None
-        self.chk_sum = chk_sum
+        self.file_types = []
+        self.chk_sums = []
         self.conc_lics = None
         self.licenses_in_file = []
         self.license_comment = None
@@ -75,6 +130,7 @@ class File(object):
         self.artifact_of_project_name = []
         self.artifact_of_project_home = []
         self.artifact_of_project_uri = []
+
 
     def __eq__(self, other):
         return isinstance(other, File) and self.name == other.name
@@ -106,7 +162,7 @@ class File(object):
         """
         messages.push_context(self.name)
         self.validate_concluded_license(messages)
-        self.validate_type(messages)
+        self.validate_file_types(messages)
         self.validate_checksum(messages)
         self.validate_licenses_in_file(messages)
         self.validate_copyright(messages)
@@ -162,44 +218,42 @@ class File(object):
 
         return messages
 
-    def validate_type(self, messages):
-        if self.type not in [
-            None,
-            FileType.SOURCE,
-            FileType.OTHER,
-            FileType.BINARY,
-            FileType.ARCHIVE,
-        ]:
-            messages.append(
-                "File type must be one of the constants defined in "
-                "class spdx.file.FileType"
-            )
-
+    def validate_file_types(self, messages):
+        if len(self.file_types) < 1:
+            messages.append('At least one file type must be specified.')
         return messages
 
     def validate_checksum(self, messages):
-        if not isinstance(self.chk_sum, checksum.Algorithm):
-            messages.append(
-                "File checksum must be instance of spdx.checksum.Algorithm"
-            )
-        else:
-            if not self.chk_sum.identifier == "SHA1":
-                messages.append("File checksum algorithm must be SHA1")
-
+        if self.get_checksum() is None:
+            messages.append("At least one file checksum algorithm must be SHA1")
         return messages
 
-    def calc_chksum(self):
+    def calculate_checksum(self, hash_algorithm='SHA1'):
         BUFFER_SIZE = 65536
 
-        file_sha1 = hashlib.sha1()
+        file_hash = hashlib.new(hash_algorithm.lower())
         with open(self.name, "rb") as file_handle:
             while True:
                 data = file_handle.read(BUFFER_SIZE)
                 if not data:
                     break
-                file_sha1.update(data)
+                file_hash.update(data)
 
-        return file_sha1.hexdigest()
+        return file_hash.hexdigest()
+
+    def get_checksum(self, hash_algorithm='SHA1'):
+        for chk_sum in self.chk_sums:
+            if chk_sum.identifier == hash_algorithm:
+                return chk_sum
+        return None
+
+    def set_checksum(self, chk_sum):
+        if isinstance(chk_sum, checksum.Algorithm):
+            for file_chk_sum in self.chk_sums:
+                if file_chk_sum.identifier == chk_sum.identifier:
+                    file_chk_sum.value = chk_sum.value
+                    return
+            self.chk_sums.append(chk_sum)
 
     def has_optional_field(self, field):
         return getattr(self, field, None) is not None
