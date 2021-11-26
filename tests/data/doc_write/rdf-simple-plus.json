@@ -28,7 +28,7 @@
           "ns1:copyrightText": "Some copyright",
           "ns1:checksum": {
             "ns1:Checksum": {
-              "ns1:algorithm": "SHA1",
+              "ns1:algorithm": "http://spdx.org/rdf/terms#checksumAlgorithm_sha1",
               "ns1:checksumValue": "SOME-SHA1"
             }
           }
@@ -45,12 +45,19 @@
         "ns1:File": {
           "@rdf:about": "http://www.spdx.org/files#SPDXRef-File",
           "ns1:fileName": "./some/path/tofile", 
-          "ns1:checksum": {
-            "ns1:Checksum": {
-              "ns1:checksumValue": "SOME-SHA1", 
-              "ns1:algorithm": "SHA1"
+          "ns1:checksum": [
+            {
+              "ns1:Checksum": {
+                "ns1:checksumValue": "SOME-SHA1",
+                "ns1:algorithm": "http://spdx.org/rdf/terms#checksumAlgorithm_sha1"
+              }
+            }, {
+              "ns1:Checksum": {
+                "ns1:checksumValue": "SOME-SHA256",
+                "ns1:algorithm": "http://spdx.org/rdf/terms#checksumAlgorithm_sha256"
+              }
             }
-          }, 
+          ],
           "ns1:licenseConcluded": {
             "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
           }, 

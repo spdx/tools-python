@@ -12,6 +12,7 @@ from spdx import file
 from spdx.parsers import rdfbuilders
 from spdx.parsers import tagvaluebuilders
 from spdx.parsers import validations
+from spdx import checksum
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
@@ -158,6 +159,23 @@ class LicenseBuilder(tagvaluebuilders.LicenseBuilder):
 class FileBuilder(rdfbuilders.FileBuilder):
     def __init__(self):
         super(FileBuilder, self).__init__()
+
+    def set_file_chksum(self, doc, chk_sum):
+        """
+        Set the file check sum, if not already set.
+        chk_sum - A string
+        Raise CardinalityError if already defined.
+        Raise OrderError if no package previously defined.
+        """
+        if self.has_package(doc) and self.has_file(doc):
+            if isinstance(chk_sum, dict):
+                algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(chk_sum.get('algorithm') or 'SHA1')
+                self.file(doc).set_checksum(checksum.Algorithm(algo, chk_sum.get('checksumValue')))
+            elif isinstance(chk_sum, checksum.Algorithm):
+                self.file(doc).set_checksum(chk_sum)
+            else:
+                self.file(doc).set_checksum(checksum.Algorithm("SHA1", chk_sum))
+            return True
 
     def set_file_notice(self, doc, text):
         """

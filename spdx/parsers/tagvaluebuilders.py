@@ -33,16 +33,11 @@ from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers import validations
 
 
-def checksum_from_sha1(value):
-    """
-    Return an spdx.checksum.Algorithm instance representing the SHA1
-    checksum or None if does not match CHECKSUM_RE.
-    """
-    # More constrained regex at lexer level
-    CHECKSUM_RE = re.compile("SHA1:\\s*([\\S]+)", re.UNICODE)
+def checksum_algorithm_from_string(value):
+    CHECKSUM_RE = re.compile("(SHA1|SHA256|SHA512):\\s*([a-f0-9]*)")
     match = CHECKSUM_RE.match(value)
     if match:
-        return checksum.Algorithm(identifier="SHA1", value=match.group(1))
+        return checksum.Algorithm(identifier=match.group(1), value=match.group(2))
     else:
         return None
 
@@ -202,7 +197,7 @@ class ExternalDocumentRefBuilder(object):
         """
         Set the `check_sum` attribute of the `ExternalDocumentRef` object.
         """
-        doc.ext_document_references[-1].check_sum = checksum_from_sha1(chksum)
+        doc.ext_document_references[-1].check_sum = checksum_algorithm_from_string(chksum)
 
     def add_ext_doc_refs(self, doc, ext_doc_id, spdx_doc_uri, chksum):
         self.set_ext_doc_id(doc, ext_doc_id)
@@ -788,12 +783,12 @@ class PackageBuilder(object):
         Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
-        if self.package_chk_sum_set:
+        if not self.package_chk_sum_set:
+            self.package_chk_sum_set = True
+            doc.packages[-1].check_sum = checksum_algorithm_from_string(chk_sum)
+            return True
+        else:
             raise CardinalityError("Package::CheckSum")
-
-        self.package_chk_sum_set = True
-        doc.packages[-1].checksum = checksum_from_sha1(chk_sum)
-        return True
 
     def set_pkg_source_info(self, doc, text):
         """
@@ -1202,14 +1197,18 @@ class FileBuilder(object):
         Raise OrderError if no package or file defined.
         Raise CardinalityError if more than one chksum set.
         """
-        if not self.has_file(doc):
+        if self.has_package(doc) and self.has_file(doc):
+            self.file_chksum_set = False
+            chk_sums = doc.files[-1].chk_sums
+            chk_sums.append(checksum_algorithm_from_string(chksum))
+            doc.files[-1].chk_sums = chk_sums
+            for chk_sum in self.file(doc).chk_sums:
+                if chk_sum.identifier == 'SHA1':
+                    self.file_chksum_set = True
+            if not self.file_chksum_set:
+                raise CardinalityError("File::CheckSum")
+        else:
             raise OrderError("File::CheckSum")
-
-        if self.file_chksum_set:
-            raise CardinalityError("File::CheckSum")
-
-        self.file_chksum_set = True
-        self.file(doc).chksum = checksum_from_sha1(chksum)
         return True
 
     def set_concluded_license(self, doc, lic):

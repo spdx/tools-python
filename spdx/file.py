@@ -58,7 +58,7 @@ class File(object):
     referenced by other elements. Mandatory, one. Type: str.
     - comment: File comment str, Optional zero or one.
     - file_types: list of file types. Cardinality 0..*
-    - chksum: SHA1, Mandatory one.
+    - chk_sums: list of checksums, there must be a SHA1 hash, at least.
     - conc_lics: Mandatory one. license.License or utils.NoAssert or utils.SPDXNone.
     - licenses_in_file: list of licenses found in file, mandatory one or more.
       document.License or utils.SPDXNone or utils.NoAssert.
@@ -74,12 +74,12 @@ class File(object):
     -attribution_text: optional string.
     """
 
-    def __init__(self, name, spdx_id=None, chksum=None):
+    def __init__(self, name, spdx_id=None):
         self.name = name
         self.spdx_id = spdx_id
         self.comment = None
         self.file_types = []
-        self.checksums = [chksum]
+        self.chk_sums = []
         self.conc_lics = None
         self.licenses_in_file = []
         self.license_comment = None
@@ -203,28 +203,36 @@ class File(object):
         return messages
 
     def validate_checksum(self, messages):
-        if not isinstance(self.chksum, checksum.Algorithm):
-            messages.append(
-                "File checksum must be instance of spdx.checksum.Algorithm"
-            )
-        else:
-            if not self.chksum.identifier == "SHA1":
-                messages.append("File checksum algorithm must be SHA1")
-
+        if self.get_checksum() is None:
+            messages.append("At least one file checksum algorithm must be SHA1")
         return messages
 
-    def calc_chksum(self):
+    def calculate_checksum(self, hash_algorithm='SHA1'):
         BUFFER_SIZE = 65536
 
-        file_sha1 = hashlib.sha1()
+        file_hash = hashlib.new(hash_algorithm.lower())
         with open(self.name, "rb") as file_handle:
             while True:
                 data = file_handle.read(BUFFER_SIZE)
                 if not data:
                     break
-                file_sha1.update(data)
+                file_hash.update(data)
 
-        return file_sha1.hexdigest()
+        return file_hash.hexdigest()
+
+    def get_checksum(self, hash_algorithm='SHA1'):
+        for chk_sum in self.chk_sums:
+            if chk_sum.identifier == hash_algorithm:
+                return chk_sum
+        return None
+
+    def set_checksum(self, chk_sum):
+        if isinstance(chk_sum, checksum.Algorithm):
+            for file_chk_sum in self.chk_sums:
+                if file_chk_sum.identifier == chk_sum.identifier:
+                    file_chk_sum.value = chk_sum.value
+                    return
+            self.chk_sums.append(chk_sum)
 
     def has_optional_field(self, field):
         return bool (getattr(self, field, None))

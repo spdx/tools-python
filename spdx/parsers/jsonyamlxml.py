@@ -823,7 +823,7 @@ class FileParser(BaseParser):
             self.parse_file_attribution_text(file.get("attributionTexts"))
             self.parse_file_dependencies(file.get("fileDependencies"))
             self.parse_annotations(file.get("annotations"), spdx_id=file.get("SPDXID"))
-            self.parse_file_chksum(file.get("sha1"))
+            self.parse_file_chksum(file.get("checksums"))
         else:
             self.value_error("FILE", file)
 
@@ -1095,9 +1095,13 @@ class FileParser(BaseParser):
 
     def parse_file_chksum(self, file_chksum):
         """
-        Parse File checksum
+        Parse File checksums
         - file_chksum: Python str/unicode
         """
+        if isinstance(file_chksum, list):
+            for chk_sum in file_chksum:
+                self.builder.set_file_chksum(self.document, chk_sum)
+            return True
         if isinstance(file_chksum, str):
             try:
                 return self.builder.set_file_chksum(self.document, file_chksum)

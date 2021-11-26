@@ -49,11 +49,8 @@ class BaseWriter(object):
         """
         Return a dictionary representation of a spdx.checksum.Algorithm object
         """
-        checksum_object = dict()
-        checksum_object["algorithm"] = (
-            checksum_field.identifier.upper()
-        )
-        checksum_object["checksumValue"] = checksum_field.value
+        checksum_object = {'algorithm': "checksumAlgorithm_" + checksum_field.identifier.lower(),
+                           'checksumValue': checksum_field.value}
         return checksum_object
 
     def spdx_id(self, spdx_id_field):
@@ -235,7 +232,9 @@ class FileWriter(BaseWriter):
 
         file_object["fileName"] = file.name
         file_object["SPDXID"] = self.spdx_id(file.spdx_id)
-        file_object["checksums"] = [self.checksum(file.chksum)]
+        file_object["checksums"] = []
+        for chk_sum in file.chk_sums:
+            file_object["checksums"].append(self.checksum(chk_sum))
 
         if file.has_optional_field("conc_lics"):
             file_object["licenseConcluded"] = self.license(file.conc_lics)

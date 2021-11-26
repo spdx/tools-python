@@ -17,7 +17,7 @@ from rdflib import RDF
 from rdflib import RDFS
 from rdflib import URIRef
 from rdflib.compare import to_isomorphic
-
+from spdx import checksum
 from spdx import config
 from spdx import file
 from spdx import license
@@ -48,13 +48,14 @@ class BaseWriter(object):
         """
         Return a node representing spdx.checksum.
         """
+        algo = checksum.CHECKSUM_ALGORITHM_TO_XML_DICT.get(chksum.identifier) or 'checksumAlgorithm_sha1'
         chksum_node = BNode()
         type_triple = (chksum_node, RDF.type, self.spdx_namespace.Checksum)
         self.graph.add(type_triple)
         algorithm_triple = (
             chksum_node,
             self.spdx_namespace.algorithm,
-            Literal(chksum.identifier),
+            Literal('http://spdx.org/rdf/terms#' + algo),
         )
         self.graph.add(algorithm_triple)
         value_triple = (
@@ -264,13 +265,14 @@ class FileWriter(LicenseWriter):
                 ftype_triple = (file_node, self.spdx_namespace.fileType, ftype)
                 self.graph.add(ftype_triple)
 
-        self.graph.add(
-            (
-                file_node,
-                self.spdx_namespace.checksum,
-                self.create_checksum_node(doc_file.chksum),
+        for chk_sum in doc_file.chk_sums:
+            self.graph.add(
+                (
+                    file_node,
+                    self.spdx_namespace.checksum,
+                    self.create_checksum_node(chk_sum),
+                )
             )
-        )
 
         conc_lic_node = self.license_or_special(doc_file.conc_lics)
         conc_lic_triple = (
