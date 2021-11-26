@@ -231,13 +231,6 @@ class FileWriter(BaseWriter):
         return artifact_of_objects
 
     def create_file_info(self, file, annotations_by_spdx_id):
-        file_types = {
-            1: "fileType_source",
-            2: "fileType_binary",
-            3: "fileType_archive",
-            4: "fileType_other",
-        }
-
         file_object = dict()
 
         file_object["fileName"] = file.name
@@ -258,8 +251,11 @@ class FileWriter(BaseWriter):
         if file.has_optional_field("comment"):
             file_object["comment"] = file.comment
 
-        if file.has_optional_field("type"):
-            file_object["fileTypes"] = [file_types.get(file.type)]
+        if file.has_optional_field("file_types"):
+            types = []
+            for file_type in file.file_types:
+                types.append(FILE_TYPE_TO_STRING_DICT.get(file_type))
+            file_object["fileTypes"] = types
 
         if file.has_optional_field("license_comment"):
             file_object["licenseComments"] = file.license_comment

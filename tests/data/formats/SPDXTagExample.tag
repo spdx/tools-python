@@ -72,6 +72,7 @@ ExternalRefComment: <text>NIST National Vulnerability Database (NVD) describes s
 FileName: src/org/spdx/parser/DOAPProject.java
 SPDXID: SPDXRef-File1
 FileType: SOURCE
+FileType: TEXT
 FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
 LicenseConcluded: Apache-2.0
 LicenseInfoInFile: Apache-2.0
@@ -80,6 +81,7 @@ FileCopyrightText: <text>Copyright 2010, 2011 Source Auditor Inc.</text>
 FileName: Jenna-2.6.3/jena-2.6.3-sources.jar
 SPDXID: SPDXRef-File2
 FileType: ARCHIVE
+FileType: OTHER
 FileChecksum: SHA1: 3ab4e1c67a2d28fced849ee1bb76e7391b93f125
 LicenseConcluded: LicenseRef-1
 LicenseInfoInFile: LicenseRef-1

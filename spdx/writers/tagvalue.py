@@ -111,13 +111,7 @@ def write_relationship(relationship_term, out):
 
 
 def write_file_type(ftype, out):
-    VALUES = {
-        spdx_file.FileType.SOURCE: "SOURCE",
-        spdx_file.FileType.OTHER: "OTHER",
-        spdx_file.FileType.BINARY: "BINARY",
-        spdx_file.FileType.ARCHIVE: "ARCHIVE",
-    }
-    write_value("FileType", VALUES[ftype], out)
+    write_value("FileType", file.FILE_TYPE_TO_STRING_DICT[ftype], out)
 
 
 def write_file(spdx_file, out):
@@ -128,8 +122,8 @@ def write_file(spdx_file, out):
     write_value("FileName", spdx_file.name, out)
     if spdx_file.spdx_id:
         write_value("SPDXID", spdx_file.spdx_id, out)
-    if spdx_file.has_optional_field("type"):
-        write_file_type(spdx_file.type, out)
+    for file_type in spdx_file.file_types:
+        write_file_type(file_type, out)
     write_value("FileChecksum", spdx_file.chksum.to_tv(), out)
     if spdx_file.has_optional_field("conc_lics"):
         if isinstance(
