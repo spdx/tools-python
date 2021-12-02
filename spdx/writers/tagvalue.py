@@ -240,8 +240,8 @@ def write_package(package, out):
     if package.has_optional_field("originator"):
         write_value("PackageOriginator", package.originator, out)
 
-    if package.has_optional_field("checksum"):
-        write_value("PackageChecksum", package.checksum.to_tv(), out)
+    for package_checksum in package.checksums:
+        write_value("PackageChecksum", package_checksum.to_tv(), out)
 
     if package.has_optional_field("verif_code"):
         write_value("PackageVerificationCode", format_verif_code(package), out)

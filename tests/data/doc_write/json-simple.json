@@ -27,9 +27,13 @@
                 {
                     "algorithm": "SHA1",
                     "checksumValue": "SOME-SHA1"
-                }
-            ],
-            "licenseDeclared": "NOASSERTION",
+                },
+                        {
+                            "algorithm": "SHA256",
+                            "checksumValue": "SOME-SHA256"
+                        }
+                    ],
+                    "licenseDeclared": "NOASSERTION",
             "licenseConcluded": "NOASSERTION",
             "licenseInfoFromFiles": [
                 "LGPL-2.1-only"
@@ -48,11 +52,11 @@
             "SPDXID": "SPDXRef-File",
             "checksums": [
                 {
-                    "algorithm": "checksumAlgorithm_sha1",
+                    "algorithm": "SHA1",
                     "checksumValue": "SOME-SHA1"
                 },
                 {
-                    "algorithm": "checksumAlgorithm_sha256",
+                    "algorithm": "SHA256",
                     "checksumValue": "SOME-SHA256"
                 }
             ],

@@ -45,13 +45,14 @@ class BaseWriter(object):
             license_str = license_field.__str__()
         return license_str
 
-    def checksum(self, checksum_field):
+    def checksum_to_dict(self, checksum_field):
         """
         Return a dictionary representation of a spdx.checksum.Algorithm object
         """
-        checksum_object = {'algorithm': "checksumAlgorithm_" + checksum_field.identifier.lower(),
-                           'checksumValue': checksum_field.value}
-        return checksum_object
+        #checksum_object = {'algorithm': "checksumAlgorithm_" + checksum_field.identifier.lower(),
+        #                   'checksumValue': checksum_field.value}
+        #return checksum_object
+        return {'algorithm': checksum_field.identifier, 'checksumValue': checksum_field.value}
 
     def spdx_id(self, spdx_id_field):
         return spdx_id_field.__str__().split("#")[-1]
@@ -168,8 +169,12 @@ class PackageWriter(BaseWriter):
         if package.has_optional_field("originator"):
             package_object["originator"] = package.originator.to_value()
 
-        if package.has_optional_field("checksum"):
-            package_object["checksums"] = [self.checksum(checksum) for checksum in package.checksums if checksum]
+        package_object["checksums"] = []
+        for chk_sum in package.checksums:
+            package_object["checksums"].append(self.checksum_to_dict(chk_sum))
+        sha1 = package.get_checksum('SHA1')
+        if sha1 is not None:
+            package_object['sha1'] = sha1.value
 
         if package.has_optional_field("description"):
             package_object["description"] = package.description
@@ -233,9 +238,8 @@ class FileWriter(BaseWriter):
         file_object["fileName"] = file.name
         file_object["SPDXID"] = self.spdx_id(file.spdx_id)
         file_object["checksums"] = []
-        for chk_sum in file.chk_sums:
-            file_object["checksums"].append(self.checksum(chk_sum))
-
+        for chk_sum in file.checksums:
+            file_object["checksums"].append(self.checksum_to_dict(chk_sum))
         if file.has_optional_field("conc_lics"):
             file_object["licenseConcluded"] = self.license(file.conc_lics)
 
@@ -521,7 +525,7 @@ class Writer(
                 "spdxDocument"
             ] = ext_document_reference.spdx_document_uri
 
-            ext_document_reference_object["checksum"] = self.checksum(
+            ext_document_reference_object["checksum"] = self.checksum_to_dict(
                 ext_document_reference.check_sum
             )
 

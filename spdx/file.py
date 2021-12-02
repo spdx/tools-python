@@ -79,7 +79,7 @@ class File(object):
         self.spdx_id = spdx_id
         self.comment = None
         self.file_types = []
-        self.chk_sums = []
+        self.checksums = []
         self.conc_lics = None
         self.licenses_in_file = []
         self.license_comment = None
@@ -99,16 +99,15 @@ class File(object):
         return self.name < other.name
 
     @property
-    def chksum(self):
+    def chk_sum(self):
         """
         Backwards compatibility, return first checksum.
         """
-        # NOTE Package.check_sum but File.chk_sum
-        return self.checksums[0]
+        return self.get_checksum('SHA1')
 
-    @chksum.setter
-    def chksum(self, value):
-        self.checksums[0] = value
+    @chk_sum.setter
+    def chk_sum(self, value):
+        self.set_checksum(value)
 
     def add_lics(self, lics):
         self.licenses_in_file.append(lics)
@@ -221,18 +220,18 @@ class File(object):
         return file_hash.hexdigest()
 
     def get_checksum(self, hash_algorithm='SHA1'):
-        for chk_sum in self.chk_sums:
+        for chk_sum in self.checksums:
             if chk_sum.identifier == hash_algorithm:
                 return chk_sum
         return None
 
     def set_checksum(self, chk_sum):
         if isinstance(chk_sum, checksum.Algorithm):
-            for file_chk_sum in self.chk_sums:
+            for file_chk_sum in self.checksums:
                 if file_chk_sum.identifier == chk_sum.identifier:
                     file_chk_sum.value = chk_sum.value
                     return
-            self.chk_sums.append(chk_sum)
+            self.checksums.append(chk_sum)
 
     def has_optional_field(self, field):
         return bool (getattr(self, field, None))

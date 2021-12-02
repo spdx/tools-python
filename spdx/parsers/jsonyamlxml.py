@@ -1162,7 +1162,7 @@ class PackageParser(BaseParser):
             self.parse_annotations(package.get("annotations"), spdx_id=package.get("SPDXID"))
             self.parse_pkg_attribution_text(package.get("attributionTexts"))
             self.parse_pkg_files(package.get("hasFiles"), method_to_parse_relationship)
-            self.parse_pkg_chksum(package.get("sha1"))
+            self.parse_pkg_chksum(package.get("checksums"))
             self.parse_package_external_refs(package.get("externalRefs"))
             self.parse_primary_package_purpose(package.get("primaryPackagePurpose"))
             self.parse_release_date(package.get("releaseDate"))
@@ -1597,6 +1597,10 @@ class PackageParser(BaseParser):
         Parse Package checksum
         - pkg_chksum: Python str/unicode
         """
+        if isinstance(pkg_chksum, list):
+            for chk_sum in pkg_chksum:
+                self.builder.set_pkg_chk_sum(self.document, chk_sum)
+            return True
         if isinstance(pkg_chksum, str):
             try:
                 return self.builder.set_pkg_chk_sum(self.document, pkg_chksum)
