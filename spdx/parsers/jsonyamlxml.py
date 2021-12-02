@@ -1072,7 +1072,7 @@ class PackageParser(BaseParser):
             self.parse_annotations(package.get("annotations"))
             self.parse_pkg_attribution_text(package.get("attributionTexts"))
             self.parse_pkg_files(package.get("files"))
-            self.parse_pkg_chksum(package.get("sha1"))
+            self.parse_pkg_chksum(package.get("checksums"))
         else:
             self.value_error("PACKAGE", package)
 
@@ -1478,6 +1478,10 @@ class PackageParser(BaseParser):
         Parse Package checksum
         - pkg_chksum: Python str/unicode
         """
+        if isinstance(pkg_chksum, list):
+            for chk_sum in pkg_chksum:
+                self.builder.set_pkg_chk_sum(self.document, chk_sum)
+            return True
         if isinstance(pkg_chksum, str):
             try:
                 return self.builder.set_pkg_chk_sum(self.document, pkg_chksum)

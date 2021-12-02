@@ -33,7 +33,7 @@
                                     }
                                 ], 
                                 "fileTypes": [
-                                    "fileType_archive"
+                                    "ARCHIVE"
                                 ], 
                                 "SPDXID": "SPDXRef-File1"
                             }
@@ -54,7 +54,7 @@
                                     }
                                 ], 
                                 "fileTypes": [
-                                    "fileType_source"
+                                    "SOURCE"
                                 ], 
                                 "SPDXID": "SPDXRef-File2"
                             }

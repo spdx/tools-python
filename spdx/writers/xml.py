@@ -68,7 +68,7 @@ def write_document(document, out, validate=True):
             for license_in_file in phile.licenses_in_file:
                 add_license(file_element, 'licenseInfoFromFiles', license_in_file)
             sha1 = None
-            for checksum in phile.chk_sums:
+            for checksum in phile.checksums:
                 if checksum.identifier == 'SHA1':
                     sha1 = checksum.value
                     break
@@ -87,7 +87,7 @@ def write_document(document, out, validate=True):
                     add_not_empty(artifact_of_element, 'projectUri', apu)
             add_license(file_element, 'licenseConcluded', phile.conc_lics)
             add_not_empty(file_element, 'licenseComments', phile.license_comment)
-            for checksum in phile.chk_sums:
+            for checksum in phile.checksums:
                 add_checksum(file_element, 'checksum', checksum)
             for file_type in phile.file_types:
                 file_type_name = file.FILE_TYPE_TO_XML_DICT.get(file_type)

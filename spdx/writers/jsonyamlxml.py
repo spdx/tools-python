@@ -12,7 +12,7 @@
 from rdflib import Literal
 
 from spdx import document
-from spdx.file import FILE_TYPE_TO_XML_DICT
+from spdx.file import FILE_TYPE_TO_XML_DICT, FILE_TYPE_TO_STRING_DICT
 
 
 class BaseWriter(object):
@@ -42,13 +42,14 @@ class BaseWriter(object):
             license_str = license_field.__str__()
         return license_str
 
-    def checksum(self, checksum_field):
+    def checksum_to_dict(self, checksum_field):
         """
         Return a dictionary representation of a spdx.checksum.Algorithm object
         """
-        checksum_object = {'algorithm': "checksumAlgorithm_" + checksum_field.identifier.lower(),
-                           'checksumValue': checksum_field.value}
-        return checksum_object
+        #checksum_object = {'algorithm': "checksumAlgorithm_" + checksum_field.identifier.lower(),
+        #                   'checksumValue': checksum_field.value}
+        #return checksum_object
+        return {'algorithm': checksum_field.identifier, 'checksumValue': checksum_field.value}
 
     def spdx_id(self, spdx_id_field):
         return spdx_id_field.__str__().split("#")[-1]
@@ -141,9 +142,12 @@ class PackageWriter(BaseWriter):
         if package.has_optional_field("originator"):
             package_object["originator"] = package.originator.__str__()
 
-        if package.has_optional_field("check_sum"):
-            package_object["checksums"] = [self.checksum(package.check_sum)]
-            package_object["sha1"] = package.check_sum.value
+        package_object["checksums"] = []
+        for chk_sum in package.checksums:
+            package_object["checksums"].append(self.checksum_to_dict(chk_sum))
+        sha1 = package.get_checksum('SHA1')
+        if sha1 is not None:
+            package_object['sha1'] = sha1.value
 
         if package.has_optional_field("description"):
             package_object["description"] = package.description
@@ -190,8 +194,8 @@ class FileWriter(BaseWriter):
             file_object["name"] = file.name
             file_object["SPDXID"] = self.spdx_id(file.spdx_id)
             file_object["checksums"] = []
-            for chk_sum in file.chk_sums:
-                file_object["checksums"].append(self.checksum(chk_sum))
+            for chk_sum in file.checksums:
+                file_object["checksums"].append(self.checksum_to_dict(chk_sum))
             file_object["licenseConcluded"] = self.license(file.conc_lics)
             file_object["licenseInfoFromFiles"] = list(
                 map(self.license, file.licenses_in_file)
@@ -205,7 +209,7 @@ class FileWriter(BaseWriter):
             if file.has_optional_field("file_types"):
                 types = []
                 for file_type in file.file_types:
-                    types.append(FILE_TYPE_TO_XML_DICT.get(file_type))
+                    types.append(FILE_TYPE_TO_STRING_DICT.get(file_type))
                 file_object["fileTypes"] = types
 
             if file.has_optional_field("license_comment"):
@@ -450,7 +454,7 @@ class Writer(
                 "spdxDocument"
             ] = ext_document_reference.spdx_document_uri
 
-            ext_document_reference_object["checksum"] = self.checksum(
+            ext_document_reference_object["checksum"] = self.checksum_to_dict(
                 ext_document_reference.check_sum
             )
 

@@ -514,15 +514,17 @@ class PackageParser(LicenseParser):
                 break
 
     def p_pkg_chk_sum(self, p_term, predicate):
-        for _s, _p, checksum in self.graph.triples((p_term, predicate, None)):
+        for _s, _p, pkg_checksum in self.graph.triples((p_term, predicate, None)):
             for _, _, value in self.graph.triples(
-                (checksum, self.spdx_namespace["checksumValue"], None)
+                (pkg_checksum, self.spdx_namespace["checksumValue"], None)
             ):
-                try:
-                    self.builder.set_pkg_chk_sum(self.doc, str(value))
-                except CardinalityError:
-                    self.more_than_one_error("Package checksum")
-                    break
+                for _, _, algo in self.graph.triples(
+                        (pkg_checksum, self.spdx_namespace["algorithm"], None)
+                ):
+                    algo = convert_rdf_checksum_algorithm(str(algo))
+                    chk_sum = checksum.Algorithm(str(algo), str(value))
+                    self.builder.set_pkg_chk_sum(self.doc, chk_sum)
+
 
     def p_pkg_homepg(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):

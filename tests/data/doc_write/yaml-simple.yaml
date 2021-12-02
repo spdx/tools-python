@@ -14,8 +14,10 @@ Document:
       packageVerificationCode:
         packageVerificationCodeValue: "SOME code"
       checksums:
-      - algorithm: "checksumAlgorithm_sha1"
-        checksumValue: "SOME-SHA1"
+        - algorithm: "SHA1"
+          checksumValue: "SOME-SHA1"
+        - algorithm: "SHA256"
+          checksumValue: "SOME-SHA256"
       licenseDeclared: "NOASSERTION"
       licenseConcluded: "NOASSERTION"
       files:
@@ -23,15 +25,15 @@ Document:
           name: "./some/path/tofile"
           SPDXID: "SPDXRef-File"
           checksums:
-            - algorithm: "checksumAlgorithm_sha1"
+            - algorithm: "SHA1"
               checksumValue: "SOME-SHA1"
-            - algorithm: "checksumAlgorithm_sha256"
+            - algorithm: "SHA256"
               checksumValue: "SOME-SHA256"
           licenseConcluded: "NOASSERTION"
           copyrightText: "NOASSERTION"
           fileTypes:
-            - "fileType_other"
-            - "fileType_source"
+            - "OTHER"
+            - "SOURCE"
           licenseInfoFromFiles:
           - "LGPL-2.1-only"
           sha1: "SOME-SHA1"

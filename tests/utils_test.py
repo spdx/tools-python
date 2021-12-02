@@ -392,7 +392,7 @@ class TestParserUtils(object):
             lics_from_files = sorted(file.licenses_in_file, key=lambda lic: lic.identifier)
             contributors = sorted(file.contributors, key=lambda c: c.name)
             chk_sums = []
-            for chk_sum in file.chk_sums:
+            for chk_sum in file.checksums:
                 chk_sums.append(cls.checksum_to_dict(chk_sum))
 
             file_dict = OrderedDict([

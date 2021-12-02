@@ -5,10 +5,17 @@
         "name": "Sample_Document-V2.1",
         "SPDXID": "SPDXRef-DOCUMENT",
         "documentNamespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+        "creationInfo": {
+            "creators": [
+                "Organization: SPDX"
+            ],
+            "created": "2021-11-15T00:00:00Z",
+            "licenseListVersion": "3.6"
+        },
         "documentDescribes": [
             {
                 "Package": {
-                    "SPDXID": "SPDXRef-Package", 
+                    "SPDXID": "SPDXRef-Package",
                     "name": "some/path",
                     "downloadLocation": "NOASSERTION",
                     "copyrightText": "Some copyright",
@@ -17,8 +24,12 @@
                     },
                     "checksums": [
                         {
-                            "algorithm": "checksumAlgorithm_sha1",
+                            "algorithm": "SHA1",
                             "checksumValue": "SOME-SHA1"
+                        },
+                        {
+                            "algorithm": "SHA256",
+                            "checksumValue": "SOME-SHA256"
                         }
                     ],
                     "licenseDeclared": "NOASSERTION",
@@ -30,17 +41,17 @@
                                 "SPDXID": "SPDXRef-File",
                                 "checksums": [
                                     {
-                                        "algorithm": "checksumAlgorithm_sha1",
+                                        "algorithm": "SHA1",
                                         "checksumValue": "SOME-SHA1"
                                     },
                                     {
-                                        "algorithm": "checksumAlgorithm_sha256",
+                                        "algorithm": "SHA256",
                                         "checksumValue": "SOME-SHA256"
                                     }
                                 ],
                                 "licenseConcluded": "NOASSERTION",
                                 "copyrightText": "NOASSERTION",
-                                "fileTypes": ["fileType_other", "fileType_source"],
+                                "fileTypes": ["OTHER", "SOURCE"],
                                 "licenseInfoFromFiles": ["LGPL-2.1-or-later"],
                                 "sha1": "SOME-SHA1"
                             }

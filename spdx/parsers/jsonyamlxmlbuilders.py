@@ -184,7 +184,9 @@ class FileBuilder(rdfbuilders.FileBuilder):
         """
         if self.has_package(doc) and self.has_file(doc):
             if isinstance(chk_sum, dict):
-                algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(chk_sum.get('algorithm') or 'SHA1')
+
+                #algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(chk_sum.get('algorithm') or 'SHA1')
+                algo = chk_sum.get('algorithm') or 'SHA1'
                 self.file(doc).set_checksum(checksum.Algorithm(algo, chk_sum.get('checksumValue')))
             elif isinstance(chk_sum, checksum.Algorithm):
                 self.file(doc).set_checksum(chk_sum)
@@ -211,7 +213,7 @@ class FileBuilder(rdfbuilders.FileBuilder):
         fileType representations.
         """
         if self.has_package(doc) and self.has_file(doc):
-            file_type = file.FILE_TYPE_FROM_XML_DICT.get(type_value) or file.FileType.OTHER
+            file_type = file.FILE_TYPE_FROM_STRING_DICT.get(type_value) or file.FileType.OTHER
             spdx_file = self.file(doc)
             if file_type not in spdx_file.file_types:
                 spdx_file.file_types.append(file_type)

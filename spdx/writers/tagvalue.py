@@ -111,7 +111,7 @@ def write_file(spdx_file, out):
         write_value("SPDXID", spdx_file.spdx_id, out)
     for file_type in spdx_file.file_types:
         write_file_type(file_type, out)
-    for file_chk_sum in spdx_file.chk_sums:
+    for file_chk_sum in spdx_file.checksums:
         write_value("FileChecksum", file_chk_sum.to_tv(), out)
     if isinstance(
         spdx_file.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
@@ -220,8 +220,8 @@ def write_package(package, out):
     if package.has_optional_field("originator"):
         write_value("PackageOriginator", package.originator, out)
 
-    if package.has_optional_field("check_sum"):
-        write_value("PackageChecksum", package.check_sum.to_tv(), out)
+    for package_checksum in package.checksums:
+        write_value("PackageChecksum", package_checksum.to_tv(), out)
 
     if package.has_optional_field("verif_code"):
         write_value("PackageVerificationCode", format_verif_code(package), out)

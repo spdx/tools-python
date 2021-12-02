@@ -12,6 +12,7 @@
 import xml.etree.ElementTree as ET
 
 from spdx.document import Document
+from spdx.file import FileType, FILE_TYPE_FROM_XML_DICT
 from spdx.parsers import jsonyamlxml
 
 ANNOTATION_KEYS = ['SPDXID', 'annotationDate', 'annotationType', 'annotator', 'comment']
@@ -25,7 +26,7 @@ PACKAGE_KEYS = ['SPDXID', 'annotations', 'attributionTexts', 'checksum', 'copyri
                 'licenseConcluded', 'licenseDeclared', 'licenseInfoFromFiles', 'name', 'originator',
                 'packageFileName', 'packageVerificationCode', 'sha1', 'sourceInfo', 'summary',
                 'supplier', 'versionInfo']
-RELATIONSHIP_KEYS = ['cpmment', 'spdxElementId', 'relationshipType', 'relatedSpdxElement']
+RELATIONSHIP_KEYS = ['comment', 'spdxElementId', 'relationshipType', 'relatedSpdxElement']
 REVIEW_KEYS = ['comment', 'reviewDate', 'reviewer']
 SNIPPET_KEYS = ['SPDXID', 'attributionTexts', 'comment', 'copyrightText', 'fileId',
                 'name', 'licenseComments', 'licenseConcluded', 'licenseInfoFromSnippet']
@@ -46,8 +47,13 @@ class Parser(jsonyamlxml.Parser):
     def checksum_node_to_dict(self, checksum_node):
         checksum_dict = {}
         for child in checksum_node:
-            if child.tag in ['algorithm', 'checksumValue']:
-                checksum_dict[child.tag] = child.text
+            if child.tag == 'algorithm':
+                algo = child.text
+                if algo.startswith('checksumAlgorithm_'):
+                    algo = algo[18:].upper()
+                checksum_dict['algorithm'] = algo
+            elif child.tag == 'checksumValue':
+                checksum_dict['checksumValue'] = child.text
             else:
                 self.logger.log('unknown tag "{}"'.format(child.tag))
                 self.error = True
@@ -132,7 +138,10 @@ class Parser(jsonyamlxml.Parser):
                     this_file['checksums'] = checksums
                 elif child.tag == 'fileType':
                     file_types = this_file.get('fileTypes') or []
-                    file_types.append(child.text)
+                    file_type = child.text
+                    if file_type.startswith('fileType_'):
+                        file_type = file_type[9:].upper()
+                    file_types.append(file_type)
                     this_file['fileTypes'] = file_types
                 elif child.tag == 'licenseInfoFromFiles':
                     liff_list = this_file.get('licenseInfoFromFiles') or []
@@ -153,7 +162,9 @@ class Parser(jsonyamlxml.Parser):
             if child.tag in PACKAGE_KEYS:
                 if child.tag == 'checksum':
                     checksum = self.checksum_node_to_dict(child)
-                    package['checksum'] = checksum  # right now this is not used. the sha1 is used.
+                    checksums = package.get('checksums') or []
+                    checksums.append(checksum)
+                    package['checksums'] = checksums
                 elif child.tag == 'File':
                     file_nodes.append(child)
                     package['files'] = []  # will get later

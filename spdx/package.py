@@ -82,7 +82,7 @@ class Package(object):
         self.files_analyzed = None
         self.homepage = None
         self.verif_code = None
-        self.check_sum = None
+        self.checksums = []
         self.source_info = None
         self.conc_lics = None
         self.license_declared = None
@@ -96,6 +96,17 @@ class Package(object):
         self.files = []
         self.verif_exc_files = []
         self.pkg_ext_refs = []
+
+    @property
+    def check_sum(self):
+        """
+        Backwards compatibility, return first checksum.
+        """
+        return self.get_checksum('SHA1')
+
+    @check_sum.setter
+    def check_sum(self, value):
+        self.set_checksum(value)
 
     @property
     def are_files_analyzed(self):
@@ -271,12 +282,8 @@ class Package(object):
         return messages
 
     def validate_checksum(self, messages):
-        if self.check_sum is not None:
-            if not isinstance(self.check_sum, checksum.Algorithm):
-                messages.append(
-                    "Package checksum must be instance of spdx.checksum.Algorithm"
-                )
-
+        if self.get_checksum() is None:
+            messages.append("At least one package checksum algorithm must be SHA1")
         return messages
 
     def calc_verif_code(self):
@@ -295,6 +302,20 @@ class Package(object):
         hasher = hashlib.new(hash_algo_name.lower())
         hasher.update("".join(list_of_file_hashes).encode("utf-8"))
         return hasher.hexdigest()
+
+    def get_checksum(self, hash_algorithm='SHA1'):
+        for chk_sum in self.checksums:
+            if chk_sum.identifier == hash_algorithm:
+                return chk_sum
+        return None
+
+    def set_checksum(self, new_checksum):
+        if isinstance(new_checksum, checksum.Algorithm):
+            for c in self.checksums:
+                if c.identifier == new_checksum.identifier:
+                    c.value = new_checksum.value
+                    return
+            self.checksums.append(new_checksum)
 
     def has_optional_field(self, field):
         return getattr(self, field, None) is not None

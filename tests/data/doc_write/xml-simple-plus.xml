@@ -15,10 +15,10 @@
                 <packageVerificationCode>
 					<packageVerificationCodeValue>SOME code</packageVerificationCodeValue>
 				</packageVerificationCode>
-                <checksums>
+                <checksum>
 					<checksumValue>SOME-SHA1</checksumValue>
 					<algorithm>checksumAlgorithm_sha1</algorithm>
-				</checksums>
+				</checksum>
                 <licenseDeclared>NOASSERTION</licenseDeclared>
                 <licenseConcluded>NOASSERTION</licenseConcluded>
 				<File>
