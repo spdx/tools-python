@@ -265,7 +265,7 @@ class FileWriter(LicenseWriter):
                 ftype_triple = (file_node, self.spdx_namespace.fileType, ftype)
                 self.graph.add(ftype_triple)
 
-        for chk_sum in doc_file.chk_sums:
+        for chk_sum in doc_file.checksums:
             self.graph.add(
                 (
                     file_node,

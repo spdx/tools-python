@@ -12,6 +12,7 @@ PackageName: some/path
 SPDXID: SPDXRef-Package
 PackageDownloadLocation: NOASSERTION
 PackageChecksum: SHA1: SOME-SHA1
+PackageChecksum: SHA256: SOME-SHA256
 PackageVerificationCode: SOME code
 PackageLicenseDeclared: NOASSERTION
 PackageLicenseConcluded: NOASSERTION

@@ -192,11 +192,15 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
-        if not self.package_chk_sum_set:
-            self.package_chk_sum_set = True
-            doc.packages[-1].checksum = checksum.Algorithm("SHA1", chk_sum)
-        else:
-            raise CardinalityError("Package::CheckSum")
+        self.package_chk_sum_set = True
+        if isinstance(chk_sum, dict):
+            algo = chk_sum.get('algorithm') or 'SHA1'
+            if algo.startswith('checksumAlgorithm_'):
+                algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(algo) or 'SHA1'
+            doc.packages[-1].set_checksum(checksum.Algorithm(identifier=algo,
+                                                             value=chk_sum.get('checksumValue')))
+        elif isinstance(chk_sum, checksum.Algorithm):
+            doc.packages[-1].set_checksum(chk_sum)
 
     def set_pkg_source_info(self, doc, text):
         """

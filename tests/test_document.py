@@ -80,7 +80,7 @@ class TestDocument(TestCase):
                        'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
                        namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
         pack = doc.package = Package('some/path', NoAssert())
-        pack.checksum = 'SOME-SHA1'
+        pack.check_sum = Algorithm('SHA256', 'SOME-SHA256')
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
         file1.spdx_id = 'SPDXRef-File'
@@ -92,8 +92,7 @@ class TestDocument(TestCase):
         messages = doc.validate(messages)
         expected = ['Sample_Document-V2.1: Creation info missing created date.',
                     'Sample_Document-V2.1: No creators defined, must have at least one.',
-                    'Sample_Document-V2.1: some/path: Package checksum must be instance of '
-                    'spdx.checksum.Algorithm',
+                    'Sample_Document-V2.1: some/path: At least one package checksum algorithm must be SHA1',
                     'Sample_Document-V2.1: some/path: Package download_location can not be None.']
         assert sorted(expected) == sorted(messages)
 
@@ -107,6 +106,7 @@ class TestDocument(TestCase):
         package = doc.package = Package(name='some/path', download_location=NoAssert())
         package.spdx_id = 'SPDXRef-Package'
         package.cr_text = 'Some copyright'
+        package.set_checksum(Algorithm('SHA1', 'SOME-SHA1'))
         package.verif_code = 'SOME code'
         package.license_declared = NoAssert()
         package.conc_lics = NoAssert()
@@ -179,7 +179,8 @@ class TestWriters(TestCase):
         package.spdx_id = 'SPDXRef-Package'
         package.cr_text = 'Some copyright'
         package.verif_code = 'SOME code'
-        package.checksum = Algorithm('SHA1', 'SOME-SHA1')
+        package.set_checksum(Algorithm('SHA1', 'SOME-SHA1'))
+        package.set_checksum(Algorithm('SHA256', 'SOME-SHA256'))
         package.license_declared = NoAssert()
         package.conc_lics = NoAssert()
         package.primary_package_purpose = PackagePurpose.FILE

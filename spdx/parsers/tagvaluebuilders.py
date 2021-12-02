@@ -783,12 +783,9 @@ class PackageBuilder(object):
         Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
-        if not self.package_chk_sum_set:
-            self.package_chk_sum_set = True
-            doc.packages[-1].check_sum = checksum_algorithm_from_string(chk_sum)
-            return True
-        else:
-            raise CardinalityError("Package::CheckSum")
+        self.package_chk_sum_set = True
+        doc.packages[-1].set_checksum(checksum_algorithm_from_string(chk_sum))
+        return True
 
     def set_pkg_source_info(self, doc, text):
         """
@@ -1199,10 +1196,10 @@ class FileBuilder(object):
         """
         if self.has_package(doc) and self.has_file(doc):
             self.file_chksum_set = False
-            chk_sums = doc.files[-1].chk_sums
+            chk_sums = doc.files[-1].checksums
             chk_sums.append(checksum_algorithm_from_string(chksum))
-            doc.files[-1].chk_sums = chk_sums
-            for chk_sum in self.file(doc).chk_sums:
+            doc.files[-1].checksums = chk_sums
+            for chk_sum in self.file(doc).checksums:
                 if chk_sum.identifier == 'SHA1':
                     self.file_chksum_set = True
             if not self.file_chksum_set:

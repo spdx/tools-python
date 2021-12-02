@@ -13,7 +13,7 @@ files:
   checksums:
   - algorithm: SHA1
     checksumValue: SOME-SHA1
-  - algorithm: checksumAlgorithm_sha256
+  - algorithm: SHA256
     checksumValue: SOME-SHA256
   copyrightText: NOASSERTION
   fileName: ./some/path/tofile
@@ -29,6 +29,8 @@ packages:
   checksums:
   - algorithm: SHA1
     checksumValue: SOME-SHA1
+  - algorithm: SHA256
+    checksumValue: SOME-SHA256
   copyrightText: Some copyright
   downloadLocation: NOASSERTION
   hasFiles:
