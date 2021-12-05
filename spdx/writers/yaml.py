@@ -27,4 +27,4 @@ def write_document(document, out, validate=True):
     writer = Writer(document)
     document_object = writer.create_document()
 
-    yaml.safe_dump(document_object, out, indent=2, explicit_start=True)
+    yaml.safe_dump(document_object, out, indent=2, explicit_start=True, encoding='utf-8')
