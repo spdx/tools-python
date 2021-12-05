@@ -62,7 +62,7 @@ def datetime_from_iso_format(string):
         return None
 
 
-class NoAssert(str):
+class NoAssert(object):
     """
     Represent SPDX NOASSERTION value.
     """
