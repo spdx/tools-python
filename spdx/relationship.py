@@ -82,6 +82,9 @@ class Relationship(object):
         self.relationship = relationship
         self.relationship_comment = relationship_comment
 
+    def __eq__(self, other):
+        return True if self.relationship == other.relationship else False
+
     @property
     def has_comment(self):
         return self.relationship_comment is not None
@@ -103,7 +106,7 @@ class Relationship(object):
         Check that all the fields are valid.
         Appends any error messages to messages parameter shall be a ErrorMessages.
         """
-        self.validate_relationship(messages)
+        return self.validate_relationship(messages)
 
     def validate_relationship(self, messages):
         r_type = self.relationship.split(" ")[1]
@@ -112,3 +115,5 @@ class Relationship(object):
                 "Relationship type must be one of the constants defined in "
                 "class spdx.relationship.Relationship"
             )
+
+        return messages
