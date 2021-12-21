@@ -32,7 +32,7 @@ jobs:
   mac_python_3_6:
     shell: /bin/bash --login
     macos:
-      xcode: '9.4.1'
+      xcode: '10.3.0'
     steps:
     - checkout
     - mac_install_python:
@@ -43,7 +43,7 @@ jobs:
   mac_python_3_7:
     shell: /bin/bash --login
     macos:
-      xcode: '9.4.1'
+      xcode: '10.3.0'
     steps:
     - checkout
     - mac_install_python:
@@ -54,7 +54,7 @@ jobs:
   mac_python_3_8:
     shell: /bin/bash --login
     macos:
-      xcode: '9.4.1'
+      xcode: '10.3.0'
     steps:
     - checkout
     - mac_install_python:
@@ -64,7 +64,7 @@ jobs:
   mac_python_3_9:
     shell: /bin/bash --login
     macos:
-      xcode: '9.4.1'
+      xcode: '10.3.0'
     steps:
     - checkout
     - mac_install_python:
