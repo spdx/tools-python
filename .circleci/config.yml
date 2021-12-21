@@ -6,7 +6,7 @@ commands:
       python_version:
         description: "version of python to install"
         type: string
-        default: "3.7.12"
+        default: 3.7.12
     steps:
       - run: |
           brew update
@@ -60,7 +60,7 @@ jobs:
         python_version: "3.9.9"
     - install_run_tests
 
-  mac_python_3_6:
+  mac_python_3_10:
     shell: /bin/bash --login
     macos:
       xcode: '10.3.0'
