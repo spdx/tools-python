@@ -16,6 +16,7 @@ commands:
           echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
           echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
           source ~/.bash_profile
+          pyenv install --list
           pyenv install << parameters.python_version >>
           pyenv versions
           pyenv global << parameters.python_version >>
