@@ -569,7 +569,7 @@ class RelationshipInfoWriter(BaseWriter):
         """
         Return a list of relationship nodes
         """
-        return map(self.create_relationship_node, self.document.relationships)
+        return list(map(self.create_relationship_node, self.document.relationships))
 
 
 class CreationInfoWriter(BaseWriter):
@@ -1016,10 +1016,11 @@ class Writer(
         for package_node in self.packages():
             package_triple = (doc_node, self.spdx_namespace.describesPackage, package_node)
             self.graph.add(package_triple)
-        """# Add relationship
-        relate_node = self.relationships()
-        relate_triple = (doc_node, self.spdx_namespace.relationship, relate_node)
-        self.graph.add(relate_triple)"""
+        # Add relationship
+        for relate_node in self.relationships():
+            relate_triple = (doc_node, self.spdx_namespace.relationship, relate_node)
+            self.graph.add(relate_triple)
+
         # Add snippet
         snippet_nodes = self.snippets()
         for snippet in snippet_nodes:
