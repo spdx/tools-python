@@ -40,7 +40,7 @@ This is the result of an initial GSoC contribution by @[ah450](https://github.co
 
 # TODOs
 
-* Update to full SPDX v2.1
+* Update to full SPDX v2.2.1(ISO 5962:2021)
 * Add to full license expression support
 
 
