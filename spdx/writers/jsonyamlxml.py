@@ -112,15 +112,15 @@ class PackageWriter(BaseWriter):
         package_object["SPDXID"] = self.spdx_id(package.spdx_id)
         package_object["name"] = package.name
         package_object["downloadLocation"] = package.download_location.__str__()
-        package_object["packageVerificationCode"] = self.package_verification_code(
-            package
-        )
         package_object["licenseConcluded"] = self.license(package.conc_lics)
         package_object["licenseInfoFromFiles"] = list(
             map(self.license, package.licenses_from_files)
         )
         package_object["licenseDeclared"] = self.license(package.license_declared)
         package_object["copyrightText"] = package.cr_text.__str__()
+
+        if package.verif_code is not None:
+            package_object["packageVerificationCode"] = self.package_verification_code(package)
 
         if package.has_optional_field("version"):
             package_object["versionInfo"] = package.version
