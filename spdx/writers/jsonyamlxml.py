@@ -498,9 +498,14 @@ class Writer(
         document_describes = self.create_document_describes()
         self.document_object["documentDescribes"] = document_describes
 
+        unique_doc_packages = {}
+        for doc_package in self.document.packages:
+            if doc_package.spdx_id not in unique_doc_packages.keys():
+                unique_doc_packages[doc_package.spdx_id] = doc_package
+
         package_objects = []
         file_objects = []
-        for package in self.document.packages:
+        for package in unique_doc_packages.values():
             package_info_object, files_in_package = self.create_package_info(package)
             package_objects.append(package_info_object)
             file_objects.extend(file for file in files_in_package if file not in file_objects)
