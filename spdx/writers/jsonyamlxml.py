@@ -47,7 +47,9 @@ class BaseWriter(object):
         """
         checksum_object = dict()
         checksum_object["algorithm"] = (
-            "checksumAlgorithm_" + checksum_field.identifier.lower()
+            #"checksumAlgorithm_" + checksum_field.identifier.lower()
+            # Changed by the WhiteSouse PS Team.
+            checksum_field.identifier
         )
         checksum_object["checksumValue"] = checksum_field.value
         return checksum_object
@@ -155,6 +157,9 @@ class PackageWriter(BaseWriter):
 
         if package.has_optional_field("homepage"):
             package_object["homepage"] = package.homepage.__str__()
+
+        if package.has_optional_field("files_analyzed"):
+            package_object["filesAnalyzed"] = package.files_analyzed
 
         return package_object
 
@@ -471,13 +476,36 @@ class Writer(
         self.document_object["SPDXID"] = self.spdx_id(self.document.spdx_id)
         self.document_object["name"] = self.document.name
 
+        # filter by unique spdx_id attribute in Package object, added by the WhiteSouse PS Team
+        unique_doc_packages = {}
+        for doc_package in self.document.packages:
+            if doc_package.spdx_id not in unique_doc_packages.keys():
+                unique_doc_packages[doc_package.spdx_id] = doc_package
+
+        # commented by WS PS Team
+        # package_objects = []
+        # for package in self.document.packages:
+        #     package_info_object = self.create_package_info(package)
+        #     package_info_object["files"] = self.create_file_info(package)
+        #     package_objects.append({"Package": package_info_object})
+        #
+        # self.document_object["documentDescribes"] = package_objects
+
+        # the previous code block has been adjusted by the WhiteSouse PS Team.
+        # adding documentDescribes and packages sections.
         package_objects = []
-        for package in self.document.packages:
+        document_describes_objects = []
+        for package in unique_doc_packages.values():
             package_info_object = self.create_package_info(package)
             package_info_object["files"] = self.create_file_info(package)
-            package_objects.append({"Package": package_info_object})
+            # create a list of the packages' names for the 'documentDescribes' field
+            package_spdxid = package_info_object.get("SPDXID")
+            document_describes_objects.append(package_spdxid)
+            package_objects.append(package_info_object)
 
-        self.document_object["documentDescribes"] = package_objects
+        self.document_object["documentDescribes"] = document_describes_objects
+        self.document_object["packages"] = package_objects
+        # end
 
         if self.document.has_comment:
             self.document_object["comment"] = self.document.comment
@@ -504,4 +532,6 @@ class Writer(
         if self.document.relationships:
             self.document_object["relationships"] = self.create_relationship_info()
 
-        return {"Document": self.document_object}
+        # return {"Document": self.document_object}. No need in "Document" key for json and tv format.
+        # Changed by the WhiteSouse PS Team.
+        return self.document_object
