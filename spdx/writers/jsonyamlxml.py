@@ -376,9 +376,16 @@ class ExtractedLicenseWriter(BaseWriter):
 
     def create_extracted_license(self):
         extracted_license_objects = []
-        extracted_licenses = self.document.extracted_licenses
+        # commented by the WS PS Team
+        # extracted_licenses = self.document.extracted_licenses
 
-        for extracted_license in extracted_licenses:
+        # filter by unique identifier attribute in ExtractedLicense object, added by the WhiteSouse PS Team
+        unique_extracted_licenses = {}
+        for lic in self.document.extracted_licenses:
+            if lic.identifier not in unique_extracted_licenses.keys():
+                unique_extracted_licenses[lic.identifier] = lic
+
+        for extracted_license in unique_extracted_licenses.values():
             extracted_license_object = dict()
 
             if isinstance(extracted_license.identifier, Literal):
