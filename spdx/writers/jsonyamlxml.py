@@ -147,7 +147,8 @@ class PackageWriter(BaseWriter):
 
         if package.has_optional_field("check_sum"):
             package_object["checksums"] = [self.checksum(package.check_sum)]
-            package_object["sha1"] = package.check_sum.value
+            # package_object["sha1"] = package.check_sum.value
+            # commented by the WS PS Team, sha1 is already exist in check_sum
 
         if package.has_optional_field("description"):
             package_object["description"] = package.description
@@ -489,7 +490,7 @@ class Writer(
             if doc_package.spdx_id not in unique_doc_packages.keys():
                 unique_doc_packages[doc_package.spdx_id] = doc_package
 
-        # commented by WS PS Team
+        # commented by the WS PS Team
         # package_objects = []
         # for package in self.document.packages:
         #     package_info_object = self.create_package_info(package)
@@ -504,7 +505,8 @@ class Writer(
         document_describes_objects = []
         for package in unique_doc_packages.values():
             package_info_object = self.create_package_info(package)
-            package_info_object["files"] = self.create_file_info(package)
+            if package.files:
+                package_info_object["files"] = self.create_file_info(package)
             # create a list of the packages' names for the 'documentDescribes' field
             package_spdxid = package_info_object.get("SPDXID")
             document_describes_objects.append(package_spdxid)
