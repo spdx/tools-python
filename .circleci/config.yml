@@ -6,7 +6,7 @@ commands:
       python_version:
         description: "version of python to install"
         type: string
-        default: 3.6.5
+        default: 3.7.10
     steps:
       - run: |
           brew update
@@ -29,21 +29,10 @@ commands:
       - run: pytest
         
 jobs:
-  mac_python_3_6:
-    shell: /bin/bash --login
-    macos:
-      xcode: '9.4.1'
-    steps:
-    - checkout
-    - mac_install_python:
-        python_version: "3.6.5"
-    - install_run_tests
-
-
   mac_python_3_7:
     shell: /bin/bash --login
     macos:
-      xcode: '9.4.1'
+      xcode: '10.3.0'
     steps:
     - checkout
     - mac_install_python:
@@ -54,7 +43,7 @@ jobs:
   mac_python_3_8:
     shell: /bin/bash --login
     macos:
-      xcode: '9.4.1'
+      xcode: '10.3.0'
     steps:
     - checkout
     - mac_install_python:
@@ -64,7 +53,7 @@ jobs:
   mac_python_3_9:
     shell: /bin/bash --login
     macos:
-      xcode: '9.4.1'
+      xcode: '10.3.0'
     steps:
     - checkout
     - mac_install_python:
@@ -103,7 +92,6 @@ workflows:
   version: 2
   python_matrix_build:
     jobs:
-      - mac_python_3_6
       - mac_python_3_7
       - mac_python_3_8
       - mac_python_3_9
