@@ -276,6 +276,9 @@ class Package(object):
                 messages.append(
                     "Package checksum must be instance of spdx.checksum.Algorithm"
                 )
+            # this check was added by the WhiteSouse PS Team ( for cases where SHA1 is not available at WhiteSource )
+            if not self.check_sum.value:
+                delattr(self, 'check_sum')
 
         return messages
 
