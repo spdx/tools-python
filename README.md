@@ -1,4 +1,4 @@
-# Python library to to parse, validate and create SPDX documents
+# Python library to parse, validate and create SPDX documents
 
 | Linux | macOS | Windows |
 | :---- | :------ | :---- |
