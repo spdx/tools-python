@@ -1,4 +1,4 @@
-# Python library to to parse, validate and create SPDX documents
+# Python library to parse, validate and create SPDX documents
 
 | Linux | macOS | Windows |
 | :---- | :------ | :---- |
@@ -40,7 +40,7 @@ This is the result of an initial GSoC contribution by @[ah450](https://github.co
 
 # TODOs
 
-* Update to full SPDX v2.1
+* Update to full SPDX v2.2.1(ISO 5962:2021)
 * Add to full license expression support
 
 
@@ -67,10 +67,10 @@ Try running :   `parser --file data/SPDXRdfExample.rdf`.
 * If I/O formats are not known:
 
     * Use `convertor --from/-f <input_format> <input_file> --to/-t <output_format> <output_file>` where `<input_format>` is the manually enterred format of the input file (can be either rdf or tag)
-    and `<out_format>` (can be tag, rdf, json, yaml, xml) is the manually enterred format of the output file. 
+    and `<out_format>` (can be tag, rdf, json, yaml, xml) is the manually entered format of the output file. 
     Try running : `convertor --from tag data/SPDXTagExample.in --to yaml output.out` 
 
-* If anyone format is known and other is not, you can use the mixture of the above two points.      
+* If anyone of the format is known and other is not, you can use the mixture of the above two points.      
 Ex. : `convertor -f rdf data/SPDXRdfExample.xyz -o output.xml`
 
 * for help - use `convertor --help`
