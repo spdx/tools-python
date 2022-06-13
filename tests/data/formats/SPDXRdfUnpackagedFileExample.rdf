@@ -3,9 +3,9 @@
     xmlns:j.0="http://usefulinc.com/ns/doap#"
     xmlns="http://spdx.org/rdf/terms#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-  <Snippet rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Snippet">
+  <Snippet rdf:about="http://spdx.org/spdxdocs/spdx-example-F16320D4-36AB-476D-9691-59E1BAD31206#SPDXRef-Snippet">
     <snippetFromFile>
-      <File rdf:about="http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DoapSource"/>
+      <File rdf:about="http://spdx.org/spdxdocs/spdx-example-F16320D4-36AB-476D-9691-59E1BAD31206#SPDXRef-DoapSource"/>
     </snippetFromFile>
     <name>from linux kernel</name>
     <copyrightText>Copyright 2008-2010 John Smith</copyrightText>
@@ -14,15 +14,15 @@
     <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
     <licenseInfoInSnippet rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
   </Snippet>
-  <SpdxDocument rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT">
+  <SpdxDocument rdf:about="https://spdx.org/spdxdocs/spdx-example-F16320D4-36AB-476D-9691-59E1BAD31206#SPDXRef-DOCUMENT">
     <name>Sample_Document-V2.1</name>
     <creationInfo>
       <CreationInfo>
-        <created>2010-02-03T00:00:00Z</created>
+        <created>2022-05-31T00:00:00Z</created>
         <rdfs:comment>This is an example of an SPDX spreadsheet format</rdfs:comment>
-        <creator>Tool: SourceAuditor-V1.2</creator>
-        <creator>Organization: Source Auditor Inc.</creator>
-        <creator>Person: Gary O'Neall</creator>
+        <creator>Tool: SomeExampleTool-V1.0</creator>
+        <creator>Organization: Sample Group Inc.</creator>
+        <creator>Person: A. Developer</creator>
       </CreationInfo>
     </creationInfo>
     <specVersion>SPDX-2.1</specVersion>
@@ -39,56 +39,18 @@
       </ExternalDocumentRef>
     </externalDocumentRef>
     <referencesFile>
-      <File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File1">
-        <licenseConcluded>
-          <ExtractedLicensingInfo rdf:nodeID="A1">
-            <extractedText>/*
- * (c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- * 1. Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products
- *    derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
- * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
- * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
- * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
- * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
- * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
- * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
- * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */</extractedText>
-            <licenseId>LicenseRef-1</licenseId>
-          </ExtractedLicensingInfo>
-        </licenseConcluded>
-        <artifactOf>
-          <j.0:Project>
-            <j.0:homepage>http://www.openjena.org/</j.0:homepage>
-            <j.0:name>Jena</j.0:name>
-          </j.0:Project>
-        </artifactOf>
-        <licenseComments>This license is used by Jena</licenseComments>
-        <fileName>Jenna-2.6.3/jena-2.6.3-sources.jar</fileName>
-        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_archive"/>
-        <copyrightText>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP</copyrightText>
-        <licenseInfoInFile rdf:nodeID="A1"/>
-        <rdfs:comment>This file belongs to Jena</rdfs:comment>
+      <File rdf:about="https://spdx.org/spdxdocs/spdx-example-F16320D4-36AB-476D-9691-59E1BAD31206#SPDXRef-File1">
+        <copyrightText>Copyright 2022 Example Client Inc.</copyrightText>
+        <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+        <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
+        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <checksum>
           <Checksum>
-            <checksumValue>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</checksumValue>
+            <checksumValue>1b30f385d353620c845594d7ef96b3dd6d17a69a</checksumValue>
             <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
           </Checksum>
         </checksum>
+        <fileName>file.bin</fileName>
       </File>
     </referencesFile>
     <reviewed>
@@ -99,7 +61,7 @@
       </Review>
     </reviewed>
     <dataLicense rdf:resource="http://spdx.org/licenses/CC0-1.0"/>
-    <hasExtractedLicensingInfo rdf:nodeID="A1"/>
+    <hasExtractedLicensingInfo/>
     <reviewed>
       <Review>
         <rdfs:comment>Another example reviewer.</rdfs:comment>
@@ -122,18 +84,18 @@
       </Relationship>
     </relationship>
     <referencesFile>
-      <File rdf:about="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File2">
-        <copyrightText>Copyright 2010, 2011 Source Auditor Inc.</copyrightText>
+      <File rdf:about="https://spdx.org/spdxdocs/spdx-example-F16320D4-36AB-476D-9691-59E1BAD31206#SPDXRef-File2">
+        <copyrightText>Copyright 2022 Example Client Inc.</copyrightText>
         <licenseInfoInFile rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <licenseConcluded rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
-        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_source"/>
+        <fileType rdf:resource="http://spdx.org/rdf/terms#fileType_other"/>
         <checksum>
           <Checksum>
             <checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</checksumValue>
             <algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
           </Checksum>
         </checksum>
-        <fileName>src/org/spdx/parser/DOAPProject.java</fileName>
+        <fileName>etc/message.dat</fileName>
       </File>
     </referencesFile>
     <describesPackage>
@@ -142,7 +104,7 @@
         <downloadLocation>http://www.spdx.org/tools</downloadLocation>
         <filesAnalyzed>true</filesAnalyzed>
         <supplier>Organization:Linux Foundation</supplier>
-        <hasFile rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File1"/>
+        <hasFile rdf:resource="https://spdx.org/spdxdocs/spdx-example-F16320D4-36AB-476D-9691-59E1BAD31206#SPDXRef-File2"/>
         <licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
         <packageVerificationCode>
           <PackageVerificationCode>
@@ -167,7 +129,6 @@ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED WAR
                 <licenseId>LicenseRef-2</licenseId>
               </ExtractedLicensingInfo>
             </member>
-            <member rdf:nodeID="A1"/>
             <member rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <member rdf:resource="http://spdx.org/licenses/MPL-1.1"/>
             <member rdf:resource="http://spdx.org/licenses/Apache-1.0"/>
@@ -268,14 +229,11 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
         <licenseInfoFromFiles rdf:nodeID="A4"/>
         <name>SPDX Translator</name>
         <versionInfo>Version 0.9.2</versionInfo>
-        <licenseInfoFromFiles rdf:nodeID="A1"/>
-        <hasFile rdf:resource="https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File2"/>
         <licenseInfoFromFiles rdf:nodeID="A3"/>
         <copyrightText> Copyright 2010, 2011 Source Auditor Inc.</copyrightText>
         <licenseDeclared>
           <ConjunctiveLicenseSet>
             <member rdf:nodeID="A3"/>
-            <member rdf:nodeID="A1"/>
             <member rdf:resource="http://spdx.org/licenses/Apache-2.0"/>
             <member rdf:resource="http://spdx.org/licenses/MPL-1.1"/>
             <member rdf:nodeID="A4"/>

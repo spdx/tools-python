@@ -45,3 +45,12 @@ class TestParser(unittest.TestCase):
             expected = json.load(ex)
 
         assert result == expected
+
+    def test_rdf_parser_unpacked_files(self, regen=False):
+        parser = rdf.Parser(RDFBuilder(), StandardLogger())
+        test_file = utils_test.get_test_loc('formats/SPDXRdfUnpackagedFileExample.rdf', test_data_dir=utils_test.test_data_dir)
+        with io.open(test_file, 'rb') as f:
+            document, _ = parser.parse(f)
+        expected_loc = utils_test.get_test_loc('doc_parse/spdx-expected-unpackaged-files.json', test_data_dir=utils_test.test_data_dir)
+        self.check_document(document, expected_loc, regen=regen)
+

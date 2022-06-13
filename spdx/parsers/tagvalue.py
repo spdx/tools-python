@@ -564,7 +564,8 @@ class Parser(object):
         value = p[2]
         if not self.builder.doc_spdx_id_set:
             self.builder.set_doc_spdx_id(self.document, value)
-        elif not self.builder.package_spdx_id_set:
+        elif (not self.builder.package_spdx_id_set
+                and self.builder.package_set):
             self.builder.set_pkg_spdx_id(self.document, value)
         else:
             self.builder.set_file_spdx_id(self.document, value)

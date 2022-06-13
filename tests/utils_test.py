@@ -510,6 +510,7 @@ class TestParserUtils(object):
             ('creators', [cls.entity_to_dict(creator) for creator in creators]),
             ('created', utils.datetime_iso_format(doc.creation_info.created)),
             ('creatorComment', doc.creation_info.comment),
+            ('files', cls.files_to_list(doc.unpackaged_files)),
             ('packages', [cls.package_to_dict(p) for p in doc.packages]),
             ('externalDocumentRefs', cls.ext_document_references_to_list(sorted(doc.ext_document_references))),
             ('extractedLicenses', cls.extracted_licenses_to_list(sorted(doc.extracted_licenses))),

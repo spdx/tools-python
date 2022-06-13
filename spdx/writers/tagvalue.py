@@ -358,6 +358,11 @@ def write_document(document, out, validate=True):
         write_relationship(relationship, out)
         write_separators(out)
 
+    # Write out unpackaged file info
+    for spdx_file in document.unpackaged_files:
+        write_file(spdx_file, out)
+        write_separators(out)
+
     # Write out package info
     for package in document.packages:
         write_package(package, out)

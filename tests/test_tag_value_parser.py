@@ -207,6 +207,17 @@ class TestParser(TestCase):
         'ReviewComment: <text>Alice was also here.</text>'
     ])
 
+    unpackaged_file_str = '\n'.join([
+        'FileName: testfile.text-info',
+        'SPDXID: SPDXRef-File',
+        'FileType: OTHER',
+        'FileChecksum: SHA1: c940141b1f4d098f12812675e9cfa5fe72e07bab',
+        'LicenseConcluded: Apache-2.0',
+        'LicenseInfoInFile: Apache-2.0',
+        'FileCopyrightText: <text>Copyright 2022 Acme Inc.</text>',
+        'FileComment: <text>Very long file</text>'
+        ])
+
     package_str = '\n'.join([
         'PackageName: Test',
         'SPDXID: SPDXRef-Package',
@@ -259,7 +270,7 @@ class TestParser(TestCase):
         'LicenseInfoInSnippet: Apache-2.0',
     ])
 
-    complete_str = '{0}\n{1}\n{2}\n{3}\n{4}\n{5}'.format(document_str, creation_str, review_str, package_str, file_str, snippet_str)
+    complete_str = '{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}'.format(document_str, creation_str, review_str, unpackaged_file_str, package_str, file_str, snippet_str)
 
     def setUp(self):
         self.p = Parser(Builder(), StandardLogger())
@@ -318,6 +329,16 @@ class TestParser(TestCase):
         assert len(spdx_file.artifact_of_project_name) == 1
         assert len(spdx_file.artifact_of_project_home) == 1
         assert len(spdx_file.artifact_of_project_uri) == 1
+
+    def test_unpackaged_file(self):
+        document, error = self.p.parse(self.complete_str)
+        assert document is not None
+        assert not error
+        assert len(document.files) == 1
+        spdx_file = document.unpackaged_files[0]
+        assert spdx_file.name == 'testfile.text-info'
+        assert spdx_file.spdx_id == 'SPDXRef-File'
+        assert spdx_file.type == spdx.file.FileType.OTHER
 
     def test_unknown_tag(self):
 

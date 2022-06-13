@@ -35,7 +35,12 @@ UNSTABLE_CONVERSIONS = {
     "SPDXRdfExample.rdf-yaml",
     "SPDXRdfExample.rdf-xml",
     "SPDXRdfExample.rdf-json",
-    "SPDXRdfExample.rdf-tag"
+    "SPDXRdfExample.rdf-tag",
+    "SPDXRdfUnpackagedFileExample.rdf-rdf",
+    "SPDXRdfUnpackagedFileExample.rdf-yaml",
+    "SPDXRdfUnpackagedFileExample.rdf-xml",
+    "SPDXRdfUnpackagedFileExample.rdf-json",
+    "SPDXRdfUnpackagedFileExample.rdf-tag"
 }
 
 @pytest.mark.parametrize("out_format", ['rdf', 'yaml', 'xml', 'json', 'tag'])

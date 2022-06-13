@@ -182,7 +182,10 @@ class FileWriter(BaseWriter):
 
         return artifact_of_objects
 
-    def create_file_info(self, package):
+    def create_pkg_file_info(self, package):
+        return self.create_file_info(package.files)
+
+    def create_file_info(self, files):
         file_types = {
             1: "fileType_source",
             2: "fileType_binary",
@@ -190,7 +193,6 @@ class FileWriter(BaseWriter):
             4: "fileType_other",
         }
         file_objects = []
-        files = package.files
 
         for file in files:
             file_object = dict()
@@ -471,10 +473,13 @@ class Writer(
         self.document_object["SPDXID"] = self.spdx_id(self.document.spdx_id)
         self.document_object["name"] = self.document.name
 
+        if self.document.unpackaged_files:
+            self.document_object["files"] = self.create_file_info(self.document.unpackaged_files)
+
         package_objects = []
         for package in self.document.packages:
             package_info_object = self.create_package_info(package)
-            package_info_object["files"] = self.create_file_info(package)
+            package_info_object["files"] = self.create_pkg_file_info(package)
             package_objects.append({"Package": package_info_object})
 
         self.document_object["documentDescribes"] = package_objects
