@@ -271,14 +271,17 @@ class Package(object):
         return messages
 
     def validate_checksum(self, messages):
-        if self.check_sum is not None:
-            if not isinstance(self.check_sum, checksum.Algorithm):
-                messages.append(
-                    "Package checksum must be instance of spdx.checksum.Algorithm"
-                )
-            # this check was added by the WhiteSouse PS Team ( for cases where SHA1 is not available at WhiteSource )
-            if not self.check_sum.value:
-                delattr(self, 'check_sum')
+        try:
+            if self.check_sum is not None:
+                if not isinstance(self.check_sum, checksum.Algorithm):
+                    messages.append(
+                        "Package checksum must be instance of spdx.checksum.Algorithm"
+                    )
+                # this check was added by the WhiteSouse PS Team ( for cases where SHA1 is not available at WhiteSource )
+                if not self.check_sum.value:
+                    delattr(self, 'check_sum')
+        except:
+            pass
 
         return messages
 
