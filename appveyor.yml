@@ -3,10 +3,10 @@ image:
   - Visual Studio 2019
 environment:
   matrix:
-    - PYTHON_EXE: "C:\\Python36-x64\\python.exe"
     - PYTHON_EXE: "C:\\Python37-x64\\python.exe"
     - PYTHON_EXE: "C:\\Python38-x64\\python.exe"
     - PYTHON_EXE: "C:\\Python39-x64\\python.exe"
+    - PYTHON_EXE: "C:\\Python310-x64\\python.exe"
 
 install:
   - "%PYTHON_EXE% --version"
