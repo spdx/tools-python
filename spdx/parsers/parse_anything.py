@@ -22,33 +22,25 @@ from spdx.parsers.builderexceptions import FileTypeError
 
 
 def parse_file(fn):
-    buildermodule = jsonyamlxmlbuilders
-    read_data = False
-    if fn.endswith(".rdf") or fn.endswith(".rdf.xml"):
-        parsing_module = rdf
-        buildermodule = rdfbuilders
-    elif fn.endswith(".spdx"):
-        parsing_module = rdf
-        buildermodule = rdfbuilders
-    elif fn.endswith(".tag"):
-        parsing_module = tagvalue
-        buildermodule = tagvaluebuilders
-        read_data = True
-    elif fn.endswith(".json"):
-        parsing_module = jsonparser
-    elif fn.endswith(".xml"):
-        parsing_module = xmlparser
-    elif fn.endswith(".yaml") or fn.endswith(".yml"):
-        parsing_module = yamlparser
-    else:
-        raise FileTypeError("FileType Not Supported" + str(fn))
+    buildermodules = [rdfbuilders, jsonyamlxmlbuilders, jsonyamlxmlbuilders, jsonyamlxmlbuilders, tagvaluebuilders]
+    parsing_modules = [rdf, xmlparser, yamlparser, jsonparser, tagvalue]
+    read_datas = [False, False, False, False, True]
+    for i in range(len(buildermodules)):
+        parsing_module = parsing_modules[i]
+        buildermodule = buildermodules[i]
+        read_data = read_datas[i]
+        try:
+            p = parsing_module.Parser(buildermodule.Builder(), StandardLogger())
+            if hasattr(p, "build"):
+                p.build()
+            with open(fn) as f:
+                if read_data:
+                    data = f.read()
+                    return p.parse(data)
+                else:
+                    return p.parse(f)
+        except:
+            if i == len(buildermodules) - 1:
+                raise FileTypeError("FileType Not Supported" + str(fn))
 
-    p = parsing_module.Parser(buildermodule.Builder(), StandardLogger())
-    if hasattr(p, "build"):
-        p.build()
-    with open(fn) as f:
-        if read_data:
-            data = f.read()
-            return  p.parse(data)
-        else:
-            return  p.parse(f)
+
