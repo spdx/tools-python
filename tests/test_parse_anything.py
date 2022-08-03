@@ -15,7 +15,7 @@ import pytest
 from spdx.parsers import parse_anything
 
 
-dirname = os.path.join(os.path.dirname(__file__), "data", "formats")
+dirname = os.path.join(os.path.dirname(__file__), "data", "parse_anything_test_files")
 test_files = [os.path.join(dirname, fn) for fn in os.listdir(dirname)]
 
 
