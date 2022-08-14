@@ -28,3 +28,17 @@ def test_parse_anything(test_file):
     # test a few fields, the core of the tests are per parser
     assert doc.name in ('Sample_Document-V2.1', 'xyz-0.1.0')
     assert doc.comment in (None, 'This is a sample spreadsheet', 'Sample Comment')
+
+dirname = os.path.join(os.path.dirname(__file__), "data", "formats")
+test_files = [os.path.join(dirname, fn) for fn in os.listdir(dirname)]
+
+
+@pytest.mark.parametrize("test_file", test_files)
+def test_parse_anything_formats(test_file):
+    doc, error = parse_anything.parse_file(test_file)
+
+    assert not error
+
+    # test a few fields, the core of the tests are per parser
+    assert doc.name in ('Sample_Document-V2.1', 'xyz-0.1.0')
+    assert doc.comment in (None, 'This is a sample spreadsheet', 'Sample Comment')
