@@ -16,6 +16,7 @@ from spdx.cli_tools.convertor import determine_infile_and_outfile
 
 from tests.testing_utils import raises
 
+
 class TestConvertor(TestCase):
     maxDiff = None
 
@@ -37,50 +38,46 @@ class TestConvertor(TestCase):
         src = ('infile.in', 'outfile.out')
         from_ = 'rdf'
         to = 'json'
+        expected_infile = 'infile.rdf'
+        expected_outfile = 'outfile.json'
 
         infile, outfile = determine_infile_and_outfile(infile_given, outfile_given, src, from_, to)
 
-        infile_path = os.path.splitext(src[0])[0]
-        infile_given = infile_path + "." + from_
-        outfile_path = os.path.splitext(src[1])[0]
-        outfile_given = outfile_path + "." + to
-        assert infile == infile_given
-        assert outfile == outfile_given
+        assert infile == expected_infile
+        assert outfile == expected_outfile
 
     def test_determine_input_with_known_i_format_unknown_o_format(self):
-            infile_given = 'infile.rdf'
-            outfile_given = None
-            src = ('outfile')
-            from_ = None
-            to = 'json'
+        infile_given = 'infile.rdf'
+        outfile_given = None
+        src = ('outfile',)
+        from_ = None
+        to = 'json'
+        expected_outfile = 'outfile.json'
 
-            infile, outfile = determine_infile_and_outfile(infile_given, outfile_given, src, from_, to)
+        infile, outfile = determine_infile_and_outfile(infile_given, outfile_given, src, from_, to)
 
-            outfile_path = os.path.splitext(src[0])[0]
-            outfile_given = outfile_path + "." + to
-            assert infile == infile_given
-            assert outfile == outfile_given
+        assert infile == infile_given
+        assert outfile == expected_outfile
 
     def test_determine_input_with_unknown_i_format_known_o_format(self):
-            infile_given = None
-            outfile_given = 'outfile.json'
-            src = ('infile')
-            from_ = 'rdf'
-            to = None
+        infile_given = None
+        outfile_given = 'outfile.json'
+        src = ('infile',)
+        from_ = 'rdf'
+        to = None
+        expected_infile = 'infile.rdf'
 
-            infile, outfile = determine_infile_and_outfile(infile_given, outfile_given, src, from_, to)
+        infile, outfile = determine_infile_and_outfile(infile_given, outfile_given, src, from_, to)
 
-            infile_path = os.path.splitext(src[0])[0]
-            infile_given = infile_path + "." + from_
-            assert infile == infile_given
-            assert outfile == outfile_given
+        assert infile == expected_infile
+        assert outfile == outfile_given
 
     @raises(ValueError)
     def test_determine_input_with_invalid_arguments(self):
-            infile_given = None
-            outfile_given = None
-            src = ()
-            from_ = None
-            to = None
+        infile_given = None
+        outfile_given = None
+        src = ()
+        from_ = None
+        to = None
 
-            infile, outfile = determine_infile_and_outfile(infile_given, outfile_given, src, from_, to)
+        infile, outfile = determine_infile_and_outfile(infile_given, outfile_given, src, from_, to)
