@@ -22,6 +22,53 @@ def print_help_msg(command):
     with click.Context(command) as ctx:
         click.echo(command.get_help(ctx))
 
+def determine_infile_and_outfile(infile, outfile, src, from_, to):
+    if infile is not None and outfile is not None:
+        """
+        when the CLI is of given format:
+        ' convertor ---infile <input_file> ---outfile <output_file>.
+        """
+        return infile, outfile
+
+    elif infile is None and outfile is None and len(src) == 2:
+        """
+        ' convertor -f/--from <type> <input_file> -t/--to <type> <output_file>.
+        """
+        infile = src[0]
+        outfile = src[1]
+        # infile = os.path.splitext(infile)[0]
+        if from_ is not None:
+            infile_path = os.path.splitext(infile)[0]
+            infile = infile_path + "." + from_
+        if to is not None:
+            outfile_path = os.path.splitext(outfile)[0]
+            outfile = outfile_path + "." + to
+        return infile, outfile
+
+    elif infile is None and outfile is not None:
+        """
+        ' convertor -f/--from <type> <input_file> --outfile <output_file> '
+        """
+        infile = src[0]
+        if from_ is not None:
+            infile_path = os.path.splitext(infile)[0]
+            infile = infile_path + "." + from_
+        return infile, outfile
+
+    elif infile is not None and outfile is None:
+        """
+        ' convertor --infile <input_file> -t/--to <type> <output_file>'
+        """
+        outfile = src[0]
+        if to is not None:
+            outfile_path = os.path.splitext(outfile)[0]
+            outfile = outfile_path + "." + to
+        return infile, outfile
+
+    else:
+        raise ValueError("Given arguments for convertor are invalid.")
+
+
 @click.command()
 @click.argument("src", nargs=-1)
 @click.option("--infile", "-i", help="The file to be converted ")
@@ -44,41 +91,13 @@ def main(infile, outfile, src, from_, to, force):
     To use : run 'convertor -f <from_TYPE> <input file> -t <to_TYPE> <output_file>' command on terminal or use ' convertor --infile <input file name> --outfile <output file name> '
 
     """
-    if infile is None and outfile is None and len(src) == 2:
-        """
-        when the CLI is of given format:
-        ' convertor -f/--from <type> <input_file> -t/--to <type> <output_file>.
-        """
-        infile = src[0]
-        outfile = src[1]
-        # infile = os.path.splitext(infile)[0]
-        if from_ is not None:
-            infile_path = os.path.splitext(infile)[0]
-            infile = infile_path + "." + from_
-        if to is not None:
-            outfile_path = os.path.splitext(outfile)[0]
-            outfile = outfile_path + "." + to
-
-    elif infile is None and outfile is not None:
-        """
-        ' convertor -f/--from <type> <input_file> --outfile <output_file> '
-        """
-        infile = src[0]
-        if from_ is not None:
-            infile_path = os.path.splitext(infile)[0]
-            infile = infile_path + "." + from_
-
-    elif infile is not None and outfile is None:
-        """
-        ' convertor --infile <input_file> -t/--to <type> <output_file>'
-        """
-        outfile = src[0]
-        if to is not None:
-            outfile_path = os.path.splitext(outfile)[0]
-            outfile = outfile_path + "." + to
-    else:
+    try:
+        infile, outfile = determine_infile_and_outfile(infile, outfile, src, from_, to)
+    except ValueError as err:
+        print(err)
         print_help_msg(main)
         return
+
     doc, errors = parse_file(infile)
     if errors:
         print("Errors while parsing: ", errors)
