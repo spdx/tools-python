@@ -27,10 +27,7 @@ def parse_file(fn):
     if fn.endswith(".rdf") or fn.endswith(".rdf.xml"):
         parsing_module = rdf
         buildermodule = rdfbuilders
-    elif fn.endswith(".spdx"):
-        parsing_module = rdf
-        buildermodule = rdfbuilders
-    elif fn.endswith(".tag"):
+    elif fn.endswith(".tag") or fn.endswith(".spdx"):
         parsing_module = tagvalue
         buildermodule = tagvaluebuilders
         read_data = True

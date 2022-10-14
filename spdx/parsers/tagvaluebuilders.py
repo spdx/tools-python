@@ -602,6 +602,7 @@ class PackageBuilder(object):
         name - any string.
         Raise CardinalityError if package already defined.
         """
+        self.reset_package()
         self.package_set = True
         doc.add_package(package.Package(name=name))
         return True
