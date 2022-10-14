@@ -42,7 +42,7 @@ UNSTABLE_CONVERSIONS = {
 @pytest.mark.parametrize("in_file", test_files, ids=lambda x: os.path.basename(x))
 def test_write_anything(in_file, out_format, tmpdir):
     in_basename = os.path.basename(in_file)
-    if in_basename == "SPDXSBOMExample.spdx.yml":
+    if in_basename == "SPDXSBOMExample.spdx.yml" or in_basename == "SPDXSBOMExample.tag":
         # conversion of spdx2.2 is not yet done
         return
     doc, error = parse_anything.parse_file(in_file)
