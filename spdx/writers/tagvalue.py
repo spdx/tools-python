@@ -23,7 +23,8 @@ class InvalidDocumentError(Exception):
 
     pass
 
-
+def write_separator(out):
+    out.write("\n")
 def write_separators(out):
     out.write("\n" * 2)
 
@@ -64,7 +65,6 @@ def write_review(review, out):
     """
     Write the fields of a single review to out.
     """
-    out.write("# Review\n\n")
     write_value("Reviewer", review.reviewer, out)
     write_value("ReviewDate", review.review_date_iso_format, out)
     if review.has_comment:
@@ -75,7 +75,6 @@ def write_annotation(annotation, out):
     """
     Write the fields of a single annotation to out.
     """
-    out.write("# Annotation\n\n")
     write_value("Annotator", annotation.annotator, out)
     write_value("AnnotationDate", annotation.annotation_date_iso_format, out)
     if annotation.has_comment:
@@ -89,7 +88,6 @@ def write_relationship(relationship_term, out):
     """
     Write the fields of relationships to out.
     """
-    out.write("# Relationships\n\n")
     write_value("Relationship", relationship_term.relationship, out)
     if relationship_term.has_comment:
         write_text_value(
@@ -343,19 +341,27 @@ def write_document(document, out, validate=True):
     write_creation_info(document.creation_info, out)
     write_separators(out)
 
-    # Writesorted reviews
-    for review in sorted(document.reviews):
-        write_review(review, out)
-        write_separators(out)
+    # Write sorted reviews
+    if document.reviews:
+        out.write("# Reviews\n\n")
+        for review in sorted(document.reviews):
+            write_review(review, out)
+            write_separator(out)
+        write_separator(out)
 
     # Write sorted annotations
-    for annotation in sorted(document.annotations):
-        write_annotation(annotation, out)
-        write_separators(out)
+    if document.annotations:
+        out.write("# Annotations\n\n")
+        for annotation in sorted(document.annotations):
+            write_annotation(annotation, out)
+            write_separator(out)
+        write_separator(out)
 
     # Write relationships
-    for relationship in document.relationships:
-        write_relationship(relationship, out)
+    if document.relationships:
+        out.write("# Relationships\n\n")
+        for relationship in document.relationships:
+            write_relationship(relationship, out)
         write_separators(out)
 
     # Write out package info
@@ -368,7 +374,9 @@ def write_document(document, out, validate=True):
         write_snippet(snippet, out)
         write_separators(out)
 
-    out.write("# Extracted Licenses\n\n")
-    for lic in sorted(document.extracted_licenses):
-        write_extracted_licenses(lic, out)
-        write_separators(out)
+    if document.extracted_licenses:
+        out.write("# Extracted Licenses\n\n")
+        for lic in sorted(document.extracted_licenses):
+            write_extracted_licenses(lic, out)
+            write_separator(out)
+        write_separator(out)
