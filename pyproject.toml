@@ -1,6 +1,49 @@
 [build-system]
-requires = ["setuptools>=44", "wheel", "setuptools_scm[toml]>=3.4.3"]
+requires = ["setuptools>=61.2", "setuptools_scm[toml]>=3.4.3"]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "spdx-tools"
+authors = [{name = "Ahmed H. Ismail", email = "ahm3d.hisham@gmail.com"}]
+maintainers = [
+    {name = "Philippe Ombredanne", email = "pombredanne@gmail.com"},
+    {name = "SPDX group at the Linux Foundation and others"},
+]
+license = {text = "Apache-2.0"}
+description = "SPDX parser and tools."
+readme = "README.md"
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+]
+urls = {Homepage = "https://github.com/spdx/tools-python"}
+requires-python = ">=3.6"
+dependencies = ["ply", "rdflib", "click", "pyyaml", "xmltodict"]
+dynamic = ["version"]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[project.scripts]
+pyspdxtools_convertor = "spdx.cli_tools.convertor:main"
+pyspdxtools_parser = "spdx.cli_tools.parser:main"
+
+[tool.setuptools]
+zip-safe = false  # because of the uses of __file__: https://github.com/spdx/tools-python/issues/257
+include-package-data = true
+
+[tool.setuptools.packages.find]
+include = ["spdx", "spdx.*"]
 
 [tool.setuptools_scm]
 git_describe_command = ["git", "describe", "--dirty", "--tags", "--long", "--match",  "v[0-9]*"]  # `python3.6` tag falsely matches to the default one, clrearly a bug in setuptools_scm
+
+[tool.aliases]
+release = "clean --all sdist --formats=gztar bdist_wheel"
