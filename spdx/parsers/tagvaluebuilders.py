@@ -1056,6 +1056,7 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_spdx_id_set:
                 self.file_spdx_id_set = True
+                spdx_id = spdx_id.split("#")[-1]
                 if validations.validate_file_spdx_id(spdx_id):
                     self.file(doc).spdx_id = spdx_id
                     return True

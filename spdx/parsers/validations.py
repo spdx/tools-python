@@ -219,7 +219,6 @@ def validate_pkg_lics_comment(value, optional=False):
 
 
 def validate_file_spdx_id(value, optional=False):
-    value = value.split("#")[-1]
     TEXT_RE = re.compile(r"SPDXRef-([A-Za-z0-9.\-]+)", re.UNICODE)
     if value is None:
         return optional
