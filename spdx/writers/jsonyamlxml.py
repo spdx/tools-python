@@ -115,9 +115,10 @@ class PackageWriter(BaseWriter):
         if package.files_analyzed is not None:
             package_object["filesAnalyzed"] = package.files_analyzed
         if package.files_analyzed is None or package.files_analyzed is True:
-            package_object["packageVerificationCode"] = self.package_verification_code(
-                package
-            )
+            if package.verif_code:
+                package_object["packageVerificationCode"] = self.package_verification_code(
+                    package
+                )
             package_object["licenseInfoFromFiles"] = list(
                 map(self.license, package.licenses_from_files)
             )

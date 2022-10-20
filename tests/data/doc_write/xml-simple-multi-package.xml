@@ -50,5 +50,30 @@
 				</files>
 			</Package>
 		</documentDescribes>
+		<documentDescribes>
+			<Package>
+				<SPDXID>SPDXRef-Package3</SPDXID>
+				<name>some/path3</name>
+				<downloadLocation>NOASSERTION</downloadLocation>
+				<licenseInfoFromFiles>LGPL-2.1-or-later</licenseInfoFromFiles>
+				<licenseConcluded>NOASSERTION</licenseConcluded>
+				<licenseDeclared>NOASSERTION</licenseDeclared>
+				<copyrightText>Some copyright</copyrightText>
+				<files>
+					<File>
+						<name>./some/path/tofile</name>
+						<SPDXID>SPDXRef-File</SPDXID>
+						<checksums>
+							<algorithm>checksumAlgorithm_sha1</algorithm>
+							<checksumValue>SOME-SHA1</checksumValue>
+						</checksums>
+						<licenseConcluded>NOASSERTION</licenseConcluded>
+						<licenseInfoFromFiles>LGPL-2.1-or-later</licenseInfoFromFiles>
+						<copyrightText>NOASSERTION</copyrightText>
+						<sha1>SOME-SHA1</sha1>
+					</File>
+				</files>
+			</Package>
+		</documentDescribes>
 	</Document>
 </SpdxDocument>

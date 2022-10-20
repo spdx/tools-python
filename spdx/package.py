@@ -39,8 +39,10 @@ class Package(object):
      If set to "false", the package must not contain any files.
      Optional, boolean.
      - homepage: Optional, URL as string or NONE or NO_ASSERTION.
-     - verif_code: string. Mandatory if files_analyzed is True or None (omitted)
-       Must be None (omitted) if files_analyzed is False
+     - verif_code: string. According to the specification, this is Mandatory
+     whenever files_analyzed is True or None (omitted) and Must be None (omitted)
+     if files_analyzed is False. However, as a convenience within this library,
+     we allow this to be Optional even when files_analyzed is True/None.
      - check_sum: Optional , spdx.checksum.Algorithm.
      - source_info: Optional string.
      - conc_lics: Mandatory spdx.document.License or spdx.utils.SPDXNone or
@@ -246,8 +248,6 @@ class Package(object):
         docstring must be of a type that provides __str__ method.
         """
         FIELDS = ["name", "spdx_id", "download_location", "cr_text"]
-        if self.are_files_analyzed:
-            FIELDS = FIELDS + ["verif_code"]
         self.validate_str_fields(FIELDS, False, messages)
 
         return messages
