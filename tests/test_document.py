@@ -99,7 +99,6 @@ class TestDocument(TestCase):
             'of spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License',
             'Sample_Document-V2.1: some/path: Package download_location can not be None.',
             'Sample_Document-V2.1: some/path: Package must have at least one file.',
-            'Sample_Document-V2.1: some/path: Package verif_code can not be None.'
         ]
         assert sorted(expected) == sorted(messages)
 
@@ -218,6 +217,14 @@ class TestWriters(TestCase):
         package2.conc_lics = NoAssert()
         package2.verif_code = 'SOME code'
 
+        # This one does, but per recommendation, we choose to make the
+        # verification code optional in this library
+        package3 = Package(name='some/path3', download_location=NoAssert())
+        package3.spdx_id = 'SPDXRef-Package3'
+        package3.cr_text = 'Some copyright'
+        package3.license_declared = NoAssert()
+        package3.conc_lics = NoAssert()
+
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
         file1.spdx_id = 'SPDXRef-File'
@@ -233,8 +240,11 @@ class TestWriters(TestCase):
 
         package2.add_lics_from_file(lic1)
         package2.add_file(file1)
+        package3.add_lics_from_file(lic1)
+        package3.add_file(file1)
 
         doc.add_package(package2)
+        doc.add_package(package3)
 
         return doc
 
