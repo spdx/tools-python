@@ -4,9 +4,9 @@ Thank you for your interest in `tools-python`. The project is open-source softwa
 
 ## Issues
 
-`tools-python` has a [project page on GitHub](https://github.com/spdx/tools-python/) where you can [create an issue](https://github.com/spdx/tools-python/issues/new) to report a bug, make a suggestion, or propose a substantial change or improvement that you might like to make. You may also wish to contact the SPDX working group technical team through its mailing list, [spdx-tech@lists.spdx.org](mailto:spdx-tech@lists.spdx.org).
+`tools-python` has a [project page on GitHub](https://github.com/spdx/tools-python/) where you can [create an issue](https://github.com/spdx/tools-python/issues/new) to report a bug, make a suggestion, or propose a substantial change or improvement. You may also wish to contact the SPDX working group technical team through its mailing list, [spdx-tech@lists.spdx.org](mailto:spdx-tech@lists.spdx.org).
 
-If you would like to work on a fix for any issue, please assign the issue to yourself prior to creating a patch.
+If you would like to work on a fix for any issue, please assign the issue to yourself or write a comment indicating your intention prior to creating a patch.
 
 ## Development process
 
@@ -29,7 +29,7 @@ Here's the process to make changes to the codebase:
 
    #### Licensing
 
-   Please sign-off in each of your commits that you license your contributions under the terms of [the Developer Certificate of Origin](https://developercertificate.org/). Git has utilities for signing off on commits: `git commit -s` or `--signoff` signs a current commit, and `git rebase --signoff <revision-range>` retroactively signs a range of past commits.
+   Please sign off in each of your commits that you license your contributions under the terms of [the Developer Certificate of Origin](https://developercertificate.org/). Git has utilities for signing off on commits: `git commit -s` or `--signoff` signs a current commit, and `git rebase --signoff <revision-range>` retroactively signs a range of past commits.
 
 1. Test your changes:
    ```sh
