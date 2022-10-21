@@ -1,8 +1,8 @@
 # Python library to parse, validate and create SPDX documents
 
-| Linux | macOS | Windows |
-| :---- | :------ | :---- |
-[ ![Linux build status][1]][2] | [![macOS build status][3]][4] | [![Windows build status][5]][6] |
+| Linux                          | macOS                         | Windows                         |
+|:-------------------------------|:------------------------------|:--------------------------------|
+| [ ![Linux build status][1]][2] | [![macOS build status][3]][4] | [![Windows build status][5]][6] |
 
 [1]: https://travis-ci.org/spdx/tools-python.svg?branch=master
 [2]: https://travis-ci.org/spdx/tools-python
@@ -14,7 +14,7 @@
 
 # Information
 
-This library implements SPDX tag/value and RDF parsers, validators and handlers in Python.
+This library implements SPDX parsers, convertors, validators and handlers in Python.
 
 - Home: https://github.com/spdx/tools-python
 - Issues: https://github.com/spdx/tools-python/issues
@@ -24,7 +24,7 @@ This library implements SPDX tag/value and RDF parsers, validators and handlers 
 # History
 
 This is the result of an initial GSoC contribution by @[ah450](https://github.com/ah450)
-(or https://github.com/a-h-i) and  is maintained by a community of SPDX adopters and enthusiasts.
+(or https://github.com/a-h-i) and is maintained by a community of SPDX adopters and enthusiasts.
 
 
 # License
@@ -35,13 +35,14 @@ This is the result of an initial GSoC contribution by @[ah450](https://github.co
 # Features
 
 * API to create and manipulate SPDX documents.
-* Parse and create Tag/Value, RDF, JSON, YAML, XML format SPDX files
+* Parse, convert and create Tag/Value, RDF, JSON, YAML, XML format SPDX files
 
 
 # TODOs
 
 * Update to full SPDX v2.2.1(ISO 5962:2021)
-* Add to full license expression support
+* Update to full SPDX v2.3
+* Add full license expression support
 
 
 # How to use
@@ -49,91 +50,57 @@ This is the result of an initial GSoC contribution by @[ah450](https://github.co
 ## Command-line usage:
 
 1. **PARSER** (for parsing any format):
-* Use   `parser --file <filename>`   where  `<filename>`  is the location of the file.              
-Try running :   `parser --file data/SPDXRdfExample.rdf`.
-       
-* Or you can use  `parser`  only and then it will automatically prompt/ask for  `filename`. 
+* Use `parser --file <filename>` where `<filename>` is the location of the file.              
+Try running: `parser --file data/SPDXRdfExample.rdf`.
 
-* for help - use `parser --help` 
+* Or you can use `parser` only, and it will automatically prompt/ask for `filename`.
+
+* For help use `parser --help`
 
 
 2. **CONVERTOR** (for converting one format to another):
 * If I/O formats are known:
-    
-    * Use `convertor --infile/-i <input_file> --outfile/-o <output_file>` where `<input_file>` is the location of the file to be converted 
-    (Note: only RDF and Tag formated supported) and `<output_file>` is the location of the output file.  
+
+    * Use `convertor --infile/-i <input_file> --outfile/-o <output_file>` where `<input_file>` is the location of the file to be converted
+    (Note: only RDF and Tag formatted supported) and `<output_file>` is the location of the output file.  
     Try running : `convertor --infile data/SPDXRdfExample.rdf --outfile output.json` 
 
 * If I/O formats are not known:
 
-    * Use `convertor --from/-f <input_format> <input_file> --to/-t <output_format> <output_file>` where `<input_format>` is the manually enterred format of the input file (can be either rdf or tag)
+    * Use `convertor --from/-f <input_format> <input_file> --to/-t <output_format> <output_file>` where `<input_format>` is the manually entered format of the input file (can be either rdf or tag)
     and `<out_format>` (can be tag, rdf, json, yaml, xml) is the manually entered format of the output file. 
     Try running : `convertor --from tag data/SPDXTagExample.in --to yaml output.out` 
 
-* If anyone of the format is known and other is not, you can use the mixture of the above two points.      
-Ex. : `convertor -f rdf data/SPDXRdfExample.xyz -o output.xml`
+* If one of the formats is known and the other is not, you can use a mixture of the above two points.  
+Example: `convertor -f rdf data/SPDXRdfExample.xyz -o output.xml`
 
-* for help - use `convertor --help`
-
+* For help use `convertor --help`
 
 
 # Installation
 
-As always you should work in a virtualenv or venv.  You can install a local clone
-of this repo with `yourenv/bin/pip install .` or install from PyPI with
-`yourenv/bin/pip install spdx-tools`.  Note that on Windows it would be `Scripts`
+As always you should work in a virtualenv or venv. You can install a local clone
+of this repo with `yourenv/bin/pip install .` or install it from PyPI with
+`yourenv/bin/pip install spdx-tools`. Note that on Windows it would be `Scripts`
 instead of `bin`.
-
-
-# How to run tests
-
-Tests framework is using pytest
-
-```
-pip install pytest
-pytest -vvs
-```
-
-
-# Development process
-
-We use the GitHub flow that is described here: https://guides.github.com/introduction/flow/
-
-So, whenever we have to make some changes to the code, we should follow these steps:
-1. Create a new branch:
-    `git checkout -b fix-or-improve-something`
-2. Make some changes and the first commit(s) to the branch: 
-    `git commit --signoff -m 'What changes we did'`
-3. Push the branch to GitHub:
-    `git push origin fix-or-improve-something`
-4. Make a pull request on GitHub.
-5. Continue making more changes and commits on the branch, with `git commit --signoff` and `git push`.
-6. When done, write a comment on the PR asking for a code review.
-7. Some other developer will review your changes and accept your PR. The merge should be done with `rebase`, if possible, or with `squash`.
-8. The temporary branch on GitHub should be deleted (there is a button for deleting it).
-9. Delete the local branch as well:
-    ```
-    git checkout master
-    git pull -p
-    git branch -a
-    git branch -d fix-or-improve-something
-    ```
-
-Besides this, another requirement is that every change should be made to fix or close an issue: https://guides.github.com/features/issues/
-If there is no issue for the changes that you want to make, create first an issue about it that describes what needs to be done, assign it to yourself, and then start working for closing it.
 
 
 # Dependencies
 
-* PLY : https://pypi.python.org/pypi/ply/ used for parsing.
-* rdflib : https://pypi.python.org/pypi/rdflib/ for handling RDF. 
+* PLY: https://pypi.python.org/pypi/ply/ used for parsing.
+* rdflib: https://pypi.python.org/pypi/rdflib/ for handling RDF.
 * PyYAML: https://pypi.org/project/PyYAML/ for handling YAML.
 * xmltodict: https://pypi.org/project/xmltodict/ for handling XML.
+* click: https://pypi.org/project/click/ for creating the CLI interface.
 
 
 # Support
 
-* Submit issues, questions or feedback at: https://github.com/spdx/tools-python/issues
+* Submit issues, questions or feedback at https://github.com/spdx/tools-python/issues
 * Join the chat at https://gitter.im/spdx-org/Lobby
-* Join the dicussion on https://lists.spdx.org/g/spdx-tech and 
+* Join the discussion on https://lists.spdx.org/g/spdx-tech and
   https://spdx.dev/participate/tech/
+
+# Contributing
+
+Contributions are very welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to contribute to the codebase.
