@@ -52,3 +52,13 @@ Here's the process to make changes to the codebase:
    git branch -a
    git branch -d fix-or-improve-something
    ```
+
+
+# How to run tests
+
+The tests framework is using pytest:
+
+```
+pip install pytest
+pytest -vvs
+```

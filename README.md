@@ -77,7 +77,6 @@ Example: `convertor -f rdf data/SPDXRdfExample.xyz -o output.xml`
 * For help use `convertor --help`
 
 
-
 # Installation
 
 As always you should work in a virtualenv or venv. You can install a local clone
@@ -85,14 +84,6 @@ of this repo with `yourenv/bin/pip install .` or install it from PyPI with
 `yourenv/bin/pip install spdx-tools`. Note that on Windows it would be `Scripts`
 instead of `bin`.
 
-# How to run tests
-
-Tests framework is using pytest:
-
-```
-pip install pytest
-pytest -vvs
-```
 
 # Dependencies
 
@@ -113,5 +104,3 @@ pytest -vvs
 # Contributing
 
 Contributions are very welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to contribute to the codebase.
-
-
