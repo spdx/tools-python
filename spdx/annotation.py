@@ -83,7 +83,6 @@ class Annotation(object):
         self.validate_annotator(messages)
         self.validate_annotation_date(messages)
         self.validate_annotation_type(messages)
-        self.validate_spdx_id(messages)
 
     def validate_annotator(self, messages):
         if self.annotator is None:
@@ -97,6 +96,3 @@ class Annotation(object):
         if self.annotation_type is None:
             messages.append("Annotation missing annotation type.")
 
-    def validate_spdx_id(self, messages):
-        if self.spdx_id is None:
-            messages.append("Annotation missing SPDX Identifier Reference.")

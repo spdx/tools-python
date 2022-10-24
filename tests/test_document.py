@@ -98,7 +98,6 @@ class TestDocument(TestCase):
             'Sample_Document-V2.1: some/path: Package declared license must be instance '
             'of spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License',
             'Sample_Document-V2.1: some/path: Package download_location can not be None.',
-            'Sample_Document-V2.1: some/path: Package must have at least one file.',
         ]
         assert sorted(expected) == sorted(messages)
 

@@ -26,5 +26,5 @@ def test_parse_anything(test_file):
     assert not error
 
     # test a few fields, the core of the tests are per parser
-    assert doc.name in ('Sample_Document-V2.1', 'xyz-0.1.0')
-    assert doc.comment in (None, 'This is a sample spreadsheet', 'Sample Comment')
+    assert doc.name in ('Sample_Document-V2.0', 'Sample_Document-V2.1', 'SPDX-Tools-v2.0', 'xyz-0.1.0')
+    assert doc.comment in (None, 'This is a sample spreadsheet', 'Sample Comment', 'This document was created using SPDX 2.0 using licenses from the web site.')

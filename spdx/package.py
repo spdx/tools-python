@@ -127,7 +127,6 @@ class Package(object):
         self.validate_checksum(messages)
         self.validate_optional_str_fields(messages)
         self.validate_mandatory_str_fields(messages)
-        self.validate_files(messages)
         self.validate_pkg_ext_refs(messages)
         self.validate_mandatory_fields(messages)
         self.validate_optional_fields(messages)
@@ -213,17 +212,6 @@ class Package(object):
 
         return messages
 
-    def validate_files(self, messages):
-        if self.are_files_analyzed:
-            if not self.files:
-                messages.append(
-                    "Package must have at least one file."
-                )
-            else:
-                for f in self.files:
-                    messages = f.validate(messages)
-
-        return messages
 
     def validate_optional_str_fields(self, messages):
         """Fields marked as optional and of type string in class

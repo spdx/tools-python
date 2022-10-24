@@ -345,7 +345,6 @@ class AnnotationParser(BaseParser):
                         self.parse_annotation_date(annotation.get("annotationDate"))
                         self.parse_annotation_comment(annotation.get("comment"))
                         self.parse_annotation_type(annotation.get("annotationType"))
-                        self.parse_annotation_id(annotation.get("SPDXID"))
                 else:
                     self.value_error("ANNOTATION", annotation)
 
@@ -411,21 +410,6 @@ class AnnotationParser(BaseParser):
                 self.order_error("ANNOTATION_TYPE", "ANNOTATOR_VALUE")
         else:
             self.value_error("ANNOTATION_TYPE", annotation_type)
-
-    def parse_annotation_id(self, annotation_id):
-        """
-        Parse Annotation id
-        - annotation_id: Python str/unicode
-        """
-        if isinstance(annotation_id, str):
-            try:
-                return self.builder.set_annotation_spdx_id(self.document, annotation_id)
-            except CardinalityError:
-                self.more_than_one_error("ANNOTATION_ID")
-            except OrderError:
-                self.order_error("ANNOTATION_ID", "ANNOTATOR_VALUE")
-        else:
-            self.value_error("ANNOTATION_ID", annotation_id)
 
 
 class RelationshipParser(BaseParser):
@@ -500,7 +484,7 @@ class SnippetParser(BaseParser):
                         self.parse_snippet_license_comment(
                             snippet.get("licenseComments")
                         )
-                        self.parse_snippet_file_spdxid(snippet.get("fileId"))
+                        self.parse_snippet_file_spdxid(snippet.get("snippetFromFile"))
                         self.parse_snippet_concluded_license(
                             snippet.get("licenseConcluded")
                         )
@@ -508,7 +492,7 @@ class SnippetParser(BaseParser):
                             snippet.get("attributionTexts")
                         )
                         self.parse_snippet_license_info_from_snippet(
-                            snippet.get("licenseInfoFromSnippet")
+                            snippet.get("licenseInfoInSnippets")
                         )
                 else:
                     self.value_error("SNIPPET", snippet)
@@ -1068,7 +1052,6 @@ class PackageParser(BaseParser):
             self.parse_pkg_description(package.get("description"))
             self.parse_annotations(package.get("annotations"))
             self.parse_pkg_attribution_text(package.get("attributionTexts"))
-            self.parse_pkg_files(package.get("files"))
             self.parse_pkg_chksum(package.get("sha1"))
         else:
             self.value_error("PACKAGE", package)
@@ -1208,6 +1191,16 @@ class PackageParser(BaseParser):
                 )
             except CardinalityError:
                 self.more_than_one_error("PKG_FILES_ANALYZED")
+        # Handle XML value of type string
+        elif isinstance(pkg_files_analyzed, str):
+            if pkg_files_analyzed.lower() == "true":
+                return self.builder.set_pkg_files_analyzed(
+                    self.document, True
+                )
+            else:
+                return self.builder.set_pkg_files_analyzed(
+                    self.document, False
+                )
         else:
             self.value_error("PKG_FILES_ANALYZED", pkg_files_analyzed)
 
@@ -1459,25 +1452,6 @@ class PackageParser(BaseParser):
                 self.order_error("PKG_DESCRIPTION", "PKG_NAME")
         elif pkg_description is not None:
             self.value_error("PKG_DESCRIPTION", pkg_description)
-
-    def parse_pkg_files(self, pkg_files):
-        """
-        Parse Package files
-        - pkg_files: Python list of dicts as in FileParser.parse_file
-        """
-        if not self.package.are_files_analyzed:
-            if pkg_files is not None:
-                self.value_error("PKG_FILES", pkg_files)
-            return
-
-        if isinstance(pkg_files, list):
-            for pkg_file in pkg_files:
-                if isinstance(pkg_file, dict):
-                    self.parse_file(pkg_file.get("File"))
-                else:
-                    self.value_error("PKG_FILE", pkg_file)
-        else:
-            self.value_error("PKG_FILES", pkg_files)
 
     def parse_pkg_chksum(self, pkg_chksum):
         """

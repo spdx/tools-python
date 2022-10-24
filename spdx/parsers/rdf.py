@@ -585,11 +585,8 @@ class PackageParser(LicenseParser):
 
     def p_pkg_vinfo(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):
-            try:
-                self.builder.set_pkg_vers(self.doc, str(o))
-            except CardinalityError:
-                self.more_than_one_error("Package version info")
-                break
+            self.builder.set_pkg_vers(self.doc, str(o))
+
 
 
 class FileParser(LicenseParser):

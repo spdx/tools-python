@@ -449,11 +449,11 @@ class Document(object):
 
     def validate_annotations(self, messages):
         for annotation in self.annotations:
-            messages = annotation.validate(messages)
+            annotation.validate(messages)
 
     def validate_relationships(self, messages):
         for relationship in self.relationships:
-            messages = relationship.validate(messages)
+            relationship.validate(messages)
 
     def validate_snippet(self, messages=None):
         for snippet in self.snippet:
