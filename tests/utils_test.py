@@ -238,8 +238,8 @@ def load_and_clean_xml(location):
         content = l.read()
     data = xmltodict.parse(content, encoding='utf-8')
 
-    if 'creationInfo' in data['SpdxDocument']['Document']:
-        del(data['SpdxDocument']['Document']['creationInfo'])
+    if 'creationInfo' in data['Document']:
+        del(data['Document']['creationInfo'])
 
     return sort_nested(data)
 

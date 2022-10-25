@@ -1,98 +1,96 @@
 {
-    "Document": {
-        "spdxVersion": "SPDX-2.1",
-        "documentNamespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
-        "creationInfo": {
-            "creators": [
-                "Tool: ScanCode"
-            ],
-            "created": "2021-10-21T17:09:37Z",
-            "licenseListVersion": "3.6"
-        },
-        "dataLicense": "CC0-1.0",
-        "SPDXID": "SPDXRef-DOCUMENT",
-        "name": "Sample_Document-V2.1",
-        "documentDescribes": [
-            {
-                "Package": {
-                    "SPDXID": "SPDXRef-Package1",
-                    "name": "some/path1",
-                    "downloadLocation": "NOASSERTION",
-                    "filesAnalyzed": false,
-                    "licenseConcluded": "NOASSERTION",
-                    "licenseDeclared": "NOASSERTION",
-                    "copyrightText": "Some copyright"
-                }
-            },
-            {
-                "Package": {
-                    "SPDXID": "SPDXRef-Package2",
-                    "name": "some/path2",
-                    "downloadLocation": "NOASSERTION",
-                    "packageVerificationCode": {
-                        "packageVerificationCodeValue": "SOME code"
-                    },
-                    "licenseInfoFromFiles": [
-                        "LGPL-2.1-or-later"
-                    ],
-                    "licenseConcluded": "NOASSERTION",
-                    "licenseDeclared": "NOASSERTION",
-                    "copyrightText": "Some copyright",
-                    "files": [
-                        {
-                            "File": {
-                                "name": "./some/path/tofile",
-                                "SPDXID": "SPDXRef-File",
-                                "checksums": [
-                                    {
-                                        "algorithm": "checksumAlgorithm_sha1",
-                                        "checksumValue": "SOME-SHA1"
-                                    }
-                                ],
-                                "licenseConcluded": "NOASSERTION",
-                                "licenseInfoFromFiles": [
-                                    "LGPL-2.1-or-later"
-                                ],
-                                "copyrightText": "NOASSERTION",
-                                "sha1": "SOME-SHA1"
-                            }
-                        }
-                    ]
-                }
-            },
-            {
-                "Package": {
-                    "SPDXID": "SPDXRef-Package3",
-                    "name": "some/path3",
-                    "downloadLocation": "NOASSERTION",
-                    "licenseInfoFromFiles": [
-                        "LGPL-2.1-or-later"
-                    ],
-                    "licenseConcluded": "NOASSERTION",
-                    "licenseDeclared": "NOASSERTION",
-                    "copyrightText": "Some copyright",
-                    "files": [
-                        {
-                            "File": {
-                                "name": "./some/path/tofile",
-                                "SPDXID": "SPDXRef-File",
-                                "checksums": [
-                                    {
-                                        "algorithm": "checksumAlgorithm_sha1",
-                                        "checksumValue": "SOME-SHA1"
-                                    }
-                                ],
-                                "licenseConcluded": "NOASSERTION",
-                                "licenseInfoFromFiles": [
-                                    "LGPL-2.1-or-later"
-                                ],
-                                "copyrightText": "NOASSERTION",
-                                "sha1": "SOME-SHA1"
-                            }
-                        }
-                    ]
-                }
+    "spdxVersion": "SPDX-2.1",
+    "documentNamespace": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+    "creationInfo": {
+        "creators": [
+            "Tool: ScanCode"
+        ],
+        "created": "2021-10-21T17:09:37Z",
+        "licenseListVersion": "3.6"
+    },
+    "dataLicense": "CC0-1.0",
+    "SPDXID": "SPDXRef-DOCUMENT",
+    "name": "Sample_Document-V2.1",
+    "documentDescribes": [
+        {
+            "Package": {
+                "SPDXID": "SPDXRef-Package1",
+                "name": "some/path1",
+                "downloadLocation": "NOASSERTION",
+                "filesAnalyzed": false,
+                "licenseConcluded": "NOASSERTION",
+                "licenseDeclared": "NOASSERTION",
+                "copyrightText": "Some copyright"
             }
-        ]
+        },
+        {
+            "Package": {
+                "SPDXID": "SPDXRef-Package2",
+                "name": "some/path2",
+                "downloadLocation": "NOASSERTION",
+                "packageVerificationCode": {
+                    "packageVerificationCodeValue": "SOME code"
+                },
+                "licenseInfoFromFiles": [
+                    "LGPL-2.1-or-later"
+                ],
+                "licenseConcluded": "NOASSERTION",
+                "licenseDeclared": "NOASSERTION",
+                "copyrightText": "Some copyright",
+                "files": [
+                    {
+                        "File": {
+                            "name": "./some/path/tofile",
+                            "SPDXID": "SPDXRef-File",
+                            "checksums": [
+                                {
+                                    "algorithm": "checksumAlgorithm_sha1",
+                                    "checksumValue": "SOME-SHA1"
+                                }
+                            ],
+                            "licenseConcluded": "NOASSERTION",
+                            "licenseInfoFromFiles": [
+                                "LGPL-2.1-or-later"
+                            ],
+                            "copyrightText": "NOASSERTION",
+                            "sha1": "SOME-SHA1"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "Package": {
+                "SPDXID": "SPDXRef-Package3",
+                "name": "some/path3",
+                "downloadLocation": "NOASSERTION",
+                "licenseInfoFromFiles": [
+                    "LGPL-2.1-or-later"
+                ],
+                "licenseConcluded": "NOASSERTION",
+                "licenseDeclared": "NOASSERTION",
+                "copyrightText": "Some copyright",
+                "files": [
+                    {
+                        "File": {
+                            "name": "./some/path/tofile",
+                            "SPDXID": "SPDXRef-File",
+                            "checksums": [
+                                {
+                                    "algorithm": "checksumAlgorithm_sha1",
+                                    "checksumValue": "SOME-SHA1"
+                                }
+                            ],
+                            "licenseConcluded": "NOASSERTION",
+                            "licenseInfoFromFiles": [
+                                "LGPL-2.1-or-later"
+                            ],
+                            "copyrightText": "NOASSERTION",
+                            "sha1": "SOME-SHA1"
+                        }
+                    }
+                ]
+            }
+        }
+    ]
     }
-}

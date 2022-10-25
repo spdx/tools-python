@@ -513,7 +513,7 @@ class Writer(
         if self.document.relationships:
             self.document_object["relationships"] = self.create_relationship_info()
 
-        return {"Document": self.document_object}
+        return self.document_object
 
 
 def flatten_document(document_object):

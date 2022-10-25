@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SpdxDocument>
 	<Document>
         <spdxVersion>SPDX-2.1</spdxVersion>
         <dataLicense>CC0-1.0</dataLicense>
@@ -40,4 +39,3 @@
             </Package>
         </documentDescribes>
     </Document>
-</SpdxDocument>
