@@ -299,7 +299,7 @@ class Package(object):
         return sha1.hexdigest()
 
     def has_optional_field(self, field):
-        return bool (getattr(self, field, None)
+        return bool (getattr(self, field, None))
 
 
 class ExternalPackageRef(object):
