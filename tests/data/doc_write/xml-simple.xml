@@ -1,43 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SpdxDocument>
-	<Document>
-        <spdxVersion>SPDX-2.1</spdxVersion>
-        <dataLicense>CC0-1.0</dataLicense>
-		<name>Sample_Document-V2.1</name>
-		<SPDXID>SPDXRef-DOCUMENT</SPDXID>
-		<documentNamespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</documentNamespace>
-        <documentDescribes>
-            <Package>
-				<SPDXID>SPDXRef-Package</SPDXID>
-                <name>some/path</name>
-                <downloadLocation>NOASSERTION</downloadLocation>
-                <copyrightText>Some copyrught</copyrightText>
-                <packageVerificationCode>
-					<packageVerificationCodeValue>SOME code</packageVerificationCodeValue>
-				</packageVerificationCode>
-                <checksums>
-					<checksumValue>SOME-SHA1</checksumValue>
-					<algorithm>checksumAlgorithm_sha1</algorithm>
-				</checksums>
-                <licenseDeclared>NOASSERTION</licenseDeclared>
-                <licenseConcluded>NOASSERTION</licenseConcluded>
-                <files>
-					<File>
-						<name>./some/path/tofile</name>
-						<SPDXID>SPDXRef-File</SPDXID>
-						<checksums>
-							<checksumValue>SOME-SHA1</checksumValue>
-							<algorithm>checksumAlgorithm_sha1</algorithm>
-						</checksums>
-                        <licenseConcluded>NOASSERTION</licenseConcluded>
-                        <copyrightText>NOASSERTION</copyrightText>
-						<licenseInfoFromFiles>LGPL-2.1-only</licenseInfoFromFiles>
-						<sha1>SOME-SHA1</sha1>
-					</File>
-				</files>
-                <licenseInfoFromFiles>LGPL-2.1-only</licenseInfoFromFiles>
-                <sha1>SOME-SHA1</sha1>
-            </Package>
-        </documentDescribes>
-    </Document>
-</SpdxDocument>
+<Document>
+	<spdxVersion>SPDX-2.1</spdxVersion>
+	<dataLicense>CC0-1.0</dataLicense>
+	<name>Sample_Document-V2.1</name>
+	<SPDXID>SPDXRef-DOCUMENT</SPDXID>
+	<documentNamespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</documentNamespace>
+	<documentDescribes>
+		<Package>
+			<SPDXID>SPDXRef-Package</SPDXID>
+			<name>some/path</name>
+			<downloadLocation>NOASSERTION</downloadLocation>
+			<copyrightText>Some copyrught</copyrightText>
+			<packageVerificationCode>
+				<packageVerificationCodeValue>SOME code</packageVerificationCodeValue>
+			</packageVerificationCode>
+			<checksums>
+				<checksumValue>SOME-SHA1</checksumValue>
+				<algorithm>checksumAlgorithm_sha1</algorithm>
+			</checksums>
+			<licenseDeclared>NOASSERTION</licenseDeclared>
+			<licenseConcluded>NOASSERTION</licenseConcluded>
+			<files>
+				<File>
+					<name>./some/path/tofile</name>
+					<SPDXID>SPDXRef-File</SPDXID>
+					<checksums>
+						<checksumValue>SOME-SHA1</checksumValue>
+						<algorithm>checksumAlgorithm_sha1</algorithm>
+					</checksums>
+					<licenseConcluded>NOASSERTION</licenseConcluded>
+					<copyrightText>NOASSERTION</copyrightText>
+					<licenseInfoFromFiles>LGPL-2.1-only</licenseInfoFromFiles>
+					<sha1>SOME-SHA1</sha1>
+				</File>
+			</files>
+			<licenseInfoFromFiles>LGPL-2.1-only</licenseInfoFromFiles>
+			<sha1>SOME-SHA1</sha1>
+		</Package>
+	</documentDescribes>
+</Document>

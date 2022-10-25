@@ -25,6 +25,6 @@ def write_document(document, out, validate=True):
             raise InvalidDocumentError(messages)
 
     writer = Writer(document)
-    document_object = {"SpdxDocument": writer.create_document()}
+    document_object = writer.create_document()
 
     xmltodict.unparse(document_object, out, encoding="utf-8", pretty=True)

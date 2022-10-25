@@ -342,9 +342,9 @@ class SnippetWriter(BaseWriter):
             snippet_object = dict()
             snippet_object["SPDXID"] = self.spdx_id(snippet.spdx_id)
             snippet_object["copyrightText"] = snippet.copyright
-            snippet_object["fileId"] = self.spdx_id(snippet.snip_from_file_spdxid)
+            snippet_object["snippetFromFile"] = self.spdx_id(snippet.snip_from_file_spdxid)
             snippet_object["licenseConcluded"] = self.license(snippet.conc_lics)
-            snippet_object["licenseInfoFromSnippet"] = list(
+            snippet_object["licenseInfoInSnippets"] = list(
                 map(self.license, snippet.licenses_in_snippet)
             )
 

@@ -21,6 +21,7 @@ import re
 
 import xmltodict
 import yaml
+from spdx.utils import NoAssert
 
 import spdx
 from spdx import utils
@@ -237,9 +238,8 @@ def load_and_clean_xml(location):
     with io.open(location, encoding='utf-8') as l:
         content = l.read()
     data = xmltodict.parse(content, encoding='utf-8')
-
-    if 'creationInfo' in data['SpdxDocument']['Document']:
-        del(data['SpdxDocument']['Document']['creationInfo'])
+    if 'creationInfo' in data['Document']:
+        del(data['Document']['creationInfo'])
 
     return sort_nested(data)
 
@@ -276,7 +276,10 @@ class TestParserUtils(object):
             return None
         license_dict = OrderedDict()
 
-        if isinstance(license, spdx.document.LicenseConjunction):
+        if isinstance(license, NoAssert):
+            license_dict['type'] = NoAssert()
+            return license_dict
+        elif isinstance(license, spdx.document.LicenseConjunction):
             license_dict['type'] = 'Conjunction'
             sep_regex = CONJ_SEP
         elif isinstance(license, spdx.document.LicenseDisjunction):
