@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SpdxDocument>
 	<Document>
 		<comment>This is a sample spreadsheet</comment>
 		<name>Sample_Document-V2.1</name>
@@ -261,4 +260,3 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
             <relationshipType>CONTAINS</relationshipType>
         </relationships>
 	</Document>
-</SpdxDocument>
