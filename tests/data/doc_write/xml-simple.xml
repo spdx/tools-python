@@ -38,4 +38,9 @@
                 <sha1>SOME-SHA1</sha1>
             </Package>
         </documentDescribes>
+	        <relationships>
+            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
+            <relatedSpdxElement>SPDXRef-Package</relatedSpdxElement>
+            <relationshipType>DESCRIBES</relationshipType>
+        </relationships>
     </Document>

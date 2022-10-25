@@ -5,6 +5,8 @@ DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0
 DocumentName: Sample_Document-V2.1
 SPDXID: SPDXRef-DOCUMENT
 # Creation Info
+# Relationships
+Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package
 # Package
 PackageName: some/path
 SPDXID: SPDXRef-Package

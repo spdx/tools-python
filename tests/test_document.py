@@ -22,6 +22,7 @@ from spdx.document import License
 from spdx.file import File
 from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
+from spdx.relationship import Relationship
 from spdx.utils import NoAssert
 from spdx.version import Version
 
@@ -191,6 +192,8 @@ class TestWriters(TestCase):
 
         package.add_lics_from_file(lic1)
         package.add_file(file1)
+        relationship = doc.spdx_id + " " + "DESCRIBES" + " " + package.spdx_id
+        doc.add_relationships(Relationship(relationship))
         return doc
 
     def _get_lgpl_multi_package_doc(self, or_later=False):
@@ -245,6 +248,13 @@ class TestWriters(TestCase):
 
         doc.add_package(package2)
         doc.add_package(package3)
+
+        relationship = doc.spdx_id + " " + "DESCRIBES" + " " + package1.spdx_id
+        doc.add_relationships(Relationship(relationship))
+        relationship = doc.spdx_id + " " + "DESCRIBES" + " " + package2.spdx_id
+        doc.add_relationships(Relationship(relationship))
+        relationship = doc.spdx_id + " " + "DESCRIBES" + " " + package3.spdx_id
+        doc.add_relationships(Relationship(relationship))
 
         return doc
 
