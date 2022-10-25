@@ -288,6 +288,10 @@ class Package(object):
                 messages.append(
                     "Package checksum must be instance of spdx.checksum.Algorithm"
                 )
+            elif not self.check_sum.identifier == "SHA1":
+                messages.append(
+                    "First checksum in package must be SHA1."
+                )
 
         return messages
 

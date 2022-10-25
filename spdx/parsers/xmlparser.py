@@ -37,12 +37,16 @@ class Parser(jsonyamlxml.Parser):
             "reviewers",
             "fileTypes",
             "licenseInfoFromFiles",
+            "licenseInfoInFiles",
             "artifactOf",
             "fileContributors",
             "fileDependencies",
             "excludedFilesNames",
             "files",
             "documentDescribes",
+            "packages",
+            "checksums",
+            "hasFiles"
         }
 
     def parse(self, file):

@@ -1495,36 +1495,34 @@ class PackageParser(BaseParser):
             self.value_error("PKG_CHECKSUM", pkg_chksum)
 
 
-def unflatten_document(document):
+def flatten_document(document):
     """
-    Inverse of spdx.writers.jsonyamlxml.flatten_document
+    Flatten document to match current data model. File objects are nested within packages according to hasFiles-tag.
     """
     files_by_id = {}
     if "files" in document:
-        for f in document.pop("files"):
+        for f in document.get("files"):
             f["name"] = f.pop("fileName")
             # XXX must downstream rely on "sha1" property?
             for checksum in f["checksums"]:
-                if checksum["algorithm"] == "SHA1":
+                if checksum["algorithm"] == "SHA1" or "sha1" in checksum["algorithm"]:
                     f["sha1"] = checksum["checksumValue"]
                     break
             if "licenseInfoInFiles" in f:
                 f["licenseInfoFromFiles"] = f.pop("licenseInfoInFiles")
             files_by_id[f["SPDXID"]] = f
-
-    packages = document.pop("packages")
-    for package in packages:
-        if "hasFiles" in package:
-            package["files"] = [{
-                "File": files_by_id[spdxid]} for spdxid in package["hasFiles"]
-            ]
-        # XXX must downstream rely on "sha1" property?
-        for checksum in package.get("checksums", []):
-            if checksum["algorithm"] == "SHA1":
-                package["sha1"] = checksum["checksumValue"]
-                break
-
-    document["documentDescribes"] = [{ "Package": package} for package in packages ]
+    if "packages" in document:
+        packages = document.get("packages")
+        for package in packages:
+            if "hasFiles" in package:
+                package["files"] = [{
+                    "File": files_by_id[spdxid.split("#")[-1]]} for spdxid in package["hasFiles"]
+                ]
+            # XXX must downstream rely on "sha1" property?
+            for checksum in package.get("checksums", []):
+                if checksum["algorithm"] == "SHA1" or "sha1" in checksum["algorithm"]:
+                    package["sha1"] = checksum["checksumValue"]
+                    break
 
     return document
 
@@ -1545,7 +1543,7 @@ class Parser(
     def json_yaml_set_document(self, data):
         # we could verify that the spdxVersion >= 2.2, but we try to be resilient in parsing
         if data.get("spdxVersion"):
-            self.document_object = unflatten_document(data)
+            self.document_object = data
             return
         self.document_object = data.get("Document")
 
@@ -1555,6 +1553,7 @@ class Parser(
         """
         self.error = False
         self.document = document.Document()
+        self.document_object = flatten_document(self.document_object)
         if not isinstance(self.document_object, dict):
             self.logger.log("Empty or not valid SPDX Document")
             self.error = True
@@ -1580,7 +1579,8 @@ class Parser(
 
         self.parse_packages(self.document_object.get("packages"))
 
-        self.parse_doc_described_objects(self.document_object.get("documentDescribes"))
+        if self.document_object.get("documentDescribes"):
+            self.parse_doc_described_objects(self.document_object.get("documentDescribes"))
 
         validation_messages = ErrorMessages()
         # Report extra errors if self.error is False otherwise there will be
@@ -1693,11 +1693,17 @@ class Parser(
                 and described.get("File") is not None,
                 doc_described_objects,
             )
+            relationships = filter(
+                lambda described: isinstance(described, str), doc_described_objects
+            )
             # At the moment, only single-package documents are supported, so just the last package will be stored.
             for package in packages:
                 self.parse_package(package.get("Package"))
             for file in files:
                 self.parse_file(file.get("File"))
+            for relationship in relationships:
+                self.parse_relationship(self.document.spdx_id, "DESCRIBES", relationship)
+
             return True
         else:
             self.value_error("DOC_DESCRIBES", doc_described_objects)

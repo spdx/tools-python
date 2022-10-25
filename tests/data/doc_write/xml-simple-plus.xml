@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 	<Document>
         <spdxVersion>SPDX-2.1</spdxVersion>
         <dataLicense>CC0-1.0</dataLicense>
 		<name>Sample_Document-V2.1</name>
 		<SPDXID>SPDXRef-DOCUMENT</SPDXID>
 		<documentNamespace>https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301</documentNamespace>
-        <documentDescribes>
-            <Package>
+        <documentDescribes>SPDXRef-Package</documentDescribes>
+            <packages>
 				<SPDXID>SPDXRef-Package</SPDXID>
                 <name>some/path</name>
                 <downloadLocation>NOASSERTION</downloadLocation>
@@ -20,9 +21,13 @@
 				</checksums>
                 <licenseDeclared>NOASSERTION</licenseDeclared>
                 <licenseConcluded>NOASSERTION</licenseConcluded>
+				   <licenseInfoFromFiles>LGPL-2.1-or-later</licenseInfoFromFiles>
+
+	<hasFiles>SPDXRef-File</hasFiles>
+			</packages>
                 <files>
-					<File>
-						<name>./some/path/tofile</name>
+
+						<fileName>./some/path/tofile</fileName>
 						<SPDXID>SPDXRef-File</SPDXID>
 						<checksums>
 							<checksumValue>SOME-SHA1</checksumValue>
@@ -30,18 +35,9 @@
 						</checksums>
                         <licenseConcluded>NOASSERTION</licenseConcluded>
                         <copyrightText>NOASSERTION</copyrightText>
-						<licenseInfoFromFiles>LGPL-2.1-or-later</licenseInfoFromFiles>
-						<sha1>SOME-SHA1</sha1>
-					</File>
+						<licenseInfoInFiles>LGPL-2.1-or-later</licenseInfoInFiles>
+
 				</files>
-                <licenseInfoFromFiles>LGPL-2.1-or-later</licenseInfoFromFiles>
-                <sha1>SOME-SHA1</sha1>
-            </Package>
-        </documentDescribes>
-	        <relationships>
-            <spdxElementId>SPDXRef-DOCUMENT</spdxElementId>
-            <relatedSpdxElement>SPDXRef-Package</relatedSpdxElement>
-            <relationshipType>DESCRIBES</relationshipType>
-        </relationships>
+
 
     </Document>
