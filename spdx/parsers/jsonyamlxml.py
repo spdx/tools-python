@@ -737,7 +737,7 @@ class FileParser(BaseParser):
         - file: Python dict with File Information fields in it
         """
         if isinstance(file, dict):
-            self.parse_file_name(file.get("name"))
+            self.parse_file_name(file.get("fileName"))
             self.parse_file_id(file.get("SPDXID"))
             self.parse_file_types(file.get("fileTypes"))
             self.parse_file_concluded_license(file.get("licenseConcluded"))
@@ -1502,7 +1502,6 @@ def flatten_document(document):
     files_by_id = {}
     if "files" in document:
         for f in document.get("files"):
-            f["name"] = f.pop("fileName")
             # XXX must downstream rely on "sha1" property?
             for checksum in f["checksums"]:
                 if checksum["algorithm"] == "SHA1" or "sha1" in checksum["algorithm"]:

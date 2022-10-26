@@ -104,7 +104,7 @@
       "files": [
         {
           "id": "SPDXRef-File1",
-          "name": "Jenna-2.6.3/jena-2.6.3-sources.jar",
+          "fileName": "Jenna-2.6.3/jena-2.6.3-sources.jar",
           "type": 3,
           "comment": "This file belongs to Jena",
           "licenseConcluded": {
@@ -140,7 +140,7 @@
         },
         {
           "id": "SPDXRef-File2",
-          "name": "src/org/spdx/parser/DOAPProject.java",
+          "fileName": "src/org/spdx/parser/DOAPProject.java",
           "type": 1,
           "comment": null,
           "licenseConcluded": {

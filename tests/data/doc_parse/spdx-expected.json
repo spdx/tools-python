@@ -104,7 +104,7 @@
       "files": [
         {
           "id": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File1",
-          "name": "Jenna-2.6.3/jena-2.6.3-sources.jar",
+          "fileName": "Jenna-2.6.3/jena-2.6.3-sources.jar",
           "type": 3,
           "comment": "This file belongs to Jena",
           "licenseConcluded": {
@@ -138,7 +138,7 @@
         },
         {
           "id": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File2",
-          "name": "src/org/spdx/parser/DOAPProject.java",
+          "fileName": "src/org/spdx/parser/DOAPProject.java",
           "type": 1,
           "comment": null,
           "licenseConcluded": {
