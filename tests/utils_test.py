@@ -381,7 +381,7 @@ class TestParserUtils(object):
             contributors = sorted(file.contributors, key=lambda c: c.name)
             file_dict = OrderedDict([
                 ('id', file.spdx_id),
-                ('name', file.name),
+                ('fileName', file.name),
                 ('type', file.type),
                 ('comment', file.comment),
                 ('licenseConcluded', cls.license_to_dict(file.conc_lics)),
