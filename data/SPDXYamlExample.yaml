@@ -51,7 +51,7 @@ Document:
           SPDXID: SPDXRef-File1
           licenseComments: This license is used by Jena
           licenseConcluded: LicenseRef-1
-          licenseInfoFromFiles:
+          licenseInfoInFiles:
           - LicenseRef-1
           name: Jenna-2.6.3/jena-2.6.3-sources.jar
           sha1: 3ab4e1c67a2d28fced849ee1bb76e7391b93f125
@@ -64,7 +64,7 @@ Document:
           - fileType_source
           SPDXID: SPDXRef-File2
           licenseConcluded: Apache-2.0
-          licenseInfoFromFiles:
+          licenseInfoInFiles:
           - Apache-2.0
           name: src/org/spdx/parser/DOAPProject.java
           sha1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12

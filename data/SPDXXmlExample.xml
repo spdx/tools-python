@@ -9,7 +9,7 @@
                  <attributionTexts>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</attributionTexts>
 				<files>
 					<File>
-						<licenseInfoFromFiles>Apache-2.0</licenseInfoFromFiles>
+						<licenseInfoInFiles>Apache-2.0</licenseInfoInFiles>
 						<sha1>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</sha1>
 						<name>src/org/spdx/parser/DOAPProject.java</name>
 						<copyrightText>Copyright 2010, 2011 Source Auditor Inc.</copyrightText>
@@ -26,7 +26,7 @@
 				<files>
 					<File>
 						<comment>This file belongs to Jena</comment>
-						<licenseInfoFromFiles>LicenseRef-1</licenseInfoFromFiles>
+						<licenseInfoInFiles>LicenseRef-1</licenseInfoInFiles>
 						<sha1>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</sha1>
 						<name>Jenna-2.6.3/jena-2.6.3-sources.jar</name>
 						<copyrightText>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP</copyrightText>

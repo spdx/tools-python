@@ -741,7 +741,7 @@ class FileParser(BaseParser):
             self.parse_file_id(file.get("SPDXID"))
             self.parse_file_types(file.get("fileTypes"))
             self.parse_file_concluded_license(file.get("licenseConcluded"))
-            self.parse_file_license_info_from_files(file.get("licenseInfoFromFiles"))
+            self.parse_file_license_info_from_files(file.get("licenseInfoInFiles"))
             self.parse_file_license_comments(file.get("licenseComments"))
             self.parse_file_copyright_text(file.get("copyrightText"))
             self.parse_file_artifacts(file.get("artifactOf"))
@@ -1508,8 +1508,6 @@ def flatten_document(document):
                 if checksum["algorithm"] == "SHA1" or "sha1" in checksum["algorithm"]:
                     f["sha1"] = checksum["checksumValue"]
                     break
-            if "licenseInfoInFiles" in f:
-                f["licenseInfoFromFiles"] = f.pop("licenseInfoInFiles")
             files_by_id[f["SPDXID"]] = f
     if "packages" in document:
         packages = document.get("packages")
