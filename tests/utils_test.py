@@ -389,7 +389,7 @@ class TestParserUtils(object):
                 ('licenseComment', file.license_comment),
                 ('notice', file.notice),
                 ('checksum', cls.checksum_to_dict(file.chk_sum)),
-                ('licenseInfoFromFiles', [cls.license_to_dict(lic) for lic in lics_from_files]),
+                ('licenseInfoInFiles', [cls.license_to_dict(lic) for lic in lics_from_files]),
                 ('contributors', [cls.entity_to_dict(contributor) for contributor in contributors]),
                 ('dependencies', sorted(file.dependencies)),
                 ('artifactOfProjectName', file.artifact_of_project_name),
