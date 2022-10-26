@@ -14,7 +14,6 @@
             <licenseInfoFromFiles>Apache-2.0</licenseInfoFromFiles>
             <licenseInfoFromFiles>LicenseRef-2</licenseInfoFromFiles>
             <licenseInfoFromFiles>MPL-1.1</licenseInfoFromFiles>
-            <sha1>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</sha1>
             <name>SPDX Translator</name>
             <hasFiles>SPDXRef-File1</hasFiles>
             <hasFiles>SPDXRef-File2</hasFiles>
@@ -198,7 +197,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
 		<SPDXID>SPDXRef-DOCUMENT</SPDXID>
         <files>
             <licenseInfoInFiles>Apache-2.0</licenseInfoInFiles>
-            <sha1>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</sha1>
             <fileName>src/org/spdx/parser/DOAPProject.java</fileName>
             <copyrightText>Copyright 2010, 2011 Source Auditor Inc.</copyrightText>
             <licenseConcluded>Apache-2.0</licenseConcluded>
@@ -213,7 +211,6 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
         <files>
             <comment>This file belongs to Jena</comment>
             <licenseInfoInFiles>LicenseRef-1</licenseInfoInFiles>
-            <sha1>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</sha1>
             <fileName>Jenna-2.6.3/jena-2.6.3-sources.jar</fileName>
             <copyrightText>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP</copyrightText>
             <artifactOf>
