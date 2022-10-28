@@ -73,21 +73,6 @@
         "LGPL-2.1-or-later"
       ],
       "copyrightText": "NOASSERTION"
-    },
-    {
-      "fileName": "./some/path/tofile",
-      "SPDXID": "SPDXRef-File",
-      "checksums": [
-        {
-          "algorithm": "SHA1",
-          "checksumValue": "SOME-SHA1"
-        }
-      ],
-      "licenseConcluded": "NOASSERTION",
-      "licenseInfoInFiles": [
-        "LGPL-2.1-or-later"
-      ],
-      "copyrightText": "NOASSERTION"
     }
   ]
 }

@@ -264,7 +264,7 @@ class FileWriter(LicenseWriter):
             (
                 file_node,
                 self.spdx_namespace.checksum,
-                self.create_checksum_node(doc_file.chk_sum),
+                self.create_checksum_node(doc_file.chksum),
             )
         )
 
@@ -754,8 +754,8 @@ class PackageWriter(LicenseWriter):
             package, package_node, self.spdx_namespace.filesAnalyzed, "files_analyzed"
         )
 
-        if package.has_optional_field("check_sum"):
-            checksum_node = self.create_checksum_node(package.check_sum)
+        if package.has_optional_field("checksum"):
+            checksum_node = self.create_checksum_node(package.checksum)
             self.graph.add((package_node, self.spdx_namespace.checksum, checksum_node))
 
         if package.has_optional_field("homepage"):

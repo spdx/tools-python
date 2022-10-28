@@ -780,7 +780,7 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_chk_sum_set:
             self.package_chk_sum_set = True
-            doc.packages[-1].check_sum = checksum_from_sha1(chk_sum)
+            doc.packages[-1].checksum = checksum_from_sha1(chk_sum)
             return True
         else:
             raise CardinalityError("Package::CheckSum")
@@ -1130,7 +1130,7 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_chksum_set:
                 self.file_chksum_set = True
-                self.file(doc).chk_sum = checksum_from_sha1(chksum)
+                self.file(doc).chksum = checksum_from_sha1(chksum)
                 return True
             else:
                 raise CardinalityError("File::CheckSum")

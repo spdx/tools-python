@@ -50,8 +50,8 @@ def main(file, force):
         "Package Download Location: {0}".format(doc.package.download_location)
     )
     print("Package Homepage: {0}".format(doc.package.homepage))
-    if doc.package.check_sum:
-        print("Package Checksum: {0}".format(doc.package.check_sum.value))
+    if doc.package.checksum:
+        print("Package Checksum: {0}".format(doc.package.checksum.value))
     print("Package Attribution Text: {0}".format(doc.package.attribution_text))
     print("Package verification code: {0}".format(doc.package.verif_code))
     print(
@@ -77,7 +77,7 @@ def main(file, force):
     for f in doc.files:
         print("\tFile name: {0}".format(f.name))
         print("\tFile type: {0}".format(VALUES[f.type]))
-        print("\tFile Checksum: {0}".format(f.chk_sum.value))
+        print("\tFile Checksum: {0}".format(f.chksum.value))
         print("\tFile license concluded: {0}".format(f.conc_lics))
         print(
             "\tFile license info in file: {0}".format(

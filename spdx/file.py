@@ -42,7 +42,7 @@ class File(object):
     - comment: File comment str, Optional zero or one.
     - type: one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
       and FileType.OTHER, optional zero or one.
-    - chk_sum: SHA1, Mandatory one.
+    - chksum: SHA1, Mandatory one.
     - conc_lics: Mandatory one. document.License or utils.NoAssert or utils.SPDXNone.
     - licenses_in_file: list of licenses found in file, mandatory one or more.
       document.License or utils.SPDXNone or utils.NoAssert.
@@ -58,12 +58,12 @@ class File(object):
     -attribution_text: optional string.
     """
 
-    def __init__(self, name, spdx_id=None, chk_sum=None):
+    def __init__(self, name, spdx_id=None, chksum=None):
         self.name = name
         self.spdx_id = spdx_id
         self.comment = None
         self.type = None
-        self.checksums = [None]
+        self.checksums = [chksum]
         self.conc_lics = None
         self.licenses_in_file = []
         self.license_comment = None
@@ -83,15 +83,15 @@ class File(object):
         return self.name < other.name
 
     @property
-    def chk_sum(self):
+    def chksum(self):
         """
         Backwards compatibility, return first checksum.
         """
         # NOTE Package.check_sum but File.chk_sum
         return self.checksums[0]
 
-    @chk_sum.setter
-    def chk_sum(self, value):
+    @chksum.setter
+    def chksum(self, value):
         self.checksums[0] = value
 
     def add_lics(self, lics):
@@ -190,12 +190,12 @@ class File(object):
         return messages
 
     def validate_checksum(self, messages):
-        if not isinstance(self.chk_sum, checksum.Algorithm):
+        if not isinstance(self.chksum, checksum.Algorithm):
             messages.append(
                 "File checksum must be instance of spdx.checksum.Algorithm"
             )
         else:
-            if not self.chk_sum.identifier == "SHA1":
+            if not self.chksum.identifier == "SHA1":
                 messages.append("File checksum algorithm must be SHA1")
 
         return messages

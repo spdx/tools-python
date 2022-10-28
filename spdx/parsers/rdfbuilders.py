@@ -195,7 +195,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         self.assert_package_exists()
         if not self.package_chk_sum_set:
             self.package_chk_sum_set = True
-            doc.packages[-1].check_sum = checksum.Algorithm("SHA1", chk_sum)
+            doc.packages[-1].checksum = checksum.Algorithm("SHA1", chk_sum)
         else:
             raise CardinalityError("Package::CheckSum")
 
@@ -391,7 +391,7 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_chksum_set:
                 self.file_chksum_set = True
-                self.file(doc).chk_sum = checksum.Algorithm("SHA1", chk_sum)
+                self.file(doc).chksum = checksum.Algorithm("SHA1", chk_sum)
                 return True
             else:
                 raise CardinalityError("File::CheckSum")

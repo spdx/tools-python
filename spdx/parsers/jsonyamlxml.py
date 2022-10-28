@@ -741,7 +741,7 @@ class FileParser(BaseParser):
             self.parse_file_id(file.get("SPDXID"))
             self.parse_file_types(file.get("fileTypes"))
             self.parse_file_concluded_license(file.get("licenseConcluded"))
-            self.parse_file_license_info_from_files(file.get("licenseInfoInFiles"))
+            self.parse_file_license_info_in_files(file.get("licenseInfoInFiles"))
             self.parse_file_license_comments(file.get("licenseComments"))
             self.parse_file_copyright_text(file.get("copyrightText"))
             self.parse_file_artifacts(file.get("artifactOf"))
@@ -836,7 +836,7 @@ class FileParser(BaseParser):
         else:
             self.value_error("FILE_SINGLE_LICS", concluded_license)
 
-    def parse_file_license_info_from_files(self, license_info_from_files):
+    def parse_file_license_info_in_files(self, license_info_from_files):
         """
         Parse File license information from files
         - license_info_from_files: Python list of licenses information from files (str/unicode)
@@ -1502,7 +1502,6 @@ def flatten_document(document):
     files_by_id = {}
     if "files" in document:
         for f in document.get("files"):
-            # XXX must downstream rely on "sha1" property?
             for checksum in f["checksums"]:
                 if checksum["algorithm"] == "SHA1" or "sha1" in checksum["algorithm"]:
                     f["sha1"] = checksum["checksumValue"]
@@ -1515,7 +1514,6 @@ def flatten_document(document):
                 package["files"] = [{
                     "File": files_by_id[spdxid.split("#")[-1]]} for spdxid in package["hasFiles"]
                 ]
-            # XXX must downstream rely on "sha1" property?
             for checksum in package.get("checksums", []):
                 if checksum["algorithm"] == "SHA1" or "sha1" in checksum["algorithm"]:
                     package["sha1"] = checksum["checksumValue"]
@@ -1676,30 +1674,15 @@ class Parser(
 
     def parse_doc_described_objects(self, doc_described_objects):
         """
-        Parse Document documentDescribes (Files and Packages dicts)
-        - doc_described_objects: Python list of dicts as in FileParser.parse_file or PackageParser.parse_package
+        Parse Document documentDescribes (SPDXIDs)
+        - doc_described_objects: Python list of strings
         """
         if isinstance(doc_described_objects, list):
-            packages = filter(
-                lambda described: isinstance(described, dict)
-                and described.get("Package") is not None,
-                doc_described_objects,
-            )
-            files = filter(
-                lambda described: isinstance(described, dict)
-                and described.get("File") is not None,
-                doc_described_objects,
-            )
-            relationships = filter(
+            described_spdxids = filter(
                 lambda described: isinstance(described, str), doc_described_objects
             )
-            # At the moment, only single-package documents are supported, so just the last package will be stored.
-            for package in packages:
-                self.parse_package(package.get("Package"))
-            for file in files:
-                self.parse_file(file.get("File"))
-            for relationship in relationships:
-                self.parse_relationship(self.document.spdx_id, "DESCRIBES", relationship)
+            for spdxid in described_spdxids:
+                self.parse_relationship(self.document.spdx_id, "DESCRIBES", spdxid)
 
             return True
         else:
