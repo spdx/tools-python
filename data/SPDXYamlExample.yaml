@@ -170,16 +170,6 @@ Document:
   SPDXID: SPDXRef-DOCUMENT
   name: Sample_Document-V2.1
   documentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301
-  relationships:
-    - spdxElementId: "SPDXRef-DOCUMENT"
-      relatedSpdxElement: "SPDXRef-Package"
-      relationshipType: "DESCRIBES"
-    - spdxElementId: "SPDXRef-DOCUMENT"
-      relatedSpdxElement: "SPDXRef-Package"
-      relationshipType: "CONTAINS"
-    - spdxElementId: "SPDXRef-DOCUMENT"
-      relatedSpdxElement: "SPDXRef-File"
-      relationshipType: "DESCRIBES"
   reviewers:
     - comment: Another example reviewer.
       reviewDate: '2011-03-13T00:00:00Z'

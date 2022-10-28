@@ -147,7 +147,7 @@ class PackageWriter(BaseWriter):
         if package.has_optional_field("originator"):
             package_object["originator"] = package.originator.to_value()
 
-        if package.has_optional_field("check_sum"):
+        if package.has_optional_field("checksum"):
             package_object["checksums"] = [self.checksum(checksum) for checksum in package.checksums if checksum]
 
         if package.has_optional_field("description"):
@@ -204,15 +204,12 @@ class FileWriter(BaseWriter):
 
         file_object["fileName"] = file.name
         file_object["SPDXID"] = self.spdx_id(file.spdx_id)
-        file_object["checksums"] = [self.checksum(file.chk_sum)]
+        file_object["checksums"] = [self.checksum(file.chksum)]
         file_object["licenseConcluded"] = self.license(file.conc_lics)
         file_object["licenseInfoInFiles"] = list(
             map(self.license, file.licenses_in_file)
         )
         file_object["copyrightText"] = file.copyright.__str__()
-       # assert file.chk_sum.identifier == "SHA1", "First checksum must be SHA1"
-       # file_object["sha1"] = file.chk_sum.value
-
 
         if file.has_optional_field("comment"):
             file_object["comment"] = file.comment
@@ -474,17 +471,18 @@ class Writer(
 
     def create_document_describes(self):
         """
-        Create list of SPDXID that have a
+        Create a list of SPDXIDs that the document describes according to DESCRIBES-relationship.
         """
-        described_relationships = []
+        document_describes = []
         remove_rel = []
         for relationship in self.document.relationships:
             if relationship.relationshiptype == "DESCRIBES":
-                described_relationships.append(relationship.relatedspdxelement)
+                document_describes.append(relationship.relatedspdxelement)
                 if not relationship.has_comment:
-                    remove_rel.append(relationship.relatedspdxelement)
-        self.document.relationships = [rel for rel in self.document.relationships if rel.relatedspdxelement not in remove_rel]
-        return described_relationships
+                    remove_rel.append(relationship)
+        for relationship in remove_rel:
+            self.document.relationships.remove(relationship)
+        return document_describes
 
 
     def create_document(self):
@@ -497,16 +495,15 @@ class Writer(
         self.document_object["SPDXID"] = self.spdx_id(self.document.spdx_id)
         self.document_object["name"] = self.document.name
 
-        described_relationships = self.create_document_describes()
-        if described_relationships:
-            self.document_object["documentDescribes"] = described_relationships
+        document_describes = self.create_document_describes()
+        self.document_object["documentDescribes"] = document_describes
 
         package_objects = []
         file_objects = []
         for package in self.document.packages:
             package_info_object, files_in_package = self.create_package_info(package)
             package_objects.append(package_info_object)
-            file_objects.extend(files_in_package)
+            file_objects.extend(file for file in files_in_package if file not in file_objects)
         self.document_object["packages"] = package_objects
         self.document_object["files"] = file_objects
 
@@ -537,9 +534,3 @@ class Writer(
 
         return self.document_object
 
-
-class JsonYamlWriter(Writer):
-
-    def create_document(self):
-        document_object = super().create_document()
-        return document_object

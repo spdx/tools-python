@@ -106,15 +106,15 @@ class Package(object):
         # return self.files_analyzed or self.files_analyzed is None
 
     @property
-    def check_sum(self):
+    def checksum(self):
         """
         Backwards compatibility, return first checksum.
         """
         # NOTE Package.check_sum but File.chk_sum
         return self.checksums[0]
 
-    @check_sum.setter
-    def check_sum(self, value):
+    @checksum.setter
+    def checksum(self, value):
         self.checksums[0] = value
 
     def add_file(self, fil):
@@ -283,12 +283,12 @@ class Package(object):
         return messages
 
     def validate_checksum(self, messages):
-        if self.check_sum is not None:
-            if not isinstance(self.check_sum, checksum.Algorithm):
+        if self.checksum is not None:
+            if not isinstance(self.checksum, checksum.Algorithm):
                 messages.append(
                     "Package checksum must be instance of spdx.checksum.Algorithm"
                 )
-            elif not self.check_sum.identifier == "SHA1":
+            elif not self.checksum.identifier == "SHA1":
                 messages.append(
                     "First checksum in package must be SHA1."
                 )
@@ -300,10 +300,10 @@ class Package(object):
 
         for file_entry in self.files:
             if (
-                isinstance(file_entry.chk_sum, checksum.Algorithm)
-                and file_entry.chk_sum.identifier == "SHA1"
+                isinstance(file_entry.chksum, checksum.Algorithm)
+                and file_entry.chksum.identifier == "SHA1"
             ):
-                sha1 = file_entry.chk_sum.value
+                sha1 = file_entry.chksum.value
             else:
                 sha1 = file_entry.calc_chksum()
             hashes.append(sha1)

@@ -24,7 +24,7 @@ class TestPackage(TestCase):
 
     def test_package_with_non_sha1_check_sum(self):
         package = Package()
-        package.check_sum = Algorithm("SHA256", '')
+        package.checksum = Algorithm("SHA256", '')
 
         # Make sure that validation still works despite the checksum not being SHA1
         messages = []

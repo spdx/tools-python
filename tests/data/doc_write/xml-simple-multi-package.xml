@@ -49,23 +49,11 @@
         <fileName>./some/path/tofile</fileName>
         <SPDXID>SPDXRef-File</SPDXID>
         <checksums>
-            <algorithm>checksumAlgorithm_sha1</algorithm>
+            <algorithm>SHA1</algorithm>
             <checksumValue>SOME-SHA1</checksumValue>
         </checksums>
         <licenseConcluded>NOASSERTION</licenseConcluded>
         <licenseInfoInFiles>LGPL-2.1-or-later</licenseInfoInFiles>
         <copyrightText>NOASSERTION</copyrightText>
-    </files>
-    <files>
-        <fileName>./some/path/tofile</fileName>
-        <SPDXID>SPDXRef-File</SPDXID>
-        <checksums>
-            <algorithm>checksumAlgorithm_sha1</algorithm>
-            <checksumValue>SOME-SHA1</checksumValue>
-        </checksums>
-        <licenseConcluded>NOASSERTION</licenseConcluded>
-        <licenseInfoInFiles>LGPL-2.1-or-later</licenseInfoInFiles>
-        <copyrightText>NOASSERTION</copyrightText>
-
     </files>
 </Document>

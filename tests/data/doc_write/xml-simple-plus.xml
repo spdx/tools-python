@@ -17,7 +17,7 @@
 				</packageVerificationCode>
                 <checksums>
 					<checksumValue>SOME-SHA1</checksumValue>
-					<algorithm>checksumAlgorithm_sha1</algorithm>
+					<algorithm>SHA1</algorithm>
 				</checksums>
                 <licenseDeclared>NOASSERTION</licenseDeclared>
                 <licenseConcluded>NOASSERTION</licenseConcluded>
@@ -31,7 +31,7 @@
 						<SPDXID>SPDXRef-File</SPDXID>
 						<checksums>
 							<checksumValue>SOME-SHA1</checksumValue>
-							<algorithm>checksumAlgorithm_sha1</algorithm>
+							<algorithm>SHA1</algorithm>
 						</checksums>
                         <licenseConcluded>NOASSERTION</licenseConcluded>
                         <copyrightText>NOASSERTION</copyrightText>
