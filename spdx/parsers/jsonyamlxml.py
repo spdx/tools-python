@@ -452,7 +452,7 @@ class RelationshipParser(BaseParser):
     def parse_relationship(self, spdxelementid, relationshiptype, relatedspdxelement):
         """
         Parse Relationshiptype, spdxElementId and relatedSpdxElement
-        - relationship : Python str/unicode
+        - relationship: Python str/unicode
         """
         if isinstance(relationshiptype, str):
             relate = spdxelementid + " " + relationshiptype + " " + relatedspdxelement
@@ -555,7 +555,7 @@ class SnippetParser(BaseParser):
     def parse_snippet_attribution_text(self, snippet_attribution_texts):
         """
         Parse Snippet attribution texts
-        - snippet_attribution_texts : list in yaml, json and string in xml format
+        - snippet_attribution_texts: list in yaml, json and string in xml format
         """
         if isinstance(snippet_attribution_texts, list) or isinstance(
             snippet_attribution_texts, str
@@ -882,7 +882,7 @@ class FileParser(BaseParser):
     def parse_file_attribution_text(self, file_attribution_texts):
         """
         Parse File attribution texts
-        - file_attribution_texts : list in yaml, json and string in xml format
+        - file_attribution_texts: list in yaml, json and string in xml format
         """
         if isinstance(file_attribution_texts, list) or isinstance(
             file_attribution_texts, str
@@ -1357,7 +1357,7 @@ class PackageParser(BaseParser):
     def parse_pkg_attribution_text(self, pkg_attribution_texts):
         """
         Parse Package attribution texts
-        - pkg_attribution_texts : list in yaml, json and string in xml format
+        - pkg_attribution_texts: list in yaml, json and string in xml format
         """
         if isinstance(pkg_attribution_texts, list) or isinstance(
             pkg_attribution_texts, str
@@ -1579,7 +1579,7 @@ class Parser(
 
         validation_messages = ErrorMessages()
         # Report extra errors if self.error is False otherwise there will be
-        # redundent messages
+        # redundant messages
         validation_messages = self.document.validate(validation_messages)
         if not self.error:
             if validation_messages:

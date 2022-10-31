@@ -24,7 +24,7 @@ from spdx.parsers.loggers import ErrorMessages
 def tv_to_rdf(infile_name, outfile_name):
     """
     Convert a SPDX file from tag/value format to RDF format.
-    Return True on sucess, False otherwise.
+    Return True on success, False otherwise.
     """
     parser = Parser(Builder(), StandardLogger())
     parser.build()
@@ -52,9 +52,9 @@ def main():
         )
         sys.exit(1)
 
-    tvfile = args[0]
-    rdffile = args[1]
-    success = tv_to_rdf(tvfile, rdffile)
+    tv_file = args[0]
+    rdf_file = args[1]
+    success = tv_to_rdf(tv_file, rdf_file)
     sys.exit(0 if success else 1)
 
 

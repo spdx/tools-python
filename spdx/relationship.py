@@ -75,7 +75,7 @@ class Relationship(object):
     Document relationship information
     Fields:
     - relationship:  provides information about the relationship between two SPDX elements.
-    - relationship_comment :  place for the SPDX file creator to record any general comments. Optional, One
+    - relationship_comment:  place for the SPDX file creator to record any general comments. Optional, One
     """
 
     def __init__(self, relationship=None, relationship_comment=None):

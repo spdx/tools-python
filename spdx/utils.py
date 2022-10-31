@@ -33,7 +33,7 @@ DATE_ISO_REGEX = re.compile(
 )
 
 
-# Groups for retrivieng values from DATE_ISO_REGEX matches.
+# Groups for retrieving values from DATE_ISO_REGEX matches.
 DATE_ISO_YEAR_GRP = 1
 DATE_ISO_MONTH_GRP = 2
 DATE_ISO_DAY_GRP = 3

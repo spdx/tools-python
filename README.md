@@ -18,7 +18,7 @@ This library implements SPDX parsers, convertors, validators and handlers in Pyt
 
 - Home: https://github.com/spdx/tools-python
 - Issues: https://github.com/spdx/tools-python/issues
-- Pypi: https://pypi.python.org/pypi/spdx-tools
+- PyPI: https://pypi.python.org/pypi/spdx-tools
 
 
 # History

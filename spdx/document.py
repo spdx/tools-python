@@ -101,7 +101,7 @@ class License(object):
     @classmethod
     def from_full_name(cls, full_name):
         """
-        Returna new License for a full_name. If the full_name exists in
+        Return a new License for a full_name. If the full_name exists in
         config.LICENSE_MAP the identifier is retrieved from it.
         Otherwise the identifier is the same as the full_name.
         """
@@ -286,7 +286,7 @@ class Document(object):
     - annotations: SPDX document annotation information, Optional zero or more.
       Type: Annotation.
     - snippet: Snippet information. Optional zero or more. Type: Snippet.
-    - relationships : Relationship between two SPDX elements. Optional zero or more.
+    - relationships: Relationship between two SPDX elements. Optional zero or more.
       Type: Relationship. 
     """
 

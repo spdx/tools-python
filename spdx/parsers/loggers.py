@@ -30,7 +30,7 @@ class ErrorMessages:
         self.context = []
     
     def push_context(self, context):
-        """push some context information to better indentify where is the problem"""
+        """push some context information to better identify where is the problem"""
         self.context.append(context)
 
     def pop_context(self):

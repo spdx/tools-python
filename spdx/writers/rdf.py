@@ -954,7 +954,7 @@ class Writer(
     SnippetWriter,
 ):
     """
-    Warpper for other writers to write all fields of spdx.document.Document
+    Wrapper for other writers to write all fields of spdx.document.Document
     Call `write()` to start writing.
     """
 
