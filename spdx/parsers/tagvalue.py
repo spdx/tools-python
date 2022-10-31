@@ -92,7 +92,7 @@ ERROR_MESSAGES = {
     "FILE_CONTRIB_VALUE": "FileContributor must be a single line, line: {0}",
     "FILE_DEP_VALUE": "FileDependency must be a single line, line: {0}",
     "ART_PRJ_NAME_VALUE": "ArtifactOfProjectName must be a single line, line: {0}",
-    "FILE_ART_OPT_ORDER": "ArtificatOfProjectHomePage and ArtificatOfProjectURI must immediatly follow ArtifactOfProjectName, line: {0}",
+    "FILE_ART_OPT_ORDER": "ArtificatOfProjectHomePage and ArtificatOfProjectURI must immediately follow ArtifactOfProjectName, line: {0}",
     "ART_PRJ_HOME_VALUE": "ArtificatOfProjectHomePage must be a URL or UNKNOWN, line: {0}",
     "ART_PRJ_URI_VALUE": "ArtificatOfProjectURI must be a URI or UNKNOWN, line: {0}",
     "UNKNOWN_TAG": "Found unknown tag : {0} at line: {1}",
@@ -310,7 +310,7 @@ class Parser(object):
         msg = ERROR_MESSAGES["LICS_ID_VALUE"].format(p.lineno(1))
         self.logger.log(msg)
 
-    def p_uknown_tag(self, p):
+    def p_unknown_tag(self, p):
         """unknown_tag : UNKNOWN_TAG LINE"""
         self.error = True
         msg = ERROR_MESSAGES["UNKNOWN_TAG"].format(p[1], p.lineno(1))
@@ -322,7 +322,7 @@ class Parser(object):
         """
         pass
 
-    def p_file_artificat_2(self, p):
+    def p_file_artifact_2(self, p):
         """file_artifact : prj_name_art error"""
         self.error = True
         msg = ERROR_MESSAGES["FILE_ART_OPT_ORDER"].format(p.lineno(2))

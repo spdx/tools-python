@@ -233,7 +233,7 @@ class EntityBuilder(object):
         """
         Build an organization object of of a string representation.
         Return built organization.
-        Raise SPDXValueError if failed to extractname.
+        Raise SPDXValueError if failed to extract name.
         """
         match = self.org_re.match(entity)
         if match and validations.validate_org_name(match.group(self.ORG_NAME_GROUP)):
@@ -359,7 +359,7 @@ class ReviewBuilder(object):
     def add_reviewer(self, doc, reviewer):
         """
         Adds a reviewer to the SPDX Document.
-        Reviwer is an entity created by an EntityBuilder.
+        Reviewer is an entity created by an EntityBuilder.
         Raise SPDXValueError if not a valid reviewer type.
         """
         # Each reviewer marks the start of a new review object.
@@ -644,7 +644,7 @@ class PackageBuilder(object):
         Set the package file name, if not already set.
         name - Any string.
         Raise CardinalityError if already has a file_name.
-        Raise OrderError if no pacakge previously defined.
+        Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         if not self.package_file_name_set:
@@ -800,7 +800,7 @@ class PackageBuilder(object):
                 doc.packages[-1].source_info = str_from_text(text)
                 return True
             else:
-                raise SPDXValueError("Pacckage::SourceInfo")
+                raise SPDXValueError("Package::SourceInfo")
         else:
             raise CardinalityError("Package::SourceInfo")
 
@@ -1248,13 +1248,13 @@ class FileBuilder(object):
 
     def set_file_atrificat_of_project(self, doc, symbol, value):
         """
-        Set a file name, uri or home artificat.
+        Set a file name, uri or home artifact.
         Raise OrderError if no package or file defined.
         """
         if self.has_package(doc) and self.has_file(doc):
             self.file(doc).add_artifact(symbol, value)
         else:
-            raise OrderError("File::Artificat")
+            raise OrderError("File::Artifact")
 
     def file(self, doc):
         """

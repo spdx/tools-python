@@ -19,7 +19,7 @@ from spdx import utils
 @total_ordering
 class Creator(object):
     """
-    Creator enity.
+    Creator entity.
     Fields:
     - name: creator's name/identifier
     """
@@ -27,7 +27,7 @@ class Creator(object):
     def __init__(self, name):
         self.name = name
 
-    # FIXME: do not overrride eq and not hash
+    # FIXME: do not override eq and not hash
     def __eq__(self, other):
         return isinstance(other, Creator) and self.name == other.name
 
@@ -48,7 +48,7 @@ class Organization(Creator):
         super(Organization, self).__init__(name)
         self.email = email
 
-    # FIXME: do not overrride eq and not hash
+    # FIXME: do not override eq and not hash
     def __eq__(self, other):
         return isinstance(other, Organization) and (self.name, self.email) == (
             other.name,
@@ -84,7 +84,7 @@ class Person(Creator):
         super(Person, self).__init__(name)
         self.email = email
 
-    # FIXME: do not overrride eq and not hash
+    # FIXME: do not override eq and not hash
     def __eq__(self, other):
         return isinstance(other, Person) and (self.name, self.email) == (
             other.name,

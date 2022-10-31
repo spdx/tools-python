@@ -22,14 +22,14 @@ from spdx.parsers.builderexceptions import FileTypeError
 
 
 def parse_file(fn):
-    buildermodule = jsonyamlxmlbuilders
+    builder_module = jsonyamlxmlbuilders
     read_data = False
     if fn.endswith(".rdf") or fn.endswith(".rdf.xml"):
         parsing_module = rdf
-        buildermodule = rdfbuilders
+        builder_module = rdfbuilders
     elif fn.endswith(".tag") or fn.endswith(".spdx"):
         parsing_module = tagvalue
-        buildermodule = tagvaluebuilders
+        builder_module = tagvaluebuilders
         read_data = True
     elif fn.endswith(".json"):
         parsing_module = jsonparser
@@ -40,7 +40,7 @@ def parse_file(fn):
     else:
         raise FileTypeError("FileType Not Supported" + str(fn))
 
-    p = parsing_module.Parser(buildermodule.Builder(), StandardLogger())
+    p = parsing_module.Parser(builder_module.Builder(), StandardLogger())
     if hasattr(p, "build"):
         p.build()
     with open(fn) as f:

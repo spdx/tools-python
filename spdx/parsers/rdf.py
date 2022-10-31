@@ -43,7 +43,7 @@ ERROR_MESSAGES = {
     "PKG_DOWN_LOC": "Invalid package download location value '{0}'  must be a url or NONE or NOASSERTION",
     "PKG_FILES_ANALYZED_VALUE": "FilesAnalyzed must be a boolean value, line: {0}",
     "PKG_CONC_LIST": "Package concluded license list must have more than one member",
-    "LICS_LIST_MEMBER": "Declaritive or Conjunctive license set member must be a license url or identifier",
+    "LICS_LIST_MEMBER": "Declarative or Conjunctive license set member must be a license url or identifier",
     "PKG_SINGLE_LICS": "Package concluded license must be a license url or spdx:noassertion or spdx:none.",
     "PKG_LICS_INFO_FILES": "Package licenseInfoFromFiles must be a license or spdx:none or spdx:noassertion",
     "FILE_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
@@ -159,43 +159,43 @@ class LicenseParser(BaseParser):
         """
         Return a license identifier from an ExtractedLicense or None.
         """
-        identifier_tripples = list(
+        identifier_triples = list(
             self.graph.triples((extr_lic, self.spdx_namespace["licenseId"], None))
         )
 
-        if not identifier_tripples:
+        if not identifier_triples:
             self.error = True
             msg = "Extracted license must have licenseId property."
             self.logger.log(msg)
             return
 
-        if len(identifier_tripples) > 1:
-            self.more_than_one_error("extracted license identifier_tripples")
+        if len(identifier_triples) > 1:
+            self.more_than_one_error("extracted license identifier_triples")
             return
 
-        identifier_tripple = identifier_tripples[0]
-        _s, _p, identifier = identifier_tripple
+        identifier_triple = identifier_triples[0]
+        _s, _p, identifier = identifier_triple
         return str(identifier)
 
     def get_extr_license_text(self, extr_lic):
         """
         Return extracted text from an ExtractedLicense or None.
         """
-        text_tripples = list(
+        text_triples = list(
             self.graph.triples((extr_lic, self.spdx_namespace["extractedText"], None))
         )
-        if not text_tripples:
+        if not text_triples:
             self.error = True
             msg = "Extracted license must have extractedText property"
             self.logger.log(msg)
             return
 
-        if len(text_tripples) > 1:
+        if len(text_triples) > 1:
             self.more_than_one_error("extracted license text")
             return
 
-        text_tripple = text_tripples[0]
-        _s, _p, text = text_tripple
+        text_triple = text_triples[0]
+        _s, _p, text = text_triple
         return str(text)
 
     def get_extr_lic_name(self, extr_lic):
@@ -250,7 +250,7 @@ class LicenseParser(BaseParser):
             return
 
         # Set fields
-        # FIXME: the constructor of the license should alwas accept a name
+        # FIXME: the constructor of the license should always accept a name
         lic = document.ExtractedLicense(ident)
         if text is not None:
             lic.text = text
@@ -318,7 +318,7 @@ class PackageParser(LicenseParser):
         """
         Parse package fields.
         """
-        # Check there is a pacakge name
+        # Check there is a package name
         if not (p_term, self.spdx_namespace["name"], None) in self.graph:
             self.error = True
             self.logger.log("Package must have a name.")
@@ -478,7 +478,7 @@ class PackageParser(LicenseParser):
                 try:
                     self.builder.set_pkg_verif_code(self.doc, str(code))
                 except CardinalityError:
-                    self.more_than_one_error("package verificaton code")
+                    self.more_than_one_error("package verification code")
                     break
             # Parse excluded file
             for _, _, filename in self.graph.triples(
@@ -491,7 +491,7 @@ class PackageParser(LicenseParser):
                 try:
                     self.builder.set_pkg_excl_file(self.doc, str(filename))
                 except CardinalityError:
-                    self.more_than_one_error("package verificaton code excluded file")
+                    self.more_than_one_error("package verification code excluded file")
                     break
 
     def p_pkg_src_info(self, p_term, predicate):
@@ -979,7 +979,7 @@ class ReviewParser(BaseParser):
         )
         if len(reviewed_list) != 1:
             self.error = True
-            msg = "Review must have exactlyone review date"
+            msg = "Review must have exactly one review date"
             self.logger.log(msg)
             return
         return str(reviewed_list[0][2])

@@ -24,7 +24,7 @@ class Package(object):
     """
     Represent an analyzed Package.
     Fields:
-     - name : Mandatory, string.
+     - name: Mandatory, string.
      - spdx_id: Uniquely identify any element in an SPDX document which may be
      referenced by other elements. Mandatory, one. Type: str.
      - version: Optional, string.
@@ -47,9 +47,9 @@ class Package(object):
      - source_info: Optional string.
      - conc_lics: Mandatory spdx.document.License or spdx.utils.SPDXNone or
      - spdx.utils.NoAssert.
-     - license_declared : Mandatory spdx.document.License or spdx.utils.SPDXNone or
-     - spdx.utils.NoAssert.
-     - license_comment  : optional string.
+     - license_declared: Mandatory spdx.document.License or spdx.utils.SPDXNone or
+     spdx.utils.NoAssert.
+     - license_comment: optional string.
      - licenses_from_files: list of spdx.document.License or spdx.utils.SPDXNone or
      - spdx.utils.NoAssert.
      - cr_text: Copyright text, string , utils.NoAssert or utils.SPDXNone. Mandatory.
@@ -57,11 +57,11 @@ class Package(object):
      - description: Optional str.
      - comment: Comments about the package being described, optional one.
      Type: str
-     - files: List of files in package, atleast one.
-     - verif_exc_files : list of file names excluded from verification code or None.
-     - ext_pkg_refs : External references referenced within the given package.
+     - files: List of files in package, at least one.
+     - verif_exc_files: list of file names excluded from verification code or None.
+     - ext_pkg_refs: External references referenced within the given package.
      Optional, one or many. Type: ExternalPackageRef
-     - attribution_text : optional string.
+     - attribution_text: optional string.
     """
 
     def __init__(

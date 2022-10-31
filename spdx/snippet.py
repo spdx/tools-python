@@ -27,7 +27,6 @@ class Snippet(object):
      in to arriving at the Concluded License for a snippet. Optional, one.
      - snip_from_file_spdxid:  Uniquely identify the file in an SPDX document
      which this snippet is associated with. Mandatory, one. Type: str.
-     Type: str.
      - conc_lics: Contains the license the SPDX file creator has concluded as
      governing the snippet or alternative values if the governing license
      cannot be determined. Mandatory one. Type: document.License or
@@ -35,7 +34,7 @@ class Snippet(object):
      - licenses_in_snippet: The list of licenses found in the snippet.
      Mandatory, one or more. Type: document.License or utils.SPDXNone or
      utils.NoAssert.
-     - attribution_text : optional string.
+     - attribution_text: optional string.
     """
 
     def __init__(
