@@ -570,7 +570,7 @@ class RelationshipInfoWriter(BaseWriter):
         """
         Return a list of relationship nodes
         """
-        return list(map(self.create_relationship_node, self.document.relationships))
+        return map(self.create_relationship_node, self.document.relationships)
 
 
 class CreationInfoWriter(BaseWriter):

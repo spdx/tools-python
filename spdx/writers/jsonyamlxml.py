@@ -379,10 +379,6 @@ class ExtractedLicenseWriter(BaseWriter):
 
     def create_extracted_license(self):
         extracted_license_objects = []
-        # commented by the WS PS Team
-        # extracted_licenses = self.document.extracted_licenses
-
-        # filter by unique identifier attribute in ExtractedLicense object, added by the WhiteSouse PS Team
         unique_extracted_licenses = {}
         for lic in self.document.extracted_licenses:
             if lic.identifier not in unique_extracted_licenses.keys():
@@ -545,4 +541,3 @@ class Writer(
             self.document_object["relationships"] = self.create_relationship_info()
 
         return self.document_object
-

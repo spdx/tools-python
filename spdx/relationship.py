@@ -83,7 +83,10 @@ class Relationship(object):
         self.relationship_comment = relationship_comment
 
     def __eq__(self, other):
-        return True if self.relationship == other.relationship else False
+        return (
+                isinstance(other, Relationship)
+                and self.relationship == other.relationship
+        )
 
     @property
     def has_comment(self):

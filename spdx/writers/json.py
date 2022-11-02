@@ -14,20 +14,14 @@ import json
 from spdx.writers.tagvalue import InvalidDocumentError
 from spdx.writers.jsonyamlxml import Writer
 from spdx.parsers.loggers import ErrorMessages
-import numpy as np
 import datetime
 
 
-# this method has been added by the WhiteSouse PS Team.
 def json_converter(obj):
-    if isinstance(obj, np.integer):
-        return int(obj)
-    elif isinstance(obj, np.floating):
-        return float(obj)
-    elif isinstance(obj, np.ndarray):
-        return obj.tolist()
-    elif isinstance(obj, datetime.datetime):
-        return obj.__str__()
+    if isinstance(obj, datetime.datetime):
+        return str(obj)
+    else:
+        raise TypeError("No implementation available to serialize objects of type " + type(obj).__name__)
 
 
 def write_document(document, out, validate=True):

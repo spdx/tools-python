@@ -13,8 +13,8 @@ with open('README.md', 'r') as fh:
     long_description = fh.read()
 
 setup(
-    name='ws-spdx-tools',
-    version='0.7.0a3.post7',
+    name='spdx-tools',
+    version='0.7.0a3',
     description='SPDX parser and tools.',
     long_description=long_description,
     long_description_content_type='text/markdown',
