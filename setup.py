@@ -8,6 +8,7 @@ import unittest
 def test_suite():
     return unittest.TestLoader().discover('tests', pattern='test_*.py')
 
+
 with open('README.md', 'r') as fh:
     long_description = fh.read()
 
@@ -33,6 +34,9 @@ setup(
         'click',
         'pyyaml',
         'xmltodict',
+    ],
+    tests_require=[
+        'pytest',
     ],
     python_requires='>=3.6',
     entry_points={
