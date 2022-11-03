@@ -13,7 +13,7 @@ install:
   - "%PYTHON_EXE% setup.py install"
   - "%PYTHON_EXE% -m pip install pytest"
 
-build: off
+build: false
 
 test_script:
   - "%PYTHON_EXE% -m pytest"
