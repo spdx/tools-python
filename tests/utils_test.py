@@ -195,7 +195,7 @@ def check_json_scan(expected_file, result_file, regen=False):
             o.write(result)
 
     expected = load_and_clean_json(expected_file)
-    assert expected == result
+    assert result == expected
 
 
 def load_and_clean_yaml(location):
