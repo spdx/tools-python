@@ -10,14 +10,14 @@
 # limitations under the License.
 
 from spdx import document
+from spdx import utils
 from spdx.document import LicenseConjunction
 from spdx.document import LicenseDisjunction
-from spdx.parsers.builderexceptions import SPDXValueError, CardinalityError, OrderError
+from spdx.package import ExternalPackageRef
 from spdx.parsers import rdf
+from spdx.parsers.builderexceptions import SPDXValueError, CardinalityError, OrderError
 from spdx.parsers.loggers import ErrorMessages
-from spdx import utils
 from spdx.utils import UnKnown
-
 
 ERROR_MESSAGES = rdf.ERROR_MESSAGES
 
@@ -788,7 +788,8 @@ class FileParser(BaseParser):
     def parse_file_types(self, file_types):
         """
         Parse File types
-        - file_types: Python list of file types (str/unicode: fileType_archive, fileType_binary, fileType_source or fileType_other)
+        - file_types: Python list of file types (str/unicode: fileType_archive, fileType_binary, fileType_source or
+        fileType_other)
         """
         if isinstance(file_types, list):  # file_types is an array in JSON examples...
             for file_type in file_types:
@@ -1070,6 +1071,7 @@ class PackageParser(BaseParser):
             self.parse_pkg_attribution_text(package.get("attributionTexts"))
             self.parse_pkg_files(package.get("files"))
             self.parse_pkg_chksum(package.get("sha1"))
+            self.parse_package_external_refs(package.get("externalRefs"))
         else:
             self.value_error("PACKAGE", package)
 
@@ -1494,6 +1496,20 @@ class PackageParser(BaseParser):
         elif pkg_chksum is not None:
             self.value_error("PKG_CHECKSUM", pkg_chksum)
 
+    def parse_package_external_refs(self, external_refs):
+        if external_refs is None:
+            return
+        if not isinstance(external_refs, list):
+            self.value_error("PACKAGE_EXTERNAL_REFS", external_refs)
+            return
+
+        for external_ref_dict in external_refs:
+            external_ref = ExternalPackageRef(category=external_ref_dict["category"],
+                                              pkg_ext_ref_type=external_ref_dict["pkg_ext_ref_type"],
+                                              locator=external_ref_dict["locator"],
+                                              comment=external_ref_dict["comment"])
+            self.package.add_pkg_ext_refs(external_ref)
+
 
 def flatten_document(document):
     """
@@ -1520,6 +1536,7 @@ def flatten_document(document):
                     break
 
     return document
+
 
 class Parser(
     CreationInfoParser,
@@ -1687,7 +1704,6 @@ class Parser(
             return True
         else:
             self.value_error("DOC_DESCRIBES", doc_described_objects)
-
 
     def parse_packages(self, packages):
         """

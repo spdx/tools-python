@@ -46,7 +46,8 @@ class Parser(jsonyamlxml.Parser):
             "documentDescribes",
             "packages",
             "checksums",
-            "hasFiles"
+            "hasFiles",
+            "externalRefs"
         }
 
     def parse(self, file):
