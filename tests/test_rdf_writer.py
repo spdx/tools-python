@@ -3,9 +3,10 @@ import os
 import pytest
 from rdflib import URIRef
 
-from spdx.document import Document
-from spdx.package import Package
+from spdx.document import Document, License
+from spdx.package import Package, ExternalPackageRef
 from spdx.parsers.loggers import StandardLogger
+from spdx.parsers.parse_anything import parse_file
 from spdx.parsers.rdf import Parser
 from spdx.parsers.rdfbuilders import Builder
 from spdx.utils import NoAssert
@@ -13,7 +14,7 @@ from spdx.writers.rdf import Writer
 
 
 @pytest.fixture
-def temporary_file_path():
+def temporary_file_path() -> str:
     temporary_file_path = "temp_accept_provided_doc_node.rdf.xml"
     yield temporary_file_path
     os.remove(temporary_file_path)
@@ -38,8 +39,30 @@ def test_accept_provided_doc_node(temporary_file_path) -> None:
     assert parsed_document.spdx_id is None
 
 
+def test_external_package_references(temporary_file_path) -> None:
+    document: Document = minimal_document()
+    package: Package = document.packages[0]
+    first_ref: ExternalPackageRef = ExternalPackageRef(category="PACKAGE-MANAGER")
+    second_ref = ExternalPackageRef(category="SECURITY")
+    package.add_pkg_ext_refs(first_ref)
+    package.add_pkg_ext_refs(second_ref)
+
+    # Not using write_anything here because we don't want to deal with validation
+    with open(temporary_file_path, "wb") as out:
+        writer = Writer(document, out)
+        writer.write()
+
+    parsed_document = parse_file(temporary_file_path)[0]
+    parsed_package: Package = parsed_document.packages[0]
+
+    assert len(parsed_package.pkg_ext_refs) is 2
+    parsed_reference_categories = list(map(lambda x: x.category, parsed_package.pkg_ext_refs))
+    assert first_ref.category in parsed_reference_categories
+    assert second_ref.category in parsed_reference_categories
+
+
 def minimal_document() -> Document:
-    document = Document()
+    document = Document(data_license=License.from_identifier('CC0-1.0'))
     document.creation_info.set_created_now()
     package: Package = minimal_package()
     document.add_package(package)
