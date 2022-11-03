@@ -159,6 +159,9 @@ class PackageWriter(BaseWriter):
         if package.has_optional_field("homepage"):
             package_object["homepage"] = package.homepage.__str__()
 
+        if package.has_optional_field("pkg_ext_refs"):
+            package_object["externalRefs"] = [vars(external_ref) for external_ref in package.pkg_ext_refs]
+
         files_in_package = []
         if package.has_optional_field("files"):
             package_object["hasFiles"] = []
@@ -233,11 +236,11 @@ class FileWriter(BaseWriter):
             file_object["fileDependencies"] = file.dependencies
 
         valid_artifacts = (
-                file.artifact_of_project_name
-                and len(file.artifact_of_project_name)
-                == len(file.artifact_of_project_home)
-                and len(file.artifact_of_project_home)
-                == len(file.artifact_of_project_uri)
+            file.artifact_of_project_name
+            and len(file.artifact_of_project_name)
+            == len(file.artifact_of_project_home)
+            and len(file.artifact_of_project_home)
+            == len(file.artifact_of_project_uri)
         )
 
         if valid_artifacts:
@@ -484,7 +487,6 @@ class Writer(
             self.document.relationships.remove(relationship)
         return document_describes
 
-
     def create_document(self):
         self.document_object = dict()
 
@@ -533,4 +535,3 @@ class Writer(
             self.document_object["relationships"] = self.create_relationship_info()
 
         return self.document_object
-
