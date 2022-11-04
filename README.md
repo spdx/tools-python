@@ -76,6 +76,13 @@ Example: `convertor -f rdf data/SPDXRdfExample.xyz -o output.xml`
 
 * For help use `convertor --help`
 
+3. **SBOM GENERATOR** (for generating a software bill of materials):
+* Use   `sbom_generator <project>`   where  `<project>`  is the name of the top-level project.
+(Note: If using a version of Python older than 3.8, you will need to install `importlib_metadata` to use `sbom_generator`.)
+Try running :   `sbom_generator spdx-tools`.
+
+* for help - use `parser --help`
+
 
 # Installation
 
