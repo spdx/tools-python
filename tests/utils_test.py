@@ -138,7 +138,7 @@ def check_rdf_scan(expected_file, result_file, regen=False):
     else:
         with io.open(expected_file, 'r', encoding='utf-8') as i:
             expected = sort_nested(json.load(i))
-    assert expected == result
+    assert result == expected
 
 
 def load_and_clean_tv(location):
