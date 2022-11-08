@@ -19,7 +19,7 @@ def temporary_file_path() -> str:
 def test_external_package_references(temporary_file_path) -> None:
     document: Document = minimal_document()
     package: Package = document.packages[0]
-    first_ref: ExternalPackageRef = ExternalPackageRef(category="PACKAGE-MANAGER")
+    first_ref = ExternalPackageRef(category="PACKAGE-MANAGER")
     second_ref = ExternalPackageRef(category="SECURITY")
     package.add_pkg_ext_refs(first_ref)
     package.add_pkg_ext_refs(second_ref)
