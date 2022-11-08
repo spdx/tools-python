@@ -10,17 +10,34 @@
 # limitations under the License.
 
 import hashlib
-
+from datetime import datetime
+from enum import Enum
 from functools import reduce
+from typing import List, Optional
 
 from spdx import checksum
 from spdx import creationinfo
 from spdx import document
 from spdx import utils
+from spdx.parsers.loggers import ErrorMessages
+
+
+class PackagePurpose(Enum):
+    APPLICATION = 1
+    FRAMEWORK = 2
+    LIBRARY = 3
+    CONTAINER = 4
+    OPERATING_SYSTEM = 5
+    DEVICE = 6
+    FIRMWARE = 7
+    SOURCE = 8
+    ARCHIVE = 9
+    FILE = 10
+    INSTALL = 11
+    OTHER = 12
 
 
 class Package(object):
-
     """
     Represent an analyzed Package.
     Fields:
@@ -62,6 +79,7 @@ class Package(object):
      - ext_pkg_refs: External references referenced within the given package.
      Optional, one or many. Type: ExternalPackageRef
      - attribution_text: optional string.
+     - primary_package_purpose: Optional one. Type: PackagePurpose
     """
 
     def __init__(
@@ -98,6 +116,11 @@ class Package(object):
         self.files = []
         self.verif_exc_files = []
         self.pkg_ext_refs = []
+        self.primary_package_purpose: Optional[PackagePurpose] = None
+        self.release_date: Optional[datetime] = None
+        self.built_date: Optional[datetime] = None
+        self.valid_until_date: Optional[datetime] = None
+
 
     @property
     def are_files_analyzed(self):
@@ -148,7 +171,7 @@ class Package(object):
         return messages
 
     def validate_files_analyzed(self, messages):
-        if self.files_analyzed not in [ True, False, None ]:
+        if self.files_analyzed not in [True, False, None]:
             messages.append(
                 'Package files_analyzed must be True or False or None (omitted)'
             )
@@ -157,6 +180,11 @@ class Package(object):
                 'Package verif_code must be None (omitted) when files_analyzed is False'
             )
 
+        return messages
+
+    def validate_primary_package_purposes(self, messages: ErrorMessages) -> ErrorMessages:
+        if self.primary_package_purpose not in PackagePurpose:
+            messages.append("Primary package purpose has a value that is not allowed!")
         return messages
 
     def validate_optional_fields(self, messages):
@@ -315,7 +343,7 @@ class Package(object):
         return sha1.hexdigest()
 
     def has_optional_field(self, field):
-        return bool (getattr(self, field, None))
+        return bool(getattr(self, field, None))
 
 
 class ExternalPackageRef(object):
