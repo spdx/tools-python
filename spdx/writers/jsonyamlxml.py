@@ -12,6 +12,7 @@
 from rdflib import Literal
 
 from spdx import document
+from spdx.package import ExternalPackageRef
 
 
 class BaseWriter(object):
@@ -107,6 +108,20 @@ class PackageWriter(BaseWriter):
 
         return package_verification_code_object
 
+    @staticmethod
+    def external_reference_as_dict(external_ref: ExternalPackageRef) -> dict:
+        """
+        Create a dictionary representation of the provided external reference, renaming the properties as they should
+        appear in a json/yaml/xml document.
+        """
+        external_ref_dict = dict()
+        external_ref_dict["referenceCategory"] = external_ref.category
+        external_ref_dict["referenceType"] = external_ref.pkg_ext_ref_type
+        external_ref_dict["referenceLocator"] = external_ref.locator
+        if external_ref.comment:
+            external_ref_dict["comment"] = external_ref.comment
+        return external_ref_dict
+
     def create_package_info(self, package):
         package_object = dict()
         package_object["SPDXID"] = self.spdx_id(package.spdx_id)
@@ -160,7 +175,8 @@ class PackageWriter(BaseWriter):
             package_object["homepage"] = package.homepage.__str__()
 
         if package.has_optional_field("pkg_ext_refs"):
-            package_object["externalRefs"] = [vars(external_ref) for external_ref in package.pkg_ext_refs]
+            package_object["externalRefs"] = [self.external_reference_as_dict(external_ref) for external_ref in
+                                              package.pkg_ext_refs]
 
         files_in_package = []
         if package.has_optional_field("files"):
