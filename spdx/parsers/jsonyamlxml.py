@@ -1504,10 +1504,11 @@ class PackageParser(BaseParser):
             return
 
         for external_ref_dict in external_refs:
-            external_ref = ExternalPackageRef(category=external_ref_dict["category"],
-                                              pkg_ext_ref_type=external_ref_dict["pkg_ext_ref_type"],
-                                              locator=external_ref_dict["locator"],
-                                              comment=external_ref_dict["comment"])
+            external_ref = ExternalPackageRef(category=external_ref_dict["referenceCategory"],
+                                              pkg_ext_ref_type=external_ref_dict["referenceType"],
+                                              locator=external_ref_dict["referenceLocator"])
+            if "comment" in external_ref_dict:
+                external_ref.comment = external_ref_dict["comment"]
             self.package.add_pkg_ext_refs(external_ref)
 
 
