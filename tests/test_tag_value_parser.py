@@ -87,16 +87,18 @@ file_str = '\n'.join([
 
 unknown_tag_str = 'SomeUnknownTag: SomeUnknownValue'
 
-snippet_str = '\n'.join([
-    'SnippetSPDXID: SPDXRef-Snippet',
-    'SnippetLicenseComments: <text>Some lic comment.</text>',
-    'SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>',
-    'SnippetComment: <text>Some snippet comment.</text>',
-    'SnippetName: from linux kernel',
-    'SnippetFromFileSPDXID: SPDXRef-DoapSource',
-    'SnippetLicenseConcluded: Apache-2.0',
-    'LicenseInfoInSnippet: Apache-2.0',
-])
+    snippet_str = '\n'.join([
+        'SnippetSPDXID: SPDXRef-Snippet',
+        'SnippetLicenseComments: <text>Some lic comment.</text>',
+        'SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>',
+        'SnippetComment: <text>Some snippet comment.</text>',
+        'SnippetName: from linux kernel',
+        'SnippetFromFileSPDXID: SPDXRef-DoapSource',
+        'SnippetLicenseConcluded: Apache-2.0',
+        'LicenseInfoInSnippet: Apache-2.0',
+        'SnippetByteRange: 310:420',
+        'SnippetLineRange: 5:23',
+    ])
 
 annotation_str = '\n'.join([
     'Annotator: Person: Jane Doe()',
@@ -255,6 +257,10 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'SNIPPET_LICS_INFO',
                                  'LicenseInfoInSnippet', 8)
         self.token_assert_helper(self.l.token(), 'LINE', 'Apache-2.0', 8)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_BYTE_RANGE', 'SnippetByteRange', 9)
+        self.token_assert_helper(self.l.token(), 'LINE', '310:420', 9)
+        self.token_assert_helper(self.l.token(), 'SNIPPET_LINE_RANGE', 'SnippetLineRange', 10)
+        self.token_assert_helper(self.l.token(), 'LINE', '5:23', 10)
 
     def test_annotation(self):
         data = annotation_str
@@ -382,3 +388,7 @@ class TestParser(TestCase):
         assert document.snippet[-1].snip_from_file_spdxid == 'SPDXRef-DoapSource'
         assert document.snippet[-1].conc_lics.identifier == 'Apache-2.0'
         assert document.snippet[-1].licenses_in_snippet[-1].identifier == 'Apache-2.0'
+        assert document.snippet[-1].byte_range[0] == 310
+        assert document.snippet[-1].byte_range[1] == 420
+        assert document.snippet[-1].line_range[0] == 5
+        assert document.snippet[-1].line_range[1] == 23

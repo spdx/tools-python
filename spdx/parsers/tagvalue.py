@@ -204,6 +204,8 @@ class Parser(object):
                   | snip_file_spdx_id
                   | snip_lics_conc
                   | snip_lics_info
+                  | snip_byte_range
+                  | snip_line_range
                   | extr_lic_id
                   | extr_lic_text
                   | extr_lic_name
@@ -1249,6 +1251,42 @@ class Parser(object):
         """snip_lics_info : SNIPPET_LICS_INFO error"""
         self.error = True
         msg = ERROR_MESSAGES["SNIP_LICS_INFO_VALUE"].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snippet_byte_range(self, p):
+        """snip_byte_range : SNIPPET_BYTE_RANGE LINE"""
+        try:
+            self.builder.set_snippet_byte_range(self.document, p[2])
+        except OrderError:
+            self.order_error("SnippetByteRange", "SnippetSPDXID", p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = "Value for Snippet ByteRange invalid in line {}.".format(p.lineno(1))
+            self.logger.log(msg)
+
+    def p_snippet_byte_range_1(self, p):
+        """snip_byte_range : SNIPPET_BYTE_RANGE error"""
+
+        self.error = True
+        msg = "Reading of SnippetByteRange failed for line {}.".format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_snippet_line_range(self, p):
+        """snip_line_range : SNIPPET_LINE_RANGE LINE"""
+        try:
+            self.builder.set_snippet_line_range(self.document, p[2])
+        except OrderError:
+            self.order_error("SnippetLineRange", "SnippetSPDXID", p.lineno(1))
+        except SPDXValueError:
+            self.error = True
+            msg = "Value for Snippet LineRange invalid in line {}.".format(p.lineno(1))
+            self.logger.log(msg)
+
+    def p_snippet_line_range_1(self, p):
+        """snip_line_range : SNIPPET_LINE_RANGE error"""
+
+        self.error = True
+        msg = "Reading of SnippetLineRange failed for line {}.".format(p.lineno(1))
         self.logger.log(msg)
 
     def p_snip_lic_info_value_1(self, p):

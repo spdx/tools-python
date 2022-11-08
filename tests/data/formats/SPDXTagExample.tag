@@ -99,6 +99,7 @@ SnippetComment: <text>This snippet was identified as significant and highlighted
 SnippetName: from linux kernel
 SnippetLicenseConcluded: Apache-2.0
 LicenseInfoInSnippet: Apache-2.0
+SnippetByteRange: 310:420
 
 ## License Information
 LicenseID: LicenseRef-3
