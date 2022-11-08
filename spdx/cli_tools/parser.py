@@ -90,6 +90,15 @@ def main(file, force):
             )
         )
 
+    if len(doc.package.pkg_ext_refs) > 0:
+        print("Package external references:")
+        for ref in doc.package.pkg_ext_refs:
+            print(f"\tCategory: {ref.category}")
+            print(f"\tType: {ref.pkg_ext_ref_type}")
+            print(f"\tLocator: {ref.locator}")
+            if ref.comment:
+                print(f"\tComment: {ref.comment}")
+
     print("Document Extracted licenses:")
     for lics in doc.extracted_licenses:
         print("\tIdentifier: {0}".format(lics.identifier))
