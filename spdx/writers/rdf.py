@@ -923,13 +923,14 @@ class PackageExternalRefWriter(BaseWriter):
         )
         self.graph.add(pkg_ext_ref_locator_triple)
 
-        pkg_ext_ref_comment = Literal(pkg_ext_refs.comment)
-        pkg_ext_ref_comment_triple = (
-            pkg_ext_ref_node,
-            RDFS.comment,
-            pkg_ext_ref_comment,
-        )
-        self.graph.add(pkg_ext_ref_comment_triple)
+        if pkg_ext_refs.comment:
+            pkg_ext_ref_comment = Literal(pkg_ext_refs.comment)
+            pkg_ext_ref_comment_triple = (
+                pkg_ext_ref_node,
+                RDFS.comment,
+                pkg_ext_ref_comment,
+            )
+            self.graph.add(pkg_ext_ref_comment_triple)
 
         return pkg_ext_ref_node
 
