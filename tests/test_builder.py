@@ -806,3 +806,29 @@ class TestSnippetBuilder(TestCase):
         self.builder.set_snippet_lics_info(
             self.document, License.from_identifier("Apache-2.0")
         )
+
+    def test_snippet_byte_range(self):
+        self.builder.create_snippet(self.document, "SPDXRef-Snippet")
+        self.builder.set_snippet_byte_range(self.document, "310:420")
+
+    @testing_utils.raises(builders.OrderError)
+    def test_snippet_byte_range_order(self):
+        self.builder.set_snippet_byte_range(self.document, "310:420")
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_snippet_byte_range_value(self):
+        self.builder.create_snippet(self.document, "SPDXRef-Snippet")
+        self.builder.set_snippet_byte_range(self.document, "310:30")
+
+    def test_snippet_line_range(self):
+        self.builder.create_snippet(self.document, "SPDXRef-Snippet")
+        self.builder.set_snippet_line_range(self.document, "5:23")
+
+    @testing_utils.raises(builders.OrderError)
+    def test_snippet_line_range_order(self):
+        self.builder.set_snippet_line_range(self.document, "5:23")
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_snippet_line_range_value(self):
+        self.builder.create_snippet(self.document, "SPDXRef-Snippet")
+        self.builder.set_snippet_line_range(self.document, "23:5")

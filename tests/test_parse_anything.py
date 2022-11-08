@@ -16,7 +16,7 @@ from spdx.parsers import parse_anything
 
 
 dirname = os.path.join(os.path.dirname(__file__), "data", "formats")
-test_files = [os.path.join(dirname, fn) for fn in os.listdir(dirname) if "2.2" not in fn]
+test_files = [os.path.join(dirname, fn) for fn in os.listdir(dirname) if "TagExample" in fn]
 # exclude json2.2 file since spec-2.2 is not fully supported yet
 
 

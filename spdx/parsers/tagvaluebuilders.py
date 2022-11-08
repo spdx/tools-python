@@ -1542,6 +1542,32 @@ class SnippetBuilder(object):
         else:
             raise SPDXValueError("Snippet::LicenseInfoInSnippet")
 
+    def set_snippet_byte_range(self, doc, parsed):
+        """
+        Raise OrderError if no snippet previously defined.
+        Raise SPDXValueError if the data is malformed.
+        """
+        self.assert_snippet_exists()
+        startpoint = int(parsed.split(":")[0])
+        endpoint = int(parsed.split(":")[-1])
+        if startpoint <= endpoint:
+            doc.snippet[-1].byte_range = (startpoint, endpoint)
+        else:
+            raise SPDXValueError("Snippet::ByteRange")
+
+    def set_snippet_line_range(self, doc, parsed):
+        """
+        Raise OrderError if no snippet previously defined.
+        Raise SPDXValueError if the data is malformed.
+        """
+        self.assert_snippet_exists()
+        startpoint = int(parsed.split(":")[0])
+        endpoint = int(parsed.split(":")[-1])
+        if startpoint <= endpoint:
+            doc.snippet[-1].line_range = (startpoint, endpoint)
+        else:
+            raise SPDXValueError("Snippet::LineRange")
+
     def reset_snippet(self):
         # FIXME: this state does not make sense
         self.snippet_spdx_id_set = False

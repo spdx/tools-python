@@ -95,6 +95,8 @@ class Lexer(object):
         "SnippetLicenseConcluded": "SNIPPET_LICS_CONC",
         "LicenseInfoInSnippet": "SNIPPET_LICS_INFO",
         "SnippetAttributionText": "SNIPPET_ATTRIBUTION_TEXT",
+        "SnippetByteRange": "SNIPPET_BYTE_RANGE",
+        "SnippetLineRange": "SNIPPET_LINE_RANGE",
         # Common
         "NOASSERTION": "NO_ASSERT",
         "UNKNOWN": "UN_KNOWN",
@@ -146,6 +148,7 @@ class Lexer(object):
         r":\s*SHA1:\s*[a-f0-9]{40,40}"
         t.value = t.value[1:].strip()
         return t
+
 
     def t_DOC_REF_ID(self, t):
         r":\s*DocumentRef-([A-Za-z0-9\+\.\-]+)"
