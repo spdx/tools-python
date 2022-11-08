@@ -8,12 +8,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from datetime import datetime
+from typing import List, Dict
 
 from spdx import document
 from spdx import utils
 from spdx.document import LicenseConjunction
 from spdx.document import LicenseDisjunction
-from spdx.package import ExternalPackageRef
+from spdx.package import ExternalPackageRef, PackagePurpose
 from spdx.parsers import rdf
 from spdx.parsers.builderexceptions import SPDXValueError, CardinalityError, OrderError
 from spdx.parsers.loggers import ErrorMessages
@@ -1072,6 +1074,10 @@ class PackageParser(BaseParser):
             self.parse_pkg_files(package.get("files"))
             self.parse_pkg_chksum(package.get("sha1"))
             self.parse_package_external_refs(package.get("externalRefs"))
+            self.parse_primary_package_purpose(package.get("primaryPackagePurpose"))
+            self.parse_release_date(package.get("releaseDate"))
+            self.parse_built_date(package.get("builtDate"))
+            self.parse_valid_until_date(package.get("validUntilDate"))
         else:
             self.value_error("PACKAGE", package)
 
@@ -1496,7 +1502,7 @@ class PackageParser(BaseParser):
         elif pkg_chksum is not None:
             self.value_error("PKG_CHECKSUM", pkg_chksum)
 
-    def parse_package_external_refs(self, external_refs):
+    def parse_package_external_refs(self, external_refs: List[Dict]):
         if external_refs is None:
             return
         if not isinstance(external_refs, list):
@@ -1511,6 +1517,46 @@ class PackageParser(BaseParser):
                 external_ref.comment = external_ref_dict["comment"]
             self.package.add_pkg_ext_refs(external_ref)
 
+    def parse_primary_package_purpose(self, primary_package_purpose: str):
+        if primary_package_purpose is None:
+            return
+
+        if primary_package_purpose not in [purpose.name for purpose in PackagePurpose]:
+            self.value_error("PRIMARY_PACKAGE_PURPOSE", primary_package_purpose)
+            return
+
+        purpose_enum = PackagePurpose[primary_package_purpose]
+        self.package.primary_package_purpose = purpose_enum
+
+    def parse_release_date(self, release_date: str):
+        if release_date is None:
+            return
+
+        parsed_date: datetime = utils.datetime_from_iso_format(release_date)
+        if parsed_date is not None:
+            self.package.release_date = parsed_date
+        else:
+            self.value_error("RELEASE_DATE", release_date)
+
+    def parse_built_date(self, built_date: str):
+        if built_date is None:
+            return
+
+        parsed_date: datetime = utils.datetime_from_iso_format(built_date)
+        if parsed_date is not None:
+            self.package.built_date = parsed_date
+        else:
+            self.value_error("BUILT_DATE", built_date)
+            
+    def parse_valid_until_date(self, valid_until_date: str):
+        if valid_until_date is None:
+            return
+
+        parsed_date: datetime = utils.datetime_from_iso_format(valid_until_date)
+        if parsed_date is not None:
+            self.package.valid_until_date = parsed_date
+        else:
+            self.value_error("VALID_UNTIL_DATE", valid_until_date)
 
 def flatten_document(document):
     """

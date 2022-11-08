@@ -12,6 +12,7 @@
 import os
 import shutil
 import tempfile
+from datetime import datetime
 from unittest import TestCase
 
 from spdx.checksum import Algorithm
@@ -20,7 +21,7 @@ from spdx.creationinfo import Tool
 from spdx.document import Document, ExternalDocumentRef
 from spdx.document import License
 from spdx.file import File
-from spdx.package import Package
+from spdx.package import Package, PackagePurpose
 from spdx.parsers.loggers import ErrorMessages
 from spdx.relationship import Relationship
 from spdx.utils import NoAssert
@@ -176,6 +177,11 @@ class TestWriters(TestCase):
         package.checksum = Algorithm('SHA1', 'SOME-SHA1')
         package.license_declared = NoAssert()
         package.conc_lics = NoAssert()
+        package.primary_package_purpose = PackagePurpose.FILE
+        package.release_date = datetime(2021, 1, 1, 12, 0, 0)
+        package.built_date = datetime(2021, 1, 1, 12, 0, 0)
+        package.valid_until_date = datetime(2022, 1, 1, 12, 0, 0)
+
 
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'

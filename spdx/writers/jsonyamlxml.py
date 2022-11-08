@@ -174,6 +174,18 @@ class PackageWriter(BaseWriter):
         if package.has_optional_field("homepage"):
             package_object["homepage"] = package.homepage.__str__()
 
+        if package.has_optional_field("primary_package_purpose"):
+            package_object["primaryPackagePurpose"] = package.primary_package_purpose.name
+
+        if package.has_optional_field("release_date"):
+            package_object["releaseDate"] = package.release_date.isoformat() + "Z"
+
+        if package.has_optional_field("built_date"):
+            package_object["builtDate"] = package.built_date.isoformat() + "Z"
+
+        if package.has_optional_field("valid_until_date"):
+            package_object["validUntilDate"] = package.valid_until_date.isoformat() + "Z"
+
         if package.has_optional_field("pkg_ext_refs"):
             package_object["externalRefs"] = [self.external_reference_as_dict(external_ref) for external_ref in
                                               package.pkg_ext_refs]
