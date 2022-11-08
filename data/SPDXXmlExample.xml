@@ -37,6 +37,12 @@
             <licenseDeclared>(LicenseRef-3 AND LicenseRef-2 AND Apache-2.0 AND MPL-1.1 AND LicenseRef-1 AND LicenseRef-4)</licenseDeclared>
             <downloadLocation>http://www.spdx.org/tools</downloadLocation>
             <description>This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document.</description>
+            <externalRefs>
+              <comment>external reference comment</comment>
+              <referenceCategory>OTHER</referenceCategory>
+              <referenceLocator>reference/locator</referenceLocator>
+              <referenceType>http://reference.type</referenceType>
+            </externalRefs>
         </packages>
 		<creationInfo>
 			<comment>This is an example of an SPDX spreadsheet format</comment>
