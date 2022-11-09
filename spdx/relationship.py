@@ -10,18 +10,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from enum import Enum
+from enum import auto, Enum
+
 from spdx.parsers.loggers import ErrorMessages
-
-# Implement the auto feature that becomes available in 3.6	
-autoinc = 0	
-
-
-def auto():	
-    global autoinc	
-    autoval = autoinc	
-    autoinc += 1	
-    return autoval
 
 
 class RelationshipType(Enum):
@@ -82,33 +73,37 @@ class Relationship(object):
         self.relationship = relationship
         self.relationship_comment = relationship_comment
 
+    def __eq__(self, other):
+        return (
+            isinstance(other, Relationship)
+            and self.relationship == other.relationship
+        )
+
     @property
     def has_comment(self):
         return self.relationship_comment is not None
 
     @property
-    def spdxelementid(self):
+    def spdx_element_id(self):
         return self.relationship.split(" ")[0]
 
     @property
-    def relationshiptype(self):
+    def relationship_type(self):
         return self.relationship.split(" ")[1]
 
     @property
-    def relatedspdxelement(self):
+    def related_spdx_element(self):
         return self.relationship.split(" ")[2]
 
-    def validate(self, messages):
+    def validate(self, messages: ErrorMessages) -> ErrorMessages:
         """
         Check that all the fields are valid.
         Appends any error messages to messages parameter shall be a ErrorMessages.
         """
-        self.validate_relationship(messages)
-
-    def validate_relationship(self, messages):
-        r_type = self.relationship.split(" ")[1]
+        r_type = self.relationship_type
         if r_type not in [name for name, _ in RelationshipType.__members__.items()]:
             messages.append(
                 "Relationship type must be one of the constants defined in "
                 "class spdx.relationship.Relationship"
             )
+        return messages

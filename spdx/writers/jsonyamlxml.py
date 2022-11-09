@@ -331,16 +331,16 @@ class RelationshipInfoWriter(BaseWriter):
         relationship_objects = []
 
         for relationship_term in self.document.relationships:
-            if relationship_term.relationshiptype == "DESCRIBES":
+            if relationship_term.relationship_type == "DESCRIBES":
                 continue
-            if relationship_term.relationshiptype == "CONTAINS":
+            if relationship_term.relationship_type == "CONTAINS":
                 continue
             relationship_object = dict()
-            relationship_object["spdxElementId"] = relationship_term.spdxelementid
+            relationship_object["spdxElementId"] = relationship_term.spdx_element_id
             relationship_object[
                 "relatedSpdxElement"
-            ] = relationship_term.relatedspdxelement
-            relationship_object["relationshipType"] = relationship_term.relationshiptype
+            ] = relationship_term.related_spdx_element
+            relationship_object["relationshipType"] = relationship_term.relationship_type
             if relationship_term.has_comment:
                 relationship_object["comment"] = relationship_term.relationship_comment
 
@@ -495,8 +495,8 @@ class Writer(
         document_describes = []
         remove_rel = []
         for relationship in self.document.relationships:
-            if relationship.relationshiptype == "DESCRIBES":
-                document_describes.append(relationship.relatedspdxelement)
+            if relationship.relationship_type == "DESCRIBES":
+                document_describes.append(relationship.related_spdx_element)
                 if not relationship.has_comment:
                     remove_rel.append(relationship)
         for relationship in remove_rel:

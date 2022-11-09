@@ -1220,7 +1220,7 @@ class RelationshipParser(BaseParser):
             for sub, pre, rel_ele in self.graph.triples(
                 (relation_term, self.spdx_namespace["relatedSpdxElement"], None)
             ):
-                related_element = str(rel_ele.split("#")[1])
+                related_element = str(rel_ele.split("#")[1]) if '#' in rel_ele else rel_ele
         except:
             related_element = None
 
