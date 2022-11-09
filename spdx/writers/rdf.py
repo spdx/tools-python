@@ -24,6 +24,7 @@ from spdx import config
 from spdx import utils
 from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
+from spdx.relationship import Relationship
 from spdx.writers.tagvalue import InvalidDocumentError
 
 import warnings
@@ -536,15 +537,31 @@ class RelationshipInfoWriter(BaseWriter):
     def __init__(self, document, out):
         super(RelationshipInfoWriter, self).__init__(document, out)
 
-    def create_relationship_node(self, relationship):
+    def transform_relationship_type_to_rdf_model(self, relationship_type: str) -> str:
         """
-        Return an relationship node.
+        Transform relationship type from upper snake case to camel case to match rdf-specific output e.g.
+        COPY_OF -> relationshipType_copyOf.
         """
-        relationship_node = URIRef(str(relationship.spdxelementid))
+        return "relationshipType_" + relationship_type[0].lower() + relationship_type.title().replace('_', '')[1:]
+
+    def create_relationship_node(self, relationship: Relationship) -> BNode:
+        """
+        Return a relationship node.
+        """
+        relationship_node = BNode()
         type_triple = (relationship_node, RDF.type, self.spdx_namespace.Relationship)
         self.graph.add(type_triple)
 
-        relationship_type_node = Literal(relationship.relationshiptype)
+        relationship_spdx_element_id = Literal(relationship.spdx_element_id)
+        self.graph.add(
+            (
+                relationship_node,
+                self.spdx_namespace.spdxElementId,
+                relationship_spdx_element_id,
+            )
+        )
+        relationship_type = self.transform_relationship_type_to_rdf_model(relationship.relationship_type)
+        relationship_type_node = self.spdx_namespace[relationship_type]
         self.graph.add(
             (
                 relationship_node,
@@ -552,7 +569,7 @@ class RelationshipInfoWriter(BaseWriter):
                 relationship_type_node,
             )
         )
-        related_spdx_node = Literal(relationship.relatedspdxelement)
+        related_spdx_node = Literal(relationship.related_spdx_element)
         related_spdx_triple = (
             relationship_node,
             self.spdx_namespace.relatedSpdxElement,
@@ -1019,6 +1036,7 @@ class Writer(
         for package_node in self.packages():
             package_triple = (doc_node, self.spdx_namespace.describesPackage, package_node)
             self.graph.add(package_triple)
+
         # Add external package reference
         for pkg_ext_ref_node in self.pkg_ext_refs():
             pkg_ext_ref_triple = (
@@ -1027,10 +1045,12 @@ class Writer(
                 pkg_ext_ref_node,
             )
             self.graph.add(pkg_ext_ref_triple)
-        """# Add relationship
-        relate_node = self.relationships()
-        relate_triple = (doc_node, self.spdx_namespace.relationship, relate_node)
-        self.graph.add(relate_triple)"""
+
+        # Add relationship
+        for relate_node in self.relationships():
+            relate_triple = (doc_node, self.spdx_namespace.relationship, relate_node)
+            self.graph.add(relate_triple)
+
         # Add snippet
         snippet_nodes = self.snippets()
         for snippet in snippet_nodes:

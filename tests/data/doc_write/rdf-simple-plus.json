@@ -61,7 +61,15 @@
             "@rdf:resource": "http://spdx.org/licenses/LGPL-2.1-or-later"
           }
         }
-      }, 
+      },
+        "ns1:relationship": {
+            "ns1:Relationship": {
+                "ns1:spdxElementId": "SPDXRef-DOCUMENT",
+                "ns1:relatedSpdxElement": "SPDXRef-Package",
+                "ns1:relationshipType": {
+                    "@rdf:resource": "http://spdx.org/rdf/terms#relationshipType_describes"
+                }
+      }},
       "@rdf:about": "http://www.spdx.org/tools#SPDXRef-DOCUMENT"
     }
   }
