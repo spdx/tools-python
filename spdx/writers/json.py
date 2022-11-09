@@ -14,6 +14,14 @@ import json
 from spdx.writers.tagvalue import InvalidDocumentError
 from spdx.writers.jsonyamlxml import Writer
 from spdx.parsers.loggers import ErrorMessages
+import datetime
+
+
+def json_converter(obj):
+    if isinstance(obj, datetime.datetime):
+        return str(obj)
+    else:
+        raise TypeError("No implementation available to serialize objects of type " + type(obj).__name__)
 
 
 def write_document(document, out, validate=True):
@@ -26,4 +34,4 @@ def write_document(document, out, validate=True):
 
     writer = Writer(document)
     document_object = writer.create_document()
-    json.dump(document_object, out, indent=4)
+    json.dump(document_object, out, indent=4, default=json_converter)
