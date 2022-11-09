@@ -138,7 +138,7 @@ def check_rdf_scan(expected_file, result_file, regen=False):
     else:
         with io.open(expected_file, 'r', encoding='utf-8') as i:
             expected = sort_nested(json.load(i))
-    assert expected == result
+    assert result == expected
 
 
 def load_and_clean_tv(location):
@@ -165,7 +165,7 @@ def check_tv_scan(expected_file, result_file, regen=False):
             o.write(result)
 
     expected = load_and_clean_tv(expected_file)
-    assert expected == result
+    assert result == expected
 
 
 def load_and_clean_json(location):
@@ -195,7 +195,7 @@ def check_json_scan(expected_file, result_file, regen=False):
             o.write(result)
 
     expected = load_and_clean_json(expected_file)
-    assert expected == result
+    assert result == expected
 
 
 def load_and_clean_yaml(location):
@@ -225,7 +225,7 @@ def check_yaml_scan(expected_file, result_file, regen=False):
             o.write(result)
 
     expected = load_and_clean_yaml(expected_file)
-    assert expected == result
+    assert result == expected
 
 
 def load_and_clean_xml(location):
@@ -255,7 +255,7 @@ def check_xml_scan(expected_file, result_file, regen=False):
             o.write(result)
 
     expected = load_and_clean_xml(expected_file)
-    assert expected == result
+    assert result == expected
 
 
 class TestParserUtils(object):
