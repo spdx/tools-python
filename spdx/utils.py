@@ -73,6 +73,9 @@ class NoAssert(object):
     def __str__(self):
         return self.to_value()
 
+    def __repr__(self):
+        return self.to_value()
+
 
 class UnKnown(object):
     """
@@ -90,6 +93,7 @@ class UnKnown(object):
 
     def __eq__(self, other):
         return self.to_value() == other.to_value()
+
 
 class SPDXNone(object):
     """
