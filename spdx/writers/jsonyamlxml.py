@@ -398,9 +398,12 @@ class ExtractedLicenseWriter(BaseWriter):
 
     def create_extracted_license(self):
         extracted_license_objects = []
-        extracted_licenses = self.document.extracted_licenses
+        unique_extracted_licenses = {}
+        for lic in self.document.extracted_licenses:
+            if lic.identifier not in unique_extracted_licenses.keys():
+                unique_extracted_licenses[lic.identifier] = lic
 
-        for extracted_license in extracted_licenses:
+        for extracted_license in unique_extracted_licenses.values():
             extracted_license_object = dict()
 
             if isinstance(extracted_license.identifier, Literal):
@@ -516,9 +519,14 @@ class Writer(
         document_describes = self.create_document_describes()
         self.document_object["documentDescribes"] = document_describes
 
+        unique_doc_packages = {}
+        for doc_package in self.document.packages:
+            if doc_package.spdx_id not in unique_doc_packages.keys():
+                unique_doc_packages[doc_package.spdx_id] = doc_package
+
         package_objects = []
         file_objects = []
-        for package in self.document.packages:
+        for package in unique_doc_packages.values():
             package_info_object, files_in_package = self.create_package_info(package)
             package_objects.append(package_info_object)
             file_objects.extend(file for file in files_in_package if file not in file_objects)
