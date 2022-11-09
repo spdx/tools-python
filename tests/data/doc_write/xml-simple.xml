@@ -20,7 +20,6 @@
         </checksums>
         <licenseDeclared>NOASSERTION</licenseDeclared>
         <licenseConcluded>NOASSERTION</licenseConcluded>
-
         <licenseInfoFromFiles>LGPL-2.1-only</licenseInfoFromFiles>
         <hasFiles>SPDXRef-File</hasFiles>
     </packages>
