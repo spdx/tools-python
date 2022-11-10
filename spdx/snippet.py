@@ -71,7 +71,7 @@ class Snippet(object):
             messages.append("Snippet has no SPDX Identifier.")
 
     def validate_copyright_text(self, messages):
-        if not isinstance(
+        if self.copyright and not isinstance(
             self.copyright,
             (str, utils.NoAssert, utils.SPDXNone),
         ):
@@ -84,26 +84,25 @@ class Snippet(object):
             messages.append("Snippet has no Snippet from File SPDX Identifier.")
 
     def validate_concluded_license(self, messages):
-        if not isinstance(
-            self.conc_lics, (document.License, utils.NoAssert, utils.SPDXNone)
+        if self.conc_lics and not isinstance(
+            self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)
         ):
             messages.append(
-                "Snippet Concluded License must be one of "
-                "document.License, utils.NoAssert or utils.SPDXNone"
+                "Snippet concluded license must be instance of "
+                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                "spdx.document.License"
             )
 
     def validate_licenses_in_snippet(self, messages):
-        if len(self.licenses_in_snippet) == 0:
-            messages.append("Snippet must have at least one license in file.")
-        else:
-            for lic in self.licenses_in_snippet:
-                if not isinstance(
-                    lic, (document.License, utils.NoAssert, utils.SPDXNone)
-                ):
-                    messages.append(
-                        "Licenses in Snippet must be one of "
-                        "document.License, utils.NoAssert or utils.SPDXNone"
-                    )
+        for lic in self.licenses_in_snippet:
+            if not isinstance(
+                lic, (document.License, utils.NoAssert, utils.SPDXNone)
+            ):
+                messages.append(
+                    "License in snippet must be instance of "
+                    "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                    "spdx.document.License"
+                )
 
     def has_optional_field(self, field):
         return bool (getattr(self, field, None))
