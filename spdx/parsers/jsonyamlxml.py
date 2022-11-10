@@ -1066,6 +1066,7 @@ class PackageParser(BaseParser):
             self.parse_pkg_license_comment(package.get("licenseComments"))
             self.parse_pkg_copyright_text(package.get("copyrightText"))
             self.parse_pkg_summary(package.get("summary"))
+            self.parse_pkg_comment(package.get("comment"))
             self.parse_pkg_description(package.get("description"))
             self.parse_annotations(package.get("annotations"))
             self.parse_pkg_attribution_text(package.get("attributionTexts"))
@@ -1446,6 +1447,21 @@ class PackageParser(BaseParser):
                 self.order_error("PKG_SUMMARY", "PKG_NAME")
         elif pkg_summary is not None:
             self.value_error("PKG_SUMMARY", pkg_summary)
+
+    def parse_pkg_comment(self, pkg_comment):
+        """
+        Parse Package comment
+        - pkg_comment: Python str/unicode
+        """
+        if isinstance(pkg_comment, str):
+            try:
+                return self.builder.set_pkg_comment(self.document, pkg_comment)
+            except CardinalityError:
+                self.more_than_one_error("PKG_COMMENT")
+            except OrderError:
+                self.order_error("PKG_COMMENT", "PKG_NAME")
+        elif pkg_comment is not None:
+            self.value_error("PKG_COMMENT", pkg_comment)
 
     def parse_pkg_description(self, pkg_description):
         """

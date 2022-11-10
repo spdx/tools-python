@@ -168,6 +168,9 @@ class PackageWriter(BaseWriter):
         if package.has_optional_field("description"):
             package_object["description"] = package.description
 
+        if package.has_optional_field("comment"):
+            package_object["comment"] = package.comment
+
         if package.has_optional_field("license_comment"):
             package_object["licenseComments"] = package.license_comment
 
