@@ -11,7 +11,7 @@
 
 from rdflib import Literal
 
-from spdx import document
+from spdx import document, utils
 from spdx.package import ExternalPackageRef
 
 
@@ -178,13 +178,13 @@ class PackageWriter(BaseWriter):
             package_object["primaryPackagePurpose"] = package.primary_package_purpose.name
 
         if package.has_optional_field("release_date"):
-            package_object["releaseDate"] = package.release_date.isoformat() + "Z"
+            package_object["releaseDate"] = utils.datetime_iso_format(package.release_date)
 
         if package.has_optional_field("built_date"):
-            package_object["builtDate"] = package.built_date.isoformat() + "Z"
+            package_object["builtDate"] = utils.datetime_iso_format(package.built_date)
 
         if package.has_optional_field("valid_until_date"):
-            package_object["validUntilDate"] = package.valid_until_date.isoformat() + "Z"
+            package_object["validUntilDate"] = utils.datetime_iso_format(package.valid_until_date)
 
         if package.has_optional_field("pkg_ext_refs"):
             package_object["externalRefs"] = [self.external_reference_as_dict(external_ref) for external_ref in
