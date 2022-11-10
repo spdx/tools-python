@@ -335,7 +335,7 @@ class AnnotationParser(BaseParser):
     def __init__(self, builder, logger):
         super(AnnotationParser, self).__init__(builder, logger)
 
-    def parse_annotations(self, annotations):
+    def parse_annotations(self, annotations, spdx_id: str = None):
         """
         Parse Annotation Information fields
         - annotations: Python list with Annotation Information dicts in it
@@ -347,7 +347,10 @@ class AnnotationParser(BaseParser):
                         self.parse_annotation_date(annotation.get("annotationDate"))
                         self.parse_annotation_comment(annotation.get("comment"))
                         self.parse_annotation_type(annotation.get("annotationType"))
-                        self.parse_annotation_id(annotation.get("SPDXID"))
+                        if annotation.get("SPDXID"):
+                            self.parse_annotation_id(annotation.get("SPDXID"))
+                        else:
+                            self.parse_annotation_id(spdx_id)
                 else:
                     self.value_error("ANNOTATION", annotation)
 
@@ -512,6 +515,7 @@ class SnippetParser(BaseParser):
                         self.parse_snippet_license_info_from_snippet(
                             snippet.get("licenseInfoFromSnippet")
                         )
+                        self.parse_annotations(snippet.get("annotations"), spdx_id=snippet.get("SPDXID"))
                 else:
                     self.value_error("SNIPPET", snippet)
 
@@ -752,7 +756,7 @@ class FileParser(BaseParser):
             self.parse_file_contributors(file.get("fileContributors"))
             self.parse_file_attribution_text(file.get("attributionTexts"))
             self.parse_file_dependencies(file.get("fileDependencies"))
-            self.parse_annotations(file.get("annotations"))
+            self.parse_annotations(file.get("annotations"), spdx_id=file.get("SPDXID"))
             self.parse_file_chksum(file.get("sha1"))
         else:
             self.value_error("FILE", file)
@@ -1077,7 +1081,7 @@ class PackageParser(BaseParser):
             self.parse_pkg_summary(package.get("summary"))
             self.parse_pkg_comment(package.get("comment"))
             self.parse_pkg_description(package.get("description"))
-            self.parse_annotations(package.get("annotations"))
+            self.parse_annotations(package.get("annotations"), spdx_id=package.get("SPDXID"))
             self.parse_pkg_attribution_text(package.get("attributionTexts"))
             self.parse_pkg_files(package.get("files"))
             self.parse_pkg_chksum(package.get("sha1"))
@@ -1654,7 +1658,7 @@ class Parser(
         self.parse_extracted_license_info(
             self.document_object.get("hasExtractedLicensingInfos")
         )
-        self.parse_annotations(self.document_object.get("annotations"))
+        self.parse_annotations(self.document_object.get("annotations"), spdx_id=self.document_object.get("SPDXID"))
         self.parse_relationships(self.document_object.get("relationships"))
         self.parse_reviews(self.document_object.get("reviewers"))
         self.parse_snippets(self.document_object.get("snippets"))
