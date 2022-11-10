@@ -896,7 +896,7 @@ class SnippetParser(LicenseParser):
                         lics = self.handle_lics(licenses)
                         self.builder.set_snip_concluded_license(self.doc, lics)
                     except SPDXValueError:
-                        self.value_error("SNIPPET_SINGLE_LICS", licenses)
+                        self.value_error("SNIPPET_CONCLUDED_LICENSE", licenses)
         except CardinalityError:
             self.more_than_one_error(
                 "package {0}".format(self.spdx_namespace["licenseConcluded"])

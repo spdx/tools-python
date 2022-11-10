@@ -134,12 +134,18 @@ class PackageWriter(BaseWriter):
                 package_object["packageVerificationCode"] = self.package_verification_code(
                     package
                 )
-            package_object["licenseInfoFromFiles"] = list(
-                map(self.license, package.licenses_from_files)
-            )
-        package_object["licenseConcluded"] = self.license(package.conc_lics)
-        package_object["licenseDeclared"] = self.license(package.license_declared)
-        package_object["copyrightText"] = package.cr_text.__str__()
+            if package.has_optional_field("licenses_from_files"):
+                package_object["licenseInfoFromFiles"] = list(
+                    map(self.license, package.licenses_from_files)
+                )
+        if package.has_optional_field("conc_lics"):
+            package_object["licenseConcluded"] = self.license(package.conc_lics)
+
+        if package.has_optional_field("license_declared"):
+            package_object["licenseDeclared"] = self.license(package.license_declared)
+
+        if package.has_optional_field("cr_text"):
+            package_object["copyrightText"] = package.cr_text.__str__()
 
         if package.has_optional_field("version"):
             package_object["versionInfo"] = package.version
@@ -236,11 +242,17 @@ class FileWriter(BaseWriter):
         file_object["fileName"] = file.name
         file_object["SPDXID"] = self.spdx_id(file.spdx_id)
         file_object["checksums"] = [self.checksum(file.chksum)]
-        file_object["licenseConcluded"] = self.license(file.conc_lics)
-        file_object["licenseInfoInFiles"] = list(
-            map(self.license, file.licenses_in_file)
-        )
-        file_object["copyrightText"] = file.copyright.__str__()
+
+        if file.has_optional_field("conc_lics"):
+            file_object["licenseConcluded"] = self.license(file.conc_lics)
+
+        if file.has_optional_field("licenses_in_file"):
+            file_object["licenseInfoInFiles"] = list(
+                map(self.license, file.licenses_in_file)
+            )
+
+        if file.has_optional_field("copyright"):
+            file_object["copyrightText"] = file.copyright.__str__()
 
         if file.has_optional_field("comment"):
             file_object["comment"] = file.comment
@@ -376,12 +388,18 @@ class SnippetWriter(BaseWriter):
         for snippet in snippets:
             snippet_object = dict()
             snippet_object["SPDXID"] = self.spdx_id(snippet.spdx_id)
-            snippet_object["copyrightText"] = snippet.copyright
             snippet_object["fileId"] = self.spdx_id(snippet.snip_from_file_spdxid)
-            snippet_object["licenseConcluded"] = self.license(snippet.conc_lics)
-            snippet_object["licenseInfoFromSnippet"] = list(
-                map(self.license, snippet.licenses_in_snippet)
-            )
+
+            if snippet.has_optional_field("copyright"):
+                snippet_object["copyrightText"] = snippet.copyright
+
+            if snippet.has_optional_field("conc_lics"):
+                snippet_object["licenseConcluded"] = self.license(snippet.conc_lics)
+
+            if snippet.has_optional_field("licenses_in_snippet"):
+                snippet_object["licenseInfoFromSnippet"] = list(
+                    map(self.license, snippet.licenses_in_snippet)
+                )
 
             if snippet.has_optional_field("name"):
                 snippet_object["name"] = snippet.name

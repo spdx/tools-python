@@ -164,7 +164,6 @@ class Package(object):
         self.validate_mandatory_str_fields(messages)
         self.validate_files(messages)
         self.validate_pkg_ext_refs(messages)
-        self.validate_mandatory_fields(messages)
         self.validate_optional_fields(messages)
         messages.pop_context()
 
@@ -204,6 +203,34 @@ class Package(object):
                 "spdx.utils.NoAssert or spdx.creationinfo.Creator"
             )
 
+        if self.conc_lics and not isinstance(
+            self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)
+        ):
+            messages.append(
+                "Package concluded license must be instance of "
+                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                "spdx.document.License"
+            )
+
+        if self.license_declared and not isinstance(
+            self.license_declared, (utils.SPDXNone, utils.NoAssert, document.License)
+        ):
+            messages.append(
+                "Package declared license must be instance of "
+                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                "spdx.document.License"
+            )
+
+        license_from_file_check = lambda prev, el: prev and isinstance(
+            el, (document.License, utils.SPDXNone, utils.NoAssert)
+        )
+        if not reduce(license_from_file_check, self.licenses_from_files, True):
+            messages.append(
+                "Each element in licenses_from_files must be instance of "
+                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                "spdx.document.License"
+            )
+
         return messages
 
     def validate_pkg_ext_refs(self, messages):
@@ -218,50 +245,10 @@ class Package(object):
 
         return messages
 
-    def validate_mandatory_fields(self, messages):
-        if not isinstance(
-            self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)
-        ):
-            messages.append(
-                "Package concluded license must be instance of "
-                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
-            )
-
-        if not isinstance(
-            self.license_declared, (utils.SPDXNone, utils.NoAssert, document.License)
-        ):
-            messages.append(
-                "Package declared license must be instance of "
-                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
-            )
-
-        # FIXME: this is obscure and unreadable
-        license_from_file_check = lambda prev, el: prev and isinstance(
-            el, (document.License, utils.SPDXNone, utils.NoAssert)
-        )
-        if not reduce(license_from_file_check, self.licenses_from_files, True):
-            messages.append(
-                "Each element in licenses_from_files must be instance of "
-                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
-            )
-
-        if not self.licenses_from_files and self.are_files_analyzed:
-            messages.append("Package licenses_from_files can not be empty")
-
-        return messages
-
     def validate_files(self, messages):
         if self.are_files_analyzed:
-            if not self.files:
-                messages.append(
-                    "Package must have at least one file."
-                )
-            else:
-                for f in self.files:
-                    messages = f.validate(messages)
+            for file in self.files:
+                messages = file.validate(messages)
 
         return messages
 
@@ -278,6 +265,7 @@ class Package(object):
             "description",
             "attribution_text",
             "comment",
+            "cr_text"
         ]
         self.validate_str_fields(FIELDS, True, messages)
 
@@ -287,7 +275,7 @@ class Package(object):
         """Fields marked as Mandatory and of type string in class
         docstring must be of a type that provides __str__ method.
         """
-        FIELDS = ["name", "spdx_id", "download_location", "cr_text"]
+        FIELDS = ["name", "spdx_id", "download_location"]
         self.validate_str_fields(FIELDS, False, messages)
 
         return messages
