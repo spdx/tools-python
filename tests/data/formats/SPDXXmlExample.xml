@@ -235,5 +235,25 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
 			<licenseComments>The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.</licenseComments>
 			<SPDXID>SPDXRef-Snippet</SPDXID>
 			<fileId>SPDXRef-DoapSource</fileId>
+            <ranges>
+                <endPointer>
+                    <offset>420</offset>
+                    <reference>SPDXRef-DoapSource</reference>
+                </endPointer>
+                <startPointer>
+                    <offset>310</offset>
+                    <reference>SPDXRef-DoapSource</reference>
+                </startPointer>
+            </ranges>
+            <ranges>
+                <endPointer>
+                    <lineNumber>23</lineNumber>
+                    <reference>SPDXRef-DoapSource</reference>
+                </endPointer>
+                <startPointer>
+                    <lineNumber>5</lineNumber>
+                    <reference>SPDXRef-DoapSource</reference>
+                </startPointer>
+            </ranges>
         </snippets>
 	</Document>

@@ -9,7 +9,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import datetime
-from typing import List, Dict
+from enum import Enum, auto
+from typing import List, Dict, Tuple
 
 from spdx import document
 from spdx import utils
@@ -19,6 +20,7 @@ from spdx.package import ExternalPackageRef, PackagePurpose
 from spdx.parsers import rdf
 from spdx.parsers.builderexceptions import SPDXValueError, CardinalityError, OrderError
 from spdx.parsers.loggers import ErrorMessages
+from spdx.snippet import Snippet
 from spdx.utils import UnKnown
 
 ERROR_MESSAGES = rdf.ERROR_MESSAGES
@@ -486,9 +488,18 @@ class RelationshipParser(BaseParser):
             self.value_error("RELATIONSHIP_COMMENT", relationship_comment)
 
 
+class RangeType(Enum):
+    BYTE = auto()
+    LINE = auto()
+
+
 class SnippetParser(BaseParser):
     def __init__(self, builder, logger):
         super(SnippetParser, self).__init__(builder, logger)
+
+    @property
+    def snippet(self) -> Snippet:
+        return self.document.snippet[-1]
 
     def parse_snippets(self, snippets):
         """
@@ -516,6 +527,7 @@ class SnippetParser(BaseParser):
                             snippet.get("licenseInfoFromSnippet")
                         )
                         self.parse_annotations(snippet.get("annotations"), spdx_id=snippet.get("SPDXID"))
+                        self.parse_snippet_ranges(snippet.get("ranges"))
                 else:
                     self.value_error("SNIPPET", snippet)
 
@@ -666,6 +678,61 @@ class SnippetParser(BaseParser):
                     self.value_error("SNIPPET_LIC_INFO", lic_in_snippet)
         elif license_info_from_snippet is not None:
             self.value_error("SNIPPET_LIC_INFO_FIELD", license_info_from_snippet)
+
+    def parse_snippet_ranges(self, ranges_from_snippet: List[Dict]) -> None:
+        """
+        Parse ranges (byte range and optional line range) from snippet
+        - ranges_from_snippet; Python list of dict
+        """
+        if not isinstance(ranges_from_snippet, list):
+            self.value_error("SNIPPET_RANGES", ranges_from_snippet)
+            return
+
+        for range_dict in ranges_from_snippet:
+            try:
+                range_type = self.validate_range_and_get_type(range_dict)
+                start_end_tuple: Tuple[int, int] = SnippetParser.get_start_end_tuple(range_dict, range_type)
+            except SPDXValueError:
+                self.value_error("SNIPPET_RANGE", range_dict)
+                return
+
+            if range_type == RangeType.BYTE:
+                self.snippet.byte_range = start_end_tuple
+            elif range_type == RangeType.LINE:
+                self.snippet.line_range = start_end_tuple
+
+    @staticmethod
+    def get_start_end_tuple(range_dict: Dict, range_type: RangeType) -> Tuple[int, int]:
+        end_pointer = range_dict["endPointer"]
+        start_pointer = range_dict["startPointer"]
+        if range_type == RangeType.BYTE:
+            start = int(start_pointer["offset"])
+            end = int(end_pointer["offset"])
+        else:
+            start = int(start_pointer["lineNumber"])
+            end = int(end_pointer["lineNumber"])
+        if start > end:
+            raise SPDXValueError("Snippet::ranges")
+
+        return start, end
+
+    def validate_range_and_get_type(self, range_dict: Dict) -> RangeType:
+        if ("startPointer" not in range_dict) or ("endPointer" not in range_dict):
+            raise SPDXValueError("Snippet::ranges")
+        start_pointer_type = self.validate_pointer_and_get_type(range_dict["startPointer"])
+        end_pointer_type = self.validate_pointer_and_get_type(range_dict["endPointer"])
+        if start_pointer_type != end_pointer_type:
+            raise SPDXValueError("Snippet::ranges")
+        return start_pointer_type
+
+    def validate_pointer_and_get_type(self, pointer: Dict) -> RangeType:
+        if self.snippet.snip_from_file_spdxid != pointer["reference"]:
+            raise SPDXValueError("Snippet::ranges")
+        if ("offset" in pointer and "lineNumber" in pointer) or (
+                "offset" not in pointer and "lineNumber" not in pointer):
+            raise SPDXValueError("Snippet::ranges")
+
+        return RangeType.BYTE if "offset" in pointer else RangeType.LINE
 
 
 class ReviewParser(BaseParser):
@@ -1574,7 +1641,7 @@ class PackageParser(BaseParser):
             self.package.built_date = parsed_date
         else:
             self.value_error("BUILT_DATE", built_date)
-            
+
     def parse_valid_until_date(self, valid_until_date: str):
         if valid_until_date is None:
             return

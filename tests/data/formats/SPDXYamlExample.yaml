@@ -191,6 +191,19 @@ Document:
       licenseInfoFromSnippet:
         - Apache-2.0
       name: from linux kernel
+      ranges:
+        - endPointer:
+            offset: 420
+            reference: "SPDXRef-DoapSource"
+          startPointer:
+            offset: 310
+            reference: "SPDXRef-DoapSource"
+        - endPointer:
+            lineNumber: 23
+            reference: "SPDXRef-DoapSource"
+          startPointer:
+            lineNumber: 5
+            reference: "SPDXRef-DoapSource"
   spdxVersion: SPDX-2.1
   files:
     - SPDXID: SPDXRef-File1

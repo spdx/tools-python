@@ -19,6 +19,9 @@ from tests import utils_test
 
 dirname = os.path.join(os.path.dirname(__file__), "data", "formats")
 test_files = [os.path.join(dirname, fn) for fn in os.listdir(dirname)]
+test_files_json_yaml_xml = [filename for filename in test_files if filename.endswith("json") or
+                            filename.endswith("yaml") or filename.endswith("xml")]
+test_files_rdf_tag = [filename for filename in test_files if (filename.endswith("tag") or filename.endswith("rdf"))]
 UNSTABLE_CONVERSIONS = {
     "SPDXTagExample.tag-rdf",
     "SPDXTagExample.tag-yaml",
@@ -40,30 +43,40 @@ UNSTABLE_CONVERSIONS = {
     "SPDXJsonExample2.2.json-tag",
 }
 
+
 @pytest.mark.parametrize("out_format", ['rdf', 'yaml', 'xml', 'json', 'tag'])
-@pytest.mark.parametrize("in_file", test_files, ids=lambda x: os.path.basename(x))
-def test_write_anything(in_file, out_format, tmpdir):
+@pytest.mark.parametrize("in_file", test_files_json_yaml_xml, ids=lambda x: os.path.basename(x))
+def test_write_anything_json_yaml_xml(in_file, out_format, tmpdir):
     in_basename = os.path.basename(in_file)
-    if in_basename == "SPDXSBOMExample.spdx.yml" or in_basename == "SPDXSBOMExample.tag" or in_basename == "SPDXJsonExample2.2.json":
+    if in_basename == "SPDXSBOMExample.spdx.yml" or in_basename == "SPDXJsonExample2.2.json":
         # conversion of spdx2.2 is not yet done
         return
-    doc, error = parse_anything.parse_file(in_file)
+    write_anything_test(in_basename, in_file, out_format, tmpdir)
 
+
+@pytest.mark.parametrize("out_format", ['rdf', 'tag'])
+@pytest.mark.parametrize("in_file", test_files_rdf_tag, ids=lambda x: os.path.basename(x))
+def test_write_anything_rdf_tag(in_file, out_format, tmpdir):
+    in_basename = os.path.basename(in_file)
+    if in_basename == "SPDXSBOMExample.tag":
+        # conversion of spdx2.2 is not yet done
+        return
+    write_anything_test(in_basename, in_file, out_format, tmpdir)
+
+
+def write_anything_test(in_basename, in_file, out_format, tmpdir):
+    doc, error = parse_anything.parse_file(in_file)
     assert not error
     result = utils_test.TestParserUtils.to_dict(doc)
-
     out_fn = os.path.join(tmpdir, "test." + out_format)
     write_anything.write_file(doc, out_fn)
-
     doc2, error2 = parse_anything.parse_file(out_fn)
     result2 = utils_test.TestParserUtils.to_dict(doc2)
     assert not error2
-
     test = in_basename + "-" + out_format
     if test not in UNSTABLE_CONVERSIONS:
-        assert result==result2
+        assert result == result2
     else:
         # if this test fails, this means we are more stable \o/
         # in that case, please remove the test from UNSTABLE_CONVERSIONS list
         assert result2 != result, test
-

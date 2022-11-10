@@ -8,6 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Tuple, Optional
 
 from spdx import document
 from spdx import utils
@@ -35,10 +36,14 @@ class Snippet(object):
      Mandatory, one or more. Type: document.License or utils.SPDXNone or
      utils.NoAssert.
      - attribution_text: optional string.
+     - byte_range: Defines the byte range in the original host file that the
+     snippet information applies to. Mandatory, one. Type (int, int)
+     - line_range: Defines the line range in the original host file that the
+     snippet information applies to. Optional, one. Type (int, int)
     """
 
     def __init__(
-        self, spdx_id=None, copyright=None, snip_from_file_spdxid=None, conc_lics=None
+        self, spdx_id=None, copyright=None, snip_from_file_spdxid=None, conc_lics=None, byte_range=None
     ):
         self.spdx_id = spdx_id
         self.name = None
@@ -49,6 +54,8 @@ class Snippet(object):
         self.snip_from_file_spdxid = snip_from_file_spdxid
         self.conc_lics = conc_lics
         self.licenses_in_snippet = []
+        self.byte_range: Optional[Tuple[int, int]] = byte_range
+        self.line_range: Optional[Tuple[int, int]] = None
 
     def add_lics(self, lics):
         self.licenses_in_snippet.append(lics)
@@ -105,4 +112,4 @@ class Snippet(object):
                 )
 
     def has_optional_field(self, field):
-        return bool (getattr(self, field, None))
+        return bool(getattr(self, field, None))

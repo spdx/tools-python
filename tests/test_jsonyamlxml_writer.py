@@ -8,6 +8,7 @@ import pytest
 from spdx.document import Document
 from spdx.package import Package, ExternalPackageRef, PackagePurpose
 from spdx.parsers.parse_anything import parse_file
+from spdx.snippet import Snippet
 from spdx.writers import json, write_anything
 from tests.test_rdf_writer import minimal_document
 
@@ -76,3 +77,42 @@ def test_release_built_valid_until_date(temporary_file_path: str, out_format: st
     assert parsed_package.release_date == package.release_date
     assert parsed_package.built_date == package.built_date
     assert parsed_package.valid_until_date == package.valid_until_date
+
+
+@pytest.mark.parametrize("out_format", ['yaml', 'xml', 'json'])
+def test_snippet_byte_range(temporary_file_path, out_format):
+    snippet = minimal_snippet()
+    parsed_snippet = write_and_parse_snippet(out_format, snippet, temporary_file_path)
+
+    assert parsed_snippet.byte_range == (310, 420)
+    assert parsed_snippet.line_range is None
+
+
+@pytest.mark.parametrize("out_format", ['yaml', 'xml', 'json'])
+def test_snippet_ranges(temporary_file_path, out_format):
+    snippet = minimal_snippet()
+    snippet.line_range = (5, 23)
+    parsed_snippet = write_and_parse_snippet(out_format, snippet, temporary_file_path)
+
+    assert parsed_snippet.byte_range == (310, 420)
+    assert parsed_snippet.line_range == (5, 23)
+
+
+def minimal_snippet():
+    snippet = Snippet()
+    snippet.spdx_id = "SPDXRef-Snippet"
+    snippet.snip_from_file_spdxid = "SPDXRef-File"
+    snippet.byte_range = (310, 420)
+    return snippet
+
+
+def write_and_parse_snippet(out_format, snippet, temporary_file_path):
+    document: Document = minimal_document()
+    document.add_snippet(snippet)
+    file_path_with_ending = temporary_file_path + "." + out_format
+    write_anything.write_file(document, file_path_with_ending, validate=False)
+    parsed_document: Document = parse_file(file_path_with_ending)[0]
+    parsed_snippet: Snippet = parsed_document.snippet[0]
+
+    return parsed_snippet
+
