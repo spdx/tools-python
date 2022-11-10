@@ -399,9 +399,10 @@ class SnippetWriter(BaseWriter):
         snippets = self.document.snippet
 
         for snippet in snippets:
+            snippet_from_file_spdx_id = self.spdx_id(snippet.snip_from_file_spdxid)
             snippet_object = dict()
             snippet_object["SPDXID"] = self.spdx_id(snippet.spdx_id)
-            snippet_object["fileId"] = self.spdx_id(snippet.snip_from_file_spdxid)
+            snippet_object["fileId"] = snippet_from_file_spdx_id
 
             if snippet.has_optional_field("copyright"):
                 snippet_object["copyrightText"] = snippet.copyright
@@ -413,6 +414,9 @@ class SnippetWriter(BaseWriter):
                 snippet_object["licenseInfoFromSnippet"] = list(
                     map(self.license, snippet.licenses_in_snippet)
                 )
+            byte_range = {"endPointer": {"offset": snippet.byte_range[1], "reference": snippet_from_file_spdx_id},
+                          "startPointer": {"offset": snippet.byte_range[0], "reference": snippet_from_file_spdx_id}}
+            snippet_object["ranges"] = [byte_range]
 
             if snippet.has_optional_field("name"):
                 snippet_object["name"] = snippet.name
@@ -429,9 +433,16 @@ class SnippetWriter(BaseWriter):
             if snippet.spdx_id in annotations_by_spdx_id:
                 snippet_object["annotations"] = annotations_by_spdx_id[snippet.spdx_id]
 
+            if snippet.has_optional_field("line_range"):
+                line_range = {
+                    "endPointer": {"lineNumber": snippet.line_range[1], "reference": snippet_from_file_spdx_id},
+                    "startPointer": {"lineNumber": snippet.line_range[0], "reference": snippet_from_file_spdx_id}}
+                snippet_object["ranges"].append(line_range)
+
             snippet_info_objects.append(snippet_object)
 
         return snippet_info_objects
+
 
 
 class ExtractedLicenseWriter(BaseWriter):

@@ -46,6 +46,6 @@ def parse_file(fn):
     with open(fn) as f:
         if read_data:
             data = f.read()
-            return  p.parse(data)
+            return p.parse(data)
         else:
-            return  p.parse(f)
+            return p.parse(f)
