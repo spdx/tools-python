@@ -388,7 +388,6 @@ class TestWriters(TestCase):
         try:
             temp_dir = tempfile.mkdtemp(prefix='test_spdx')
             result_file = os.path.join(temp_dir, 'spdx-simple-multi-package.json')
-            result_file = 'spdx-simple-multi-package.json'
             with open(result_file, 'w') as output:
                 write_document(doc, output, validate=True)
 
