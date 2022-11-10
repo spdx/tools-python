@@ -273,7 +273,7 @@ class FileWriter(BaseWriter):
             file_object["noticeText"] = file.notice
 
         if file.contributors:
-            file_object["fileContributors"] = file.contributors.__str__()
+            file_object["fileContributors"] = file.contributors
 
         if file.dependencies:
             file_object["fileDependencies"] = file.dependencies
