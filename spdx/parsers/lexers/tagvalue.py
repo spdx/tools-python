@@ -117,6 +117,7 @@ class Lexer(object):
         "PERSON_VALUE",
         "DATE",
         "LINE",
+        "RANGE",
         "CHKSUM",
         "DOC_REF_ID",
         "DOC_URI",
@@ -146,6 +147,11 @@ class Lexer(object):
 
     def t_CHKSUM(self, t):
         r":\s*SHA1:\s*[a-f0-9]{40,40}"
+        t.value = t.value[1:].strip()
+        return t
+
+    def t_RANGE(self, t):
+        r":\s*\d+:\d+"
         t.value = t.value[1:].strip()
         return t
 

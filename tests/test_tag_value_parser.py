@@ -87,18 +87,18 @@ file_str = '\n'.join([
 
 unknown_tag_str = 'SomeUnknownTag: SomeUnknownValue'
 
-    snippet_str = '\n'.join([
-        'SnippetSPDXID: SPDXRef-Snippet',
-        'SnippetLicenseComments: <text>Some lic comment.</text>',
-        'SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>',
-        'SnippetComment: <text>Some snippet comment.</text>',
-        'SnippetName: from linux kernel',
-        'SnippetFromFileSPDXID: SPDXRef-DoapSource',
-        'SnippetLicenseConcluded: Apache-2.0',
-        'LicenseInfoInSnippet: Apache-2.0',
-        'SnippetByteRange: 310:420',
-        'SnippetLineRange: 5:23',
-    ])
+snippet_str = '\n'.join([
+    'SnippetSPDXID: SPDXRef-Snippet',
+    'SnippetLicenseComments: <text>Some lic comment.</text>',
+    'SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>',
+    'SnippetComment: <text>Some snippet comment.</text>',
+    'SnippetName: from linux kernel',
+    'SnippetFromFileSPDXID: SPDXRef-DoapSource',
+    'SnippetLicenseConcluded: Apache-2.0',
+    'LicenseInfoInSnippet: Apache-2.0',
+    'SnippetByteRange: 310:420',
+    'SnippetLineRange: 5:23',
+])
 
 annotation_str = '\n'.join([
     'Annotator: Person: Jane Doe()',
@@ -152,7 +152,6 @@ class TestLexer(TestCase):
                                  'SHA1: '
                                  'd6a770ba38583ed4bb4525bd96e50461655d2759', 2)
 
-
     def test_creation_info(self):
         data = creation_str
         self.l.input(data)
@@ -181,7 +180,7 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'REVIEW_COMMENT', 'ReviewComment', 6)
         self.token_assert_helper(self.l.token(), 'TEXT', '<text>Alice was also here.</text>', 6)
 
-    def test_pacakage(self):
+    def test_package(self):
         data = package_str
         self.l.input(data)
         self.token_assert_helper(self.l.token(), 'PKG_NAME', 'PackageName', 1)
@@ -258,9 +257,9 @@ class TestLexer(TestCase):
                                  'LicenseInfoInSnippet', 8)
         self.token_assert_helper(self.l.token(), 'LINE', 'Apache-2.0', 8)
         self.token_assert_helper(self.l.token(), 'SNIPPET_BYTE_RANGE', 'SnippetByteRange', 9)
-        self.token_assert_helper(self.l.token(), 'LINE', '310:420', 9)
+        self.token_assert_helper(self.l.token(), 'RANGE', '310:420', 9)
         self.token_assert_helper(self.l.token(), 'SNIPPET_LINE_RANGE', 'SnippetLineRange', 10)
-        self.token_assert_helper(self.l.token(), 'LINE', '5:23', 10)
+        self.token_assert_helper(self.l.token(), 'RANGE', '5:23', 10)
 
     def test_annotation(self):
         data = annotation_str
@@ -359,9 +358,7 @@ class TestParser(TestCase):
         assert document.annotations[-1].annotation_type == 'OTHER'
         assert document.annotations[-1].spdx_id == 'SPDXRef-DOCUMENT'
 
-
     def test_unknown_tag(self):
-
         try:
             from StringIO import StringIO
         except ImportError:
