@@ -642,6 +642,13 @@ class Parser(object):
                            | BINARY
         """
         p[0] = p[1]
+
+    def p_annotation_type_value(self, p):
+        """annotation_type_value : OTHER
+                           | REVIEW
+        """
+        p[0] = p[1]
+
     def p_pkg_desc_1(self, p):
         """pkg_desc : PKG_DESC TEXT"""
         try:
