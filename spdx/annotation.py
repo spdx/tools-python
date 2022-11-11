@@ -85,6 +85,8 @@ class Annotation(object):
         self.validate_annotation_type(messages)
         self.validate_spdx_id(messages)
 
+        return messages
+
     def validate_annotator(self, messages):
         if self.annotator is None:
             messages.append("Annotation missing annotator.")
