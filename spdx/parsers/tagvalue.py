@@ -77,9 +77,15 @@ ERROR_MESSAGES = {
     "PKG_EXT_REF_VALUE": "ExternalRef must contain category, type, and locator in the standard format, line:{0}.",
     "PKG_EXT_REF_COMMENT_VALUE": "ExternalRefComment must be free form text, line:{0}",
     "PKG_VERF_CODE_VALUE": "VerificationCode doesn't match verifcode form, line:{0}",
+    "PRIMARY_PACKAGE_PURPOSE_VALUE": 'PrimaryPackagePurpose must be one of APPLICATION, FRAMEWORK, LIBRARY, CONTAINER, '
+                                     'OPERATING-SYSTEM, DEVICE, FIRMWARE, SOURCE, ARCHIVE, FILE, INSTALL, OTHER',
+    "BUILT_DATE_VALUE_TYPE": "Built date value must be date in ISO 8601 format, line: {0}",
+    "RELEASE_DATE_VALUE_TYPE": "Release date value must be date in ISO 8601 format, line: {0}",
+    "VALID_UNTIL_DATE_VALUE_TYPE": "Valid until date value must be date in ISO 8601 format, line: {0}",
     "FILE_NAME_VALUE": "FileName must be a single line of text, line: {0}",
     "FILE_COMMENT_VALUE": "FileComment must be free form text, line:{0}",
-    "FILE_TYPE_VALUE": "FileType must be one of OTHER, BINARY, SOURCE or ARCHIVE, line: {0}",
+    "FILE_TYPE_VALUE": 'FileType must be one of SOURCE, BINARY, ARCHIVE, APPLICATION, AUDIO, IMAGE, TEXT, VIDEO, '
+                       'DOCUMENTATION, SPDX, OTHER, line: {0}',
     "FILE_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
                           'letters, numbers, ".", "-".',
     "FILE_ATTRIBUTION_TEXT_VALUE": "FileAttributionText must be free form text, line: {0}",
@@ -182,6 +188,10 @@ class Parser(object):
                   | pkg_cr_text
                   | pkg_ext_ref
                   | pkg_ext_ref_comment
+                  | primary_package_purpose
+                  | built_date
+                  | release_date
+                  | valid_until_date
                   | file_name
                   | file_type
                   | file_chksum
@@ -638,10 +648,17 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_file_type_value(self, p):
-        """file_type_value : OTHER
-                           | SOURCE
-                           | ARCHIVE
+        """file_type_value : SOURCE
                            | BINARY
+                           | ARCHIVE
+                           | APPLICATION
+                           | AUDIO
+                           | IMAGE
+                           | TEXT
+                           | VIDEO
+                           | DOCUMENTATION
+                           | SPDX
+                           | OTHER
         """
         p[0] = p[1]
 
@@ -1075,6 +1092,77 @@ class Parser(object):
         """package_name : PKG_NAME error"""
         self.error = True
         msg = ERROR_MESSAGES["PACKAGE_NAME_VALUE"].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_primary_package_purpose_1(self, p):
+        """primary_package_purpose : PRIMARY_PACKAGE_PURPOSE primary_package_purpose_value"""
+        try:
+            self.builder.set_pkg_primary_package_purpose(self.document, p[2])
+        except CardinalityError:
+            self.more_than_one_error("PrimaryPackagePurpose", p.lineno(1))
+
+    def p_primary_package_purpose_2(self, p):
+        """primary_package_purpose : PRIMARY_PACKAGE_PURPOSE error"""
+        self.error = True
+        msg = ERROR_MESSAGES["PRIMARY_PACKAGE_PURPOSE_VALUE"].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_primary_package_purpose_value(self, p):
+        """primary_package_purpose_value : APPLICATION
+                                         | FRAMEWORK
+                                         | LIBRARY
+                                         | CONTAINER
+                                         | OPERATING_SYSTEM
+                                         | DEVICE
+                                         | FIRMWARE
+                                         | SOURCE
+                                         | ARCHIVE
+                                         | FILE
+                                         | INSTALL
+                                         | OTHER
+        """
+        p[0] = p[1]
+
+    def p_built_date_1(self, p):
+        """built_date : BUILT_DATE DATE"""
+        try:
+            value = p[2]
+            self.builder.set_pkg_built_date(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error("BuiltDate", p.lineno(1))
+
+    def p_built_date_2(self, p):
+        """built_date : BUILT_DATE error"""
+        self.error = True
+        msg = ERROR_MESSAGES["BUILT_DATE_VALUE_TYPE"].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_release_date_1(self, p):
+        """release_date : RELEASE_DATE DATE"""
+        try:
+            value = p[2]
+            self.builder.set_pkg_release_date(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error("ReleaseDate", p.lineno(1))
+
+    def p_release_date_2(self, p):
+        """release_date : RELEASE_DATE error"""
+        self.error = True
+        msg = ERROR_MESSAGES["RELEASE_DATE_VALUE_TYPE"].format(p.lineno(1))
+        self.logger.log(msg)
+
+    def p_valid_until_date_1(self, p):
+        """valid_until_date : VALID_UNTIL_DATE DATE"""
+        try:
+            value = p[2]
+            self.builder.set_pkg_valid_until_date(self.document, value)
+        except CardinalityError:
+            self.more_than_one_error("ValidUntilDate", p.lineno(1))
+
+    def p_valid_until_date_2(self, p):
+        """valid_until_date : VALID_UNTIL_DATE error"""
+        self.error = True
+        msg = ERROR_MESSAGES["VALID_UNTIL_DATE_VALUE_TYPE"].format(p.lineno(1))
         self.logger.log(msg)
 
     def p_snip_spdx_id(self, p):

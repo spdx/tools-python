@@ -344,7 +344,7 @@ class TestParserUtils(object):
         lics_from_files = []
         if package.are_files_analyzed:
             lics_from_files = sorted(package.licenses_from_files, key=lambda lic: lic.identifier)
-        return OrderedDict([
+        package_dict = OrderedDict([
             ('id', package.spdx_id),
             ('name', package.name),
             ('packageFileName', package.file_name),
@@ -368,6 +368,21 @@ class TestParserUtils(object):
                 ('excludedFilesNames', sorted(package.verif_exc_files))])
             )
         ])
+
+        if package.built_date:
+            package_dict['builtDate'] = utils.datetime_iso_format(package.built_date)
+            
+        if package.release_date:
+            package_dict['releaseDate'] = utils.datetime_iso_format(package.release_date)
+            
+        if package.valid_until_date:
+            package_dict['validUntilDate'] = utils.datetime_iso_format(package.valid_until_date)
+
+        if package.primary_package_purpose:
+            package_dict['primaryPackagePurpose'] = package.primary_package_purpose.name.replace("_", "-")
+
+        return package_dict
+
 
     @classmethod
     def files_to_list(cls, files):

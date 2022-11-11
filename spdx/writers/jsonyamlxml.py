@@ -185,7 +185,7 @@ class PackageWriter(BaseWriter):
             package_object["homepage"] = package.homepage.__str__()
 
         if package.has_optional_field("primary_package_purpose"):
-            package_object["primaryPackagePurpose"] = package.primary_package_purpose.name
+            package_object["primaryPackagePurpose"] = package.primary_package_purpose.name.replace("_", "-")
 
         if package.has_optional_field("release_date"):
             package_object["releaseDate"] = utils.datetime_iso_format(package.release_date)

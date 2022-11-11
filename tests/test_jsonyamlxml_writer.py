@@ -49,7 +49,7 @@ def test_external_package_references(temporary_file_path: str, out_format: str) 
 def test_primary_package_purpose(temporary_file_path: str, out_format: str):
     document: Document = minimal_document()
     package: Package = document.packages[0]
-    package.primary_package_purpose = PackagePurpose.FILE
+    package.primary_package_purpose = PackagePurpose.OPERATING_SYSTEM
 
     file_path_with_ending = temporary_file_path + "." + out_format
     write_anything.write_file(document, file_path_with_ending, validate=False)
@@ -57,7 +57,7 @@ def test_primary_package_purpose(temporary_file_path: str, out_format: str):
     parsed_document: Document = parse_file(file_path_with_ending)[0]
     parsed_package: Package = parsed_document.packages[0]
 
-    assert parsed_package.primary_package_purpose == PackagePurpose.FILE
+    assert parsed_package.primary_package_purpose == PackagePurpose.OPERATING_SYSTEM
 
 
 @pytest.mark.parametrize("out_format", tested_formats)

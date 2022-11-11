@@ -212,7 +212,11 @@
           "SpdxTranslatorSpdx.rdf",
           "SpdxTranslatorSpdx.txt"
         ]
-      }
+      },
+      "builtDate": "2020-01-01T12:00:00Z",
+      "releaseDate": "2021-01-01T12:00:00Z",
+      "validUntilDate": "2022-01-01T12:00:00Z",
+      "primaryPackagePurpose": "OPERATING-SYSTEM"
     }
   ],
   "externalDocumentRefs": [

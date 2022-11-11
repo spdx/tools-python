@@ -37,6 +37,10 @@
             <licenseDeclared>(LicenseRef-3 AND LicenseRef-2 AND Apache-2.0 AND MPL-1.1 AND LicenseRef-1 AND LicenseRef-4)</licenseDeclared>
             <downloadLocation>http://www.spdx.org/tools</downloadLocation>
             <description>This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document.</description>
+            <primaryPackagePurpose>OPERATING-SYSTEM</primaryPackagePurpose>
+            <builtDate>2020-01-01T12:00:00Z</builtDate>
+            <releaseDate>2021-01-01T12:00:00Z</releaseDate>
+            <validUntilDate>2022-01-01T12:00:00Z</validUntilDate>
         </packages>
 		<creationInfo>
 			<comment>This is an example of an SPDX spreadsheet format</comment>
