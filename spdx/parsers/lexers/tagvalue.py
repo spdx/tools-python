@@ -103,6 +103,7 @@ class Lexer(object):
         "BINARY": "BINARY",
         "ARCHIVE": "ARCHIVE",
         "OTHER": "OTHER",
+        "REVIEW": "REVIEW"
     }
     states = (("text", "exclusive"),)
 

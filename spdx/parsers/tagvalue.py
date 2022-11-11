@@ -1349,7 +1349,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_annotation_type_1(self, p):
-        """annotation_type : ANNOTATION_TYPE LINE"""
+        """annotation_type : ANNOTATION_TYPE annotation_type_value"""
         try:
             value = p[2]
             self.builder.add_annotation_type(self.document, value)
