@@ -1092,7 +1092,7 @@ class FileBuilder(object):
         """
         if self.has_package(doc) and self.has_file(doc):
             if validations.validate_file_attribution_text(text):
-                self.file(doc).comment = str_from_text(text)
+                self.file(doc).attribution_text = str_from_text(text)
                 return True
             else:
                 raise SPDXValueError("File::AttributionText")
