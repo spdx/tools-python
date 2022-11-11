@@ -243,7 +243,8 @@ class TestParser(TestCase):
         'ArtifactOfProjectName: AcmeTest',
         'ArtifactOfProjectHomePage: http://www.acme.org/',
         'ArtifactOfProjectURI: http://www.acme.org/',
-        'FileComment: <text>Very long file</text>'
+        'FileComment: <text>Very long file</text>',
+        'FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts.</text>'
         ])
 
     unknown_tag_str = 'SomeUnknownTag: SomeUnknownValue'
@@ -318,6 +319,9 @@ class TestParser(TestCase):
         assert len(spdx_file.artifact_of_project_name) == 1
         assert len(spdx_file.artifact_of_project_home) == 1
         assert len(spdx_file.artifact_of_project_uri) == 1
+        assert spdx_file.comment == 'Very long file'
+        assert spdx_file.attribution_text == 'Acknowledgements that might be required to be communicated in ' \
+                                             'some contexts.'
 
     def test_unknown_tag(self):
 
