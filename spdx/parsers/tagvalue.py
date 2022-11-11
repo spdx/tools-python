@@ -1254,7 +1254,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_snippet_byte_range(self, p):
-        """snip_byte_range : SNIPPET_BYTE_RANGE LINE"""
+        """snip_byte_range : SNIPPET_BYTE_RANGE RANGE"""
         try:
             self.builder.set_snippet_byte_range(self.document, p[2])
         except OrderError:
@@ -1272,7 +1272,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_snippet_line_range(self, p):
-        """snip_line_range : SNIPPET_LINE_RANGE LINE"""
+        """snip_line_range : SNIPPET_LINE_RANGE RANGE"""
         try:
             self.builder.set_snippet_line_range(self.document, p[2])
         except OrderError:
