@@ -39,6 +39,9 @@ def format_verif_code(package):
 def write_value(tag, value, out):
     out.write("{0}: {1}\n".format(tag, value))
 
+def write_range(tag, value, out):
+    out.write("{0}: {1}:{2}\n".format(tag, value[0], value[1]))
+
 
 def write_text_value(tag, value, out):
     value = "{0}: <text>{1}</text>\n".format(tag, value)
@@ -170,6 +173,10 @@ def write_snippet(snippet, out):
     write_value("SnippetSPDXID", snippet.spdx_id, out)
     write_value("SnippetFromFileSPDXID", snippet.snip_from_file_spdxid, out)
     write_text_value("SnippetCopyrightText", snippet.copyright, out)
+    write_range("SnippetByteRange", snippet.byte_range, out)
+    if snippet.line_range[0] is not None:
+        write_range("SnippetLineRange", snippet.line_range, out)
+
     if snippet.has_optional_field("name"):
         write_value("SnippetName", snippet.name, out)
     if snippet.has_optional_field("comment"):
