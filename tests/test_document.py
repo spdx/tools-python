@@ -12,6 +12,7 @@
 import os
 import shutil
 import tempfile
+from datetime import datetime
 from unittest import TestCase
 
 from spdx.checksum import Algorithm
@@ -20,7 +21,7 @@ from spdx.creationinfo import Tool
 from spdx.document import Document, ExternalDocumentRef
 from spdx.document import License
 from spdx.file import File
-from spdx.package import Package
+from spdx.package import Package, PackagePurpose
 from spdx.parsers.loggers import ErrorMessages
 from spdx.relationship import Relationship
 from spdx.utils import NoAssert
@@ -88,19 +89,11 @@ class TestDocument(TestCase):
         pack.add_lics_from_file(lic1)
         messages = ErrorMessages()
         messages = doc.validate(messages)
-        expected = [
-            'Sample_Document-V2.1: Creation info missing created date.',
-            'Sample_Document-V2.1: No creators defined, must have at least one.',
-            'Sample_Document-V2.1: some/path: Package checksum must be instance of '
-            'spdx.checksum.Algorithm',
-            'Sample_Document-V2.1: some/path: Package concluded license must be instance '
-            'of spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License',
-            'Sample_Document-V2.1: some/path: Package cr_text can not be None.',
-            'Sample_Document-V2.1: some/path: Package declared license must be instance '
-            'of spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License',
-            'Sample_Document-V2.1: some/path: Package download_location can not be None.',
-            'Sample_Document-V2.1: some/path: Package must have at least one file.',
-        ]
+        expected = ['Sample_Document-V2.1: Creation info missing created date.',
+                    'Sample_Document-V2.1: No creators defined, must have at least one.',
+                    'Sample_Document-V2.1: some/path: Package checksum must be instance of '
+                    'spdx.checksum.Algorithm',
+                    'Sample_Document-V2.1: some/path: Package download_location can not be None.']
         assert sorted(expected) == sorted(messages)
 
     def test_document_is_valid_when_using_or_later_licenses(self):
@@ -176,6 +169,11 @@ class TestWriters(TestCase):
         package.checksum = Algorithm('SHA1', 'SOME-SHA1')
         package.license_declared = NoAssert()
         package.conc_lics = NoAssert()
+        package.primary_package_purpose = PackagePurpose.FILE
+        package.release_date = datetime(2021, 1, 1, 12, 0, 0)
+        package.built_date = datetime(2021, 1, 1, 12, 0, 0)
+        package.valid_until_date = datetime(2022, 1, 1, 12, 0, 0)
+
 
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'

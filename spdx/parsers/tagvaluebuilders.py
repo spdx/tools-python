@@ -815,7 +815,7 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_conc_lics_set:
             self.package_conc_lics_set = True
-            if validations.validate_lics_conc(licenses):
+            if validations.validate_lics_conc(licenses, optional=True):
                 doc.packages[-1].conc_lics = licenses
                 return True
             else:
@@ -830,7 +830,7 @@ class PackageBuilder(object):
         Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
-        if validations.validate_lics_from_file(lic):
+        if validations.validate_lics_from_file(lic, optional=True):
             doc.packages[-1].licenses_from_files.append(lic)
             return True
         else:
@@ -846,7 +846,7 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_license_declared_set:
             self.package_license_declared_set = True
-            if validations.validate_lics_conc(lic):
+            if validations.validate_lics_conc(lic, optional=True):
                 doc.packages[-1].license_declared = lic
                 return True
             else:
@@ -894,7 +894,7 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_cr_text_set:
             self.package_cr_text_set = True
-            if validations.validate_pkg_cr_text(text):
+            if validations.validate_pkg_cr_text(text, optional=True):
                 if isinstance(text, str):
                     doc.packages[-1].cr_text = str_from_text(text)
                 else:
@@ -1092,7 +1092,7 @@ class FileBuilder(object):
         """
         if self.has_package(doc) and self.has_file(doc):
             if validations.validate_file_attribution_text(text):
-                self.file(doc).comment = str_from_text(text)
+                self.file(doc).attribution_text = str_from_text(text)
                 return True
             else:
                 raise SPDXValueError("File::AttributionText")
@@ -1146,7 +1146,7 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_conc_lics_set:
                 self.file_conc_lics_set = True
-                if validations.validate_lics_conc(lic):
+                if validations.validate_lics_conc(lic, optional=True):
                     self.file(doc).conc_lics = lic
                     return True
                 else:
@@ -1197,7 +1197,7 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             if not self.file_copytext_set:
                 self.file_copytext_set = True
-                if validations.validate_file_cpyright(text):
+                if validations.validate_file_cpyright(text, optional=True):
                     if isinstance(text, str):
                         self.file(doc).copyright = str_from_text(text)
                     else:
@@ -1466,7 +1466,7 @@ class SnippetBuilder(object):
         self.assert_snippet_exists()
         if not self.snippet_copyright_set:
             self.snippet_copyright_set = True
-            if validations.validate_snippet_copyright(text):
+            if validations.validate_snippet_copyright(text, optional=True):
                 if isinstance(text, str):
                     doc.snippet[-1].copyright = str_from_text(text)
                 else:
@@ -1522,7 +1522,7 @@ class SnippetBuilder(object):
         self.assert_snippet_exists()
         if not self.snippet_conc_lics_set:
             self.snippet_conc_lics_set = True
-            if validations.validate_lics_conc(conc_lics):
+            if validations.validate_lics_conc(conc_lics, optional=True):
                 doc.snippet[-1].conc_lics = conc_lics
                 return True
             else:
@@ -1536,7 +1536,7 @@ class SnippetBuilder(object):
         Raise SPDXValueError if the data is a malformed value.
         """
         self.assert_snippet_exists()
-        if validations.validate_snip_lics_info(lics_info):
+        if validations.validate_snip_lics_info(lics_info, optional=True):
             doc.snippet[-1].add_lics(lics_info)
             return True
         else:

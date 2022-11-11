@@ -18,7 +18,7 @@
           "ns1:licenseDeclared": {
             "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
           }, 
-          "ns1:name": "some/path", 
+          "ns1:name": "some/path",
           "ns1:licenseInfoFromFiles": {
             "@rdf:resource": "http://spdx.org/licenses/LGPL-2.1-only"
           }, 

@@ -134,7 +134,7 @@ class File(object):
         return messages
 
     def validate_copyright(self, messages):
-        if not isinstance(
+        if self.copyright and not isinstance(
             self.copyright,
             (str, utils.NoAssert, utils.SPDXNone),
         ):
@@ -156,20 +156,26 @@ class File(object):
         return messages
 
     def validate_licenses_in_file(self, messages):
-        # FIXME: what are we testing the length of a list? or?
-        if len(self.licenses_in_file) == 0:
-            messages.append("File must have at least one license in file.")
+        for license_in_file in self.licenses_in_file:
+            if not isinstance(
+                license_in_file, (utils.SPDXNone, utils.NoAssert, document.License)
+            ):
+                messages.append(
+                    "License in file must be instance of "
+                    "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                    "spdx.document.License"
+                )
 
         return messages
 
     def validate_concluded_license(self, messages):
-        # FIXME: use isinstance instead??
-        if not isinstance(
-            self.conc_lics, (document.License, utils.NoAssert, utils.SPDXNone)
+        if self.conc_lics and not isinstance(
+            self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)
         ):
             messages.append(
-                "File concluded license must be one of "
-                "document.License, utils.NoAssert or utils.SPDXNone"
+                "File concluded license must be instance of "
+                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                "spdx.document.License"
             )
 
         return messages

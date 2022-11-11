@@ -10,17 +10,34 @@
 # limitations under the License.
 
 import hashlib
-
+from datetime import datetime
+from enum import Enum
 from functools import reduce
+from typing import List, Optional
 
 from spdx import checksum
 from spdx import creationinfo
 from spdx import document
 from spdx import utils
+from spdx.parsers.loggers import ErrorMessages
+
+
+class PackagePurpose(Enum):
+    APPLICATION = 1
+    FRAMEWORK = 2
+    LIBRARY = 3
+    CONTAINER = 4
+    OPERATING_SYSTEM = 5
+    DEVICE = 6
+    FIRMWARE = 7
+    SOURCE = 8
+    ARCHIVE = 9
+    FILE = 10
+    INSTALL = 11
+    OTHER = 12
 
 
 class Package(object):
-
     """
     Represent an analyzed Package.
     Fields:
@@ -62,6 +79,7 @@ class Package(object):
      - ext_pkg_refs: External references referenced within the given package.
      Optional, one or many. Type: ExternalPackageRef
      - attribution_text: optional string.
+     - primary_package_purpose: Optional one. Type: PackagePurpose
     """
 
     def __init__(
@@ -98,6 +116,11 @@ class Package(object):
         self.files = []
         self.verif_exc_files = []
         self.pkg_ext_refs = []
+        self.primary_package_purpose: Optional[PackagePurpose] = None
+        self.release_date: Optional[datetime] = None
+        self.built_date: Optional[datetime] = None
+        self.valid_until_date: Optional[datetime] = None
+
 
     @property
     def are_files_analyzed(self):
@@ -141,14 +164,13 @@ class Package(object):
         self.validate_mandatory_str_fields(messages)
         self.validate_files(messages)
         self.validate_pkg_ext_refs(messages)
-        self.validate_mandatory_fields(messages)
         self.validate_optional_fields(messages)
         messages.pop_context()
 
         return messages
 
     def validate_files_analyzed(self, messages):
-        if self.files_analyzed not in [ True, False, None ]:
+        if self.files_analyzed not in [True, False, None]:
             messages.append(
                 'Package files_analyzed must be True or False or None (omitted)'
             )
@@ -157,6 +179,11 @@ class Package(object):
                 'Package verif_code must be None (omitted) when files_analyzed is False'
             )
 
+        return messages
+
+    def validate_primary_package_purposes(self, messages: ErrorMessages) -> ErrorMessages:
+        if self.primary_package_purpose not in PackagePurpose:
+            messages.append("Primary package purpose has a value that is not allowed!")
         return messages
 
     def validate_optional_fields(self, messages):
@@ -176,6 +203,34 @@ class Package(object):
                 "spdx.utils.NoAssert or spdx.creationinfo.Creator"
             )
 
+        if self.conc_lics and not isinstance(
+            self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)
+        ):
+            messages.append(
+                "Package concluded license must be instance of "
+                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                "spdx.document.License"
+            )
+
+        if self.license_declared and not isinstance(
+            self.license_declared, (utils.SPDXNone, utils.NoAssert, document.License)
+        ):
+            messages.append(
+                "Package declared license must be instance of "
+                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                "spdx.document.License"
+            )
+
+        license_from_file_check = lambda prev, el: prev and isinstance(
+            el, (document.License, utils.SPDXNone, utils.NoAssert)
+        )
+        if not reduce(license_from_file_check, self.licenses_from_files, True):
+            messages.append(
+                "Each element in licenses_from_files must be instance of "
+                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
+                "spdx.document.License"
+            )
+
         return messages
 
     def validate_pkg_ext_refs(self, messages):
@@ -190,50 +245,10 @@ class Package(object):
 
         return messages
 
-    def validate_mandatory_fields(self, messages):
-        if not isinstance(
-            self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)
-        ):
-            messages.append(
-                "Package concluded license must be instance of "
-                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
-            )
-
-        if not isinstance(
-            self.license_declared, (utils.SPDXNone, utils.NoAssert, document.License)
-        ):
-            messages.append(
-                "Package declared license must be instance of "
-                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
-            )
-
-        # FIXME: this is obscure and unreadable
-        license_from_file_check = lambda prev, el: prev and isinstance(
-            el, (document.License, utils.SPDXNone, utils.NoAssert)
-        )
-        if not reduce(license_from_file_check, self.licenses_from_files, True):
-            messages.append(
-                "Each element in licenses_from_files must be instance of "
-                "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
-            )
-
-        if not self.licenses_from_files and self.are_files_analyzed:
-            messages.append("Package licenses_from_files can not be empty")
-
-        return messages
-
     def validate_files(self, messages):
         if self.are_files_analyzed:
-            if not self.files:
-                messages.append(
-                    "Package must have at least one file."
-                )
-            else:
-                for f in self.files:
-                    messages = f.validate(messages)
+            for file in self.files:
+                messages = file.validate(messages)
 
         return messages
 
@@ -250,6 +265,7 @@ class Package(object):
             "description",
             "attribution_text",
             "comment",
+            "cr_text"
         ]
         self.validate_str_fields(FIELDS, True, messages)
 
@@ -259,7 +275,7 @@ class Package(object):
         """Fields marked as Mandatory and of type string in class
         docstring must be of a type that provides __str__ method.
         """
-        FIELDS = ["name", "spdx_id", "download_location", "cr_text"]
+        FIELDS = ["name", "spdx_id", "download_location"]
         self.validate_str_fields(FIELDS, False, messages)
 
         return messages
@@ -315,7 +331,7 @@ class Package(object):
         return sha1.hexdigest()
 
     def has_optional_field(self, field):
-        return bool (getattr(self, field, None))
+        return bool(getattr(self, field, None))
 
 
 class ExternalPackageRef(object):

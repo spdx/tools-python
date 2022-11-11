@@ -36,7 +36,11 @@
             ],
             "hasFiles": [
                 "SPDXRef-File"
-            ]
+            ],
+            "primaryPackagePurpose" : "FILE",
+            "releaseDate" : "2021-01-01T12:00:00Z",
+            "builtDate" : "2021-01-01T12:00:00Z",
+            "validUntilDate" : "2022-01-01T12:00:00Z"
         }
     ],
     "files": [
