@@ -5,7 +5,6 @@ Document:
       annotator: 'Person: Jim Reviewer'
       comment: This is just an example. Some of the non-standard licenses look like
         they are actually BSD 3 clause licenses
-      SPDXID: SPDXRef-45
   comment: This is a sample spreadsheet
   creationInfo:
     comment: This is an example of an SPDX spreadsheet format

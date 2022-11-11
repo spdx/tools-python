@@ -123,7 +123,6 @@
     {
       "comment": "This is just an example. Some of the non-standard licenses look like they are actually BSD 3 clause licenses",
       "annotationType": "REVIEW",
-      "SPDXID": "SPDXRef-45",
       "annotationDate": "2012-06-13T00:00:00Z",
       "annotator": "Person: Jim Reviewer"
     }
