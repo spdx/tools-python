@@ -8,6 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Dict
 
 from rdflib import Literal
 
@@ -122,7 +123,7 @@ class PackageWriter(BaseWriter):
             external_ref_dict["comment"] = external_ref.comment
         return external_ref_dict
 
-    def create_package_info(self, package):
+    def create_package_info(self, package, annotations_by_spdx_id):
         package_object = dict()
         package_object["SPDXID"] = self.spdx_id(package.spdx_id)
         package_object["name"] = package.name
@@ -198,13 +199,15 @@ class PackageWriter(BaseWriter):
         if package.has_optional_field("pkg_ext_refs"):
             package_object["externalRefs"] = [self.external_reference_as_dict(external_ref) for external_ref in
                                               package.pkg_ext_refs]
+        if package.spdx_id in annotations_by_spdx_id:
+            package["annotations"] = annotations_by_spdx_id[package.spdx_id]
 
         files_in_package = []
         if package.has_optional_field("files"):
             package_object["hasFiles"] = []
             for file in package.files:
                 package_object["hasFiles"].append(file.spdx_id)
-                files_in_package.append(self.create_file_info(file))
+                files_in_package.append(self.create_file_info(file, annotations_by_spdx_id))
 
         return package_object, files_in_package
 
@@ -232,7 +235,7 @@ class FileWriter(BaseWriter):
 
         return artifact_of_objects
 
-    def create_file_info(self, file):
+    def create_file_info(self, file, annotations_by_spdx_id):
         file_types = {
             1: "fileType_source",
             2: "fileType_binary",
@@ -289,6 +292,9 @@ class FileWriter(BaseWriter):
         if valid_artifacts:
             file_object["artifactOf"] = self.create_artifact_info(file)
 
+        if file.spdx_id in annotations_by_spdx_id:
+            file_object["annotations"] = annotations_by_spdx_id[file.spdx_id]
+
         return file_object
 
 
@@ -324,26 +330,30 @@ class AnnotationInfoWriter(BaseWriter):
     def __init__(self, document):
         super(AnnotationInfoWriter, self).__init__(document)
 
-    def create_annotation_info(self):
+    def create_annotations_by_spdx_id(self) -> Dict:
         """
-        The way how tools-python manages its models makes difficult to classify
-        annotations (by document, files and packages) and some of them could end up omitted.
-        This method sets every annotation as part of the spdx document itself,
-        avoiding them to be omitted.
+        Create a dict with annotations_by_spdx_id and use the spdx_id of the element that is annotated as key.
+        These keys are then used to attach the annotation to the corresponding SPDX element.
         """
-        annotation_objects = []
+        annotations_by_spdx_id = dict()
+
+        if not self.document.annotations:
+            return annotations_by_spdx_id
 
         for annotation in self.document.annotations:
             annotation_object = dict()
-            annotation_object["SPDXID"] = self.spdx_id(annotation.spdx_id)
             annotation_object["annotator"] = annotation.annotator.__str__()
             annotation_object["annotationDate"] = annotation.annotation_date_iso_format
             annotation_object["annotationType"] = annotation.annotation_type
             annotation_object["comment"] = annotation.comment
 
-            annotation_objects.append(annotation_object)
+            annotation_spdx_id = self.spdx_id(annotation.spdx_id)
+            if annotation_spdx_id not in annotations_by_spdx_id:
+                annotations_by_spdx_id[annotation_spdx_id] = [annotation_object]
+            else:
+                annotations_by_spdx_id[annotation_spdx_id].append(annotation_object)
 
-        return annotation_objects
+        return annotations_by_spdx_id
 
 
 class RelationshipInfoWriter(BaseWriter):
@@ -384,7 +394,7 @@ class SnippetWriter(BaseWriter):
     def __init__(self, document):
         super(SnippetWriter, self).__init__(document)
 
-    def create_snippet_info(self):
+    def create_snippet_info(self, annotations_by_spdx_id):
         snippet_info_objects = []
         snippets = self.document.snippet
 
@@ -415,6 +425,9 @@ class SnippetWriter(BaseWriter):
 
             if snippet.has_optional_field("license_comment"):
                 snippet_object["licenseComments"] = snippet.license_comment
+
+            if snippet.spdx_id in annotations_by_spdx_id:
+                snippet_object["annotations"] = annotations_by_spdx_id[snippet.spdx_id]
 
             snippet_info_objects.append(snippet_object)
 
@@ -499,6 +512,7 @@ class Writer(
     """
 
     def __init__(self, document):
+        self.doc_spdx_id = self.spdx_id(document.spdx_id)
         super(Writer, self).__init__(document)
 
     def create_ext_document_references(self):
@@ -546,9 +560,9 @@ class Writer(
         self.document_object["documentNamespace"] = self.document.namespace.__str__()
         self.document_object["creationInfo"] = self.create_creation_info()
         self.document_object["dataLicense"] = self.license(self.document.data_license)
-        self.document_object["SPDXID"] = self.spdx_id(self.document.spdx_id)
+        self.document_object["SPDXID"] = self.doc_spdx_id
         self.document_object["name"] = self.document.name
-
+        annotations_by_spdx_id= self.create_annotations_by_spdx_id()
         document_describes = self.create_document_describes()
         self.document_object["documentDescribes"] = document_describes
 
@@ -560,7 +574,7 @@ class Writer(
         package_objects = []
         file_objects = []
         for package in unique_doc_packages.values():
-            package_info_object, files_in_package = self.create_package_info(package)
+            package_info_object, files_in_package = self.create_package_info(package, annotations_by_spdx_id)
             package_objects.append(package_info_object)
             file_objects.extend(file for file in files_in_package if file not in file_objects)
         self.document_object["packages"] = package_objects
@@ -583,10 +597,10 @@ class Writer(
             self.document_object["reviewers"] = self.create_review_info()
 
         if self.document.snippet:
-            self.document_object["snippets"] = self.create_snippet_info()
+            self.document_object["snippets"] = self.create_snippet_info(annotations_by_spdx_id)
 
-        if self.document.annotations:
-            self.document_object["annotations"] = self.create_annotation_info()
+        if self.doc_spdx_id in annotations_by_spdx_id:
+            self.document_object["annotations"] = annotations_by_spdx_id[self.doc_spdx_id]
 
         if self.document.relationships:
             self.document_object["relationships"] = self.create_relationship_info()

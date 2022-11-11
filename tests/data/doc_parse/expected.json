@@ -260,7 +260,7 @@
   ],
   "annotations": [
     {
-      "id": "SPDXRef-45",
+      "id": "SPDXRef-DOCUMENT",
       "comment": "This is just an example. Some of the non-standard licenses look like they are actually BSD 3 clause licenses",
       "type": "REVIEW",
       "annotator": {
