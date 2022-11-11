@@ -174,7 +174,7 @@ def write_snippet(snippet, out):
     write_value("SnippetFromFileSPDXID", snippet.snip_from_file_spdxid, out)
     write_text_value("SnippetCopyrightText", snippet.copyright, out)
     write_range("SnippetByteRange", snippet.byte_range, out)
-    if snippet.line_range[0] is not None:
+    if snippet.has_optional_field("line_range"):
         write_range("SnippetLineRange", snippet.line_range, out)
 
     if snippet.has_optional_field("name"):

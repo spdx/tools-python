@@ -148,6 +148,8 @@ class TestConversions(TestCase):
         self.write_tagvalue_file(doc, filename)
         self.parse_tagvalue_file(filename)
 
+    @unittest.skip("This fails because we can read/write the mandatory field snippet_byte_range so far only for "
+                   "tv-, json-, yaml- or xml-files, not for rdf-files. https://github.com/spdx/tools-python/issues/274")
     def test_rdf_tagvalue(self):
         doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
         filename = get_temp_file('.tag')
@@ -172,8 +174,7 @@ class TestConversions(TestCase):
         self.write_tagvalue_file(doc, filename)
         self.parse_tagvalue_file(filename)
 
-    @unittest.skip("This fails because we can read/write the mandatory field snippet_byte_range so far only for "
-                   "json-, yaml- or xml-files, not for rdf-/tv-files. https://github.com/spdx/tools-python/issues/274")
+
     def test_tagvalue_json(self):
         doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
         filename = get_temp_file('.json')
@@ -181,7 +182,7 @@ class TestConversions(TestCase):
         self.parse_json_file(filename)
 
     @unittest.skip("This fails because we can read/write the mandatory field snippet_byte_range so far only for "
-                   "json-, yaml- or xml-files, not for rdf-/tv-files. https://github.com/spdx/tools-python/issues/274")
+                   "tv-, json-, yaml- or xml-files, not for rdf-files. https://github.com/spdx/tools-python/issues/274")
     def test_rdf_json(self):
         doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
         filename = get_temp_file('.json')
@@ -206,8 +207,7 @@ class TestConversions(TestCase):
         self.write_json_file(doc, filename)
         self.parse_json_file(filename)
 
-    @unittest.skip("This fails because we can read/write the mandatory field snippet_byte_range so far only for "
-                   "json-, yaml- or xml-files, not for rdf-/tv-files. https://github.com/spdx/tools-python/issues/274")
+
     def test_tagvalue_yaml(self):
         doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
         filename = get_temp_file('.yaml')
@@ -215,7 +215,7 @@ class TestConversions(TestCase):
         self.parse_yaml_file(filename)
 
     @unittest.skip("This fails because we can read/write the mandatory field snippet_byte_range so far only for "
-                   "json-, yaml- or xml-files, not for rdf-/tv-files. https://github.com/spdx/tools-python/issues/274")
+                   "tv-, json-, yaml- or xml-files, not for rdf-files. https://github.com/spdx/tools-python/issues/274")
     def test_rdf_yaml(self):
         doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
         filename = get_temp_file('.yaml')
@@ -240,8 +240,7 @@ class TestConversions(TestCase):
         self.write_yaml_file(doc, filename)
         self.parse_yaml_file(filename)
 
-    @unittest.skip("This fails because we can read/write the mandatory field snippet_byte_range so far only for "
-                   "json-, yaml- or xml-files, not for rdf-/tv-files. https://github.com/spdx/tools-python/issues/274")
+
     def test_tagvalue_xml(self):
         doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
         filename = get_temp_file('.xml')
@@ -249,7 +248,7 @@ class TestConversions(TestCase):
         self.parse_xml_file(filename)
 
     @unittest.skip("This fails because we can read/write the mandatory field snippet_byte_range so far only for "
-                   "json-, yaml- or xml-files, not for rdf-/tv-files. https://github.com/spdx/tools-python/issues/274")
+                   "tv-, json-, yaml- or xml-files, not for rdf-files. https://github.com/spdx/tools-python/issues/274")
     def test_rdf_xml(self):
         doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
         filename = get_temp_file('.xml')
