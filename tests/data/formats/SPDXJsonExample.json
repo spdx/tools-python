@@ -48,7 +48,11 @@
       "versionInfo": "Version 0.9.2",
       "licenseDeclared": "(LicenseRef-4 AND LicenseRef-3 AND Apache-2.0 AND LicenseRef-2 AND MPL-1.1 AND LicenseRef-1)",
       "downloadLocation": "http://www.spdx.org/tools",
-      "description": "This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document."
+      "description": "This utility translates and SPDX RDF XML document to a spreadsheet, translates a spreadsheet to an SPDX RDF XML document and translates an SPDX RDFa document to an SPDX RDF XML document.",
+      "primaryPackagePurpose": "OPERATING-SYSTEM",
+      "builtDate": "2020-01-01T12:00:00Z",
+      "releaseDate": "2021-01-01T12:00:00Z",
+      "validUntilDate": "2022-01-01T12:00:00Z"
     }
   ],
   "files": [

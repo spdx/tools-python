@@ -24,6 +24,7 @@ from spdx import utils
 from spdx import version
 
 from spdx.document import ExternalDocumentRef
+from spdx.package import PackagePurpose
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
@@ -593,6 +594,10 @@ class PackageBuilder(object):
         self.package_summary_set = False
         self.package_desc_set = False
         self.package_comment_set = False
+        self.package_primary_purpose_set = False
+        self.package_built_date_set = False
+        self.package_release_date_set = False
+        self.package_valid_until_date_set = False
         # self.package_attribution_text_set = False
         self.pkg_ext_comment_set = False
 
@@ -954,6 +959,79 @@ class PackageBuilder(object):
                 raise SPDXValueError("Package::Comment")
         else:
             raise CardinalityError("Package::Comment")
+
+    def set_pkg_primary_package_purpose(self, doc, purpose):
+        """
+        Set the package's primary purpose.
+        Raise CardinalityError if more than one purpose is set.
+        Raise SPDXValueError if purpose is unknown.
+        """
+        self.assert_package_exists()
+        if not self.package_primary_purpose_set:
+            self.package_primary_purpose_set = True
+            purpose = purpose.replace("-", "_")
+            for purpose_enum in PackagePurpose:
+                if purpose == purpose_enum.name:
+                    doc.packages[-1].primary_package_purpose = purpose_enum
+                    return True
+            else:
+                raise SPDXValueError("Package::PrimaryPackagePurpose")
+        else:
+            raise CardinalityError("Package::PrimaryPackagePurpose")
+
+    def set_pkg_built_date(self, doc, built_date):
+        """
+        Set the package`s built date.
+        Raise CardinalityError if built_date date already set.
+        Raise SPDXValueError if built_date is not a date.
+        """
+        self.assert_package_exists()
+        if not self.package_built_date_set:
+            self.package_built_date_set = True
+            date = utils.datetime_from_iso_format(built_date)
+            if date is not None:
+                doc.packages[-1].built_date = date
+                return True
+            else:
+                raise SPDXValueError("Package::BuiltDate")
+        else:
+            raise CardinalityError("Package::BuiltDate")
+
+    def set_pkg_release_date(self, doc, release_date):
+        """
+        Set the package`s release date.
+        Raise CardinalityError if release_date date already set.
+        Raise SPDXValueError if release_date is not a date.
+        """
+        self.assert_package_exists()
+        if not self.package_release_date_set:
+            self.package_release_date_set = True
+            date = utils.datetime_from_iso_format(release_date)
+            if date is not None:
+                doc.packages[-1].release_date = date
+                return True
+            else:
+                raise SPDXValueError("Package::ReleaseDate")
+        else:
+            raise CardinalityError("Package::ReleaseDate")
+
+    def set_pkg_valid_until_date(self, doc, valid_until_date):
+        """
+        Set the package`s valid_until date.
+        Raise CardinalityError if valid_until_date date already set.
+        Raise SPDXValueError if valid_until_date is not a date.
+        """
+        self.assert_package_exists()
+        if not self.package_valid_until_date_set:
+            self.package_valid_until_date_set = True
+            date = utils.datetime_from_iso_format(valid_until_date)
+            if date is not None:
+                doc.packages[-1].valid_until_date = date
+                return True
+            else:
+                raise SPDXValueError("Package::ValidUntilDate")
+        else:
+            raise CardinalityError("Package::ValidUntilDate")
 
     def set_pkg_ext_ref_category(self, doc, category):
         """

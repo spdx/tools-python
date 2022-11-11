@@ -11,7 +11,7 @@
 
 from itertools import zip_longest
 
-from spdx import document
+from spdx import document, utils
 from spdx import file as spdx_file
 from spdx.parsers.loggers import ErrorMessages
 
@@ -287,6 +287,19 @@ def write_package(package, out):
         write_value("ExternalRef", pkg_ref_str, out)
         if pkg_ref.comment:
             write_text_value("ExternalRefComment", pkg_ref.comment, out)
+
+    if package.has_optional_field("primary_package_purpose"):
+        write_value("PrimaryPackagePurpose", package.primary_package_purpose.name.replace("_", "-"), out)
+
+    if package.has_optional_field("built_date"):
+        write_value("BuiltDate", utils.datetime_iso_format(package.built_date), out)
+
+    if package.has_optional_field("release_date"):
+        write_value("ReleaseDate", utils.datetime_iso_format(package.release_date), out)
+
+    if package.has_optional_field("valid_until_date"):
+        write_value("ValidUntilDate", utils.datetime_iso_format(package.valid_until_date), out)
+
 
     # Write sorted files.
     for spdx_file in sorted(package.files):

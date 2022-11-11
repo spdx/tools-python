@@ -17,6 +17,10 @@ PackageLicenseDeclared: NOASSERTION
 PackageLicenseConcluded: NOASSERTION
 PackageLicenseInfoFromFiles: LGPL-2.1-or-later
 PackageCopyrightText: <text>Some copyrught</text>
+PrimaryPackagePurpose: FILE
+BuiltDate: 2021-01-01T12:00:00Z
+ReleaseDate: 2021-01-01T12:00:00Z
+ValidUntilDate: 2022-01-01T12:00:00Z
 # File
 FileName: ./some/path/tofile
 SPDXID: SPDXRef-File

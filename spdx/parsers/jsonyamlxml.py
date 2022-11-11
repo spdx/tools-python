@@ -1614,7 +1614,7 @@ class PackageParser(BaseParser):
     def parse_primary_package_purpose(self, primary_package_purpose: str):
         if primary_package_purpose is None:
             return
-
+        primary_package_purpose = primary_package_purpose.replace("-", "_")  # OPERATING-SYSTEM -> OPERATING_SYSTEM
         if primary_package_purpose not in [purpose.name for purpose in PackagePurpose]:
             self.value_error("PRIMARY_PACKAGE_PURPOSE", primary_package_purpose)
             return

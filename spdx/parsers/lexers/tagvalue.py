@@ -63,6 +63,10 @@ class Lexer(object):
         "ExternalRef": "PKG_EXT_REF",
         "ExternalRefComment": "PKG_EXT_REF_COMMENT",
         "PackageAttributionText": "PKG_ATTRIBUTION_TEXT",
+        "PrimaryPackagePurpose": "PRIMARY_PACKAGE_PURPOSE",
+        "BuiltDate": "BUILT_DATE",
+        "ReleaseDate": "RELEASE_DATE",
+        "ValidUntilDate": "VALID_UNTIL_DATE",
         # Files
         "FileName": "FILE_NAME",
         "FileType": "FILE_TYPE",
@@ -104,8 +108,22 @@ class Lexer(object):
         "SOURCE": "SOURCE",
         "BINARY": "BINARY",
         "ARCHIVE": "ARCHIVE",
+        "APPLICATION": "APPLICATION",
+        "AUDIO": "AUDIO",
+        "IMAGE": "IMAGE",
+        "VIDEO": "VIDEO",
+        "DOCUMENTATION": "DOCUMENTATION",
+        "SPDX": "SPDX",
         "OTHER": "OTHER",
-        "REVIEW": "REVIEW"
+        "REVIEW": "REVIEW",
+        "FRAMEWORK": "FRAMEWORK",
+        "LIBRARY": "LIBRARY",
+        "CONTAINER": "CONTAINER",
+        "OPERATING-SYSTEM": "OPERATING_SYSTEM",
+        "DEVICE": "DEVICE",
+        "FIRMWARE": "FIRMWARE",
+        "FILE": "FILE",
+        "INSTALL": "INSTALL"
     }
     states = (("text", "exclusive"),)
 

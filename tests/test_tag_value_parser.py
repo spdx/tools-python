@@ -10,10 +10,12 @@
 # limitations under the License.
 
 import sys
+from datetime import datetime
 from unittest import TestCase
 
 import spdx
 from spdx import utils
+from spdx.package import PackagePurpose
 from spdx.parsers.tagvalue import Parser
 from spdx.parsers.lexers.tagvalue import Lexer
 from spdx.parsers.tagvaluebuilders import Builder
@@ -68,6 +70,10 @@ package_str = '\n'.join([
     'PackageLicenseComments: <text>License Comments</text>',
     'ExternalRef: SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:',
     'ExternalRefComment: <text>Some comment about the package.</text>'
+    'PrimaryPackagePurpose: OPERATING-SYSTEM',
+    'BuiltDate: 2020-01-01T12:00:00Z',
+    'ReleaseDate: 2021-01-01T12:00:00Z',
+    'ValidUntilDate: 2022-01-01T12:00:00Z'
 ])
 
 file_str = '\n'.join([
@@ -227,6 +233,15 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'LINE', 'SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:', 21)
         self.token_assert_helper(self.l.token(), 'PKG_EXT_REF_COMMENT', 'ExternalRefComment', 22)
         self.token_assert_helper(self.l.token(), 'TEXT', '<text>Some comment about the package.</text>', 22)
+        self.token_assert_helper(self.l.token(), 'PRIMARY_PACKAGE_PURPOSE', 'PrimaryPackagePurpose', 23)
+        self.token_assert_helper(self.l.token(), 'LINE', 'OPERATING-SYSTEM', 23)
+        self.token_assert_helper(self.l.token(), 'BUILT_DATE', 'BuiltDate', 24)
+        self.token_assert_helper(self.l.token(), 'DATE', '2020-01-01T12:00:00Z', 24)
+        self.token_assert_helper(self.l.token(), 'RELEASE_DATE', 'ReleaseDate', 25)
+        self.token_assert_helper(self.l.token(), 'DATE', '2021-01-01T12:00:00Z', 25)
+        self.token_assert_helper(self.l.token(), 'VALID_UNTIL_DATE', 'ValidUntilDate', 26)
+        self.token_assert_helper(self.l.token(), 'DATE', '2022-01-01T12:00:00Z', 26)
+
 
     def test_unknown_tag(self):
         data = unknown_tag_str
@@ -330,6 +345,10 @@ class TestParser(TestCase):
         assert document.package.pkg_ext_refs[-1].pkg_ext_ref_type == 'cpe23Type'
         assert document.package.pkg_ext_refs[-1].locator == 'cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:'
         assert document.package.pkg_ext_refs[-1].comment == 'Some comment about the package.'
+        assert document.package.primary_package_purpose == PackagePurpose.OPERATING_SYSTEM
+        assert document.package.built_date == datetime(2020, 1, 1, 12, 0, 0)
+        assert document.package.release_date == datetime(2021, 1, 1, 12, 0, 0)
+        assert document.package.valid_until_date == datetime(2022, 1, 1, 12, 0, 0)
 
     def test_file(self):
         document, error = self.p.parse(self.complete_str)
