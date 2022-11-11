@@ -19,9 +19,9 @@ from tests import utils_test
 
 dirname = os.path.join(os.path.dirname(__file__), "data", "formats")
 test_files = [os.path.join(dirname, fn) for fn in os.listdir(dirname)]
-test_files_json_yaml_xml = [filename for filename in test_files if filename.endswith("json") or
-                            filename.endswith("yaml") or filename.endswith("xml")]
-test_files_rdf_tag = [filename for filename in test_files if (filename.endswith("tag") or filename.endswith("rdf"))]
+test_files_json_yaml_xml_tag = [filename for filename in test_files if filename.endswith("json") or
+                            filename.endswith("yaml") or filename.endswith("xml") or filename.endswith("tag")]
+test_files_rdf = [filename for filename in test_files if filename.endswith("rdf")]
 UNSTABLE_CONVERSIONS = {
     "SPDXTagExample.tag-rdf",
     "SPDXTagExample.tag-yaml",
@@ -43,24 +43,26 @@ UNSTABLE_CONVERSIONS = {
     "SPDXJsonExample2.2.json-tag",
 }
 
+# Because the rdf-parser/ writer can't handle the mandatory field byte_range in snippets yet we can only test conversion
+# from json, yaml, xml and tv to each other format and rdf to rdf. Otherwise, the jsonyamlxml- or tv-writer would add
+# the initial value None for snippet_ranges which then leads to an error while parsing.
+# https://github.com/spdx/tools-python/issues/274
+
 
 @pytest.mark.parametrize("out_format", ['rdf', 'yaml', 'xml', 'json', 'tag'])
-@pytest.mark.parametrize("in_file", test_files_json_yaml_xml, ids=lambda x: os.path.basename(x))
-def test_write_anything_json_yaml_xml(in_file, out_format, tmpdir):
+@pytest.mark.parametrize("in_file", test_files_json_yaml_xml_tag, ids=lambda x: os.path.basename(x))
+def test_write_anything_json_yaml_xml_tv(in_file, out_format, tmpdir):
     in_basename = os.path.basename(in_file)
-    if in_basename == "SPDXSBOMExample.spdx.yml" or in_basename == "SPDXJsonExample2.2.json":
+    if in_basename == "SPDXSBOMExample.spdx.yml" or in_basename == "SPDXJsonExample2.2.json" or in_basename == "SPDXSBOMExample.tag":
         # conversion of spdx2.2 is not yet done
         return
     write_anything_test(in_basename, in_file, out_format, tmpdir)
 
 
-@pytest.mark.parametrize("out_format", ['rdf', 'tag'])
-@pytest.mark.parametrize("in_file", test_files_rdf_tag, ids=lambda x: os.path.basename(x))
-def test_write_anything_rdf_tag(in_file, out_format, tmpdir):
+@pytest.mark.parametrize("out_format", ['rdf'])
+@pytest.mark.parametrize("in_file", test_files_rdf, ids=lambda x: os.path.basename(x))
+def test_write_anything_rdf(in_file, out_format, tmpdir):
     in_basename = os.path.basename(in_file)
-    if in_basename == "SPDXSBOMExample.tag":
-        # conversion of spdx2.2 is not yet done
-        return
     write_anything_test(in_basename, in_file, out_format, tmpdir)
 
 
