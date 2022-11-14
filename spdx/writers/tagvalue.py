@@ -119,21 +119,23 @@ def write_file(spdx_file, out):
     if spdx_file.has_optional_field("type"):
         write_file_type(spdx_file.type, out)
     write_value("FileChecksum", spdx_file.chksum.to_tv(), out)
-    if isinstance(
-        spdx_file.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
-    ):
-        write_value("LicenseConcluded", "({0})".format(spdx_file.conc_lics), out)
-    else:
-        write_value("LicenseConcluded", spdx_file.conc_lics, out)
+    if spdx_file.has_optional_field("conc_lics"):
+        if isinstance(
+            spdx_file.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
+        ):
+            write_value("LicenseConcluded", "({0})".format(spdx_file.conc_lics), out)
+        else:
+            write_value("LicenseConcluded", spdx_file.conc_lics, out)
 
     # write sorted list
     for lics in sorted(spdx_file.licenses_in_file):
         write_value("LicenseInfoInFile", lics, out)
 
-    if isinstance(spdx_file.copyright, str):
-        write_text_value("FileCopyrightText", spdx_file.copyright, out)
-    else:
-        write_value("FileCopyrightText", spdx_file.copyright, out)
+    if spdx_file.has_optional_field("copyright"):
+        if isinstance(spdx_file.copyright, str):
+            write_text_value("FileCopyrightText", spdx_file.copyright, out)
+        else:
+            write_value("FileCopyrightText", spdx_file.copyright, out)
 
     if spdx_file.has_optional_field("license_comment"):
         write_text_value("LicenseComments", spdx_file.license_comment, out)
@@ -172,11 +174,11 @@ def write_snippet(snippet, out):
     out.write("# Snippet\n\n")
     write_value("SnippetSPDXID", snippet.spdx_id, out)
     write_value("SnippetFromFileSPDXID", snippet.snip_from_file_spdxid, out)
-    write_text_value("SnippetCopyrightText", snippet.copyright, out)
+    if snippet.has_optional_field("copyright"):
+        write_text_value("SnippetCopyrightText", snippet.copyright, out)
     write_range("SnippetByteRange", snippet.byte_range, out)
     if snippet.has_optional_field("line_range"):
         write_range("SnippetLineRange", snippet.line_range, out)
-
     if snippet.has_optional_field("name"):
         write_value("SnippetName", snippet.name, out)
     if snippet.has_optional_field("comment"):
@@ -185,12 +187,13 @@ def write_snippet(snippet, out):
         write_text_value("SnippetLicenseComments", snippet.license_comment, out)
     if snippet.has_optional_field("attribution_text"):
         write_text_value("SnippetAttributionText", snippet.attribution_text, out)
-    if isinstance(
-        snippet.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
-    ):
-        write_value("SnippetLicenseConcluded", "({0})".format(snippet.conc_lics), out)
-    else:
-        write_value("SnippetLicenseConcluded", snippet.conc_lics, out)
+    if snippet.has_optional_field("conc_lics"):
+        if isinstance(
+            snippet.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
+        ):
+            write_value("SnippetLicenseConcluded", "({0})".format(snippet.conc_lics), out)
+        else:
+            write_value("SnippetLicenseConcluded", snippet.conc_lics, out)
     # Write sorted list
     for lics in sorted(snippet.licenses_in_snippet):
         write_value("LicenseInfoInSnippet", lics, out)
@@ -242,22 +245,24 @@ def write_package(package, out):
     if package.has_optional_field("comment"):
         write_text_value("PackageComment", package.comment, out)
 
-    if isinstance(
-        package.license_declared,
-        (document.LicenseConjunction, document.LicenseDisjunction),
-    ):
-        write_value(
-            "PackageLicenseDeclared", "({0})".format(package.license_declared), out
-        )
-    else:
-        write_value("PackageLicenseDeclared", package.license_declared, out)
+    if package.has_optional_field("license_declared"):
+        if isinstance(
+            package.license_declared,
+            (document.LicenseConjunction, document.LicenseDisjunction),
+        ):
+            write_value(
+                "PackageLicenseDeclared", "({0})".format(package.license_declared), out
+            )
+        else:
+            write_value("PackageLicenseDeclared", package.license_declared, out)
 
-    if isinstance(
-        package.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
-    ):
-        write_value("PackageLicenseConcluded", "({0})".format(package.conc_lics), out)
-    else:
-        write_value("PackageLicenseConcluded", package.conc_lics, out)
+    if package.has_optional_field("conc_lics"):
+        if isinstance(
+            package.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
+        ):
+            write_value("PackageLicenseConcluded", "({0})".format(package.conc_lics), out)
+        else:
+            write_value("PackageLicenseConcluded", package.conc_lics, out)
 
     # Write sorted list of licenses.
     for lics in sorted(package.licenses_from_files):
@@ -266,8 +271,7 @@ def write_package(package, out):
     if package.has_optional_field("license_comment"):
         write_text_value("PackageLicenseComments", package.license_comment, out)
 
-    # cr_text is either free form text or NONE or NOASSERTION.
-    if package.cr_text:
+    if package.has_optional_field("cr_text"):
         if isinstance(package.cr_text, str):
             write_text_value("PackageCopyrightText", package.cr_text, out)
         else:
