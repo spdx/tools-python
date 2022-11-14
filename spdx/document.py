@@ -8,12 +8,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from spdx.file import File
 from spdx.license import ExtractedLicense
 from spdx.parsers.loggers import ErrorMessages
 
 import warnings
 
 from functools import total_ordering
+from spdx.relationship import Relationship
 
 
 @total_ordering
@@ -48,7 +53,7 @@ class ExternalDocumentRef(object):
             other.check_sum,
         )
 
-    def validate(self, messages):
+    def validate(self, messages: ErrorMessages) -> ErrorMessages:
         """
         Check that all the fields are valid.
         Appends any error messages to messages parameter shall be a ErrorMessages.
@@ -56,6 +61,7 @@ class ExternalDocumentRef(object):
         self.validate_ext_doc_id(messages)
         self.validate_spdx_doc_uri(messages)
         self.validate_checksum(messages)
+        return messages
 
     def validate_ext_doc_id(self, messages):
         if not self.external_document_id:
@@ -118,13 +124,14 @@ class Document(object):
         self.comment = comment
         self.namespace = namespace
         self.creation_info = CreationInfo()
+        self.files: Optional[List['File']] = []
         self.packages = []
         if package is not None:
             self.packages.append(package)
         self.extracted_licenses = []
         self.reviews = []
         self.annotations = []
-        self.relationships = []
+        self.relationships: List[Relationship] = []
         self.snippet = []
 
     def add_review(self, review):
@@ -147,6 +154,9 @@ class Document(object):
 
     def add_package(self, package):
         self.packages.append(package)
+
+    def add_file(self, file: 'File') -> None:
+        self.files.append(file)
 
     # For backwards compatibility with older versions, we support a
     # mode where the first package in a document may be referred to as
@@ -174,17 +184,6 @@ class Document(object):
             self.packages[0] = value
 
     @property
-    def files(self):
-        if self.packages:
-            return self.package.files
-        else:
-            return []
-
-    @files.setter
-    def files(self, value):
-        self.package.files = value
-
-    @property
     def has_comment(self):
         return self.comment is not None
 
@@ -206,6 +205,7 @@ class Document(object):
         self.validate_namespace(messages)
         self.validate_ext_document_references(messages)
         self.validate_creation_info(messages)
+        self.validate_files(messages)
         self.validate_packages(messages)
         self.validate_extracted_licenses(messages)
         self.validate_reviews(messages)
@@ -251,9 +251,14 @@ class Document(object):
                     "External document references must be of the type "
                     "spdx.document.ExternalDocumentRef and not " + str(type(doc))
                 ]
+
     def validate_reviews(self, messages):
         for review in self.reviews:
             messages = review.validate(messages)
+
+    def validate_files(self, messages: ErrorMessages) -> None:
+        for file in self.files:
+            messages = file.validate(messages)
 
     def validate_annotations(self, messages):
         for annotation in self.annotations:
