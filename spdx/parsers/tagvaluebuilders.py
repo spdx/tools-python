@@ -718,7 +718,10 @@ class PackageBuilder(object):
         if self.package_files_analyzed_set:
             raise CardinalityError("Package::FilesAnalyzed")
 
-        if files_analyzed is None or not validations.validate_pkg_files_analyzed(files_analyzed):
+        if files_analyzed is None:
+            return True
+
+        if not validations.validate_pkg_files_analyzed(files_analyzed):
             raise SPDXValueError("Package::FilesAnalyzed")
 
         self.package_files_analyzed_set = True
@@ -898,10 +901,10 @@ class PackageBuilder(object):
         if self.package_cr_text_set:
             raise CardinalityError("Package::CopyrightText")
 
-        self.package_cr_text_set = True
         if not validations.validate_pkg_cr_text(text, optional=True):
             raise SPDXValueError("Package::CopyrightText")
 
+        self.package_cr_text_set = True
         if isinstance(text, str):
             doc.packages[-1].cr_text = str_from_text(text)
         else:
@@ -1554,6 +1557,7 @@ class SnippetBuilder(object):
             doc.snippet[-1].copyright = str_from_text(text)
         else:
             doc.snippet[-1].copyright = text  # None or NoAssert
+        return True
 
     def set_snippet_lic_comment(self, doc, text):
         """
