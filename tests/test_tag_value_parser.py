@@ -69,7 +69,7 @@ package_str = '\n'.join([
     'PackageLicenseInfoFromFiles: Apache-2.0',
     'PackageLicenseComments: <text>License Comments</text>',
     'ExternalRef: SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:',
-    'ExternalRefComment: <text>Some comment about the package.</text>'
+    'ExternalRefComment: <text>Some comment about the package.</text>',
     'PrimaryPackagePurpose: OPERATING-SYSTEM',
     'BuiltDate: 2020-01-01T12:00:00Z',
     'ReleaseDate: 2021-01-01T12:00:00Z',
@@ -234,7 +234,7 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'PKG_EXT_REF_COMMENT', 'ExternalRefComment', 22)
         self.token_assert_helper(self.l.token(), 'TEXT', '<text>Some comment about the package.</text>', 22)
         self.token_assert_helper(self.l.token(), 'PRIMARY_PACKAGE_PURPOSE', 'PrimaryPackagePurpose', 23)
-        self.token_assert_helper(self.l.token(), 'LINE', 'OPERATING-SYSTEM', 23)
+        self.token_assert_helper(self.l.token(), 'OPERATING_SYSTEM', 'OPERATING-SYSTEM', 23)
         self.token_assert_helper(self.l.token(), 'BUILT_DATE', 'BuiltDate', 24)
         self.token_assert_helper(self.l.token(), 'DATE', '2020-01-01T12:00:00Z', 24)
         self.token_assert_helper(self.l.token(), 'RELEASE_DATE', 'ReleaseDate', 25)
