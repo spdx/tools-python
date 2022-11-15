@@ -194,6 +194,7 @@ Document:
       licenseConcluded: Apache-2.0
       licenseInfoInSnippets:
         - Apache-2.0
+        - GPL-2.0-only
       name: from linux kernel
       ranges:
         - endPointer:
