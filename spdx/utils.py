@@ -15,7 +15,7 @@ import re
 from ply import lex
 from ply import yacc
 
-from spdx import document
+from spdx import license
 
 
 def datetime_iso_format(date):
@@ -163,7 +163,7 @@ class LicenseListParser(object):
     def p_disjunction_1(self, p):
         """disjunction : disjunction OR conjunction
         """
-        p[0] = document.LicenseDisjunction(p[1], p[3])
+        p[0] = license.LicenseDisjunction(p[1], p[3])
 
     def p_disjunction_2(self, p):
         """disjunction : conjunction
@@ -173,7 +173,7 @@ class LicenseListParser(object):
     def p_conjunction_1(self, p):
         """conjunction : conjunction AND license_atom
         """
-        p[0] = document.LicenseConjunction(p[1], p[3])
+        p[0] = license.LicenseConjunction(p[1], p[3])
 
     def p_conjunction_2(self, p):
         """conjunction : license_atom
@@ -183,7 +183,7 @@ class LicenseListParser(object):
     def p_license_atom_1(self, p):
         """license_atom : LICENSE
         """
-        p[0] = document.License.from_identifier(p[1])
+        p[0] = license.License.from_identifier(p[1])
 
     def p_license_atom_2(self, p):
         """license_atom : LP disjunction RP

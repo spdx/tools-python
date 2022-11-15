@@ -12,9 +12,10 @@
 import re
 
 import rdflib
+
 from spdx import creationinfo
+from spdx import license
 from spdx import utils
-from spdx import document
 
 
 def validate_is_free_form_text(value, optional=False):
@@ -247,7 +248,7 @@ def validate_file_cpyright(value, optional=False):
 def validate_lics_from_file(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (document.License, utils.SPDXNone, utils.NoAssert)):
+    elif isinstance(value, (license.License, utils.SPDXNone, utils.NoAssert)):
         return True
     else:
         return False
@@ -260,7 +261,7 @@ def validate_file_notice(value, optional=False):
 def validate_lics_conc(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, document.License)):
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, license.License)):
         return True
     else:
         return False
@@ -269,7 +270,7 @@ def validate_lics_conc(value, optional=False):
 def validate_file_lics_in_file(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, document.License)):
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, license.License)):
         return True
     else:
         return False
@@ -329,7 +330,7 @@ def validate_snip_file_spdxid(value, optional=False):
 def validate_snip_lics_info(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, document.License)):
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, license.License)):
         return True
     else:
         return False

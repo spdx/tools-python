@@ -11,7 +11,7 @@
 
 from itertools import zip_longest
 
-from spdx import document, utils
+from spdx import license, utils
 from spdx import file as spdx_file
 from spdx.parsers.loggers import ErrorMessages
 
@@ -121,7 +121,7 @@ def write_file(spdx_file, out):
     write_value("FileChecksum", spdx_file.chksum.to_tv(), out)
     if spdx_file.has_optional_field("conc_lics"):
         if isinstance(
-            spdx_file.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
+            spdx_file.conc_lics, (license.LicenseConjunction, license.LicenseDisjunction)
         ):
             write_value("LicenseConcluded", "({0})".format(spdx_file.conc_lics), out)
         else:
@@ -189,7 +189,7 @@ def write_snippet(snippet, out):
         write_text_value("SnippetAttributionText", snippet.attribution_text, out)
     if snippet.has_optional_field("conc_lics"):
         if isinstance(
-            snippet.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
+            snippet.conc_lics, (license.LicenseConjunction, license.LicenseDisjunction)
         ):
             write_value("SnippetLicenseConcluded", "({0})".format(snippet.conc_lics), out)
         else:
@@ -248,7 +248,7 @@ def write_package(package, out):
     if package.has_optional_field("license_declared"):
         if isinstance(
             package.license_declared,
-            (document.LicenseConjunction, document.LicenseDisjunction),
+            (license.LicenseConjunction, license.LicenseDisjunction),
         ):
             write_value(
                 "PackageLicenseDeclared", "({0})".format(package.license_declared), out
@@ -258,7 +258,7 @@ def write_package(package, out):
 
     if package.has_optional_field("conc_lics"):
         if isinstance(
-            package.conc_lics, (document.LicenseConjunction, document.LicenseDisjunction)
+            package.conc_lics, (license.LicenseConjunction, license.LicenseDisjunction)
         ):
             write_value("PackageLicenseConcluded", "({0})".format(package.conc_lics), out)
         else:

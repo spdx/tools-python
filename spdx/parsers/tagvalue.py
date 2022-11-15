@@ -12,7 +12,9 @@
 import re
 
 from ply import yacc
+
 from spdx import config
+from spdx import license
 from spdx import utils
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
@@ -538,7 +540,7 @@ class Parser(object):
     def p_file_lic_info_value_3(self, p):
         """file_lic_info_value : LINE"""
         value = p[1]
-        p[0] = document.License.from_identifier(value)
+        p[0] = license.License.from_identifier(value)
 
     def p_conc_license_1(self, p):
         """conc_license : NO_ASSERT"""
@@ -553,7 +555,7 @@ class Parser(object):
         value = p[1]
         ref_re = re.compile("LicenseRef-.+", re.UNICODE)
         if (p[1] in config.LICENSE_MAP.keys()) or (ref_re.match(p[1]) is not None):
-            p[0] = document.License.from_identifier(value)
+            p[0] = license.License.from_identifier(value)
         else:
             p[0] = self.license_list_parser.parse(value)
 
@@ -853,7 +855,7 @@ class Parser(object):
     def p_pkg_lic_ff_value_3(self, p):
         """pkg_lic_ff_value : LINE"""
         value = p[1]
-        p[0] = document.License.from_identifier(value)
+        p[0] = license.License.from_identifier(value)
 
     def p_pkg_lic_ff_2(self, p):
         """pkg_lic_ff : PKG_LICS_FFILE error"""
@@ -1388,7 +1390,7 @@ class Parser(object):
     def p_snip_lic_info_value_3(self, p):
         """snip_lic_info_value : LINE"""
         value = p[1]
-        p[0] = document.License.from_identifier(value)
+        p[0] = license.License.from_identifier(value)
 
     def p_reviewer_1(self, p):
         """reviewer : REVIEWER entity"""

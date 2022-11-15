@@ -13,7 +13,8 @@ from unittest import TestCase
 
 import tests.testing_utils as testing_utils
 
-from spdx.document import Document, License
+from spdx.document import Document
+from spdx.license import License
 import spdx.parsers.tagvaluebuilders as builders
 from spdx.version import Version
 

@@ -18,9 +18,9 @@ from rdflib import RDFS
 from rdflib import URIRef
 from rdflib.compare import to_isomorphic
 
-from spdx import file
-from spdx import document
 from spdx import config
+from spdx import file
+from spdx import license
 from spdx import utils
 from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
@@ -85,7 +85,7 @@ class LicenseWriter(BaseWriter):
 
     def licenses_from_tree_helper(self, current, licenses):
         if isinstance(
-            current, (document.LicenseConjunction, document.LicenseDisjunction)
+            current, (license.LicenseConjunction, license.LicenseDisjunction)
         ):
             self.licenses_from_tree_helper(current.license_1, licenses)
             self.licenses_from_tree_helper(current.license_2, licenses)
@@ -133,7 +133,7 @@ class LicenseWriter(BaseWriter):
         Handle single(no conjunction/disjunction) licenses.
         Return the created node.
         """
-        if isinstance(lic, document.ExtractedLicense):
+        if isinstance(lic, license.ExtractedLicense):
             return self.create_extracted_license(lic)
         if lic.identifier.rstrip("+") in config.LICENSE_MAP:
             return URIRef(lic.url)
@@ -146,7 +146,7 @@ class LicenseWriter(BaseWriter):
             if len(matches) != 0:
                 return self.create_extracted_license(matches[0])
             else:
-                lic = document.ExtractedLicense(lic.identifier)
+                lic = license.ExtractedLicense(lic.identifier)
                 warnings.warn(
                     "Missing extracted license: {0}".format(lic.identifier)
                 )
@@ -203,9 +203,9 @@ class LicenseWriter(BaseWriter):
         Could be a single license (extracted or part of license list.) or
         a conjunction/disjunction of licenses.
         """
-        if isinstance(lic, document.LicenseConjunction):
+        if isinstance(lic, license.LicenseConjunction):
             return self.create_conjunction_node(lic)
-        elif isinstance(lic, document.LicenseDisjunction):
+        elif isinstance(lic, license.LicenseDisjunction):
             return self.create_disjunction_node(lic)
         else:
             return self.create_license_helper(lic)
