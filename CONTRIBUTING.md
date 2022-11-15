@@ -19,7 +19,9 @@ We use the GitHub flow that is described here: https://guides.github.com/introdu
 
 Here's the process to make changes to the codebase:
 
-1. Find or [file an issue](#issues) you'd like to address. Every change should be made to fix or close an issue.
+1. Find or [file an issue](#issues) you'd like to address. Every change should be made to fix or close an issue. Please
+   try to keep issues reasonably small, focusing on one aspect, or split off sub-issues if possible. Large pull requests
+   that fix many things at the same time tend to cause a lot of conflicts.
 
 2. Review [open pull requests](https://github.com/spdx/tools-python/pulls) before committing time to a substantial
    revision. Work along similar lines may already be in progress.
