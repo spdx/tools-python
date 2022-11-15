@@ -267,8 +267,8 @@ class TestParserUtils(object):
     @classmethod
     def license_to_dict(cls, license):
         """
-        Represents spdx.document.License, spdx.document.LicenseConjunction or
-        spdx.document.LicenseDisjunction as a Python dictionary
+        Represents spdx.license.License, spdx.license.LicenseConjunction or
+        spdx.license.LicenseDisjunction as a Python dictionary
         """
         CONJ_SEP = re.compile(' AND | and ')
         DISJ_SEP = re.compile(' OR | or ')
@@ -276,10 +276,10 @@ class TestParserUtils(object):
             return None
         license_dict = OrderedDict()
 
-        if isinstance(license, spdx.document.LicenseConjunction):
+        if isinstance(license, spdx.license.LicenseConjunction):
             license_dict['type'] = 'Conjunction'
             sep_regex = CONJ_SEP
-        elif isinstance(license, spdx.document.LicenseDisjunction):
+        elif isinstance(license, spdx.license.LicenseDisjunction):
             license_dict['type'] = 'Disjunction'
             sep_regex = DISJ_SEP
         else:

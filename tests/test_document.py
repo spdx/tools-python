@@ -19,7 +19,7 @@ from spdx.checksum import Algorithm
 from spdx.config import LICENSE_MAP, EXCEPTION_MAP
 from spdx.creationinfo import Tool
 from spdx.document import Document, ExternalDocumentRef
-from spdx.document import License
+from spdx.license import License
 from spdx.file import File
 from spdx.package import Package, PackagePurpose
 from spdx.parsers.loggers import ErrorMessages

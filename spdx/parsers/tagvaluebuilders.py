@@ -14,8 +14,8 @@ import re
 from spdx import annotation
 from spdx import checksum
 from spdx import creationinfo
-from spdx import document
 from spdx import file
+from spdx import license
 from spdx import package
 from spdx import relationship
 from spdx import review
@@ -100,7 +100,7 @@ class DocBuilder(object):
             raise SPDXValueError("Document::DataLicense")
 
         self.doc_data_lics_set = True
-        doc.data_license = document.License.from_identifier(lics)
+        doc.data_license = license.License.from_identifier(lics)
         return True
 
     def set_doc_name(self, doc, name):
@@ -1396,7 +1396,7 @@ class LicenseBuilder(object):
         if not validations.validate_extracted_lic_id(lic_id):
             raise SPDXValueError("ExtractedLicense::id")
 
-        doc.add_extr_lic(document.ExtractedLicense(lic_id))
+        doc.add_extr_lic(license.ExtractedLicense(lic_id))
         return True
 
     def set_lic_text(self, doc, text):

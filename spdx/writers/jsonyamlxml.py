@@ -12,7 +12,7 @@ from typing import Dict
 
 from rdflib import Literal
 
-from spdx import document, utils
+from spdx import license, utils
 from spdx.package import ExternalPackageRef
 
 
@@ -33,11 +33,11 @@ class BaseWriter(object):
         Return a string representation of a license or spdx.utils special object
         """
         if isinstance(
-            license_field, (document.LicenseDisjunction, document.LicenseConjunction)
+            license_field, (license.LicenseDisjunction, license.LicenseConjunction)
         ):
             return "({})".format(license_field)
 
-        if isinstance(license_field, document.License):
+        if isinstance(license_field, license.License):
             license_str = license_field.identifier.__str__()
         else:
             license_str = license_field.__str__()

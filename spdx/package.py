@@ -17,7 +17,7 @@ from typing import List, Optional
 
 from spdx import checksum
 from spdx import creationinfo
-from spdx import document
+from spdx import license
 from spdx import utils
 from spdx.parsers.loggers import ErrorMessages
 
@@ -62,13 +62,13 @@ class Package(object):
      we allow this to be Optional even when files_analyzed is True/None.
      - check_sum: Optional , spdx.checksum.Algorithm.
      - source_info: Optional string.
-     - conc_lics: Mandatory spdx.document.License or spdx.utils.SPDXNone or
-     - spdx.utils.NoAssert.
-     - license_declared: Mandatory spdx.document.License or spdx.utils.SPDXNone or
-     spdx.utils.NoAssert.
+     - conc_lics: Mandatory license.License or utils.SPDXNone or
+     utils.NoAssert.
+     - license_declared: Mandatory license.License or utils.SPDXNone or
+     utils.NoAssert.
      - license_comment: optional string.
-     - licenses_from_files: list of spdx.document.License or spdx.utils.SPDXNone or
-     - spdx.utils.NoAssert.
+     - licenses_from_files: list of license.License or utils.SPDXNone or
+     utils.NoAssert.
      - cr_text: Copyright text, string , utils.NoAssert or utils.SPDXNone. Mandatory.
      - summary: Optional str.
      - description: Optional str.
@@ -204,31 +204,31 @@ class Package(object):
             )
 
         if self.conc_lics and not isinstance(
-            self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)
+            self.conc_lics, (utils.SPDXNone, utils.NoAssert, license.License)
         ):
             messages.append(
                 "Package concluded license must be instance of "
                 "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
+                "spdx.license.License"
             )
 
         if self.license_declared and not isinstance(
-            self.license_declared, (utils.SPDXNone, utils.NoAssert, document.License)
+            self.license_declared, (utils.SPDXNone, utils.NoAssert, license.License)
         ):
             messages.append(
                 "Package declared license must be instance of "
                 "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
+                "spdx.license.License"
             )
 
         license_from_file_check = lambda prev, el: prev and isinstance(
-            el, (document.License, utils.SPDXNone, utils.NoAssert)
+            el, (license.License, utils.SPDXNone, utils.NoAssert)
         )
         if not reduce(license_from_file_check, self.licenses_from_files, True):
             messages.append(
                 "Each element in licenses_from_files must be instance of "
                 "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
+                "spdx.license.License"
             )
 
         return messages

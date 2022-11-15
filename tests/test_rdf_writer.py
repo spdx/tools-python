@@ -3,7 +3,8 @@ import os
 import pytest
 from rdflib import URIRef
 
-from spdx.document import Document, License
+from spdx.document import Document
+from spdx.license import License
 from spdx.package import Package, ExternalPackageRef
 from spdx.parsers.loggers import StandardLogger
 from spdx.parsers.parse_anything import parse_file

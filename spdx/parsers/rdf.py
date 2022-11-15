@@ -19,6 +19,7 @@ from rdflib import RDF
 from rdflib import RDFS
 
 from spdx import document
+from spdx import license
 from spdx import utils
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import SPDXValueError
@@ -144,7 +145,7 @@ class LicenseParser(BaseParser):
             if special == lics:
                 if self.LICS_REF_REGEX.match(lics):
                     # Is a license ref i.e LicenseRef-1
-                    return document.License.from_identifier(str(lics))
+                    return license.License.from_identifier(str(lics))
                 else:
                     # Not a known license form
                     raise SPDXValueError("License")
@@ -153,7 +154,7 @@ class LicenseParser(BaseParser):
                 return special
         else:
             # license url
-            return document.License.from_identifier(lics[ident_start:])
+            return license.License.from_identifier(lics[ident_start:])
 
     def get_extr_license_ident(self, extr_lic):
         """
@@ -251,7 +252,7 @@ class LicenseParser(BaseParser):
 
         # Set fields
         # FIXME: the constructor of the license should always accept a name
-        lic = document.ExtractedLicense(ident)
+        lic = license.ExtractedLicense(ident)
         if text is not None:
             lic.text = text
         if name is not None:
@@ -296,14 +297,14 @@ class LicenseParser(BaseParser):
         Return a license representing the conjunction from a list of
         license resources or None.
         """
-        return self._handle_license_list(lics_set, cls=document.LicenseConjunction)
+        return self._handle_license_list(lics_set, cls=license.LicenseConjunction)
 
     def handle_disjunctive_list(self, lics_set):
         """
         Return a license representing the disjunction from a list of
         license resources or None.
         """
-        return self._handle_license_list(lics_set, cls=document.LicenseDisjunction)
+        return self._handle_license_list(lics_set, cls=license.LicenseDisjunction)
 
 
 class PackageParser(LicenseParser):

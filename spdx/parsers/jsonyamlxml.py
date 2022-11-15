@@ -14,8 +14,7 @@ from typing import List, Dict, Tuple
 
 from spdx import document
 from spdx import utils
-from spdx.document import LicenseConjunction
-from spdx.document import LicenseDisjunction
+from spdx.license import LicenseConjunction, LicenseDisjunction
 from spdx.package import ExternalPackageRef, PackagePurpose
 from spdx.parsers import rdf
 from spdx.parsers.builderexceptions import SPDXValueError, CardinalityError, OrderError

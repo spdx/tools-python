@@ -12,7 +12,7 @@
 import re
 
 from spdx import checksum
-from spdx import document
+from spdx import license
 from spdx import package
 from spdx import version
 from spdx.parsers.builderexceptions import CardinalityError
@@ -60,7 +60,7 @@ class DocBuilder(object):
             res_parts = res.split("/")
             if len(res_parts) != 0:
                 identifier = res_parts[-1]
-                doc.data_license = document.License.from_identifier(identifier)
+                doc.data_license = license.License.from_identifier(identifier)
             else:
                 raise SPDXValueError("Document::License")
         else:

@@ -13,7 +13,7 @@ from functools import total_ordering
 import hashlib
 
 from spdx import checksum
-from spdx import document
+from spdx import license
 from spdx import utils
 
 
@@ -43,10 +43,10 @@ class File(object):
     - type: one of FileType.SOURCE, FileType.BINARY, FileType.ARCHIVE
       and FileType.OTHER, optional zero or one.
     - chksum: SHA1, Mandatory one.
-    - conc_lics: Mandatory one. document.License or utils.NoAssert or utils.SPDXNone.
+    - conc_lics: Mandatory one. license.License or utils.NoAssert or utils.SPDXNone.
     - licenses_in_file: list of licenses found in file, mandatory one or more.
-      document.License or utils.SPDXNone or utils.NoAssert.
-    - document.license or utils.NoAssert or utils.SPDXNone.
+      license.License or utils.SPDXNone or utils.NoAssert.
+    - license.License or utils.NoAssert or utils.SPDXNone.
     - license_comment: Optional.
     - copyright: Copyright text, Mandatory one. utils.NoAssert or utils.SPDXNone or str.
     - notice: optional One, str.
@@ -140,7 +140,7 @@ class File(object):
         ):
             messages.append(
                 "File copyright must be str or unicode or "
-                "utils.NoAssert or utils.SPDXNone"
+                "spdx.utils.NoAssert or spdx.utils.SPDXNone"
             )
 
         return messages
@@ -158,24 +158,24 @@ class File(object):
     def validate_licenses_in_file(self, messages):
         for license_in_file in self.licenses_in_file:
             if not isinstance(
-                license_in_file, (utils.SPDXNone, utils.NoAssert, document.License)
+                license_in_file, (utils.SPDXNone, utils.NoAssert, license.License)
             ):
                 messages.append(
                     "License in file must be instance of "
                     "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                    "spdx.document.License"
+                    "spdx.license.License"
                 )
 
         return messages
 
     def validate_concluded_license(self, messages):
         if self.conc_lics and not isinstance(
-            self.conc_lics, (utils.SPDXNone, utils.NoAssert, document.License)
+            self.conc_lics, (utils.SPDXNone, utils.NoAssert, license.License)
         ):
             messages.append(
                 "File concluded license must be instance of "
                 "spdx.utils.SPDXNone or spdx.utils.NoAssert or "
-                "spdx.document.License"
+                "spdx.license.License"
             )
 
         return messages

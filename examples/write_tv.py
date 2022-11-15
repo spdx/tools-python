@@ -7,7 +7,8 @@ if __name__ == "__main__":
     import codecs
     from spdx.writers.tagvalue import write_document, InvalidDocumentError
     from spdx.parsers.loggers import ErrorMessages
-    from spdx.document import Document, License, LicenseConjunction, ExtractedLicense
+    from spdx.document import Document
+    from spdx.license import License, LicenseConjunction, ExtractedLicense
     from spdx.version import Version
     from spdx.creationinfo import Person
     from spdx.review import Review
