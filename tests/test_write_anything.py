@@ -67,18 +67,24 @@ def test_write_anything_rdf(in_file, out_format, tmpdir):
 
 
 def write_anything_test(in_basename, in_file, out_format, tmpdir):
-    doc, error = parse_anything.parse_file(in_file)
-    assert not error
-    result = utils_test.TestParserUtils.to_dict(doc)
-    out_fn = os.path.join(tmpdir, "test." + out_format)
-    write_anything.write_file(doc, out_fn)
-    doc2, error2 = parse_anything.parse_file(out_fn)
-    result2 = utils_test.TestParserUtils.to_dict(doc2)
-    assert not error2
+    """This parses the in_file and writes it to the out_format,
+    then parses the written out_file again and checks if it is still the same as in_file."""
+    doc_in, error_in = parse_anything.parse_file(in_file)
+    assert not error_in
+    result_in = utils_test.TestParserUtils.to_dict(doc_in)
+
+    out_file_name = os.path.join(tmpdir, "test." + out_format)
+    write_anything.write_file(doc_in, out_file_name)
+
+    doc_out, error_out = parse_anything.parse_file(out_file_name)
+    assert not error_out
+    result_out = utils_test.TestParserUtils.to_dict(doc_out)
+
     test = in_basename + "-" + out_format
     if test not in UNSTABLE_CONVERSIONS:
-        assert result == result2
+        assert result_in == result_out
+
     else:
         # if this test fails, this means we are more stable \o/
         # in that case, please remove the test from UNSTABLE_CONVERSIONS list
-        assert result2 != result, test
+        assert result_out != result_in, test

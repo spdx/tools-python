@@ -503,9 +503,9 @@ class TestParserUtils(object):
                 ('comment', snippet.comment),
                 ('copyrightText', snippet.copyright),
                 ('licenseComments', snippet.license_comment),
-                ('fileId', snippet.snip_from_file_spdxid),
+                ('snippetFromFile', snippet.snip_from_file_spdxid),
                 ('licenseConcluded', cls.license_to_dict(snippet.conc_lics)),
-                ('licenseInfoFromSnippet', [cls.license_to_dict(lic) for lic in lics_from_snippet]),
+                ('licenseInfoInSnippets', [cls.license_to_dict(lic) for lic in lics_from_snippet]),
             ])
             snippets_list.append(snippet_dict)
 

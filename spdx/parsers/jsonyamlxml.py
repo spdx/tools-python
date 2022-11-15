@@ -516,7 +516,7 @@ class SnippetParser(BaseParser):
                         self.parse_snippet_license_comment(
                             snippet.get("licenseComments")
                         )
-                        self.parse_snippet_file_spdxid(snippet.get("fileId"))
+                        self.parse_snippet_file_spdxid(snippet.get("snippetFromFile"))
                         self.parse_snippet_concluded_license(
                             snippet.get("licenseConcluded")
                         )
@@ -524,7 +524,7 @@ class SnippetParser(BaseParser):
                             snippet.get("attributionTexts")
                         )
                         self.parse_snippet_license_info_from_snippet(
-                            snippet.get("licenseInfoFromSnippet")
+                            snippet.get("licenseInfoInSnippets")
                         )
                         self.parse_annotations(snippet.get("annotations"), spdx_id=snippet.get("SPDXID"))
                         self.parse_snippet_ranges(snippet.get("ranges"))
@@ -669,7 +669,7 @@ class SnippetParser(BaseParser):
                         lic_parser.parse(lic_in_snippet)
                     )
                     try:
-                        return self.builder.set_snippet_lics_info(
+                        self.builder.set_snippet_lics_info(
                             self.document, license_object
                         )
                     except SPDXValueError:
