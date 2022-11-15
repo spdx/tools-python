@@ -402,7 +402,7 @@ class SnippetWriter(BaseWriter):
             snippet_from_file_spdx_id = self.spdx_id(snippet.snip_from_file_spdxid)
             snippet_object = dict()
             snippet_object["SPDXID"] = self.spdx_id(snippet.spdx_id)
-            snippet_object["fileId"] = snippet_from_file_spdx_id
+            snippet_object["snippetFromFile"] = snippet_from_file_spdx_id
 
             if snippet.has_optional_field("copyright"):
                 snippet_object["copyrightText"] = snippet.copyright
@@ -411,7 +411,7 @@ class SnippetWriter(BaseWriter):
                 snippet_object["licenseConcluded"] = self.license(snippet.conc_lics)
 
             if snippet.has_optional_field("licenses_in_snippet"):
-                snippet_object["licenseInfoFromSnippet"] = list(
+                snippet_object["licenseInfoInSnippets"] = list(
                     map(self.license, snippet.licenses_in_snippet)
                 )
             byte_range = {"endPointer": {"offset": snippet.byte_range[1], "reference": snippet_from_file_spdx_id},
