@@ -20,6 +20,8 @@ import warnings
 from functools import total_ordering
 from spdx.relationship import Relationship
 
+from spdx.relationship import Relationship
+
 
 @total_ordering
 class ExternalDocumentRef(object):

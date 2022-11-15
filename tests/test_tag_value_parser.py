@@ -339,7 +339,7 @@ class TestParser(TestCase):
         assert document.package.version == 'Version 0.9.2'
         assert len(document.package.licenses_from_files) == 2
         assert (document.package.conc_lics.identifier == 'LicenseRef-2.0 AND Apache-2.0')
-        assert document.package.files_analyzed == True
+        assert document.package.files_analyzed is True
         assert document.package.comment == 'Comment on the package.'
         assert document.package.pkg_ext_refs[-1].category == 'SECURITY'
         assert document.package.pkg_ext_refs[-1].pkg_ext_ref_type == 'cpe23Type'
@@ -354,8 +354,8 @@ class TestParser(TestCase):
         document, error = self.p.parse(self.complete_str)
         assert document is not None
         assert not error
-        assert len(document.package.files) == 1
-        spdx_file = document.package.files[0]
+        assert len(document.files) == 1
+        spdx_file = document.files[0]
         assert spdx_file.name == 'testfile.java'
         assert spdx_file.spdx_id == 'SPDXRef-File'
         assert spdx_file.type == spdx.file.FileType.SOURCE

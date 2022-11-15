@@ -25,7 +25,7 @@ def temporary_file_path() -> str:
 # that part is refactored.
 def test_accept_provided_doc_node(temporary_file_path) -> None:
     doc_node = URIRef("http://www.spdx.org/tools#SPDXRef-DOCUMENT")
-    document: Document = minimal_document()
+    document: Document = minimal_document_with_package()
 
     with open(temporary_file_path, "wb") as out:
         writer = Writer(document, out)
@@ -41,7 +41,7 @@ def test_accept_provided_doc_node(temporary_file_path) -> None:
 
 
 def test_external_package_references(temporary_file_path) -> None:
-    document: Document = minimal_document()
+    document: Document = minimal_document_with_package()
     package: Package = document.packages[0]
     first_ref = ExternalPackageRef(category="PACKAGE-MANAGER")
     second_ref = ExternalPackageRef(category="SECURITY")
@@ -62,7 +62,7 @@ def test_external_package_references(temporary_file_path) -> None:
     assert second_ref.category in parsed_reference_categories
 
 
-def minimal_document() -> Document:
+def minimal_document_with_package() -> Document:
     document = Document(data_license=License.from_identifier('CC0-1.0'))
     document.creation_info.set_created_now()
     package: Package = minimal_package()

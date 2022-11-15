@@ -8,12 +8,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Dict
+from typing import Dict, List
 
 from rdflib import Literal
 
 from spdx import license, utils
 from spdx.package import ExternalPackageRef
+from spdx.relationship import Relationship
+from spdx.utils import update_dict_item_with_new_item
 
 
 class BaseWriter(object):
@@ -200,16 +202,9 @@ class PackageWriter(BaseWriter):
             package_object["externalRefs"] = [self.external_reference_as_dict(external_ref) for external_ref in
                                               package.pkg_ext_refs]
         if package.spdx_id in annotations_by_spdx_id:
-            package["annotations"] = annotations_by_spdx_id[package.spdx_id]
+            package_object["annotations"] = annotations_by_spdx_id[package.spdx_id]
 
-        files_in_package = []
-        if package.has_optional_field("files"):
-            package_object["hasFiles"] = []
-            for file in package.files:
-                package_object["hasFiles"].append(file.spdx_id)
-                files_in_package.append(self.create_file_info(file, annotations_by_spdx_id))
-
-        return package_object, files_in_package
+        return package_object
 
 
 class FileWriter(BaseWriter):
@@ -364,26 +359,17 @@ class RelationshipInfoWriter(BaseWriter):
     def __init__(self, document):
         super(RelationshipInfoWriter, self).__init__(document)
 
-    def create_relationship_info(self):
-        relationship_objects = []
+    def create_relationship_info(self, relationship: Relationship):
+        relationship_object = dict()
+        relationship_object["spdxElementId"] = relationship.spdx_element_id
+        relationship_object[
+            "relatedSpdxElement"
+        ] = relationship.related_spdx_element
+        relationship_object["relationshipType"] = relationship.relationship_type
+        if relationship.has_comment:
+            relationship_object["comment"] = relationship.relationship_comment
 
-        for relationship_term in self.document.relationships:
-            if relationship_term.relationship_type == "DESCRIBES":
-                continue
-            if relationship_term.relationship_type == "CONTAINS":
-                continue
-            relationship_object = dict()
-            relationship_object["spdxElementId"] = relationship_term.spdx_element_id
-            relationship_object[
-                "relatedSpdxElement"
-            ] = relationship_term.related_spdx_element
-            relationship_object["relationshipType"] = relationship_term.relationship_type
-            if relationship_term.has_comment:
-                relationship_object["comment"] = relationship_term.relationship_comment
-
-            relationship_objects.append(relationship_object)
-
-        return relationship_objects
+        return relationship_object
 
 
 class SnippetWriter(BaseWriter):
@@ -442,7 +428,6 @@ class SnippetWriter(BaseWriter):
             snippet_info_objects.append(snippet_object)
 
         return snippet_info_objects
-
 
 
 class ExtractedLicenseWriter(BaseWriter):
@@ -549,20 +534,44 @@ class Writer(
 
         return ext_document_reference_objects
 
-    def create_document_describes(self):
-        """
-        Create a list of SPDXIDs that the document describes according to DESCRIBES-relationship.
-        """
-        document_describes = []
-        remove_rel = []
+    def create_relationships(self) -> List[Dict]:
+        packages_spdx_ids = [package.spdx_id for package in self.document.packages]
+        files_spdx_ids = [file.spdx_id for file in self.document.files]
+        # we take the package_objects from document_object because we will modify them to add jsonyamlxml-specific fields
+        packages_by_spdx_id = {package["SPDXID"]: package for package in self.document_object["packages"]}
+
+        relationship_objects = []
         for relationship in self.document.relationships:
-            if relationship.relationship_type == "DESCRIBES":
-                document_describes.append(relationship.related_spdx_element)
-                if not relationship.has_comment:
-                    remove_rel.append(relationship)
-        for relationship in remove_rel:
-            self.document.relationships.remove(relationship)
-        return document_describes
+            if relationship.relationship_type == "CONTAINS" and relationship.spdx_element_id in packages_spdx_ids \
+                    and relationship.related_spdx_element in files_spdx_ids:
+                update_dict_item_with_new_item(packages_by_spdx_id[relationship.spdx_element_id], "hasFiles",
+                                               relationship.related_spdx_element)
+                if relationship.has_comment:
+                    relationship_objects.append(self.create_relationship_info(relationship))
+
+            elif relationship.relationship_type == "CONTAINED_BY" and relationship.spdx_element_id in files_spdx_ids \
+                    and relationship.related_spdx_element in packages_spdx_ids:
+                update_dict_item_with_new_item(packages_by_spdx_id[relationship.related_spdx_element],
+                                                    "hasFiles", relationship.spdx_element_id)
+                if relationship.has_comment:
+                    relationship_objects.append(self.create_relationship_info(relationship))
+
+            elif relationship.relationship_type == "DESCRIBES" and relationship.spdx_element_id == self.document.spdx_id:
+                update_dict_item_with_new_item(self.document_object, "documentDescribes",
+                                               relationship.related_spdx_element)
+                if relationship.has_comment:
+                    relationship_objects.append(self.create_relationship_info(relationship))
+
+            elif relationship.relationship_type == "DESCRIBED_BY" and relationship.related_spdx_element == self.document.spdx_id:
+                update_dict_item_with_new_item(self.document_object, "documentDescribes",
+                                               relationship.spdx_element_id)
+                if relationship.has_comment:
+                    relationship_objects.append(self.create_relationship_info(relationship))
+
+            else:
+                relationship_objects.append(self.create_relationship_info(relationship))
+
+        return relationship_objects
 
     def create_document(self):
         self.document_object = dict()
@@ -573,9 +582,7 @@ class Writer(
         self.document_object["dataLicense"] = self.license(self.document.data_license)
         self.document_object["SPDXID"] = self.doc_spdx_id
         self.document_object["name"] = self.document.name
-        annotations_by_spdx_id= self.create_annotations_by_spdx_id()
-        document_describes = self.create_document_describes()
-        self.document_object["documentDescribes"] = document_describes
+        annotations_by_spdx_id = self.create_annotations_by_spdx_id()
 
         unique_doc_packages = {}
         for doc_package in self.document.packages:
@@ -583,12 +590,15 @@ class Writer(
                 unique_doc_packages[doc_package.spdx_id] = doc_package
 
         package_objects = []
-        file_objects = []
         for package in unique_doc_packages.values():
-            package_info_object, files_in_package = self.create_package_info(package, annotations_by_spdx_id)
+            package_info_object = self.create_package_info(package, annotations_by_spdx_id)
             package_objects.append(package_info_object)
-            file_objects.extend(file for file in files_in_package if file not in file_objects)
         self.document_object["packages"] = package_objects
+
+        file_objects = []
+        for file in self.document.files:
+            file_object = self.create_file_info(file, annotations_by_spdx_id)
+            file_objects.append(file_object)
         self.document_object["files"] = file_objects
 
         if self.document.has_comment:
@@ -614,6 +624,8 @@ class Writer(
             self.document_object["annotations"] = annotations_by_spdx_id[self.doc_spdx_id]
 
         if self.document.relationships:
-            self.document_object["relationships"] = self.create_relationship_info()
+            relationship_objects = self.create_relationships()
+            if relationship_objects:
+                self.document_object["relationships"] = relationship_objects
 
         return self.document_object

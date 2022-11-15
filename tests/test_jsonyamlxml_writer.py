@@ -5,12 +5,17 @@ from typing import List
 
 import pytest
 
+from spdx.checksum import Algorithm
 from spdx.document import Document
+from spdx.file import File
+from spdx.license import License
 from spdx.package import Package, ExternalPackageRef, PackagePurpose
 from spdx.parsers.parse_anything import parse_file
+from spdx.relationship import Relationship
 from spdx.snippet import Snippet
-from spdx.writers import json, write_anything
-from tests.test_rdf_writer import minimal_document
+from spdx.utils import update_dict_item_with_new_item
+from spdx.writers import write_anything
+from tests.test_rdf_writer import minimal_document_with_package
 
 tested_formats: List[str] = ['yaml', 'xml', 'json']
 
@@ -26,7 +31,7 @@ def temporary_file_path() -> str:
 
 @pytest.mark.parametrize("out_format", tested_formats)
 def test_external_package_references(temporary_file_path: str, out_format: str) -> None:
-    document: Document = minimal_document()
+    document: Document = minimal_document_with_package()
     package: Package = document.packages[0]
     first_ref = ExternalPackageRef(category="PACKAGE-MANAGER")
     second_ref = ExternalPackageRef(category="SECURITY")
@@ -47,7 +52,7 @@ def test_external_package_references(temporary_file_path: str, out_format: str) 
 
 @pytest.mark.parametrize("out_format", tested_formats)
 def test_primary_package_purpose(temporary_file_path: str, out_format: str):
-    document: Document = minimal_document()
+    document: Document = minimal_document_with_package()
     package: Package = document.packages[0]
     package.primary_package_purpose = PackagePurpose.OPERATING_SYSTEM
 
@@ -62,7 +67,7 @@ def test_primary_package_purpose(temporary_file_path: str, out_format: str):
 
 @pytest.mark.parametrize("out_format", tested_formats)
 def test_release_built_valid_until_date(temporary_file_path: str, out_format: str):
-    document: Document = minimal_document()
+    document: Document = minimal_document_with_package()
     package: Package = document.packages[0]
     package.release_date = datetime(2021, 1, 1, 12, 0, 0)
     package.built_date = datetime(2021, 1, 1, 12, 0, 0)
@@ -107,7 +112,7 @@ def minimal_snippet():
 
 
 def write_and_parse_snippet(out_format, snippet, temporary_file_path):
-    document: Document = minimal_document()
+    document: Document = minimal_document_with_package()
     document.add_snippet(snippet)
     file_path_with_ending = temporary_file_path + "." + out_format
     write_anything.write_file(document, file_path_with_ending, validate=False)
@@ -116,3 +121,43 @@ def write_and_parse_snippet(out_format, snippet, temporary_file_path):
 
     return parsed_snippet
 
+
+@pytest.mark.parametrize("out_format", ['yaml', 'xml', 'json'])
+def test_files_without_package(temporary_file_path, out_format):
+    document: Document = minimal_document()
+    document.spdx_id = "SPDXRef-DOCUMENT"
+    file: File = minimal_file()
+    document.add_file(file)
+    describes_relationship: Relationship = Relationship("SPDXRef-DOCUMENT DESCRIBES SPDXRef-File")
+    document.add_relationships(relationship=describes_relationship)
+
+    file_path_with_ending = temporary_file_path + "." + out_format
+    write_anything.write_file(document, file_path_with_ending, validate=False)
+
+    parsed_document: Document = parse_file(file_path_with_ending)[0]
+    parsed_file: File = parsed_document.files[0]
+
+    assert parsed_file.name == "Example File"
+
+
+def minimal_document():
+    document = Document(data_license=License.from_identifier('CC0-1.0'))
+    document.creation_info.set_created_now()
+    return document
+
+
+def minimal_file():
+    file = File(name="Example File", spdx_id="SPDXRef-File", chksum=Algorithm('SHA1', 'SOME-SHA1'))
+    return file
+
+
+@pytest.mark.parametrize("key,value,expected_length",
+                         [("existing_key", "new_value", 2), ("existing_key", "existing_value", 1),
+                          ("new_key", "new_value", 1)])
+def test_update_dict_item_with_new_item(key, value, expected_length):
+    current_state = {"existing_key": ["existing_value"]}
+    update_dict_item_with_new_item(current_state, key, value)
+
+    assert key in current_state
+    assert value in current_state[key]
+    assert len(current_state[key]) == expected_length

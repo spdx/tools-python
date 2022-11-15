@@ -1114,13 +1114,7 @@ class FileBuilder(object):
         self.reset_file_stat()
 
     def set_file_name(self, doc, name):
-        """
-        Raise OrderError if no package defined.
-        """
-        if not self.has_package(doc):
-            raise OrderError("File::Name")
-
-        doc.packages[-1].files.append(file.File(name))
+        doc.files.append(file.File(name))
         # A file name marks the start of a new file instance.
         # The builder must be reset
         # FIXME: this state does not make sense
@@ -1342,16 +1336,15 @@ class FileBuilder(object):
 
     def file(self, doc):
         """
-        Return the last file in the document's package's file list.
+        Return the last file in the document's file list.
         """
-        return doc.packages[-1].files[-1]
+        return doc.files[-1]
 
     def has_file(self, doc):
         """
-        Return true if the document's package has at least one file.
-        Does not test if the document has a package.
+        Return true if the document has at least one file.
         """
-        return len(doc.packages[-1].files) != 0
+        return len(doc.files) != 0
 
     def has_package(self, doc):
         """

@@ -10,12 +10,12 @@
 # limitations under the License.
 from datetime import datetime
 from enum import Enum, auto
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Callable
 
 from spdx import document
 from spdx import utils
 from spdx.license import LicenseConjunction, LicenseDisjunction
-from spdx.package import ExternalPackageRef, PackagePurpose
+from spdx.package import ExternalPackageRef, PackagePurpose, Package
 from spdx.parsers import rdf
 from spdx.parsers.builderexceptions import SPDXValueError, CardinalityError, OrderError
 from spdx.parsers.loggers import ErrorMessages
@@ -1110,6 +1110,16 @@ class FileParser(BaseParser):
         else:
             self.value_error("FILE_CHECKSUM", file_chksum)
 
+    def parse_files(self, files: List[Dict]) -> None:
+        if files is None:
+            return
+        if isinstance(files, list):
+            for file in files:
+                self.parse_file(file)
+        else:
+            self.value_error("FILES", files)
+
+
 
 class PackageParser(BaseParser):
     def __init__(self, builder, logger):
@@ -1120,7 +1130,7 @@ class PackageParser(BaseParser):
         # current package being parsed is the last one
         return self.document.packages[-1]
 
-    def parse_package(self, package):
+    def parse_package(self, package: Package, method_to_parse_relationship: Callable):
         """
         Parse Package Information fields
         - package: Python dict with Package Information fields in it
@@ -1149,7 +1159,7 @@ class PackageParser(BaseParser):
             self.parse_pkg_description(package.get("description"))
             self.parse_annotations(package.get("annotations"), spdx_id=package.get("SPDXID"))
             self.parse_pkg_attribution_text(package.get("attributionTexts"))
-            self.parse_pkg_files(package.get("files"))
+            self.parse_pkg_files(package.get("hasFiles"), method_to_parse_relationship)
             self.parse_pkg_chksum(package.get("sha1"))
             self.parse_package_external_refs(package.get("externalRefs"))
             self.parse_primary_package_purpose(package.get("primaryPackagePurpose"))
@@ -1561,24 +1571,24 @@ class PackageParser(BaseParser):
         elif pkg_description is not None:
             self.value_error("PKG_DESCRIPTION", pkg_description)
 
-    def parse_pkg_files(self, pkg_files):
+    def parse_pkg_files(self, pkg_has_files: List[str], method_to_parse_relationship: Callable) -> None:
         """
         Parse Package files
-        - pkg_files: Python list of dicts as in FileParser.parse_file
+        - pkg_has_files: Python list of spdx_ids
         """
         if not self.package.are_files_analyzed:
-            if pkg_files is not None:
-                self.value_error("PKG_FILES", pkg_files)
+            if pkg_has_files is not None:
+                self.value_error("PKG_FILES", pkg_has_files)
             return
 
-        if isinstance(pkg_files, list):
-            for pkg_file in pkg_files:
-                if isinstance(pkg_file, dict):
-                    self.parse_file(pkg_file.get("File"))
+        if isinstance(pkg_has_files, list):
+            for pkg_file_spdx_id in pkg_has_files:
+                if isinstance(pkg_file_spdx_id, str):
+                    method_to_parse_relationship(self.package.spdx_id, "CONTAINS", pkg_file_spdx_id)
                 else:
-                    self.value_error("PKG_FILE", pkg_file)
-        elif pkg_files is not None:
-            self.value_error("PKG_FILES", pkg_files)
+                    self.value_error("PKG_FILE", pkg_file_spdx_id)
+        elif pkg_has_files is not None:
+            self.value_error("PKG_HAS_FILES", pkg_has_files)
 
     def parse_pkg_chksum(self, pkg_chksum):
         """
@@ -1730,6 +1740,7 @@ class Parser(
         self.parse_snippets(self.document_object.get("snippets"))
 
         self.parse_packages(self.document_object.get("packages"))
+        self.parse_files(self.document_object.get("files"))
 
         if self.document_object.get("documentDescribes"):
             self.parse_doc_described_objects(self.document_object.get("documentDescribes"))
@@ -1853,7 +1864,7 @@ class Parser(
             return
         if isinstance(packages, list):
             for package in packages:
-                self.parse_package(package)
+                self.parse_package(package, self.parse_relationship)
             return True
         else:
             self.value_error("PACKAGES", packages)
