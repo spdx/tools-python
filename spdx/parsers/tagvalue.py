@@ -575,6 +575,9 @@ class Parser(object):
         try:
             value = p[2]
             self.builder.set_file_name(self.document, value)
+            self.builder.set_current_name("file", value)
+            self.builder.set_current_id("file", None)
+
         except OrderError:
             self.order_error("FileName", "PackageName", p.lineno(1))
 
@@ -589,10 +592,14 @@ class Parser(object):
         value = p[2]
         if not self.builder.doc_spdx_id_set:
             self.builder.set_doc_spdx_id(self.document, value)
-        elif not self.builder.package_spdx_id_set:
+        elif self.builder.current_package_has_name() and not self.builder.current_package_has_id():
             self.builder.set_pkg_spdx_id(self.document, value)
+            self.builder.set_current_id("package", value)
         else:
             self.builder.set_file_spdx_id(self.document, value)
+            self.builder.set_current_id("file", value)
+            if self.builder.current_package_has_name:
+                self.builder.add_relationship(self.document, self.builder.current_package["spdx_id"] + " CONTAINS " + value)
 
     def p_file_comment_1(self, p):
         """file_comment : FILE_COMMENT text_or_line"""
@@ -1068,6 +1075,8 @@ class Parser(object):
         try:
             value = p[2]
             self.builder.set_pkg_file_name(self.document, value)
+            self.builder.set_current_name("file", value)
+            self.builder.set_current_id("file", None)
         except OrderError:
             self.order_error("PackageFileName", "PackageName", p.lineno(1))
         except CardinalityError:
@@ -1100,6 +1109,8 @@ class Parser(object):
         try:
             value = p[2]
             self.builder.create_package(self.document, value)
+            self.builder.set_current_name("package", value)
+            self.builder.set_current_id("package", None)
         except CardinalityError:
             self.more_than_one_error("PackageName", p.lineno(1))
 

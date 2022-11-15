@@ -10,6 +10,7 @@
 # limitations under the License.
 
 import re
+from typing import Dict
 
 from spdx import annotation
 from spdx import checksum
@@ -1128,7 +1129,7 @@ class FileBuilder(object):
         Raise SPDXValueError if malformed value.
         Raise CardinalityError if more than one spdx_id set.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::SPDXID")
 
         if self.file_spdx_id_set:
@@ -1147,7 +1148,7 @@ class FileBuilder(object):
         Raise CardinalityError if more than one comment set.
         Raise SPDXValueError if text is not free form text or single line of text.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::Comment")
 
         if self.file_comment_set:
@@ -1166,7 +1167,7 @@ class FileBuilder(object):
         Raise OrderError if no package or no file defined.
         Raise SPDXValueError if text is not free form text or single line of text.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::AttributionText")
 
         if not validations.validate_file_attribution_text(text):
@@ -1187,7 +1188,7 @@ class FileBuilder(object):
             "ARCHIVE": file.FileType.ARCHIVE,
             "OTHER": file.FileType.OTHER,
         }
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::Type")
 
         if self.file_type_set:
@@ -1205,7 +1206,7 @@ class FileBuilder(object):
         Raise OrderError if no package or file defined.
         Raise CardinalityError if more than one chksum set.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::CheckSum")
 
         if self.file_chksum_set:
@@ -1221,7 +1222,7 @@ class FileBuilder(object):
         Raise CardinalityError if already set.
         Raise SPDXValueError if malformed.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::ConcludedLicense")
 
         if self.file_conc_lics_set:
@@ -1239,7 +1240,7 @@ class FileBuilder(object):
         Raise OrderError if no package or file defined.
         Raise SPDXValueError if malformed value.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::LicenseInFile")
 
         if not validations.validate_file_lics_in_file(lic):
@@ -1254,7 +1255,7 @@ class FileBuilder(object):
         Raise SPDXValueError if text is not free form text or single line of text.
         Raise CardinalityError if more than one per file.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::LicenseComment")
 
         if self.file_license_comment_set:
@@ -1272,7 +1273,7 @@ class FileBuilder(object):
         Raise SPDXValueError if not free form text or NONE or NO_ASSERT or single line of text.
         Raise CardinalityError if more than one.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::CopyRight")
 
         if self.file_copytext_set:
@@ -1294,7 +1295,7 @@ class FileBuilder(object):
         Raise SPDXValueError if not free form text or single line of text.
         Raise CardinalityError if more than one.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::Notice")
 
         if self.file_notice_set:
@@ -1310,7 +1311,7 @@ class FileBuilder(object):
         """
         Raise OrderError if no package or file defined.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::Contributor")
 
         self.file(doc).add_contrib(value)
@@ -1319,7 +1320,7 @@ class FileBuilder(object):
         """
         Raise OrderError if no package or file defined.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::Dependency")
 
         self.file(doc).add_depend(value)
@@ -1329,7 +1330,7 @@ class FileBuilder(object):
         Set a file name, uri or home artifact.
         Raise OrderError if no package or file defined.
         """
-        if not self.has_package(doc) or not self.has_file(doc):
+        if not self.has_file(doc):
             raise OrderError("File::Artifact")
 
         self.file(doc).add_artifact(symbol, value)
@@ -1683,6 +1684,26 @@ class Builder(
         super(Builder, self).__init__()
         # FIXME: this state does not make sense
         self.reset()
+        self.current_package: Dict = dict()
+        self.current_file: Dict = dict()
+
+    def set_current_name(self, indicator: str, name: str) -> None:
+        if indicator == "package":
+            self.current_package["name"] = name
+        elif indicator == "file":
+            self.current_file["name"] = name
+
+    def set_current_id(self, indicator: str, spdx_id: str) -> None:
+        if indicator == "package":
+            self.current_package["spdx_id"] = spdx_id
+        elif indicator == "file":
+            self.current_file["spdx_id"] = spdx_id
+
+    def current_package_has_name(self):
+        return bool("name" in self.current_package) and (self.current_package["name"])
+
+    def current_package_has_id(self):
+        return bool("spdx_id" in self.current_package) and (self.current_package["spdx_id"])
 
     def reset(self):
         """
