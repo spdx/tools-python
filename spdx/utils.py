@@ -11,6 +11,7 @@
 
 import datetime
 import re
+from typing import Dict
 
 from ply import lex
 from ply import yacc
@@ -203,3 +204,10 @@ class LicenseListParser(object):
             return self.yacc.parse(data, lexer=self.lex)
         except:
             return None
+
+
+def update_dict_item_with_new_item(current_state: Dict, key: str, item_to_add: str) -> None:
+    if key not in current_state:
+        current_state[key] = [item_to_add]
+    elif item_to_add not in current_state[key]:
+        current_state[key].append(item_to_add)

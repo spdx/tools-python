@@ -196,9 +196,11 @@ class TestWriters(TestCase):
             lic1 = License.from_identifier('LGPL-2.1-or-later')
 
         file1.add_lics(lic1)
+        doc.add_file(file1)
 
         package.add_lics_from_file(lic1)
-        package.add_file(file1)
+        relationship = package.spdx_id + " " + "CONTAINS" + " " + file1.spdx_id
+        doc.add_relationships(Relationship(relationship))
         relationship = doc.spdx_id + " " + "DESCRIBES" + " " + package.spdx_id
         doc.add_relationships(Relationship(relationship))
         return doc
@@ -249,18 +251,21 @@ class TestWriters(TestCase):
         file1.add_lics(lic1)
 
         package2.add_lics_from_file(lic1)
-        package2.add_file(file1)
         package3.add_lics_from_file(lic1)
-        package3.add_file(file1)
 
         doc.add_package(package2)
         doc.add_package(package3)
+        doc.add_file(file1)
 
         relationship = doc.spdx_id + " " + "DESCRIBES" + " " + package1.spdx_id
         doc.add_relationships(Relationship(relationship))
         relationship = doc.spdx_id + " " + "DESCRIBES" + " " + package2.spdx_id
         doc.add_relationships(Relationship(relationship))
         relationship = doc.spdx_id + " " + "DESCRIBES" + " " + package3.spdx_id
+        doc.add_relationships(Relationship(relationship))
+        relationship = package2.spdx_id + " " + "CONTAINS" + " " + file1.spdx_id
+        doc.add_relationships(Relationship(relationship))
+        relationship = package3.spdx_id + " " + "CONTAINS" + " " + file1.spdx_id
         doc.add_relationships(Relationship(relationship))
 
         return doc

@@ -18,13 +18,14 @@ import ntpath
 import os
 import posixpath
 import re
+from typing import List
 
 import xmltodict
 import yaml
 
 import spdx
 from spdx import utils
-
+from spdx.relationship import Relationship
 
 test_data_dir = os.path.join(os.path.dirname(__file__), 'data')
 
@@ -361,7 +362,6 @@ class TestParserUtils(object):
             ('copyrightText', package.cr_text),
             ('licenseComment', package.license_comment),
             ('checksum', cls.checksum_to_dict(package.checksum)),
-            ('files', cls.files_to_list(sorted(package.files))),
             ('licenseInfoFromFiles', [cls.license_to_dict(lic) for lic in lics_from_files]),
             ('verificationCode', OrderedDict([
                 ('value', package.verif_code),
@@ -512,6 +512,19 @@ class TestParserUtils(object):
         return snippets_list
 
     @classmethod
+    def relationships_to_dict_list(cls, relationships: List[Relationship]) -> List[OrderedDict]:
+        relationships_list = []
+        for relationship in relationships:
+            relationship_dict = OrderedDict([
+                                                ('spdx_element_id', relationship.spdx_element_id),
+                                                ('relationship_type', relationship.relationship_type),
+                                                ('related_spdx_element', relationship.related_spdx_element)
+                                            ])
+            relationships_list.append(relationship_dict)
+
+        return relationships_list
+
+    @classmethod
     def to_dict(cls, doc):
         """
         Represents a SPDX Document (spdx.document.Document) as nested Python types
@@ -528,10 +541,12 @@ class TestParserUtils(object):
             ('creators', [cls.entity_to_dict(creator) for creator in creators]),
             ('created', utils.datetime_iso_format(doc.creation_info.created)),
             ('creatorComment', doc.creation_info.comment),
+            ('files', cls.files_to_list(sorted(doc.files))),
             ('packages', [cls.package_to_dict(p) for p in doc.packages]),
             ('externalDocumentRefs', cls.ext_document_references_to_list(sorted(doc.ext_document_references))),
             ('extractedLicenses', cls.extracted_licenses_to_list(sorted(doc.extracted_licenses))),
             ('annotations', cls.annotations_to_list(sorted(doc.annotations))),
             ('reviews', cls.reviews_to_list(sorted(doc.reviews))),
             ('snippets', cls.snippets_to_list(sorted(doc.snippet))),
+            ('relationships', cls.relationships_to_dict_list(doc.relationships))
         ])

@@ -390,6 +390,14 @@ def write_document(document, out, validate=True):
             write_relationship(relationship, out)
         write_separators(out)
 
+    # Write file info
+    contains_relationships = [relationship.related_spdx_element for relationship in document.relationships if
+                              (relationship.relationship_type == "CONTAINS")]
+    for file in document.files:
+        if file.spdx_id not in contains_relationships:
+            write_file(file, out)
+            write_separators(out)
+
     # Write out package info
     for package in document.packages:
         write_package(package, out)
