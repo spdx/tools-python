@@ -313,6 +313,11 @@
           "type": "Single",
           "identifier": "Apache-2.0",
           "name": "Apache License 2.0"
+        },
+        {
+          "type": "Single",
+          "identifier": "GPL-2.0-only",
+          "name": "GNU General Public License v2.0 only"
         }
       ]
     }

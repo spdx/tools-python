@@ -236,6 +236,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
 			<copyrightText>Copyright 2008-2010 John Smith</copyrightText>
 			<licenseConcluded>Apache-2.0</licenseConcluded>
 			<licenseInfoInSnippets>Apache-2.0</licenseInfoInSnippets>
+			<licenseInfoInSnippets>GPL-2.0-only</licenseInfoInSnippets>
 			<licenseComments>The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.</licenseComments>
 			<SPDXID>SPDXRef-Snippet</SPDXID>
 			<snippetFromFile>SPDXRef-DoapSource</snippetFromFile>

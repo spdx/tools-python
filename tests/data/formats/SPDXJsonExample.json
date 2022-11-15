@@ -177,7 +177,8 @@
       "copyrightText": "Copyright 2008-2010 John Smith",
       "licenseConcluded": "Apache-2.0",
       "licenseInfoInSnippets": [
-        "Apache-2.0"
+        "Apache-2.0",
+        "GPL-2.0-only"
       ],
       "licenseComments": "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.",
       "SPDXID": "SPDXRef-Snippet",
