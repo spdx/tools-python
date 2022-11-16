@@ -45,7 +45,7 @@ def checksum_from_sha1(value):
         return None
 
 
-def str_from_text(text):
+def str_from_text(text) -> str:
     """
     Return content of a free form text block as a string.
     """
@@ -53,6 +53,8 @@ def str_from_text(text):
     match = REGEX.match(text)
     if match:
         return match.group(1)
+    elif isinstance(text, str):
+        return text
     else:
         return None
 
@@ -1411,7 +1413,7 @@ class LicenseBuilder(object):
         if self.extr_text_set:
             raise CardinalityError("ExtractedLicense::text")
 
-        if not validations.validate_is_free_form_text(text):
+        if not validations.validate_is_free_form_text_or_str(text):
             raise SPDXValueError("ExtractedLicense::text")
 
         self.extr_text_set = True
@@ -1440,7 +1442,7 @@ class LicenseBuilder(object):
     def set_lic_comment(self, doc, comment):
         """
         Set license comment.
-        Raise SPDXValueError if comment is not free form text.
+        Raise SPDXValueError if comment is not free form text or str.
         Raise OrderError if no license ID defined.
         """
         if not self.has_extr_lic(doc):
@@ -1449,7 +1451,7 @@ class LicenseBuilder(object):
         if self.extr_lic_comment_set:
             raise CardinalityError("ExtractedLicense::comment")
 
-        if not validations.validate_is_free_form_text(comment):
+        if not validations.validate_is_free_form_text_or_str(comment) and not isinstance(comment, str):
             raise SPDXValueError("ExtractedLicense::comment")
 
         self.extr_lic_comment_set = True

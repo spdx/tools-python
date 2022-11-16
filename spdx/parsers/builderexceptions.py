@@ -30,6 +30,7 @@ class OrderError(BuilderException):
     def __init__(self, msg):
         self.msg = msg
 
+
 class FileTypeError(BuilderException):
-    def __init__(self,msg):
+    def __init__(self, msg):
         self.msg = msg
