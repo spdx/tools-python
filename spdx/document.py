@@ -126,7 +126,7 @@ class Document(object):
         self.comment = comment
         self.namespace = namespace
         self.creation_info = CreationInfo()
-        self.files: Optional[List['File']] = []
+        self.files: List['File'] = []
         self.packages = []
         if package is not None:
             self.packages.append(package)

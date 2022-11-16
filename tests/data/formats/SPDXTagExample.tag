@@ -87,7 +87,7 @@ LicenseComments: <text>This license is used by Jena</text>
 FileCopyrightText: <text>(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP</text>
 ArtifactOfProjectName: Jena
 ArtifactOfProjectHomePage: http://www.openjena.org/
-ArtifactOfProjectURI: UNKNOWN
+ArtifactOfProjectURI: http://www.openjena.org/doap.rdf
 FileComment: <text>This file belongs to Jena</text>
 
 ## Snippet Information

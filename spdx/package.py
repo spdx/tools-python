@@ -9,11 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import hashlib
 from datetime import datetime
 from enum import Enum
 from functools import reduce
-from typing import List, Optional
+from typing import Optional
 
 from spdx import checksum
 from spdx import creationinfo
@@ -74,7 +73,6 @@ class Package(object):
      - description: Optional str.
      - comment: Comments about the package being described, optional one.
      Type: str
-     - files: List of files in package, at least one.
      - verif_exc_files: list of file names excluded from verification code or None.
      - ext_pkg_refs: External references referenced within the given package.
      Optional, one or many. Type: ExternalPackageRef
@@ -113,7 +111,6 @@ class Package(object):
         self.description = None
         self.comment = None
         self.attribution_text = None
-        self.files = []
         self.verif_exc_files = []
         self.pkg_ext_refs = []
         self.primary_package_purpose: Optional[PackagePurpose] = None
@@ -140,9 +137,6 @@ class Package(object):
     def checksum(self, value):
         self.checksums[0] = value
 
-    def add_file(self, fil):
-        self.files.append(fil)
-
     def add_lics_from_file(self, lics):
         self.licenses_from_files.append(lics)
 
@@ -162,7 +156,6 @@ class Package(object):
         self.validate_checksum(messages)
         self.validate_optional_str_fields(messages)
         self.validate_mandatory_str_fields(messages)
-        self.validate_files(messages)
         self.validate_pkg_ext_refs(messages)
         self.validate_optional_fields(messages)
         messages.pop_context()
@@ -245,13 +238,6 @@ class Package(object):
 
         return messages
 
-    def validate_files(self, messages):
-        if self.are_files_analyzed:
-            for file in self.files:
-                messages = file.validate(messages)
-
-        return messages
-
     def validate_optional_str_fields(self, messages):
         """Fields marked as optional and of type string in class
         docstring must be of a type that provides __str__ method.
@@ -310,25 +296,6 @@ class Package(object):
                 )
 
         return messages
-
-    def calc_verif_code(self):
-        hashes = []
-
-        for file_entry in self.files:
-            if (
-                isinstance(file_entry.chksum, checksum.Algorithm)
-                and file_entry.chksum.identifier == "SHA1"
-            ):
-                sha1 = file_entry.chksum.value
-            else:
-                sha1 = file_entry.calc_chksum()
-            hashes.append(sha1)
-
-        hashes.sort()
-
-        sha1 = hashlib.sha1()
-        sha1.update("".join(hashes).encode("utf-8"))
-        return sha1.hexdigest()
 
     def has_optional_field(self, field):
         return bool(getattr(self, field, None))

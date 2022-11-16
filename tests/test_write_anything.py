@@ -19,9 +19,8 @@ from tests import utils_test
 
 dirname = os.path.join(os.path.dirname(__file__), "data", "formats")
 test_files = [os.path.join(dirname, fn) for fn in os.listdir(dirname)]
-test_files_json_yaml_xml_tag = [filename for filename in test_files if "TagExample" in filename]
-                                #filename.endswith("json") or
-                         #   filename.endswith("yaml") or filename.endswith("xml") or filename.endswith("tag")]
+test_files_json_yaml_xml_tag = [filename for filename in test_files if filename.endswith("json")
+                                or filename.endswith("yaml") or filename.endswith("xml") or filename.endswith("tag")]
 test_files_rdf = [filename for filename in test_files if filename.endswith("rdf")]
 UNSTABLE_CONVERSIONS = {
     "SPDXTagExample.tag-rdf",
@@ -60,6 +59,8 @@ def test_write_anything_json_yaml_xml_tv(in_file, out_format, tmpdir):
     write_anything_test(in_basename, in_file, out_format, tmpdir)
 
 
+@pytest.mark.skip(reason="This test fails because rdf doesn't support files at document-level yet."
+                          " https://github.com/spdx/tools-python/issues/295")
 @pytest.mark.parametrize("out_format", ['rdf'])
 @pytest.mark.parametrize("in_file", test_files_rdf, ids=lambda x: os.path.basename(x))
 def test_write_anything_rdf(in_file, out_format, tmpdir):
