@@ -18,6 +18,7 @@ from spdx.package import Package
 
 class TestPackage(TestCase):
 
+    @unittest.skip("https://github.com/spdx/tools-python/issues/296")
     def test_calc_verif_code(self):
         package = Package()
         package.calc_verif_code()

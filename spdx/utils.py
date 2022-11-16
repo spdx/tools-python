@@ -10,12 +10,17 @@
 # limitations under the License.
 
 import datetime
+import hashlib
 import re
-from typing import Dict
+from typing import Dict, List
 
 from ply import lex
 from ply import yacc
 
+from spdx import checksum
+from spdx.file import File
+from spdx.package import Package
+from spdx.relationship import Relationship
 from spdx import license
 
 
@@ -30,7 +35,6 @@ def datetime_iso_format(date):
 DATE_ISO_REGEX = re.compile(
     r"(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z", re.UNICODE
 )
-
 
 # Groups for retrieving values from DATE_ISO_REGEX matches.
 DATE_ISO_YEAR_GRP = 1
@@ -107,7 +111,6 @@ class SPDXNone(object):
 
 
 class LicenseListLexer(object):
-
     tokens = ["LP", "RP", "AND", "OR", "LICENSE"]
 
     def t_LP(self, t):
@@ -211,3 +214,33 @@ def update_dict_item_with_new_item(current_state: Dict, key: str, item_to_add: s
         current_state[key] = [item_to_add]
     elif item_to_add not in current_state[key]:
         current_state[key].append(item_to_add)
+
+
+def calc_verif_code(files: List[File]) -> str:
+    hashes = []
+
+    for file_entry in files:
+        if (
+            isinstance(file_entry.chksum, checksum.Algorithm)
+            and file_entry.chksum.identifier == "SHA1"
+        ):
+            sha1 = file_entry.chksum.value
+        else:
+            sha1 = file_entry.calc_chksum()
+        hashes.append(sha1)
+
+    hashes.sort()
+
+    sha1 = hashlib.sha1()
+    sha1.update("".join(hashes).encode("utf-8"))
+    return sha1.hexdigest()
+
+
+def get_files_in_package(package: Package, files: List[File], relationships: List[Relationship]) -> List[File]:
+    files_in_package = []
+    for file in files:
+        if file.spdx_id in [relationship.related_spdx_element for relationship in relationships
+                            if relationship.type == "CONTAINS" and relationship.spdx_element_id == package.spdx_id]:
+            files_in_package.append(file)
+
+    return files_in_package
