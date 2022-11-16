@@ -431,10 +431,13 @@ def write_document(document, out, validate=True):
         write_separator(out)
 
 
-def write_snippets_contained_in_file(file, files_contain_snippets: List, out: TextIO) -> None:
-    if file.spdx_id in files_contain_snippets:
-        for snippet in files_contain_snippets[file.spdx_id]:
-            write_snippet(snippet, out)
+def write_snippets_contained_in_file(file, files_containing_snippets: Dict, out: TextIO) -> None:
+    if file.spdx_id in files_containing_snippets:
+        for snippet_spdx_id in files_containing_snippets[file.spdx_id]:
+            for snippet in document.snippet:
+                if snippet.spdx_id == snippet_spdx_id:
+                    write_snippet(snippet, out)
+                    break
 
 
 def scan_relationships(relationships: List[Relationship], packages: List[Package], files: List[File]) -> Tuple[
