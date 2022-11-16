@@ -107,17 +107,14 @@ def sort_nested(data):
         new_data = {}
         for k, v in data.items():
             if isinstance(v, list):
-                try:
-                    v = sort_nested(v)
-                except TypeError:
-                    pass
+                v = sort_nested(v)
             if isinstance(v, dict):
                 v = sort_nested(v)
             new_data[k] = v
         return new_data
     elif isinstance(data, list):
         new_data = []
-        for v in sorted(data):
+        for v in sorted(data, key=lambda x: json.dumps(x, sort_keys=True)):
             if isinstance(v, list):
                 v = sort_nested(v)
             if isinstance(v, dict):

@@ -25,6 +25,7 @@ from spdx import utils
 from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
 from spdx.relationship import Relationship
+from spdx.utils import get_files_in_package
 from spdx.writers.tagvalue import InvalidDocumentError
 
 import warnings
@@ -885,7 +886,8 @@ class PackageWriter(LicenseWriter):
         Add hasFile triples to graph.
         Must be called after files have been added.
         """
-        file_nodes = map(self.handle_package_has_file_helper, package.files)
+        files = get_files_in_package(package, self.document.files, self.document.relationships)
+        file_nodes = map(self.handle_package_has_file_helper, files)
         triples = [
             (package_node, self.spdx_namespace.hasFile, node) for node in file_nodes
         ]

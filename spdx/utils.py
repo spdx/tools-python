@@ -12,13 +12,14 @@
 import datetime
 import hashlib
 import re
-from typing import Dict, List
+from typing import Dict, List, TYPE_CHECKING
 
 from ply import lex
 from ply import yacc
 
 from spdx import checksum
-from spdx.file import File
+if TYPE_CHECKING:
+    from spdx.file import File
 from spdx.package import Package
 from spdx.relationship import Relationship
 from spdx import license
@@ -209,7 +210,7 @@ class LicenseListParser(object):
             return None
 
 
-def calc_verif_code(files: List[File]) -> str:
+def calc_verif_code(files: List['File']) -> str:
     hashes = []
 
     for file_entry in files:
@@ -229,11 +230,13 @@ def calc_verif_code(files: List[File]) -> str:
     return sha1.hexdigest()
 
 
-def get_files_in_package(package: Package, files: List[File], relationships: List[Relationship]) -> List[File]:
+def get_files_in_package(package: Package, files: List['File'], relationships: List[Relationship]) -> List['File']:
     files_in_package = []
     for file in files:
         if file.spdx_id in [relationship.related_spdx_element for relationship in relationships
-                            if relationship.type == "CONTAINS" and relationship.spdx_element_id == package.spdx_id]:
+                            if relationship.relationship_type == "CONTAINS" and relationship.spdx_element_id == package.spdx_id] \
+            or file.spdx_id in [relationship.spdx_element_id for relationship in relationships
+                                if relationship.relationship_type == "CONTAINED_BY" and relationship.related_spdx_element == package.spdx_id]:
             files_in_package.append(file)
 
     return files_in_package
