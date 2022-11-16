@@ -62,15 +62,26 @@
           "ns1:fileName": "./some/path/tofile"
         }
       },
-        "ns1:relationship": {
-            "ns1:Relationship": {
-                "ns1:spdxElementId": "SPDXRef-DOCUMENT",
-                "ns1:relatedSpdxElement": "SPDXRef-Package",
-                "ns1:relationshipType": {
-                    "@rdf:resource": "http://spdx.org/rdf/terms#relationshipType_describes"
+        "ns1:relationship": [
+                {
+                    "ns1:Relationship": {
+                        "ns1:spdxElementId": "SPDXRef-DOCUMENT",
+                        "ns1:relatedSpdxElement": "SPDXRef-Package",
+                        "ns1:relationshipType": {
+                            "@rdf:resource": "http://spdx.org/rdf/terms#relationshipType_describes"
+                        }
+                    }
+                },
+                {
+                    "ns1:Relationship": {
+                        "ns1:spdxElementId": "SPDXRef-Package",
+                        "ns1:relatedSpdxElement": "SPDXRef-File",
+                        "ns1:relationshipType": {
+                            "@rdf:resource": "http://spdx.org/rdf/terms#relationshipType_contains"
+                        }
+                    }
                 }
-            }
-        },
+            ],
       "@rdf:about": "http://www.spdx.org/tools#SPDXRef-DOCUMENT"
     }
   }

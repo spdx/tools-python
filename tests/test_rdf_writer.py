@@ -23,8 +23,6 @@ def temporary_file_path() -> str:
 
 # This test is really clunky since it's hard to isolate features of the rdf writer to test. Should be improved when
 # that part is refactored.
-@pytest.mark.skip(reason="This test fails because rdf doesn't support files at document-level yet."
-               " https://github.com/spdx/tools-python/issues/295")
 def test_accept_provided_doc_node(temporary_file_path) -> None:
     doc_node = URIRef("http://www.spdx.org/tools#SPDXRef-DOCUMENT")
     document: Document = minimal_document_with_package()
@@ -42,8 +40,6 @@ def test_accept_provided_doc_node(temporary_file_path) -> None:
     assert parsed_document.spdx_id is None
 
 
-@pytest.mark.skip(reason="This test fails because rdf doesn't support files at document-level yet."
-               " https://github.com/spdx/tools-python/issues/295")
 def test_external_package_references(temporary_file_path) -> None:
     document: Document = minimal_document_with_package()
     package: Package = document.packages[0]

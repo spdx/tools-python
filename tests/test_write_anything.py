@@ -59,8 +59,6 @@ def test_write_anything_json_yaml_xml_tv(in_file, out_format, tmpdir):
     write_anything_test(in_basename, in_file, out_format, tmpdir)
 
 
-@pytest.mark.skip(reason="This test fails because rdf doesn't support files at document-level yet."
-                          " https://github.com/spdx/tools-python/issues/295")
 @pytest.mark.parametrize("out_format", ['rdf'])
 @pytest.mark.parametrize("in_file", test_files_rdf, ids=lambda x: os.path.basename(x))
 def test_write_anything_rdf(in_file, out_format, tmpdir):

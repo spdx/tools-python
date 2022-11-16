@@ -154,7 +154,7 @@ class CreationInfo(object):
         self.creators.remove(creator)
 
     def set_created_now(self):
-        self.created = datetime.utcnow()
+        self.created = datetime.utcnow().replace(microsecond=0)
 
     @property
     def created_iso_format(self):

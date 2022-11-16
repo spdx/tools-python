@@ -13,6 +13,7 @@
 import io
 import json
 import unittest
+from collections import OrderedDict
 
 from spdx.parsers import rdf
 from spdx.parsers.loggers import StandardLogger
@@ -25,8 +26,6 @@ from tests.utils_test import TestParserUtils
 class TestParser(unittest.TestCase):
     maxDiff = None
 
-    @unittest.skip("This test fails because rdf doesn't support files at document-level yet. "
-                   "https://github.com/spdx/tools-python/issues/295")
     def test_rdf_parser(self, regen=False):
         parser = rdf.Parser(RDFBuilder(), StandardLogger())
         test_file = utils_test.get_test_loc('formats/SPDXRdfExample.rdf', test_data_dir=utils_test.test_data_dir)
@@ -44,6 +43,6 @@ class TestParser(unittest.TestCase):
                 o.write(data)
 
         with io.open(expected_loc, 'r', encoding='utf-8') as ex:
-            expected = json.load(ex)
+            expected = json.load(ex, object_pairs_hook=OrderedDict)
 
         assert result == expected

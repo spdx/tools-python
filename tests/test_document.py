@@ -273,8 +273,6 @@ class TestWriters(TestCase):
 
         return doc
 
-    @unittest.skip("This test fails because rdf doesn't support files at document-level yet. "
-                   "https://github.com/spdx/tools-python/issues/295")
     def test_write_document_rdf_with_validate(self):
         from spdx.writers.rdf import write_document
         doc = self._get_lgpl_doc()
@@ -294,8 +292,6 @@ class TestWriters(TestCase):
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
 
-    @unittest.skip("This test fails because rdf doesn't support files at document-level yet. "
-                   "https://github.com/spdx/tools-python/issues/295")
     def test_write_document_rdf_with_or_later_with_validate(self):
         from spdx.writers.rdf import write_document
         doc = self._get_lgpl_doc(or_later=True)
@@ -564,8 +560,6 @@ class TestWriters(TestCase):
             if temp_dir and os.path.exists(temp_dir):
                 shutil.rmtree(temp_dir)
 
-    @unittest.skip("This test fails because rdf doesn't support files at document-level yet. "
-                   "https://github.com/spdx/tools-python/issues/295")
     def test_write_document_rdf_mini(self):
         from spdx.writers.rdf import write_document
         doc = self._get_mini_doc()
