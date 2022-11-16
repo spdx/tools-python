@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from enum import auto, Enum
 import re
 from typing import Dict
 
@@ -1687,23 +1688,33 @@ class Builder(
         self.current_package: Dict = dict()
         self.current_file: Dict = dict()
 
-    def set_current_name(self, indicator: str, name: str) -> None:
-        if indicator == "package":
-            self.current_package["name"] = name
-        elif indicator == "file":
-            self.current_file["name"] = name
+    def set_current_package_name(self, name: str) -> None:
+        self.current_package["name"] = name
 
-    def set_current_id(self, indicator: str, spdx_id: str) -> None:
-        if indicator == "package":
-            self.current_package["spdx_id"] = spdx_id
-        elif indicator == "file":
-            self.current_file["spdx_id"] = spdx_id
+    def set_current_file_name(self, name: str) -> None:
+        self.current_file["name"] = name
 
-    def current_package_has_name(self):
-        return bool("name" in self.current_package) and (self.current_package["name"])
+    def set_current_file_id(self, spdx_id: str) -> None:
+        self.current_file["spdx_id"] = spdx_id
 
-    def current_package_has_id(self):
+    def set_current_package_id(self, spdx_id: str) -> None:
+        self.current_package["spdx_id"] = spdx_id
+
+    def current_package_has_name(self) -> bool:
+        return bool(("name" in self.current_package) and (self.current_package["name"]))
+
+    def current_file_has_name(self) -> bool:
+        return bool(("name" in self.current_file) and (self.current_file["name"]))
+
+    def current_package_has_id(self) -> bool:
         return bool("spdx_id" in self.current_package) and (self.current_package["spdx_id"])
+
+    def current_file_has_id(self) -> bool:
+        return bool("spdx_id" in self.current_file) and (self.current_file["spdx_id"])
+
+    def has_current_package(self) -> bool:
+        return bool(self.current_package)
+
 
     def reset(self):
         """

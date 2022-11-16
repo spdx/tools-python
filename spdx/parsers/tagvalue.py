@@ -575,8 +575,8 @@ class Parser(object):
         try:
             value = p[2]
             self.builder.set_file_name(self.document, value)
-            self.builder.set_current_name("file", value)
-            self.builder.set_current_id("file", None)
+            self.builder.set_current_file_name(value)
+            self.builder.set_current_file_id(None)
 
         except OrderError:
             self.order_error("FileName", "PackageName", p.lineno(1))
@@ -590,16 +590,30 @@ class Parser(object):
     def p_spdx_id(self, p):
         """spdx_id : SPDX_ID LINE"""
         value = p[2]
-        if not self.builder.doc_spdx_id_set:
-            self.builder.set_doc_spdx_id(self.document, value)
-        elif self.builder.current_package_has_name() and not self.builder.current_package_has_id():
-            self.builder.set_pkg_spdx_id(self.document, value)
-            self.builder.set_current_id("package", value)
-        else:
-            self.builder.set_file_spdx_id(self.document, value)
-            self.builder.set_current_id("file", value)
-            if self.builder.current_package_has_name:
-                self.builder.add_relationship(self.document, self.builder.current_package["spdx_id"] + " CONTAINS " + value)
+        try:
+            # first parsed spdx id belongs to the document
+            if not self.builder.doc_spdx_id_set:
+                self.builder.set_doc_spdx_id(self.document, value)
+
+            # else if a package is in scope that doesn't have an id yet, the parsed spdx id belongs to the package
+            elif self.builder.current_package_has_name() \
+                    and not self.builder.current_package_has_id():
+                self.builder.set_pkg_spdx_id(self.document, value)
+                self.builder.set_current_package_id(value)
+
+            # else if a file is in scope that doesn't have an id yet, the parsed spdx id belongs to the file
+            elif self.builder.current_file_has_name() \
+                    and not self.builder.current_file_has_id():
+                self.builder.set_file_spdx_id(self.document, value)
+                self.builder.set_current_file_id(value)
+                if self.builder.has_current_package():
+                    self.builder.add_relationship(self.document,
+                                                  self.builder.current_package["spdx_id"] + " CONTAINS " + value)
+            else:
+                raise SPDXValueError("SPDX ID couldn't be assigned properly.  Line no. {0}")
+        except SPDXValueError as err:
+            self.error = True
+            self.logger.log(err.msg.format(p.lineno(2)))
 
     def p_file_comment_1(self, p):
         """file_comment : FILE_COMMENT text_or_line"""
@@ -1075,8 +1089,6 @@ class Parser(object):
         try:
             value = p[2]
             self.builder.set_pkg_file_name(self.document, value)
-            self.builder.set_current_name("file", value)
-            self.builder.set_current_id("file", None)
         except OrderError:
             self.order_error("PackageFileName", "PackageName", p.lineno(1))
         except CardinalityError:
@@ -1109,8 +1121,10 @@ class Parser(object):
         try:
             value = p[2]
             self.builder.create_package(self.document, value)
-            self.builder.set_current_name("package", value)
-            self.builder.set_current_id("package", None)
+            self.builder.set_current_package_name(value)
+            self.builder.set_current_package_id(None)
+            self.builder.set_current_file_name(None)  # start of a new package implies new file
+            self.builder.set_current_file_id(None)
         except CardinalityError:
             self.more_than_one_error("PackageName", p.lineno(1))
 

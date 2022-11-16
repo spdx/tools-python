@@ -14,6 +14,7 @@ from typing import List, TextIO, Tuple, Dict
 
 from spdx import license, utils
 from spdx import file as spdx_file
+from spdx.document import Document
 from spdx.file import File
 from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
@@ -386,11 +387,13 @@ def write_document(document, out, validate=True):
             write_separator(out)
         write_separator(out)
 
-    relationships_to_write, packages_containing_files = scan_relationships(document.relationships, document.packages,
-                                                                           document.files)
-    files_containing_snippets = determine_files_containing_snippets(document.snippet)
-    packaged_files = [file_spdx_id for file_spdx_id_list in packages_containing_files.values()
-                      for file_spdx_id in file_spdx_id_list]
+    relationships_to_write, contained_files_by_package_id = scan_relationships(document.relationships,
+                                                                               document.packages, document.files)
+    contained_snippets_by_file_id = determine_files_containing_snippets(document.snippet, document.files)
+    packaged_file_ids = [file.spdx_id for files_list in contained_files_by_package_id.values()
+                         for file in files_list]
+    filed_snippet_ids = [snippet.spdx_id for snippets_list in contained_snippets_by_file_id.values()
+                         for snippet in snippets_list]
 
     # Write Relationships
     if relationships_to_write:
@@ -399,29 +402,31 @@ def write_document(document, out, validate=True):
             write_relationship(relationship, out)
         write_separators(out)
 
+    # Write snippet info
+    for snippet in document.snippet:
+        if snippet.spdx_id not in filed_snippet_ids:
+            write_snippet(snippet, out)
+            write_separators(out)
+
     # Write file info
     for file in document.files:
-        if file.spdx_id not in packaged_files:
+        if file.spdx_id not in packaged_file_ids:
             write_file(file, out)
             write_separators(out)
-            write_snippets_contained_in_file(file, files_containing_snippets, out)
+            if file.spdx_id in contained_snippets_by_file_id:
+                write_snippets(contained_snippets_by_file_id[file.spdx_id], out)
 
     # Write out package info
     for package in document.packages:
         write_package(package, out)
         write_separators(out)
-        if package.spdx_id in packages_containing_files:
-            for file_spdx_id in packages_containing_files[package.spdx_id]:
-                for file in document.files:
-                    if file.spdx_id == file_spdx_id:
-                        write_file(file, out)
-                        write_snippets_contained_in_file(file, files_containing_snippets, out)
-                        break
-
-    # Write out snippet info
-    for snippet in document.snippet:
-        write_snippet(snippet, out)
-        write_separators(out)
+        if package.spdx_id in contained_files_by_package_id:
+            for file in contained_files_by_package_id[package.spdx_id]:
+                write_file(file, out)
+                write_separators(out)
+                if file.spdx_id in contained_snippets_by_file_id:
+                    write_snippets(contained_snippets_by_file_id[file.spdx_id], out)
+                    break
 
     if document.extracted_licenses:
         out.write("# Extracted Licenses\n\n")
@@ -431,36 +436,43 @@ def write_document(document, out, validate=True):
         write_separator(out)
 
 
-def write_snippets_contained_in_file(file, files_containing_snippets: Dict, out: TextIO) -> None:
-    if file.spdx_id in files_containing_snippets:
-        for snippet_spdx_id in files_containing_snippets[file.spdx_id]:
-            for snippet in document.snippet:
-                if snippet.spdx_id == snippet_spdx_id:
-                    write_snippet(snippet, out)
-                    break
+def write_snippets(snippets_to_write: List, out: TextIO) -> None:
+    for snippet in snippets_to_write:
+        write_snippet(snippet, out)
+        write_separators(out)
 
 
-def scan_relationships(relationships: List[Relationship], packages: List[Package], files: List[File]) -> Tuple[
-        List, Dict]:
-    packages_containing_files = dict()
+def scan_relationships(relationships: List[Relationship], packages: List[Package], files: List[File]) \
+        -> Tuple[List, Dict]:
+    contained_files_by_package_id = dict()
     relationships_to_write = []
+    files_by_spdx_id = {file.spdx_id: file for file in files}
+    packages_spdx_ids = [package.spdx_id for package in packages]
     for relationship in relationships:
         if relationship.relationship_type == "CONTAINS" and \
-                relationship.spdx_element_id in [package.spdx_id for package in packages] and \
-                relationship.related_spdx_element in [file.spdx_id for file in files]:
-            packages_containing_files.setdefault(relationship.spdx_element_id, []).append(
-                relationship.related_spdx_element)
+            relationship.spdx_element_id in packages_spdx_ids and \
+                relationship.related_spdx_element in files_by_spdx_id.keys():
+            contained_files_by_package_id.setdefault(relationship.spdx_element_id, []).append(
+                files_by_spdx_id[relationship.related_spdx_element])
+            if relationship.has_comment:
+                relationships_to_write.append(relationship)
+        elif relationship.relationship_type == "CONTAINED_BY" and \
+            relationship.related_spdx_element in packages_spdx_ids and \
+                relationship.spdx_element_id in files_by_spdx_id:
+            contained_files_by_package_id.setdefault(relationship.related_spdx_element, []).append(
+                files_by_spdx_id[relationship.spdx_element_id])
             if relationship.has_comment:
                 relationships_to_write.append(relationship)
         else:
             relationships_to_write.append(relationship)
 
-    return relationships_to_write, packages_containing_files
+    return relationships_to_write, contained_files_by_package_id
 
 
-def determine_files_containing_snippets(snippets: List[Snippet]) -> Dict:
-    files_containing_snippets = dict()
+def determine_files_containing_snippets(snippets: List[Snippet], files: List[File]) -> Dict:
+    contained_snippets_by_file_id = dict()
     for snippet in snippets:
-        files_containing_snippets.setdefault(snippet.snip_from_file_spdxid, []).append(snippet.spdx_id)
+        if snippet.snip_from_file_spdxid in [file.spdx_id for file in files]:
+            contained_snippets_by_file_id.setdefault(snippet.snip_from_file_spdxid, []).append(snippet)
 
-    return files_containing_snippets
+    return contained_snippets_by_file_id
