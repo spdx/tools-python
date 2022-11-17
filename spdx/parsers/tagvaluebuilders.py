@@ -137,7 +137,7 @@ class DocBuilder(object):
         """
         Set document comment.
         Raise CardinalityError if comment already set.
-        Raise SPDXValueError if comment is not free form text.
+        Raise SPDXValueError if comment is not free form text or str.
         """
         if self.doc_comment_set:
             raise CardinalityError("Document::Comment")
@@ -305,7 +305,7 @@ class CreationInfoBuilder(object):
         """
         Set creation comment.
         Raise CardinalityError if comment already set.
-        Raise SPDXValueError if not free form text.
+        Raise SPDXValueError if not free form text or single line of text.
         """
         if self.creation_comment_set:
             raise CardinalityError("CreationInfo::Comment")
@@ -1404,7 +1404,7 @@ class LicenseBuilder(object):
     def set_lic_text(self, doc, text):
         """
         Set license extracted text.
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or str.
         Raise OrderError if no license ID defined.
         """
         if not self.has_extr_lic(doc):
@@ -1451,7 +1451,7 @@ class LicenseBuilder(object):
         if self.extr_lic_comment_set:
             raise CardinalityError("ExtractedLicense::comment")
 
-        if not validations.validate_is_free_form_text_or_str(comment) and not isinstance(comment, str):
+        if not validations.validate_is_free_form_text_or_str(comment):
             raise SPDXValueError("ExtractedLicense::comment")
 
         self.extr_lic_comment_set = True
@@ -1515,7 +1515,7 @@ class SnippetBuilder(object):
         """
         Set general comments about the snippet.
         Raise OrderError if no snippet previously defined.
-        Raise SPDXValueError if the data is a malformed value.
+        Raise SPDXValueError if the data is not free form text or str.
         Raise CardinalityError if comment already set.
         """
         self.assert_snippet_exists()
@@ -1532,7 +1532,7 @@ class SnippetBuilder(object):
     def set_snippet_attribution_text(self, doc, text):
         """
         Set the snippet's attribution text .
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or str.
         """
         self.assert_snippet_exists()
         if not validations.validate_snippet_attribution_text(text):
@@ -1545,7 +1545,7 @@ class SnippetBuilder(object):
         """Set the snippet's copyright text.
         Raise OrderError if no snippet previously defined.
         Raise CardinalityError if already set.
-        Raise SPDXValueError if text is not one of [None, NOASSERT, TEXT].
+        Raise SPDXValueError if text is not one of [None, NOASSERT, TEXT, str].
         """
         self.assert_snippet_exists()
         if self.snippet_copyright_set:
@@ -1566,7 +1566,7 @@ class SnippetBuilder(object):
         Set the snippet's license comment.
         Raise OrderError if no snippet previously defined.
         Raise CardinalityError if already set.
-        Raise SPDXValueError if the data is a malformed value.
+        Raise SPDXValueError if the data is not free form text or str.
         """
         self.assert_snippet_exists()
         if self.snippet_lic_comment_set:

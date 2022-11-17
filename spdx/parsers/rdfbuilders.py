@@ -171,7 +171,6 @@ class CreationInfoBuilder(tagvaluebuilders.CreationInfoBuilder):
         """
         Set creation comment.
         Raise CardinalityError if comment already set.
-        Raise SPDXValueError if not free form text.
         """
         if not self.creation_comment_set:
             self.creation_comment_set = True
