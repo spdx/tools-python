@@ -137,7 +137,7 @@ class DocBuilder(object):
         """
         Set document comment.
         Raise CardinalityError if comment already set.
-        Raise SPDXValueError if comment is not free form text or str.
+        Raise SPDXValueError if comment is not free form text or single line of text.
         """
         if self.doc_comment_set:
             raise CardinalityError("Document::Comment")
@@ -398,7 +398,7 @@ class ReviewBuilder(object):
         Set the review comment.
         Raise CardinalityError if already set.
         Raise OrderError if no reviewer defined before.
-        Raise SPDXValueError if comment is not free form text.
+        Raise SPDXValueError if comment is not free form text or single line of text.
         """
         if len(doc.reviews) == 0:
             raise OrderError("ReviewComment")
@@ -470,7 +470,7 @@ class AnnotationBuilder(object):
         Set the annotation comment.
         Raise CardinalityError if already set.
         Raise OrderError if no annotator defined before.
-        Raise SPDXValueError if comment is not free form text.
+        Raise SPDXValueError if comment is not free form text or single line of text.
         """
         if len(doc.annotations) == 0:
             raise OrderError("AnnotationComment::Comment")
@@ -547,7 +547,7 @@ class RelationshipBuilder(object):
         Set the annotation comment.
         Raise CardinalityError if already set.
         Raise OrderError if no relationship defined before it.
-        Raise SPDXValueError if comment is not free form text.
+        Raise SPDXValueError if comment is not free form text or single line of text.
         """
         if len(doc.relationships) == 0:
             raise OrderError("RelationshipComment::Comment")
@@ -799,7 +799,7 @@ class PackageBuilder(object):
         text - Free form text.
         Raise CardinalityError if already defined.
         Raise OrderError if no package previously defined.
-        SPDXValueError if text is not free form text.
+        SPDXValueError if text is not free form text or single line of text.
         """
         self.assert_package_exists()
         if self.package_source_info_set:
@@ -867,7 +867,7 @@ class PackageBuilder(object):
         Set the package's license comment.
         Raise OrderError if no package previously defined.
         Raise CardinalityError if already set.
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or single line of text.
         """
         self.assert_package_exists()
         if self.package_license_comment_set:
@@ -883,7 +883,7 @@ class PackageBuilder(object):
     def set_pkg_attribution_text(self, doc, text):
         """
         Set the package's attribution text .
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or single line of text.
         """
         self.assert_package_exists()
         if not validations.validate_pkg_attribution_text(text):
@@ -897,7 +897,7 @@ class PackageBuilder(object):
         Set the package's copyright text.
         Raise OrderError if no package previously defined.
         Raise CardinalityError if already set.
-        Raise value error if text is not one of [None, NOASSERT, TEXT].
+        Raise value error if text is not one of [None, NOASSERT, TEXT] or single line of text.
         """
         self.assert_package_exists()
         if self.package_cr_text_set:
@@ -915,7 +915,7 @@ class PackageBuilder(object):
     def set_pkg_summary(self, doc, text):
         """
         Set the package summary.
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or single line of text.
         Raise CardinalityError if summary already set.
         Raise OrderError if no package previously defined.
         """
@@ -932,7 +932,7 @@ class PackageBuilder(object):
     def set_pkg_desc(self, doc, text):
         """
         Set the package's description.
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or single line of text.
         Raise CardinalityError if description already set.
         Raise OrderError if no package previously defined.
         """
@@ -949,7 +949,7 @@ class PackageBuilder(object):
     def set_pkg_comment(self, doc, text):
         """
         Set the package's comment.
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or single line of text.
         Raise CardinalityError if comment already set.
         Raise OrderError if no package previously defined.
         """
@@ -1151,7 +1151,7 @@ class FileBuilder(object):
         """
         Raise OrderError if no package or no file defined.
         Raise CardinalityError if more than one comment set.
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or single line of text.
         """
         if not self.has_package(doc) or not self.has_file(doc):
             raise OrderError("File::Comment")
@@ -1170,7 +1170,7 @@ class FileBuilder(object):
         """
         Set the file's attribution text .
         Raise OrderError if no package or no file defined.
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or single line of text.
         """
         if not self.has_package(doc) or not self.has_file(doc):
             raise OrderError("File::AttributionText")
@@ -1257,7 +1257,7 @@ class FileBuilder(object):
     def set_file_license_comment(self, doc, text):
         """
         Raise OrderError if no package or file defined.
-        Raise SPDXValueError if text is not free form text.
+        Raise SPDXValueError if text is not free form text or single line of text.
         Raise CardinalityError if more than one per file.
         """
         if not self.has_package(doc) or not self.has_file(doc):
@@ -1275,7 +1275,7 @@ class FileBuilder(object):
     def set_file_copyright(self, doc, text):
         """
         Raise OrderError if no package or file defined.
-        Raise SPDXValueError if not free form text or NONE or NO_ASSERT.
+        Raise SPDXValueError if not free form text or NONE or NO_ASSERT or single line of text.
         Raise CardinalityError if more than one.
         """
         if not self.has_package(doc) or not self.has_file(doc):
@@ -1297,7 +1297,7 @@ class FileBuilder(object):
     def set_file_notice(self, doc, text):
         """
         Raise OrderError if no package or file defined.
-        Raise SPDXValueError if not free form text.
+        Raise SPDXValueError if not free form text or single line of text.
         Raise CardinalityError if more than one.
         """
         if not self.has_package(doc) or not self.has_file(doc):
@@ -1404,7 +1404,7 @@ class LicenseBuilder(object):
     def set_lic_text(self, doc, text):
         """
         Set license extracted text.
-        Raise SPDXValueError if text is not free form text or str.
+        Raise SPDXValueError if text is not free form text or single line of text.
         Raise OrderError if no license ID defined.
         """
         if not self.has_extr_lic(doc):
@@ -1442,7 +1442,7 @@ class LicenseBuilder(object):
     def set_lic_comment(self, doc, comment):
         """
         Set license comment.
-        Raise SPDXValueError if comment is not free form text or str.
+        Raise SPDXValueError if comment is not free form text or single line of text.
         Raise OrderError if no license ID defined.
         """
         if not self.has_extr_lic(doc):
@@ -1515,7 +1515,7 @@ class SnippetBuilder(object):
         """
         Set general comments about the snippet.
         Raise OrderError if no snippet previously defined.
-        Raise SPDXValueError if the data is not free form text or str.
+        Raise SPDXValueError if the data is not free form text or single line of text.
         Raise CardinalityError if comment already set.
         """
         self.assert_snippet_exists()
@@ -1532,7 +1532,7 @@ class SnippetBuilder(object):
     def set_snippet_attribution_text(self, doc, text):
         """
         Set the snippet's attribution text .
-        Raise SPDXValueError if text is not free form text or str.
+        Raise SPDXValueError if text is not free form text or single line of text.
         """
         self.assert_snippet_exists()
         if not validations.validate_snippet_attribution_text(text):
@@ -1545,7 +1545,7 @@ class SnippetBuilder(object):
         """Set the snippet's copyright text.
         Raise OrderError if no snippet previously defined.
         Raise CardinalityError if already set.
-        Raise SPDXValueError if text is not one of [None, NOASSERT, TEXT, str].
+        Raise SPDXValueError if text is not one of [None, NOASSERT, TEXT] or single line of text.
         """
         self.assert_snippet_exists()
         if self.snippet_copyright_set:
@@ -1566,7 +1566,7 @@ class SnippetBuilder(object):
         Set the snippet's license comment.
         Raise OrderError if no snippet previously defined.
         Raise CardinalityError if already set.
-        Raise SPDXValueError if the data is not free form text or str.
+        Raise SPDXValueError if the data is not free form text or single line of text.
         """
         self.assert_snippet_exists()
         if self.snippet_lic_comment_set:
