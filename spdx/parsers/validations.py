@@ -311,7 +311,7 @@ def validate_snip_comment(value, optional=False):
 def validate_snippet_copyright(value, optional=False):
     if validate_is_free_form_text_or_str(value, optional):
         return True
-    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, str)):
+    elif isinstance(value, (utils.NoAssert, utils.SPDXNone)):
         return True
     elif value is None:
         return optional
