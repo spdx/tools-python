@@ -56,8 +56,8 @@ ERROR_MESSAGES = {
                                      "or single line of text, line:{0}",
     "ANNOTATION_TYPE_VALUE": 'AnnotationType must be "REVIEW" or "OTHER". Line: {0}',
     "ANNOTATION_SPDX_ID_VALUE": 'SPDXREF must be ["DocumentRef-"[idstring]":"]SPDXID where'
-                                '["DocumentRef-"[idstring]":"] is an optional reference to an external SPDX document and'
-                                'SPDXID is a unique string containing letters, numbers, ".","-".',
+                                '["DocumentRef-"[idstring]":"] is an optional reference to an external SPDX document'
+                                'and SPDXID is a unique string containing letters, numbers, ".","-".',
     "A_BEFORE_B": "{0} Can not appear before {1}, line: {2}",
     "PACKAGE_NAME_VALUE": "PackageName must be single line of text, line: {0}",
     "PKG_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
@@ -69,15 +69,17 @@ ERROR_MESSAGES = {
     "PKG_DOWN_VALUE": "PackageDownloadLocation must be a url or NONE or NOASSERTION, line: {0}",
     "PKG_FILES_ANALYZED_VALUE": "FilesAnalyzed must be a boolean value, line: {0}",
     "PKG_HOME_VALUE": "PackageHomePage must be a url or NONE or NOASSERTION, line: {0}",
-    "PKG_SRC_INFO_VALUE": "PackageSourceInfo must be free form text, line: {0}",
+    "PKG_SRC_INFO_VALUE": "PackageSourceInfo must be free form text or single line of text, line: {0}",
     "PKG_CHKSUM_VALUE": "PackageChecksum must be a single line of text, line: {0}",
-    "PKG_LICS_CONC_VALUE": "PackageLicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line: {0}",
+    "PKG_LICS_CONC_VALUE": "PackageLicenseConcluded must be NOASSERTION, NONE, license identifier "
+                           "or license list, line: {0}",
     "PKG_LIC_FFILE_VALUE": "PackageLicenseInfoFromFiles must be, line: {0}",
-    "PKG_LICS_DECL_VALUE": "PackageLicenseDeclared must be NOASSERTION, NONE, license identifier or license list, line: {0}",
+    "PKG_LICS_DECL_VALUE": "PackageLicenseDeclared must be NOASSERTION, NONE, license identifier "
+                           "or license list, line: {0}",
     "PKG_LICS_COMMENT_VALUE": "PackageLicenseComments must be free form text or single line of text, line: {0}",
-    "PKG_ATTRIBUTION_TEXT_VALUE": "PackageAttributionText must be free form text, line: {0}",
-    "PKG_SUM_VALUE": "PackageSummary must be free form text, line: {0}",
-    "PKG_DESC_VALUE": "PackageDescription must be free form text, line: {0}",
+    "PKG_ATTRIBUTION_TEXT_VALUE": "PackageAttributionText must be free form text or single line of text, line: {0}",
+    "PKG_SUM_VALUE": "PackageSummary must be free form text or single line of text, line: {0}",
+    "PKG_DESC_VALUE": "PackageDescription must be free form text or single line of text, line: {0}",
     "PKG_COMMENT_VALUE": "PackageComment must be free form text or single line of text, line: {0}",
     "PKG_EXT_REF_VALUE": "ExternalRef must contain category, type, and locator in the standard format, line:{0}.",
     "PKG_EXT_REF_COMMENT_VALUE": "ExternalRefComment must be free form text or single line of text, line:{0}",
@@ -93,13 +95,14 @@ ERROR_MESSAGES = {
                        'DOCUMENTATION, SPDX, OTHER, line: {0}',
     "FILE_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
                           'letters, numbers, ".", "-".',
-    "FILE_ATTRIBUTION_TEXT_VALUE": "FileAttributionText must be free form text, line: {0}",
+    "FILE_ATTRIBUTION_TEXT_VALUE": "FileAttributionText must be free form text or single line of text, line: {0}",
     "FILE_CHKSUM_VALUE": "FileChecksum must be a single line of text starting with 'SHA1:', line:{0}",
     "FILE_LICS_CONC_VALUE": "LicenseConcluded must be NOASSERTION, NONE, license identifier or license list, line:{0}",
     "FILE_LICS_INFO_VALUE": "LicenseInfoInFile must be NOASSERTION, NONE or license identifier, line: {0}",
     "FILE_LICS_COMMENT_VALUE": "FileLicenseComments must be free form text or single line of text, line: {0}",
-    "FILE_CR_TEXT_VALUE": "FileCopyrightText must be one of NOASSERTION, NONE or free form text, line: {0}",
-    "FILE_NOTICE_VALUE": "FileNotice must be free form text, line: {0}",
+    "FILE_CR_TEXT_VALUE": "FileCopyrightText must be one of NOASSERTION, NONE, free form text or single line of text,"
+                          "line: {0}",
+    "FILE_NOTICE_VALUE": "FileNotice must be free form text or single line of text, line: {0}",
     "FILE_CONTRIB_VALUE": "FileContributor must be a single line, line: {0}",
     "FILE_DEP_VALUE": "FileDependency must be a single line, line: {0}",
     "ART_PRJ_NAME_VALUE": "ArtifactOfProjectName must be a single line, line: {0}",
@@ -109,21 +112,22 @@ ERROR_MESSAGES = {
     "ART_PRJ_URI_VALUE": "ArtificatOfProjectURI must be a URI or UNKNOWN, line: {0}",
     "UNKNOWN_TAG": "Found unknown tag : {0} at line: {1}",
     "LICS_ID_VALUE": "LicenseID must start with 'LicenseRef-', line: {0}",
-    "LICS_TEXT_VALUE": "ExtractedText must be free form text, line: {0}",
+    "LICS_TEXT_VALUE": "ExtractedText must be free form text or single line of text, line: {0}",
     "LICS_NAME_VALE": "LicenseName must be single line of text or NOASSERTION, line: {0}",
     "LICS_COMMENT_VALUE": "LicenseComment must be free form text or single line of text, line: {0}",
     "LICS_CRS_REF_VALUE": "LicenseCrossReference must be uri as single line of text, line: {0}",
     "RELATIONSHIP_VALUE": "Relationship types must be one of the defined types, line: {0}",
     "RELATIONSHIP_COMMENT_VALUE": "RelationshipComment value must be free form text between <text></text> tags "
                                   "or single line of text, line:{0}",
-    "PKG_CPY_TEXT_VALUE": "Package copyright text must be free form text, line: {0}",
+    "PKG_CPY_TEXT_VALUE": "Package copyright text must be free form text or single line of text, line: {0}",
     "SNIP_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string '
                           'containing letters, numbers, ".", "-".',
     "SNIPPET_NAME_VALUE": "SnippetName must be a single line of text, line: {0}",
     "SNIP_COMMENT_VALUE": "SnippetComment must be free form text or single line of text, line: {0}",
-    "SNIP_COPYRIGHT_VALUE": "SnippetCopyrightText must be one of NOASSERTION, NONE or free form text, line: {0}",
+    "SNIP_COPYRIGHT_VALUE": "SnippetCopyrightText must be one of NOASSERTION, NONE, "
+                            "free form text or single line of text, line: {0}",
     "SNIP_LICS_COMMENT_VALUE": "SnippetLicenseComments must be free form text or single line of text, line: {0}",
-    "SNIPPET_ATTRIBUTION_TEXT_VALUE": "SnippetAttributionText must be free form text, line: {0}",
+    "SNIPPET_ATTRIBUTION_TEXT_VALUE": "SnippetAttributionText must be free form text or single line of text, line: {0}",
     "SNIP_FILE_SPDXID_VALUE": 'SnippetFromFileSPDXID must be ["DocumentRef-"[idstring]":"] SPDXID '
                               "where DocumentRef-[idstring]: is an optional reference to an external"
                               "SPDX Document and SPDXID is a string containing letters, "
@@ -299,7 +303,7 @@ class Parser(object):
         p[0] = utils.NoAssert()
 
     def p_extr_lic_text_1(self, p):
-        """extr_lic_text : LICS_TEXT TEXT"""
+        """extr_lic_text : LICS_TEXT text_or_line"""
         try:
             value = p[2]
             self.builder.set_lic_text(self.document, value)
@@ -444,7 +448,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_file_notice_1(self, p):
-        """file_notice : FILE_NOTICE TEXT"""
+        """file_notice : FILE_NOTICE text_or_line"""
         try:
             value = p[2]
             self.builder.set_file_notice(self.document, value)
@@ -475,7 +479,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_file_cr_value_1(self, p):
-        """file_cr_value : TEXT"""
+        """file_cr_value : text_or_line"""
         p[0] = p[1]
 
     def p_file_cr_value_2(self, p):
@@ -503,7 +507,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_file_attribution_text_1(self, p):
-        """file_attribution_text : FILE_ATTRIBUTION_TEXT TEXT"""
+        """file_attribution_text : FILE_ATTRIBUTION_TEXT text_or_line"""
         try:
             value = p[2]
             self.builder.set_file_attribution_text(self.document, value)
@@ -591,7 +595,7 @@ class Parser(object):
             self.builder.set_file_spdx_id(self.document, value)
 
     def p_file_comment_1(self, p):
-        """file_comment : FILE_COMMENT TEXT"""
+        """file_comment : FILE_COMMENT text_or_line"""
         try:
             value = p[2]
             self.builder.set_file_comment(self.document, value)
@@ -678,7 +682,7 @@ class Parser(object):
         p[0] = p[1]
 
     def p_pkg_desc_1(self, p):
-        """pkg_desc : PKG_DESC TEXT"""
+        """pkg_desc : PKG_DESC text_or_line"""
         try:
             value = p[2]
             self.builder.set_pkg_desc(self.document, value)
@@ -694,7 +698,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_pkg_comment_1(self, p):
-        """pkg_comment : PKG_COMMENT TEXT"""
+        """pkg_comment : PKG_COMMENT text_or_line"""
         try:
             value = p[2]
             self.builder.set_pkg_comment(self.document, value)
@@ -710,7 +714,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_pkg_attribution_text_1(self, p):
-        """pkg_attribution_text : PKG_ATTRIBUTION_TEXT TEXT"""
+        """pkg_attribution_text : PKG_ATTRIBUTION_TEXT text_or_line"""
         try:
             value = p[2]
             self.builder.set_pkg_attribution_text(self.document, value)
@@ -728,7 +732,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_pkg_summary_1(self, p):
-        """pkg_summary : PKG_SUM TEXT"""
+        """pkg_summary : PKG_SUM text_or_line"""
         try:
             value = p[2]
             self.builder.set_pkg_summary(self.document, value)
@@ -794,7 +798,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_pkg_cr_text_value_1(self, p):
-        """pkg_cr_text_value : TEXT"""
+        """pkg_cr_text_value : text_or_line"""
         p[0] = p[1]
 
     def p_pkg_cr_text_value_2(self, p):
@@ -890,7 +894,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_pkg_src_info_1(self, p):
-        """pkg_src_info : PKG_SRC_INFO TEXT"""
+        """pkg_src_info : PKG_SRC_INFO text_or_line"""
         try:
             value = p[2]
             self.builder.set_pkg_source_info(self.document, value)
@@ -1229,7 +1233,7 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_snippet_attribution_text_1(self, p):
-        """snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT TEXT"""
+        """snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT text_or_line"""
         try:
             value = p[2]
             self.builder.set_snippet_attribution_text(self.document, value)
