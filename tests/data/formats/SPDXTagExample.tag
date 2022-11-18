@@ -51,7 +51,7 @@ PackageDescription: <text>This utility translates and SPDX RDF XML document to a
 PackageAttributionText: <text>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</text>
 PackageComment: <text>This package includes several sub-packages.</text>
 
-PackageCopyrightText: <text> Copyright 2010, 2011 Source Auditor Inc.</text>
+PackageCopyrightText: <text>Copyright 2010, 2011 Source Auditor Inc.</text>
 
 PackageLicenseDeclared: (LicenseRef-3 AND LicenseRef-4 AND Apache-2.0 AND MPL-1.1 AND LicenseRef-1 AND LicenseRef-2)
 PackageLicenseConcluded: (LicenseRef-3 AND LicenseRef-4 AND Apache-1.0 AND Apache-2.0 AND MPL-1.1 AND LicenseRef-1 AND LicenseRef-2)
@@ -94,7 +94,7 @@ FileComment: <text>This file belongs to Jena</text>
 SnippetSPDXID: SPDXRef-Snippet
 SnippetFromFileSPDXID: SPDXRef-DoapSource
 SnippetLicenseComments: <text>The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.</text>
-SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>
+SnippetCopyrightText: <text>Copyright 2008-2010 John Smith</text>
 SnippetComment: <text>This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0-or-later.</text>
 SnippetName: from linux kernel
 SnippetLicenseConcluded: Apache-2.0

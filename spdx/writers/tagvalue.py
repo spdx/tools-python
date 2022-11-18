@@ -44,8 +44,10 @@ def write_range(tag, value, out):
 
 
 def write_text_value(tag, value, out):
-    value = "{0}: <text>{1}</text>\n".format(tag, value)
-    out.write(value)
+    if "\n" in value:
+        out.write("{0}: <text>{1}</text>\n".format(tag, value))
+    else:
+        write_value(tag, value, out)
 
 
 def write_creation_info(creation_info, out):
