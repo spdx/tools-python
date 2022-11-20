@@ -8,26 +8,26 @@
 				<SPDXID>SPDXRef-Package</SPDXID>
                 <originator>Organization: SPDX</originator>
 				<attributionTexts>The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.</attributionTexts>
-				<File>
+				<files>
 					<licenseInfoFromFiles>Apache-2.0</licenseInfoFromFiles>
 					<sha1>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</sha1>
 					<name>src/org/spdx/parser/DOAPProject.java</name>
 					<copyrightText>Copyright 2010, 2011 Source Auditor Inc.</copyrightText>
 					<licenseConcluded>Apache-2.0</licenseConcluded>
 					<licenseComments></licenseComments>
-					<checksum>
+					<checksums>
 						<checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</checksumValue>
 						<algorithm>checksumAlgorithm_sha1</algorithm>
-					</checksum>
-					<checksum>
+					</checksums>
+					<checksums>
 						<checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb120000000000000000</checksumValue>
 						<algorithm>checksumAlgorithm_sha256</algorithm>
-					</checksum>
-					<fileType>fileType_source</fileType>
-					<fileType>fileType_text</fileType>
+					</checksums>
+					<fileTypes>fileType_source</fileTypes>
+					<fileTypes>fileType_text</fileTypes>
 					<SPDXID>SPDXRef-File2</SPDXID>
-				</File>
-				<File>
+				</files>
+				<files>
 					<comment>This file belongs to Jena</comment>
 					<licenseInfoFromFiles>LicenseRef-1</licenseInfoFromFiles>
 					<sha1>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</sha1>
@@ -40,18 +40,18 @@
 					</artifactOf>
 					<licenseConcluded>LicenseRef-1</licenseConcluded>
 					<licenseComments>This license is used by Jena</licenseComments>
-					<checksum>
+					<checksums>
 						<checksumValue>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</checksumValue>
 						<algorithm>checksumAlgorithm_sha1</algorithm>
-					</checksum>
-					<checksum>
+					</checksums>
+					<checksums>
 						<checksumValue>3ab4e1c67a2d28fced849ee1bb76e7391b93f1250000000000000000</checksumValue>
 						<algorithm>checksumAlgorithm_sha256</algorithm>
-					</checksum>
-					<fileType>fileType_archive</fileType>
-					<fileType>fileType_other</fileType>
+					</checksums>
+					<fileTypes>fileType_archive</fileTypes>
+					<fileTypes>fileType_other</fileTypes>
 					<SPDXID>SPDXRef-File1</SPDXID>
-				</File>
+				</files>
 				<licenseInfoFromFiles>Apache-1.0</licenseInfoFromFiles>
 				<licenseInfoFromFiles>LicenseRef-3</licenseInfoFromFiles>
 				<licenseInfoFromFiles>MPL-1.1</licenseInfoFromFiles>
@@ -59,6 +59,10 @@
 				<licenseInfoFromFiles>LicenseRef-4</licenseInfoFromFiles>
 				<licenseInfoFromFiles>Apache-2.0</licenseInfoFromFiles>
 				<licenseInfoFromFiles>LicenseRef-1</licenseInfoFromFiles>
+				<checksums>
+					<checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</checksumValue>
+					<algorithm>checksumAlgorithm_sha1</algorithm>
+				</checksums>
 				<sha1>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</sha1>
 				<name>SPDX Translator</name>
 				<packageFileName>spdxtranslator-1.0.zip</packageFileName>
@@ -73,10 +77,6 @@
 				</packageVerificationCode>
 				<licenseConcluded>(LicenseRef-1 AND MPL-1.1 AND LicenseRef-2 AND LicenseRef-3 AND Apache-2.0 AND LicenseRef-4 AND Apache-1.0)</licenseConcluded>
 				<supplier>Organization: Linux Foundation</supplier>
-				<checksum>
-					<checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</checksumValue>
-					<algorithm>checksumAlgorithm_sha1</algorithm>
-				</checksum>
 				<versionInfo>Version 0.9.2</versionInfo>
 				<licenseDeclared>(LicenseRef-3 AND LicenseRef-2 AND Apache-2.0 AND MPL-1.1 AND LicenseRef-1 AND LicenseRef-4)</licenseDeclared>
 				<downloadLocation>http://www.spdx.org/tools</downloadLocation>
@@ -245,7 +245,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
 			<name>from linux kernel</name>
 			<copyrightText>Copyright 2008-2010 John Smith</copyrightText>
 			<licenseConcluded>Apache-2.0</licenseConcluded>
-			<licenseInfoFromSnippet>Apache-2.0</licenseInfoFromSnippet>
+			<licenseInfoInSnippet>Apache-2.0</licenseInfoInSnippet>
 			<licenseComments>The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.</licenseComments>
 			<SPDXID>SPDXRef-Snippet</SPDXID>
 			<fileId>SPDXRef-DoapSource</fileId>

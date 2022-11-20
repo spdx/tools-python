@@ -13,21 +13,25 @@ import unittest
 from unittest import TestCase
 
 from spdx.checksum import Algorithm
+from spdx.document import Document
 from spdx.package import Package
 
 
 class TestPackage(TestCase):
 
     def test_calc_verif_code(self):
+        document = Document()
         package = Package()
-        package.calc_verif_code()
+        # this test needs some love.  add files to document, add them as hasFiles to the pkg.
+        package.calc_verif_code(document)
 
     def test_package_with_non_sha1_check_sum(self):
+        document = Document()
         package = Package()
         package.check_sum = Algorithm("SHA256", '')
-
         # Make sure that validation still works despite the checksum not being SHA1
         messages = []
+        # this test needs some love.  add files to document, add them as hasFiles to the pkg.
         messages = package.validate_checksum(messages)
 
 

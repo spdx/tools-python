@@ -50,8 +50,6 @@ def main(file, force):
         "Package Download Location: {0}".format(doc.package.download_location)
     )
     print("Package Homepage: {0}".format(doc.package.homepage))
-    if doc.package.check_sum:
-        print("Package Checksum: {0}".format(doc.package.check_sum.value))
     print("Package Attribution Text: {0}".format(doc.package.attribution_text))
     print("Package verification code: {0}".format(doc.package.verif_code))
     print(

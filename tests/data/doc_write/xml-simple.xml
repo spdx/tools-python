@@ -15,30 +15,30 @@
                 <packageVerificationCode>
 					<packageVerificationCodeValue>SOME code</packageVerificationCodeValue>
 				</packageVerificationCode>
-                <checksum>
+                <checksums>
 					<checksumValue>SOME-SHA1</checksumValue>
 					<algorithm>checksumAlgorithm_sha1</algorithm>
-				</checksum>
+				</checksums>
                 <licenseDeclared>NOASSERTION</licenseDeclared>
                 <licenseConcluded>NOASSERTION</licenseConcluded>
-				<File>
+				<files>
 					<name>./some/path/tofile</name>
 					<SPDXID>SPDXRef-File</SPDXID>
-					<checksum>
+					<checksums>
 						<checksumValue>SOME-SHA1</checksumValue>
 						<algorithm>checksumAlgorithm_sha1</algorithm>
-					</checksum>
-					<checksum>
+					</checksums>
+					<checksums>
 						<checksumValue>SOME-SHA256</checksumValue>
 						<algorithm>checksumAlgorithm_sha256</algorithm>
-					</checksum>
+					</checksums>
 					<licenseConcluded>NOASSERTION</licenseConcluded>
 					<copyrightText>NOASSERTION</copyrightText>
 					<licenseInfoFromFiles>LGPL-2.1-only</licenseInfoFromFiles>
 					<sha1>SOME-SHA1</sha1>
-					<fileType>fileType_other</fileType>
-					<fileType>fileType_source</fileType>
-				</File>
+					<fileTypes>fileType_other</fileTypes>
+					<fileTypes>fileType_source</fileTypes>
+				</files>
                 <licenseInfoFromFiles>LGPL-2.1-only</licenseInfoFromFiles>
                 <sha1>SOME-SHA1</sha1>
             </Package>

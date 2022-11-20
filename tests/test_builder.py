@@ -609,7 +609,7 @@ class TestPackageBuilder(TestCase):
         category = "SECURITY"
         self.builder.create_package(self.document, "pkg")
         self.builder.set_pkg_ext_ref_category(self.document, category)
-        assert self.document.package.pkg_ext_refs[-1].category == category
+        assert self.document.package.external_references[-1].category == category
 
     @testing_utils.raises(builders.SPDXValueError)
     def test_incorrect_pkg_ext_ref_category(self):
@@ -622,7 +622,7 @@ class TestPackageBuilder(TestCase):
         self.builder.create_package(self.document, "pkg")
         self.builder.set_pkg_ext_ref_type(self.document, pkg_ext_ref_type)
         assert (
-            self.document.package.pkg_ext_refs[-1].pkg_ext_ref_type == pkg_ext_ref_type
+            self.document.package.external_references[-1].pkg_ext_ref_type == pkg_ext_ref_type
         )
 
     @testing_utils.raises(builders.SPDXValueError)
@@ -635,7 +635,7 @@ class TestPackageBuilder(TestCase):
         locator = "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*"
         self.builder.create_package(self.document, "pkg")
         self.builder.set_pkg_ext_ref_locator(self.document, locator)
-        assert self.document.package.pkg_ext_refs[-1].locator == locator
+        assert self.document.package.external_references[-1].locator == locator
 
     @testing_utils.raises(builders.OrderError)
     def test_pkg_ext_ref_without_pkg(self):
@@ -648,7 +648,7 @@ class TestPackageBuilder(TestCase):
         self.builder.create_package(self.document, "pkg")
         self.builder.set_pkg_ext_ref_category(self.document, "SECURITY")
         self.builder.add_pkg_ext_ref_comment(self.document, comment_text)
-        assert self.document.package.pkg_ext_refs[-1].comment == comment_str
+        assert self.document.package.external_references[-1].comment == comment_str
 
     @testing_utils.raises(builders.OrderError)
     def test_pkg_ext_comment_without_pkg_ext_ref(self):

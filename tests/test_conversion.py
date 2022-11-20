@@ -12,6 +12,7 @@
 
 import codecs
 import os
+import json
 import tempfile
 from unittest import TestCase
 
@@ -31,6 +32,15 @@ import spdx.writers.yaml as yamlwriter
 import spdx.writers.xml as xmlwriter
 
 from tests import utils_test
+from tests.utils_test import TestParserUtils
+
+
+test_version = 'v2.3'
+test_json_file = 'formats/SPDXJSONExample-{}.spdx.json'.format(test_version)
+test_rdf_file = 'formats/SPDXRdfExample-{}.spdx.rdf'.format(test_version)
+test_tv_file = 'formats/SPDXTagExample-{}.spdx'.format(test_version)
+test_yaml_file = 'formats/SPDXYAMLExample-{}.spdx.yaml'.format(test_version)
+test_xml_file = 'formats/SPDXXMLExample-{}.spdx.xml'.format(test_version)
 
 
 def get_temp_file(extension=''):
@@ -45,6 +55,16 @@ def get_temp_file(extension=''):
     file_name = 'temp_file' + extension
     temp_dir = tempfile.mkdtemp()
     return os.path.join(temp_dir, file_name)
+
+
+def compare_spdx_documents(good, test):
+    good_dict = TestParserUtils.to_dict(good)
+    test_dict = TestParserUtils.to_dict(test)
+    # assert good_dict == test_dict
+    # I find it easier to compare this when presented as json
+    good_string = json.dumps(good_dict, indent=2, sort_keys=True)
+    test_string = json.dumps(test_dict, indent=2, sort_keys=True)
+    assert good_string == test_string
 
 
 class TestConversions(TestCase):
@@ -112,151 +132,176 @@ class TestConversions(TestCase):
             xmlwriter.write_document(document, out)
 
     def test_tagvalue_rdf(self):
-        doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
+        doc = self.parse_tagvalue_file(utils_test.get_test_loc(test_tv_file))
         filename = get_temp_file('.rdf')
         self.write_rdf_file(doc, filename)
-        self.parse_rdf_file(filename)
+        new_doc = self.parse_rdf_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_json_rdf(self):
-        doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
+        doc = self.parse_json_file(utils_test.get_test_loc(test_json_file))
         filename = get_temp_file('.rdf')
         self.write_rdf_file(doc, filename)
-        self.parse_rdf_file(filename)
+        new_doc = self.parse_rdf_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_yaml_rdf(self):
-        doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
+        doc = self.parse_yaml_file(utils_test.get_test_loc(test_yaml_file))
         filename = get_temp_file('.rdf')
         self.write_rdf_file(doc, filename)
-        self.parse_rdf_file(filename)
+        new_doc = self.parse_rdf_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_xml_rdf(self):
-        doc = self.parse_xml_file(utils_test.get_test_loc('formats/SPDXXmlExample.xml'))
+        doc = self.parse_xml_file(utils_test.get_test_loc(test_xml_file))
         filename = get_temp_file('.rdf')
         self.write_rdf_file(doc, filename)
-        self.parse_rdf_file(filename)
+        new_doc = self.parse_rdf_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_rdf_rdf(self):
-        doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
+        doc = self.parse_rdf_file(utils_test.get_test_loc(test_rdf_file))
         filename = get_temp_file('.rdf')
         self.write_rdf_file(doc, filename)
-        self.parse_rdf_file(filename)
+        new_doc = self.parse_rdf_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_tagvalue_tagvalue(self):
-        doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
+        doc = self.parse_tagvalue_file(utils_test.get_test_loc(test_tv_file))
         filename = get_temp_file('.tag')
         self.write_tagvalue_file(doc, filename)
-        self.parse_tagvalue_file(filename)
+        new_doc = self.parse_tagvalue_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_rdf_tagvalue(self):
-        doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
+        doc = self.parse_rdf_file(utils_test.get_test_loc(test_rdf_file))
         filename = get_temp_file('.tag')
         self.write_tagvalue_file(doc, filename)
-        self.parse_tagvalue_file(filename)
+        new_doc = self.parse_tagvalue_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_json_tagvalue(self):
-        doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
+        doc = self.parse_json_file(utils_test.get_test_loc(test_json_file))
         filename = get_temp_file('.tag')
         self.write_tagvalue_file(doc, filename)
-        self.parse_tagvalue_file(filename)
+        new_doc = self.parse_tagvalue_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_yaml_tagvalue(self):
-        doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
+        doc = self.parse_yaml_file(utils_test.get_test_loc(test_yaml_file))
         filename = get_temp_file('.tag')
         self.write_tagvalue_file(doc, filename)
-        self.parse_tagvalue_file(filename)
+        new_doc = self.parse_tagvalue_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_xml_tagvalue(self):
-        doc = self.parse_xml_file(utils_test.get_test_loc('formats/SPDXXmlExample.xml'))
+        doc = self.parse_xml_file(utils_test.get_test_loc(test_xml_file))
         filename = get_temp_file('.tag')
         self.write_tagvalue_file(doc, filename)
-        self.parse_tagvalue_file(filename)
+        new_doc = self.parse_tagvalue_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_tagvalue_json(self):
-        doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
+        doc = self.parse_tagvalue_file(utils_test.get_test_loc(test_tv_file))
         filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
-        self.parse_json_file(filename)
+        new_doc = self.parse_json_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_rdf_json(self):
-        doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
+        doc = self.parse_rdf_file(utils_test.get_test_loc(test_rdf_file))
         filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
-        self.parse_json_file(filename)
+        new_doc = self.parse_json_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_yaml_json(self):
-        doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
+        doc = self.parse_yaml_file(utils_test.get_test_loc(test_yaml_file))
         filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
-        self.parse_json_file(filename)
+        new_doc = self.parse_json_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_xml_json(self):
-        doc = self.parse_xml_file(utils_test.get_test_loc('formats/SPDXXmlExample.xml'))
+        doc = self.parse_xml_file(utils_test.get_test_loc(test_xml_file))
         filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
-        self.parse_json_file(filename)
+        new_doc = self.parse_json_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_json_json(self):
-        doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
+        doc = self.parse_json_file(utils_test.get_test_loc(test_json_file))
         filename = get_temp_file('.json')
         self.write_json_file(doc, filename)
-        self.parse_json_file(filename)
+        new_doc = self.parse_json_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_tagvalue_yaml(self):
-        doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
+        doc = self.parse_tagvalue_file(utils_test.get_test_loc(test_tv_file))
         filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
-        self.parse_yaml_file(filename)
+        new_doc = self.parse_yaml_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_rdf_yaml(self):
-        doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
+        doc = self.parse_rdf_file(utils_test.get_test_loc(test_rdf_file))
         filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
-        self.parse_yaml_file(filename)
+        new_doc = self.parse_yaml_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_json_yaml(self):
-        doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
+        doc = self.parse_json_file(utils_test.get_test_loc(test_json_file))
         filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
-        self.parse_yaml_file(filename)
+        new_doc = self.parse_yaml_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_xml_yaml(self):
-        doc = self.parse_xml_file(utils_test.get_test_loc('formats/SPDXXmlExample.xml'))
+        doc = self.parse_xml_file(utils_test.get_test_loc(test_xml_file))
         filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
-        self.parse_yaml_file(filename)
+        new_doc = self.parse_yaml_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_yaml_yaml(self):
-        doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
+        doc = self.parse_yaml_file(utils_test.get_test_loc(test_yaml_file))
         filename = get_temp_file('.yaml')
         self.write_yaml_file(doc, filename)
-        self.parse_yaml_file(filename)
+        new_doc = self.parse_yaml_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_tagvalue_xml(self):
-        doc = self.parse_tagvalue_file(utils_test.get_test_loc('formats/SPDXTagExample.tag'))
+        doc = self.parse_tagvalue_file(utils_test.get_test_loc(test_tv_file))
         filename = get_temp_file('.xml')
         self.write_xml_file(doc, filename)
-        self.parse_xml_file(filename)
+        new_doc = self.parse_xml_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_rdf_xml(self):
-        doc = self.parse_rdf_file(utils_test.get_test_loc('formats/SPDXRdfExample.rdf'))
+        doc = self.parse_rdf_file(utils_test.get_test_loc(test_rdf_file))
         filename = get_temp_file('.xml')
         self.write_xml_file(doc, filename)
-        self.parse_xml_file(filename)
+        new_doc = self.parse_xml_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_json_xml(self):
-        doc = self.parse_json_file(utils_test.get_test_loc('formats/SPDXJsonExample.json'))
+        doc = self.parse_json_file(utils_test.get_test_loc(test_json_file))
         filename = get_temp_file('.xml')
         self.write_xml_file(doc, filename)
-        self.parse_xml_file(filename)
+        new_doc = self.parse_xml_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_yaml_xml(self):
-        doc = self.parse_yaml_file(utils_test.get_test_loc('formats/SPDXYamlExample.yaml'))
+        doc = self.parse_yaml_file(utils_test.get_test_loc(test_yaml_file))
         filename = get_temp_file('.xml')
         self.write_xml_file(doc, filename)
-        self.parse_xml_file(filename)
+        new_doc = self.parse_xml_file(filename)
+        compare_spdx_documents(doc, new_doc)
 
     def test_xml_xml(self):
-        doc = self.parse_xml_file(utils_test.get_test_loc('formats/SPDXXmlExample.xml'))
+        doc = self.parse_xml_file(utils_test.get_test_loc(test_xml_file))
         filename = get_temp_file('.xml')
         self.write_xml_file(doc, filename)
-        self.parse_xml_file(filename)
+        new_doc = self.parse_xml_file(filename)
+        compare_spdx_documents(doc, new_doc)

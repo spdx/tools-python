@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+import enum
 from functools import total_ordering
 import hashlib
 
@@ -17,7 +17,7 @@ from spdx import document
 from spdx import utils
 
 
-class FileType(object):
+class FileType(enum.IntEnum):
     SOURCE = 1
     BINARY = 2
     ARCHIVE = 3
@@ -30,61 +30,17 @@ class FileType(object):
     SPDX = 10
     VIDEO = 11
 
+    @classmethod
+    def by_name(cls, name):
+        return FileType.__getitem__(name)
 
-FILE_TYPE_TO_XML_DICT = {
-    FileType.SOURCE: "fileType_source",
-    FileType.OTHER: "fileType_other",
-    FileType.BINARY: "fileType_binary",
-    FileType.ARCHIVE: "fileType_archive",
-    FileType.APPLICATION: "fileType_application",
-    FileType.AUDIO: "fileType_audio",
-    FileType.DOCUMENTATION: "fileType_documentation",
-    FileType.IMAGE: "fileType_image",
-    FileType.SPDX: "fileType_spdx",
-    FileType.TEXT: "fileType_text",
-    FileType.VIDEO: "fileType_video"
-}
-FILE_TYPE_TO_STRING_DICT = {
-    FileType.SOURCE: "SOURCE",
-    FileType.OTHER: "OTHER",
-    FileType.BINARY: "BINARY",
-    FileType.ARCHIVE: "ARCHIVE",
-    FileType.APPLICATION: "APPLICATION",
-    FileType.AUDIO: "AUDIO",
-    FileType.DOCUMENTATION: "DOCUMENTATION",
-    FileType.IMAGE: "IMAGE",
-    FileType.SPDX: "SPDX",
-    FileType.TEXT: "TEXT",
-    FileType.VIDEO: "VIDEO",
-}
 
-FILE_TYPE_FROM_XML_DICT = {
-    "fileType_source": FileType.SOURCE,
-    "fileType_binary": FileType.BINARY,
-    "fileType_archive": FileType.ARCHIVE,
-    "fileType_other": FileType.OTHER,
-    "fileType_application": FileType.APPLICATION,
-    "fileType_audio": FileType.AUDIO,
-    "fileType_image": FileType.IMAGE,
-    "fileType_text": FileType.TEXT,
-    "fileType_documentation": FileType.DOCUMENTATION,
-    "fileType_spdx": FileType.SPDX,
-    "fileType_video": FileType.VIDEO,
-}
-
-FILE_TYPE_FROM_STRING_DICT = {
-    "SOURCE": FileType.SOURCE,
-    "BINARY": FileType.BINARY,
-    "ARCHIVE": FileType.ARCHIVE,
-    "OTHER": FileType.OTHER,
-    "APPLICATION": FileType.APPLICATION,
-    "AUDIO": FileType.AUDIO,
-    "IMAGE": FileType.IMAGE,
-    "TEXT": FileType.TEXT,
-    "DOCUMENTATION": FileType.DOCUMENTATION,
-    "SPDX": FileType.SPDX,
-    "VIDEO": FileType.VIDEO,
-}
+FILE_TYPE_TO_XML_DICT = {}
+FILE_TYPE_FROM_XML_DICT = {}
+for ft in list(FileType):
+    xml_name = 'fileType_{}'.format(ft.name.lower())
+    FILE_TYPE_TO_XML_DICT[ft] = xml_name
+    FILE_TYPE_FROM_XML_DICT[xml_name] = ft
 
 
 @total_ordering
@@ -96,8 +52,8 @@ class File(object):
     - spdx_id: Uniquely identify any element in an SPDX document which may be
     referenced by other elements. Mandatory, one. Type: str.
     - comment: File comment str, Optional zero or one.
-      file_types: list of file types.  cardinality 1..#FILE_TYPES
-    - chk_sums: list of checksums, there must be a SHA1 hash, at least.
+    - file_types: list of file types.  cardinality 0..#FILE_TYPES
+    - checksums: list of checksums, there must be a SHA1 hash, at least.
     - conc_lics: Mandatory one. document.License or utils.NoAssert or utils.SPDXNone.
     - licenses_in_file: list of licenses found in file, mandatory one or more.
       document.License or utils.SPDXNone or utils.NoAssert.
@@ -118,7 +74,7 @@ class File(object):
         self.spdx_id = spdx_id
         self.comment = None
         self.file_types = []
-        self.checksums = []
+        self.checksums = {}
         self.conc_lics = None
         self.licenses_in_file = []
         self.license_comment = None
@@ -130,6 +86,7 @@ class File(object):
         self.artifact_of_project_name = []
         self.artifact_of_project_home = []
         self.artifact_of_project_uri = []
+        self.annotations = []
 
     def __eq__(self, other):
         return isinstance(other, File) and self.name == other.name
@@ -140,13 +97,22 @@ class File(object):
     @property
     def chk_sum(self):
         """
-        Backwards compatibility, return first checksum.
+        Backwards compatibility, return the SHA1 checksum.
+        note that this is deprecated, use get_checksum
         """
         return self.get_checksum('SHA1')
 
     @chk_sum.setter
     def chk_sum(self, value):
-        self.set_checksum(value)
+        """
+        backwards compatability, deprecated, please use set_checksum
+        """
+        if isinstance(value, str):
+            self.set_checksum(checksum.Algorithm('SHA1', value))
+        elif isinstance(value, checksum.Algorithm):
+            self.set_checksum(value)
+        else:
+            raise ValueError('cannot call chk_sum with value of type {}.'.format(type(value)))
 
     def add_lics(self, lics):
         self.licenses_in_file.append(lics)
@@ -172,7 +138,6 @@ class File(object):
         """
         messages.push_context(self.name)
         self.validate_concluded_license(messages)
-        self.validate_file_types(messages)
         self.validate_checksum(messages)
         self.validate_licenses_in_file(messages)
         self.validate_copyright(messages)
@@ -228,17 +193,14 @@ class File(object):
 
         return messages
 
-    def validate_file_types(self, messages):
-        if len(self.file_types) < 1:
-            messages.append('At least one file type must be specified.')
-        return messages
-
     def validate_checksum(self, messages):
         if self.get_checksum() is None:
             messages.append("At least one file checksum algorithm must be SHA1")
         return messages
 
     def calculate_checksum(self, hash_algorithm='SHA1'):
+        if hash_algorithm not in checksum.CHECKSUM_ALGORITHMS:
+            raise ValueError('checksum algorithm {} is not supported'.format(hash_algorithm))
         BUFFER_SIZE = 65536
 
         file_hash = hashlib.new(hash_algorithm.lower())
@@ -252,18 +214,15 @@ class File(object):
         return file_hash.hexdigest()
 
     def get_checksum(self, hash_algorithm='SHA1'):
-        for chk_sum in self.checksums:
-            if chk_sum.identifier == hash_algorithm:
-                return chk_sum
-        return None
+        if hash_algorithm not in checksum.CHECKSUM_ALGORITHMS:
+            raise ValueError('checksum algorithm {} is not supported'.format(hash_algorithm))
+        return self.checksums.get(hash_algorithm)
 
     def set_checksum(self, chk_sum):
         if isinstance(chk_sum, checksum.Algorithm):
-            for file_chk_sum in self.checksums:
-                if file_chk_sum.identifier == chk_sum.identifier:
-                    file_chk_sum.value = chk_sum.value
-                    return
-            self.checksums.append(chk_sum)
+            if chk_sum.identifier not in checksum.CHECKSUM_ALGORITHMS:
+                raise ValueError('checksum algorithm {} is not supported'.format(chk_sum.identifier))
+            self.checksums[chk_sum.identifier] = chk_sum.value
 
     def has_optional_field(self, field):
         return getattr(self, field, None) is not None

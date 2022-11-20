@@ -98,5 +98,5 @@ class Annotation(object):
             messages.append("Annotation missing annotation type.")
 
     def validate_spdx_id(self, messages):
-        if self.spdx_id is None:
+        if self.spdx_id is not None and type(self.spdx_id) != str :
             messages.append("Annotation missing SPDX Identifier Reference.")

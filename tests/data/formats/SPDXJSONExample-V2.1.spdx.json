@@ -221,7 +221,7 @@
                 "name": "from linux kernel", 
                 "copyrightText": "Copyright 2008-2010 John Smith", 
                 "licenseConcluded": "Apache-2.0", 
-                "licenseInfoFromSnippet": [
+                "licenseInfoInSnippet": [
                     "Apache-2.0"
                 ], 
                 "licenseComments": "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.", 

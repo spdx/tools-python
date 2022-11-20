@@ -199,10 +199,25 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
             algo = chk_sum.get('algorithm') or 'SHA1'
             if algo.startswith('checksumAlgorithm_'):
                 algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(algo) or 'SHA1'
-            doc.packages[-1].set_checksum(checksum.Algorithm(identifier=algo,
-                                                             value=chk_sum.get('checksumValue')))
+            doc.packages[-1].set_checksum(checksum.Algorithm(identifier=algo, value=chk_sum.get('checksumValue')))
         elif isinstance(chk_sum, checksum.Algorithm):
             doc.packages[-1].set_checksum(chk_sum)
+        elif isinstance(chk_sum, str):
+            doc.packages[-1].set_checsum(checksum.Algorithm('SHA1', chk_sum))
+        else:
+            raise ValueError('cannot set package checksum to value of type {}'.format(type(chk_sum)))
+
+    def set_pkg_ext_ref(self, doc, pkg_ext_ref):
+        self.assert_package_exists()
+        if isinstance(pkg_ext_ref, dict):
+            reference_category = pkg_ext_ref.get('referenceCategory')
+            reference_locator = pkg_ext_ref.get('referenceLocator')
+            reference_type = pkg_ext_ref.get('referenceType')
+            comment = pkg_ext_ref.get('comment')
+            new_ref = package.ExternalPackageRef(reference_category, reference_type, reference_locator, comment)
+            doc.packages[-1].add_external_references(new_ref)
+        else:
+            raise ValueError('cannot set package external reference to value of type {}'.format(type(pkg_ext_ref)))
 
     def set_pkg_source_info(self, doc, text):
         """

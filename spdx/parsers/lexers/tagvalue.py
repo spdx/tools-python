@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import re
 from ply import lex
 
 
@@ -114,18 +115,18 @@ class Lexer(object):
     states = (("text", "exclusive"),)
 
     tokens = [
-        "TEXT",
-        "TOOL_VALUE",
-        "UNKNOWN_TAG",
-        "ORG_VALUE",
-        "PERSON_VALUE",
-        "DATE",
-        "LINE",
-        "CHKSUM",
-        "DOC_REF_ID",
-        "DOC_URI",
-        "EXT_DOC_REF_CHKSUM",
-    ] + list(reserved.values())
+                 "TEXT",
+                 "TOOL_VALUE",
+                 "UNKNOWN_TAG",
+                 "ORG_VALUE",
+                 "PERSON_VALUE",
+                 "DATE",
+                 "LINE",
+                 "CHKSUM",
+                 "DOC_REF_ID",
+                 "DOC_URI",
+                 "EXT_DOC_REF_CHKSUM",
+             ] + list(reserved.values())
 
     def t_text(self, t):
         r":\s*<text>"
@@ -135,7 +136,7 @@ class Lexer(object):
     def t_text_end(self, t):
         r"</text>\s*"
         t.type = "TEXT"
-        t.value = t.lexer.lexdata[t.lexer.text_start : t.lexer.lexpos]
+        t.value = t.lexer.lexdata[t.lexer.text_start: t.lexer.lexpos]
         t.lexer.lineno += t.value.count("\n")
         t.value = t.value.strip()
         t.lexer.begin("INITIAL")
@@ -149,7 +150,8 @@ class Lexer(object):
         print("Lexer error in text state")
 
     def t_CHKSUM(self, t):
-        r":\s*(SHA.*):\s*([a-f0-9]{40,128})"
+        r":\s*(ADLER32|BLAKE2b-256|BLAKE2b-384|BLAKE2b-512|BLAKE3|MD2|MD4|MD5|MD6|" \
+        "SHA1|SHA224|SHA256|SHA384|SHA512|SHA3-256|SHA3-384|SHA3-512):\s*([a-f0-9]*)"
         t.value = t.value[1:].strip()
         return t
 

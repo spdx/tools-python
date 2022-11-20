@@ -12,7 +12,7 @@
 from rdflib import Literal
 
 from spdx import document
-from spdx.file import FILE_TYPE_TO_XML_DICT, FILE_TYPE_TO_STRING_DICT
+from spdx import utils
 
 
 class BaseWriter(object):
@@ -31,13 +31,12 @@ class BaseWriter(object):
         """
         Return a string representation of a license or spdx.utils special object
         """
-        if isinstance(
-            license_field, (document.LicenseDisjunction, document.LicenseConjunction)
-        ):
+        if isinstance(license_field, (document.LicenseDisjunction, document.LicenseConjunction)):
             return "({})".format(license_field)
-
-        if isinstance(license_field, document.License):
+        elif isinstance(license_field, document.License):
             license_str = license_field.identifier.__str__()
+        elif isinstance(license_field, utils.SPDXNone):
+            pass
         else:
             license_str = license_field.__str__()
         return license_str
@@ -50,6 +49,16 @@ class BaseWriter(object):
         #                   'checksumValue': checksum_field.value}
         #return checksum_object
         return {'algorithm': checksum_field.identifier, 'checksumValue': checksum_field.value}
+
+    def annotation_to_dict(self, annotation):
+        ad = {'annotationDate': annotation.annotation_date,
+              'annotationType': annotation.annotation_type,
+              'annotator': annotation.annotator,
+              'comment': annotation.comment,
+              }
+        if annotation.spdx_id is not None:
+            ad['SPDXID'] = annotation.spdx_id
+        return ad
 
     def spdx_id(self, spdx_id_field):
         return spdx_id_field.__str__().split("#")[-1]
@@ -91,19 +100,13 @@ class PackageWriter(BaseWriter):
 
     def package_verification_code(self, package):
         """
-        Represent the package verification code information as
-        as python dictionary
+        Represent the package verification code information as python dictionary
         """
-
-        package_verification_code_object = dict()
-
-        package_verification_code_object["packageVerificationCodeValue"] = package.verif_code
-
+        package_verification_code_object = {"packageVerificationCodeValue": package.verif_code}
         if package.verif_exc_files:
             package_verification_code_object[
                 "packageVerificationCodeExcludedFiles"
             ] = package.verif_exc_files
-
         return package_verification_code_object
 
     def create_package_info(self, package):
@@ -111,15 +114,16 @@ class PackageWriter(BaseWriter):
         package_object["SPDXID"] = self.spdx_id(package.spdx_id)
         package_object["name"] = package.name
         package_object["downloadLocation"] = package.download_location.__str__()
-        package_object["packageVerificationCode"] = self.package_verification_code(
-            package
-        )
-        package_object["licenseConcluded"] = self.license(package.conc_lics)
-        package_object["licenseInfoFromFiles"] = list(
-            map(self.license, package.licenses_from_files)
-        )
-        package_object["licenseDeclared"] = self.license(package.license_declared)
-        package_object["copyrightText"] = package.cr_text.__str__()
+        if package.files_analyzed:
+            package_object["packageVerificationCode"] = self.package_verification_code(package)
+        if not isinstance(package.conc_lics, utils.SPDXNone):
+            package_object["licenseConcluded"] = self.license(package.conc_lics)  # TODO
+        if package.are_files_analyzed and len(package.licenses_from_files) > 0:
+            package_object["licenseInfoFromFiles"] = list(map(self.license, package.licenses_from_files))
+        if not isinstance(package.license_declared, utils.SPDXNone):
+            package_object["licenseDeclared"] = self.license(package.license_declared)  # TODO
+        if package.has_optional_field('cr_text'):
+            package_object["copyrightText"] = package.cr_text.__str__()
 
         if package.has_optional_field("version"):
             package_object["versionInfo"] = package.version
@@ -143,11 +147,9 @@ class PackageWriter(BaseWriter):
             package_object["originator"] = package.originator.__str__()
 
         package_object["checksums"] = []
-        for chk_sum in package.checksums:
-            package_object["checksums"].append(self.checksum_to_dict(chk_sum))
-        sha1 = package.get_checksum('SHA1')
-        if sha1 is not None:
-            package_object['sha1'] = sha1.value
+        for ident, value in package.checksums.items():
+            if ident is not None and value is not None:
+                package_object["checksums"].append({'algorithm': ident, 'checksumValue': value})
 
         if package.has_optional_field("description"):
             package_object["description"] = package.description
@@ -157,6 +159,36 @@ class PackageWriter(BaseWriter):
 
         if package.has_optional_field("homepage"):
             package_object["homepage"] = package.homepage.__str__()
+
+        if package.has_files is not None and len(package.has_files) > 0:
+            package_object['hasFiles'] = package.has_files
+
+        package_object['filesAnalyzed'] = package.are_files_analyzed
+
+        '''
+        new package attributes need to be added, I think.
+        
+        self.annotations = []
+        self.primary_purpose = None
+        self.built_date = None
+        self.release_date = None
+        self.valid_until_date = None
+        '''
+
+        if len(package.annotations) > 0:
+            package_object['annotations'] = [self.annotation_to_dict(annotation) for annotation in package.annotations]
+
+        if package.has_optional_field('primary_purpose'):
+            package_object['primaryPackagePurpose'] = package.primary_purpose
+
+        if package.has_optional_field('built_date'):
+            package_object['builtDate'] = package.built_date
+
+        if package.has_optional_field('release_date'):
+            package_object['releaseDate'] = package.release_date
+
+        if package.has_optional_field('valid_until_date'):
+            package_object['validUntilDate'] = package.valid_until_date
 
         return package_object
 
@@ -184,63 +216,63 @@ class FileWriter(BaseWriter):
 
         return artifact_of_objects
 
-    def create_file_info(self, package):
-        file_objects = []
-        files = package.files
+    def create_file_info(self, file):
+        file_object = dict()
 
-        for file in files:
-            file_object = dict()
+        file_object["fileName"] = file.name
+        file_object["SPDXID"] = self.spdx_id(file.spdx_id)
+        file_object["checksums"] = []
+        for ident, value in file.checksums.items():
+            if ident is not None and value is not None:
+                file_object["checksums"].append({'algorithm': ident, 'checksumValue': value})
 
-            file_object["name"] = file.name
-            file_object["SPDXID"] = self.spdx_id(file.spdx_id)
-            file_object["checksums"] = []
-            for chk_sum in file.checksums:
-                file_object["checksums"].append(self.checksum_to_dict(chk_sum))
-            file_object["licenseConcluded"] = self.license(file.conc_lics)
-            file_object["licenseInfoFromFiles"] = list(
-                map(self.license, file.licenses_in_file)
-            )
-            file_object["copyrightText"] = file.copyright.__str__()
-            file_object["sha1"] = file.get_checksum().value
+        file_object["licenseConcluded"] = self.license(file.conc_lics)
+        file_object["licenseInfoInFiles"] = list(
+            map(self.license, file.licenses_in_file)
+        )
+        if file.copyright is not None:
+            file_object["copyrightText"] = file.copyright
+        file_object["sha1"] = file.get_checksum('SHA1')
 
-            if file.has_optional_field("comment"):
-                file_object["comment"] = file.comment
+        if file.has_optional_field("comment"):
+            file_object["comment"] = file.comment
 
-            if file.has_optional_field("file_types"):
-                types = []
-                for file_type in file.file_types:
-                    types.append(FILE_TYPE_TO_STRING_DICT.get(file_type))
-                file_object["fileTypes"] = types
+        if file.has_optional_field("file_types"):
+            types = []
+            for file_type in file.file_types:
+                types.append(file_type.name)
+            file_object["fileTypes"] = types
 
-            if file.has_optional_field("license_comment"):
-                file_object["licenseComments"] = file.license_comment
+        if file.has_optional_field("license_comment"):
+            file_object["licenseComments"] = file.license_comment
 
-            if file.has_optional_field("attribution_text"):
-                file_object["attributionTexts"] = [file.attribution_text]
+        if file.has_optional_field("attribution_text"):
+            file_object["attributionTexts"] = [file.attribution_text]
 
-            if file.has_optional_field("notice"):
-                file_object["noticeText"] = file.notice
+        if file.has_optional_field("notice"):
+            file_object["noticeText"] = file.notice
 
-            if file.contributors:
-                file_object["fileContributors"] = file.contributors.__str__()
+        if file.contributors:
+            file_object["fileContributors"] = file.contributors
 
-            if file.dependencies:
-                file_object["fileDependencies"] = file.dependencies
+        if file.dependencies:
+            file_object["fileDependencies"] = file.dependencies
 
-            valid_artifacts = (
-                file.artifact_of_project_name
-                and len(file.artifact_of_project_name)
-                == len(file.artifact_of_project_home)
-                and len(file.artifact_of_project_home)
-                == len(file.artifact_of_project_uri)
-            )
+        if len(file.annotations) > 0:
+            file_object['annotations'] = [self.annotation_to_dict(annotation) for annotation in file.annotations]
 
-            if valid_artifacts:
-                file_object["artifactOf"] = self.create_artifact_info(file)
+        valid_artifacts = (
+            file.artifact_of_project_name
+            and len(file.artifact_of_project_name)
+            == len(file.artifact_of_project_home)
+            and len(file.artifact_of_project_home)
+            == len(file.artifact_of_project_uri)
+        )
 
-            file_objects.append({"File": file_object})
+        if valid_artifacts:
+            file_object["artifactOf"] = self.create_artifact_info(file)
 
-        return file_objects
+        return file_object
 
 
 class ReviewInfoWriter(BaseWriter):
@@ -286,9 +318,13 @@ class AnnotationInfoWriter(BaseWriter):
 
         for annotation in self.document.annotations:
             annotation_object = dict()
-            annotation_object["SPDXID"] = self.spdx_id(annotation.spdx_id)
+            if annotation.spdx_id is not None:
+                annotation_object["SPDXID"] = self.spdx_id(annotation.spdx_id)
             annotation_object["annotator"] = annotation.annotator.__str__()
-            annotation_object["annotationDate"] = annotation.annotation_date_iso_format
+            if annotation.annotation_date_iso_format is not None:
+                annotation_object["annotationDate"] = annotation.annotation_date_iso_format
+            else:
+                annotation_object["annotationDate"] = annotation.annotation_date
             annotation_object["annotationType"] = annotation.annotation_type
             annotation_object["comment"] = annotation.comment
 
@@ -338,24 +374,28 @@ class SnippetWriter(BaseWriter):
         for snippet in snippets:
             snippet_object = dict()
             snippet_object["SPDXID"] = self.spdx_id(snippet.spdx_id)
-            snippet_object["copyrightText"] = snippet.copyright
-            snippet_object["fileId"] = self.spdx_id(snippet.snip_from_file_spdxid)
-            snippet_object["licenseConcluded"] = self.license(snippet.conc_lics)
-            snippet_object["licenseInfoFromSnippet"] = list(
-                map(self.license, snippet.licenses_in_snippet)
-            )
-
-            if snippet.has_optional_field("name"):
-                snippet_object["name"] = snippet.name
-
             if snippet.has_optional_field("comment"):
                 snippet_object["comment"] = snippet.comment
+            snippet_object["copyrightText"] = snippet.copyright
+            if snippet.has_optional_field("license_comment"):
+                snippet_object["licenseComments"] = snippet.license_comment
+            snippet_object["licenseConcluded"] = self.license(snippet.conc_lics)
+            snippet_object["licenseInfoInSnippets"] = list(map(self.license, snippet.licenses_in_snippet))
+            if snippet.has_optional_field("name"):
+                snippet_object["name"] = snippet.name
+            ranges = []
+            for ranje in snippet.ranges:
+                ranges.append(ranje)
+            snippet_object['ranges'] = ranges
+
+            snippet_object["snippetFromFile"] = self.spdx_id(snippet.snip_from_file_spdxid)
+
+
+
+
 
             if snippet.has_optional_field("attribution_text"):
                 snippet_object["attributionTexts"] = [snippet.attribution_text]
-
-            if snippet.has_optional_field("license_comment"):
-                snippet_object["licenseComments"] = snippet.license_comment
 
             snippet_info_objects.append(snippet_object)
 
@@ -402,10 +442,10 @@ class ExtractedLicenseWriter(BaseWriter):
             if extracted_license.cross_ref:
                 if isinstance(extracted_license.cross_ref, Literal):
                     extracted_license_object[
-                        "seeAlso"
+                        "seeAlsos"
                     ] = extracted_license.cross_ref.toPython()
                 else:
-                    extracted_license_object["seeAlso"] = extracted_license.cross_ref
+                    extracted_license_object["seeAlsos"] = extracted_license.cross_ref
 
             if extracted_license.comment:
                 if isinstance(extracted_license.comment, Literal):
@@ -464,7 +504,6 @@ class Writer(
 
     def create_document(self):
         self.document_object = dict()
-
         self.document_object["spdxVersion"] = self.document.version.__str__()
         self.document_object["documentNamespace"] = self.document.namespace.__str__()
         self.document_object["creationInfo"] = self.create_creation_info()
@@ -475,10 +514,20 @@ class Writer(
         package_objects = []
         for package in self.document.packages:
             package_info_object = self.create_package_info(package)
-            package_info_object["files"] = self.create_file_info(package)
-            package_objects.append({"Package": package_info_object})
+            package_objects.append(package_info_object)
 
-        self.document_object["documentDescribes"] = package_objects
+        file_objects = []
+        for file in self.document.files:
+            file_info_object = self.create_file_info(file)
+            file_objects.append(file_info_object)
+
+        if len(self.document.describes) > 0:
+            self.document_object["documentDescribes"] = self.document.describes
+
+        if len(package_objects) > 0:
+            self.document_object['packages'] = package_objects
+        if len(file_objects) > 0:
+            self.document_object['files'] = file_objects
 
         if self.document.has_comment:
             self.document_object["comment"] = self.document.comment
@@ -505,4 +554,4 @@ class Writer(
         if self.document.relationships:
             self.document_object["relationships"] = self.create_relationship_info()
 
-        return {"Document": self.document_object}
+        return self.document_object

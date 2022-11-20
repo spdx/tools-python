@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import enum
 import hashlib
 
 from functools import reduce
@@ -17,6 +18,38 @@ from spdx import checksum
 from spdx import creationinfo
 from spdx import document
 from spdx import utils
+
+
+class PackagePrimaryPurpose(enum.IntEnum):
+    APPLICATION = 1
+    FRAMEWORK = 2
+    LIBRARY = 3
+    CONTAINER = 4
+    OPERATINGSYSTEM = 5
+    DEVICE = 6
+    FIRMWARE = 7
+    SOURCE = 8
+    ARCHIVE = 9
+    FILE = 10
+    INSTALL = 11
+    OTHER = 12
+
+    @classmethod
+    def by_name(cls, lookup):
+        if lookup.lower() == 'operating-system':
+            lookup = 'operatingsystem'
+        return PackagePrimaryPurpose.__getitem__(lookup)
+
+
+PKG_PURPOSE_TO_XML_DICT = {}
+PKG_PURPOSE_FROM_XML_DICT = {}
+for ppp in list(PackagePrimaryPurpose):
+    name = ppp.name.lower()
+    if name == 'operatingsystem':  # so this is a little weird.
+        name = 'operating-system'
+    xml_name = 'packagePurpose_{}'.format(ppp.name.lower())
+    PKG_PURPOSE_TO_XML_DICT[ppp] = xml_name
+    PKG_PURPOSE_FROM_XML_DICT[xml_name] = ppp
 
 
 class Package(object):
@@ -36,12 +69,12 @@ class Package(object):
      been available for or subjected to analysis when creating the SPDX
      document. If "false" indicates packages that represent metadata or URI
      references to a project, product, artifact, distribution or a component.
-     If set to "false", the package must not contain any files.
+     If set to "false", the package must not contain any has_files.
      Optional, boolean.
      - homepage: Optional, URL as string or NONE or NO_ASSERTION.
      - verif_code: string. Mandatory if files_analyzed is True or None (omitted)
        Must be None (omitted) if files_analyzed is False
-     - check_sum: Optional , spdx.checksum.Algorithm.
+     - checksums: Optional, dict of values keyed by algorithm name
      - source_info: Optional string.
      - conc_lics: Mandatory spdx.document.License or spdx.utils.SPDXNone or
      - spdx.utils.NoAssert.
@@ -55,7 +88,7 @@ class Package(object):
      - description: Optional str.
      - comment: Comments about the package being described, optional one.
      Type: str
-     - files: List of files in package, atleast one.
+     - has_files: List SPDXIDs of files in package, 0..n or missing
      - verif_exc_files : list of file names excluded from verification code or None.
      - ext_pkg_refs : External references referenced within the given package.
      Optional, one or many. Type: ExternalPackageRef
@@ -82,7 +115,7 @@ class Package(object):
         self.files_analyzed = None
         self.homepage = None
         self.verif_code = None
-        self.checksums = []
+        self.checksums = {}
         self.source_info = None
         self.conc_lics = None
         self.license_declared = None
@@ -93,29 +126,38 @@ class Package(object):
         self.description = None
         self.comment = None
         self.attribution_text = None
-        self.files = []
+        self.has_files = []
         self.verif_exc_files = []
-        self.pkg_ext_refs = []
+        self.external_references = []
+        self.annotations = []
+        self.primary_purpose = []
+        self.built_date = None
+        self.release_date = None
+        self.valid_until_date = None
 
     @property
     def check_sum(self):
         """
         Backwards compatibility, return first checksum.
+        deprecated, use get_checksum()
         """
         return self.get_checksum('SHA1')
 
     @check_sum.setter
     def check_sum(self, value):
-        self.set_checksum(value)
+        if isinstance(value, str):
+            self.set_checksum(checksum.Algorithm('SHA1', value))
+        elif isinstance(value, checksum.Algorithm):
+            self.set_checksum(value)
+        else:
+            raise ValueError('cannot call check_sum with value of type {}.'.format(type(value)))
 
     @property
     def are_files_analyzed(self):
-        return self.files_analyzed is not False
-        # as default None Value is False, previous line is simplification of
-        # return self.files_analyzed or self.files_analyzed is None
-
-    def add_file(self, fil):
-        self.files.append(fil)
+        if self.files_analyzed is None:
+            return True  # default is True
+        else:
+            return self.files_analyzed
 
     def add_lics_from_file(self, lics):
         self.licenses_from_files.append(lics)
@@ -123,8 +165,11 @@ class Package(object):
     def add_exc_file(self, filename):
         self.verif_exc_files.append(filename)
 
-    def add_pkg_ext_refs(self, pkg_ext_ref):
-        self.pkg_ext_refs.append(pkg_ext_ref)
+    def add_external_references(self, pkg_ext_ref):
+        if isinstance(pkg_ext_ref, ExternalPackageRef):
+            self.external_references.append(pkg_ext_ref)
+        else:
+            raise ValueError('cannot add external reference of type {}'.format(type(pkg_ext_ref)))
 
     def validate(self, messages):
         """
@@ -136,8 +181,8 @@ class Package(object):
         self.validate_checksum(messages)
         self.validate_optional_str_fields(messages)
         self.validate_mandatory_str_fields(messages)
-        self.validate_files(messages)
-        self.validate_pkg_ext_refs(messages)
+        self.validate_has_files(messages)
+        self.validate_external_references(messages)
         self.validate_mandatory_fields(messages)
         self.validate_optional_fields(messages)
         messages.pop_context()
@@ -145,7 +190,7 @@ class Package(object):
         return messages
 
     def validate_files_analyzed(self, messages):
-        if self.files_analyzed not in [ True, False, None ]:
+        if self.files_analyzed not in [True, False, None]:
             messages.append(
                 'Package files_analyzed must be True or False or None (omitted)'
             )
@@ -175,8 +220,8 @@ class Package(object):
 
         return messages
 
-    def validate_pkg_ext_refs(self, messages):
-        for ref in self.pkg_ext_refs:
+    def validate_external_references(self, messages):
+        for ref in self.external_references:
             if isinstance(ref, ExternalPackageRef):
                 messages = ref.validate(messages)
             else:
@@ -222,16 +267,10 @@ class Package(object):
 
         return messages
 
-    def validate_files(self, messages):
+    def validate_has_files(self, messages):
         if self.are_files_analyzed:
-            if not self.files:
-                messages.append(
-                    "Package must have at least one file."
-                )
-            else:
-                for f in self.files:
-                    messages = f.validate(messages)
-
+            if self.has_files is None or len(self.has_files) == 0:
+                messages.append('Package must have at least one has_file.')
         return messages
 
     def validate_optional_str_fields(self, messages):
@@ -256,7 +295,7 @@ class Package(object):
         """Fields marked as Mandatory and of type string in class
         docstring must be of a type that provides __str__ method.
         """
-        FIELDS = ["name", "spdx_id", "download_location", "cr_text"]
+        FIELDS = ["name", "spdx_id", "download_location"]
         if self.are_files_analyzed:
             FIELDS = FIELDS + ["verif_code"]
         self.validate_str_fields(FIELDS, False, messages)
@@ -277,25 +316,38 @@ class Package(object):
                     )
                     # Continue checking.
             elif not optional:
+                pass
                 messages.append("Package {0} can not be None.".format(field_str))
 
         return messages
 
     def validate_checksum(self, messages):
-        if self.get_checksum() is None:
-            messages.append("At least one package checksum algorithm must be SHA1")
+        if self.checksums is not None and len(self.checksums) > 0:
+            found_sha1 = False
+            for algo, value in self.checksums.items():
+                if algo not in checksum.CHECKSUM_ALGORITHMS:
+                    messages.append('Unknown package checksum algorithm {}'.format(algo))
+                if algo == 'SHA1':
+                    found_sha1 = True
+            if not found_sha1:
+                messages.append('At least one package checksum algorithm must be SHA1')
         return messages
 
-    def calc_verif_code(self):
+    def calc_verif_code(self, document):
+        """
+        calculate the new package hash code using related document
+        """
         list_of_file_hashes = []
         hash_algo_name = "SHA1"
-        for file_entry in self.files:
-            file_chksum = file_entry.get_checksum(hash_algo_name)
-            if file_chksum is not None:
-                file_ch = file_chksum.value
-            else:
-                file_ch = file_entry.calculate_checksum(hash_algo_name)
-            list_of_file_hashes.append(file_ch)
+        for spdx_id in self.has_files:
+            for f in document.files:
+                if f.spdx_id == spdx_id:
+                    file_chksum = f.get_checksum(hash_algo_name)
+                    if file_chksum is not None:
+                        file_ch = file_chksum.value
+                    else:
+                        file_ch = f.calculate_checksum(hash_algo_name)
+                    list_of_file_hashes.append(file_ch)
 
         list_of_file_hashes.sort()
 
@@ -304,18 +356,21 @@ class Package(object):
         return hasher.hexdigest()
 
     def get_checksum(self, hash_algorithm='SHA1'):
-        for chk_sum in self.checksums:
-            if chk_sum.identifier == hash_algorithm:
-                return chk_sum
-        return None
+        if hash_algorithm not in checksum.CHECKSUM_ALGORITHMS:
+            raise ValueError('checksum algorithm {} is not supported'.format(hash_algorithm))
+        value = self.checksums.get(hash_algorithm)
+        if value is not None:
+            return checksum.Algorithm(hash_algorithm, value)
+        else:
+            return None
 
-    def set_checksum(self, new_checksum):
-        if isinstance(new_checksum, checksum.Algorithm):
-            for c in self.checksums:
-                if c.identifier == new_checksum.identifier:
-                    c.value = new_checksum.value
-                    return
-            self.checksums.append(new_checksum)
+    def set_checksum(self, chk_sum):
+        if isinstance(chk_sum, checksum.Algorithm):
+            if chk_sum.identifier not in checksum.CHECKSUM_ALGORITHMS:
+                raise ValueError('checksum algorithm {} is not supported'.format(chk_sum.identifier))
+            self.checksums[chk_sum.identifier] = chk_sum.value
+        else:
+            raise ValueError('unknown chk_sum object type {}'.format(type(chk_sum)))
 
     def has_optional_field(self, field):
         return getattr(self, field, None) is not None

@@ -25,6 +25,7 @@ from tests.utils_test import TestParserUtils
 
 def check_document(document, expected_loc, regen=False):
     result = TestParserUtils.to_dict(document)
+    result.pop('documentNamespace')  # we do not compare this since it is supposed to be different for every doc.
 
     if regen:
         with open(expected_loc, 'w') as o:
@@ -32,6 +33,7 @@ def check_document(document, expected_loc, regen=False):
 
     with io.open(expected_loc, encoding='utf-8') as ex:
         expected = json.load(ex, object_pairs_hook=OrderedDict)
+    expected.pop('documentNamespace')  # not comparing namespace, it should be different.
     expected_json = json.dumps(expected, sort_keys=True, indent=2)
     result_json = json.dumps(result, sort_keys=True, indent=2)
     assert result_json == expected_json
@@ -42,7 +44,7 @@ class TestParser(TestCase):
 
     def test_json_parser(self):
         parser = jsonparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('formats/SPDXJsonExample.json')
+        test_file = utils_test.get_test_loc('formats/SPDXJSONExample-V2.3.spdx.json')
         with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
@@ -50,7 +52,7 @@ class TestParser(TestCase):
 
     def test_yaml_parser(self):
         parser = yamlparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('formats/SPDXYamlExample.yaml')
+        test_file = utils_test.get_test_loc('formats/SPDXYAMLExample-v2.3.spdx.yaml')
         with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
@@ -58,17 +60,8 @@ class TestParser(TestCase):
 
     def test_xml_parser(self):
         parser = xmlparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('formats/SPDXXmlExample.xml')
+        test_file = utils_test.get_test_loc('formats/SPDXXMLExample-v2.3.spdx.xml')
         with io.open(test_file, encoding='utf-8') as f:
             document, _ = parser.parse(f)
         expected_loc = utils_test.get_test_loc('doc_parse/expected.json')
-        check_document(document, expected_loc)
-
-    def test_sbomyaml_parser(self):
-        parser = yamlparser.Parser(Builder(), StandardLogger())
-        test_file = utils_test.get_test_loc('formats/SPDXSBOMExample.spdx.yml')
-        with io.open(test_file, encoding='utf-8') as f:
-            document, errors = parser.parse(f)
-            assert not errors
-        expected_loc = utils_test.get_test_loc('doc_parse/SBOMexpected.json')
         check_document(document, expected_loc)

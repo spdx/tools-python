@@ -74,7 +74,7 @@ class TestDocument(TestCase):
 
     def test_document_validate_failures_returns_informative_messages(self):
         doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'),
-                       'Sample_Document-V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       'Sample_Document-V2.3', spdx_id='SPDXRef-DOCUMENT',
                        namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
         pack = doc.package = Package('some/path', NoAssert())
         pack.check_sum = Algorithm('SHA256', 'SOME-SHA256')
@@ -88,17 +88,16 @@ class TestDocument(TestCase):
         messages = ErrorMessages()
         messages = doc.validate(messages)
         expected = [
-            'Sample_Document-V2.1: Creation info missing created date.',
-            'Sample_Document-V2.1: No creators defined, must have at least one.',
-            'Sample_Document-V2.1: some/path: At least one package checksum algorithm must be SHA1',
-            'Sample_Document-V2.1: some/path: Package concluded license must be instance '
+            'Sample_Document-V2.3: Creation info missing created date.',
+            'Sample_Document-V2.3: No creators defined, must have at least one.',
+            'Sample_Document-V2.3: some/path: At least one package checksum algorithm must be SHA1',
+            'Sample_Document-V2.3: some/path: Package concluded license must be instance '
             'of spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License',
-            'Sample_Document-V2.1: some/path: Package cr_text can not be None.',
-            'Sample_Document-V2.1: some/path: Package declared license must be instance '
+            'Sample_Document-V2.3: some/path: Package declared license must be instance '
             'of spdx.utils.SPDXNone or spdx.utils.NoAssert or spdx.document.License',
-            'Sample_Document-V2.1: some/path: Package download_location can not be None.',
-            'Sample_Document-V2.1: some/path: Package must have at least one file.',
-            'Sample_Document-V2.1: some/path: Package verif_code can not be None.'
+            'Sample_Document-V2.3: some/path: Package download_location can not be None.',
+            'Sample_Document-V2.3: some/path: Package must have at least one has_file.',
+            'Sample_Document-V2.3: some/path: Package verif_code can not be None.'
         ]
         assert sorted(expected) == sorted(messages)
 
@@ -129,7 +128,8 @@ class TestDocument(TestCase):
         file1.add_lics(lic1)
 
         package.add_lics_from_file(lic1)
-        package.add_file(file1)
+        package.has_files.append(file1.spdx_id)
+        doc.add_file(file1)
         messages = ErrorMessages()
         messages = doc.validate(messages)
         assert not messages
@@ -194,8 +194,10 @@ class TestWriters(TestCase):
 
         file1.add_lics(lic1)
 
+        package.has_files = [file1.spdx_id]
+
         package.add_lics_from_file(lic1)
-        package.add_file(file1)
+        doc.add_file(file1)
         return doc
 
     def test_write_document_rdf_with_validate(self):

@@ -1,4 +1,3 @@
-
 # Copyright (c) the SPDX tools authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -155,7 +154,7 @@ def load_and_clean_tv(location):
     with io.open(location, encoding='utf-8') as l:
         content = l.read()
     content = [l for l in content.splitlines(False)
-        if l and l.strip() and not l.startswith(('Creator: ', 'Created: ',))]
+               if l and l.strip() and not l.startswith(('Creator: ', 'Created: ',))]
     return '\n'.join(content)
 
 
@@ -184,7 +183,7 @@ def load_and_clean_json(location):
     data = json.loads(content)
 
     if 'creationInfo' in data['Document']:
-        del(data['Document']['creationInfo'])
+        del (data['Document']['creationInfo'])
 
     return sort_nested(data)
 
@@ -214,7 +213,7 @@ def load_and_clean_yaml(location):
     data = yaml.safe_load(content)
 
     if 'creationInfo' in data['Document']:
-        del(data['Document']['creationInfo'])
+        del (data['Document']['creationInfo'])
 
     return sort_nested(data)
 
@@ -244,12 +243,12 @@ def load_and_clean_xml(location):
     with io.open(location, encoding='utf-8') as f:
         document, _ = parser.parse(f)
 
-    data = {'SpdxDocument': {'Document':  TestParserUtils.to_dict(document)}}
+    data = {'SpdxDocument': {'Document': TestParserUtils.to_dict(document)}}
 
     if 'created' in data['SpdxDocument']['Document']:
-        del(data['SpdxDocument']['Document']['created'])
+        del (data['SpdxDocument']['Document']['created'])
     if 'creators' in data['SpdxDocument']['Document']:
-        del(data['SpdxDocument']['Document']['creators'])
+        del (data['SpdxDocument']['Document']['creators'])
 
     return data
 
@@ -277,6 +276,17 @@ class TestParserUtils(object):
     """
 
     @classmethod
+    def annotation_to_dict(cls, annotation):
+        annotation_dict = OrderedDict()
+        if annotation.spdx_id is not None:
+            annotation_dict['spdx_id'] = annotation.spdx_id
+        annotation_dict['annotation_date'] = annotation.annotation_date
+        annotation_dict['comment'] = annotation.comment
+        annotation_dict['annotation_type'] = annotation.annotation_type
+        annotation_dict['annotator'] = annotation.annotator
+        return annotation_dict
+
+    @classmethod
     def license_to_dict(cls, license):
         """
         Represents spdx.document.License, spdx.document.LicenseConjunction or
@@ -284,7 +294,7 @@ class TestParserUtils(object):
         """
         CONJ_SEP = re.compile(' AND | and ')
         DISJ_SEP = re.compile(' OR | or ')
-        if license is None:
+        if license is None or isinstance(license, spdx.utils.SPDXNone):
             return None
         license_dict = OrderedDict()
 
@@ -356,6 +366,11 @@ class TestParserUtils(object):
         lics_from_files = []
         if package.are_files_analyzed:
             lics_from_files = sorted(package.licenses_from_files, key=lambda lic: lic.identifier)
+        chk_sums = []
+        algos = sorted(package.checksums.keys())
+        for algo in algos:
+            chk_sums.append(OrderedDict([('identifier', algo), ('value', package.checksums[algo])]))
+
         return OrderedDict([
             ('id', package.spdx_id),
             ('name', package.name),
@@ -372,13 +387,18 @@ class TestParserUtils(object):
             ('licenseDeclared', cls.license_to_dict(package.license_declared)),
             ('copyrightText', package.cr_text),
             ('licenseComment', package.license_comment),
-            ('checksum', cls.checksum_to_dict(package.check_sum)),
-            ('files', cls.files_to_list(sorted(package.files))),
+            ('checksums', chk_sums),
+            ('hasFiles', sorted(package.has_files)),
             ('licenseInfoFromFiles', [cls.license_to_dict(lic) for lic in lics_from_files]),
+            ('annotations', [cls.annotation_to_dict(annotation) for annotation in package.annotations]),
+            ('primaryPurpose', package.primary_purpose),
+            ('builtDate', package.built_date),
+            ('releaseDate', package.release_date),
+            ('validUntilDate', package.valid_until_date),
             ('verificationCode', OrderedDict([
                 ('value', package.verif_code),
                 ('excludedFilesNames', sorted(package.verif_exc_files))])
-            )
+             ),
         ])
 
     @classmethod
@@ -390,10 +410,11 @@ class TestParserUtils(object):
 
         for file in files:
             lics_from_files = sorted(file.licenses_in_file, key=lambda lic: lic.identifier)
-            contributors = sorted(file.contributors, key=lambda c: c.name)
+            contributors = sorted(file.contributors)
             chk_sums = []
-            for chk_sum in file.checksums:
-                chk_sums.append(cls.checksum_to_dict(chk_sum))
+            algos = sorted(file.checksums.keys())
+            for algo in algos:
+                chk_sums.append(OrderedDict([('identifier', algo), ('value', file.checksums[algo])]))
 
             file_dict = OrderedDict([
                 ('id', file.spdx_id),
@@ -406,11 +427,9 @@ class TestParserUtils(object):
                 ('notice', file.notice),
                 ('checksums', chk_sums),
                 ('licenseInfoFromFiles', [cls.license_to_dict(lic) for lic in lics_from_files]),
-                ('contributors', [cls.entity_to_dict(contributor) for contributor in contributors]),
+                ('contributors', contributors),
                 ('dependencies', sorted(file.dependencies)),
-                ('artifactOfProjectName', file.artifact_of_project_name),
-                ('artifactOfProjectHome', file.artifact_of_project_home),
-                ('artifactOfProjectURI', file.artifact_of_project_uri),
+                ('annotations', [cls.annotation_to_dict(annotation) for annotation in file.annotations])
             ])
             files_list.append(file_dict)
 
@@ -446,7 +465,7 @@ class TestParserUtils(object):
                 ('identifier', extracted_license.identifier),
                 ('text', extracted_license.text),
                 ('comment', extracted_license.comment),
-                ('cross_refs', sorted(extracted_license.cross_ref)),
+                ('seeAlsos', sorted(extracted_license.cross_ref)),
             ])
             if extracted_license_dict not in extracted_licenses_list:
                 extracted_licenses_list.append(extracted_license_dict)
@@ -462,11 +481,11 @@ class TestParserUtils(object):
 
         for annotation in annotations:
             annotation_dict = OrderedDict([
-                ('id', annotation.spdx_id),
+                ('spdxid', annotation.spdx_id),
                 ('comment', annotation.comment),
                 ('type', annotation.annotation_type),
-                ('annotator', cls.entity_to_dict(annotation.annotator)),
-                ('date', utils.datetime_iso_format(annotation.annotation_date)),
+                ('annotator', annotation.annotator),
+                ('date', annotation.annotation_date),
             ])
             annotations_list.append(annotation_dict)
 
@@ -484,10 +503,26 @@ class TestParserUtils(object):
                 ('comment', review.comment),
                 ('reviewer', cls.entity_to_dict(review.reviewer)),
                 ('date', utils.datetime_iso_format(review.review_date))
-             ])
+            ])
             reviews_list.append(review_dict)
 
         return reviews_list
+
+    @classmethod
+    def range_to_dict(cls, ranje):
+        start_pointer_dict = OrderedDict()
+        start_pointer = ranje.get('startPointer')
+        for k in sorted(start_pointer.keys()):
+            start_pointer_dict[k] = start_pointer[k]
+        end_pointer_dict = OrderedDict()
+        end_pointer = ranje.get('endPointer')
+        for k in sorted(end_pointer.keys()):
+            end_pointer_dict[k] = end_pointer[k]
+        range_dict = OrderedDict([
+            ('startPointer', start_pointer_dict),
+            ('endPointer', end_pointer_dict),
+        ])
+        return range_dict
 
     @classmethod
     def snippets_to_list(cls, snippets):
@@ -506,7 +541,8 @@ class TestParserUtils(object):
                 ('licenseComments', snippet.license_comment),
                 ('fileId', snippet.snip_from_file_spdxid),
                 ('licenseConcluded', cls.license_to_dict(snippet.conc_lics)),
-                ('licenseInfoFromSnippet', [cls.license_to_dict(lic) for lic in lics_from_snippet]),
+                ('licenseInfoInSnippet', [cls.license_to_dict(lic) for lic in lics_from_snippet]),
+                ('ranges', [cls.range_to_dict(ranje) for ranje in snippet.ranges]),
             ])
             snippets_list.append(snippet_dict)
 
@@ -530,6 +566,7 @@ class TestParserUtils(object):
             ('created', utils.datetime_iso_format(doc.creation_info.created or 'None')),
             ('creatorComment', doc.creation_info.comment),
             ('packages', [cls.package_to_dict(p) for p in doc.packages]),
+            ('files', cls.files_to_list(doc.files)),
             ('externalDocumentRefs', cls.ext_document_references_to_list(sorted(doc.ext_document_references))),
             ('extractedLicenses', cls.extracted_licenses_to_list(sorted(doc.extracted_licenses))),
             ('annotations', cls.annotations_to_list(sorted(doc.annotations))),

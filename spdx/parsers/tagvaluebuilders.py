@@ -30,13 +30,11 @@ from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers import validations
 
 
-def checksum_algorithm_from_string(value):
-    CHECKSUM_RE = re.compile("(SHA1|SHA256|SHA512):\\s*([a-f0-9]*)")
-    match = CHECKSUM_RE.match(value)
+def parse_checksum_string(value):
+    checksum_re = re.compile(checksum.CHECKSUM_REGEX)
+    match = checksum_re.match(value)
     if match:
-        return checksum.Algorithm(identifier=match.group(1), value=match.group(2))
-    else:
-        return None
+        return match.group(1), match.group(2)
 
 
 def str_from_text(text):
@@ -192,7 +190,9 @@ class ExternalDocumentRefBuilder(object):
         """
         Set the `check_sum` attribute of the `ExternalDocumentRef` object.
         """
-        doc.ext_document_references[-1].check_sum = checksum_algorithm_from_string(chksum)
+        ident, value = parse_checksum_string(chksum)
+        if ident is not None and value is not None:
+            doc.ext_document_references[-1].check_sum = checksum.Algorithm(ident, value)
 
     def add_ext_doc_refs(self, doc, ext_doc_id, spdx_doc_uri, chksum):
         self.set_ext_doc_id(doc, ext_doc_id)
@@ -590,6 +590,7 @@ class PackageBuilder(object):
         self.package_comment_set = False
         # self.package_attribution_text_set = False
         self.pkg_ext_comment_set = False
+        self.pkg_built_date_set = False
 
     def create_package(self, doc, name):
         """
@@ -600,6 +601,19 @@ class PackageBuilder(object):
         self.package_set = True
         doc.add_package(package.Package(name=name))
         return True
+
+    def set_pkg_built_date(self, doc, built_date):
+        """
+        set the package built date
+        Raise CardinalityError if already defined.
+        """
+        self.assert_package_exists()
+        if not self.pkg_built_date_set:
+            doc.packages[-1].built_date = built_date
+            self.pkg_built_date_set = True
+            return True
+        else:
+            raise CardinalityError("Package::built_date")
 
     def set_pkg_spdx_id(self, doc, spdx_id):
         """
@@ -647,6 +661,16 @@ class PackageBuilder(object):
             return True
         else:
             raise CardinalityError("Package::FileName")
+
+    def set_pkg_primary_purpose(self, doc, purpose):
+        """
+        set the package primary purpose
+        """
+        self.assert_package_exists()
+        if isinstance(purpose, str):
+            doc.packages[-1].primary_purpose.append(purpose)
+        else:
+            raise SPDXValueError("Package::primary_purpose")
 
     def set_pkg_supplier(self, doc, entity):
         """
@@ -773,7 +797,8 @@ class PackageBuilder(object):
         """
         self.assert_package_exists()
         self.package_chk_sum_set = True
-        doc.packages[-1].set_checksum(checksum_algorithm_from_string(chk_sum))
+        ident, value = parse_checksum_string(chk_sum)
+        doc.packages[-1].set_checksum(checksum.Algorithm(ident, value))
         return True
 
     def set_pkg_source_info(self, doc, text):
@@ -806,6 +831,9 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_conc_lics_set:
             self.package_conc_lics_set = True
+            if licenses is None:
+                doc.packages[-1].conc_lics = utils.SPDXNone()
+                return True
             if validations.validate_lics_conc(licenses):
                 doc.packages[-1].conc_lics = licenses
                 return True
@@ -837,6 +865,8 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if not self.package_license_declared_set:
             self.package_license_declared_set = True
+            if lic is None:
+                return True
             if validations.validate_lics_conc(lic):
                 doc.packages[-1].license_declared = lic
                 return True
@@ -953,14 +983,12 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if validations.validate_pkg_ext_ref_category(category):
             if (
-                len(doc.packages[-1].pkg_ext_refs)
-                and doc.packages[-1].pkg_ext_refs[-1].category is None
+                len(doc.packages[-1].external_references)
+                and doc.packages[-1].external_references[-1].category is None
             ):
-                doc.packages[-1].pkg_ext_refs[-1].category = category
+                doc.packages[-1].external_references[-1].category = category
             else:
-                doc.packages[-1].add_pkg_ext_refs(
-                    package.ExternalPackageRef(category=category)
-                )
+                doc.packages[-1].add_external_references(package.ExternalPackageRef(category=category))
         else:
             raise SPDXValueError("ExternalRef::Category")
 
@@ -971,12 +999,12 @@ class PackageBuilder(object):
         self.assert_package_exists()
         if validations.validate_pkg_ext_ref_type(pkg_ext_ref_type):
             if (
-                len(doc.packages[-1].pkg_ext_refs)
-                and doc.packages[-1].pkg_ext_refs[-1].pkg_ext_ref_type is None
+                len(doc.packages[-1].external_references)
+                and doc.packages[-1].external_references[-1].pkg_ext_ref_type is None
             ):
-                doc.packages[-1].pkg_ext_refs[-1].pkg_ext_ref_type = pkg_ext_ref_type
+                doc.packages[-1].external_references[-1].pkg_ext_ref_type = pkg_ext_ref_type
             else:
-                doc.packages[-1].add_pkg_ext_refs(
+                doc.packages[-1].add_external_references(
                     package.ExternalPackageRef(pkg_ext_ref_type=pkg_ext_ref_type)
                 )
         else:
@@ -988,30 +1016,36 @@ class PackageBuilder(object):
         """
         self.assert_package_exists()
         if (
-            len(doc.packages[-1].pkg_ext_refs)
-            and doc.packages[-1].pkg_ext_refs[-1].locator is None
+            len(doc.packages[-1].external_references)
+            and doc.packages[-1].external_references[-1].locator is None
         ):
-            doc.packages[-1].pkg_ext_refs[-1].locator = locator
+            doc.packages[-1].external_references[-1].locator = locator
         else:
-            doc.packages[-1].add_pkg_ext_refs(package.ExternalPackageRef(locator=locator))
+            doc.packages[-1].add_external_references(package.ExternalPackageRef(locator=locator))
 
     def add_pkg_ext_ref_comment(self, doc, comment):
         """
         Set the `comment` attribute of the `ExternalPackageRef` object.
         """
         self.assert_package_exists()
-        if not len(doc.packages[-1].pkg_ext_refs):
+        if not len(doc.packages[-1].external_references):
             raise OrderError("Package::ExternalRef")
         else:
             if validations.validate_pkg_ext_ref_comment(comment):
-                doc.packages[-1].pkg_ext_refs[-1].comment = str_from_text(comment)
+                doc.packages[-1].external_references[-1].comment = str_from_text(comment)
             else:
                 raise SPDXValueError("ExternalRef::Comment")
 
-    def add_pkg_ext_refs(self, doc, category, pkg_ext_ref_type, locator):
+    def add_external_references(self, doc, category, pkg_ext_ref_type, locator):
         self.set_pkg_ext_ref_category(doc, category)
         self.set_pkg_ext_ref_type(doc, pkg_ext_ref_type)
         self.set_pkg_ext_ref_locator(doc, locator)
+
+    def set_pkg_has_files(self, doc, has_files):
+        self.assert_package_exists()
+        if has_files is not None and len(has_files) > 0:
+            doc.packages[-1].files_analyzed = True
+        doc.packages[-1].has_files = has_files
 
     def assert_package_exists(self):
         if not self.package_set:
@@ -1028,7 +1062,7 @@ class FileBuilder(object):
         Raise OrderError if no package defined.
         """
         if self.has_package(doc):
-            doc.packages[-1].files.append(file.File(name))
+            doc.files.append(file.File(name))
             # A file name marks the start of a new file instance.
             # The builder must be reset
             # FIXME: this state does not make sense
@@ -1095,7 +1129,7 @@ class FileBuilder(object):
         Raise SPDXValueError if type is unknown.
         """
         if self.has_package(doc) and self.has_file(doc):
-            file_type = file.FILE_TYPE_FROM_STRING_DICT.get(type_value) or file.FileType.OTHER
+            file_type = file.FileType.by_name(type_value) or file.FileType.OTHER
             spdx_file = self.file(doc)
             if file_type not in spdx_file.file_types:
                 spdx_file.file_types.append(file_type)
@@ -1104,7 +1138,7 @@ class FileBuilder(object):
         else:
             raise OrderError("File::Type")
 
-    def set_file_chksum(self, doc, chksum):
+    def set_file_chksum(self, doc, new_checksum):
         """
         Raise OrderError if no package or file defined.
         Raise CardinalityError if more than one chksum set.
@@ -1112,13 +1146,14 @@ class FileBuilder(object):
         if self.has_package(doc) and self.has_file(doc):
             self.file_chksum_set = False
             chk_sums = doc.files[-1].checksums
-            chk_sums.append(checksum_algorithm_from_string(chksum))
-            doc.files[-1].checksums = chk_sums
-            for chk_sum in self.file(doc).checksums:
-                if chk_sum.identifier == 'SHA1':
-                    self.file_chksum_set = True
-            if not self.file_chksum_set:
-                raise CardinalityError("File::CheckSum")
+            identifier, value = parse_checksum_string(new_checksum)
+            if identifier is not None and value is not None:
+                if identifier not in checksum.CHECKSUM_ALGORITHMS:
+                    raise ValueError('checksum algorithm {} is not supported'.format(identifier))
+                chk_sums[identifier] = value
+            self.file(doc).checksums = chk_sums
+            if self.file(doc).checksums.get('SHA1') is not None:
+                self.file_chksum_set = True
         else:
             raise OrderError("File::CheckSum")
         return True
@@ -1246,14 +1281,14 @@ class FileBuilder(object):
         """
         Return the last file in the document's package's file list.
         """
-        return doc.packages[-1].files[-1]
+        return doc.files[-1]
 
     def has_file(self, doc):
         """
         Return true if the document's package has at least one file.
         Does not test if the document has a package.
         """
-        return len(doc.packages[-1].files) != 0
+        return len(doc.files) != 0
 
     def has_package(self, doc):
         """
@@ -1527,6 +1562,13 @@ class SnippetBuilder(object):
             return True
         else:
             raise SPDXValueError("Snippet::LicenseInfoInSnippet")
+
+    def set_snippet_range(self, doc, ranje):
+        self.assert_snippet_exists()
+        if isinstance(ranje, dict) and len(ranje) == 2:
+            doc.snippet[-1].add_range(ranje)
+        else:
+            raise SPDXValueError("Snippet::Range")
 
     def reset_snippet(self):
         # FIXME: this state does not make sense

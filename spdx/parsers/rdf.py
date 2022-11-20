@@ -515,14 +515,15 @@ class PackageParser(LicenseParser):
 
     def p_pkg_chk_sum(self, p_term, predicate):
         for _s, _p, pkg_checksum in self.graph.triples((p_term, predicate, None)):
-            for _, _, value in self.graph.triples(
+            for _, _, rdf_value in self.graph.triples(
                 (pkg_checksum, self.spdx_namespace["checksumValue"], None)
             ):
+                value = str(rdf_value).split('#')[0]
                 for _, _, algo in self.graph.triples(
                         (pkg_checksum, self.spdx_namespace["algorithm"], None)
                 ):
-                    algo = convert_rdf_checksum_algorithm(str(algo))
-                    chk_sum = checksum.Algorithm(str(algo), str(value))
+                    identifier = convert_rdf_checksum_algorithm(str(algo))
+                    chk_sum = checksum.Algorithm(identifier, value)
                     self.builder.set_pkg_chk_sum(self.doc, chk_sum)
 
 
@@ -705,7 +706,7 @@ class FileParser(LicenseParser):
         Note: does not handle artifact of project URI.
         """
         for _, _, project in self.graph.triples((f_term, predicate, None)):
-            if (project, RDF.type, self.doap_namespace["Project"]):
+            if (project, RDF.type, self.doap_namespace["Project"]) in self.graph:
                 self.p_file_project(project)
             else:
                 self.error = True
@@ -787,14 +788,15 @@ class FileParser(LicenseParser):
         """
         try:
             for _s, _p, file_checksum in self.graph.triples((f_term, predicate, None)):
-                for _, _, value in self.graph.triples(
+                for _, _, rdf_value in self.graph.triples(
                     (file_checksum, self.spdx_namespace["checksumValue"], None)
                 ):
+                    value = rdf_value.split('#')[0]
                     for _, _, algo in self.graph.triples(
                             (file_checksum, self.spdx_namespace["algorithm"], None)
                     ):
-                        algo = convert_rdf_checksum_algorithm(str(algo))
-                        chk_sum = checksum.Algorithm(str(algo), str(value))
+                        identifier = convert_rdf_checksum_algorithm(str(algo))
+                        chk_sum = checksum.Algorithm(identifier, value)
                         self.builder.set_file_chksum(self.doc, chk_sum)
         except CardinalityError:
             self.more_than_one_error("File checksum")

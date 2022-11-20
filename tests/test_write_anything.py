@@ -18,25 +18,34 @@ from spdx.writers import write_anything
 
 from tests import utils_test
 
+
 dirname = os.path.join(os.path.dirname(__file__), "data", "formats")
 test_files = [os.path.join(dirname, fn) for fn in os.listdir(dirname)]
+# narrow this list to the current version only.
+version = 'v2.3'
+version_files = []
+for test_file in test_files:
+    if version in test_file:
+        version_files.append(test_file)
+test_files = version_files
+
 UNSTABLE_CONVERSIONS = {
-    "SPDXTagExample.tag-rdf",
-    "SPDXTagExample.tag-yaml",
-    "SPDXTagExample.tag-xml",
-    "SPDXTagExample.tag-json",
+    "SPDXTagExample-v2.3.spdx-rdf",
+    "SPDXTagExample-v2.3.spdx-yaml",
+    "SPDXTagExample-v2.3.spdx-xml",
+    "SPDXTagExample-v2.3.spdx-json",
     "SPDXSimpleTag.tag-rdf",
-    "SPDXXmlExample.xml-rdf",
-    "SPDXXmlExample.xml-tag",
-    "SPDXJsonExample.json-rdf",
-    "SPDXJsonExample.json-tag",
-    "SPDXYamlExample.yaml-rdf",
-    "SPDXYamlExample.yaml-tag",
-    "SPDXRdfExample.rdf-rdf",
-    "SPDXRdfExample.rdf-yaml",
-    "SPDXRdfExample.rdf-xml",
-    "SPDXRdfExample.rdf-json",
-    "SPDXRdfExample.rdf-tag",
+    "SPDXXMLExample-v2.3.spdx.xml-rdf",
+    "SPDXXMLExample-v2.3.spdx.xml-tag",
+    "SPDXJSONExample-V2.3.spdx.json-rdf",
+    "SPDXJSONExample-V2.3.spdx.json-tag",
+    "SPDXYAMLExample-v2.3.spdx.yaml-rdf",
+    "SPDXYAMLExample-v2.3.spdx.yaml-tag",
+    "SPDXRdfExample-v2.3.spdx.rdf-rdf",
+    "SPDXRdfExample-v2.3.spdx.rdf-yaml",
+    "SPDXRdfExample-v2.3.spdx.rdf-xml",
+    "SPDXRdfExample-v2.3.spdx.rdf-json",
+    "SPDXRdfExample-v2.3.spdx.rdf-tag",
 }
 
 

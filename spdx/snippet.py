@@ -50,9 +50,13 @@ class Snippet(object):
         self.snip_from_file_spdxid = snip_from_file_spdxid
         self.conc_lics = conc_lics
         self.licenses_in_snippet = []
+        self.ranges = []
 
     def add_lics(self, lics):
         self.licenses_in_snippet.append(lics)
+
+    def add_range(self, ranje):  # range is a reserved word.
+        self.ranges.append(ranje)
 
     def validate(self, messages):
         """

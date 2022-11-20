@@ -18,20 +18,6 @@ from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 
-file_types_dict = {
-    "fileType_source": "SOURCE",
-    "fileType_binary": "BINARY",
-    "fileType_archive": "ARCHIVE",
-    "fileType_other": "OTHER",
-    "fileType_application": "APPLICATION",
-    "fileType_audio": "AUDIO",
-    "fileType_image": "IMAGE",
-    "fileType_text": "TEXT",
-    "fileType_documentation": "DOCUMENTATION",
-    "fileType_spdx": "SPDX",
-    "fileType_video": "VIDEO",
-}
-
 
 class CreationInfoBuilder(rdfbuilders.CreationInfoBuilder):
     def __init__(self):
@@ -96,6 +82,15 @@ class DocBuilder(tagvaluebuilders.DocBuilder):
             doc.comment = comment
         else:
             raise CardinalityError("Document::Comment")
+
+    def add_doc_described_objects(self, doc, doc_described_objects):
+        if isinstance(doc_described_objects, list):
+            doc.describes.extend(doc_described_objects)
+        elif isinstance(doc_described_objects, str):
+            doc.describes.append(doc_described_objects)
+
+    def set_doc_described_objects(self, doc, doc_described_objects):
+        doc.describes = doc_described_objects
     
     def set_doc_namespace(self, doc, namespace):
         """
@@ -177,15 +172,11 @@ class FileBuilder(rdfbuilders.FileBuilder):
 
     def set_file_chksum(self, doc, chk_sum):
         """
-        Set the file check sum, if not already set.
-        chk_sum - A string
-        Raise CardinalityError if already defined.
-        Raise OrderError if no package previously defined.
+        Set the file checksum, if not already set.
+        chk_sum - A string, which is the sha1 hash, or a checksum.Algorithm, or a crummy dict.
         """
         if self.has_package(doc) and self.has_file(doc):
             if isinstance(chk_sum, dict):
-
-                #algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(chk_sum.get('algorithm') or 'SHA1')
                 algo = chk_sum.get('algorithm') or 'SHA1'
                 self.file(doc).set_checksum(checksum.Algorithm(algo, chk_sum.get('checksumValue')))
             elif isinstance(chk_sum, checksum.Algorithm):
@@ -213,7 +204,7 @@ class FileBuilder(rdfbuilders.FileBuilder):
         fileType representations.
         """
         if self.has_package(doc) and self.has_file(doc):
-            file_type = file.FILE_TYPE_FROM_STRING_DICT.get(type_value) or file.FileType.OTHER
+            file_type = file.FileType.by_name(type_value) or file.FileType.OTHER
             spdx_file = self.file(doc)
             if file_type not in spdx_file.file_types:
                 spdx_file.file_types.append(file_type)

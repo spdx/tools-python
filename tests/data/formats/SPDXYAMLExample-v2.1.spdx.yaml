@@ -237,7 +237,7 @@ Document:
       the snippet was copied into the current file. The concluded license information
       was found in the COPYING.txt file in package xyz.
     licenseConcluded: Apache-2.0
-    licenseInfoFromSnippet:
+    licenseInfoInSnippet:
     - Apache-2.0
     name: from linux kernel
   spdxVersion: SPDX-2.1

@@ -316,6 +316,8 @@ class Document(object):
         self.packages = []
         if package is not None:
             self.packages.append(package)
+        self.files = []
+        self.describes = []
         self.extracted_licenses = []
         self.reviews = []
         self.annotations = []
@@ -350,8 +352,8 @@ class Document(object):
 
     @property
     def package(self):
-        warnings.warn('document.package and document.files are deprecated; '
-                      'use document.packages instead',
+        warnings.warn('document.package and document.file are deprecated; '
+                      'use document.packages or document.files instead',
                       DeprecationWarning)
         if len(self.packages) == 0:
             return None
@@ -368,13 +370,14 @@ class Document(object):
         else:
             self.packages[0] = value
 
-    @property
-    def files(self):
-        return self.package.files
+    def get_files(self):
+        return self.files
 
-    @files.setter
-    def files(self, value):
-        self.package.files = value
+    def set_files(self, value):
+        self.files = value
+
+    def add_file(self, fil):
+        self.files.append(fil)
 
     @property
     def has_comment(self):

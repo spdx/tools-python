@@ -41,11 +41,11 @@ class BaseWriter(object):
         self.spdx_namespace = Namespace("http://spdx.org/rdf/terms#")
         self.graph = Graph()
 
-    def create_checksum_node(self, chksum):
+    def create_checksum_node(self, ident, value):
         """
         Return a node representing spdx.checksum.
         """
-        algo = checksum.CHECKSUM_ALGORITHM_TO_XML_DICT.get(chksum.identifier) or 'checksumAlgorithm_sha1'
+        algo = checksum.CHECKSUM_ALGORITHM_TO_XML_DICT.get(ident) or 'checksumAlgorithm_sha1'
         chksum_node = BNode()
         type_triple = (chksum_node, RDF.type, self.spdx_namespace.Checksum)
         self.graph.add(type_triple)
@@ -58,7 +58,7 @@ class BaseWriter(object):
         value_triple = (
             chksum_node,
             self.spdx_namespace.checksumValue,
-            Literal(chksum.value),
+            Literal(value),
         )
         self.graph.add(value_triple)
         return chksum_node
@@ -255,12 +255,12 @@ class FileWriter(LicenseWriter):
                 ftype_triple = (file_node, self.spdx_namespace.fileType, ftype)
                 self.graph.add(ftype_triple)
 
-        for chk_sum in doc_file.checksums:
+        for ident, value in doc_file.checksums.items():
             self.graph.add(
                 (
                     file_node,
                     self.spdx_namespace.checksum,
-                    self.create_checksum_node(chk_sum),
+                    self.create_checksum_node(ident, value),
                 )
             )
 
@@ -644,7 +644,8 @@ class ExternalDocumentRefWriter(BaseWriter):
         doc_uri_triple = (ext_doc_ref_node, self.spdx_namespace.spdxDocument, doc_uri)
         self.graph.add(doc_uri_triple)
 
-        checksum_node = self.create_checksum_node(ext_document_references.check_sum)
+        checksum_node = self.create_checksum_node(ext_document_references.check_sum.identifier,
+                                                  ext_document_references.check_sum.value)
         self.graph.add((ext_doc_ref_node, self.spdx_namespace.checksum, checksum_node))
 
         return ext_doc_ref_node
@@ -751,7 +752,7 @@ class PackageWriter(LicenseWriter):
         )
 
         if package.has_optional_field("check_sum"):
-            checksum_node = self.create_checksum_node(package.check_sum)
+            checksum_node = self.create_checksum_node(package.check_sum.identifier, package.check_sum.value)
             self.graph.add((package_node, self.spdx_namespace.checksum, checksum_node))
 
         if package.has_optional_field("homepage"):
