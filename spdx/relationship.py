@@ -59,6 +59,8 @@ class RelationshipType(Enum):
     TEST_DEPENDENCY_OF = auto()
     TEST_TOOL_OF = auto()
     VARIANT_OF = auto()
+    REQUIREMENT_DESCRIPTION_FOR = auto()
+    SPECIFICATION_FOR = auto()
 
 
 class Relationship(object):
