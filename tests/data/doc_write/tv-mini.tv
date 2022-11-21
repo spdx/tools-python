@@ -3,7 +3,4 @@ SPDXVersion: SPDX-2.1
 DataLicense: CC0-1.0
 SPDXID: SPDXRef-DOCUMENT
 # Creation Info
-# Package
-PackageDownloadLocation: NOASSERTION
-PackageLicenseDeclared: NOASSERTION
-PackageLicenseConcluded: NOASSERTION
+
