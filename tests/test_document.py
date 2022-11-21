@@ -151,6 +151,15 @@ class TestDocument(TestCase):
 
         assert len(doc.packages) == 2
 
+    def test_document_without_packages(self):
+        doc = Document(Version(2, 1), License.from_identifier("CC0-1.0"),
+                       'Sample_Document_V2.1', spdx_id='SPDXRef-DOCUMENT',
+                       namespace='https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301')
+        doc.creation_info.add_creator(Tool('ScanCode'))
+        doc.creation_info.set_created_now()
+
+        messages = doc.validate()
+        assert len(messages.messages) == 0
 
 class TestWriters(TestCase):
     maxDiff = None
@@ -523,12 +532,8 @@ class TestWriters(TestCase):
 
     def _get_mini_doc(self,):
         doc = Document(Version(2, 1), License.from_identifier('CC0-1.0'))
-        doc.creation_info.add_creator(Tool('ScanCode'))
         doc.creation_info.set_created_now()
 
-        package = doc.package = Package(download_location=NoAssert())
-        package.license_declared = NoAssert()
-        package.conc_lics = NoAssert()
         return doc
 
     def test_write_document_tv_mini(self):

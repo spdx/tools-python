@@ -29,6 +29,7 @@ from spdx.writers.tagvalue import InvalidDocumentError
 
 import warnings
 
+
 class BaseWriter(object):
     """
     Base class for all Writer classes.
@@ -368,7 +369,6 @@ class FileWriter(LicenseWriter):
 
 
 class SnippetWriter(LicenseWriter):
-
     """
     Write spdx.snippet.Snippet
     """
@@ -446,7 +446,6 @@ class SnippetWriter(LicenseWriter):
 
 
 class ReviewInfoWriter(BaseWriter):
-
     """
     Write spdx.review.Review
     """
@@ -591,7 +590,6 @@ class RelationshipInfoWriter(BaseWriter):
 
 
 class CreationInfoWriter(BaseWriter):
-
     """
     Write class spdx.creationinfo.CreationInfo
     """
@@ -681,7 +679,6 @@ class ExternalDocumentRefWriter(BaseWriter):
 
 
 class PackageWriter(LicenseWriter):
-
     """
     Write spdx.package.Package
     """
@@ -955,9 +952,8 @@ class PackageExternalRefWriter(BaseWriter):
         """
         Return a list of package external references.
         """
-        return map(
-            self.create_package_external_ref_node, self.document.package.pkg_ext_refs
-        )
+        return [self.create_package_external_ref_node(ext_ref) for package in self.document.packages
+                for ext_ref in package.pkg_ext_refs]
 
 
 class Writer(

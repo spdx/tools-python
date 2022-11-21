@@ -175,7 +175,10 @@ class Document(object):
 
     @property
     def files(self):
-        return self.package.files
+        if self.packages:
+            return self.package.files
+        else:
+            return []
 
     @files.setter
     def files(self, value):
@@ -271,17 +274,8 @@ class Document(object):
             messages.append("Document has no creation information.")
 
     def validate_packages(self, messages):
-        if len(self.packages) > 0:
-            for package in self.packages:
-                messages = package.validate(messages)
-        else:
-            messages.append("Document has no packages.")
-
-    def validate_package(self, messages):
-        if self.package is not None:
-            self.package.validate(messages)
-        else:
-            messages.append("Document has no packages.")
+        for package in self.packages:
+            messages = package.validate(messages)
 
     def validate_extracted_licenses(self, messages):
         for lic in self.extracted_licenses:
