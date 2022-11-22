@@ -10,7 +10,7 @@
         <SPDXID>SPDXRef-Package</SPDXID>
         <name>some/path</name>
         <downloadLocation>NOASSERTION</downloadLocation>
-        <copyrightText>Some copyrught</copyrightText>
+        <copyrightText>Some copyright</copyrightText>
         <packageVerificationCode>
             <packageVerificationCodeValue>SOME code</packageVerificationCodeValue>
         </packageVerificationCode>

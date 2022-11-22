@@ -105,7 +105,7 @@ class TestDocument(TestCase):
 
         package = doc.package = Package(name='some/path', download_location=NoAssert())
         package.spdx_id = 'SPDXRef-Package'
-        package.cr_text = 'Some copyrught'
+        package.cr_text = 'Some copyright'
         package.verif_code = 'SOME code'
         package.license_declared = NoAssert()
         package.conc_lics = NoAssert()
@@ -135,7 +135,7 @@ class TestDocument(TestCase):
 
         package1 = Package(name='some/path1', download_location=NoAssert())
         package1.spdx_id = 'SPDXRef-Package1'
-        package1.cr_text = 'Some copyrught'
+        package1.cr_text = 'Some copyright'
         package1.files_verified = False
         package1.license_declared = NoAssert()
         package1.conc_lics = NoAssert()
@@ -143,7 +143,7 @@ class TestDocument(TestCase):
 
         package2 = Package(name='some/path2', download_location=NoAssert())
         package2.spdx_id = 'SPDXRef-Package2'
-        package2.cr_text = 'Some copyrught'
+        package2.cr_text = 'Some copyright'
         package2.files_verified = False
         package2.license_declared = NoAssert()
         package2.conc_lics = NoAssert()
@@ -164,7 +164,7 @@ class TestWriters(TestCase):
 
         package = doc.package = Package(name='some/path', download_location=NoAssert())
         package.spdx_id = 'SPDXRef-Package'
-        package.cr_text = 'Some copyrught'
+        package.cr_text = 'Some copyright'
         package.verif_code = 'SOME code'
         package.checksum = Algorithm('SHA1', 'SOME-SHA1')
         package.license_declared = NoAssert()

@@ -24,7 +24,7 @@ packages:
   checksums:
   - algorithm: SHA1
     checksumValue: SOME-SHA1
-  copyrightText: Some copyrught
+  copyrightText: Some copyright
   downloadLocation: NOASSERTION
   hasFiles:
   - SPDXRef-File
