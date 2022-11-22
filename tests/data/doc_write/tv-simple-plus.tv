@@ -16,7 +16,7 @@ PackageVerificationCode: SOME code
 PackageLicenseDeclared: NOASSERTION
 PackageLicenseConcluded: NOASSERTION
 PackageLicenseInfoFromFiles: LGPL-2.1-or-later
-PackageCopyrightText: Some copyrught
+PackageCopyrightText: Some copyright
 PrimaryPackagePurpose: FILE
 BuiltDate: 2021-01-01T12:00:00Z
 ReleaseDate: 2021-01-01T12:00:00Z

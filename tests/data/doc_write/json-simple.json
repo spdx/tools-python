@@ -19,7 +19,7 @@
             "SPDXID": "SPDXRef-Package",
             "name": "some/path",
             "downloadLocation": "NOASSERTION",
-            "copyrightText": "Some copyrught",
+            "copyrightText": "Some copyright",
             "packageVerificationCode": {
                 "packageVerificationCodeValue": "SOME code"
             },
