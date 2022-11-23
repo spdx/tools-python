@@ -211,23 +211,21 @@ class LicenseListParser(object):
 
 
 def calc_verif_code(files: List['File']) -> str:
-    hashes = []
-
-    for file_entry in files:
-        if (
-            isinstance(file_entry.chksum, checksum.Algorithm)
-            and file_entry.chksum.identifier == "SHA1"
-        ):
-            sha1 = file_entry.chksum.value
+    list_of_file_hashes = []
+    hash_algo_name = "SHA1"
+    for f in files:
+        file_chksum = f.get_checksum(hash_algo_name)
+        if file_chksum is not None:
+            file_ch = file_chksum.value
         else:
-            sha1 = file_entry.calc_chksum()
-        hashes.append(sha1)
+            file_ch = f.calculate_checksum(hash_algo_name)
+        list_of_file_hashes.append(file_ch)
 
-    hashes.sort()
+    list_of_file_hashes.sort()
 
-    sha1 = hashlib.sha1()
-    sha1.update("".join(hashes).encode("utf-8"))
-    return sha1.hexdigest()
+    hasher = hashlib.new(hash_algo_name.lower())
+    hasher.update("".join(list_of_file_hashes).encode("utf-8"))
+    return hasher.hexdigest()
 
 
 def get_files_in_package(package: 'Package', files: List['File'], relationships: List[Relationship]) -> List['File']:
@@ -247,33 +245,3 @@ def update_dict_item_with_new_item(current_state: Dict, key: str, item_to_add: s
         current_state[key] = [item_to_add]
     elif item_to_add not in current_state[key]:
         current_state[key].append(item_to_add)
-
-
-def calc_verif_code(files: List['File']) -> str:
-    hashes = []
-
-    for file_entry in files:
-        if (
-            isinstance(file_entry.chksum, checksum.Algorithm)
-            and file_entry.chksum.identifier == "SHA1"
-        ):
-            sha1 = file_entry.chksum.value
-        else:
-            sha1 = file_entry.calc_chksum()
-        hashes.append(sha1)
-
-    hashes.sort()
-
-    sha1 = hashlib.sha1()
-    sha1.update("".join(hashes).encode("utf-8"))
-    return sha1.hexdigest()
-
-
-def get_files_in_package(package: 'Package', files: List['File'], relationships: List[Relationship]) -> List['File']:
-    files_in_package = []
-    for file in files:
-        if file.spdx_id in [relationship.related_spdx_element for relationship in relationships
-                            if relationship.relationship_type == "CONTAINS" and relationship.spdx_element_id == package.spdx_id]:
-            files_in_package.append(file)
-
-    return files_in_package

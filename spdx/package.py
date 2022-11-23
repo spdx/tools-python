@@ -59,7 +59,7 @@ class Package(object):
      whenever files_analyzed is True or None (omitted) and Must be None (omitted)
      if files_analyzed is False. However, as a convenience within this library,
      we allow this to be Optional even when files_analyzed is True/None.
-     - check_sum: Optional , spdx.checksum.Algorithm.
+     - checksums: Optional , List of spdx.checksum.Algorithm.
      - source_info: Optional string.
      - conc_lics: Mandatory license.License or utils.SPDXNone or
      utils.NoAssert.
@@ -301,7 +301,7 @@ class Package(object):
     def validate_checksum(self, messages):
         if not self.checksums:
             return messages
-        if self.get_checksum() is None:
+        if self.get_checksum("SHA1") is None:
             messages.append("At least one package checksum algorithm must be SHA1")
             return messages
 
