@@ -58,7 +58,7 @@ class File(object):
     referenced by other elements. Mandatory, one. Type: str.
     - comment: File comment str, Optional zero or one.
     - file_types: list of file types. Cardinality 0..*
-    - chk_sums: list of checksums, there must be a SHA1 hash, at least.
+    - checksums: List of checksums, there must be a SHA1 hash, at least.
     - conc_lics: Mandatory one. license.License or utils.NoAssert or utils.SPDXNone.
     - licenses_in_file: list of licenses found in file, mandatory one or more.
       document.License or utils.SPDXNone or utils.NoAssert.
@@ -202,9 +202,7 @@ class File(object):
         return messages
 
     def validate_checksum(self, messages):
-        if not self.checksums:
-            return messages
-        if self.get_checksum() is None:
+        if self.get_checksum("SHA1") is None:
             messages.append("At least one file checksum algorithm must be SHA1")
             return messages
 
