@@ -688,7 +688,7 @@ class Parser(object):
                            | APPLICATION
                            | AUDIO
                            | IMAGE
-                           | TEXT
+                           | FILETYPE_TEXT
                            | VIDEO
                            | DOCUMENTATION
                            | SPDX

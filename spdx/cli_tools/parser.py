@@ -78,15 +78,10 @@ def main(file, force):
                     print(f"\tComment: {ref.comment}")
     if doc.files:
         print("Files:")
-    VALUES = {
-        spdxfile.FileType.SOURCE: "SOURCE",
-        spdxfile.FileType.OTHER: "OTHER",
-        spdxfile.FileType.BINARY: "BINARY",
-        spdxfile.FileType.ARCHIVE: "ARCHIVE",
-    }
     for f in doc.files:
         print("\tFile name: {0}".format(f.name))
-        print("\tFile type: {0}".format(VALUES[f.type]))
+        for file_type in f.file_types:
+            print("\tFile type: {0}".format(file_type.name))
         print("\tFile Checksum: {0}".format(f.chksum.value))
         print("\tFile license concluded: {0}".format(f.conc_lics))
         print(

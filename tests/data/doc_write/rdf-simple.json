@@ -59,7 +59,9 @@
           "ns1:copyrightText": {
             "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
           }, 
-          "ns1:fileName": "./some/path/tofile"
+          "ns1:fileName": "./some/path/tofile",
+          "ns1:fileType": [{"@rdf:resource": "http://spdx.org/rdf/terms#fileType_other"},
+                           {"@rdf:resource": "http://spdx.org/rdf/terms#fileType_source"}]
         }
       },
         "ns1:relationship": [

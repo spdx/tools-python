@@ -111,6 +111,7 @@ class Lexer(object):
         "APPLICATION": "APPLICATION",
         "AUDIO": "AUDIO",
         "IMAGE": "IMAGE",
+        "TEXT": "FILETYPE_TEXT",
         "VIDEO": "VIDEO",
         "DOCUMENTATION": "DOCUMENTATION",
         "SPDX": "SPDX",

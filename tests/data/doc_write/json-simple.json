@@ -57,7 +57,8 @@
             "fileName": "./some/path/tofile",
             "licenseInfoInFiles": [
                 "LGPL-2.1-only"
-            ]
+            ],
+            "fileTypes": ["OTHER", "SOURCE"]
         }
     ]
 }

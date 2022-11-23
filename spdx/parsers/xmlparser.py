@@ -48,7 +48,7 @@ class Parser(jsonyamlxml.Parser):
             "externalRefs",
             "ranges",
             "licenseInfoInSnippets",
-            "packageVerificationCodeExcludedFiles"
+            "packageVerificationCodeExcludedFiles",
         }
 
     def parse(self, file):

@@ -1183,15 +1183,19 @@ class FileBuilder(object):
         Raise CardinalityError if more than one type set.
         Raise SPDXValueError if type is unknown.
         """
-        if self.has_package(doc) and self.has_file(doc):
-            file_type = file.FILE_TYPE_FROM_STRING_DICT.get(type_value) or file.FileType.OTHER
-            spdx_file = self.file(doc)
-            if file_type not in spdx_file.file_types:
-                spdx_file.file_types.append(file_type)
-            else:
-                raise CardinalityError("File::Type")
-        else:
-            raise OrderError("File::Type")
+        if not self.has_file(doc):
+            raise OrderError("File::FileType")
+
+        if type_value not in file.FileType.__members__:
+            raise SPDXValueError("File:FileType")
+
+        file_type = file.FileType[type_value]
+
+        spdx_file = self.file(doc)
+        if file_type in spdx_file.file_types:
+            raise CardinalityError("File::FileType")
+
+        spdx_file.file_types.append(file_type)
 
     def set_file_chksum(self, doc, chksum):
         """
