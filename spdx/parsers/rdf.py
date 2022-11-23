@@ -51,7 +51,7 @@ ERROR_MESSAGES = {
     'letters, numbers, ".", "-".',
     "PKG_EXT_REF_CATEGORY": '\'{0}\' must be "SECURITY", "PACKAGE-MANAGER", or "OTHER".',
     "PKG_EXT_REF_TYPE": '{0} must be a unique string containing letters, numbers, ".", or "-".',
-    "FILE_TYPE": "There must be at least one file type specified.",
+    "FILE_TYPE": "Unknown file type.",
     "FILE_SINGLE_LICS": "File concluded license must be a license url or spdx:noassertion or spdx:none.",
     "REVIEWER_VALUE": "Invalid reviewer value '{0}' must be Organization, Tool or Person.",
     "REVIEW_DATE": "Invalid review date value '{0}' must be date in ISO 8601 format.",
@@ -763,14 +763,6 @@ class FileParser(LicenseParser):
         try:
             for _, _, ftype in self.graph.triples((f_term, predicate, None)):
                 try:
-                    if ftype.endswith("binary"):
-                        ftype = "BINARY"
-                    elif ftype.endswith("source"):
-                        ftype = "SOURCE"
-                    elif ftype.endswith("other"):
-                        ftype = "OTHER"
-                    elif ftype.endswith("archive"):
-                        ftype = "ARCHIVE"
                     self.builder.set_file_type(self.doc, ftype)
                 except SPDXValueError:
                     self.value_error("FILE_TYPE", ftype)

@@ -59,7 +59,9 @@
           }, 
           "ns1:licenseInfoInFile": {
             "@rdf:resource": "http://spdx.org/licenses/LGPL-2.1-or-later"
-          }
+          },
+          "ns1:fileType": [{"@rdf:resource": "http://spdx.org/rdf/terms#fileType_other"},
+                           {"@rdf:resource": "http://spdx.org/rdf/terms#fileType_source"}]
         }
       },
         "ns1:relationship": [

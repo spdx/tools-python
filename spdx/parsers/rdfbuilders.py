@@ -11,7 +11,7 @@
 
 import re
 
-from spdx import checksum
+from spdx import checksum, file
 from spdx import license
 from spdx import package
 from spdx import version
@@ -470,18 +470,19 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         """
         Set the file type for RDF values.
         """
-        if self.has_package(doc) and self.has_file(doc):
-            ss = filetype.split('#')
-            if len(ss) != 2:
-                raise SPDXValueError('Unknown file type {}'.format(filetype))
-            file_type = file.FILE_TYPE_FROM_XML_DICT.get(ss[1]) or file.FileType.OTHER
-            spdx_file = self.file(doc)
-            if file_type not in spdx_file.file_types:
-                spdx_file.file_types.append(file_type)
-            else:
-                raise CardinalityError("File::Type")
-        else:
-            raise OrderError("File::Type")
+        if not self.has_file(doc):
+            raise OrderError("File::FileType")
+
+        split_string = filetype.split('#')
+        if len(split_string) != 2:
+            raise SPDXValueError('Unknown file type {}'.format(filetype))
+        file_type = file.file_type_from_rdf(filetype)
+
+        spdx_file = self.file(doc)
+        if file_type in spdx_file.file_types:
+            raise CardinalityError("File::FileType")
+
+        spdx_file.file_types.append(file_type)
 
 
 class SnippetBuilder(tagvaluebuilders.SnippetBuilder):

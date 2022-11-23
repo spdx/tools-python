@@ -260,7 +260,7 @@ class FileWriter(LicenseWriter):
 
         if doc_file.has_optional_field("file_types"):
             for f_type in doc_file.file_types:
-                ftype = self.spdx_namespace[file.FILE_TYPE_TO_XML_DICT[f_type]]
+                ftype = self.spdx_namespace[file.file_type_to_rdf(f_type)]
                 ftype_triple = (file_node, self.spdx_namespace.fileType, ftype)
                 self.graph.add(ftype_triple)
 

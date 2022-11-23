@@ -18,6 +18,9 @@ files:
   licenseConcluded: NOASSERTION
   licenseInfoInFiles:
   - LGPL-2.1-or-later
+  fileTypes:
+  - SOURCE
+  - OTHER
 name: Sample_Document-V2.1
 packages:
 - SPDXID: SPDXRef-Package

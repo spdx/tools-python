@@ -80,6 +80,7 @@ file_str = '\n'.join([
     'FileName: testfile.java',
     'SPDXID: SPDXRef-File',
     'FileType: SOURCE',
+    'FileType: TEXT',
     'FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12',
     'LicenseConcluded: Apache-2.0',
     'LicenseInfoInFile: Apache-2.0',
@@ -358,7 +359,7 @@ class TestParser(TestCase):
         spdx_file = document.files[0]
         assert spdx_file.name == 'testfile.java'
         assert spdx_file.spdx_id == 'SPDXRef-File'
-        assert spdx_file.type == spdx.file.FileType.SOURCE
+        assert spdx_file.file_types == [spdx.file.FileType.SOURCE, spdx.file.FileType.TEXT]
         assert len(spdx_file.artifact_of_project_name) == 1
         assert len(spdx_file.artifact_of_project_home) == 1
         assert len(spdx_file.artifact_of_project_uri) == 1

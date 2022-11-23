@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+from spdx import file
 from spdx.parsers import rdfbuilders
 from spdx.parsers import tagvaluebuilders
 from spdx.parsers import validations
@@ -176,16 +176,12 @@ class FileBuilder(rdfbuilders.FileBuilder):
         """
         Wrap rdfbuilders.FileBuilder.set_file_type to match the different
         fileType representations.
+        This method does not make much sense as it converts the file type (e.g. SOURCE)
+        to rdf format (e.g. fileType_source) which is then converted back.
+        But this seems to be the kind of workflow that is currently in use here.
         """
 
-        type_dict = {
-            "fileType_source": "SOURCE",
-            "fileType_binary": "BINARY",
-            "fileType_archive": "ARCHIVE",
-            "fileType_other": "OTHER",
-        }
-
-        return super(FileBuilder, self).set_file_type(doc, type_dict.get(type_value))
+        return super(FileBuilder, self).set_file_type(doc, f"namespace#fileType_{type_value.lower()}")
 
 
 class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):

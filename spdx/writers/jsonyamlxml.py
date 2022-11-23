@@ -254,7 +254,7 @@ class FileWriter(BaseWriter):
         if file.has_optional_field("file_types"):
             types = []
             for file_type in file.file_types:
-                types.append(FILE_TYPE_TO_STRING_DICT.get(file_type))
+                types.append(file_type.name)
             file_object["fileTypes"] = types
 
         if file.has_optional_field("license_comment"):

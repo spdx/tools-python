@@ -24,6 +24,8 @@ ValidUntilDate: 2022-01-01T12:00:00Z
 # File
 FileName: ./some/path/tofile
 SPDXID: SPDXRef-File
+FileType: OTHER
+FileType: SOURCE
 FileChecksum: SHA1: SOME-SHA1
 LicenseConcluded: NOASSERTION
 LicenseInfoInFile: LGPL-2.1-or-later

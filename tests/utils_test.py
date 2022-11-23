@@ -394,7 +394,7 @@ class TestParserUtils(object):
             file_dict = OrderedDict([
                 ('id', file.spdx_id),
                 ('fileName', file.name),
-                ('type', file.type),
+                ('fileTypes', [file_type.name for file_type in file.file_types]),
                 ('comment', file.comment),
                 ('licenseConcluded', cls.license_to_dict(file.conc_lics)),
                 ('copyrightText', file.copyright),
