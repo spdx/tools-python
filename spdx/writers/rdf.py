@@ -22,6 +22,7 @@ from spdx import config
 from spdx import file
 from spdx import license
 from spdx import utils
+from spdx.checksum import ChecksumAlgorithmIdentifier
 from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
 from spdx.relationship import Relationship
@@ -48,7 +49,7 @@ class BaseWriter(object):
         """
         Return a node representing spdx.checksum.
         """
-        algo = checksum.CHECKSUM_ALGORITHM_TO_XML_DICT.get(chksum.identifier) or 'checksumAlgorithm_sha1'
+        algo = ChecksumAlgorithmIdentifier[chksum.identifier].checksum_to_rdf() or 'checksumAlgorithm_sha1'
         chksum_node = BNode()
         type_triple = (chksum_node, RDF.type, self.spdx_namespace.Checksum)
         self.graph.add(type_triple)

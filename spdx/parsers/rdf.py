@@ -22,6 +22,7 @@ from spdx import document
 from spdx import license
 from spdx import utils
 from spdx import checksum
+from spdx.checksum import ChecksumAlgorithmIdentifier
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.loggers import ErrorMessages
@@ -71,7 +72,7 @@ def convert_rdf_checksum_algorithm(algo):
     ss = algo.split('#')
     if len(ss) != 2:
         raise SPDXValueError('Unknown checksum algorithm {}'.format(algo))
-    algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(ss[1])
+    algo = ChecksumAlgorithmIdentifier.checksum_from_rdf(ss[1])
     if algo is None:
         raise SPDXValueError('Unknown checksum algorithm {}'.format(algo))
     return algo
