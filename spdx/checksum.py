@@ -8,26 +8,43 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from enum import Enum, auto
 
-CHECKSUM_ALGORITHMS = ['SHA1', 'SHA256', 'SHA512']
-CHECKSUM_ALGORITHM_FROM_XML_DICT = {
-    'checksumAlgorithm_sha1': 'SHA1',
-    'checksumAlgorithm_sha256': 'SHA256',
-    'checksumAlgorithm_sha512': 'SHA512',
-}
-CHECKSUM_ALGORITHM_TO_XML_DICT = {
-    'SHA1': 'checksumAlgorithm_sha1',
-    'SHA256': 'checksumAlgorithm_sha256',
-    'SHA512': 'checksumAlgorithm_sha512',
-}
+
+class ChecksumAlgorithmIdentifier(Enum):
+    SHA1 = auto()
+    SHA224 = auto()
+    SHA256 = auto()
+    SHA384 = auto()
+    SHA512 = auto()
+    SHA3_256 = auto()
+    SHA3_384 = auto()
+    SHA3_512 = auto()
+    BLAKE2B_256 = auto()
+    BLAKE2B_384 = auto()
+    BLAKE2B_512 = auto()
+    BLAKE3 = auto()
+    MD2 = auto()
+    MD4 = auto()
+    MD5 = auto()
+    MD6 = auto()
+    ADLER32 = auto()
+
+    def checksum_to_rdf(self):
+        return "checksumAlgorithm_" + self.name.lower()
+
+    @classmethod
+    def checksum_from_rdf(cls, identifier: str) -> str:
+        identifier = identifier.split('_')[-1].upper()
+        return identifier
 
 
 class Algorithm(object):
     """Generic checksum algorithm."""
 
-    def __init__(self, identifier, value):
-        if identifier not in CHECKSUM_ALGORITHMS:
-            raise ValueError('checksum algorithm: {}'.format(identifier))
+    def __init__(self, identifier: str, value):
+        if identifier not in ChecksumAlgorithmIdentifier.__members__:
+            raise ValueError('Invalid algorithm for Checksum: {}'.format(identifier))
         self.identifier = identifier
         self.value = value
 

@@ -10,10 +10,11 @@
 # limitations under the License.
 
 from enum import Enum, auto
+import warnings
 from functools import total_ordering
 import hashlib
 
-from spdx import checksum
+from spdx.checksum import Algorithm, ChecksumAlgorithmIdentifier
 from spdx import utils
 from spdx.license import License
 from spdx.parsers.builderexceptions import SPDXValueError
@@ -101,13 +102,21 @@ class File(object):
     @property
     def chk_sum(self):
         """
-        Backwards compatibility, return first checksum.
+        Backwards compatibility, return SHA1 checksum.
         """
+        warnings.warn("This property is deprecated. Use get_checksum instead.")
         return self.get_checksum('SHA1')
 
     @chk_sum.setter
     def chk_sum(self, value):
-        self.set_checksum(value)
+        """
+        Backwards compatibility, set checksum.
+        """
+        warnings.warn("This property is deprecated. Use set_checksum instead.")
+        if isinstance(value, str):
+            self.set_checksum(Algorithm(ChecksumAlgorithmIdentifier.SHA1, value))
+        elif isinstance(value, Algorithm):
+            self.set_checksum(value)
 
     def add_lics(self, lics):
         self.licenses_in_file.append(lics)
@@ -207,6 +216,8 @@ class File(object):
             return messages
 
     def calculate_checksum(self, hash_algorithm='SHA1'):
+        if hash_algorithm not in ChecksumAlgorithmIdentifier.__members__:
+            raise ValueError
         BUFFER_SIZE = 65536
 
         file_hash = hashlib.new(hash_algorithm.lower())
@@ -219,19 +230,20 @@ class File(object):
 
         return file_hash.hexdigest()
 
-    def get_checksum(self, hash_algorithm='SHA1'):
+    def get_checksum(self, hash_algorithm: ChecksumAlgorithmIdentifier = ChecksumAlgorithmIdentifier.SHA1) -> Algorithm:
         for chk_sum in self.checksums:
             if chk_sum.identifier == hash_algorithm:
                 return chk_sum
         return None
 
-    def set_checksum(self, chk_sum):
-        if isinstance(chk_sum, checksum.Algorithm):
-            for file_chk_sum in self.checksums:
-                if file_chk_sum.identifier == chk_sum.identifier:
-                    file_chk_sum.value = chk_sum.value
-                    return
-            self.checksums.append(chk_sum)
+    def set_checksum(self, chk_sum: Algorithm):
+        if not isinstance(chk_sum, Algorithm):
+            raise SPDXValueError
+        for file_chk_sum in self.checksums:
+            if file_chk_sum.identifier == chk_sum.identifier:
+                file_chk_sum.value = chk_sum.value
+                return
+        self.checksums.append(chk_sum)
 
     def has_optional_field(self, field):
         return bool (getattr(self, field, None))
