@@ -31,7 +31,7 @@
             <supplier>Organization: Linux Foundation</supplier>
             <checksums>
                 <checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</checksumValue>
-                <algorithm>checksumAlgorithm_sha1</algorithm>
+                <algorithm>SHA1</algorithm>
             </checksums>
             <versionInfo>Version 0.9.2</versionInfo>
             <licenseDeclared>(LicenseRef-3 AND LicenseRef-2 AND Apache-2.0 AND MPL-1.1 AND LicenseRef-1 AND LicenseRef-4)</licenseDeclared>
@@ -53,7 +53,7 @@
 		<externalDocumentRefs>
 			<checksum>
 				<checksumValue>d6a770ba38583ed4bb4525bd96e50461655d2759</checksumValue>
-				<algorithm>checksumAlgorithm_sha1</algorithm>
+				<algorithm>SHA1</algorithm>
 			</checksum>
 			<spdxDocument>https://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301</spdxDocument>
 			<externalDocumentId>DocumentRef-spdx-tool-2.1</externalDocumentId>
@@ -206,7 +206,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
             <licenseComments></licenseComments>
             <checksums>
                 <checksumValue>2fd4e1c67a2d28fced849ee1bb76e7391b93eb12</checksumValue>
-                <algorithm>checksumAlgorithm_sha1</algorithm>
+                <algorithm>SHA1</algorithm>
             </checksums>
             <fileTypes>SOURCE</fileTypes>
             <fileTypes>TEXT</fileTypes>
@@ -226,7 +226,11 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
             <licenseComments>This license is used by Jena</licenseComments>
             <checksums>
                 <checksumValue>3ab4e1c67a2d28fced849ee1bb76e7391b93f125</checksumValue>
-                <algorithm>checksumAlgorithm_sha1</algorithm>
+                <algorithm>SHA1</algorithm>
+            </checksums>
+            <checksums>
+                <checksumValue>3ab4e1c67a2d28fced849ee1bb76e7391b93f1250000000000000000</checksumValue>
+                <algorithm>SHA256</algorithm>
             </checksums>
             <fileTypes>ARCHIVE</fileTypes>
             <fileTypes>OTHER</fileTypes>

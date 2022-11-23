@@ -30,6 +30,7 @@ def write_document(document, out, validate=True):
         messages = ErrorMessages()
         messages = document.validate(messages)
         if messages:
+            print(messages.messages)
             raise InvalidDocumentError(messages)
 
     writer = Writer(document)

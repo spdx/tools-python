@@ -18,6 +18,10 @@
             <checksumValue>SOME-SHA1</checksumValue>
             <algorithm>SHA1</algorithm>
         </checksums>
+        <checksums>
+            <checksumValue>SOME-SHA256</checksumValue>
+            <algorithm>SHA256</algorithm>
+        </checksums>
         <licenseDeclared>NOASSERTION</licenseDeclared>
         <licenseConcluded>NOASSERTION</licenseConcluded>
         <licenseInfoFromFiles>LGPL-2.1-only</licenseInfoFromFiles>
@@ -33,6 +37,10 @@
         <checksums>
             <checksumValue>SOME-SHA1</checksumValue>
             <algorithm>SHA1</algorithm>
+        </checksums>
+        <checksums>
+            <checksumValue>SOME-SHA256</checksumValue>
+            <algorithm>SHA256</algorithm>
         </checksums>
         <licenseConcluded>NOASSERTION</licenseConcluded>
         <copyrightText>NOASSERTION</copyrightText>

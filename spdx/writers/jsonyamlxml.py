@@ -169,12 +169,8 @@ class PackageWriter(BaseWriter):
         if package.has_optional_field("originator"):
             package_object["originator"] = package.originator.to_value()
 
-        package_object["checksums"] = []
         for chk_sum in package.checksums:
-            package_object["checksums"].append(self.checksum_to_dict(chk_sum))
-        sha1 = package.get_checksum('SHA1')
-        if sha1 is not None:
-            package_object['sha1'] = sha1.value
+            package_object.setdefault("checksums", []).append(self.checksum_to_dict(chk_sum))
 
         if package.has_optional_field("description"):
             package_object["description"] = package.description
@@ -237,9 +233,8 @@ class FileWriter(BaseWriter):
 
         file_object["fileName"] = file.name
         file_object["SPDXID"] = self.spdx_id(file.spdx_id)
-        file_object["checksums"] = []
         for chk_sum in file.checksums:
-            file_object["checksums"].append(self.checksum_to_dict(chk_sum))
+            file_object.setdefault("checksums",[]).append(self.checksum_to_dict(chk_sum))
         if file.has_optional_field("conc_lics"):
             file_object["licenseConcluded"] = self.license(file.conc_lics)
 

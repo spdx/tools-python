@@ -247,7 +247,7 @@ class TestWriters(TestCase):
         file1 = File('./some/path/tofile')
         file1.name = './some/path/tofile'
         file1.spdx_id = 'SPDXRef-File'
-        file1.chksum = Algorithm('SHA1', 'SOME-SHA1')
+        file1.set_checksum(Algorithm('SHA1', 'SOME-SHA1'))
         file1.conc_lics = NoAssert()
         file1.copyright = NoAssert()
 
