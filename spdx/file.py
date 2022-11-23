@@ -202,9 +202,11 @@ class File(object):
         return messages
 
     def validate_checksum(self, messages):
+        if not self.checksums:
+            return messages
         if self.get_checksum() is None:
             messages.append("At least one file checksum algorithm must be SHA1")
-        return messages
+            return messages
 
     def calculate_checksum(self, hash_algorithm='SHA1'):
         BUFFER_SIZE = 65536

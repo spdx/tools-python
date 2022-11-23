@@ -147,7 +147,8 @@ def minimal_document():
 
 
 def minimal_file():
-    file = File(name="Example File", spdx_id="SPDXRef-File", chksum=Algorithm('SHA1', 'SOME-SHA1'))
+    file = File(name="Example File", spdx_id="SPDXRef-File")
+    file.set_checksum(Algorithm('SHA1', 'some-sha1-value'))
     return file
 
 

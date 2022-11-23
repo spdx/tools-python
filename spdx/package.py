@@ -142,7 +142,10 @@ class Package(object):
         Backwards compatibility, return first checksum.
         """
         # NOTE Package.check_sum but File.chk_sum
-        return self.checksums[0]
+        if self.checksums:
+            return self.checksums[0]
+        else:
+            return None
 
     @checksum.setter
     def checksum(self, value):
@@ -296,9 +299,11 @@ class Package(object):
         return messages
 
     def validate_checksum(self, messages):
+        if not self.checksums:
+            return messages
         if self.get_checksum() is None:
             messages.append("At least one package checksum algorithm must be SHA1")
-        return messages
+            return messages
 
     def get_checksum(self, hash_algorithm='SHA1'):
         for chk_sum in self.checksums:

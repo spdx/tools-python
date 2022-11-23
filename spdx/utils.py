@@ -20,7 +20,7 @@ from ply import yacc
 from spdx import checksum
 if TYPE_CHECKING:
     from spdx.file import File
-from spdx.package import Package
+    from spdx.package import Package
 from spdx.relationship import Relationship
 from spdx import license
 
@@ -230,7 +230,7 @@ def calc_verif_code(files: List['File']) -> str:
     return sha1.hexdigest()
 
 
-def get_files_in_package(package: Package, files: List['File'], relationships: List[Relationship]) -> List['File']:
+def get_files_in_package(package: 'Package', files: List['File'], relationships: List[Relationship]) -> List['File']:
     files_in_package = []
     for file in files:
         if file.spdx_id in [relationship.related_spdx_element for relationship in relationships
@@ -269,7 +269,7 @@ def calc_verif_code(files: List['File']) -> str:
     return sha1.hexdigest()
 
 
-def get_files_in_package(package: Package, files: List['File'], relationships: List[Relationship]) -> List['File']:
+def get_files_in_package(package: 'Package', files: List['File'], relationships: List[Relationship]) -> List['File']:
     files_in_package = []
     for file in files:
         if file.spdx_id in [relationship.related_spdx_element for relationship in relationships
