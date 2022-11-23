@@ -537,8 +537,12 @@ class Writer(
     def create_relationships(self) -> List[Dict]:
         packages_spdx_ids = [package.spdx_id for package in self.document.packages]
         files_spdx_ids = [file.spdx_id for file in self.document.files]
-        # we take the package_objects from document_object because we will modify them to add jsonyamlxml-specific fields
-        packages_by_spdx_id = {package["SPDXID"]: package for package in self.document_object["packages"]}
+        # we take the package_objects from document_object if any exist because we will modify them to add
+        # jsonyamlxml-specific fields
+        if "packages" in self.document_object:
+            packages_by_spdx_id = {package["SPDXID"]: package for package in self.document_object["packages"]}
+        else:
+            packages_by_spdx_id = {}
 
         relationship_objects = []
         for relationship in self.document.relationships:
@@ -588,18 +592,18 @@ class Writer(
         for doc_package in self.document.packages:
             if doc_package.spdx_id not in unique_doc_packages.keys():
                 unique_doc_packages[doc_package.spdx_id] = doc_package
-
-        package_objects = []
-        for package in unique_doc_packages.values():
-            package_info_object = self.create_package_info(package, annotations_by_spdx_id)
-            package_objects.append(package_info_object)
-        self.document_object["packages"] = package_objects
-
-        file_objects = []
-        for file in self.document.files:
-            file_object = self.create_file_info(file, annotations_by_spdx_id)
-            file_objects.append(file_object)
-        self.document_object["files"] = file_objects
+        if unique_doc_packages:
+            package_objects = []
+            for package in unique_doc_packages.values():
+                package_info_object = self.create_package_info(package, annotations_by_spdx_id)
+                package_objects.append(package_info_object)
+            self.document_object["packages"] = package_objects
+        if self.document.files:
+            file_objects = []
+            for file in self.document.files:
+                file_object = self.create_file_info(file, annotations_by_spdx_id)
+                file_objects.append(file_object)
+            self.document_object["files"] = file_objects
 
         if self.document.has_comment:
             self.document_object["comment"] = self.document.comment

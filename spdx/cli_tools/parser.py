@@ -44,30 +44,40 @@ def main(file, force):
         print("\tDate: {0}".format(review.review_date))
         print("\tComment: {0}".format(review.comment))
     print("Creation comment: {0}".format(doc.creation_info.comment))
-    print("Package Name: {0}".format(doc.package.name))
-    print("Package Version: {0}".format(doc.package.version))
-    print(
-        "Package Download Location: {0}".format(doc.package.download_location)
-    )
-    print("Package Homepage: {0}".format(doc.package.homepage))
-    if doc.package.checksum:
-        print("Package Checksum: {0}".format(doc.package.checksum.value))
-    print("Package Attribution Text: {0}".format(doc.package.attribution_text))
-    print("Package verification code: {0}".format(doc.package.verif_code))
-    print(
-        "Package excluded from verif: {0}".format(
-            ",".join(doc.package.verif_exc_files)
+    for package in doc.packages:
+        print("Package Name: {0}".format(package.name))
+        print("Package Version: {0}".format(package.version))
+        print(
+            "Package Download Location: {0}".format(package.download_location)
         )
-    )
-    print("Package license concluded: {0}".format(doc.package.conc_lics))
-    print("Package license declared: {0}".format(doc.package.license_declared))
-    print("Package licenses from files:")
-    for lics in doc.package.licenses_from_files:
-        print("\t{0}".format(lics))
-    print("Package Copyright text: {0}".format(doc.package.cr_text))
-    print("Package summary: {0}".format(doc.package.summary))
-    print("Package description: {0}".format(doc.package.description))
-    print("Package Files:")
+        print("Package Homepage: {0}".format(package.homepage))
+        if package.checksum:
+            print("Package Checksum: {0}".format(package.checksum.value))
+        print("Package Attribution Text: {0}".format(package.attribution_text))
+        print("Package verification code: {0}".format(package.verif_code))
+        print(
+            "Package excluded from verif: {0}".format(
+                ",".join(package.verif_exc_files)
+            )
+        )
+        print("Package license concluded: {0}".format(package.conc_lics))
+        print("Package license declared: {0}".format(package.license_declared))
+        print("Package licenses from files:")
+        for lics in package.licenses_from_files:
+            print("\t{0}".format(lics))
+        print("Package Copyright text: {0}".format(package.cr_text))
+        print("Package summary: {0}".format(package.summary))
+        print("Package description: {0}".format(package.description))
+        if len(package.pkg_ext_refs) > 0:
+            print("Package external references:")
+            for ref in package.pkg_ext_refs:
+                print(f"\tCategory: {ref.category}")
+                print(f"\tType: {ref.pkg_ext_ref_type}")
+                print(f"\tLocator: {ref.locator}")
+                if ref.comment:
+                    print(f"\tComment: {ref.comment}")
+    if doc.files:
+        print("Files:")
     VALUES = {
         spdxfile.FileType.SOURCE: "SOURCE",
         spdxfile.FileType.OTHER: "OTHER",
@@ -90,22 +100,14 @@ def main(file, force):
             )
         )
 
-    if len(doc.package.pkg_ext_refs) > 0:
-        print("Package external references:")
-        for ref in doc.package.pkg_ext_refs:
-            print(f"\tCategory: {ref.category}")
-            print(f"\tType: {ref.pkg_ext_ref_type}")
-            print(f"\tLocator: {ref.locator}")
-            if ref.comment:
-                print(f"\tComment: {ref.comment}")
-
-    print("Document Extracted licenses:")
+    if doc.extracted_licenses:
+        print("Document Extracted licenses:")
     for lics in doc.extracted_licenses:
         print("\tIdentifier: {0}".format(lics.identifier))
         print("\tName: {0}".format(lics.full_name))
         print("\License Text: {0}".format(lics.text))
-
-    print("Annotations:")
+    if doc.annotations:
+        print("Annotations:")
     for an in doc.annotations:
         print("\tAnnotator: {0}".format(an.annotator))
         print("\tAnnotation Date: {0}".format(an.annotation_date))
