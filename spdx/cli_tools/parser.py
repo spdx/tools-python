@@ -115,15 +115,14 @@ def main(file, force):
         print("\tAnnotation Type: {0}".format(an.annotation_type))
         print("\tAnnotation SPDX Identifier: {0}".format(an.spdx_id))
 
-        # print(doc.__dict__)
-
+    if doc.relationships:
         print("Relationships: ")
-        for relation in doc.relationships:
-            print("\tRelationship: {0}".format(relation.relationship))
-            try:
-                print("\tRelationship: {0}".format(relation.comment))
-            except:
-                continue
+    for relation in doc.relationships:
+        print("\tRelationship: {0}".format(relation.relationship))
+        try:
+            print("\tRelationship: {0}".format(relation.comment))
+        except:
+            continue
 
 if __name__ == "__main__":
     main()
