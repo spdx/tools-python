@@ -8,10 +8,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import re
 from enum import Enum, auto
 
-Exceptions_rdf = {"SHA3256": "SHA3_256", "SHA3384": "SHA3_384", "SHA3512": "SHA3_512", "BLAKE2B256": "BLAKE2B_256",
-                  "BLAKE2B384": "BLAKE2B_384", "BLAKE2V512": "BLAKE2B_512"}
 
 
 class ChecksumAlgorithmIdentifier(Enum):
@@ -38,9 +37,11 @@ class ChecksumAlgorithmIdentifier(Enum):
 
     @classmethod
     def checksum_from_rdf(cls, identifier: str) -> str:
-        identifier = identifier.split('_')[-1].upper()
-        if identifier in Exceptions_rdf:
-            return Exceptions_rdf[identifier]
+        identifier = identifier.split('_', 1)[-1].upper()
+        blake_checksum = re.compile(r"(BLAKE2B)\s*(256|384|512)", re.UNICODE)
+        match = blake_checksum.match(identifier)
+        if match:
+            return match[1] + '_' + match[2]
         return identifier
 
 
