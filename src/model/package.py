@@ -42,7 +42,7 @@ class PackageVerificationCode:
 
     def __init__(self, value: str, excluded_files: List[str] = None):
         self.value = value
-        self.excluded_files = [] if excluded_files is None else excluded_files
+        self.excluded_files = excluded_files or []
 
 
 class ExternalPackageReferenceCategory(Enum):
@@ -132,8 +132,8 @@ class Package:
         self.summary = summary
         self.description = description
         self.comment = comment
-        self.external_references = [] if external_references is None else external_references
-        self.attribution_texts = [] if attribution_texts is None else attribution_texts
+        self.external_references = external_references or []
+        self.attribution_texts = attribution_texts or []
         self.primary_package_purpose = primary_package_purpose
         self.release_date = release_date
         self.built_date = built_date

@@ -46,4 +46,4 @@ class Snippet:
         self.copyright_text = copyright_text
         self.comment = comment
         self.name = name
-        self.attribution_texts = [] if attribution_texts is None else attribution_texts
+        self.attribution_texts = attribution_texts or []

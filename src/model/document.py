@@ -45,7 +45,7 @@ class Document:
     name: str
     document_namespace: str
     creation_info: CreationInfo
-    external_document_references: List[ExternalDocumentRef]
+    external_document_refs: List[ExternalDocumentRef]
     comment: Optional[str]
 
     packages: List[Package]
@@ -56,7 +56,7 @@ class Document:
     extracted_licensing_info: List[ExtractedLicensingInfo]
 
     def __init__(self, spdx_version: str, spdx_id: str, name: str, document_namespace: str,
-                 creation_info: CreationInfo, external_document_references: List[ExternalDocumentRef] = None,
+                 creation_info: CreationInfo, external_document_refs: List[ExternalDocumentRef] = None,
                  comment: Optional[str] = None, packages: List[Package] = None, files: List[File] = None,
                  snippets: List[Snippet] = None, annotations: List[Annotation] = None,
                  relationships: List[Relationship] = None,
@@ -66,11 +66,11 @@ class Document:
         self.name = name
         self.document_namespace = document_namespace
         self.creation_info = creation_info
-        self.external_document_references = [] if external_document_references is None else external_document_references
+        self.external_document_refs = external_document_refs or []
         self.comment = comment
-        self.packages = [] if packages is None else packages
-        self.files = [] if files is None else files
-        self.snippets = [] if snippets is None else snippets
-        self.annotations = [] if annotations is None else annotations
-        self.relationships = [] if relationships is None else relationships
-        self.extracted_licensing_info = [] if extracted_licensing_info is None else extracted_licensing_info
+        self.packages = packages or []
+        self.files = files or []
+        self.snippets = snippets or []
+        self.annotations = annotations or []
+        self.relationships = relationships or []
+        self.extracted_licensing_info = extracted_licensing_info or []
