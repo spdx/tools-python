@@ -162,12 +162,10 @@ class FileBuilder(rdfbuilders.FileBuilder):
 
     def set_file_checksum(self, doc, checksum):
         """
-        Set the file check sum, if not already set.
+        Set the file checksum.
         checksum - A string
-        Raise CardinalityError if already defined.
-        Raise OrderError if no package previously defined.
         """
-        if self.has_package(doc) and self.has_file(doc):
+        if self.has_file(doc):
             if isinstance(checksum, dict):
                 algo = checksum.get('algorithm') or 'SHA1'
                 self.file(doc).set_checksum(Algorithm(algo, checksum.get('checksumValue')))
@@ -183,7 +181,7 @@ class FileBuilder(rdfbuilders.FileBuilder):
         Raise OrderError if no package or file defined.
         Raise CardinalityError if more than one.
         """
-        if self.has_package(doc) and self.has_file(doc):
+        if self.has_file(doc):
             self.file_notice_set = True
             self.file(doc).notice = text
             return True

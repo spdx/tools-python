@@ -320,7 +320,7 @@ class Package(object):
                 return checksum
         return None
 
-    def set_checksum(self, new_checksum):
+    def set_checksum(self, new_checksum: Algorithm):
         if not isinstance(new_checksum, Algorithm):
             raise SPDXValueError("Package::Checksum")
 

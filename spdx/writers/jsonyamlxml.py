@@ -234,7 +234,7 @@ class FileWriter(BaseWriter):
         file_object["fileName"] = file.name
         file_object["SPDXID"] = self.spdx_id(file.spdx_id)
         for checksum in file.checksums:
-            file_object.setdefault("checksums",[]).append(self.checksum_to_dict(checksum))
+            file_object.setdefault("checksums", []).append(self.checksum_to_dict(checksum))
         if file.has_optional_field("conc_lics"):
             file_object["licenseConcluded"] = self.license(file.conc_lics)
 
