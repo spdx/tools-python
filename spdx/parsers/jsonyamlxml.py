@@ -823,7 +823,7 @@ class FileParser(BaseParser):
             self.parse_file_attribution_text(file.get("attributionTexts"))
             self.parse_file_dependencies(file.get("fileDependencies"))
             self.parse_annotations(file.get("annotations"), spdx_id=file.get("SPDXID"))
-            self.parse_file_chksum(file.get("checksums"))
+            self.parse_file_checksums(file.get("checksums"))
         else:
             self.value_error("FILE", file)
 
@@ -1093,24 +1093,25 @@ class FileParser(BaseParser):
             return None
         return None
 
-    def parse_file_chksum(self, file_checksum):
+    def parse_file_checksums(self, file_checksums):
         """
         Parse File checksums
-        - file_checksum: Python str/unicode
+        - file_checksum: Python List
         """
-        if isinstance(file_checksum, list):
-            for checksum in file_checksum:
+        if isinstance(file_checksums, list):
+            for checksum in file_checksums:
                 self.builder.set_file_checksum(self.document, checksum)
             return True
-        if isinstance(file_checksum, str):
+        if isinstance(file_checksums, str):
+            # kept for backwards compatibility
             try:
-                return self.builder.set_file_checksum(self.document, file_checksum)
+                return self.builder.set_file_checksum(self.document, file_checksums)
             except CardinalityError:
                 self.more_than_one_error("FILE_CHECKSUM")
             except OrderError:
                 self.order_error("FILE_CHECKSUM", "FILE_NAME")
         else:
-            self.value_error("FILE_CHECKSUM", file_checksum)
+            self.value_error("FILE_CHECKSUM", file_checksums)
 
     def parse_files(self, files: List[Dict]) -> None:
         if files is None:
@@ -1162,7 +1163,7 @@ class PackageParser(BaseParser):
             self.parse_annotations(package.get("annotations"), spdx_id=package.get("SPDXID"))
             self.parse_pkg_attribution_text(package.get("attributionTexts"))
             self.parse_pkg_files(package.get("hasFiles"), method_to_parse_relationship)
-            self.parse_pkg_chksum(package.get("checksums"))
+            self.parse_pkg_checksums(package.get("checksums"))
             self.parse_package_external_refs(package.get("externalRefs"))
             self.parse_primary_package_purpose(package.get("primaryPackagePurpose"))
             self.parse_release_date(package.get("releaseDate"))
@@ -1592,24 +1593,25 @@ class PackageParser(BaseParser):
         elif pkg_has_files is not None:
             self.value_error("PKG_HAS_FILES", pkg_has_files)
 
-    def parse_pkg_chksum(self, pkg_checksum):
+    def parse_pkg_checksums(self, pkg_checksums):
         """
         Parse Package checksum
         - pkg_chksum: Python str/unicode
         """
-        if isinstance(pkg_checksum, list):
-            for checksum in pkg_checksum:
+        if isinstance(pkg_checksums, list):
+            for checksum in pkg_checksums:
                 self.builder.set_pkg_checksum(self.document, checksum)
             return True
-        if isinstance(pkg_checksum, str):
+        if isinstance(pkg_checksums, str):
+            # kept for backwards compatibility
             try:
-                return self.builder.set_pkg_checksum(self.document, pkg_checksum)
+                return self.builder.set_pkg_checksum(self.document, pkg_checksums)
             except CardinalityError:
                 self.more_than_one_error("PKG_CHECKSUM")
             except OrderError:
                 self.order_error("PKG_CHECKSUM", "PKG_NAME")
-        elif pkg_checksum is not None:
-            self.value_error("PKG_CHECKSUM", pkg_checksum)
+        elif pkg_checksums is not None:
+            self.value_error("PKG_CHECKSUM", pkg_checksums)
 
     def parse_package_external_refs(self, external_refs: List[Dict]):
         if external_refs is None:

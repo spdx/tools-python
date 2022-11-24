@@ -245,4 +245,4 @@ class File(object):
         self.checksums.append(checksum)
 
     def has_optional_field(self, field):
-        return bool (getattr(self, field, None))
+        return bool(getattr(self, field, None))
