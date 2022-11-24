@@ -24,6 +24,7 @@ from spdx import review
 from spdx import snippet
 from spdx import utils
 from spdx import version
+from spdx.checksum import Algorithm
 
 from spdx.document import ExternalDocumentRef
 from spdx.package import PackagePurpose
@@ -38,7 +39,7 @@ def checksum_algorithm_from_string(value):
         "SHA1|SHA224|SHA256|SHA384|SHA512|SHA3-256|SHA3-384|SHA3-512):\\s*([a-f0-9]*)")
     match = CHECKSUM_RE.match(value)
     if match:
-        return checksum.Algorithm(identifier=match.group(1), value=match.group(2))
+        return Algorithm(identifier=match.group(1), value=match.group(2))
     else:
         return None
 
@@ -776,15 +777,15 @@ class PackageBuilder(object):
             ).split(",")
         return True
 
-    def set_pkg_chk_sum(self, doc, chk_sum):
+    def set_pkg_checksum(self, doc, checksum):
         """
         Set the package checksum, if not already set.
-        chk_sum - A string
+        checksum - A string
         Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
         self.package_chk_sum_set = True
-        doc.packages[-1].set_checksum(checksum_algorithm_from_string(chk_sum))
+        doc.packages[-1].set_checksum(checksum_algorithm_from_string(checksum))
         return True
 
     def set_pkg_source_info(self, doc, text):
@@ -1189,18 +1190,16 @@ class FileBuilder(object):
 
         spdx_file.file_types.append(file_type)
 
-    def set_file_chksum(self, doc, chksum):
+    def set_file_checksum(self, doc, checksum):
         """
         Raise OrderError if no file defined.
         Raise CardinalityError if no SHA1 checksum set.
         """
         if self.has_file(doc):
             self.file_chksum_set = False
-            chk_sums = self.file(doc).checksums
-            chk_sums.append(checksum_algorithm_from_string(chksum))
-            self.file(doc).checksums = chk_sums
-            for chk_sum in self.file(doc).checksums:
-                if chk_sum.identifier == 'SHA1':
+            self.file(doc).checksums.append(checksum_algorithm_from_string(checksum))
+            for file_checksum in self.file(doc).checksums:
+                if file_checksum.identifier == 'SHA1':
                     self.file_chksum_set = True
             if not self.file_chksum_set:
                 raise CardinalityError("File::CheckSum")

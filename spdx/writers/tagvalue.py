@@ -124,8 +124,8 @@ def write_file(spdx_file, out):
         write_value("SPDXID", spdx_file.spdx_id, out)
     for file_type in spdx_file.file_types:
         write_file_type(file_type.name, out)
-    for file_chk_sum in spdx_file.checksums:
-        write_value("FileChecksum", file_chk_sum.to_tv(), out)
+    for file_checksum in spdx_file.checksums:
+        write_value("FileChecksum", file_checksum.to_tv(), out)
     if spdx_file.has_optional_field("conc_lics"):
         if isinstance(
             spdx_file.conc_lics, (license.LicenseConjunction, license.LicenseDisjunction)

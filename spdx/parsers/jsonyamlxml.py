@@ -1093,24 +1093,24 @@ class FileParser(BaseParser):
             return None
         return None
 
-    def parse_file_chksum(self, file_chksum):
+    def parse_file_chksum(self, file_checksum):
         """
         Parse File checksums
-        - file_chksum: Python str/unicode
+        - file_checksum: Python str/unicode
         """
-        if isinstance(file_chksum, list):
-            for chk_sum in file_chksum:
-                self.builder.set_file_chksum(self.document, chk_sum)
+        if isinstance(file_checksum, list):
+            for checksum in file_checksum:
+                self.builder.set_file_checksum(self.document, checksum)
             return True
-        if isinstance(file_chksum, str):
+        if isinstance(file_checksum, str):
             try:
-                return self.builder.set_file_chksum(self.document, file_chksum)
+                return self.builder.set_file_checksum(self.document, file_checksum)
             except CardinalityError:
                 self.more_than_one_error("FILE_CHECKSUM")
             except OrderError:
                 self.order_error("FILE_CHECKSUM", "FILE_NAME")
         else:
-            self.value_error("FILE_CHECKSUM", file_chksum)
+            self.value_error("FILE_CHECKSUM", file_checksum)
 
     def parse_files(self, files: List[Dict]) -> None:
         if files is None:
@@ -1592,24 +1592,24 @@ class PackageParser(BaseParser):
         elif pkg_has_files is not None:
             self.value_error("PKG_HAS_FILES", pkg_has_files)
 
-    def parse_pkg_chksum(self, pkg_chksum):
+    def parse_pkg_chksum(self, pkg_checksum):
         """
         Parse Package checksum
         - pkg_chksum: Python str/unicode
         """
-        if isinstance(pkg_chksum, list):
-            for chk_sum in pkg_chksum:
-                self.builder.set_pkg_chk_sum(self.document, chk_sum)
+        if isinstance(pkg_checksum, list):
+            for checksum in pkg_checksum:
+                self.builder.set_pkg_checksum(self.document, checksum)
             return True
-        if isinstance(pkg_chksum, str):
+        if isinstance(pkg_checksum, str):
             try:
-                return self.builder.set_pkg_chk_sum(self.document, pkg_chksum)
+                return self.builder.set_pkg_checksum(self.document, pkg_checksum)
             except CardinalityError:
                 self.more_than_one_error("PKG_CHECKSUM")
             except OrderError:
                 self.order_error("PKG_CHECKSUM", "PKG_NAME")
-        elif pkg_chksum is not None:
-            self.value_error("PKG_CHECKSUM", pkg_chksum)
+        elif pkg_checksum is not None:
+            self.value_error("PKG_CHECKSUM", pkg_checksum)
 
     def parse_package_external_refs(self, external_refs: List[Dict]):
         if external_refs is None:
