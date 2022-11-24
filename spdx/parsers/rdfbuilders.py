@@ -10,6 +10,7 @@
 # limitations under the License.
 
 import re
+from typing import Dict
 
 from spdx import file
 from spdx import license
@@ -186,23 +187,23 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
     def __init__(self):
         super(PackageBuilder, self).__init__()
 
-    def set_pkg_checksum(self, doc, checksum):
+    def set_pkg_checksum(self, doc, checksum: [Algorithm, Dict]):
         """
-        Set the package check sum, if not already set.
-        chk_sum - A string
-        Raise CardinalityError if already defined.
+        Set the package checksum.
+        checksum - A string
+        Raise SPDXValueError if checksum type invalid.
         Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
-        self.package_chk_sum_set = True
         if isinstance(checksum, dict):
             algo = checksum.get('algorithm') or 'SHA1'
             if algo.startswith('checksumAlgorithm_'):
                 algo = convert_rdf_checksum_algorithm(algo) or 'SHA1'
-            doc.packages[-1].set_checksum(Algorithm(identifier=algo,
-                                                             value=checksum.get('checksumValue')))
+            doc.packages[-1].set_checksum(Algorithm(identifier=algo, value=checksum.get('checksumValue')))
         elif isinstance(checksum, Algorithm):
             doc.packages[-1].set_checksum(checksum)
+        else:
+            raise SPDXValueError("Invalid value for package checksum.")
 
     def set_pkg_source_info(self, doc, text):
         """

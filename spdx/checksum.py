@@ -10,6 +10,9 @@
 # limitations under the License.
 from enum import Enum, auto
 
+Exceptions_rdf = {"SHA3256": "SHA3_256", "SHA3384": "SHA3_384", "SHA3512": "SHA3_512", "BLAKE2B256": "BLAKE2B_256",
+                  "BLAKE2B384": "BLAKE2B_384", "BLAKE2V512": "BLAKE2B_512"}
+
 
 class ChecksumAlgorithmIdentifier(Enum):
     SHA1 = auto()
@@ -36,6 +39,8 @@ class ChecksumAlgorithmIdentifier(Enum):
     @classmethod
     def checksum_from_rdf(cls, identifier: str) -> str:
         identifier = identifier.split('_')[-1].upper()
+        if identifier in Exceptions_rdf:
+            return Exceptions_rdf[identifier]
         return identifier
 
 
@@ -43,7 +48,7 @@ class Algorithm(object):
     """Generic checksum algorithm."""
 
     def __init__(self, identifier: str, value):
-        if identifier.upper().replace('-','_') not in ChecksumAlgorithmIdentifier.__members__:
+        if identifier.upper().replace('-', '_') not in ChecksumAlgorithmIdentifier.__members__:
             raise ValueError('Invalid algorithm for Checksum: {}'.format(identifier))
         self.identifier = identifier
         self.value = value
