@@ -34,7 +34,8 @@ from spdx.parsers import validations
 
 
 def checksum_algorithm_from_string(value):
-    CHECKSUM_RE = re.compile("(SHA1|SHA256|SHA512):\\s*([a-f0-9]*)")
+    CHECKSUM_RE = re.compile("(ADLER32|BLAKE2b-256|BLAKE2b-384|BLAKE2b-512|BLAKE3|MD2|MD4|MD5|MD6|" \
+        "SHA1|SHA224|SHA256|SHA384|SHA512|SHA3-256|SHA3-384|SHA3-512):\\s*([a-f0-9]*)")
     match = CHECKSUM_RE.match(value)
     if match:
         return checksum.Algorithm(identifier=match.group(1), value=match.group(2))
@@ -777,9 +778,8 @@ class PackageBuilder(object):
 
     def set_pkg_chk_sum(self, doc, chk_sum):
         """
-        Set the package check sum, if not already set.
+        Set the package checksum, if not already set.
         chk_sum - A string
-        Raise CardinalityError if already defined.
         Raise OrderError if no package previously defined.
         """
         self.assert_package_exists()
@@ -1191,14 +1191,14 @@ class FileBuilder(object):
 
     def set_file_chksum(self, doc, chksum):
         """
-        Raise OrderError if no package or file defined.
-        Raise CardinalityError if more than one chksum set.
+        Raise OrderError if no file defined.
+        Raise CardinalityError if no SHA1 checksum set.
         """
-        if self.has_package(doc) and self.has_file(doc):
+        if self.has_file(doc):
             self.file_chksum_set = False
-            chk_sums = doc.files[-1].checksums
+            chk_sums = self.file(doc).checksums
             chk_sums.append(checksum_algorithm_from_string(chksum))
-            doc.files[-1].checksums = chk_sums
+            self.file(doc).checksums = chk_sums
             for chk_sum in self.file(doc).checksums:
                 if chk_sum.identifier == 'SHA1':
                     self.file_chksum_set = True
