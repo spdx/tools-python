@@ -358,7 +358,7 @@ class TestParserUtils(object):
             ('licenseDeclared', cls.license_to_dict(package.license_declared)),
             ('copyrightText', package.cr_text),
             ('licenseComment', package.license_comment),
-            ('checksum', cls.checksum_to_dict(package.checksum)),
+            ('checksums', [cls.checksum_to_dict(checksum) for checksum in package.checksums.values()]),
             ('licenseInfoFromFiles', [cls.license_to_dict(lic) for lic in lics_from_files]),
             ('verificationCode', OrderedDict([
                 ('value', package.verif_code),
@@ -392,7 +392,7 @@ class TestParserUtils(object):
             lics_in_files = sorted(file.licenses_in_file, key=lambda lic: lic.identifier)
             contributors = sorted(file.contributors, key=lambda c: c.name)
             chk_sums = []
-            for chk_sum in file.checksums:
+            for _, chk_sum in file.checksums.items():
                 chk_sums.append(cls.checksum_to_dict(chk_sum))
 
             file_dict = OrderedDict([
