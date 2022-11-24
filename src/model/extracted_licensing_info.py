@@ -27,4 +27,4 @@ class ExtractedLicensingInfo:
         self.extracted_text = extracted_text
         self.license_name = license_name
         self.comment = comment
-        self.cross_references = [] if cross_references is None else cross_references
+        self.cross_references = cross_references or []
