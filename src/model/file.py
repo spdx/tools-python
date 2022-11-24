@@ -61,13 +61,13 @@ class File:
                  contributors: List[str] = None, attribution_texts: List[str] = None):
         self.name = name
         self.spdx_id = spdx_id
-        self.file_type = [] if file_type is None else file_type
+        self.file_type = file_type or []
         self.checksums = checksums
-        self.concluded_license = [] if concluded_license is None else concluded_license
-        self.license_info_in_file = [] if license_info_in_file is None else license_info_in_file
+        self.concluded_license = concluded_license or []
+        self.license_info_in_file = license_info_in_file or []
         self.license_comment = license_comment
         self.copyright_text = copyright_text
         self.comment = comment
         self.notice = notice
-        self.contributors = [] if contributors is None else contributors
-        self.attribution_texts = [] if attribution_texts is None else attribution_texts
+        self.contributors = contributors or []
+        self.attribution_texts = attribution_texts or []
