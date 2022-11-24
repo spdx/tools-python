@@ -11,15 +11,17 @@
 
 import re
 
-from spdx import checksum, file
+from spdx import file
 from spdx import license
 from spdx import package
 from spdx import version
+from spdx.checksum import Algorithm
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers import tagvaluebuilders
 from spdx.parsers import validations
+from spdx.parsers.rdf import convert_rdf_checksum_algorithm
 
 
 class DocBuilder(object):
@@ -141,7 +143,7 @@ class ExternalDocumentRefBuilder(tagvaluebuilders.ExternalDocumentRefBuilder):
         chk_sum - The checksum value in the form of a string.
         """
         if chk_sum:
-            doc.ext_document_references[-1].check_sum = checksum.Algorithm(
+            doc.ext_document_references[-1].check_sum = Algorithm(
                 "SHA1", chk_sum
             )
         else:
@@ -184,7 +186,7 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
     def __init__(self):
         super(PackageBuilder, self).__init__()
 
-    def set_pkg_chk_sum(self, doc, chk_sum):
+    def set_pkg_checksum(self, doc, checksum):
         """
         Set the package check sum, if not already set.
         chk_sum - A string
@@ -193,14 +195,14 @@ class PackageBuilder(tagvaluebuilders.PackageBuilder):
         """
         self.assert_package_exists()
         self.package_chk_sum_set = True
-        if isinstance(chk_sum, dict):
-            algo = chk_sum.get('algorithm') or 'SHA1'
+        if isinstance(checksum, dict):
+            algo = checksum.get('algorithm') or 'SHA1'
             if algo.startswith('checksumAlgorithm_'):
-                algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(algo) or 'SHA1'
-            doc.packages[-1].set_checksum(checksum.Algorithm(identifier=algo,
-                                                             value=chk_sum.get('checksumValue')))
-        elif isinstance(chk_sum, checksum.Algorithm):
-            doc.packages[-1].set_checksum(chk_sum)
+                algo = convert_rdf_checksum_algorithm(algo) or 'SHA1'
+            doc.packages[-1].set_checksum(Algorithm(identifier=algo,
+                                                             value=checksum.get('checksumValue')))
+        elif isinstance(checksum, Algorithm):
+            doc.packages[-1].set_checksum(checksum)
 
     def set_pkg_source_info(self, doc, text):
         """
@@ -384,7 +386,7 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
     def __init__(self):
         super(FileBuilder, self).__init__()
 
-    def set_file_chksum(self, doc, chk_sum):
+    def set_file_checksum(self, doc, chk_sum):
         """
         Set the file check sum, if not already set.
         chk_sum - A string
@@ -393,12 +395,12 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         """
         if self.has_package(doc) and self.has_file(doc):
             if isinstance(chk_sum, dict):
-                self.file(doc).set_checksum(checksum.Algorithm(chk_sum.get('algorithm'),
+                self.file(doc).set_checksum(Algorithm(chk_sum.get('algorithm'),
                                                                chk_sum.get('checksumValue')))
-            elif isinstance(chk_sum, checksum.Algorithm):
+            elif isinstance(chk_sum, Algorithm):
                 self.file(doc).set_checksum(chk_sum)
             else:
-                self.file(doc).set_checksum(checksum.Algorithm("SHA1", chk_sum))
+                self.file(doc).set_checksum(Algorithm("SHA1", chk_sum))
             return True
 
     def set_file_license_comment(self, doc, text):

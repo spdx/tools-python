@@ -525,7 +525,7 @@ class PackageParser(LicenseParser):
                 ):
                     algo = convert_rdf_checksum_algorithm(str(algo))
                     chk_sum = checksum.Algorithm(str(algo), str(value))
-                    self.builder.set_pkg_chk_sum(self.doc, chk_sum)
+                    self.builder.set_pkg_checksum(self.doc, chk_sum)
 
 
     def p_pkg_homepg(self, p_term, predicate):
@@ -797,7 +797,7 @@ class FileParser(LicenseParser):
                     ):
                         algo = convert_rdf_checksum_algorithm(str(algo))
                         chk_sum = checksum.Algorithm(str(algo), str(value))
-                        self.builder.set_file_chksum(self.doc, chk_sum)
+                        self.builder.set_file_checksum(self.doc, chk_sum)
         except CardinalityError:
             self.more_than_one_error("File checksum")
 

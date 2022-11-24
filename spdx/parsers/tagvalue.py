@@ -650,7 +650,7 @@ class Parser(object):
         """file_chksum : FILE_CHKSUM CHKSUM"""
         try:
             value = p[2]
-            self.builder.set_file_chksum(self.document, value)
+            self.builder.set_file_checksum(self.document, value)
         except OrderError:
             self.order_error("FileChecksum", "FileName", p.lineno(1))
         except CardinalityError:
@@ -934,7 +934,7 @@ class Parser(object):
         """pkg_chksum : PKG_CHKSUM CHKSUM"""
         try:
             value = p[2]
-            self.builder.set_pkg_chk_sum(self.document, value)
+            self.builder.set_pkg_checksum(self.document, value)
         except OrderError:
             self.order_error("PackageChecksum", "PackageFileName", p.lineno(1))
         except CardinalityError:

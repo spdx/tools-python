@@ -231,19 +231,18 @@ class File(object):
         return file_hash.hexdigest()
 
     def get_checksum(self, hash_algorithm: ChecksumAlgorithmIdentifier = ChecksumAlgorithmIdentifier.SHA1) -> Algorithm:
-        for chk_sum in self.checksums:
-            if chk_sum.identifier == hash_algorithm:
-                return chk_sum
-        return None
+        for checksum in self.checksums:
+            if checksum.identifier == hash_algorithm:
+                return checksum
 
-    def set_checksum(self, chk_sum: Algorithm):
-        if not isinstance(chk_sum, Algorithm):
+    def set_checksum(self, checksum: Algorithm):
+        if not isinstance(checksum, Algorithm):
             raise SPDXValueError
-        for file_chk_sum in self.checksums:
-            if file_chk_sum.identifier == chk_sum.identifier:
-                file_chk_sum.value = chk_sum.value
+        for file_checksum in self.checksums:
+            if file_checksum.identifier == checksum.identifier:
+                file_checksum.value = checksum.value
                 return
-        self.checksums.append(chk_sum)
+        self.checksums.append(checksum)
 
     def has_optional_field(self, field):
         return bool (getattr(self, field, None))

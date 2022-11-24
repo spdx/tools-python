@@ -516,7 +516,7 @@ class TestPackageBuilder(TestCase):
 
     @testing_utils.raises(builders.OrderError)
     def test_pkg_chksum_order(self):
-        self.builder.set_pkg_chk_sum(self.document, "some code")
+        self.builder.set_pkg_checksum(self.document, "some code")
 
     @testing_utils.raises(builders.OrderError)
     def test_pkg_source_info_order(self):

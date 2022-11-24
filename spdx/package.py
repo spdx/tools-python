@@ -14,7 +14,6 @@ from enum import Enum
 from functools import reduce
 from typing import Optional
 
-from spdx import checksum
 from spdx import creationinfo
 from spdx import license
 from spdx import utils
@@ -316,9 +315,9 @@ class Package(object):
             return messages
 
     def get_checksum(self, hash_algorithm: ChecksumAlgorithmIdentifier = ChecksumAlgorithmIdentifier.SHA1):
-        for chk_sum in self.checksums:
-            if chk_sum.identifier == hash_algorithm:
-                return chk_sum
+        for checksum in self.checksums:
+            if checksum.identifier == hash_algorithm:
+                return checksum
         return None
 
     def set_checksum(self, new_checksum):

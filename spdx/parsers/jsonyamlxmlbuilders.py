@@ -12,7 +12,7 @@ from spdx import file
 from spdx.parsers import rdfbuilders
 from spdx.parsers import tagvaluebuilders
 from spdx.parsers import validations
-from spdx import checksum
+from spdx.checksum import Algorithm
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
@@ -160,23 +160,21 @@ class FileBuilder(rdfbuilders.FileBuilder):
     def __init__(self):
         super(FileBuilder, self).__init__()
 
-    def set_file_chksum(self, doc, chk_sum):
+    def set_file_checksum(self, doc, checksum):
         """
         Set the file check sum, if not already set.
-        chk_sum - A string
+        checksum - A string
         Raise CardinalityError if already defined.
         Raise OrderError if no package previously defined.
         """
         if self.has_package(doc) and self.has_file(doc):
-            if isinstance(chk_sum, dict):
-
-                #algo = checksum.CHECKSUM_ALGORITHM_FROM_XML_DICT.get(chk_sum.get('algorithm') or 'SHA1')
-                algo = chk_sum.get('algorithm') or 'SHA1'
-                self.file(doc).set_checksum(checksum.Algorithm(algo, chk_sum.get('checksumValue')))
-            elif isinstance(chk_sum, checksum.Algorithm):
-                self.file(doc).set_checksum(chk_sum)
+            if isinstance(checksum, dict):
+                algo = checksum.get('algorithm') or 'SHA1'
+                self.file(doc).set_checksum(Algorithm(algo, checksum.get('checksumValue')))
+            elif isinstance(checksum, Algorithm):
+                self.file(doc).set_checksum(checksum)
             else:
-                self.file(doc).set_checksum(checksum.Algorithm("SHA1", chk_sum))
+                self.file(doc).set_checksum(Algorithm("SHA1", checksum))
             return True
 
     def set_file_notice(self, doc, text):
