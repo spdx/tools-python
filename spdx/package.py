@@ -119,14 +119,13 @@ class Package(object):
         self.built_date: Optional[datetime] = None
         self.valid_until_date: Optional[datetime] = None
 
-
     @property
     def check_sum(self):
         """
         Backwards compatibility, return SHA1 checksum.
         """
         warnings.warn("This property is deprecated. Use get_checksum instead.")
-        return self.get_checksum('SHA1')
+        return self.get_checksum(ChecksumAlgorithmIdentifier.SHA1)
 
     @check_sum.setter
     def check_sum(self, value):
@@ -135,7 +134,7 @@ class Package(object):
         """
         warnings.warn("This property is deprecated. Use set_checksum instead.")
         if isinstance(value, str):
-            self.set_checksum(Algorithm(ChecksumAlgorithmIdentifier.SHA1, value))
+            self.set_checksum(Algorithm("SHA1", value))
         elif isinstance(value, Algorithm):
             self.set_checksum(value)
 
@@ -144,21 +143,6 @@ class Package(object):
         return self.files_analyzed is not False
         # as default None Value is False, previous line is simplification of
         # return self.files_analyzed or self.files_analyzed is None
-
-    @property
-    def checksum(self):
-        """
-        Backwards compatibility, return first checksum.
-        """
-        # NOTE Package.check_sum but File.chk_sum
-        if self.checksums:
-            return self.checksums["SHA1"]
-        else:
-            return None
-
-    @checksum.setter
-    def checksum(self, value):
-        self.checksums[0] = value
 
     def add_lics_from_file(self, lics):
         self.licenses_from_files.append(lics)

@@ -26,12 +26,20 @@
             "@rdf:resource": "http://spdx.org/rdf/terms#noassertion"
           }, 
           "ns1:copyrightText": "Some copyright",
-          "ns1:checksum": {
-            "ns1:Checksum": {
-              "ns1:algorithm": "http://spdx.org/rdf/terms#checksumAlgorithm_sha1",
-              "ns1:checksumValue": "SOME-SHA1"
-            }
-          }
+            "ns1:checksum": [
+                {
+                    "ns1:Checksum": {
+                        "ns1:algorithm": "http://spdx.org/rdf/terms#checksumAlgorithm_sha1",
+                        "ns1:checksumValue": "SOME-SHA1"
+                    }
+                },
+                {
+                    "ns1:Checksum": {
+                        "ns1:algorithm": "http://spdx.org/rdf/terms#checksumAlgorithm_sha256",
+                        "ns1:checksumValue": "SOME-SHA256"
+                    }
+                }
+            ]
         }
       }, 
       "ns1:specVersion": "SPDX-2.1", 

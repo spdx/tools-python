@@ -773,9 +773,10 @@ class PackageWriter(LicenseWriter):
             package, package_node, self.spdx_namespace.filesAnalyzed, "files_analyzed"
         )
 
-        if package.has_optional_field("checksum"):
-            checksum_node = self.create_checksum_node(package.checksum)
-            self.graph.add((package_node, self.spdx_namespace.checksum, checksum_node))
+        if package.has_optional_field("checksums"):
+            for checksum in package.checksums.values():
+                checksum_node = self.create_checksum_node(checksum)
+                self.graph.add((package_node, self.spdx_namespace.checksum, checksum_node))
 
         if package.has_optional_field("homepage"):
             homepage_node = URIRef(self.to_special_value(package.homepage))
