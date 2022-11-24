@@ -17,7 +17,7 @@ from rdflib import RDF
 from rdflib import RDFS
 from rdflib import URIRef
 from rdflib.compare import to_isomorphic
-from spdx import checksum
+
 from spdx import config
 from spdx import file
 from spdx import license
@@ -45,27 +45,27 @@ class BaseWriter(object):
         self.spdx_namespace = Namespace("http://spdx.org/rdf/terms#")
         self.graph = Graph()
 
-    def create_checksum_node(self, chksum):
+    def create_checksum_node(self, checksum):
         """
         Return a node representing spdx.checksum.
         """
-        algo = ChecksumAlgorithmIdentifier[chksum.identifier].checksum_to_rdf() or 'checksumAlgorithm_sha1'
-        chksum_node = BNode()
-        type_triple = (chksum_node, RDF.type, self.spdx_namespace.Checksum)
+        algo = ChecksumAlgorithmIdentifier[checksum.identifier].checksum_to_rdf() or 'checksumAlgorithm_sha1'
+        checksum_node = BNode()
+        type_triple = (checksum_node, RDF.type, self.spdx_namespace.Checksum)
         self.graph.add(type_triple)
         algorithm_triple = (
-            chksum_node,
+            checksum_node,
             self.spdx_namespace.algorithm,
             Literal('http://spdx.org/rdf/terms#' + algo),
         )
         self.graph.add(algorithm_triple)
         value_triple = (
-            chksum_node,
+            checksum_node,
             self.spdx_namespace.checksumValue,
-            Literal(chksum.value),
+            Literal(checksum.value),
         )
         self.graph.add(value_triple)
-        return chksum_node
+        return checksum_node
 
     def to_special_value(self, value):
         """

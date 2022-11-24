@@ -21,8 +21,7 @@ from rdflib import RDFS
 from spdx import document
 from spdx import license
 from spdx import utils
-from spdx import checksum
-from spdx.checksum import ChecksumAlgorithmIdentifier
+from spdx.checksum import Algorithm, ChecksumAlgorithmIdentifier
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.loggers import ErrorMessages
@@ -364,7 +363,7 @@ class PackageParser(LicenseParser):
         self.p_pkg_down_loc(p_term, self.spdx_namespace["downloadLocation"])
         self.p_pkg_files_analyzed(p_term, self.spdx_namespace["filesAnalyzed"])
         self.p_pkg_homepg(p_term, self.doap_namespace["homepage"])
-        self.p_pkg_chk_sum(p_term, self.spdx_namespace["checksum"])
+        self.p_pkg_checksum(p_term, self.spdx_namespace["checksum"])
         self.p_pkg_src_info(p_term, self.spdx_namespace["sourceInfo"])
         self.p_pkg_verif_code(p_term, self.spdx_namespace["packageVerificationCode"])
         self.p_pkg_attribution_text(p_term, self.spdx_namespace["attributionText"])
@@ -515,7 +514,7 @@ class PackageParser(LicenseParser):
                 self.more_than_one_error("package source info")
                 break
 
-    def p_pkg_chk_sum(self, p_term, predicate):
+    def p_pkg_checksum(self, p_term, predicate):
         for _s, _p, pkg_checksum in self.graph.triples((p_term, predicate, None)):
             for _, _, value in self.graph.triples(
                 (pkg_checksum, self.spdx_namespace["checksumValue"], None)
@@ -523,10 +522,9 @@ class PackageParser(LicenseParser):
                 for _, _, algo in self.graph.triples(
                         (pkg_checksum, self.spdx_namespace["algorithm"], None)
                 ):
-                    algo = convert_rdf_checksum_algorithm(str(algo))
-                    chk_sum = checksum.Algorithm(str(algo), str(value))
-                    self.builder.set_pkg_checksum(self.doc, chk_sum)
-
+                    algorithm_identifier = convert_rdf_checksum_algorithm(str(algo))
+                    checksum = Algorithm(algorithm_identifier, str(value))
+                    self.builder.set_pkg_checksum(self.doc, checksum)
 
     def p_pkg_homepg(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):
@@ -629,7 +627,7 @@ class FileParser(LicenseParser):
 
         self.p_file_spdx_id(f_term, self.spdx_namespace["File"])
         self.p_file_type(f_term, self.spdx_namespace["fileType"])
-        self.p_file_chk_sum(f_term, self.spdx_namespace["checksum"])
+        self.p_file_checksum(f_term, self.spdx_namespace["checksum"])
         self.p_file_lic_conc(f_term, self.spdx_namespace["licenseConcluded"])
         self.p_file_lic_info(f_term, self.spdx_namespace["licenseInfoInFile"])
         self.p_file_comments_on_lics(f_term, self.spdx_namespace["licenseComments"])
@@ -783,23 +781,20 @@ class FileParser(LicenseParser):
         except CardinalityError:
             self.more_than_one_error("file type")
 
-    def p_file_chk_sum(self, f_term, predicate):
+    def p_file_checksum(self, f_term, predicate):
         """
         Set file checksum.
         """
-        try:
-            for _s, _p, file_checksum in self.graph.triples((f_term, predicate, None)):
-                for _, _, value in self.graph.triples(
-                    (file_checksum, self.spdx_namespace["checksumValue"], None)
+        for _s, _p, file_checksum in self.graph.triples((f_term, predicate, None)):
+            for _, _, value in self.graph.triples(
+                (file_checksum, self.spdx_namespace["checksumValue"], None)
+            ):
+                for _, _, algo in self.graph.triples(
+                        (file_checksum, self.spdx_namespace["algorithm"], None)
                 ):
-                    for _, _, algo in self.graph.triples(
-                            (file_checksum, self.spdx_namespace["algorithm"], None)
-                    ):
-                        algo = convert_rdf_checksum_algorithm(str(algo))
-                        chk_sum = checksum.Algorithm(str(algo), str(value))
-                        self.builder.set_file_checksum(self.doc, chk_sum)
-        except CardinalityError:
-            self.more_than_one_error("File checksum")
+                    algorithm_identifier = convert_rdf_checksum_algorithm(str(algo))
+                    checksum = Algorithm(algorithm_identifier, str(value))
+                    self.builder.set_file_checksum(self.doc, checksum)
 
     def p_file_lic_conc(self, f_term, predicate):
         """
