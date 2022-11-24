@@ -43,7 +43,7 @@ class Algorithm(object):
     """Generic checksum algorithm."""
 
     def __init__(self, identifier: str, value):
-        if identifier not in ChecksumAlgorithmIdentifier.__members__:
+        if identifier.upper().replace('-','_') not in ChecksumAlgorithmIdentifier.__members__:
             raise ValueError('Invalid algorithm for Checksum: {}'.format(identifier))
         self.identifier = identifier
         self.value = value

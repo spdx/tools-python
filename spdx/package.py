@@ -323,7 +323,7 @@ class Package(object):
 
     def set_checksum(self, new_checksum):
         if not isinstance(new_checksum, Algorithm):
-            raise SPDXValueError
+            raise SPDXValueError("Package::Checksum")
 
         for checksum in self.checksums:
             if checksum.identifier == new_checksum.identifier:
