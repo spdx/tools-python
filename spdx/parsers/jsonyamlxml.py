@@ -1461,7 +1461,7 @@ class PackageParser(BaseParser):
             for pkg_attribution_text in pkg_attribution_texts:
                 try:
                     return self.builder.set_pkg_attribution_text(
-                        self.document, pkg_attribution_texts
+                        self.document, pkg_attribution_text
                     )
                 except CardinalityError:
                     self.more_than_one_error("PKG_ATTRIBUTION_TEXT")
