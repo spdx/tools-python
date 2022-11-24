@@ -1196,13 +1196,9 @@ class FileBuilder(object):
         Raise CardinalityError if no SHA1 checksum set.
         """
         if self.has_file(doc):
-            self.file_chksum_set = False
-            self.file(doc).checksums.append(checksum_algorithm_from_string(checksum))
-            for file_checksum in self.file(doc).checksums:
-                if file_checksum.identifier == 'SHA1':
-                    self.file_chksum_set = True
-            if not self.file_chksum_set:
-                raise CardinalityError("File::CheckSum")
+            new_checksum = checksum_algorithm_from_string(checksum)
+            self.file(doc).set_checksum(new_checksum)
+            self.file_chksum_set = True
         else:
             raise OrderError("File::CheckSum")
         return True

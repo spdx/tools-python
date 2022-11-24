@@ -59,7 +59,8 @@ class File(object):
     referenced by other elements. Mandatory, one. Type: str.
     - comment: File comment str, Optional zero or one.
     - file_types: list of file types. Cardinality 0..*
-    - checksums: List of checksums, there must be a SHA1 hash, at least.
+    - checksums: Dict with identifier of spdx.checksum.Algorithm as key and spdx.checksum.Algorithm as value,
+    there must be a SHA1 hash, at least.
     - conc_lics: Mandatory one. license.License or utils.NoAssert or utils.SPDXNone.
     - licenses_in_file: list of licenses found in file, mandatory one or more.
       document.License or utils.SPDXNone or utils.NoAssert.
@@ -80,7 +81,7 @@ class File(object):
         self.spdx_id = spdx_id
         self.comment = None
         self.file_types = []
-        self.checksums = []
+        self.checksums = {}
         self.conc_lics = None
         self.licenses_in_file = []
         self.license_comment = None
@@ -105,7 +106,7 @@ class File(object):
         Backwards compatibility, return SHA1 checksum.
         """
         warnings.warn("This property is deprecated. Use get_checksum instead.")
-        return self.get_checksum('SHA1')
+        return self.get_checksum(ChecksumAlgorithmIdentifier.SHA1)
 
     @chk_sum.setter
     def chk_sum(self, value):
@@ -114,7 +115,7 @@ class File(object):
         """
         warnings.warn("This property is deprecated. Use set_checksum instead.")
         if isinstance(value, str):
-            self.set_checksum(Algorithm(ChecksumAlgorithmIdentifier.SHA1, value))
+            self.set_checksum(Algorithm("SHA1", value))
         elif isinstance(value, Algorithm):
             self.set_checksum(value)
 
@@ -211,7 +212,7 @@ class File(object):
         return messages
 
     def validate_checksum(self, messages):
-        if self.get_checksum("SHA1") is None:
+        if self.get_checksum(ChecksumAlgorithmIdentifier.SHA1) is None:
             messages.append("At least one file checksum algorithm must be SHA1")
             return messages
 
@@ -231,18 +232,14 @@ class File(object):
         return file_hash.hexdigest()
 
     def get_checksum(self, hash_algorithm: ChecksumAlgorithmIdentifier = ChecksumAlgorithmIdentifier.SHA1) -> Algorithm:
-        for checksum in self.checksums:
-            if checksum.identifier == hash_algorithm:
-                return checksum
+        return self.checksums[hash_algorithm.name]
 
-    def set_checksum(self, checksum: Algorithm):
-        if not isinstance(checksum, Algorithm):
+    def set_checksum(self, new_checksum: Algorithm):
+        if not isinstance(new_checksum, Algorithm):
             raise SPDXValueError
-        for file_checksum in self.checksums:
-            if file_checksum.identifier == checksum.identifier:
-                file_checksum.value = checksum.value
-                return
-        self.checksums.append(checksum)
+        if new_checksum.identifier in self.checksums:
+            return
+        self.checksums[new_checksum.identifier] = new_checksum
 
     def has_optional_field(self, field):
         return bool(getattr(self, field, None))

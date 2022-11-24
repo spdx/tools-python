@@ -60,7 +60,7 @@ class Package(object):
      whenever files_analyzed is True or None (omitted) and Must be None (omitted)
      if files_analyzed is False. However, as a convenience within this library,
      we allow this to be Optional even when files_analyzed is True/None.
-     - checksums: Optional , List of spdx.checksum.Algorithm.
+     - checksums: Optional, Dict with identifier of spdx.checksum.Algorithm as key and spdx.checksum.Algorithm as value.
      - source_info: Optional string.
      - conc_lics: Mandatory license.License or utils.SPDXNone or
      utils.NoAssert.
@@ -101,7 +101,7 @@ class Package(object):
         self.files_analyzed = None
         self.homepage = None
         self.verif_code = None
-        self.checksums = []
+        self.checksums = {}
         self.source_info = None
         self.conc_lics = None
         self.license_declared = None
@@ -152,7 +152,7 @@ class Package(object):
         """
         # NOTE Package.check_sum but File.chk_sum
         if self.checksums:
-            return self.checksums[0]
+            return self.checksums["SHA1"]
         else:
             return None
 
@@ -310,25 +310,21 @@ class Package(object):
     def validate_checksum(self, messages):
         if not self.checksums:
             return messages
-        if self.get_checksum("SHA1") is None:
+        try:
+            self.get_checksum(ChecksumAlgorithmIdentifier.SHA1)
+        except KeyError:
             messages.append("At least one package checksum algorithm must be SHA1")
             return messages
 
-    def get_checksum(self, hash_algorithm: ChecksumAlgorithmIdentifier = ChecksumAlgorithmIdentifier.SHA1):
-        for checksum in self.checksums:
-            if checksum.identifier == hash_algorithm:
-                return checksum
-        return None
+    def get_checksum(self, hash_algorithm: ChecksumAlgorithmIdentifier = ChecksumAlgorithmIdentifier.SHA1) -> Algorithm:
+        return self.checksums[hash_algorithm.name]
 
     def set_checksum(self, new_checksum: Algorithm):
         if not isinstance(new_checksum, Algorithm):
             raise SPDXValueError("Package::Checksum")
-
-        for checksum in self.checksums:
-            if checksum.identifier == new_checksum.identifier:
-                checksum.value = new_checksum.value
-                return
-        self.checksums.append(new_checksum)
+        if new_checksum.identifier in self.checksums:
+            return
+        self.checksums[new_checksum.identifier] = new_checksum
 
     def has_optional_field(self, field):
         return bool(getattr(self, field, None))
