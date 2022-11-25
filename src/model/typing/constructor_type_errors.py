@@ -10,3 +10,6 @@ class ConstructorTypeErrors(TypeError):
 
     def __init__(self, messages: List[str]):
         self.messages = messages
+
+    def get_messages(self):
+        return self.messages
