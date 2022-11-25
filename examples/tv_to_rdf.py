@@ -32,7 +32,7 @@ def tv_to_rdf(infile_name, outfile_name):
         data = infile.read()
         document, error = parser.parse(data)
         if not error:
-            with open(outfile_name, mode="w") as outfile:
+            with open(outfile_name, mode="wb") as outfile:
                 write_document(document, outfile)
             return True
         else:
