@@ -51,7 +51,7 @@ This is the result of an initial GSoC contribution by @[ah450](https://github.co
 
 1. **PARSER** (for parsing any format):
 * Use `pyspdxtools_parser --file <filename>` where `<filename>` is the location of the file.              
-Try running: `pyspdxtools_parser --file tests/data/formats/SPDXRdfExample.rdf`.
+If you are using a source distribution, try running: `pyspdxtools_parser --file tests/data/formats/SPDXRdfExample.rdf`.
 
 * Or you can use `pyspdxtools_parser` only, and it will automatically prompt/ask for `filename`.
 
@@ -63,16 +63,16 @@ Try running: `pyspdxtools_parser --file tests/data/formats/SPDXRdfExample.rdf`.
 
     * Use `pyspdxtools_convertor --infile/-i <input_file> --outfile/-o <output_file>` where `<input_file>` is the location of the file to be converted
     (Note: only RDF and Tag formatted supported) and `<output_file>` is the location of the output file.  
-    Try running : `pyspdxtools_convertor --infile tests/data/formats/SPDXRdfExample.rdf --outfile output.json` 
+    If you are using a source distribution, try running : `pyspdxtools_convertor --infile tests/data/formats/SPDXRdfExample.rdf --outfile output.json` 
 
 * If I/O formats are not known:
 
     * Use `pyspdxtools_convertor --from/-f <input_format> <input_file> --to/-t <output_format> <output_file>` where `<input_format>` is the manually entered format of the input file (can be either rdf or tag)
     and `<out_format>` (can be tag, rdf, json, yaml, xml) is the manually entered format of the output file. 
-    Try running : `pyspdxtools_convertor --from tag tests/data/formats/SPDXTagExample.in --to yaml output.out` 
+    If you are using a source distribution, try running : `pyspdxtools_convertor --from tag tests/data/formats/SPDXTagExample.in --to yaml output.out` 
 
 * If one of the formats is known and the other is not, you can use a mixture of the above two points.  
-Example: `pyspdxtools_convertor -f rdf tests/data/formats/SPDXRdfExample.xyz -o output.xml`
+Example (if you are using a source distribution): `pyspdxtools_convertor -f rdf tests/data/formats/SPDXRdfExample.xyz -o output.xml`
 
 * For help use `pyspdxtools_convertor --help`
 
