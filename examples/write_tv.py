@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from spdx.relationship import Relationship
 
 # Writes a new tag/value file from scratch.
 # Usage: write_tv <tagvaluefile>
@@ -19,10 +20,10 @@ if __name__ == "__main__":
 
     doc = Document()
     doc.version = Version(1, 2)
-    doc.name = "Hello SPDX"
+    doc.name = "Hello_SPDX"
     doc.spdx_id = "Test#SPDXRef-DOCUMENT"
     doc.comment = "Example Document"
-    doc.namespace = "spdx"
+    doc.namespace = "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301"
     doc.data_license = License.from_identifier("CC0-1.0")
     doc.creation_info.add_creator(Person("Alice", "alice@example.com"))
     doc.creation_info.set_created_now()
@@ -51,6 +52,8 @@ if __name__ == "__main__":
     testfile2.conc_lics = License.from_identifier("Apache-2.0")
     testfile2.add_lics(License.from_identifier("Apache-2.0"))
     testfile2.copyright = NoAssert()
+    doc.add_file(testfile1)
+    doc.add_file(testfile2)
 
     # Package
     package = Package()
@@ -72,10 +75,12 @@ if __name__ == "__main__":
     package.cr_text = NoAssert()
     package.summary = "Simple package."
     package.description = "Really simple package."
-    package.add_file(testfile1)
-    package.add_file(testfile2)
 
     doc.package = package
+    relationship = Relationship("TestPackage#SPDXRef-PACKAGE CONTAINS TestFilet#SPDXRef-FILE")
+    doc.add_relationships(relationship)
+    relationship = Relationship("TestPackage#SPDXRef-PACKAGE CONTAINS TestFile2#SPDXRef-FILE")
+    doc.add_relationships(relationship)
 
     # An extracted license
 

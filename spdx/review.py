@@ -48,7 +48,7 @@ class Review(object):
         )
 
     def set_review_date_now(self):
-        self.review_date = datetime.utcnow()
+        self.review_date = datetime.utcnow().replace(microsecond=0)
 
     @property
     def review_date_iso_format(self):
@@ -70,12 +70,12 @@ class Review(object):
 
     def validate_reviewer(self, messages):
         if self.reviewer is None:
-            messages = messages + ["Review missing reviewer."]
+            messages.append("Review missing reviewer.")
 
         return messages
 
     def validate_review_date(self, messages):
         if self.review_date is None:
-            messages = messages + ["Review missing review date."]
+            messages.append("Review missing review date.")
 
         return messages
