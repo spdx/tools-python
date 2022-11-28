@@ -9,7 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from src.model.dataclass_with_properties import dataclass_with_properties
 
+
+@dataclass_with_properties
 class LicenseExpression:
     """So far, this just holds a string with the license expression. The ticket for adding license expression support
     is https://github.com/spdx/tools-python/issues/10."""

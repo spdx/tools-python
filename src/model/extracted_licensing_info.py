@@ -8,23 +8,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+from dataclasses import dataclass, field
 from typing import Optional, List
 
+from typeguard import typechecked
 
+from src.model.dataclass_with_properties import dataclass_with_properties
+
+
+@dataclass_with_properties
 class ExtractedLicensingInfo:
-    license_id: Optional[str]
-    extracted_text: Optional[str]
-    license_name: Optional[str]
-    comment: Optional[str]
-    cross_references: List[str]
-
-    def __init__(self, license_id: Optional[str] = None, extracted_text: Optional[str] = None,
-                 license_name: Optional[str] = None, comment: Optional[str] = None,
-                 cross_references: List[str] = None):
-        self.license_id = license_id
-        self.extracted_text = extracted_text
-        self.license_name = license_name
-        self.comment = comment
-        self.cross_references = cross_references or []
+    license_id: Optional[str] = None
+    extracted_text: Optional[str] = None
+    license_name: Optional[str] = None
+    comment: Optional[str] = None
+    cross_references: List[str] = field(default_factory=list)
