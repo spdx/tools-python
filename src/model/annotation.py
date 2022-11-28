@@ -8,10 +8,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum, auto
+
+from typeguard import typechecked
+
+from src.model.dataclass_with_properties import dataclass_with_properties
 
 
 class AnnotationType(Enum):
@@ -19,17 +22,10 @@ class AnnotationType(Enum):
     OTHER = auto()
 
 
+@dataclass_with_properties
 class Annotation:
     spdx_id: str
     annotation_type: AnnotationType
     annotator: str
     annotation_date: datetime
     annotation_comment: str
-
-    def __init__(self, spdx_id: str, annotation_type: AnnotationType, annotator: str, annotation_date: datetime,
-                 annotation_comment: str):
-        self.spdx_id = spdx_id
-        self.annotation_type = annotation_type
-        self.annotator = annotator
-        self.annotation_date = annotation_date
-        self.annotation_comment = annotation_comment
