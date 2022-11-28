@@ -51,7 +51,7 @@ class ChecksumAlgorithm(Enum):
 
     @classmethod
     def checksum_algorithm_from_string(cls, identifier: str) -> 'ChecksumAlgorithm':
-        identifier.replace("-", "_").upper()
+        identifier = identifier.replace("-", "_").upper()
         if identifier not in ChecksumAlgorithm.__members__:
             raise ValueError(f"Invalid algorithm for checksum: {identifier}")
         return ChecksumAlgorithm[identifier]
