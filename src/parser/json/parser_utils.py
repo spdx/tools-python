@@ -8,18 +8,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Dict
+from typing import Dict, Optional, List, Union
 
-from src.model.package import Package
-from src.parser.logger import Logger
+from src.parser.json.snippet_parser import RangeType
 
 
-class PackageParser:
-    logger: Logger
-
-    def __init__(self, logger: Logger):
-        self.logger = logger
-
-    def parse(self, package: Dict) -> Package:
-        package = Package()
-        return package
+def set_optional_property(property_name: Union[str, RangeType], parse_object: Dict) -> Optional[str, int, Dict, List, bool]:
+    if property_name in parse_object:
+        property_value = parse_object.get(property_name)
+        return property_value
+    else:
+        return None

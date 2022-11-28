@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Dict
+from typing import Dict, List
 
 from src.model.relationship import Relationship
 from src.parser.logger import Logger
@@ -20,6 +20,12 @@ class RelationshipParser:
     def __init__(self, logger):
         self.logger = logger
 
-    def parse(self, relationship: Dict) -> Relationship:
+    def parse_relationship(self, relationship: Dict) -> Relationship:
         relationship = Relationship()
         return relationship
+
+    def parse_relationships(self, relationship_dict_list: List[Dict]) -> List[Relationship]:
+        relationships_list = []
+        for relationship_dict in relationship_dict_list:
+            relationships_list.append(self.parse_relationship(relationship_dict))
+        return relationships_list

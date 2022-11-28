@@ -11,16 +11,16 @@
 import json
 
 from src.model.document import Document
-from src.parser.annotationparser import AnnotationParser
-from src.parser.creationinfoparser import CreationInfoParser
+from src.parser.json.annotation_parser import AnnotationParser
+from src.parser.json.creation_info_parser import CreationInfoParser
 from src.parser.error import SPDXParsingError
-from src.parser.extractedlicensingparser import ExtractedLicensingParser
-from src.parser.fileparser import FileParser
+from src.parser.json.extracted_licensing_parser import ExtractedLicensingParser
+from src.parser.json.file_parser import FileParser
 from src.parser.logger import Logger
-from src.parser.packageparser import PackageParser
-from src.parser.relationshipparser import RelationshipParser
-from src.parser.reviewparser import ReviewParser
-from src.parser.snippetparser import SnippetParser
+from src.parser.json.package_parser import PackageParser
+from src.parser.json.relationship_parser import RelationshipParser
+from src.parser.json.review_parser import ReviewParser
+from src.parser.json.snippet_parser import SnippetParser
 
 
 class JsonParser:
@@ -53,17 +53,16 @@ class JsonParser:
             input_doc_as_dict)
         document: Document = Document(spdx_version, spdx_id, name, document_namespace, creation_info)
 
-        document.packages = list(map(self.package_parser.parse, input_doc_as_dict.get("packages")))
-        document.files = list(map(self.file_parser.parse, input_doc_as_dict.get("files")))
-        document.annotations = list(map(self.annotation_parser.parse, input_doc_as_dict.get("annotations"), document.spdx_id))
-        document.snippets = list(map(self.snippet_parser.parse, input_doc_as_dict.get("snippets")))
-        document.relationships = list(map(self.relationship_parser.parse, input_doc_as_dict.get("relationships")))
-
-        review_to_annotations = list(map(self.review_parser.parse, input_doc_as_dict.get("revieweds")))
+        document.packages = self.package_parser.parse_packages(input_doc_as_dict.get("packages"))
+        document.files = self.file_parser.parse_files(input_doc_as_dict.get("files"))
+        document.annotations = self.annotation_parser.parse_annotations(input_doc_as_dict.get("annotations"), document.spdx_id)
+        document.snippets = self.snippet_parser.parse_snippets(input_doc_as_dict.get("snippets"))
+        document.relationships = self.relationship_parser.parse_relationships(input_doc_as_dict.get("relationships"))
+        review_to_annotations = self.review_parser.parse_reviews(input_doc_as_dict.get("revieweds"))
         for annotation in review_to_annotations:
             document.annotations.append(annotation)
 
-        document.extracted_licensing_info = map(self.extracted_licenses_parser.parse,
+        document.extracted_licensing_info = map(self.extracted_licenses_parser.parse_extracted_licensing_info,
                                                 input_doc_as_dict.get("hasExtractedLicensingInfo"))
 
         if logger.has_errors():

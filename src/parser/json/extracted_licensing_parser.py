@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Dict
+from typing import Dict, List
 
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.parser.logger import Logger
@@ -20,6 +20,13 @@ class ExtractedLicensingParser:
     def __init__(self, logger: Logger):
         self.logger = logger
 
-    def parse(self, extracted_licensing_info: Dict) -> ExtractedLicensingInfo:
-        extracted_licensing_info = ExtractedLicensingInfo()
-        return extracted_licensing_info
+    def parse_extracted_licensing_info(self, extracted_licensing_info_dict: Dict) -> ExtractedLicensingInfo:
+        extracted_licensing_info_dict = ExtractedLicensingInfo()
+        return extracted_licensing_info_dict
+
+    def parse_extracted_licensing_infos(self, extracted_licensing_info_dicts: List[Dict]) -> List[ExtractedLicensingInfo]:
+        extracted_licensing_infos_list = []
+        for extracted_licensing_info_dict in extracted_licensing_info_dicts:
+            extracted_licensing_infos_list.append(self.parse_extracted_licensing_info(extracted_licensing_info_dict))
+
+        return extracted_licensing_infos_list

@@ -11,12 +11,8 @@
 from typing import List
 
 
-class SPDXError(Exception):
-    pass
-
-
-class SPDXParsingError(SPDXError):
-    message: List[str]
+class SPDXParsingError(Exception):
+    messages: List[str]
 
     def __init__(self, message):
-        self.message = message
+        self.messages = [message]
