@@ -28,8 +28,8 @@ class AnnotationParser:
             annotation_date = annotation.get("annotationDate")
             annotation_comment = annotation.get("annotationComment")
             annotation = Annotation(spdx_id, annotation_type, annotator, annotation_date, annotation_comment)
-        except TypeError:
-            self.logger.append('Error while parsing annotation')
+        except ValueError as err:
+            self.logger.append(f'Error while parsing annotation: {err.args[0]}')
         return annotation
 
     def parse_annotations(self, annotations_dict_list: List[Dict], spdx_id: Optional[str] = None) -> List[Annotation]:
