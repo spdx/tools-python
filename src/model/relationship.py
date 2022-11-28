@@ -8,10 +8,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+from dataclasses import dataclass
 from enum import auto, Enum
 from typing import Optional
+
+from typeguard import typechecked
+
+from src.model.dataclass_with_properties import dataclass_with_properties
 
 
 class RelationshipType(Enum):
@@ -62,15 +65,11 @@ class RelationshipType(Enum):
     VARIANT_OF = auto()
 
 
+@typechecked
+@dataclass_with_properties
+@dataclass(eq=True)
 class Relationship:
     spdx_element_id: str
     relationship_type: RelationshipType
     related_spdx_element_id: str
-    comment: Optional[str]
-
-    def __init__(self, spdx_element_id: str, relationship_type: RelationshipType, related_spdx_element_id: str,
-                 comment: Optional[str] = None):
-        self.spdx_element_id = spdx_element_id
-        self.relationship_type = relationship_type
-        self.related_spdx_element_id = related_spdx_element_id
-        self.comment = comment
+    comment: Optional[str] = None

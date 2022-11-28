@@ -8,8 +8,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from dataclasses import dataclass
 
 
+@dataclass(eq=True)
 class LicenseExpression:
     """So far, this just holds a string with the license expression. The ticket for adding license expression support
     is https://github.com/spdx/tools-python/issues/10."""

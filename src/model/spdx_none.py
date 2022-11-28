@@ -22,3 +22,6 @@ class SpdxNone:
 
     def __repr__(self):
         return self._string_value
+
+    def __eq__(self, other):
+        return isinstance(other, SpdxNone)

@@ -8,17 +8,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from dataclasses import dataclass
 
+from typeguard import typechecked
 
 from src.model.checksum import Checksum
+from src.model.dataclass_with_properties import dataclass_with_properties
 
 
+@typechecked
+@dataclass_with_properties
+@dataclass(eq=True)
 class ExternalDocumentRef:
     document_uri: str
     spdx_id: str
     checksum: Checksum
-
-    def __init__(self, document_uri: str, spdx_id: str, checksum: Checksum):
-        self.document_uri = document_uri
-        self.spdx_id = spdx_id
-        self.checksum = checksum

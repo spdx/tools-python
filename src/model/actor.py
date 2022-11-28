@@ -8,10 +8,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+from dataclasses import dataclass
 from enum import Enum, auto
 from typing import Optional
+
+from typeguard import typechecked
+
+from src.model.dataclass_with_properties import dataclass_with_properties
 
 
 class ActorType(Enum):
@@ -20,12 +23,10 @@ class ActorType(Enum):
     TOOL = auto()
 
 
+@typechecked
+@dataclass_with_properties
+@dataclass(eq=True)
 class Actor:
     actor_type: ActorType
     name: str
-    email: Optional[str]
-
-    def __init__(self, actor_type: ActorType, name: str, email: Optional[str] = None):
-        self.actor_type = actor_type
-        self.name = name
-        self.email = email
+    email: Optional[str] = None

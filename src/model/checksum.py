@@ -8,9 +8,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
+from dataclasses import dataclass
 from enum import auto, Enum
+
+from typeguard import typechecked
+
+from src.model.dataclass_with_properties import dataclass_with_properties
 
 
 class ChecksumAlgorithm(Enum):
@@ -33,10 +36,9 @@ class ChecksumAlgorithm(Enum):
     ADLER32 = auto()
 
 
+@typechecked
+@dataclass_with_properties
+@dataclass(eq=True)
 class Checksum:
     algorithm: ChecksumAlgorithm
     value: str
-
-    def __init__(self, algorithm: ChecksumAlgorithm, value: str):
-        self.algorithm = algorithm
-        self.value = value
