@@ -22,7 +22,7 @@ from spdx import config
 from spdx import file
 from spdx import license
 from spdx import utils
-from spdx.checksum import ChecksumAlgorithmIdentifier
+from spdx.checksum import Checksum
 from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
 from spdx.relationship import Relationship
@@ -45,11 +45,11 @@ class BaseWriter(object):
         self.spdx_namespace = Namespace("http://spdx.org/rdf/terms#")
         self.graph = Graph()
 
-    def create_checksum_node(self, checksum):
+    def create_checksum_node(self, checksum: Checksum) -> BNode:
         """
         Return a node representing spdx.checksum.
         """
-        algo = ChecksumAlgorithmIdentifier[checksum.identifier].checksum_to_rdf() or 'checksumAlgorithm_sha1'
+        algo = checksum.identifier.algorithm_to_rdf_representation() or 'checksumAlgorithm_sha1'
         checksum_node = BNode()
         type_triple = (checksum_node, RDF.type, self.spdx_namespace.Checksum)
         self.graph.add(type_triple)
@@ -668,7 +668,7 @@ class ExternalDocumentRefWriter(BaseWriter):
         doc_uri_triple = (ext_doc_ref_node, self.spdx_namespace.spdxDocument, doc_uri)
         self.graph.add(doc_uri_triple)
 
-        checksum_node = self.create_checksum_node(ext_document_references.check_sum)
+        checksum_node = self.create_checksum_node(ext_document_references.checksum)
         self.graph.add((ext_doc_ref_node, self.spdx_namespace.checksum, checksum_node))
 
         return ext_doc_ref_node

@@ -15,7 +15,7 @@ if __name__ == "__main__":
     from spdx.review import Review
     from spdx.package import Package
     from spdx.file import File, FileType
-    from spdx.checksum import Algorithm
+    from spdx.checksum import Checksum
     from spdx.utils import SPDXNone, NoAssert, UnKnown
 
     doc = Document()
@@ -36,7 +36,7 @@ if __name__ == "__main__":
     testfile1.type = FileType.BINARY
     testfile1.spdx_id = "TestFilet#SPDXRef-FILE"
     testfile1.comment = "This is a test file."
-    testfile1.chksum = Algorithm("SHA1", "c537c5d99eca5333f23491d47ededd083fefb7ad")
+    testfile1.chksum = Checksum("SHA1", "c537c5d99eca5333f23491d47ededd083fefb7ad")
     testfile1.conc_lics = License.from_identifier("BSD-2-Clause")
     testfile1.add_lics(License.from_identifier("BSD-2-Clause"))
     testfile1.copyright = SPDXNone()
@@ -48,7 +48,7 @@ if __name__ == "__main__":
     testfile2.type = FileType.SOURCE
     testfile2.spdx_id = "TestFile2#SPDXRef-FILE"
     testfile2.comment = "This is a test file."
-    testfile2.chksum = Algorithm("SHA1", "bb154f28d1cf0646ae21bb0bec6c669a2b90e113")
+    testfile2.chksum = Checksum("SHA1", "bb154f28d1cf0646ae21bb0bec6c669a2b90e113")
     testfile2.conc_lics = License.from_identifier("Apache-2.0")
     testfile2.add_lics(License.from_identifier("Apache-2.0"))
     testfile2.copyright = NoAssert()
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     package.file_name = "twt.jar"
     package.spdx_id = 'TestPackage#SPDXRef-PACKAGE'
     package.download_location = "http://www.tagwritetest.test/download"
-    package.checksum = Algorithm("SHA1", "c537c5d99eca5333f23491d47ededd083fefb7ad")
+    package.checksum = Checksum("SHA1", "c537c5d99eca5333f23491d47ededd083fefb7ad")
     package.homepage = SPDXNone()
     package.verif_code = "4e3211c67a2d28fced849ee1bb76e7391b93feba"
     license_set = LicenseConjunction(

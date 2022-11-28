@@ -357,7 +357,7 @@ def write_document(document, out, validate=True):
             [
                 doc_ref.external_document_id,
                 doc_ref.spdx_document_uri,
-                doc_ref.check_sum.identifier + ":" + doc_ref.check_sum.value,
+                doc_ref.checksum.identifier.name + ": " + doc_ref.checksum.value,
             ]
         )
         write_value("ExternalDocumentRef", doc_ref_str, out)

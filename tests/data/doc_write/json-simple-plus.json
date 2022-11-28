@@ -14,11 +14,12 @@
     "documentDescribes": [
         "SPDXRef-Package"
     ],
-    "packages": [ {
-                    "SPDXID": "SPDXRef-Package",
-                    "name": "some/path",
-                    "downloadLocation": "NOASSERTION",
-                    "copyrightText": "Some copyright",
+    "packages": [
+        {
+            "SPDXID": "SPDXRef-Package",
+            "name": "some/path",
+            "downloadLocation": "NOASSERTION",
+            "copyrightText": "Some copyright",
             "packageVerificationCode": {
                 "packageVerificationCodeValue": "SOME code"
             },
@@ -27,12 +28,12 @@
                     "algorithm": "SHA1",
                     "checksumValue": "SOME-SHA1"
                 },
-                        {
-                            "algorithm": "SHA256",
-                            "checksumValue": "SOME-SHA256"
-                        }
-                    ],
-                    "licenseDeclared": "NOASSERTION",
+                {
+                    "algorithm": "SHA256",
+                    "checksumValue": "SOME-SHA256"
+                }
+            ],
+            "licenseDeclared": "NOASSERTION",
             "licenseConcluded": "NOASSERTION",
             "licenseInfoFromFiles": [
                 "LGPL-2.1-or-later"
@@ -40,25 +41,25 @@
             "hasFiles": [
                 "SPDXRef-File"
             ],
-            "primaryPackagePurpose" : "FILE",
-            "releaseDate" : "2021-01-01T12:00:00Z",
-            "builtDate" : "2021-01-01T12:00:00Z",
-            "validUntilDate" : "2022-01-01T12:00:00Z"
+            "primaryPackagePurpose": "FILE",
+            "releaseDate": "2021-01-01T12:00:00Z",
+            "builtDate": "2021-01-01T12:00:00Z",
+            "validUntilDate": "2022-01-01T12:00:00Z"
         }
     ],
     "files": [
         {
             "SPDXID": "SPDXRef-File",
-                "checksums": [
-                    {
-                        "algorithm": "SHA1",
-                        "checksumValue": "SOME-SHA1"
-                    },
-                    {
-                        "algorithm": "SHA256",
-                        "checksumValue": "SOME-SHA256"
-                    }
-                ],
+            "checksums": [
+                {
+                    "algorithm": "SHA1",
+                    "checksumValue": "SOME-SHA1"
+                },
+                {
+                    "algorithm": "SHA256",
+                    "checksumValue": "SOME-SHA256"
+                }
+            ],
             "licenseConcluded": "NOASSERTION",
             "copyrightText": "NOASSERTION",
             "fileName": "./some/path/tofile",

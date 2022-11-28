@@ -73,9 +73,8 @@ FileName: src/org/spdx/parser/DOAPProject.java
 SPDXID: SPDXRef-File1
 FileType: SOURCE
 FileType: TEXT
-FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12
+FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eB12
 FileChecksum: SHA256: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb120000000000000000
-FileType: SOURCE
 LicenseConcluded: Apache-2.0
 LicenseInfoInFile: Apache-2.0
 FileCopyrightText: <text>Copyright 2010, 2011 Source Auditor Inc.</text>
@@ -86,7 +85,6 @@ FileType: ARCHIVE
 FileType: OTHER
 FileChecksum: SHA1: 3ab4e1c67a2d28fced849ee1bb76e7391b93f125
 FileChecksum: SHA256: 3ab4e1c67a2d28fced849ee1bb76e7391b93f1250000000000000000
-FileType: ARCHIVE
 LicenseConcluded: LicenseRef-1
 LicenseInfoInFile: LicenseRef-1
 LicenseComments: <text>This license is used by Jena</text>

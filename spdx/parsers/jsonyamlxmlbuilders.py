@@ -8,11 +8,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from spdx import file
+from typing import Dict, Union
+
+from spdx.document import Document
 from spdx.parsers import rdfbuilders
 from spdx.parsers import tagvaluebuilders
 from spdx.parsers import validations
-from spdx.checksum import Algorithm
+from spdx.checksum import Checksum, ChecksumAlgorithm
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
@@ -160,20 +162,24 @@ class FileBuilder(rdfbuilders.FileBuilder):
     def __init__(self):
         super(FileBuilder, self).__init__()
 
-    def set_file_checksum(self, doc, checksum):
+    def set_file_checksum(self, doc: Document, checksum: Union[Dict, Checksum, str]) -> bool:
         """
         Set the file checksum.
         checksum - A string
+        raise OrderError if no file defined.
         """
-        if self.has_file(doc):
-            if isinstance(checksum, dict):
-                algo = checksum.get('algorithm') or 'SHA1'
-                self.file(doc).set_checksum(Algorithm(algo, checksum.get('checksumValue')))
-            elif isinstance(checksum, Algorithm):
-                self.file(doc).set_checksum(checksum)
-            else:
-                self.file(doc).set_checksum(Algorithm("SHA1", checksum))
-            return True
+        if not self.has_file(doc):
+            raise OrderError("No file for checksum defined.")
+
+        if isinstance(checksum, dict):
+            algo = checksum.get('algorithm') or 'SHA1'
+            identifier = ChecksumAlgorithm.checksum_algorithm_from_string(algo)
+            self.file(doc).set_checksum(Checksum(identifier, checksum.get('checksumValue')))
+        elif isinstance(checksum, Checksum):
+            self.file(doc).set_checksum(checksum)
+        elif isinstance(checksum, str):
+            self.file(doc).set_checksum(Checksum(ChecksumAlgorithm.SHA1, checksum))
+        return True
 
     def set_file_notice(self, doc, text):
         """

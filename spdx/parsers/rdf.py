@@ -21,7 +21,7 @@ from rdflib import RDFS
 from spdx import document
 from spdx import license
 from spdx import utils
-from spdx.checksum import Algorithm, ChecksumAlgorithmIdentifier
+from spdx.checksum import Checksum, ChecksumAlgorithm
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.loggers import ErrorMessages
@@ -67,14 +67,12 @@ ERROR_MESSAGES = {
 }
 
 
-def convert_rdf_checksum_algorithm(algo):
-    ss = algo.split('#')
-    if len(ss) != 2:
-        raise SPDXValueError('Unknown checksum algorithm {}'.format(algo))
-    algo = ChecksumAlgorithmIdentifier.checksum_from_rdf(ss[1])
-    if algo is None:
-        raise SPDXValueError('Unknown checksum algorithm {}'.format(algo))
-    return algo
+def convert_rdf_checksum_algorithm(rdf_checksum_algorithm: str) -> ChecksumAlgorithm:
+    split_string = rdf_checksum_algorithm.split('#')
+    if len(split_string) != 2:
+        raise SPDXValueError('Unknown checksum algorithm {}'.format(rdf_checksum_algorithm))
+    checksum_algorithm = ChecksumAlgorithm.checksum_from_rdf(split_string[1])
+    return checksum_algorithm
 
 
 class BaseParser(object):
@@ -523,7 +521,7 @@ class PackageParser(LicenseParser):
                         (pkg_checksum, self.spdx_namespace["algorithm"], None)
                 ):
                     algorithm_identifier = convert_rdf_checksum_algorithm(str(algo))
-                    checksum = Algorithm(algorithm_identifier, str(value))
+                    checksum = Checksum(algorithm_identifier, str(value))
                     self.builder.set_pkg_checksum(self.doc, checksum)
 
     def p_pkg_homepg(self, p_term, predicate):
@@ -793,7 +791,7 @@ class FileParser(LicenseParser):
                         (file_checksum, self.spdx_namespace["algorithm"], None)
                 ):
                     algorithm_identifier = convert_rdf_checksum_algorithm(str(algo))
-                    checksum = Algorithm(algorithm_identifier, str(value))
+                    checksum = Checksum(algorithm_identifier, str(value))
                     self.builder.set_file_checksum(self.doc, checksum)
 
     def p_file_lic_conc(self, f_term, predicate):
