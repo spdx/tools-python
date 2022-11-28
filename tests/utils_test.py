@@ -331,7 +331,7 @@ class TestParserUtils(object):
         if checksum is None:
             return None
         return OrderedDict([
-            ('identifier', checksum.identifier),
+            ('identifier', checksum.identifier.name),
             ('value', checksum.value)])
 
     @classmethod
@@ -392,8 +392,8 @@ class TestParserUtils(object):
             lics_in_files = sorted(file.licenses_in_file, key=lambda lic: lic.identifier)
             contributors = sorted(file.contributors, key=lambda c: c.name)
             chk_sums = []
-            for _, chk_sum in file.checksums.items():
-                chk_sums.append(cls.checksum_to_dict(chk_sum))
+            for checksum in file.checksums.values():
+                chk_sums.append(cls.checksum_to_dict(checksum))
 
             file_dict = OrderedDict([
                 ('id', file.spdx_id),
@@ -427,7 +427,7 @@ class TestParserUtils(object):
             ext_doc_ref_dict = OrderedDict([
                 ('externalDocumentId', ext_doc_ref.external_document_id),
                 ('spdxDocument', ext_doc_ref.spdx_document_uri),
-                ('checksum', cls.checksum_to_dict(ext_doc_ref.check_sum)),
+                ('checksum', cls.checksum_to_dict(ext_doc_ref.checksum)),
             ])
             ext_doc_refs_list.append(ext_doc_ref_dict)
 

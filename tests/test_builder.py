@@ -131,7 +131,7 @@ class TestExternalDocumentRefBuilder(TestCase):
         chksum_val = "d6a770ba38583ed4bb4525bd96e50461655d2759"
         self.builder.set_ext_doc_id(self.document, "DocumentRef-spdx-tool-2.1")
         self.builder.set_chksum(self.document, chksum)
-        assert self.document.ext_document_references[-1].check_sum.value == chksum_val
+        assert self.document.ext_document_references[-1].checksum.value == chksum_val
 
     def test_add_ext_doc_refs(self):
         ext_doc_id_val = "DocumentRef-spdx-tool-2.1"
@@ -149,7 +149,7 @@ class TestExternalDocumentRefBuilder(TestCase):
         assert (
             self.document.ext_document_references[-1].spdx_document_uri == spdx_doc_uri
         )
-        assert self.document.ext_document_references[-1].check_sum.value == chksum_val
+        assert self.document.ext_document_references[-1].checksum.value == chksum_val
 
 
 class TestEntityBuilder(TestCase):

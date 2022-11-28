@@ -17,7 +17,8 @@ from typing import Dict, List, TYPE_CHECKING
 from ply import lex
 from ply import yacc
 
-from spdx import checksum
+from spdx.checksum import ChecksumAlgorithm
+
 if TYPE_CHECKING:
     from spdx.file import File
     from spdx.package import Package
@@ -212,18 +213,18 @@ class LicenseListParser(object):
 
 def calc_verif_code(files: List['File']) -> str:
     list_of_file_hashes = []
-    hash_algo_name = "SHA1"
-    for f in files:
-        file_chksum = f.get_checksum(hash_algo_name)
-        if file_chksum is not None:
-            file_ch = file_chksum.value
+    hash_algorithm_name = ChecksumAlgorithm.SHA1
+    for file in files:
+        file_checksum = file.get_checksum(hash_algorithm_name)
+        if file_checksum is not None:
+            file_checksum_value = file_checksum.value
         else:
-            file_ch = f.calculate_checksum(hash_algo_name)
-        list_of_file_hashes.append(file_ch)
+            file_checksum_value = file.calculate_checksum(hash_algorithm_name)
+        list_of_file_hashes.append(file_checksum_value)
 
     list_of_file_hashes.sort()
 
-    hasher = hashlib.new(hash_algo_name.lower())
+    hasher = hashlib.new(hash_algorithm_name.name.lower())
     hasher.update("".join(list_of_file_hashes).encode("utf-8"))
     return hasher.hexdigest()
 

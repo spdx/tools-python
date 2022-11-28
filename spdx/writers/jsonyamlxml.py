@@ -13,6 +13,7 @@ from typing import Dict, List
 from rdflib import Literal
 
 from spdx import license, utils
+from spdx.checksum import Checksum
 from spdx.package import ExternalPackageRef
 from spdx.relationship import Relationship
 from spdx.utils import update_dict_item_with_new_item
@@ -45,14 +46,11 @@ class BaseWriter(object):
             license_str = license_field.__str__()
         return license_str
 
-    def checksum_to_dict(self, checksum_field):
+    def checksum_to_dict(self, checksum_field: Checksum) -> Dict:
         """
-        Return a dictionary representation of a spdx.checksum.Algorithm object
+        Return a dictionary representation of a checksum.Checksum object
         """
-        #checksum_object = {'algorithm': "checksumAlgorithm_" + checksum_field.identifier.lower(),
-        #                   'checksumValue': checksum_field.value}
-        #return checksum_object
-        return {'algorithm': checksum_field.identifier, 'checksumValue': checksum_field.value}
+        return {'algorithm': checksum_field.identifier.name, 'checksumValue': checksum_field.value}
 
     def spdx_id(self, spdx_id_field):
         return spdx_id_field.__str__().split("#")[-1]
@@ -521,7 +519,7 @@ class Writer(
             ] = ext_document_reference.spdx_document_uri
 
             ext_document_reference_object["checksum"] = self.checksum_to_dict(
-                ext_document_reference.check_sum
+                ext_document_reference.checksum
             )
 
             ext_document_reference_objects.append(ext_document_reference_object)

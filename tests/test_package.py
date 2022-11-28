@@ -12,7 +12,7 @@
 import unittest
 from unittest import TestCase
 
-from spdx.checksum import Algorithm
+from spdx.checksum import Checksum
 from spdx.package import Package
 
 
@@ -25,11 +25,11 @@ class TestPackage(TestCase):
 
     def test_package_with_non_sha1_check_sum(self):
         package = Package()
-        package.set_checksum(Algorithm("SHA256", ''))
+        package.set_checksum(Checksum("SHA256", ''))
 
         # Make sure that validation still works despite the checksum not being SHA1
         messages = []
-        messages = package.validate_checksum(messages)
+        package.validate_checksums(messages)
 
 
 if __name__ == '__main__':

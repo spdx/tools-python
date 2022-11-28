@@ -17,7 +17,7 @@ from typing import Optional
 from spdx import creationinfo
 from spdx import license
 from spdx import utils
-from spdx.checksum import Algorithm, ChecksumAlgorithmIdentifier
+from spdx.checksum import Checksum, ChecksumAlgorithm
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.loggers import ErrorMessages
 
@@ -60,7 +60,7 @@ class Package(object):
      whenever files_analyzed is True or None (omitted) and Must be None (omitted)
      if files_analyzed is False. However, as a convenience within this library,
      we allow this to be Optional even when files_analyzed is True/None.
-     - checksums: Optional, Dict with identifier of spdx.checksum.Algorithm as key and spdx.checksum.Algorithm as value.
+     - checksums: Optional, Dict with checksum.ChecksumAlgorithm as key and checksum.Checksum as value.
      - source_info: Optional string.
      - conc_lics: Mandatory license.License or utils.SPDXNone or
      utils.NoAssert.
@@ -120,22 +120,22 @@ class Package(object):
         self.valid_until_date: Optional[datetime] = None
 
     @property
-    def check_sum(self):
+    def checksum(self):
         """
         Backwards compatibility, return SHA1 checksum.
         """
         warnings.warn("This property is deprecated. Use get_checksum instead.")
-        return self.get_checksum(ChecksumAlgorithmIdentifier.SHA1)
+        return self.get_checksum(ChecksumAlgorithm.SHA1)
 
-    @check_sum.setter
-    def check_sum(self, value):
+    @checksum.setter
+    def checksum(self, value):
         """
         Backwards compatibility, set SHA1 checksum.
         """
         warnings.warn("This property is deprecated. Use set_checksum instead.")
         if isinstance(value, str):
-            self.set_checksum(Algorithm("SHA1", value))
-        elif isinstance(value, Algorithm):
+            self.set_checksum(Checksum("SHA1", value))
+        elif isinstance(value, Checksum):
             self.set_checksum(value)
 
     @property
@@ -160,7 +160,7 @@ class Package(object):
         """
         messages.push_context(self.name)
         self.validate_files_analyzed(messages)
-        self.validate_checksum(messages)
+        self.validate_checksums(messages)
         self.validate_optional_str_fields(messages)
         self.validate_mandatory_str_fields(messages)
         self.validate_pkg_ext_refs(messages)
@@ -291,23 +291,20 @@ class Package(object):
 
         return messages
 
-    def validate_checksum(self, messages):
+    def validate_checksums(self, messages: ErrorMessages):
         if not self.checksums:
-            return messages
-        try:
-            self.get_checksum(ChecksumAlgorithmIdentifier.SHA1)
-        except KeyError:
-            messages.append("At least one package checksum algorithm must be SHA1")
-            return messages
-
-    def get_checksum(self, hash_algorithm: ChecksumAlgorithmIdentifier = ChecksumAlgorithmIdentifier.SHA1) -> Algorithm:
-        return self.checksums[hash_algorithm.name]
-
-    def set_checksum(self, new_checksum: Algorithm):
-        if not isinstance(new_checksum, Algorithm):
-            raise SPDXValueError("Package::Checksum")
-        if new_checksum.identifier in self.checksums:
             return
+        for checksum in self.checksums.values():
+            if not isinstance(checksum, Checksum):
+                messages.append("Package checksum must be instance of spdx.checksum.Checksum")
+
+    def get_checksum(self, hash_algorithm: ChecksumAlgorithm = ChecksumAlgorithm.SHA1) -> Checksum:
+        return self.checksums[hash_algorithm]
+
+    def set_checksum(self, new_checksum: Checksum):
+        if not isinstance(new_checksum, Checksum):
+            raise SPDXValueError("Package::Checksum")
+
         self.checksums[new_checksum.identifier] = new_checksum
 
     def has_optional_field(self, field):

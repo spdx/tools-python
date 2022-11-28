@@ -34,25 +34,25 @@ class ExternalDocumentRef(object):
     """
 
     def __init__(
-        self, external_document_id=None, spdx_document_uri=None, check_sum=None
+        self, external_document_id=None, spdx_document_uri=None, checksum=None
     ):
         self.external_document_id = external_document_id
         self.spdx_document_uri = spdx_document_uri
-        self.check_sum = check_sum
+        self.checksum = checksum
 
     def __eq__(self, other):
         return (
             isinstance(other, ExternalDocumentRef)
             and self.external_document_id == other.external_document_id
             and self.spdx_document_uri == other.spdx_document_uri
-            and self.check_sum == other.check_sum
+            and self.checksum == other.checksum
         )
 
     def __lt__(self, other):
-        return (self.external_document_id, self.spdx_document_uri, self.check_sum) < (
+        return (self.external_document_id, self.spdx_document_uri, self.checksum) < (
             other.external_document_id,
             other.spdx_document_uri,
-            other.check_sum,
+            other.checksum,
         )
 
     def validate(self, messages: ErrorMessages) -> ErrorMessages:
@@ -74,7 +74,7 @@ class ExternalDocumentRef(object):
             messages.append("ExternalDocumentRef has no SPDX Document URI.")
 
     def validate_checksum(self, messages):
-        if not self.check_sum:
+        if not self.checksum:
             messages.append("ExternalDocumentRef has no Checksum.")
 
 

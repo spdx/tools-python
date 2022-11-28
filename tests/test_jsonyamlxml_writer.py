@@ -5,7 +5,7 @@ from typing import List
 
 import pytest
 
-from spdx.checksum import Algorithm
+from spdx.checksum import Checksum, ChecksumAlgorithm
 from spdx.document import Document
 from spdx.file import File
 from spdx.license import License
@@ -148,7 +148,7 @@ def minimal_document():
 
 def minimal_file():
     file = File(name="Example File", spdx_id="SPDXRef-File")
-    file.set_checksum(Algorithm('SHA1', 'some-sha1-value'))
+    file.set_checksum(Checksum(ChecksumAlgorithm.SHA1, 'some-sha1-value'))
     return file
 
 

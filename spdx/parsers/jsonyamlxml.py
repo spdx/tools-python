@@ -10,7 +10,7 @@
 # limitations under the License.
 from datetime import datetime
 from enum import Enum, auto
-from typing import List, Dict, Tuple, Callable
+from typing import List, Dict, Tuple, Callable, Optional
 
 from spdx import document
 from spdx import utils
@@ -1093,10 +1093,10 @@ class FileParser(BaseParser):
             return None
         return None
 
-    def parse_file_checksums(self, file_checksums):
+    def parse_file_checksums(self, file_checksums: List[Dict]) -> Optional[bool]:
         """
         Parse File checksums
-        - file_checksum: Python List
+        - file_checksums: Python List
         """
         if isinstance(file_checksums, list):
             for checksum in file_checksums:
@@ -1593,10 +1593,10 @@ class PackageParser(BaseParser):
         elif pkg_has_files is not None:
             self.value_error("PKG_HAS_FILES", pkg_has_files)
 
-    def parse_pkg_checksums(self, pkg_checksums):
+    def parse_pkg_checksums(self, pkg_checksums: List[Dict]) -> Optional[bool]:
         """
-        Parse Package checksum
-        - pkg_chksum: Python str/unicode
+        Parse Package checksums
+        - pkg_chksums: Python List
         """
         if isinstance(pkg_checksums, list):
             for checksum in pkg_checksums:

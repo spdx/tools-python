@@ -9,12 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from enum import auto, Enum
 import re
 from typing import Dict
 
 from spdx import annotation
-from spdx import checksum
 from spdx import creationinfo
 from spdx import file
 from spdx import license
@@ -24,24 +22,14 @@ from spdx import review
 from spdx import snippet
 from spdx import utils
 from spdx import version
-from spdx.checksum import Algorithm
+from spdx.checksum import Checksum
 
-from spdx.document import ExternalDocumentRef
+from spdx.document import ExternalDocumentRef, Document
 from spdx.package import PackagePurpose
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers import validations
-
-
-def checksum_algorithm_from_string(value):
-    CHECKSUM_RE = re.compile("(ADLER32|BLAKE2b-256|BLAKE2b-384|BLAKE2b-512|BLAKE3|MD2|MD4|MD5|MD6|" \
-        "SHA1|SHA224|SHA256|SHA384|SHA512|SHA3-256|SHA3-384|SHA3-512):\\s*([a-f0-9]*)")
-    match = CHECKSUM_RE.match(value)
-    if match:
-        return Algorithm(identifier=match.group(1), value=match.group(2))
-    else:
-        return None
 
 
 def str_from_text(text) -> str:
@@ -199,7 +187,7 @@ class ExternalDocumentRefBuilder(object):
         """
         Set the `check_sum` attribute of the `ExternalDocumentRef` object.
         """
-        doc.ext_document_references[-1].check_sum = checksum_algorithm_from_string(chksum)
+        doc.ext_document_references[-1].checksum = Checksum.checksum_from_string(chksum)
 
     def add_ext_doc_refs(self, doc, ext_doc_id, spdx_doc_uri, chksum):
         self.set_ext_doc_id(doc, ext_doc_id)
@@ -785,7 +773,7 @@ class PackageBuilder(object):
         """
         self.assert_package_exists()
         self.package_chk_sum_set = True
-        doc.packages[-1].set_checksum(checksum_algorithm_from_string(checksum))
+        doc.packages[-1].set_checksum(Checksum.checksum_from_string(checksum))
         return True
 
     def set_pkg_source_info(self, doc, text):
@@ -1190,15 +1178,13 @@ class FileBuilder(object):
 
         spdx_file.file_types.append(file_type)
 
-    def set_file_checksum(self, doc, checksum):
+    def set_file_checksum(self, doc: Document, checksum: str):
         """
         Raise OrderError if no file defined.
-        Raise CardinalityError if no SHA1 checksum set.
         """
         if self.has_file(doc):
-            new_checksum = checksum_algorithm_from_string(checksum)
+            new_checksum = Checksum.checksum_from_string(checksum)
             self.file(doc).set_checksum(new_checksum)
-            self.file_chksum_set = True
         else:
             raise OrderError("File::CheckSum")
         return True
