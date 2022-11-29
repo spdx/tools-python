@@ -460,14 +460,21 @@ class RelationshipParser(BaseParser):
         Parse Relationshiptype, spdxElementId and relatedSpdxElement
         - relationship: Python str/unicode
         """
-        if isinstance(relationshiptype, str):
-            relate = spdxelementid + " " + relationshiptype + " " + relatedspdxelement
-            try:
-                return self.builder.add_relationship(self.document, relate)
-            except SPDXValueError:
-                self.value_error("RELATIONSHIP_VALUE", relate)
-        else:
+        if not isinstance(relationshiptype, str):
             self.value_error("RELATIONSHIP_VALUE", relationshiptype)
+            return
+        if not isinstance(spdxelementid, str):
+            self.value_error("SPDXELEMENTID", spdxelementid)
+            return
+        if not isinstance(relatedspdxelement, str):
+            self.value_error("RELATEDSPDXELEMENT", relatedspdxelement)
+            return
+        relate = spdxelementid + " " + relationshiptype + " " + relatedspdxelement
+        try:
+            return self.builder.add_relationship(self.document, relate)
+        except SPDXValueError:
+            self.value_error("RELATIONSHIP_VALUE", relate)
+
 
     def parse_relationship_comment(self, relationship_comment):
         """
