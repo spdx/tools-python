@@ -826,21 +826,23 @@ class PackageWriter(LicenseWriter):
             )
             self.graph.add(verif_triple)
         # Handle concluded license
-        conc_lic_node = self.license_or_special(package.conc_lics)
-        conc_lic_triple = (
-            package_node,
-            self.spdx_namespace.licenseConcluded,
-            conc_lic_node,
-        )
-        self.graph.add(conc_lic_triple)
+        if package.conc_lics:
+            conc_lic_node = self.license_or_special(package.conc_lics)
+            conc_lic_triple = (
+                package_node,
+                self.spdx_namespace.licenseConcluded,
+                conc_lic_node,
+            )
+            self.graph.add(conc_lic_triple)
         # Handle declared license
-        decl_lic_node = self.license_or_special(package.license_declared)
-        decl_lic_triple = (
-            package_node,
-            self.spdx_namespace.licenseDeclared,
-            decl_lic_node,
-        )
-        self.graph.add(decl_lic_triple)
+        if package.license_declared:
+            decl_lic_node = self.license_or_special(package.license_declared)
+            decl_lic_triple = (
+                package_node,
+                self.spdx_namespace.licenseDeclared,
+                decl_lic_node,
+            )
+            self.graph.add(decl_lic_triple)
         # Package licenses from files
         licenses_from_files_nodes = map(
             lambda el: self.license_or_special(el), package.licenses_from_files
