@@ -181,6 +181,9 @@ class ExternalDocumentRefBuilder(object):
         if not validations.validate_doc_namespace(spdx_doc_uri):
             raise SPDXValueError("Document::ExternalDocumentRef")
 
+        if not doc.ext_document_references:
+            doc.add_ext_document_reference(ExternalDocumentRef())
+
         doc.ext_document_references[-1].spdx_document_uri = spdx_doc_uri
 
     def set_chksum(self, doc, chksum):

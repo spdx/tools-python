@@ -17,7 +17,7 @@ from spdx import license
 from spdx import package
 from spdx import version
 from spdx.checksum import Checksum, ChecksumAlgorithm
-from spdx.document import Document
+from spdx.document import Document, ExternalDocumentRef
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
@@ -144,6 +144,9 @@ class ExternalDocumentRefBuilder(tagvaluebuilders.ExternalDocumentRefBuilder):
         Set the external document reference's check sum, if not already set.
         chk_sum - The checksum value in the form of a string.
         """
+        if not doc.ext_document_references:
+            doc.add_ext_document_reference(ExternalDocumentRef())
+
         if chk_sum:
             doc.ext_document_references[-1].checksum = Checksum(
                 ChecksumAlgorithm.SHA1, chk_sum
