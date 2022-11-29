@@ -10,26 +10,25 @@
 # limitations under the License.
 
 import re
-from typing import Dict
+from typing import Dict, List
 
 from spdx import annotation
 from spdx import creationinfo
 from spdx import file
 from spdx import license
 from spdx import package
-from spdx import relationship
 from spdx import review
 from spdx import snippet
 from spdx import utils
 from spdx import version
 from spdx.checksum import Checksum
-
 from spdx.document import ExternalDocumentRef, Document
 from spdx.package import PackagePurpose
+from spdx.parsers import validations
 from spdx.parsers.builderexceptions import CardinalityError
 from spdx.parsers.builderexceptions import OrderError
 from spdx.parsers.builderexceptions import SPDXValueError
-from spdx.parsers import validations
+from spdx.relationship import Relationship
 
 
 def str_from_text(text) -> str:
@@ -196,7 +195,6 @@ class ExternalDocumentRefBuilder(object):
 
 
 class EntityBuilder(object):
-
     tool_re = re.compile(r"Tool:\s*(.+)", re.UNICODE)
     person_re = re.compile(r"Person:\s*(([^(])+)(\((.*)\))?", re.UNICODE)
     org_re = re.compile(r"Organization:\s*(([^(])+)(\((.*)\))?", re.UNICODE)
@@ -521,15 +519,31 @@ class RelationshipBuilder(object):
         # FIXME: this state does not make sense
         self.relationship_comment_set = False
 
-    def add_relationship(self, doc, relationship_term):
+    def add_relationship(self, doc: Document, relationship_term: str) -> bool:
         """
         Raise SPDXValueError if type is unknown.
         """
         self.reset_relationship()
-        doc.add_relationship(relationship.Relationship(relationship_term))
-        return True
+        relationship_to_add = Relationship(relationship_term)
+        existing_relationships: List[Relationship] = doc.relationships
 
-    def add_relationship_comment(self, doc, comment):
+        if relationship_to_add not in existing_relationships:
+            doc.add_relationship(relationship_to_add)
+            return True
+
+        existing_relationship: Relationship = existing_relationships[existing_relationships.index(relationship_to_add)]
+
+        # If the relationship already exists without comment, we remove the old one and re-append it at the end. This
+        # allows to add a comment to the relationship (since a comment will always be added to the latest
+        # relationship). If an equal relationship with comment already exists, we ignore the new relationship.
+        if not existing_relationship.has_comment:
+            existing_relationships.remove(relationship_to_add)
+            doc.add_relationship(relationship_to_add)
+            return True
+
+        return False
+
+    def add_relationship_comment(self, doc: Document, comment: str) -> bool:
         """
         Set the annotation comment.
         Raise CardinalityError if already set.
@@ -1012,7 +1026,7 @@ class PackageBuilder(object):
             raise CardinalityError("Package::ValidUntilDate")
 
         date = utils.datetime_from_iso_format(valid_until_date)
-        if date is  None:
+        if date is None:
             raise SPDXValueError("Package::ValidUntilDate")
 
         self.package_valid_until_date_set = True
@@ -1648,7 +1662,6 @@ class Builder(
     AnnotationBuilder,
     RelationshipBuilder,
 ):
-
     """
     SPDX document builder.
     """
@@ -1686,7 +1699,6 @@ class Builder(
 
     def has_current_package(self) -> bool:
         return bool(self.current_package)
-
 
     def reset(self):
         """
