@@ -124,7 +124,7 @@ class TestDocument(TestCase):
         package.add_lics_from_file(lic1)
         doc.add_file(file1)
         relationship = create_relationship(package.spdx_id, RelationshipType.CONTAINS, file1.spdx_id)
-        doc.add_relationships(relationship)
+        doc.add_relationship(relationship)
         messages = ErrorMessages()
         messages = doc.validate(messages)
         assert not messages
@@ -206,9 +206,9 @@ class TestWriters(TestCase):
 
         package.add_lics_from_file(lic1)
         relationship = create_relationship(package.spdx_id, RelationshipType.CONTAINS, file1.spdx_id)
-        doc.add_relationships(relationship)
+        doc.add_relationship(relationship)
         relationship = create_relationship(doc.spdx_id, RelationshipType.DESCRIBES, package.spdx_id)
-        doc.add_relationships(relationship)
+        doc.add_relationship(relationship)
         return doc
 
     def _get_lgpl_multi_package_doc(self, or_later=False):
@@ -264,15 +264,15 @@ class TestWriters(TestCase):
         doc.add_file(file1)
 
         relationship = create_relationship(doc.spdx_id, RelationshipType.DESCRIBES, package1.spdx_id)
-        doc.add_relationships(relationship)
+        doc.add_relationship(relationship)
         relationship = create_relationship(doc.spdx_id, RelationshipType.DESCRIBES, package2.spdx_id)
-        doc.add_relationships(relationship)
+        doc.add_relationship(relationship)
         relationship = create_relationship(doc.spdx_id, RelationshipType.DESCRIBES, package3.spdx_id)
-        doc.add_relationships(relationship)
+        doc.add_relationship(relationship)
         relationship = create_relationship(package2.spdx_id, RelationshipType.CONTAINS, file1.spdx_id)
-        doc.add_relationships(relationship)
+        doc.add_relationship(relationship)
         relationship = create_relationship(package3.spdx_id, RelationshipType.CONTAINS, file1.spdx_id)
-        doc.add_relationships(relationship)
+        doc.add_relationship(relationship)
 
         return doc
 
