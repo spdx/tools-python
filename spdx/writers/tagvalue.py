@@ -20,6 +20,7 @@ from spdx.package import Package
 from spdx.parsers.loggers import ErrorMessages
 from spdx.relationship import Relationship
 from spdx.snippet import Snippet
+from spdx.version import Version
 
 
 class InvalidDocumentError(Exception):
@@ -347,8 +348,9 @@ def write_document(document, out, validate=True):
         write_value("DocumentNamespace", document.namespace, out)
     if document.name:
         write_value("DocumentName", document.name, out)
-    if document.license_list_version:
-        write_value("LicenseListVersion", str(document.license_list_version), out)
+    if document.creation_info.license_list_version:
+        version: Version = document.creation_info.license_list_version
+        write_value("LicenseListVersion", str(version.major) + "." + str(version.minor), out)
     write_value("SPDXID", "SPDXRef-DOCUMENT", out)
     if document.has_comment:
         write_text_value("DocumentComment", document.comment, out)
