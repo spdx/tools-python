@@ -117,7 +117,8 @@ def validate_snippet_attribution_text(value, optional=False):
 
 
 def validate_pkg_ext_ref_category(value, optional=False):
-    if value.upper() in ["SECURITY", "OTHER", "PACKAGE-MANAGER"]:
+    # PACKAGE_MANAGER is used in the json schema for 2.2. For now, we simply allow both versions
+    if value.upper() in ["SECURITY", "OTHER", "PACKAGE-MANAGER", "PACKAGE_MANAGER"]:
         return True
     else:
         return False
