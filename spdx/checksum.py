@@ -10,7 +10,6 @@
 # limitations under the License.
 import re
 from enum import Enum, auto
-from typing import Optional
 
 
 class ChecksumAlgorithm(Enum):
@@ -64,6 +63,11 @@ class Checksum(object):
         self.identifier = identifier
         self.value = value
 
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, Checksum):
+            return False
+        return self.identifier == other.identifier and self.value == other.value
+
     @classmethod
     def checksum_from_string(cls, value: str) -> 'Checksum':
         CHECKSUM_RE = re.compile("(ADLER32|BLAKE2b-256|BLAKE2b-384|BLAKE2b-512|BLAKE3|MD2|MD4|MD5|MD6|" \
@@ -74,5 +78,21 @@ class Checksum(object):
         identifier = ChecksumAlgorithm.checksum_algorithm_from_string(match.group(1))
         return Checksum(identifier=identifier, value=match.group(2))
 
-    def to_tv(self):
-        return "{0}: {1}".format(self.identifier.name, self.value)
+    def to_tv(self) -> str:
+        algorithm_name: str = self.identifier.name
+        # Convert underscores to dashes, and other Blake2b-specific casing rules
+        if "_" in algorithm_name:
+            algorithm_name = CHECKSUM_ALGORITHM_TO_TV.get(algorithm_name)
+            if algorithm_name is None:
+                raise ValueError(f"Missing conversion rule for converting {self.identifier.name} to tag-value string")
+        return "{0}: {1}".format(algorithm_name, self.value)
+
+
+CHECKSUM_ALGORITHM_TO_TV = {
+    ChecksumAlgorithm.BLAKE2B_256.name: "BLAKE2b-256",
+    ChecksumAlgorithm.BLAKE2B_384.name: "BLAKE2b-384",
+    ChecksumAlgorithm.BLAKE2B_512.name: "BLAKE2b-512",
+    ChecksumAlgorithm.SHA3_256.name: "SHA3-256",
+    ChecksumAlgorithm.SHA3_384.name: "SHA3-384",
+    ChecksumAlgorithm.SHA3_512.name: "SHA3-512"
+}

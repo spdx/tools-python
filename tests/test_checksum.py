@@ -10,7 +10,7 @@
 # limitations under the License.
 import pytest
 
-from spdx.checksum import ChecksumAlgorithm
+from spdx.checksum import ChecksumAlgorithm, Checksum
 
 
 @pytest.mark.parametrize("algorithm,expected",
@@ -46,3 +46,29 @@ def test_checksum_from_wrong_rdf(rdf_algorithm):
 
     assert str(error.value).startswith("Invalid algorithm for checksum")
 
+
+CHECKSUM_VALUE = "123Abc"
+
+
+@pytest.mark.parametrize("checksum_string,expected",
+                         [("SHA1: " + CHECKSUM_VALUE, Checksum(ChecksumAlgorithm.SHA1, CHECKSUM_VALUE)),
+                          ("SHA3-256: " + CHECKSUM_VALUE, Checksum(ChecksumAlgorithm.SHA3_256, CHECKSUM_VALUE)),
+                          ("ADLER32: " + CHECKSUM_VALUE, Checksum(ChecksumAlgorithm.ADLER32, CHECKSUM_VALUE)),
+                          ("BLAKE3: " + CHECKSUM_VALUE, Checksum(ChecksumAlgorithm.BLAKE3, CHECKSUM_VALUE)),
+                          ("BLAKE2b-256: " + CHECKSUM_VALUE, Checksum(ChecksumAlgorithm.BLAKE2B_256, CHECKSUM_VALUE)),
+                          ("MD5: " + CHECKSUM_VALUE, Checksum(ChecksumAlgorithm.MD5, CHECKSUM_VALUE))])
+def test_checksum_from_string(checksum_string: str, expected: Checksum):
+    checksum: Checksum = Checksum.checksum_from_string(checksum_string)
+    assert checksum == expected
+
+
+@pytest.mark.parametrize("checksum, expected",
+                         [(Checksum(ChecksumAlgorithm.SHA1, CHECKSUM_VALUE), "SHA1: " + CHECKSUM_VALUE),
+                          (Checksum(ChecksumAlgorithm.SHA3_256, CHECKSUM_VALUE), "SHA3-256: " + CHECKSUM_VALUE),
+                          (Checksum(ChecksumAlgorithm.ADLER32, CHECKSUM_VALUE), "ADLER32: " + CHECKSUM_VALUE),
+                          (Checksum(ChecksumAlgorithm.BLAKE3, CHECKSUM_VALUE), "BLAKE3: " + CHECKSUM_VALUE),
+                          (Checksum(ChecksumAlgorithm.BLAKE2B_256, CHECKSUM_VALUE), "BLAKE2b-256: " + CHECKSUM_VALUE),
+                          (Checksum(ChecksumAlgorithm.MD5, CHECKSUM_VALUE), "MD5: " + CHECKSUM_VALUE)])
+def test_checksum_to_tv(checksum: Checksum, expected: str):
+    checksum_string: str = checksum.to_tv()
+    assert checksum_string == expected
