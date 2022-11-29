@@ -12,9 +12,9 @@
 import os
 
 import pytest
+
 from spdx.parsers import parse_anything
 from spdx.writers import write_anything
-
 from tests import utils_test
 
 dirname = os.path.join(os.path.dirname(__file__), "data", "formats")
@@ -23,25 +23,24 @@ test_files_json_yaml_xml_tag = [filename for filename in test_files if filename.
                                 or filename.endswith("yaml") or filename.endswith("xml") or filename.endswith("tag")]
 test_files_rdf = [filename for filename in test_files if filename.endswith("rdf")]
 UNSTABLE_CONVERSIONS = {
-    "SPDXTagExample.tag-rdf",
     "SPDXTagExample.tag-yaml",
     "SPDXTagExample.tag-xml",
     "SPDXTagExample.tag-json",
-    "SPDXSimpleTag.tag-rdf",
-    "SPDXXmlExample.xml-rdf",
     "SPDXXmlExample.xml-tag",
-    "SPDXJsonExample.json-rdf",
     "SPDXJsonExample.json-tag",
-    "SPDXYamlExample.yaml-rdf",
     "SPDXYamlExample.yaml-tag",
     "SPDXRdfExample.rdf-rdf",
-    "SPDXRdfExample.rdf-yaml",
-    "SPDXRdfExample.rdf-xml",
-    "SPDXRdfExample.rdf-json",
-    "SPDXRdfExample.rdf-tag",
-    "SPDXJsonExample2.2.json-rdf",
-    "SPDXJsonExample2.2.json-tag",
+    "SPDXSBOMExample.tag-yaml",
+    "SPDXSBOMExample.tag-json",
+    "SPDXSBOMExample.tag-xml",
+    "SPDXYAMLExample-2.2.spdx.yaml-tag",
+    "SPDXJSONExample-v2.2.spdx.json-tag",
+    "SPDXXMLExample-v2.2.spdx.xml-tag",
+    "SPDXYAMLExample-2.3.spdx.yaml-tag",
+    "SPDXJSONExample-v2.3.spdx.json-tag",
+    "SPDXXMLExample-v2.3.spdx.xml-tag"
 }
+
 
 # Because the rdf-parser/ writer can't handle the mandatory field byte_range in snippets yet we can only test conversion
 # from json, yaml, xml and tv to each other format and rdf to rdf. Otherwise, the jsonyamlxml- or tv-writer would add
@@ -49,13 +48,10 @@ UNSTABLE_CONVERSIONS = {
 # https://github.com/spdx/tools-python/issues/274
 
 
-@pytest.mark.parametrize("out_format", [ 'yaml', 'xml', 'json', 'tag'])
+@pytest.mark.parametrize("out_format", ['yaml', 'xml', 'json', 'tag'])
 @pytest.mark.parametrize("in_file", test_files_json_yaml_xml_tag, ids=lambda x: os.path.basename(x))
 def test_write_anything_json_yaml_xml_tv(in_file, out_format, tmpdir):
     in_basename = os.path.basename(in_file)
-    if in_basename == "SPDXSBOMExample.spdx.yml" or in_basename == "SPDXJsonExample2.2.json" or in_basename == "SPDXSBOMExample.tag":
-        # conversion of spdx2.2 is not yet done
-        return
     write_anything_test(in_basename, in_file, out_format, tmpdir)
 
 
