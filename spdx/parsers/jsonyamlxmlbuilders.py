@@ -184,15 +184,15 @@ class FileBuilder(rdfbuilders.FileBuilder):
     def set_file_notice(self, doc, text):
         """
         Set file notice
-        Raise OrderError if no package or file defined.
+        Raise OrderError if no file defined.
         Raise CardinalityError if more than one.
         """
-        if self.has_file(doc):
-            self.file_notice_set = True
-            self.file(doc).notice = text
-            return True
-        else:
+        if not self.has_file(doc):
             raise OrderError("File::Notice")
+
+        self.file_notice_set = True
+        self.file(doc).notice = text
+        return True
 
     def set_file_type(self, doc, type_value):
         """
@@ -204,6 +204,52 @@ class FileBuilder(rdfbuilders.FileBuilder):
         """
 
         return super(FileBuilder, self).set_file_type(doc, f"namespace#fileType_{type_value.lower()}")
+
+    def set_file_copyright(self, doc, text):
+        """
+        Raise OrderError if no file defined.
+        Raise CardinalityError if more than one.
+        """
+        if not self.has_file(doc):
+            raise OrderError("File::CopyRight")
+        if self.file_copytext_set:
+            raise CardinalityError("File::CopyRight")
+        self.file_copytext_set = True
+        self.file(doc).copyright = text
+        return True
+
+    def set_file_license_comment(self, doc, text):
+        """
+        Raise OrderError if no file defined.
+        Raise CardinalityError if more than one per file.
+        """
+        if not self.has_file(doc):
+            raise OrderError("File::LicenseComment")
+        if self.file_license_comment_set:
+            raise CardinalityError("File::LicenseComment")
+        self.file(doc).license_comment = text
+        return True
+
+    def set_file_attribution_text(self, doc, text):
+        """
+        Set the file's attribution text.
+        """
+        if self.has_file(doc):
+            self.file(doc).attribution_text = text
+            return True
+
+    def set_file_comment(self, doc, text):
+        """
+        Raise OrderError if no file defined.
+        Raise CardinalityError if more than one comment set.
+        """
+        if not self.has_file(doc):
+            raise OrderError("File::Comment")
+        if self.file_comment_set:
+            raise CardinalityError("File::Comment")
+        self.file_comment_set = True
+        self.file(doc).comment = text
+        return True
 
 
 class AnnotationBuilder(tagvaluebuilders.AnnotationBuilder):
