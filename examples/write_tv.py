@@ -78,9 +78,9 @@ if __name__ == "__main__":
 
     doc.package = package
     relationship = Relationship("TestPackage#SPDXRef-PACKAGE CONTAINS TestFilet#SPDXRef-FILE")
-    doc.add_relationships(relationship)
+    doc.add_relationship(relationship)
     relationship = Relationship("TestPackage#SPDXRef-PACKAGE CONTAINS TestFile2#SPDXRef-FILE")
-    doc.add_relationships(relationship)
+    doc.add_relationship(relationship)
 
     # An extracted license
 

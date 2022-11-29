@@ -129,7 +129,7 @@ def test_files_without_package(temporary_file_path, out_format):
     file: File = minimal_file()
     document.add_file(file)
     describes_relationship: Relationship = Relationship("SPDXRef-DOCUMENT DESCRIBES SPDXRef-File")
-    document.add_relationships(relationship=describes_relationship)
+    document.add_relationship(relationship=describes_relationship)
 
     file_path_with_ending = temporary_file_path + "." + out_format
     write_anything.write_file(document, file_path_with_ending, validate=False)

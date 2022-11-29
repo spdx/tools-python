@@ -526,7 +526,7 @@ class RelationshipBuilder(object):
         Raise SPDXValueError if type is unknown.
         """
         self.reset_relationship()
-        doc.add_relationships(relationship.Relationship(relationship_term))
+        doc.add_relationship(relationship.Relationship(relationship_term))
         return True
 
     def add_relationship_comment(self, doc, comment):

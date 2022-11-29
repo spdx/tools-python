@@ -142,7 +142,7 @@ class Document(object):
     def add_annotation(self, annotation):
         self.annotations.append(annotation)
 
-    def add_relationships(self, relationship):
+    def add_relationship(self, relationship):
         self.relationships.append(relationship)
 
     def add_extr_lic(self, lic):
