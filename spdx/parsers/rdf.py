@@ -1217,6 +1217,10 @@ class RelationshipParser(BaseParser):
                     rtype = "HAS_PREREQUISITE"
                 elif rtype.endswith("other"):
                     rtype = "OTHER"
+                elif rtype.endswith("specificationFor"):
+                    rtype = "SPECIFICATION_FOR"
+                elif rtype.endswith("requirementDescriptionFor"):
+                    rtype = "REQUIREMENT_DESCRIPTION_FOR"
 
             except SPDXValueError:
                 self.value_error("RELATIONSHIP", rtype)
