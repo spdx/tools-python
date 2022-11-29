@@ -124,7 +124,7 @@ def validate_pkg_ext_ref_category(value, optional=False):
 
 
 def validate_pkg_ext_ref_type(value, optional=False):
-    if re.match(r"^[A-Za-z0-9.\-]+$", value) is not None:
+    if re.match(r"^\S+$", value) is not None:
         return True
     else:
         return False

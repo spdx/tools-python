@@ -629,7 +629,7 @@ class TestPackageBuilder(TestCase):
 
     @testing_utils.raises(builders.SPDXValueError)
     def test_incorrect_pkg_ext_ref_type(self):
-        pkg_ext_ref_type = "cpe23Type_with_special_symbols&%"
+        pkg_ext_ref_type = "cpe23Type with whitespace"
         self.builder.create_package(self.document, "pkg")
         self.builder.set_pkg_ext_ref_type(self.document, pkg_ext_ref_type)
 
