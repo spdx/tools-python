@@ -1117,9 +1117,9 @@ class RelationshipParser(BaseParser):
         relationship = self.get_relationship(subject_term, relation_term)
         relationship_comment = self.get_relationship_comment(relation_term)
         if relationship is not None:
-            self.builder.add_relationship(self.doc, relationship)
-        if relationship_comment is not None:
-            self.builder.add_relationship_comment(self.doc, relationship_comment)
+            relationship_added: bool = self.builder.add_relationship(self.doc, relationship)
+            if relationship_comment is not None and relationship_added:
+                self.builder.add_relationship_comment(self.doc, relationship_comment)
 
     def get_relationship(self, subject_term, relation_term):
         """
