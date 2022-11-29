@@ -275,7 +275,9 @@ class TestParserUtils(object):
         license_dict = OrderedDict()
 
         if isinstance(license_var, NoAssert):
-            license_dict['type'] = 'NOASSERTION'
+            license_dict['type'] = 'Single'
+            license_dict['identifier'] = 'NOASSERTION'
+            license_dict['name'] = 'NOASSERTION'
             return license_dict
         elif isinstance(license_var, spdx.license.LicenseConjunction):
             license_dict['type'] = 'Conjunction'
