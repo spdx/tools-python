@@ -390,7 +390,6 @@ class TestParserUtils(object):
 
         for file in files:
             lics_in_files = sorted(file.licenses_in_file, key=lambda lic: lic.identifier)
-            contributors = sorted(file.contributors, key=lambda c: c.name)
             chk_sums = []
             for checksum in file.checksums.values():
                 chk_sums.append(cls.checksum_to_dict(checksum))
@@ -406,7 +405,7 @@ class TestParserUtils(object):
                 ('notice', file.notice),
                 ('checksums', chk_sums),
                 ('licenseInfoInFiles', [cls.license_to_dict(lic) for lic in lics_in_files]),
-                ('contributors', [cls.entity_to_dict(contributor) for contributor in contributors]),
+                ('contributors', sorted(file.contributors)),
                 ('dependencies', sorted(file.dependencies)),
                 ('artifactOfProjectName', file.artifact_of_project_name),
                 ('artifactOfProjectHome', file.artifact_of_project_home),
