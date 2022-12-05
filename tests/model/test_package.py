@@ -13,7 +13,7 @@ from src.model.spdx_none import SpdxNone
 @mock.patch('src.model.actor.Actor', autospec=True)
 @mock.patch('src.model.package.PackageVerificationCode', autospec=True)
 @mock.patch('src.model.checksum.Checksum', autospec=True)
-@mock.patch('src.model.package.ExternalPackageReference', autospec=True)
+@mock.patch('src.model.package.ExternalPackageRef', autospec=True)
 def test_correct_initialization(actor, verif_code, checksum, ext_ref):
     package = Package("id", "name", SpdxNoAssertion(), "version", "file_name", SpdxNoAssertion(), actor, True,
                       verif_code, [checksum], "homepage", "source_info", None, [LicenseExpression("expression")],
