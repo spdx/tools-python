@@ -160,7 +160,7 @@
       "comment": "This is tye CyperNeko License",
       "licenseId": "LicenseRef-3",
       "name": "CyberNeko License",
-      "seeAlso": [
+      "seeAlsos": [
         "http://justasample.url.com",
         "http://people.apache.org/~andyc/neko/LICENSE"
       ]

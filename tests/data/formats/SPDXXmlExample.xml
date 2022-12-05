@@ -164,8 +164,8 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</extractedText>
 			<comment>This is tye CyperNeko License</comment>
 			<licenseId>LicenseRef-3</licenseId>
 			<name>CyberNeko License</name>
-			<seeAlso>http://justasample.url.com</seeAlso>
-			<seeAlso>http://people.apache.org/~andyc/neko/LICENSE</seeAlso>
+			<seeAlsos>http://justasample.url.com</seeAlsos>
+			<seeAlsos>http://people.apache.org/~andyc/neko/LICENSE</seeAlsos>
 		</hasExtractedLicensingInfos>
 		<hasExtractedLicensingInfos>
 			<extractedText>/*

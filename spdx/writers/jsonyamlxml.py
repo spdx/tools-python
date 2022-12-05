@@ -465,10 +465,10 @@ class ExtractedLicenseWriter(BaseWriter):
             if extracted_license.cross_ref:
                 if isinstance(extracted_license.cross_ref, Literal):
                     extracted_license_object[
-                        "seeAlso"
+                        "seeAlsos"
                     ] = extracted_license.cross_ref.toPython()
                 else:
-                    extracted_license_object["seeAlso"] = extracted_license.cross_ref
+                    extracted_license_object["seeAlsos"] = extracted_license.cross_ref
 
             if extracted_license.comment:
                 if isinstance(extracted_license.comment, Literal):

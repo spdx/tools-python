@@ -103,7 +103,7 @@ Document:
       \ USE OF THIS SOFTWARE,\nEVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE."
       licenseId: LicenseRef-3
       name: CyberNeko License
-      seeAlso:
+      seeAlsos:
         - http://justasample.url.com
         - http://people.apache.org/~andyc/neko/LICENSE
     - extractedText: "/*\n * (c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006,\

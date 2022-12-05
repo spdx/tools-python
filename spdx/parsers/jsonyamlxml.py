@@ -233,7 +233,7 @@ class LicenseParser(BaseParser):
                         self.parse_ext_lic_name(extracted_license.get("name"))
                         self.parse_ext_lic_comment(extracted_license.get("comment"))
                         self.parse_ext_lic_text(extracted_license.get("extractedText"))
-                        self.parse_ext_lic_cross_refs(extracted_license.get("seeAlso"))
+                        self.parse_ext_lic_cross_refs(extracted_license.get("seeAlsos"))
                 else:
                     self.value_error("EXTR_LIC", extracted_license)
 
