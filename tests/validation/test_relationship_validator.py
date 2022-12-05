@@ -1,8 +1,8 @@
 from typing import List
 
 from src.model.relationship import Relationship, RelationshipType
-from src.validation.validation_message import ValidationMessage, SpdxElementType, ValidationContext
 from src.validation.relationship_validator import RelationshipValidator
+from src.validation.validation_message import ValidationMessage, SpdxElementType, ValidationContext
 
 
 def test_correct_relationship():
@@ -13,64 +13,6 @@ def test_correct_relationship():
     validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
 
     assert validation_messages == []
-
-
-def test_wrong_type_in_spdx_element_id():
-    relationship_validator = RelationshipValidator("2.3")
-
-    relationship = Relationship(42, RelationshipType.DESCRIBED_BY, "some_id")
-
-    validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
-
-    expected_context: ValidationContext = ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
-                                                            full_element=relationship)
-
-    assert ValidationMessage("spdx_element_id must be <class 'str'>, but is <class 'int'>: 42",
-                             expected_context) in validation_messages
-
-
-def test_wrong_type_in_relationship_type():
-    relationship_validator = RelationshipValidator("2.3")
-
-    relationship = Relationship("some_id", "DESCRIBES", "some_id")
-
-    validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
-
-    expected_context: ValidationContext = ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
-                                                            full_element=relationship)
-
-    assert len(validation_messages) == 1
-    assert ValidationMessage(
-        "relationship_type must be <enum 'RelationshipType'>, but is <class 'str'>: DESCRIBES",
-        expected_context) in validation_messages
-
-
-def test_wrong_type_in_related_spdx_element_id():
-    relationship_validator = RelationshipValidator("2.3")
-
-    relationship = Relationship(42, "DESCRIBES", [], comment={})
-
-    validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
-
-    expected_context: ValidationContext = ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
-                                                            full_element=relationship)
-
-    assert ValidationMessage("related_spdx_element_id must be <class 'str'>, but is <class 'list'>: []",
-                             expected_context) in validation_messages
-
-
-def test_wrong_type_in_comment():
-    relationship_validator = RelationshipValidator("2.3")
-
-    relationship = Relationship(42, "DESCRIBES", [], comment={})
-
-    validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
-
-    expected_context: ValidationContext = ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
-                                                            full_element=relationship)
-
-    assert ValidationMessage("comment must be <class 'str'>, but is <class 'dict'>: {}",
-                             expected_context) in validation_messages
 
 
 def test_v2_3_only_types():

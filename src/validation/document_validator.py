@@ -5,7 +5,7 @@ from src.validation.annotation_validator import AnnotationValidator
 from src.validation.creation_info_validator import CreationInfoValidator
 from src.validation.validation_message import ValidationMessage
 from src.validation.external_document_ref_validator import ExternalDocumentRefValidator
-from src.validation.extracted_license_info_validator import ExtractedLicensingInfoValidator
+from src.validation.extracted_licensing_info_validator import ExtractedLicensingInfoValidator
 from src.validation.file_validator import FileValidator
 from src.validation.package_validator import PackageValidator
 from src.validation.relationship_validator import RelationshipValidator
@@ -23,7 +23,7 @@ class DocumentValidator:
     external_document_ref_validator: ExternalDocumentRefValidator
     extracted_licensing_info_validator: ExtractedLicensingInfoValidator
 
-    def __int__(self, spdx_version: str):
+    def __init__(self, spdx_version: str):
         self.spdx_version = spdx_version
         self.creation_info_validator = CreationInfoValidator(spdx_version)
         self.package_validator = PackageValidator(spdx_version)
