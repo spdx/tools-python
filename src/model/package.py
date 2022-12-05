@@ -44,7 +44,7 @@ class PackageVerificationCode:
     excluded_files: List[str] = field(default_factory=list)
 
 
-class ExternalPackageReferenceCategory(Enum):
+class ExternalPackageRefCategory(Enum):
     SECURITY = auto()
     PACKAGE_MANAGER = auto()
     PERSISTENT_ID = auto()
@@ -52,8 +52,8 @@ class ExternalPackageReferenceCategory(Enum):
 
 
 @dataclass_with_properties
-class ExternalPackageReference:
-    category: ExternalPackageReferenceCategory
+class ExternalPackageRef:
+    category: ExternalPackageRefCategory
     # In theory, once could refine the typing,
     # see https://spdx.github.io/spdx-spec/v2.3/external-repository-identifiers/. But it's probably not worth the
     # effort.
@@ -84,7 +84,7 @@ class Package:
     summary: Optional[str] = None
     description: Optional[str] = None
     comment: Optional[str] = None
-    external_references: List[ExternalPackageReference] = field(default_factory=list)
+    external_references: List[ExternalPackageRef] = field(default_factory=list)
     attribution_texts: List[str] = field(default_factory=list)
     primary_package_purpose: Optional[PackagePurpose] = None
     release_date: Optional[datetime] = None
