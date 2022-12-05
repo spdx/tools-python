@@ -9,14 +9,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from enum import Enum, auto
-import warnings
-from functools import total_ordering
 import hashlib
+import warnings
+from enum import Enum, auto
+from functools import total_ordering
+from typing import Optional
 
-from spdx.license import License
 from spdx import utils
 from spdx.checksum import Checksum, ChecksumAlgorithm
+from spdx.license import License
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.loggers import ErrorMessages
 
@@ -235,8 +236,8 @@ class File(object):
 
         return file_hash.hexdigest()
 
-    def get_checksum(self, hash_algorithm: ChecksumAlgorithm = ChecksumAlgorithm.SHA1) -> Checksum:
-        return self.checksums[hash_algorithm]
+    def get_checksum(self, hash_algorithm: ChecksumAlgorithm = ChecksumAlgorithm.SHA1) -> Optional[Checksum]:
+        return self.checksums.get(hash_algorithm)
 
     def set_checksum(self, new_checksum: Checksum):
         if not isinstance(new_checksum, Checksum):
