@@ -298,8 +298,8 @@ class Package(object):
             if not isinstance(checksum, Checksum):
                 messages.append("Package checksum must be instance of spdx.checksum.Checksum")
 
-    def get_checksum(self, hash_algorithm: ChecksumAlgorithm = ChecksumAlgorithm.SHA1) -> Checksum:
-        return self.checksums[hash_algorithm]
+    def get_checksum(self, hash_algorithm: ChecksumAlgorithm = ChecksumAlgorithm.SHA1) -> Optional[Checksum]:
+        return self.checksums.get(hash_algorithm)
 
     def set_checksum(self, new_checksum: Checksum):
         if not isinstance(new_checksum, Checksum):
