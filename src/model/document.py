@@ -28,22 +28,22 @@ from src.model.version import Version
 
 @dataclass_with_properties
 class CreationInfo:
-    creators: List[Actor]
-    created: datetime
-    comment: Optional[str] = None
-    license_list_version: Optional[Version] = None
-
-
-@dataclass_with_properties
-class Document:
     spdx_version: str
     spdx_id: str
     name: str
     document_namespace: str
-    creation_info: CreationInfo
+    creators: List[Actor]
+    created: datetime
+    creator_comment: Optional[str] = None
     data_license: str = "CC0-1.0"
     external_document_refs: List[ExternalDocumentRef] = field(default_factory=list)
-    comment: Optional[str] = None
+    license_list_version: Optional[Version] = None
+    document_comment: Optional[str] = None
+
+
+@dataclass_with_properties
+class Document:
+    creation_info: CreationInfo
 
     packages: List[Package] = field(default_factory=list)
     files: List[File] = field(default_factory=list)
