@@ -29,7 +29,7 @@ class Parser(jsonyamlxml.Parser):
             "creators",
             "externalDocumentRefs",
             "extractedLicenseInfos",
-            "seeAlso",
+            "seeAlsos",
             "annotations",
             "relationships",
             "snippets",
