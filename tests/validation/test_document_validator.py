@@ -3,7 +3,7 @@ from unittest import mock
 
 from src.model.document import Document
 from src.validation.document_validator import DocumentValidator
-from src.validation.validation_message import ValidationMessage
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 @mock.patch('src.model.document.CreationInfo', autospec=True)

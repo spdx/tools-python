@@ -7,7 +7,7 @@ from src.model.package import Package, PackagePurpose
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.validation.package_validator import PackageValidator
-from src.validation.validation_message import ValidationMessage
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 @mock.patch('src.model.actor.Actor', autospec=True)

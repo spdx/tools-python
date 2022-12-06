@@ -5,6 +5,7 @@ from typing import Optional, Any
 
 class SpdxElementType(Enum):
     DOCUMENT = auto()
+    CREATION_INFO = auto()
     PACKAGE = auto()
     FILE = auto()
     SNIPPET = auto()

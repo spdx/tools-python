@@ -2,7 +2,7 @@ from typing import List
 
 from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.validation.checksum_validator import ChecksumValidator
-from src.validation.validation_message import ValidationMessage
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 def test_correct_checksum():

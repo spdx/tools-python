@@ -2,7 +2,7 @@ from typing import List
 
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.validation.extracted_licensing_info_validator import ExtractedLicensingInfoValidator
-from src.validation.validation_message import ValidationMessage
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 def test_correct_extracted_licensing_info():

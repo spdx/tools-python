@@ -3,7 +3,7 @@ from typing import List
 
 from src.model.annotation import Annotation, AnnotationType
 from src.validation.annotation_validator import AnnotationValidator
-from src.validation.validation_message import ValidationMessage
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 def test_correct_annotation():

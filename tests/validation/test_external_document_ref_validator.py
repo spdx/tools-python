@@ -3,7 +3,7 @@ from unittest import mock
 
 from src.model.external_document_ref import ExternalDocumentRef
 from src.validation.external_document_ref_validator import ExternalDocumentRefValidator
-from src.validation.validation_message import ValidationMessage
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 @mock.patch('src.model.checksum.Checksum', autospec=True)

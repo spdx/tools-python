@@ -4,7 +4,7 @@ from src.model.snippet import Snippet
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.validation.snippet_validator import SnippetValidator
-from src.validation.validation_message import ValidationMessage
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 def test_correct_snippet():

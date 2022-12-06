@@ -5,7 +5,7 @@ from src.model.file import File, FileType
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.validation.file_validator import FileValidator
-from src.validation.validation_message import ValidationMessage
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 @mock.patch('src.model.checksum.Checksum', autospec=True)

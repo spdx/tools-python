@@ -2,7 +2,7 @@ from typing import List
 
 from src.model.license_expression import LicenseExpression
 from src.validation.license_expression_validator import LicenseExpressionValidator
-from src.validation.validation_message import ValidationMessage
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 def test_correct_license_expression():
