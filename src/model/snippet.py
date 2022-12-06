@@ -15,6 +15,7 @@ from src.model.dataclass_with_properties import dataclass_with_properties
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
+from src.model.type_checks import check_types_and_set_values
 
 
 @dataclass_with_properties
@@ -30,3 +31,12 @@ class Snippet:
     comment: Optional[str] = None
     name: Optional[str] = None
     attribution_texts: List[str] = field(default_factory=list)
+
+    def __init__(self, spdx_id: str, file_spdx_id: str, byte_range: Tuple[int, int],
+                 line_range: Optional[Tuple[int, int]] = None,
+                 concluded_license: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+                 license_info_in_snippet: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None,
+                 license_comment: Optional[str] = None, copyright_text: Optional[str] = None,
+                 comment: Optional[str] = None, name: Optional[str] = None, attribution_texts: List[str] = None):
+        attribution_texts = attribution_texts or []
+        check_types_and_set_values(self, locals())

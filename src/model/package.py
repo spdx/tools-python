@@ -19,6 +19,7 @@ from src.model.dataclass_with_properties import dataclass_with_properties
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
+from src.model.type_checks import check_types_and_set_values
 
 
 class PackagePurpose(Enum):
@@ -41,6 +42,10 @@ class PackageVerificationCode:
     value: str
     excluded_files: List[str] = field(default_factory=list)
 
+    def __init__(self, value: str, excluded_files: List[str] = None):
+        excluded_files = excluded_files or []
+        check_types_and_set_values(self, locals())
+
 
 class ExternalPackageRefCategory(Enum):
     SECURITY = auto()
@@ -58,6 +63,10 @@ class ExternalPackageRef:
     reference_type: str
     locator: str
     comment: Optional[str] = None
+
+    def __init__(self, category: ExternalPackageRefCategory, reference_type: str, locator: str,
+                 comment: Optional[str] = None):
+        check_types_and_set_values(self, locals())
 
 
 @dataclass_with_properties
@@ -89,3 +98,25 @@ class Package:
     release_date: Optional[datetime] = None
     built_date: Optional[datetime] = None
     valid_until_date: Optional[datetime] = None
+
+    def __init__(self, spdx_id: str, name: str, download_location: Union[str, SpdxNoAssertion, SpdxNone],
+                 version: Optional[str] = None, file_name: Optional[str] = None,
+                 supplier: Optional[Union[Actor, SpdxNoAssertion]] = None,
+                 originator: Optional[Union[Actor, SpdxNoAssertion]] = None,
+                 files_analyzed: bool = True, verification_code: Optional[PackageVerificationCode] = None,
+                 checksums: List[Checksum] = None, homepage: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
+                 source_info: Optional[str] = None,
+                 license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+                 license_info_from_files: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None,
+                 license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+                 license_comment: Optional[str] = None,
+                 copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
+                 summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
+                 external_references: List[ExternalPackageRef] = None, attribution_texts: List[str] = None,
+                 primary_package_purpose: Optional[PackagePurpose] = None, release_date: Optional[datetime] = None,
+                 built_date: Optional[datetime] = None, valid_until_date: Optional[datetime] = None):
+        checksums = checksums or []
+        license_info_from_files = license_info_from_files or []
+        external_references = external_references or []
+        attribution_texts = attribution_texts or []
+        check_types_and_set_values(self, locals())
