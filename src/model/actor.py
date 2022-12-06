@@ -12,6 +12,7 @@ from enum import Enum, auto
 from typing import Optional
 
 from src.model.dataclass_with_properties import dataclass_with_properties
+from src.model.type_checks import check_types_and_set_values
 
 
 class ActorType(Enum):
@@ -25,3 +26,6 @@ class Actor:
     actor_type: ActorType
     name: str
     email: Optional[str] = None
+
+    def __init__(self, actor_type: ActorType, name: str, email: Optional[str] = None):
+        check_types_and_set_values(self, locals())
