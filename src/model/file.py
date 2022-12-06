@@ -14,10 +14,10 @@ from typing import Optional, List, Union
 
 from src.model.checksum import Checksum
 from src.model.dataclass_with_properties import dataclass_with_properties
-from src.model.license import License
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
+from src.model.type_checks import check_types_and_set_values
 
 
 class FileType(Enum):
@@ -40,7 +40,7 @@ class File:
     spdx_id: str
     checksums: List[Checksum]
     file_type: List[FileType] = field(default_factory=list)
-    concluded_license: Optional[Union[License, SpdxNoAssertion, SpdxNone]] = None
+    concluded_license: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
     license_info_in_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = field(
         default_factory=list)
     license_comment: Optional[str] = None
@@ -54,3 +54,16 @@ class File:
     # - file dependencies: replace by a DEPENDENCY_OF relationship (or one of the more precise versions)
     # - artifact of (3 properties): replace by an external package reference and a GENERATED_FROM relationship
     #   between the file and this package
+
+    def __init__(self, name: str, spdx_id: str, checksums: List[Checksum], file_type: List[FileType] = None,
+                 concluded_license: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+                 license_info_in_file: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+                 license_comment: Optional[str] = None,
+                 copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
+                 comment: str = None, notice: Optional[str] = None,
+                 contributors: List[str] = None, attribution_texts: List[str] = None):
+        file_type = file_type or []
+        license_info_in_file = license_info_in_file or []
+        contributors = contributors or []
+        attribution_texts = attribution_texts or []
+        check_types_and_set_values(self, locals())
