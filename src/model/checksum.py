@@ -11,6 +11,7 @@
 from enum import auto, Enum
 
 from src.model.dataclass_with_properties import dataclass_with_properties
+from src.model.type_checks import check_types_and_set_values
 
 
 class ChecksumAlgorithm(Enum):
@@ -37,3 +38,6 @@ class ChecksumAlgorithm(Enum):
 class Checksum:
     algorithm: ChecksumAlgorithm
     value: str
+
+    def __init__(self, algorithm: ChecksumAlgorithm, value: str):
+        check_types_and_set_values(self, locals())

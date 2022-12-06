@@ -11,6 +11,7 @@
 
 from src.model.checksum import Checksum
 from src.model.dataclass_with_properties import dataclass_with_properties
+from src.model.type_checks import check_types_and_set_values
 
 
 @dataclass_with_properties
@@ -18,3 +19,6 @@ class ExternalDocumentRef:
     document_uri: str
     spdx_id: str
     checksum: Checksum
+
+    def __init__(self, document_uri: str, spdx_id: str, checksum: Checksum):
+        check_types_and_set_values(self, locals())

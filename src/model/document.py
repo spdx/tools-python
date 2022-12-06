@@ -21,6 +21,7 @@ from src.model.file import File
 from src.model.package import Package
 from src.model.relationship import Relationship
 from src.model.snippet import Snippet
+from src.model.type_checks import check_types_and_set_values
 from src.model.version import Version
 
 
@@ -38,6 +39,13 @@ class CreationInfo:
     license_list_version: Optional[Version] = None
     document_comment: Optional[str] = None
 
+    def __init__(self, spdx_version: str, spdx_id: str, name: str, document_namespace: str, creators: List[Actor],
+                 created: datetime, creator_comment: Optional[str] = None, data_license: str = "CC0-1.0",
+                 external_document_refs: List[ExternalDocumentRef] = None,
+                 license_list_version: Optional[Version] = None, document_comment: Optional[str] = None):
+        external_document_refs = external_document_refs or []
+        check_types_and_set_values(self, locals())
+
 
 @dataclass_with_properties
 class Document:
@@ -49,3 +57,15 @@ class Document:
     annotations: List[Annotation] = field(default_factory=list)
     relationships: List[Relationship] = field(default_factory=list)
     extracted_licensing_info: List[ExtractedLicensingInfo] = field(default_factory=list)
+
+    def __init__(self, creation_info: CreationInfo, packages: List[Package] = None, files: List[File] = None,
+                 snippets: List[Snippet] = None, annotations: List[Annotation] = None,
+                 relationships: List[Relationship] = None,
+                 extracted_licensing_info: List[ExtractedLicensingInfo] = None):
+        packages = packages or []
+        files = files or []
+        snippets = snippets or []
+        annotations = annotations or []
+        relationships = relationships or []
+        extracted_licensing_info = extracted_licensing_info or []
+        check_types_and_set_values(self, locals())
