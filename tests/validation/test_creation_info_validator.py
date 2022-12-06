@@ -13,7 +13,7 @@ from tests.valid_defaults import get_actor, get_external_document_ref, get_creat
 def test_correct_creation_info():
     creation_info_validator = CreationInfoValidator("2.3")
 
-    creation_info = CreationInfo("SPDX-2.3", "SPDXRef-DOCUMENT", "document_name", "https://some.uri",
+    creation_info = CreationInfo("SPDX-2.3", "SPDXRef-DOCUMENT", "document name", "https://some.uri",
                                  [get_actor(), get_actor()], datetime(2022, 1, 1), "creator_comment",
                                  "CC0-1.0", [get_external_document_ref(), get_external_document_ref()], Version(6, 3),
                                  "doc_comment")
