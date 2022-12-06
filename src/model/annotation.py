@@ -12,8 +12,8 @@ from datetime import datetime
 from enum import Enum, auto
 
 from src.model.actor import Actor
-from src.model.dataclass_with_properties import dataclass_with_properties
-from src.model.type_checks import check_types_and_set_values
+from src.model.typing.dataclass_with_properties import dataclass_with_properties
+from src.model.typing.type_checks import check_types_and_set_values
 
 
 class AnnotationType(Enum):

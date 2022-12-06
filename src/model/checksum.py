@@ -10,8 +10,8 @@
 # limitations under the License.
 from enum import auto, Enum
 
-from src.model.dataclass_with_properties import dataclass_with_properties
-from src.model.type_checks import check_types_and_set_values
+from src.model.typing.dataclass_with_properties import dataclass_with_properties
+from src.model.typing.type_checks import check_types_and_set_values
 
 
 class ChecksumAlgorithm(Enum):
