@@ -8,18 +8,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from dataclasses import dataclass, field
+from dataclasses import field
 from enum import Enum, auto
 from typing import Optional, List, Union
 
-from typeguard import typechecked
-
 from src.model.checksum import Checksum
+from src.model.dataclass_with_properties import dataclass_with_properties
 from src.model.license import License
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
-from src.model.dataclass_with_properties import dataclass_with_properties
 
 
 class FileType(Enum):
@@ -43,7 +41,8 @@ class File:
     checksums: List[Checksum]
     file_type: List[FileType] = field(default_factory=list)
     concluded_license: Optional[Union[License, SpdxNoAssertion, SpdxNone]] = None
-    license_info_in_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = field(default_factory=list)
+    license_info_in_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = field(
+        default_factory=list)
     license_comment: Optional[str] = None
     copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None
     comment: Optional[str] = None

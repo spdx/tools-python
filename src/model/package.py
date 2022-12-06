@@ -8,19 +8,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from dataclasses import dataclass, field
+from dataclasses import field
 from datetime import datetime
 from enum import Enum, auto
 from typing import Optional, Union, List
 
-from typeguard import typechecked
-
 from src.model.actor import Actor
 from src.model.checksum import Checksum
+from src.model.dataclass_with_properties import dataclass_with_properties
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
-from src.model.dataclass_with_properties import dataclass_with_properties
 
 
 class PackagePurpose(Enum):
@@ -77,7 +75,8 @@ class Package:
     homepage: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None
     source_info: Optional[str] = None
     license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
-    license_info_from_files: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = field(default_factory=list)
+    license_info_from_files: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = field(
+        default_factory=list)
     license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
     license_comment: Optional[str] = None
     copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None

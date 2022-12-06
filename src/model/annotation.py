@@ -8,12 +8,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum, auto
 
-from typeguard import typechecked
-
+from src.model.actor import Actor
 from src.model.dataclass_with_properties import dataclass_with_properties
 
 
@@ -26,6 +24,6 @@ class AnnotationType(Enum):
 class Annotation:
     spdx_id: str
     annotation_type: AnnotationType
-    annotator: str
+    annotator: Actor
     annotation_date: datetime
     annotation_comment: str

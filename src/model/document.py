@@ -8,21 +8,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from dataclasses import dataclass, field
+from dataclasses import field
 from datetime import datetime
 from typing import List, Optional
 
-from typeguard import typechecked
-
 from src.model.actor import Actor
 from src.model.annotation import Annotation
+from src.model.dataclass_with_properties import dataclass_with_properties
 from src.model.external_document_ref import ExternalDocumentRef
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.file import File
 from src.model.package import Package
 from src.model.relationship import Relationship
 from src.model.snippet import Snippet
-from src.model.dataclass_with_properties import dataclass_with_properties
 from src.model.version import Version
 
 
