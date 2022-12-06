@@ -14,14 +14,14 @@ from typing import List, Optional
 
 from src.model.actor import Actor
 from src.model.annotation import Annotation
-from src.model.dataclass_with_properties import dataclass_with_properties
+from src.model.typing.dataclass_with_properties import dataclass_with_properties
 from src.model.external_document_ref import ExternalDocumentRef
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.file import File
 from src.model.package import Package
 from src.model.relationship import Relationship
 from src.model.snippet import Snippet
-from src.model.type_checks import check_types_and_set_values
+from src.model.typing.type_checks import check_types_and_set_values
 from src.model.version import Version
 
 

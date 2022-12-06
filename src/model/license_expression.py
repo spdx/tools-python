@@ -9,8 +9,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from src.model.dataclass_with_properties import dataclass_with_properties
-from src.model.type_checks import check_types_and_set_values
+from src.model.typing.dataclass_with_properties import dataclass_with_properties
+from src.model.typing.type_checks import check_types_and_set_values
 
 
 @dataclass_with_properties

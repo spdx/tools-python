@@ -15,11 +15,11 @@ from typing import Optional, Union, List
 
 from src.model.actor import Actor
 from src.model.checksum import Checksum
-from src.model.dataclass_with_properties import dataclass_with_properties
+from src.model.typing.dataclass_with_properties import dataclass_with_properties
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
-from src.model.type_checks import check_types_and_set_values
+from src.model.typing.type_checks import check_types_and_set_values
 
 
 class PackagePurpose(Enum):
