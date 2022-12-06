@@ -8,15 +8,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from dataclasses import dataclass, field
+from dataclasses import field
 from typing import Tuple, Optional, List, Union
 
-from typeguard import typechecked
-
+from src.model.dataclass_with_properties import dataclass_with_properties
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
-from src.model.dataclass_with_properties import dataclass_with_properties
 
 
 @dataclass_with_properties
