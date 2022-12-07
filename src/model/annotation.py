@@ -29,6 +29,6 @@ class Annotation:
     annotation_date: datetime
     annotation_comment: str
 
-    def __init__(self, spdx_id: str, annotation_type: AnnotationType, annotator: str, annotation_date: datetime,
+    def __init__(self, spdx_id: str, annotation_type: AnnotationType, annotator: Actor, annotation_date: datetime,
                  annotation_comment: str):
         check_types_and_set_values(self, locals())
