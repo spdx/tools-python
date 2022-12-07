@@ -20,8 +20,6 @@ def check_types_and_set_values(instance_under_construction: Any, local_variables
             setattr(instance_under_construction, key, value)
         except TypeError as err:
             error_message: str = err.args[0]
-            # As setters are created dynamically, their argument name is always "value". We replace it by the
-            # actual name so the error message is more helpful.
-            errors.append(error_message.replace("value", key, 1))
+            errors.append(error_message)
     if errors:
         raise ConstructorTypeErrors(errors)
