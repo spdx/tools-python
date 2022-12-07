@@ -19,10 +19,10 @@ def test_correct_actor_person():
 
 @pytest.mark.parametrize("actor_input, expected_message",
                          [(get_actor(actor_type=ActorType.TOOL, mail="mail@mail.com"),
-                           f"email must be None if actor_type is TOOL, but is mail@mail.com"),
+                           'email must be None if actor_type is TOOL, but is: mail@mail.com'),
                           ])
 def test_wrong_actor(actor_input, expected_message):
-    parent_id = "SPDXRef-Document"
+    parent_id = "SPDXRef-DOCUMENT"
     actor_validator = ActorValidator("2.3", parent_id)
     actor = actor_input
     validation_messages: List[ValidationMessage] = actor_validator.validate_actor(actor)

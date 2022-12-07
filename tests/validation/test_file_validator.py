@@ -6,13 +6,14 @@ from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.validation.file_validator import FileValidator
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from tests.valid_defaults import get_checksum
 
 
 @mock.patch('src.model.checksum.Checksum', autospec=True)
-def test_correct_file(checksum):
+def test_correct_file():
     file_validator = FileValidator("2.3")
 
-    file = File("name", "id", [checksum, checksum], [FileType.OTHER, FileType.SPDX], SpdxNone(), SpdxNoAssertion(),
+    file = File("file/name.py", "SPDXRef-File", [get_checksum()], [FileType.OTHER, FileType.SPDX], SpdxNone(), SpdxNoAssertion(),
                 "comment on license", "copyright", "comment", "notice", ["contributor"], ["attribution"])
     validation_messages: List[ValidationMessage] = file_validator.validate_file(file)
 

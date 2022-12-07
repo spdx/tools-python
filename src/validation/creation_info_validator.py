@@ -3,12 +3,8 @@ from typing import List
 
 from src.model.document import CreationInfo
 from src.validation.actor_validator import ActorValidator
+from src.validation.string_type_validators import is_valid_uri
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-
-
-def is_valid_uri(document_namespace: str) -> bool:
-    # TODO: implement or import some uri validation
-    return True
 
 
 class CreationInfoValidator:
@@ -17,12 +13,13 @@ class CreationInfoValidator:
 
     def __init__(self, spdx_version):
         self.spdx_version = spdx_version
+        # TODO: make this local to the validate_creation_info method, because we don't know the parent id yet
         self.actor_validator = ActorValidator(spdx_version)
 
     def validate_creation_info(self, creation_info: CreationInfo) -> List[ValidationMessage]:
         validation_messages: List[ValidationMessage] = []
 
-        if not re.match(r"SPDX-[0-9]+.[0-9]+", creation_info.spdx_version):
+        if not re.match(r"^SPDX-\d+.\d+$", creation_info.spdx_version):
             validation_messages.append(
                 ValidationMessage(
                     f'spdx_version must be of the form "SPDX-[major].[minor]" but is: {creation_info.spdx_version}',

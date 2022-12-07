@@ -17,5 +17,5 @@ class LicenseExpressionValidator:
 
         return error_messages
 
-    def validate_license_expression(self, license_expression: LicenseExpression) -> List[ValidationMessage]:
+    def validate_license_expression(self, license_expression: LicenseExpression) -> ValidationMessage:
         pass

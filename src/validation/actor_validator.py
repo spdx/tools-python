@@ -25,7 +25,7 @@ class ActorValidator:
         if actor.actor_type == ActorType.TOOL and actor.email is not None:
             validation_messages.append(
                 ValidationMessage(
-                    f"email must be None if actor_type is TOOL, but is {actor.email}",
+                    f"email must be None if actor_type is TOOL, but is: {actor.email}",
                     ValidationContext(parent_id=self.parent_id, element_type=SpdxElementType.ACTOR, full_element=actor)
                 )
             )
