@@ -11,11 +11,13 @@ class ActorValidator:
         self.spdx_version = spdx_version
 
     def validate_actors(self, actors: List[Actor]) -> List[ValidationMessage]:
-        error_messages = []
+        validation_messages = []
         for actor in actors:
-            error_messages.extend(self.validate_actor(actor))
+            validation_messages.extend(self.validate_actor(actor))
 
-        return error_messages
+        return validation_messages
 
     def validate_actor(self, actor: Actor) -> List[ValidationMessage]:
-        pass
+        validation_messages = []
+
+        return validation_messages
