@@ -14,6 +14,7 @@ from functools import total_ordering
 
 from spdx import config
 from spdx import utils
+from spdx.version import Version
 
 
 @total_ordering
@@ -155,6 +156,9 @@ class CreationInfo(object):
 
     def set_created_now(self):
         self.created = datetime.utcnow().replace(microsecond=0)
+
+    def set_license_list_version(self, license_list_version):
+        self.license_list_version = Version.from_str(license_list_version)
 
     @property
     def created_iso_format(self):

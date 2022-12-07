@@ -120,7 +120,6 @@ class Document(object):
         self.version = version
         self.data_license = data_license
         self.name = name
-        self.license_list_version=license_list_version
         self.spdx_id = spdx_id
         self.ext_document_references = []
         self.comment = comment
@@ -135,6 +134,10 @@ class Document(object):
         self.annotations = []
         self.relationships: List[Relationship] = []
         self.snippet = []
+
+        # due to backwards compatibility write input argument for license list version to creation info
+        if license_list_version:
+            self.creation_info.set_license_list_version(license_list_version)
 
     def add_review(self, review):
         self.reviews.append(review)
