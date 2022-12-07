@@ -4,6 +4,7 @@ from typing import Optional, Any
 
 
 class SpdxElementType(Enum):
+    ACTOR = auto()
     DOCUMENT = auto()
     CREATION_INFO = auto()
     PACKAGE = auto()

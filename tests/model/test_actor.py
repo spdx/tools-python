@@ -36,3 +36,6 @@ def test_wrong_type_in_email_after_initializing():
     with pytest.raises(TypeError):
         actor = Actor(ActorType.PERSON, "name")
         actor.email = []
+
+def test():
+    Actor("string", 2, [])

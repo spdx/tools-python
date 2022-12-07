@@ -12,7 +12,7 @@ from src.model.snippet import Snippet
 from src.model.spdx_none import SpdxNone
 
 
-def get_actor(actor_type=ActorType.PERSON, name="person name", mail="mail@mail.com") -> Actor:
+def get_actor(actor_type=ActorType.PERSON, name="person name", mail=None) -> Actor:
     return Actor(actor_type, name, mail)
 
 
