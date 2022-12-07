@@ -57,7 +57,7 @@ class File:
 
     def __init__(self, name: str, spdx_id: str, checksums: List[Checksum], file_type: List[FileType] = None,
                  concluded_license: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
-                 license_info_in_file: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+                 license_info_in_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None,
                  license_comment: Optional[str] = None,
                  copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
                  comment: str = None, notice: Optional[str] = None,
