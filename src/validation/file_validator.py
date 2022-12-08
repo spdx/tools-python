@@ -17,11 +17,26 @@ class FileValidator:
         self.license_expression_validator = LicenseExpressionValidator(spdx_version)
 
     def validate_files(self, files: List[File]) -> List[ValidationMessage]:
-        error_messages = []
+        validation_messages = []
         for file in files:
-            error_messages.extend(self.validate_file(file))
+            validation_messages.extend(self.validate_file(file))
 
-        return error_messages
+        return validation_messages
 
     def validate_file(self, file: File) -> List[ValidationMessage]:
-        pass
+        validation_messages = []
+
+        validation_messages.extend(
+            self.checksum_validator.validate_checksums(file.checksums)
+        )
+
+        validation_messages.append(
+            self.license_expression_validator.validate_license_expression(file.concluded_license)
+        )
+
+        validation_messages.extend(
+            self.license_expression_validator.validate_license_expressions(file.license_info_in_file)
+        )
+
+        return validation_messages
+

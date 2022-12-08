@@ -62,7 +62,7 @@ def get_external_document_ref(document_uri="https://some.uri", spdx_id="SPDXRef-
     return ExternalDocumentRef(document_uri, spdx_id, checksum)
 
 
-def get_file(name="file name", spdx_id="SPDXRef-File", checksums=None, file_type=FileType.TEXT, concluded_license=None,
+def get_file(name="./file/name.py", spdx_id="SPDXRef-File", checksums=None, file_type=FileType.TEXT, concluded_license=None,
              license_info_in_file=None, license_comment=None, copyright_text=None, comment=None, notice=None,
              contributors=None, attribution_texts=None):
     if checksums is None:

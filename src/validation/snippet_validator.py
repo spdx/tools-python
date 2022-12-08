@@ -17,11 +17,23 @@ class SnippetValidator:
         self.license_expression_validator = LicenseExpressionValidator(spdx_version)
 
     def validate_snippets(self, snippets: List[Snippet]) -> List[ValidationMessage]:
-        error_messages = []
+        validation_messages = []
         for snippet in snippets:
-            error_messages.extend(self.validate_snippet(snippet))
+            validation_messages.extend(self.validate_snippet(snippet))
 
-        return error_messages
+        return validation_messages
 
     def validate_snippet(self, snippet: Snippet) -> List[ValidationMessage]:
-        pass
+        validation_messages = []
+
+        # TODO: check that file_id is external or present in the document
+
+        validation_messages.append(
+            self.license_expression_validator.validate_license_expression(snippet.concluded_license)
+        )
+
+        validation_messages.extend(
+            self.license_expression_validator.validate_license_expressions(snippet.license_info_in_snippet)
+        )
+
+        return validation_messages
