@@ -62,8 +62,8 @@ class File:
                  copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
                  comment: str = None, notice: Optional[str] = None,
                  contributors: List[str] = None, attribution_texts: List[str] = None):
-        file_type = file_type or []
-        license_info_in_file = license_info_in_file or []
-        contributors = contributors or []
-        attribution_texts = attribution_texts or []
+        file_type = [] if file_type is None else file_type
+        license_info_in_file = [] if license_info_in_file is None else license_info_in_file
+        contributors = [] if contributors is None else contributors
+        attribution_texts = [] if attribution_texts is None else attribution_texts
         check_types_and_set_values(self, locals())

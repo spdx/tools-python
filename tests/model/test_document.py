@@ -51,13 +51,13 @@ def test_wrong_type_in_packages(creation_info):
 @mock.patch('src.model.document.CreationInfo', autospec=True)
 def test_wrong_type_in_files(creation_info):
     with pytest.raises(TypeError):
-        Document(creation_info, files={"fileName": "fileValue"})
+        Document(creation_info, files={})
 
 
 @mock.patch('src.model.document.CreationInfo', autospec=True)
 def test_wrong_type_in_snippets(creation_info):
     with pytest.raises(TypeError):
-        Document(creation_info, snippets=("snippet",))
+        Document(creation_info, snippets=())
 
 
 @mock.patch('src.model.document.CreationInfo', autospec=True)
