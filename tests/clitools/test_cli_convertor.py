@@ -12,8 +12,7 @@
 import os
 from unittest import TestCase
 
-from spdx.cli_tools.convertor import determine_infile_and_outfile
-
+from src.clitools.convertor import determine_infile_and_outfile
 from tests.testing_utils import raises
 
 

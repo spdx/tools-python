@@ -13,8 +13,7 @@ import codecs
 import json
 import os
 
-from spdx.version import Version
-
+from src.model.version import Version
 
 _base_dir = os.path.dirname(__file__)
 _licenses = os.path.join(_base_dir, "licenses.json")
