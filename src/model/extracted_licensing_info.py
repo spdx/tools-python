@@ -26,5 +26,5 @@ class ExtractedLicensingInfo:
     def __init__(self, license_id: Optional[str] = None, extracted_text: Optional[str] = None,
                  license_name: Optional[str] = None, comment: Optional[str] = None,
                  cross_references: List[str] = None):
-        cross_references = cross_references or []
+        cross_references = [] if cross_references is None else cross_references
         check_types_and_set_values(self, locals())

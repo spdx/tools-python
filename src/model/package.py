@@ -43,7 +43,7 @@ class PackageVerificationCode:
     excluded_files: List[str] = field(default_factory=list)
 
     def __init__(self, value: str, excluded_files: List[str] = None):
-        excluded_files = excluded_files or []
+        excluded_files = [] if excluded_files is None else excluded_files
         check_types_and_set_values(self, locals())
 
 
@@ -115,8 +115,8 @@ class Package:
                  external_references: List[ExternalPackageRef] = None, attribution_texts: List[str] = None,
                  primary_package_purpose: Optional[PackagePurpose] = None, release_date: Optional[datetime] = None,
                  built_date: Optional[datetime] = None, valid_until_date: Optional[datetime] = None):
-        checksums = checksums or []
-        license_info_from_files = license_info_from_files or []
-        external_references = external_references or []
-        attribution_texts = attribution_texts or []
+        checksums = [] if checksums is None else checksums
+        license_info_from_files = [] if license_info_from_files is None else license_info_from_files
+        external_references = [] if external_references is None else external_references
+        attribution_texts = [] if attribution_texts is None else attribution_texts
         check_types_and_set_values(self, locals())
