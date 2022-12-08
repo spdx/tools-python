@@ -1,7 +1,7 @@
 # Changelog
 
 
-## v0.7.0 (TBD)
+## v0.7.0 (2022-12-08)
 
 Starting a Changelog.
 
@@ -58,6 +58,8 @@ This release was made possible by the following contributors. Thank you very muc
 * Daniel Holth @dholth
 * John Vandenberg @jayvdb
 * Kate Stewart @kestewart
+* Alexios Zavras @zvr
+* Maximilian Huber @maxhbr
 * Kyle Altendorf @altendky
 * alpianon @alpianon
 * kbermude @kbermude
