@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright (c) 2020 Yash Varshney
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -12,15 +12,14 @@
 # limitations under the License.
 
 import os
-from spdx.parsers.builderexceptions import FileTypeError
-from spdx.parsers.parse_anything import parse_file
-from spdx.writers.write_anything import write_file
 
 import click
+
 
 def print_help_msg(command):
     with click.Context(command) as ctx:
         click.echo(command.get_help(ctx))
+
 
 def determine_infile_and_outfile(infile, outfile, src, from_, to):
     if infile is not None and outfile is not None:
@@ -88,9 +87,12 @@ def main(infile, outfile, src, from_, to, force):
     """
     CLI-TOOL for converting a RDF or TAG file to RDF, JSON, YAML, TAG or XML format.
 
-    To use : run 'pyspdxtools_convertor -f <from_TYPE> <input file> -t <to_TYPE> <output_file>' command on terminal or use ' pyspdxtools_convertor --infile <input file name> --outfile <output file name> '
+    To use : run 'pyspdxtools_convertor -f <from_TYPE> <input file> -t <to_TYPE> <output_file>' command on terminal
+    or use ' pyspdxtools_convertor --infile <input file name> --outfile <output file name> '
 
     """
+    raise NotImplementedError("Currently, conversion is not implemented")
+
     try:
         infile, outfile = determine_infile_and_outfile(infile, outfile, src, from_, to)
     except ValueError as err:
@@ -98,13 +100,11 @@ def main(infile, outfile, src, from_, to, force):
         print_help_msg(main)
         return
 
-    doc, errors = parse_file(infile)
-    if errors:
-        print("Errors while parsing: ", errors)
-        if not force:
-            return 1
+    # Parse document from infile
+    # First one to implement is the Json parser: https://github.com/spdx/tools-python/issues/305
 
-    write_file(doc, outfile)
+    # Write document to outfile
+    # First writer to implement is the Json writer: https://github.com/spdx/tools-python/issues/359
 
 
 if __name__ == "__main__":
