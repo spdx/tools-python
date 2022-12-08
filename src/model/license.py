@@ -10,7 +10,7 @@
 # limitations under the License.
 
 
-from spdx import config
+from src import config
 
 
 def determine_full_name(identifier: str, full_name: str):

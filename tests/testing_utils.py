@@ -18,6 +18,7 @@
 
 """Tools not exempt from being descended into in tracebacks"""
 
+
 def make_decorator(func):
     """
     Wraps a test decorator so as to properly replicate metadata
@@ -60,8 +61,10 @@ def raises(*exceptions):
     you may want to use `assert_raises` instead.
     """
     valid = ' or '.join([e.__name__ for e in exceptions])
+
     def decorate(func):
         name = func.__name__
+
         def newfunc(*arg, **kw):
             try:
                 func(*arg, **kw)
