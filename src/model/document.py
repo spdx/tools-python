@@ -43,7 +43,7 @@ class CreationInfo:
                  created: datetime, creator_comment: Optional[str] = None, data_license: str = "CC0-1.0",
                  external_document_refs: List[ExternalDocumentRef] = None,
                  license_list_version: Optional[Version] = None, document_comment: Optional[str] = None):
-        external_document_refs = external_document_refs or []
+        external_document_refs = [] if external_document_refs is None else external_document_refs
         check_types_and_set_values(self, locals())
 
 
@@ -62,10 +62,10 @@ class Document:
                  snippets: List[Snippet] = None, annotations: List[Annotation] = None,
                  relationships: List[Relationship] = None,
                  extracted_licensing_info: List[ExtractedLicensingInfo] = None):
-        packages = packages or []
-        files = files or []
-        snippets = snippets or []
-        annotations = annotations or []
-        relationships = relationships or []
-        extracted_licensing_info = extracted_licensing_info or []
+        packages = [] if packages is None else packages
+        files = [] if files is None else files
+        snippets = [] if snippets is None else snippets
+        annotations = [] if annotations is None else annotations
+        relationships = [] if relationships is None else relationships
+        extracted_licensing_info = [] if extracted_licensing_info is None else extracted_licensing_info
         check_types_and_set_values(self, locals())

@@ -38,5 +38,5 @@ class Snippet:
                  license_info_in_snippet: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None,
                  license_comment: Optional[str] = None, copyright_text: Optional[str] = None,
                  comment: Optional[str] = None, name: Optional[str] = None, attribution_texts: List[str] = None):
-        attribution_texts = attribution_texts or []
+        attribution_texts = [] if attribution_texts is None else attribution_texts
         check_types_and_set_values(self, locals())

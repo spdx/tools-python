@@ -77,7 +77,7 @@ def test_wrong_type_in_data_license(actor):
 def test_wrong_type_in_external_document_refs(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", "id", "name", "namespace", [actor, actor], datetime(2022, 1, 1),
-                     external_document_refs=("ref",))
+                     external_document_refs=())
 
 
 @mock.patch('src.model.actor.Actor', autospec=True)
