@@ -31,15 +31,15 @@ dynamic = ["version"]
 test = ["pytest"]
 
 [project.scripts]
-pyspdxtools_convertor = "spdx.cli_tools.convertor:main"
-pyspdxtools_parser = "spdx.cli_tools.parser:main"
+pyspdxtools_convertor = "src.clitools.convertor:main"
+pyspdxtools_parser = "src.clitools.parser:main"
 
 [tool.setuptools]
 zip-safe = false  # because of the uses of __file__: https://github.com/spdx/tools-python/issues/257
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["spdx", "spdx.*"]
+where = ["src"]
 
 [tool.setuptools_scm]
 git_describe_command = ["git", "describe", "--dirty", "--tags", "--long", "--match",  "v[0-9]*"]  # `python3.6` tag falsely matches to the default one, clrearly a bug in setuptools_scm

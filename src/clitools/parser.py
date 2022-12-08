@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # Copyright (c) 2020 Yash Varshney
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,13 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
-from spdx import utils
-from spdx.parsers.parse_anything import parse_file
-import spdx.file as spdxfile
-
 import click
+
+from src.model.spdx_no_assertion import SpdxNoAssertion
+from src.model.spdx_none import SpdxNone
 
 
 @click.command()
@@ -30,11 +27,10 @@ def main(file, force):
     To use : run `pyspdxtools_parser` using terminal or run `pyspdxtools_parser --file <file name>`
 
     """
-    doc, errors = parse_file(file)
-    if errors:
-        print("Errors while parsing: ", errors)
-        if not force:
-            return 1
+    raise NotImplementedError("Currently, no parsers are implemented")
+
+    # Parse document and set as doc here
+    # First one to implement is the Json parser: https://github.com/spdx/tools-python/issues/305
 
     print("doc comment: {0}".format(doc.comment))
     print("Creators:")
@@ -90,7 +86,7 @@ def main(file, force):
         print(
             "\tFile license info in file: {0}".format(
                 ",".join(
-                    map(lambda l: l.identifier if not isinstance(l, (utils.SPDXNone, utils.NoAssert)) else l.to_value(),
+                    map(lambda l: l.identifier if not isinstance(l, (SpdxNone, SpdxNoAssertion)) else l.to_value(),
                         f.licenses_in_file))
             )
         )
@@ -105,7 +101,7 @@ def main(file, force):
     for lics in doc.extracted_licenses:
         print("\tIdentifier: {0}".format(lics.identifier))
         print("\tName: {0}".format(lics.full_name))
-        print("\License Text: {0}".format(lics.text))
+        print("\tLicense Text: {0}".format(lics.text))
     if doc.annotations:
         print("Annotations:")
     for an in doc.annotations:
@@ -119,10 +115,8 @@ def main(file, force):
         print("Relationships: ")
     for relation in doc.relationships:
         print("\tRelationship: {0}".format(relation.relationship))
-        try:
-            print("\tRelationship: {0}".format(relation.comment))
-        except:
-            continue
+        if relation.comment:
+            print("\tRelationship Comment: {0}".format(relation.comment))
 
 
 if __name__ == "__main__":
