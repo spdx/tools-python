@@ -5,10 +5,15 @@
 | [ ![Linux build status][1]][2] | [![macOS build status][3]][4] | [![Windows build status][5]][6] |
 
 [1]: https://travis-ci.org/spdx/tools-python.svg?branch=master
+
 [2]: https://travis-ci.org/spdx/tools-python
+
 [3]: https://circleci.com/gh/spdx/tools-python/tree/master.svg?style=shield&circle-token=36cca2dfa3639886fc34e22d92495a6773bdae6d
+
 [4]: https://circleci.com/gh/spdx/tools-python/tree/master
+
 [5]: https://ci.appveyor.com/api/projects/status/0bf9glha2yg9x8ef/branch/master?svg=true
+
 [6]: https://ci.appveyor.com/project/spdx/tools-python/branch/master
 
 
@@ -20,23 +25,19 @@ This library implements SPDX parsers, convertors, validators and handlers in Pyt
 - Issues: https://github.com/spdx/tools-python/issues
 - PyPI: https://pypi.python.org/pypi/spdx-tools
 
-
 # History
 
 This is the result of an initial GSoC contribution by @[ah450](https://github.com/ah450)
 (or https://github.com/a-h-i) and is maintained by a community of SPDX adopters and enthusiasts.
 
-
 # License
 
 [Apache-2.0](LICENSE)
-
 
 # Features
 
 * API to create and manipulate SPDX documents.
 * Parse, convert and create Tag/Value, RDF, JSON, YAML, XML format SPDX files
-
 
 # TODOs
 
@@ -44,14 +45,14 @@ This is the result of an initial GSoC contribution by @[ah450](https://github.co
 * Update to full SPDX v2.3
 * Add full license expression support
 
-
 # How to use
 
 ## Command-line usage:
 
 1. **PARSER** (for parsing any format):
+
 * Use `pyspdxtools_parser --file <filename>` where `<filename>` is the location of the file.              
-Try running: `pyspdxtools_parser --file data/SPDXRdfExample.rdf`.
+  Try running: `pyspdxtools_parser --file data/SPDXRdfExample.rdf`.
 
 * Or you can use `pyspdxtools_parser` only, and it will automatically prompt/ask for `filename`.
 
@@ -59,23 +60,25 @@ Try running: `pyspdxtools_parser --file data/SPDXRdfExample.rdf`.
 
 
 2. **CONVERTOR** (for converting one format to another):
+
 * If I/O formats are known:
 
-    * Use `pyspdxtools_convertor --infile/-i <input_file> --outfile/-o <output_file>` where `<input_file>` is the location of the file to be converted
-    (Note: only RDF and Tag formatted supported) and `<output_file>` is the location of the output file.  
-    Try running : `pyspdxtools_convertor --infile data/SPDXRdfExample.rdf --outfile output.json` 
+    * Use `pyspdxtools_convertor --infile/-i <input_file> --outfile/-o <output_file>` where `<input_file>` is the
+      location of the file to be converted
+      (Note: only RDF and Tag formatted supported) and `<output_file>` is the location of the output file.  
+      Try running : `pyspdxtools_convertor --infile data/SPDXRdfExample.rdf --outfile output.json`
 
 * If I/O formats are not known:
 
-    * Use `pyspdxtools_convertor --from/-f <input_format> <input_file> --to/-t <output_format> <output_file>` where `<input_format>` is the manually entered format of the input file (can be either rdf or tag)
-    and `<out_format>` (can be tag, rdf, json, yaml, xml) is the manually entered format of the output file. 
-    Try running : `pyspdxtools_convertor --from tag data/SPDXTagExample.in --to yaml output.out` 
+    * Use `pyspdxtools_convertor --from/-f <input_format> <input_file> --to/-t <output_format> <output_file>`
+      where `<input_format>` is the manually entered format of the input file (can be either rdf or tag)
+      and `<out_format>` (can be tag, rdf, json, yaml, xml) is the manually entered format of the output file.
+      Try running : `pyspdxtools_convertor --from tag data/SPDXTagExample.in --to yaml output.out`
 
 * If one of the formats is known and the other is not, you can use a mixture of the above two points.  
-Example: `pyspdxtools_convertor -f rdf data/SPDXRdfExample.xyz -o output.xml`
+  Example: `pyspdxtools_convertor -f rdf data/SPDXRdfExample.xyz -o output.xml`
 
 * For help use `pyspdxtools_convertor --help`
-
 
 # Installation
 
@@ -84,7 +87,6 @@ of this repo with `yourenv/bin/pip install .` or install it from PyPI with
 `yourenv/bin/pip install spdx-tools`. Note that on Windows it would be `Scripts`
 instead of `bin`.
 
-
 # Dependencies
 
 * PLY: https://pypi.python.org/pypi/ply/ used for parsing.
@@ -92,7 +94,6 @@ instead of `bin`.
 * PyYAML: https://pypi.org/project/PyYAML/ for handling YAML.
 * xmltodict: https://pypi.org/project/xmltodict/ for handling XML.
 * click: https://pypi.org/project/click/ for creating the CLI interface.
-
 
 # Support
 
@@ -103,4 +104,5 @@ instead of `bin`.
 
 # Contributing
 
-Contributions are very welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to contribute to the codebase.
+Contributions are very welcome! See [CONTRIBUTING.md](./CONTRIBUTING.md) for instructions on how to contribute to the
+codebase.
