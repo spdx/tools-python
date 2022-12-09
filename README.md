@@ -16,6 +16,11 @@
 
 [6]: https://ci.appveyor.com/project/spdx/tools-python/branch/master
 
+# CURRENT STATE
+
+A major refactoring of large parts of the codebase is currently in progress. It is expected that functionality on `main`
+is severely limited during this process. Please check out
+the [latest release](https://github.com/spdx/tools-python/releases/tag/v0.7.0) if you are looking for a working version.
 
 # Information
 
