@@ -16,9 +16,9 @@ from src.model.typing.type_checks import check_types_and_set_values
 
 @dataclass_with_properties
 class ExternalDocumentRef:
+    document_ref_id: str  # of the form "DocumentRef-[idstring]"
     document_uri: str
-    spdx_id: str
     checksum: Checksum
 
-    def __init__(self, document_uri: str, spdx_id: str, checksum: Checksum):
+    def __init__(self, document_ref_id: str, document_uri: str, checksum: Checksum):
         check_types_and_set_values(self, locals())
