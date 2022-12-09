@@ -6,10 +6,9 @@ from src.validation.validation_message import ValidationMessage, SpdxElementType
 
 
 def test_correct_relationship():
-    # before
     relationship_validator = RelationshipValidator("2.3")
 
-    relationship = Relationship("first_id", RelationshipType.AMENDS, "second_id", comment="comment")
+    relationship = Relationship("SPDXRef-DOCUMENT", RelationshipType.AMENDS, "SPDXRef-Package", comment="comment")
     validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
 
     assert validation_messages == []

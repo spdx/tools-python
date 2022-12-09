@@ -8,6 +8,4 @@ def is_valid_uri(uri: str) -> bool:
     return True
 
 
-def is_valid_spdx_id(spdx_id: str, may_be_external=False) -> bool:
-    # TODO: implement spdx_id validation
-    return True
+

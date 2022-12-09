@@ -1,47 +1,44 @@
 from typing import List
 
+from src.model.document import Document
 from src.model.relationship import Relationship, RelationshipType
+from src.validation.spdx_id_validator import validate_spdx_id_reference
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 class RelationshipValidator:
     spdx_version: str
+    document: Document
 
-    def __init__(self, spdx_version):
+    def __init__(self, spdx_version: str, document: Document):
         self.spdx_version = spdx_version
+        self.document = document
 
     def validate_relationships(self, relationships: List[Relationship]) -> List[ValidationMessage]:
-        error_messages = []
+        validation_messages = []
         for relationship in relationships:
-            error_messages.extend(self.validate_relationship(relationship))
+            validation_messages.extend(self.validate_relationship(relationship))
 
-        return error_messages
+        return validation_messages
 
     def validate_relationship(self, relationship: Relationship) -> List[ValidationMessage]:
         validation_messages = []
-        context = ValidationContext(element_type=SpdxElementType.RELATIONSHIP, full_element=relationship)
+        document_spdx_id: str = self.document.creation_info.spdx_id
+        context = ValidationContext(parent_id=document_spdx_id, element_type=SpdxElementType.RELATIONSHIP,
+                                    full_element=relationship)
 
-        type_message = "{} must be {}, but is {}: {}"
+        first_id: str = relationship.spdx_element_id
+        second_id: str = relationship.related_spdx_element_id
+        relationship_type: RelationshipType = relationship.relationship_type
 
-        if not isinstance(relationship.spdx_element_id, str):
-            message = type_message.format("spdx_element_id", str, type(relationship.spdx_element_id), relationship.spdx_element_id)
-            validation_messages.append(ValidationMessage(message, context))
-
-        if not isinstance(relationship.relationship_type, RelationshipType):
-            message = type_message.format("relationship_type", RelationshipType, type(relationship.relationship_type), relationship.relationship_type)
-            validation_messages.append(ValidationMessage(message, context))
-
-        if not isinstance(relationship.related_spdx_element_id, str):
-            message = type_message.format("related_spdx_element_id", str, type(relationship.related_spdx_element_id), relationship.related_spdx_element_id)
-            validation_messages.append(ValidationMessage(message, context))
-
-        if relationship.comment is not None and not isinstance(relationship.comment, str):
-            message = type_message.format("comment", str, type(relationship.comment), relationship.comment)
-            validation_messages.append(ValidationMessage(message, context))
+        for spdx_id in [first_id, second_id]:
+            message: str = validate_spdx_id_reference(spdx_id, self.document)
+            if message:
+                validation_messages.append(ValidationMessage(message, context))
 
         if self.spdx_version != "2.3":
-            if relationship.relationship_type == RelationshipType.SPECIFICATION_FOR or relationship.relationship_type == RelationshipType.REQUIREMENT_DESCRIPTION_FOR:
-                message = f"{relationship.relationship_type} is not supported for SPDX versions below 2.3"
+            if relationship_type == RelationshipType.SPECIFICATION_FOR or relationship_type == RelationshipType.REQUIREMENT_DESCRIPTION_FOR:
+                message = f"{relationship_type} is not supported for SPDX versions below 2.3"
                 validation_messages.append(ValidationMessage(message, context))
 
         return validation_messages

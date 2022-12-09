@@ -1,6 +1,6 @@
 from typing import List
 
-from src.model.package import ExternalPackageReference
+from src.model.package import ExternalPackageRef
 from src.validation.checksum_validator import ChecksumValidator
 from src.validation.validation_message import ValidationMessage
 from src.validation.license_expression_validator import LicenseExpressionValidator
@@ -16,12 +16,13 @@ class ExternalPackageRefValidator:
         self.checksum_validator = ChecksumValidator(spdx_version)
         self.license_expression_validator = LicenseExpressionValidator(spdx_version)
 
-    def validate_external_package_refs(self, external_package_refs: List[ExternalPackageReference]) -> List[ValidationMessage]:
-        error_messages = []
+    def validate_external_package_refs(self, external_package_refs: List[ExternalPackageRef]) -> List[ValidationMessage]:
+        validation_messages = []
         for external_package_ref in external_package_refs:
-            error_messages.extend(self.validate_external_package_ref(external_package_ref))
+            validation_messages.extend(self.validate_external_package_ref(external_package_ref))
 
-        return error_messages
+        return validation_messages
 
-    def validate_external_package_ref(self, external_package_ref: ExternalPackageReference) -> List[ValidationMessage]:
+    def validate_external_package_ref(self, external_package_ref: ExternalPackageRef) -> List[ValidationMessage]:
+        # TODO: this is gonna be insane (Annex F)
         pass

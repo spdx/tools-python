@@ -1,16 +1,33 @@
 from typing import List
-
-from src.model.package import ExternalPackageReference, ExternalPackageReferenceCategory
+import pytest
+from src.model.package import ExternalPackageRef, ExternalPackageRefCategory
 from src.validation.external_package_ref_validator import ExternalPackageRefValidator
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from tests.valid_defaults import get_external_package_ref
 
 
 def test_correct_external_package_ref():
     external_package_ref_validator = ExternalPackageRefValidator("2.3")
 
-    external_package_ref = ExternalPackageReference(ExternalPackageReferenceCategory.OTHER, "type", "locator",
-                                                    "comment")
+    external_package_ref = ExternalPackageRef(ExternalPackageRefCategory.OTHER, "swh", 
+                                              "swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2", "comment")
     validation_messages: List[ValidationMessage] = external_package_ref_validator.validate_external_package_ref(
         external_package_ref)
 
     assert validation_messages == []
+    
+
+@pytest.mark.parametrize("external_package_ref, expected_message",
+                         [(get_external_package_ref(),
+                           'email must be None if external_package_ref_type is TOOL, but is: mail@mail.com'),
+                          ])
+def test_wrong_external_package_ref(external_package_ref, expected_message):
+    parent_id = "SPDXRef-Package"
+    external_package_ref_validator = ExternalPackageRefValidator("2.3")
+    validation_messages: List[ValidationMessage] = external_package_ref_validator.validate_external_package_ref(external_package_ref)
+
+    expected = ValidationMessage(expected_message,
+                                 ValidationContext(parent_id=parent_id, element_type=SpdxElementType.EXTERNAL_PACKAGE_REF,
+                                                   full_element=external_package_ref))
+
+    assert validation_messages == [expected]

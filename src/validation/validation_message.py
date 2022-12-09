@@ -4,6 +4,8 @@ from typing import Optional, Any
 
 
 class SpdxElementType(Enum):
+    CHECKSUM = auto()
+    EXTERNAL_PACKAGE_REF = auto()
     ACTOR = auto()
     DOCUMENT = auto()
     CREATION_INFO = auto()
