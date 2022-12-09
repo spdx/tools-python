@@ -1,4 +1,4 @@
-from src.validation.string_type_validators import is_valid_uri, is_valid_spdx_id, is_valid_package_download_location, \
+from src.validation.uri_validator import is_valid_uri, is_valid_spdx_id, is_valid_package_download_location, \
     is_valid_external_spdx_id
 
 import pytest

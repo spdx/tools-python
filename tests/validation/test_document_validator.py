@@ -24,3 +24,5 @@ def test_correct_document(creation_info, ext_ref, package, file, snippet, annota
     validation_messages: List[ValidationMessage] = document_validator.validate_full_spdx_document(document)
 
     assert validation_messages == []
+
+# TODO: some kind of super test is needed to test that all the subvalidations are correctly called

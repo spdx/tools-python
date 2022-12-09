@@ -3,7 +3,7 @@ from typing import List
 
 from src.model.document import CreationInfo
 from src.validation.actor_validator import ActorValidator
-from src.validation.string_type_validators import is_valid_uri
+from src.validation.uri_validator import is_valid_uri
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
@@ -18,12 +18,13 @@ class CreationInfoValidator:
 
     def validate_creation_info(self, creation_info: CreationInfo) -> List[ValidationMessage]:
         validation_messages: List[ValidationMessage] = []
+        context = ValidationContext(spdx_id=creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
 
         if not re.match(r"^SPDX-\d+.\d+$", creation_info.spdx_version):
             validation_messages.append(
                 ValidationMessage(
                     f'spdx_version must be of the form "SPDX-[major].[minor]" but is: {creation_info.spdx_version}',
-                    ValidationContext(spdx_id=creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
+                    context
                 )
             )
 
@@ -31,7 +32,7 @@ class CreationInfoValidator:
             validation_messages.append(
                 ValidationMessage(
                     f'spdx_id must be SPDXRef-DOCUMENT, but is: {creation_info.spdx_id}',
-                    ValidationContext(spdx_id=creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
+                    context
                 )
             )
 
@@ -39,7 +40,7 @@ class CreationInfoValidator:
             validation_messages.append(
                 ValidationMessage(
                     f'data_license must be "CC0-1.0", but is: {creation_info.data_license}',
-                    ValidationContext(spdx_id=creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
+                    context
                 )
             )
 
@@ -48,7 +49,7 @@ class CreationInfoValidator:
                 ValidationMessage(
                     f'document_namespace must be a valid URI specified in RFC-3986, '
                     f'but is: {creation_info.document_namespace}',
-                    ValidationContext(spdx_id=creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
+                    context
                 )
             )
 

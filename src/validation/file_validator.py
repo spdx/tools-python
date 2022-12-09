@@ -8,12 +8,10 @@ from src.validation.license_expression_validator import LicenseExpressionValidat
 
 class FileValidator:
     spdx_version: str
-    checksum_validator: ChecksumValidator
     license_expression_validator: LicenseExpressionValidator
 
     def __init__(self, spdx_version):
         self.spdx_version = spdx_version
-        self.checksum_validator = ChecksumValidator(spdx_version)
         self.license_expression_validator = LicenseExpressionValidator(spdx_version)
 
     def validate_files(self, files: List[File]) -> List[ValidationMessage]:
@@ -25,9 +23,10 @@ class FileValidator:
 
     def validate_file(self, file: File) -> List[ValidationMessage]:
         validation_messages = []
+        checksum_validator = ChecksumValidator(self.spdx_version, file.spdx_id)
 
         validation_messages.extend(
-            self.checksum_validator.validate_checksums(file.checksums)
+            checksum_validator.validate_checksums(file.checksums)
         )
 
         validation_messages.append(

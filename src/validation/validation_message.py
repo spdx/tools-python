@@ -4,6 +4,8 @@ from typing import Optional, Any
 
 
 class SpdxElementType(Enum):
+    PACKAGE_VERIFICATION_CODE = auto()
+    EXTERNAL_DOCUMENT_REF = auto()
     CHECKSUM = auto()
     EXTERNAL_PACKAGE_REF = auto()
     ACTOR = auto()
@@ -15,7 +17,6 @@ class SpdxElementType(Enum):
     LICENSE = auto()
     ANNOTATION = auto()
     RELATIONSHIP = auto()
-    EXTERNAL_DOCUMENT = auto()
     EXTRACTED_LICENSING_INFO = auto()
 
 

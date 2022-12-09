@@ -5,7 +5,8 @@ from src.model.annotation import AnnotationType, Annotation
 from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import CreationInfo, Document
 from src.model.external_document_ref import ExternalDocumentRef
-from src.model.file import FileType, File
+from src.model.extracted_licensing_info import ExtractedLicensingInfo
+from src.model.file import File
 from src.model.package import Package, PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory
 from src.model.relationship import Relationship, RelationshipType
 from src.model.snippet import Snippet
@@ -57,12 +58,20 @@ def get_document(creation_info=get_creation_info(), packages=None, files=None, s
     return Document(creation_info, packages, files, snippets, annotations, relationships, extracted_licensing_info)
 
 
-def get_external_document_ref(document_uri="https://some.uri", spdx_id="SPDXRef-1",
+def get_external_document_ref(document_ref_id="DocumentRef-idstring", document_uri="https://some.uri",
                               checksum=get_checksum()) -> ExternalDocumentRef:
-    return ExternalDocumentRef(document_uri, spdx_id, checksum)
+    return ExternalDocumentRef(document_ref_id, document_uri, checksum)
 
 
-def get_file(name="./file/name.py", spdx_id="SPDXRef-File", checksums=None, file_type=FileType.TEXT, concluded_license=None,
+def get_extracted_licensing_info(license_id="LicenseRef-1", extracted_text="extracted text",
+                                 license_name="license name", comment=None,
+                                 cross_references=None) -> ExtractedLicensingInfo:
+    if cross_references is None:
+        cross_references = ["http://some.url"]
+    return ExtractedLicensingInfo(license_id, extracted_text, license_name, comment, cross_references)
+
+
+def get_file(name="./file/name.py", spdx_id="SPDXRef-File", checksums=None, file_type=None, concluded_license=None,
              license_info_in_file=None, license_comment=None, copyright_text=None, comment=None, notice=None,
              contributors=None, attribution_texts=None):
     if checksums is None:
