@@ -35,7 +35,6 @@ def determine_infile_and_outfile(infile, outfile, src, from_, to):
         """
         infile = src[0]
         outfile = src[1]
-        # infile = os.path.splitext(infile)[0]
         if from_ is not None:
             infile_path = os.path.splitext(infile)[0]
             infile = infile_path + "." + from_
@@ -91,14 +90,14 @@ def main(infile, outfile, src, from_, to, force):
     or use ' pyspdxtools_convertor --infile <input file name> --outfile <output file name> '
 
     """
-    raise NotImplementedError("Currently, conversion is not implemented")
-
     try:
         infile, outfile = determine_infile_and_outfile(infile, outfile, src, from_, to)
     except ValueError as err:
         print(err)
         print_help_msg(main)
         return
+
+    raise NotImplementedError("Currently, conversion is not implemented")
 
     # Parse document from infile
     # First one to implement is the Json parser: https://github.com/spdx/tools-python/issues/305
