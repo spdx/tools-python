@@ -20,22 +20,21 @@ def test_correct_file():
     assert validation_messages == []
 
 
-@pytest.mark.parametrize("file_input, expected_message",
-                         [(get_file(spdx_id="SPDXRef-some_file"),
+@pytest.mark.parametrize("file_input, spdx_id, expected_message",
+                         [(get_file(spdx_id="SPDXRef-some_file"), "SPDXRef-some_file",
                            'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-some_file'),
-                          (get_file(name="wrong file name"),
+                          (get_file(name="wrong file name"), get_file().spdx_id,
                            'file name must be a relative path to the file, starting with "./", but is: wrong file name'),
-                          (get_file(checksums=[Checksum(ChecksumAlgorithm.MD2, "value")]),
-                           f'checksums must contain a SHA1 algorithm checksum, but is: {[Checksum(ChecksumAlgorithm.MD2, "value")]}')
+                          (get_file(checksums=[Checksum(ChecksumAlgorithm.MD2, "d4c41ce30a517d6ce9d79c8c17bb4b66")]), get_file().spdx_id,
+                           f'checksums must contain a SHA1 algorithm checksum, but is: {[Checksum(ChecksumAlgorithm.MD2, "d4c41ce30a517d6ce9d79c8c17bb4b66")]}')
                           ])
-def test_wrong_file(file_input, expected_message):
-    parent_id = "SPDXRef-DOCUMENT"
+def test_wrong_file(file_input, spdx_id, expected_message):
     file_validator = FileValidator("2.3")
-    file = file_input
-    validation_messages: List[ValidationMessage] = file_validator.validate_file(file)
+    validation_messages: List[ValidationMessage] = file_validator.validate_file(file_input)
 
     expected = ValidationMessage(expected_message,
-                                 ValidationContext(parent_id=parent_id, element_type=SpdxElementType.FILE,
-                                                   full_element=file))
+                                 ValidationContext(spdx_id=spdx_id,
+                                                   element_type=SpdxElementType.FILE,
+                                                   full_element=file_input))
 
     assert validation_messages == [expected]

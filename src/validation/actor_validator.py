@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from src.model.actor import Actor, ActorType
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
@@ -8,7 +8,8 @@ class ActorValidator:
     spdx_version: str
     parent_id: str
 
-    def __init__(self, spdx_version: str, parent_id: str):
+    # TODO: what is parent_id in the case of annotations?
+    def __init__(self, spdx_version: str, parent_id: Optional[str]):
         self.spdx_version = spdx_version
         self.parent_id = parent_id
 

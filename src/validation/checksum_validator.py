@@ -50,7 +50,7 @@ class ChecksumValidator:
             if algorithm == ChecksumAlgorithm.BLAKE3:
                 length = "at least 256"
             elif algorithm == ChecksumAlgorithm.MD6:
-                length = "between 0 and 256"
+                length = "between 0 and 512"
             else:
                 length = algorithm_length[algorithm]
             validation_messages.append(

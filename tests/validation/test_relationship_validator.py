@@ -1,12 +1,17 @@
 from typing import List
 
+import pytest
+
+from src.model.document import Document
 from src.model.relationship import Relationship, RelationshipType
 from src.validation.relationship_validator import RelationshipValidator
 from src.validation.validation_message import ValidationMessage, SpdxElementType, ValidationContext
+from tests.valid_defaults import get_document, get_package, get_relationship, get_file
 
 
 def test_correct_relationship():
-    relationship_validator = RelationshipValidator("2.3")
+    document: Document = get_document(packages=[get_package(spdx_id="SPDXRef-Package")])
+    relationship_validator = RelationshipValidator("2.3", document)
 
     relationship = Relationship("SPDXRef-DOCUMENT", RelationshipType.AMENDS, "SPDXRef-Package", comment="comment")
     validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
@@ -14,20 +19,45 @@ def test_correct_relationship():
     assert validation_messages == []
 
 
-def test_v2_3_only_types():
-    relationship_validator = RelationshipValidator("2.2")
+@pytest.mark.parametrize("first_id, second_id, wrong_file_id, expected_message",
+                         [("SPDXRef-some_file", "SPDXRef-File", "SPDXRef-some_file",
+                           'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-some_file'),
+                          ("SPDXRef-File", "SPDXRef-some_file", "SPDXRef-some_file",
+                           'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-some_file'),
+                          ("SPDXRef-unknownFile", "SPDXRef-hiddenFile", "SPDXRef-hiddenFile",
+                           'did not find the referenced spdx_id SPDXRef-unknownFile in the SPDX document'),
+                          ("SPDXRef-hiddenFile", "SPDXRef-unknownFile", "SPDXRef-hiddenFile",
+                           'did not find the referenced spdx_id SPDXRef-unknownFile in the SPDX document'),
+                          ])
+def test_wrong_relationship(first_id, second_id, wrong_file_id, expected_message):
+    relationship: Relationship = get_relationship(spdx_element_id=first_id, related_spdx_element_id=second_id)
+    document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File"), get_file(spdx_id=wrong_file_id)])
+    relationship_validator = RelationshipValidator("2.3", document)
+    validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
 
-    relationship1 = Relationship("first_id", RelationshipType.SPECIFICATION_FOR, "second_id")
-    relationship2 = Relationship("first_id", RelationshipType.REQUIREMENT_DESCRIPTION_FOR, "second_id")
+    expected = ValidationMessage(expected_message,
+                                 ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
+                                                   full_element=relationship))
 
-    validation_messages: List[ValidationMessage] = relationship_validator.validate_relationships(
-        [relationship1, relationship2])
+    assert validation_messages == [expected]
 
-    expected = {ValidationMessage("RelationshipType.SPECIFICATION_FOR is not supported for SPDX versions below 2.3",
-                                  ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
-                                                    full_element=relationship1)),
-                ValidationMessage(
-                    "RelationshipType.REQUIREMENT_DESCRIPTION_FOR is not supported for SPDX versions below 2.3",
-                    ValidationContext(element_type=SpdxElementType.RELATIONSHIP, full_element=relationship2))}
 
-    assert set(validation_messages) == expected
+@pytest.mark.parametrize("relationship, expected_message",
+                         [(Relationship("SPDXRef-DOCUMENT", RelationshipType.SPECIFICATION_FOR, "SPDXRef-Package"),
+                           "RelationshipType.SPECIFICATION_FOR is not supported for SPDX versions below 2.3"),
+                          (Relationship("SPDXRef-DOCUMENT", RelationshipType.REQUIREMENT_DESCRIPTION_FOR,
+                                        "SPDXRef-Package"),
+                           "RelationshipType.REQUIREMENT_DESCRIPTION_FOR is not supported for SPDX versions below 2.3")])
+def test_v2_3_only_types(relationship, expected_message):
+    parent_id = "SPDXRef-DOCUMENT"
+    document: Document = get_document(packages=[get_package(spdx_id="SPDXRef-Package")])
+    relationship_validator = RelationshipValidator("2.2", document)
+
+    validation_message: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
+
+    expected = [ValidationMessage(expected_message,
+                                  ValidationContext(parent_id=parent_id,
+                                                    element_type=SpdxElementType.RELATIONSHIP,
+                                                    full_element=relationship))]
+
+    assert validation_message == expected
