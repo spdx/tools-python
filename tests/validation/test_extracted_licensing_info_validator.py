@@ -5,25 +5,31 @@ import pytest
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.validation.extracted_licensing_info_validator import ExtractedLicensingInfoValidator
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from tests.valid_defaults import get_extracted_licensing_info
 
 
 def test_correct_extracted_licensing_info():
     extracted_licensing_info_validator = ExtractedLicensingInfoValidator("2.3")
 
-    extracted_licensing_info = ExtractedLicensingInfo("LicenseRef-1", "extracted text", "license name", "comment", ["reference"])
+    extracted_licensing_info = ExtractedLicensingInfo("LicenseRef-1", "extracted text", "license name", ["http://some.url"], "comment")
     validation_messages: List[ValidationMessage] = extracted_licensing_info_validator.validate_extracted_licensing_info(
         extracted_licensing_info)
 
     assert validation_messages == []
-    
-    
+
+
+# TODO: tests for licenses not on the SPDX License list (i.e. they must provide id, name and cross-references)
 @pytest.mark.parametrize("extracted_licensing_info, expected_message",
-                         [(get_extracted_licensing_info(extracted_licensing_info_type=Extracted_licensing_infoType.TOOL, mail="mail@mail.com"),
-                           'email must be None if extracted_licensing_info_type is TOOL, but is: mail@mail.com'),
+                         [(get_extracted_licensing_info(license_id="SPDXRef-wrong"),
+                           'license_id must only contain letters, numbers, "." and "-" and must begin with "LicenseRef-", but is: SPDXRef-wrong'),
+                          (get_extracted_licensing_info(extracted_text=None),
+                           'extracted_text must be provided if there is a license_id assigned'),
+                          (get_extracted_licensing_info(cross_references=["wrong_url"]),
+                           'cross_reference must be a valid URL, but is: wrong_url')
                           ])
 def test_wrong_extracted_licensing_info(extracted_licensing_info, expected_message):
     parent_id = "SPDXRef-DOCUMENT"
-    extracted_licensing_info_validator = Extracted_licensing_infoValidator("2.3", parent_id)
+    extracted_licensing_info_validator = ExtractedLicensingInfoValidator("2.3")
     validation_messages: List[ValidationMessage] = extracted_licensing_info_validator.validate_extracted_licensing_info(extracted_licensing_info)
 
     expected = ValidationMessage(expected_message,

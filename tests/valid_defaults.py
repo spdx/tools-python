@@ -64,11 +64,11 @@ def get_external_document_ref(document_ref_id="DocumentRef-idstring", document_u
 
 
 def get_extracted_licensing_info(license_id="LicenseRef-1", extracted_text="extracted text",
-                                 license_name="license name", comment=None,
-                                 cross_references=None) -> ExtractedLicensingInfo:
+                                 license_name="license name", cross_references=None,
+                                 comment=None, ) -> ExtractedLicensingInfo:
     if cross_references is None:
         cross_references = ["http://some.url"]
-    return ExtractedLicensingInfo(license_id, extracted_text, license_name, comment, cross_references)
+    return ExtractedLicensingInfo(license_id, extracted_text, license_name, cross_references, comment)
 
 
 def get_file(name="./file/name.py", spdx_id="SPDXRef-File", checksums=None, file_type=None, concluded_license=None,
