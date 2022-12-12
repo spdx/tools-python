@@ -9,11 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
 from unittest import TestCase
 
+import pytest
+
 from src.clitools.convertor import determine_infile_and_outfile
-from tests.testing_utils import raises
 
 
 class TestConvertor(TestCase):
@@ -71,7 +71,6 @@ class TestConvertor(TestCase):
         assert infile == expected_infile
         assert outfile == outfile_given
 
-    @raises(ValueError)
     def test_determine_input_with_invalid_arguments(self):
         infile_given = None
         outfile_given = None
@@ -79,4 +78,5 @@ class TestConvertor(TestCase):
         from_ = None
         to = None
 
-        infile, outfile = determine_infile_and_outfile(infile_given, outfile_given, src, from_, to)
+        with pytest.raises(ValueError):
+            determine_infile_and_outfile(infile_given, outfile_given, src, from_, to)
