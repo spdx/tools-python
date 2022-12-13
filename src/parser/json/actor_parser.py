@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import re
+from typing import Union
 
 from src.model.actor import Actor, ActorType
 from src.model.spdx_no_assertion import SpdxNoAssertion
@@ -52,7 +53,7 @@ class ActorParser:
         return creator
 
 
-    def parse_actor_or_no_assert(self, actor_or_no_assert: str):
+    def parse_actor_or_no_assert(self, actor_or_no_assert: str) -> Union[SpdxNoAssertion, Actor]:
         if actor_or_no_assert == SpdxNoAssertion.__str__:
             return SpdxNoAssertion()
         else:

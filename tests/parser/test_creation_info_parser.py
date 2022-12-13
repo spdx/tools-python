@@ -9,10 +9,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import datetime
-from unittest import mock
+
+import pytest
 
 from src.model.actor import Actor, ActorType
 from src.model.version import Version
+from src.parser.error import SPDXParsingError
 from src.parser.json.creation_info_parser import CreationInfoParser
 
 
@@ -44,3 +46,16 @@ def test_creation_info_parser():
     assert creation_info.license_list_version == Version(3, 7)
 
 
+def test_parse_incomplete_creation_info():
+    creation_info_parser = CreationInfoParser()
+    doc_dict = {
+        "spdxVersion": "2.3",
+        "SPDXID": "SPDXRef-DOCUMENT",
+        "name": "Example Document"
+    }
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = creation_info_parser.parse_creation_info(doc_dict)
+
+    assert err.type == SPDXParsingError
+    assert err.value.messages == ["Error while parsing doc Example Document: ['CreationInfo is not valid.']"]
