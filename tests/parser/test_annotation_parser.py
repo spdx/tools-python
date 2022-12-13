@@ -10,8 +10,11 @@
 # limitations under the License.
 import datetime
 
+import pytest
+
 from src.model.actor import Actor, ActorType
 from src.model.annotation import AnnotationType, Annotation
+from src.parser.error import SPDXParsingError
 from src.parser.json.annotation_parser import AnnotationParser
 
 
@@ -72,7 +75,14 @@ def test_parse_all_annotations():
     annotations = annotation_parser.parse_all_annotations(input_doc_dict=doc_dict)
 
     assert len(annotations) == 4
-    assert annotations == [Annotation(spdx_id='SPDXRef-Package',
+    assert annotations == [Annotation(spdx_id='SPDXRef-DOCUMENT',
+                                      annotation_type=AnnotationType.REVIEW,
+                                      annotator=Actor(actor_type=ActorType.PERSON,
+                                                      name='Jane Doe',
+                                                      email=None),
+                                      annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),
+                                      annotation_comment='Review annotation'),
+                           Annotation(spdx_id='SPDXRef-Package',
                                       annotation_type=AnnotationType.OTHER,
                                       annotator=Actor(actor_type=ActorType.PERSON,
                                                       name='Jane Doe',
@@ -92,11 +102,18 @@ def test_parse_all_annotations():
                                                       name='Jane Doe',
                                                       email=None),
                                       annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),
-                                      annotation_comment='Snippet level annotation'),
-                           Annotation(spdx_id='SPDXRef-DOCUMENT',
-                                      annotation_type=AnnotationType.REVIEW,
-                                      annotator=Actor(actor_type=ActorType.PERSON,
-                                                      name='Jane Doe',
-                                                      email=None),
-                                      annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),
-                                      annotation_comment='Review annotation')]
+                                      annotation_comment='Snippet level annotation')]
+
+
+def test_parse_incomplete_annotation():
+    annotation_parser = AnnotationParser()
+    annotation_dict = {
+        "annotator": "Person: Jane Doe ()"
+    }
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = annotation_parser.parse_annotation(annotation_dict)
+
+    assert err.type == SPDXParsingError
+    assert err.value.messages == ["Error while parsing annotation: ['Invalid annotation type: None', "
+                                  "'ValueError while parsing annotationDate.']"]
