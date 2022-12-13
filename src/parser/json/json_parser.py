@@ -81,7 +81,7 @@ class JsonParser:
             self.logger.append_all(err.get_messages())
             snippets = None
         try:
-            relationships = self.relationship_parser.parse_relationships(input_doc_as_dict)
+            relationships = self.relationship_parser.parse_all_relationships(input_doc_as_dict)
             # documentDescribes(Document), hasFiles(Package), relationships, fileDependencies (File), artifactOf(File)
         except SPDXParsingError as err:
             self.logger.append_all(err.get_messages())

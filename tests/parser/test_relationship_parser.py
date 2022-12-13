@@ -8,7 +8,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pytest
+
 from src.model.relationship import RelationshipType, Relationship
+from src.parser.error import SPDXParsingError
 from src.parser.json.relationship_parser import RelationshipParser
 
 
@@ -29,6 +32,27 @@ def test_relationship_parser():
     assert relationship.related_spdx_element_id == "SPDXRef-Package"
     assert relationship.comment == "Comment."
 
+
+def test_parse_incomplete_relationship():
+    relationship_parser = RelationshipParser()
+    relationship_dict = {
+        "spdxElementId": "SPDXRef-DOCUMENT",
+        "relatedSpdxElement": "SPDXRef-Package",
+        "comment": "Comment."
+    }
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = relationship_parser.parse_relationship(relationship_dict)
+
+    assert err.type == SPDXParsingError
+    assert err.value.messages == ["Error while parsing relationship: ['RelationshipType must be str, not "
+                                  "NoneType.']"]
+def test_parse_relationship_type():
+    relationship_parser = RelationshipParser()
+    relationship_type_str = "DEPENDENCY_OF"
+
+    relationship_type = relationship_parser.parse_relationship_type(relationship_type_str)
+    assert relationship_type == RelationshipType.DEPENDENCY_OF
 
 def test_creating_describes_relationship():
     relationship_parser = RelationshipParser()
@@ -61,7 +85,7 @@ def test_creating_single_describes_relationship():
                            "relationshipType": "DESCRIBED_BY", "comment": "This relationship has a comment."}
                           ]}
 
-    relationships = relationship_parser.parse_relationships(document_dict)
+    relationships = relationship_parser.parse_all_relationships(document_dict)
 
     assert len(relationships) == 2
     assert relationships == [
