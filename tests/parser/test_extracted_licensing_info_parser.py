@@ -8,6 +8,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pytest
+
+from src.model.spdx_no_assertion import SpdxNoAssertion
+from src.parser.error import SPDXParsingError
 from src.parser.json.extracted_licensing_parser import ExtractedLicensingInfoParser
 
 
@@ -24,10 +28,42 @@ def test_extracted_licensing_info_parser():
 
     }
 
-    extracted_licensing_info = extracted_licensing_info_parser.parse_extracted_licensing_info(extracted_licensing_infos_dict)
+    extracted_licensing_info = extracted_licensing_info_parser.parse_extracted_licensing_info(
+        extracted_licensing_infos_dict)
 
     assert extracted_licensing_info.license_id == "LicenseRef-Beerware-4.2"
     assert extracted_licensing_info.comment == "The beerware license has a couple of other standard variants."
     assert extracted_licensing_info.extracted_text == "\"THE BEER-WARE LICENSE\" (Revision 42):\nphk@FreeBSD.ORG wrote this file. As long as you retain this notice you\ncan do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp"
     assert extracted_licensing_info.license_name == "Beer-Ware License (Version 42)"
     assert extracted_licensing_info.cross_references == ["http://people.freebsd.org/~phk/"]
+
+
+def test_parse_invalid_extracted_licensing_info():
+    extracted_licensing_info_parser = ExtractedLicensingInfoParser()
+
+    extracted_licensing_infos_dict = {
+        "licenseId": "LicenseRef-Beerware-4.2",
+        "comment": 56,
+        "extractedText": "\"THE BEER-WARE LICENSE\" (Revision 42):\nphk@FreeBSD.ORG wrote this file. As long as you retain this notice you\ncan do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp",
+        "name": "Beer-Ware License (Version 42)",
+        "seeAlsos": ["http://people.freebsd.org/~phk/"]
+
+    }
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = extracted_licensing_info_parser.parse_extracted_licensing_info(extracted_licensing_infos_dict)
+
+    assert err.type == SPDXParsingError
+    assert err.value.messages == ["Error while constructing ExtractedLicensingInfo : ['SetterError "
+                                  'ExtractedLicensingInfo: type of argument "comment" must be one of (str, '
+                                  "NoneType); got int instead: 56']"]
+
+
+def test_parse_extracted_licensing_info_name():
+    extracted_licensing_info_parser = ExtractedLicensingInfoParser()
+    extracted_licensing_info_name_str = "NOASSERTION"
+
+    extracted_licensing_info_name = extracted_licensing_info_parser.parse_extracted_licensing_info_name(
+        extracted_licensing_info_name_str)
+
+    assert type(extracted_licensing_info_name) == SpdxNoAssertion
