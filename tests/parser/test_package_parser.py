@@ -10,10 +10,13 @@
 # limitations under the License.
 from datetime import datetime
 
+import pytest
+
 from src.model.actor import Actor, ActorType
 from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.license_expression import LicenseExpression
 from src.model.package import PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
+from src.parser.error import SPDXParsingError
 from src.parser.json.package_parser import PackageParser
 
 
@@ -117,3 +120,85 @@ def test_package_parser():
     assert package.release_date == datetime(2012, 1, 29, 18, 30, 22)
     assert package.built_date == datetime(2011, 1, 29, 18, 30, 22)
     assert package.valid_until_date == datetime(2014, 1, 29, 18, 30, 22)
+
+
+def test_incomplete_package():
+    package_parser = PackageParser()
+    package_dict = {
+        "SPDXID": "SPDXRef-Package"
+    }
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = package_parser.parse_package(package_dict)
+
+    assert err.type == SPDXParsingError
+    assert err.value.get_messages() == ["Error while constructing Package None: ['SetterError Package: type of "
+                                        'argument "name" must be str; got NoneType instead: None\', \'SetterError '
+                                        'Package: type of argument "download_location" must be one of (str, '
+                                        'src.model.spdx_no_assertion.SpdxNoAssertion, src.model.spdx_none.SpdxNone); '
+                                        "got NoneType instead: None']"]
+
+
+def test_package_with_setter_error():
+    package_parser = PackageParser()
+    package_dict = {
+        "SPDXID": "SPDXRef-Package",
+        "name": 5,
+        "downloadLocation": "NONE"
+    }
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = package_parser.parse_package(package_dict)
+
+    assert err.type == SPDXParsingError
+    assert err.value.get_messages() == ["Error while constructing Package 5: ['SetterError Package: type of argument "
+                                        '"name" must be str; got int instead: 5\']']
+
+
+def test_package_with_falsy_values():
+    package_parser = PackageParser()
+    package_dict = {
+        "SPDXID": "SPDXRef-Package",
+        "name": "Example Package",
+        "downloadLocation": "NONE",
+        "checksums":
+            [{"algorithm": "SHA",
+              "value": "1234"}]
+    }
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = package_parser.parse_package(package_dict)
+
+    assert err.type == SPDXParsingError
+    assert err.value.get_messages() == [
+        "Error while parsing Package Example Package: ['Algorithm SHA not valid for checksum.']"]
+
+
+def test_parse_packages():
+    package_parser = PackageParser()
+    packages_list = [{
+        "SPDXID": "SPDXRef-Package",
+        "name": "Example Package",
+        "downloadLocation": "NONE",
+        "checksums":
+            [{"algorithm": "SHA",
+              "value": "1234"}]
+    }, {
+        "SPDXID": "SPDXRef-Package",
+        "name": 5,
+        "downloadLocation": "NONE"
+    },
+        {
+            "SPDXID": "SPDXRef-Package",
+            "name": "Example Package",
+            "downloadLocation": "NONE"}
+    ]
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = package_parser.parse_packages(packages_list)
+
+    assert err.type == SPDXParsingError
+    assert err.value.messages == ["Error while parsing Package Example Package: ['Algorithm SHA not valid for "
+                                  "checksum.']",
+                                  "Error while constructing Package 5: ['SetterError Package: type of argument "
+                                  '"name" must be str; got int instead: 5\']']

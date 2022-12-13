@@ -20,12 +20,12 @@ class Logger:
     def append(self, message: str):
         self.messages.append(message)
 
-    def append_all(self, messages: List[str]):
-        for message in messages:
+    def append_all(self, messages_to_append: List[str]):
+        for message in messages_to_append:
             self.messages.append(message)
 
     def has_messages(self):
         return bool(self.messages)
 
     def get_messages(self):
-        return self.messages
+        return list(self.messages)
