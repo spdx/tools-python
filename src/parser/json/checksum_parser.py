@@ -23,21 +23,10 @@ class ChecksumParser:
     def __init__(self):
         self.auxiliary_logger = Logger()
 
-
-    def parse_checksum(self, checksum_dict: Dict) -> Checksum:
-        algorithm = transform_json_str_to_enum_name(checksum_dict.get("algorithm"))
-        try:
-            checksum_algorithm = ChecksumAlgorithm[algorithm]
-        except KeyError:
-            raise SPDXParsingError([f"Algorithm {algorithm} not valid for checksum."])
-        checksum_value = checksum_dict.get("checksumValue")
-        try:
-            checksum = Checksum(checksum_algorithm, checksum_value)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError(err.get_messages())
-        return checksum
-
     def parse_checksums(self, checksum_dicts_list: List[Dict]) -> List[Checksum]:
+        if not checksum_dicts_list:
+            raise SPDXParsingError([f"No checksums provided, checksums are mandatory for files."])
+
         checksum_list = []
         for checksum_dict in checksum_dicts_list:
             try:
@@ -50,3 +39,20 @@ class ChecksumParser:
 
         return checksum_list
 
+    @staticmethod
+    def parse_checksum(checksum_dict: Dict) -> Checksum:
+        logger = Logger()
+        algorithm = transform_json_str_to_enum_name(checksum_dict.get("algorithm"))
+        try:
+            checksum_algorithm = ChecksumAlgorithm[algorithm]
+        except KeyError:
+            logger.append(f"Algorithm {algorithm} not valid for checksum.")
+            checksum_algorithm = None
+        checksum_value = checksum_dict.get("checksumValue")
+        if logger.has_messages():
+            raise SPDXParsingError([f"Error while parsing checksum: {logger.get_messages()}"])
+        try:
+            checksum = Checksum(algorithm=checksum_algorithm, value=checksum_value)
+        except ConstructorTypeErrors as err:
+            raise SPDXParsingError([f"Error while constructing checksum: {err.get_messages()}"])
+        return checksum
