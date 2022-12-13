@@ -11,7 +11,10 @@
 from datetime import datetime
 from unittest import mock
 
+import pytest
+
 from src.model.license_expression import LicenseExpression
+from src.parser.error import SPDXParsingError
 from src.parser.json.snippet_parser import SnippetParser
 
 
@@ -61,3 +64,79 @@ def test_snippet_parser():
     assert snippet.license_info_in_snippet == [LicenseExpression("GPL-2.0-only")]
     assert snippet.concluded_license == LicenseExpression("GPL-2.0-only")
     assert snippet.attribution_texts == ["Some example attibution text."]
+
+
+def test_parse_incomplete_snippet():
+    snippet_parser = SnippetParser()
+    incomplete_snippet_dict = {
+        "SPDXID": "SPDXRef-Snippet",
+        "file_spdx_id": "SPDXRef-File"
+    }
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = snippet_parser.parse_snippet(incomplete_snippet_dict)
+
+    assert err.type == SPDXParsingError
+    assert err.value.messages == ["Error while parsing snippet: ['No ranges dict provided.']"]
+
+
+def test_parse_snippet_with_invalid_snippet_range():
+    snippet_parser = SnippetParser()
+    snippet_with_invalid_ranges_list = {
+        "SPDXID": "SPDXRef-Snippet",
+        "file_spdx_id": "SPDXRef-File",
+        "ranges": [
+            {
+                "endPointer": {
+                    "offset": 23,
+                    "reference": "SPDXRef-DoapSource"
+                },
+                "startPointer": {
+                    "offset": "310",
+                    "reference": "SPDXRef-DoapSource"
+                }
+            }]
+    }
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = snippet_parser.parse_snippet(snippet_with_invalid_ranges_list)
+
+    assert err.type == SPDXParsingError
+    assert err.value.messages == ["Error while parsing snippet: ['SetterError Snippet: type of argument "
+                                  '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError '
+                                  'Snippet: type of argument "byte_range"[0] must be int; got str instead: '
+                                  "(\\'310\\', 23)']"]
+
+def test_parse_invalid_snippet_range():
+    snippet_parser = SnippetParser()
+
+    ranges = [
+        {
+            "endPointer": {
+                "lineNumber": 23,
+                "reference": "SPDXRef-DoapSource"
+            },
+            "startPointer": {
+                "offset": 310,
+                "reference": "SPDXRef-DoapSource"
+            }
+        }, {
+            "endPointer": {
+                "offset": 420,
+                "reference": "SPDXRef-DoapSource"
+            },
+            "startPointer": {
+                "lineNumber": 5,
+                "reference": "SPDXRef-DoapSource"
+            }
+        }
+
+    ]
+
+    with pytest.raises(SPDXParsingError) as err:
+        _ = snippet_parser.parse_ranges(ranges)
+
+    assert err.type == SPDXParsingError
+    assert err.value.messages == ["Error while parsing ranges_dict: ['Type of startpointer is not the same as "
+                                  "type of endpointer.', 'Type of startpointer is not the same as type of "
+                                  "endpointer.']"]
