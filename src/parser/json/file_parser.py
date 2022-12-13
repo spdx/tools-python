@@ -14,17 +14,20 @@ from src.model.file import File, FileType
 from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import parse_license_expression, parse_optional_field
+from src.parser.json.dict_parsing_functions import parse_optional_field
+from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
 
 class FileParser:
     logger: Logger
     checksum_parser: ChecksumParser
+    license_expression_parser: LicenseExpressionParser
 
     def __init__(self):
         self.logger = Logger()
         self.checksum_parser = ChecksumParser()
+        self.license_expression_parser = LicenseExpressionParser()
 
     def parse_file(self, file_dict: Dict) -> Optional[File]:
         name = file_dict.get("fileName")
@@ -44,12 +47,14 @@ class FileParser:
 
         license_comments = file_dict.get("licenseComments")
         try:
-            license_concluded = parse_optional_field(file_dict.get("licenseConcluded"), parse_license_expression)
+            license_concluded = parse_optional_field(file_dict.get("licenseConcluded"),
+                                                     self.license_expression_parser.parse_license_expression)
         except ConstructorTypeErrors as err:
             self.logger.append_all(err.get_messages())
             license_concluded = []
         try:
-            license_info_in_files = parse_optional_field(file_dict.get("licenseInfoInFiles"), parse_license_expression)
+            license_info_in_files = parse_optional_field(file_dict.get("licenseInfoInFiles"),
+                                                         self.license_expression_parser.parse_license_expression)
         except ConstructorTypeErrors as err:
             self.logger.append_all(err.get_messages())
             license_info_in_files = []
@@ -59,9 +64,11 @@ class FileParser:
             raise SPDXParsingError(self.logger.get_messages())
 
         try:
-            file = File(name=name, spdx_id=spdx_id, checksums=checksums, attribution_texts=attribution_texts, comment=comment, copyright_text=copyright_text,
+            file = File(name=name, spdx_id=spdx_id, checksums=checksums, attribution_texts=attribution_texts,
+                        comment=comment, copyright_text=copyright_text,
                         file_type=file_types, contributors=file_contributors, license_comment=license_comments,
-                        concluded_license=license_concluded, license_info_in_file=license_info_in_files, notice=notice_text)
+                        concluded_license=license_concluded, license_info_in_file=license_info_in_files,
+                        notice=notice_text)
         except ConstructorTypeErrors as error:
             self.logger.append_all(error.get_messages())
             raise SPDXParsingError(self.logger.get_messages())

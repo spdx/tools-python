@@ -18,8 +18,9 @@ from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import datetime_from_str, parse_license_expression, parse_optional_field, \
+from src.parser.json.dict_parsing_functions import datetime_from_str, parse_optional_field, \
     transform_json_str_to_enum_name
+from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
 
@@ -27,10 +28,12 @@ class PackageParser:
     logger: Logger
     actor_parser: ActorParser
     checksum_parser: ChecksumParser
+    license_expression_parser: LicenseExpressionParser
 
     def __init__(self):
         self.actor_parser = ActorParser()
         self.checksum_parser = ChecksumParser()
+        self.license_expression_parser = LicenseExpressionParser()
         self.logger = Logger()
 
     def parse_package(self, package_dict: Dict) -> Package:
@@ -62,18 +65,20 @@ class PackageParser:
         homepage: str = package_dict.get("homepage")
         license_comments: str = package_dict.get("licenseComments")
         try:
-            license_concluded = parse_optional_field(package_dict.get("licenseConcluded"), parse_license_expression)
+            license_concluded = parse_optional_field(package_dict.get("licenseConcluded"),
+                                                     self.license_expression_parser.parse_license_expression)
         except ConstructorTypeErrors as err:
             self.logger.append_all(err.get_messages())
             license_concluded = None
         try:
-            license_declared = parse_optional_field(package_dict.get("licenseDeclared"), parse_license_expression)
+            license_declared = parse_optional_field(package_dict.get("licenseDeclared"),
+                                                    self.license_expression_parser.parse_license_expression)
         except ConstructorTypeErrors as err:
             self.logger.append_all(err.get_messages())
             license_declared = None
         try:
             license_info_from_file = parse_optional_field(package_dict.get("licenseInfoFromFiles"),
-                                                          parse_license_expression)
+                                                          self.license_expression_parser.parse_license_expression)
         except ConstructorTypeErrors as err:
             self.logger.append_all(err.get_messages())
             license_info_from_file = None

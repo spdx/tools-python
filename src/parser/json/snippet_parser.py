@@ -15,7 +15,7 @@ from src.model.snippet import Snippet
 from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 
-from src.parser.json.dict_parsing_functions import parse_license_expression
+from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
 
@@ -26,9 +26,11 @@ class RangeType(Enum):
 
 class SnippetParser:
     logger: Logger
+    license_expression_parser = LicenseExpressionParser
 
     def __init__(self):
         self.logger = Logger()
+        self.license_expression_parser =LicenseExpressionParser()
 
     def parse_snippets(self, snippet_dicts_list: List[Dict]) -> List[Snippet]:
         snippets_list = []
@@ -54,8 +56,8 @@ class SnippetParser:
         comment = snippet_dict.get("comment")
         copyright_text = snippet_dict.get("copyrightText")
         license_comment = snippet_dict.get("licenseComments")
-        concluded_license = parse_license_expression(snippet_dict.get("licenseConcluded"))
-        license_info = parse_license_expression(snippet_dict.get("licenseInfoInSnippets"))
+        concluded_license = self.license_expression_parser.parse_license_expression(snippet_dict.get("licenseConcluded"))
+        license_info = self.license_expression_parser.parse_license_expression(snippet_dict.get("licenseInfoInSnippets"))
 
         try:
             snippet = Snippet(spdx_id=spdx_id, name=name, byte_range=byte_range, file_spdx_id=file_spdx_id,
