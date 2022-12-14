@@ -29,58 +29,37 @@ class AnnotationParser:
 
     def parse_all_annotations(self, input_doc_dict: Dict) -> List[Annotation]:
         annotations_list = []
-        doc_spdx_id: str = input_doc_dict.get("SPDXID")
-        document_annotations: List[Dict] = input_doc_dict.get("annotations")
-        if document_annotations:
-            try:
-                annotations_list.extend(self.parse_annotations(document_annotations, spdx_id=doc_spdx_id))
-            except SPDXParsingError as err:
-                self.logger.append_all(err.get_messages())
-
+        self.parse_annotations_from_object(annotations_list, [input_doc_dict])
         reviews: List[Dict] = input_doc_dict.get("revieweds")
         if reviews:
             for review in reviews:
                 try:
-                    review_annotation: Annotation = self.parse_review(review, spdx_id=doc_spdx_id)
+                    review_annotation: Annotation = self.parse_review(review, spdx_id=input_doc_dict.get("SPDXID"))
                     if review_annotation:
                         annotations_list.append(review_annotation)
                 except SPDXParsingError as err:
                     self.logger.append_all(err.get_messages())
         packages: List[Dict] = input_doc_dict.get("packages")
-        if packages:
-            for package in packages:
-                package_spdx_id: str = package.get("SPDXID")
-                package_annotations: List[Dict] = package.get("annotations")
-                if package_annotations:
-                    try:
-                        annotations_list.extend(self.parse_annotations(package_annotations, spdx_id=package_spdx_id))
-                    except SPDXParsingError as err:
-                        self.logger.append_all(err.get_messages())
+        self.parse_annotations_from_object(annotations_list, packages)
         files: List[Dict] = input_doc_dict.get("files")
-        if files:
-            for file in files:
-                file_spdx_id: str = file.get("SPDXID")
-                file_annotations: List[Dict] = file.get("annotations")
-                if file_annotations:
-                    try:
-                        annotations_list.extend(self.parse_annotations(file_annotations, spdx_id=file_spdx_id))
-                    except SPDXParsingError as err:
-                        self.logger.append_all(err.get_messages())
-
+        self.parse_annotations_from_object(annotations_list, files)
         snippets: List[Dict] = input_doc_dict.get("snippets")
-        if snippets:
-            for snippet in snippets:
-                snippet_spdx_id: str = snippet.get("SPDXID")
-                snippet_annotations: List[Dict] = snippet.get("annotations")
-                if snippet_annotations:
-                    try:
-                        annotations_list.extend(self.parse_annotations(snippet_annotations, spdx_id=snippet_spdx_id))
-                    except SPDXParsingError as err:
-                        self.logger.append_all(err.get_messages())
+        self.parse_annotations_from_object(annotations_list, snippets)
 
         if self.logger.has_messages():
             raise SPDXParsingError(self.logger.get_messages())
         return annotations_list
+
+    def parse_annotations_from_object(self, annotations_list, element_list: List[Dict]):
+        if element_list:
+            for element in element_list:
+                element_spdx_id: str = element.get("SPDXID")
+                element_annotations: List[Dict] = element.get("annotations")
+                if element_annotations:
+                    try:
+                        annotations_list.extend(self.parse_annotations(element_annotations, spdx_id=element_spdx_id))
+                    except SPDXParsingError as err:
+                        self.logger.append_all(err.get_messages())
 
     def parse_annotations(self, annotations_dict_list: List[Dict], spdx_id: Optional[str] = None) -> List[Annotation]:
         logger = Logger()
