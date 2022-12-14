@@ -98,7 +98,6 @@ class RelationshipParser:
                                                                                comment=relationship_comment))
         return relationship
 
-
     @staticmethod
     def parse_relationship_type(relationship_type_str: str) -> RelationshipType:
         try:
@@ -108,7 +107,6 @@ class RelationshipParser:
         except AttributeError:
             raise SPDXParsingError([f"RelationshipType must be str, not {type(relationship_type_str).__name__}."])
         return relationship_type
-
 
     def parse_document_describes(self, doc_spdx_id: str, described_spdx_ids: List[str],
                                  created_relationships: List[Relationship]) -> List[Relationship]:
@@ -128,7 +126,6 @@ class RelationshipParser:
             raise SPDXParsingError([f"Error while creating describes_relationship : {logger.get_messages()}"])
 
         return describes_relationships
-
 
     def parse_has_files(self, package_dicts: List[Dict], created_relationships: List[Relationship]) -> List[
         Relationship]:
@@ -155,7 +152,6 @@ class RelationshipParser:
 
         return contains_relationships
 
-
     def check_if_relationship_exists(self, relationship: Relationship,
                                      created_relationships: List[Relationship]) -> bool:
         created_relationships_without_comment: List[Relationship] = self.ignore_any_comments_in_relationship_list(
@@ -168,7 +164,6 @@ class RelationshipParser:
 
         return False
 
-
     @staticmethod
     def ignore_any_comments_in_relationship_list(created_relationships: List[Relationship]) -> List[Relationship]:
         relationships_without_comment = [Relationship(relationship_type=relationship.relationship_type,
@@ -177,26 +172,16 @@ class RelationshipParser:
                                          created_relationships]
         return relationships_without_comment
 
+    def convert_relationship(self, relationship: Relationship) -> Relationship:
+        return Relationship(related_spdx_element_id=relationship.spdx_element_id,
+                            spdx_element_id=relationship.related_spdx_element_id,
+                            relationship_type=self.convert_relationship_types[relationship.relationship_type],
+                            comment=relationship.comment)
 
-    @staticmethod
-    def convert_relationship(relationship: Relationship) -> Relationship:
-        if relationship.relationship_type == RelationshipType.DESCRIBES:
-            return Relationship(related_spdx_element_id=relationship.spdx_element_id,
-                                spdx_element_id=relationship.related_spdx_element_id,
-                                relationship_type=RelationshipType.DESCRIBED_BY, comment=relationship.comment)
-        if relationship.relationship_type == RelationshipType.DESCRIBED_BY:
-            return Relationship(related_spdx_element_id=relationship.spdx_element_id,
-                                spdx_element_id=relationship.related_spdx_element_id,
-                                relationship_type=RelationshipType.DESCRIBES, comment=relationship.comment)
-        if relationship.relationship_type == RelationshipType.CONTAINS:
-            return Relationship(related_spdx_element_id=relationship.spdx_element_id,
-                                spdx_element_id=relationship.related_spdx_element_id,
-                                relationship_type=RelationshipType.CONTAINED_BY, comment=relationship.comment)
-        if relationship.relationship_type == RelationshipType.CONTAINED_BY:
-            return Relationship(related_spdx_element_id=relationship.spdx_element_id,
-                                spdx_element_id=relationship.related_spdx_element_id,
-                                relationship_type=RelationshipType.CONTAINS, comment=relationship.comment)
-
+    convert_relationship_types = {RelationshipType.DESCRIBES: RelationshipType.DESCRIBED_BY,
+                                  RelationshipType.DESCRIBED_BY: RelationshipType.DESCRIBES,
+                                  RelationshipType.CONTAINS: RelationshipType.CONTAINED_BY,
+                                  RelationshipType.CONTAINED_BY: RelationshipType.CONTAINS}
 
     @staticmethod
     def parse_file_dependencies(file_dicts: List[Dict]) -> List[Relationship]:
@@ -219,7 +204,6 @@ class RelationshipParser:
         if logger.has_messages():
             raise SPDXParsingError([f"Error while creating dependency relationships: {logger.get_messages()}"])
         return dependency_relationships
-
 
     @staticmethod
     def parse_artifact_of(file_dicts: List[Dict]) -> List[Relationship]:
