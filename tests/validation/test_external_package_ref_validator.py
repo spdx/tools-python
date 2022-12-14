@@ -21,7 +21,8 @@ def test_correct_external_package_ref():
                          [(get_external_package_ref(),
                            'TBD'),
                           ])
-def test_wrong_external_package_ref(external_package_ref, expected_message):
+@pytest.mark.skip("add tests once external package ref validation is implemented")
+def wrong_external_package_ref(external_package_ref, expected_message):
     parent_id = "SPDXRef-Package"
     external_package_ref_validator = ExternalPackageRefValidator("2.3", parent_id)
     validation_messages: List[ValidationMessage] = external_package_ref_validator.validate_external_package_ref(external_package_ref)
