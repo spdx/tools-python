@@ -7,7 +7,7 @@ from tests.valid_defaults import get_external_package_ref
 
 
 def test_correct_external_package_ref():
-    external_package_ref_validator = ExternalPackageRefValidator("2.3")
+    external_package_ref_validator = ExternalPackageRefValidator("2.3", "SPDXRef-Package")
 
     external_package_ref = ExternalPackageRef(ExternalPackageRefCategory.OTHER, "swh", 
                                               "swh:1:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2", "comment")
@@ -19,11 +19,11 @@ def test_correct_external_package_ref():
 
 @pytest.mark.parametrize("external_package_ref, expected_message",
                          [(get_external_package_ref(),
-                           'email must be None if external_package_ref_type is TOOL, but is: mail@mail.com'),
+                           'TBD'),
                           ])
 def test_wrong_external_package_ref(external_package_ref, expected_message):
     parent_id = "SPDXRef-Package"
-    external_package_ref_validator = ExternalPackageRefValidator("2.3")
+    external_package_ref_validator = ExternalPackageRefValidator("2.3", parent_id)
     validation_messages: List[ValidationMessage] = external_package_ref_validator.validate_external_package_ref(external_package_ref)
 
     expected = ValidationMessage(expected_message,

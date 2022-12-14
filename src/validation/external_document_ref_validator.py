@@ -1,9 +1,9 @@
 import re
-from typing import List
+from typing import List, Optional
 
 from src.model.external_document_ref import ExternalDocumentRef
 from src.validation.checksum_validator import ChecksumValidator
-from src.validation.uri_validator import is_valid_uri
+from src.validation.uri_validators import validate_uri
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
@@ -37,12 +37,10 @@ class ExternalDocumentRefValidator:
                 )
             )
 
-        if not is_valid_uri(external_document_ref.document_uri):
+        for message in validate_uri(external_document_ref.document_uri):
             validation_messages.append(
                 ValidationMessage(
-                    f'document_uri must be a valid URI specified in RFC-3986, '
-                    f'but is: {external_document_ref.document_uri}',
-                    context
+                    'document_uri ' + message, context
                 )
             )
 

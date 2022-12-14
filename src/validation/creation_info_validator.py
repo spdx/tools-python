@@ -1,23 +1,23 @@
 import re
-from typing import List
-
+from typing import List, Optional
 from src.model.document import CreationInfo
 from src.validation.actor_validator import ActorValidator
-from src.validation.uri_validator import is_valid_uri
+from src.validation.external_document_ref_validator import ExternalDocumentRefValidator
+from src.validation.uri_validators import validate_uri
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 class CreationInfoValidator:
     spdx_version: str
-    actor_validator: ActorValidator
 
     def __init__(self, spdx_version):
         self.spdx_version = spdx_version
-        # TODO: make this local to the validate_creation_info method, because we don't know the parent id yet
-        self.actor_validator = ActorValidator(spdx_version)
 
     def validate_creation_info(self, creation_info: CreationInfo) -> List[ValidationMessage]:
         validation_messages: List[ValidationMessage] = []
+        actor_validator = ActorValidator(self.spdx_version, creation_info.spdx_id)
+        external_document_ref_validator = ExternalDocumentRefValidator(self.spdx_version, creation_info.spdx_id)
+
         context = ValidationContext(spdx_id=creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
 
         if not re.match(r"^SPDX-\d+.\d+$", creation_info.spdx_version):
@@ -44,17 +44,18 @@ class CreationInfoValidator:
                 )
             )
 
-        if not is_valid_uri(creation_info.document_namespace):
+        for message in validate_uri(creation_info.document_namespace):
             validation_messages.append(
                 ValidationMessage(
-                    f'document_namespace must be a valid URI specified in RFC-3986, '
-                    f'but is: {creation_info.document_namespace}',
-                    context
+                    'document_namespace ' + message, context
                 )
             )
 
         validation_messages.extend(
-            self.actor_validator.validate_actors(creation_info.creators)
+            actor_validator.validate_actors(creation_info.creators)
         )
+
+        validation_messages.extend(
+            external_document_ref_validator.validate_external_document_refs(creation_info.external_document_refs))
 
         return validation_messages

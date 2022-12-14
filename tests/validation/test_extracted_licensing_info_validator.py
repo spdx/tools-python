@@ -28,12 +28,11 @@ def test_correct_extracted_licensing_info():
                            'cross_reference must be a valid URL, but is: wrong_url')
                           ])
 def test_wrong_extracted_licensing_info(extracted_licensing_info, expected_message):
-    parent_id = "SPDXRef-DOCUMENT"
     extracted_licensing_info_validator = ExtractedLicensingInfoValidator("2.3")
     validation_messages: List[ValidationMessage] = extracted_licensing_info_validator.validate_extracted_licensing_info(extracted_licensing_info)
 
     expected = ValidationMessage(expected_message,
-                                 ValidationContext(parent_id=parent_id, element_type=SpdxElementType.EXTRACTED_LICENSING_INFO,
+                                 ValidationContext(element_type=SpdxElementType.EXTRACTED_LICENSING_INFO,
                                                    full_element=extracted_licensing_info))
 
     assert validation_messages == [expected]

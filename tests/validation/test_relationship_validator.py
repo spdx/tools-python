@@ -49,15 +49,13 @@ def test_wrong_relationship(first_id, second_id, wrong_file_id, expected_message
                                         "SPDXRef-Package"),
                            "RelationshipType.REQUIREMENT_DESCRIPTION_FOR is not supported for SPDX versions below 2.3")])
 def test_v2_3_only_types(relationship, expected_message):
-    parent_id = "SPDXRef-DOCUMENT"
     document: Document = get_document(packages=[get_package(spdx_id="SPDXRef-Package")])
     relationship_validator = RelationshipValidator("2.2", document)
 
     validation_message: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
 
     expected = [ValidationMessage(expected_message,
-                                  ValidationContext(parent_id=parent_id,
-                                                    element_type=SpdxElementType.RELATIONSHIP,
+                                  ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
                                                     full_element=relationship))]
 
     assert validation_message == expected

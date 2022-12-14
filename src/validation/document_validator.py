@@ -16,37 +16,32 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
 class DocumentValidator:
     spdx_version: str
     creation_info_validator: CreationInfoValidator
-    package_validator: PackageValidator
-    file_validator: FileValidator
     snippet_validator: SnippetValidator
     annotation_validator: AnnotationValidator
     relationship_validator: RelationshipValidator
-    external_document_ref_validator: ExternalDocumentRefValidator
     extracted_licensing_info_validator: ExtractedLicensingInfoValidator
 
     def __init__(self, spdx_version: str):
         self.spdx_version = spdx_version
         self.creation_info_validator = CreationInfoValidator(spdx_version)
-        self.package_validator = PackageValidator(spdx_version)
-        self.file_validator = FileValidator(spdx_version)
-        self.snippet_validator = SnippetValidator(spdx_version)
-        self.annotation_validator = AnnotationValidator(spdx_version)
-        self.relationship_validator = RelationshipValidator(spdx_version)
-        self.external_document_ref_validator = ExternalDocumentRefValidator(spdx_version)
         self.extracted_licensing_info_validator = ExtractedLicensingInfoValidator(spdx_version)
 
     def validate_full_spdx_document(self, document: Document) -> List[ValidationMessage]:
-        error_messages: List[ValidationMessage] = []
+        package_validator = PackageValidator(self.spdx_version, document)
+        file_validator = FileValidator(self.spdx_version, document)
+        snippet_validator = SnippetValidator(self.spdx_version, document)
+        annotation_validator = AnnotationValidator(self.spdx_version, document)
+        relationship_validator = RelationshipValidator(self.spdx_version, document)
 
-        error_messages.extend(self.creation_info_validator.validate_creation_info(document.creation_info))
-        error_messages.extend(self.package_validator.validate_packages(document.packages))
-        error_messages.extend(self.file_validator.validate_files(document.files))
-        error_messages.extend(self.snippet_validator.validate_snippets(document.snippets))
-        error_messages.extend(self.annotation_validator.validate_annotations(document.annotations))
-        error_messages.extend(self.relationship_validator.validate_relationships(document.relationships))
-        error_messages.extend(
-            self.external_document_ref_validator.validate_external_document_ref(document.external_document_refs))
-        error_messages.extend(self.extracted_licensing_info_validator.validate_extracted_licensing_infos(
+        validation_messages: List[ValidationMessage] = []
+
+        validation_messages.extend(self.creation_info_validator.validate_creation_info(document.creation_info))
+        validation_messages.extend(package_validator.validate_packages(document.packages))
+        validation_messages.extend(file_validator.validate_files(document.files))
+        validation_messages.extend(snippet_validator.validate_snippets(document.snippets))
+        validation_messages.extend(annotation_validator.validate_annotations(document.annotations))
+        validation_messages.extend(relationship_validator.validate_relationships(document.relationships))
+        validation_messages.extend(self.extracted_licensing_info_validator.validate_extracted_licensing_infos(
             document.extracted_licensing_info))
 
         # TODO: is this correct here?
@@ -54,10 +49,10 @@ class DocumentValidator:
                                            relationship.spdx_element_id == document.creation_info.spdx_id]
 
         if RelationshipType.DESCRIBES not in all_document_relationship_types:
-            error_messages.append(
+            validation_messages.append(
                 ValidationMessage(
                     f'there must be at least one relationship "{document.creation_info.spdx_id} DESCRIBES ..."',
                     ValidationContext(spdx_id=document.creation_info.spdx_id,
                                       element_type=SpdxElementType.DOCUMENT)))
 
-        return error_messages
+        return validation_messages
