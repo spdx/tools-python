@@ -20,8 +20,9 @@ from src.model.version import Version
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import datetime_from_str, parse_optional_field, \
-    try_construction_raise_parsing_error
+from src.parser.json.dict_parsing_functions import datetime_from_str, try_construction_raise_parsing_error, \
+    try_parse_optional_field_append_logger_when_failing, \
+    try_parse_required_field_append_logger_when_failing
 from src.parser.logger import Logger
 
 
@@ -47,33 +48,28 @@ class CreationInfoParser:
         if creation_info_dict is None:
             logger.append("CreationInfo is not valid.")
             raise SPDXParsingError([f"Error while parsing doc {name}: {logger.get_messages()}"])
-        try:
-            list_of_creators: List[str] = creation_info_dict.get("creators")
-            creators: List[Actor] = self.parse_creators(list_of_creators)
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            creators = []
-        try:
-            created: Optional[datetime] = datetime_from_str(creation_info_dict.get("created"))
-        except ValueError:
-            logger.append("Error while parsing created")
-            created = None
+
+        list_of_creators: List[str] = creation_info_dict.get("creators")
+        creators: List[Actor] = try_parse_required_field_append_logger_when_failing(logger=logger,
+                                                                                    field=list_of_creators,
+                                                                                    method_to_parse=self.parse_creators,
+                                                                                    default=[])
+
+        created: Optional[datetime] = try_parse_required_field_append_logger_when_failing(logger=logger,
+                                                                                          field=creation_info_dict.get(
+                                                                                              "created"),
+                                                                                          method_to_parse=datetime_from_str)
 
         creator_comment: Optional[str] = creation_info_dict.get("comment")
         data_license: str = doc_dict.get("dataLicense")
-        try:
-            external_document_refs: List[ExternalDocumentRef] = parse_optional_field(
-                doc_dict.get("externalDocumentRefs"),
-                self.parse_external_document_refs)
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            external_document_refs = []
-        try:
-            license_list_version: Optional[Version] = parse_optional_field(creation_info_dict.get("licenseListVersion"),
-                                                                           self.parse_version)
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            license_list_version = None
+
+        external_document_refs: List[ExternalDocumentRef] = try_parse_optional_field_append_logger_when_failing(
+            logger=logger, field=doc_dict.get("externalDocumentRefs"),
+            method_to_parse=self.parse_external_document_refs)
+        license_list_version: Optional[Version] = try_parse_optional_field_append_logger_when_failing(logger=logger,
+                                                                                                      field=creation_info_dict.get(
+                                                                                                          "licenseListVersion"),
+                                                                                                      method_to_parse=self.parse_version)
         document_comment: Optional[str] = doc_dict.get("comment")
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing doc {name}: {logger.get_messages()}"])
@@ -114,22 +110,23 @@ class CreationInfoParser:
         logger = Logger()
         external_document_refs = []
         for external_ref_dict in external_document_refs_dict:
-            try:
-                external_doc_ref: ExternalDocumentRef = self.parse_external_doc_ref(external_ref_dict)
-                external_document_refs.append(external_doc_ref)
-            except SPDXParsingError as err:
-                logger.append_all(err.get_messages())
+            external_doc_ref: ExternalDocumentRef = try_parse_optional_field_append_logger_when_failing(logger=logger,
+                                                                                                        field=external_ref_dict,
+                                                                                                        method_to_parse=self.parse_external_doc_ref)
+
+            external_document_refs.append(external_doc_ref)
+
         if logger.has_messages():
             raise SPDXParsingError(logger.get_messages())
         return external_document_refs
 
     def parse_external_doc_ref(self, external_doc_ref_dict: Dict) -> ExternalDocumentRef:
         logger = Logger()
-        try:
-            checksum: Optional[Checksum] = self.checksum_parser.parse_checksum(external_doc_ref_dict.get("checksum"))
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            checksum = None
+        checksum: Optional[Checksum] = try_parse_required_field_append_logger_when_failing(logger=logger,
+                                                                                           field=external_doc_ref_dict.get(
+                                                                                               "checksum"),
+                                                                                           method_to_parse=self.checksum_parser.parse_checksum)
+
         external_document_id: str = external_doc_ref_dict.get("externalDocumentId")
         spdx_document: str = external_doc_ref_dict.get("spdxDocument")
         if logger.has_messages():

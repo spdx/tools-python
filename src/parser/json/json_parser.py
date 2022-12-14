@@ -10,12 +10,15 @@
 # limitations under the License.
 import json
 from json import JSONDecodeError
+from typing import List
 
 from src.model.document import Document, CreationInfo
+from src.model.package import Package
 from src.parser.json.annotation_parser import AnnotationParser
 from src.parser.json.creation_info_parser import CreationInfoParser
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import parse_optional_field, try_construction_raise_parsing_error
+from src.parser.json.dict_parsing_functions import try_construction_raise_parsing_error, \
+    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
 from src.parser.json.extracted_licensing_parser import ExtractedLicensingInfoParser
 from src.parser.json.file_parser import FileParser
 from src.parser.logger import Logger
@@ -55,44 +58,34 @@ class JsonParser:
             self.logger.append(f"File {filename} is not a valid JSON file.")
             raise SPDXParsingError(self.logger.get_messages())
 
-        creation_info: CreationInfo = self.creation_info_parser.parse_creation_info(input_doc_as_dict)
+        creation_info: CreationInfo = try_parse_required_field_append_logger_when_failing(logger=self.logger,
+                                                                                          field=input_doc_as_dict,
+                                                                                          method_to_parse=self.creation_info_parser.parse_creation_info)
 
-        try:
-            packages = parse_optional_field(input_doc_as_dict.get("packages"), self.package_parser.parse_packages,
-                                            default=[])
-        except SPDXParsingError as err:
-            self.logger.append_all(err.get_messages())
-            packages = None
-        try:
-            files = parse_optional_field(input_doc_as_dict.get("files"), self.file_parser.parse_files)
-        except SPDXParsingError as err:
-            self.logger.append_all(err.get_messages())
-            files = None
+        packages: List[Package] = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
+                                                                                      field=input_doc_as_dict.get(
+                                                                                          "packages"),
+                                                                                      method_to_parse=self.package_parser.parse_packages,
+                                                                                      default=None)
 
-        try:
-            annotations = self.annotation_parser.parse_all_annotations(input_doc_as_dict)
-        except SPDXParsingError as err:
-            self.logger.append_all(err.get_messages())
-            annotations = None
+        files = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
+                                                                    field=input_doc_as_dict.get("files"),
+                                                                    method_to_parse=self.file_parser.parse_files)
 
-        try:
-            snippets = self.snippet_parser.parse_snippets(input_doc_as_dict.get("snippets"))
-        except SPDXParsingError as err:
-            self.logger.append_all(err.get_messages())
-            snippets = None
-        try:
-            relationships = self.relationship_parser.parse_all_relationships(input_doc_as_dict)
-            # documentDescribes(Document), hasFiles(Package), relationships, fileDependencies (File), artifactOf(File)
-        except SPDXParsingError as err:
-            self.logger.append_all(err.get_messages())
-            relationships = None
+        annotations = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
+                                                                          field=input_doc_as_dict,
+                                                                          method_to_parse=self.annotation_parser.parse_all_annotations)
+        snippets = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
+                                                                       field=input_doc_as_dict.get("snippets"),
+                                                                       method_to_parse=self.snippet_parser.parse_snippets)
+        relationships = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
+                                                                            field=input_doc_as_dict,
+                                                                            method_to_parse=self.relationship_parser.parse_all_relationships)
+        extracted_licensing_info = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
+                                                                                       field=input_doc_as_dict.get(
+                                                                                           "hasExtractedLicensingInfos"),
+                                                                                       method_to_parse=self.extracted_licenses_parser.parse_extracted_licensing_infos)
 
-        try:
-            extracted_licensing_info = parse_optional_field(input_doc_as_dict.get("hasExtractedLicensingInfos"),
-                                                            self.extracted_licenses_parser.parse_extracted_licensing_infos)
-        except SPDXParsingError as err:
-            self.logger.append_all(err.get_messages())
-            extracted_licensing_info = None
         if self.logger.has_messages():
             raise SPDXParsingError(self.logger.get_messages())
 

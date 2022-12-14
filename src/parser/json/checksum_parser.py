@@ -11,7 +11,6 @@
 from typing import Dict, List
 
 from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 from src.parser.json.dict_parsing_functions import transform_json_str_to_enum_name, try_construction_raise_parsing_error
 from src.parser.logger import Logger
