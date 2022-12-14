@@ -12,9 +12,8 @@ from typing import Dict, List, Optional, Union
 
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import parse_optional_field
+from src.parser.json.dict_parsing_functions import parse_optional_field, try_construction_raise_parsing_error
 from src.parser.logger import Logger
 
 
@@ -43,13 +42,12 @@ class ExtractedLicensingInfoParser:
             extracted_licensing_info_dict.get("name"), self.parse_extracted_licensing_info_name)
         cross_references: List[str] = extracted_licensing_info_dict.get("seeAlsos")
         comment: str = extracted_licensing_info_dict.get("comment")
-
-        try:
-            extracted_licensing_info_dict = ExtractedLicensingInfo(license_id=license_id, extracted_text=extracted_text,
-                                                                   comment=comment, license_name=license_name,
-                                                                   cross_references=cross_references)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while constructing ExtractedLicensingInfo : {err.get_messages()}"])
+        extracted_licensing_info_dict = try_construction_raise_parsing_error(ExtractedLicensingInfo,
+                                                                             dict(license_id=license_id,
+                                                                                  extracted_text=extracted_text,
+                                                                                  comment=comment,
+                                                                                  license_name=license_name,
+                                                                                  cross_references=cross_references))
         return extracted_licensing_info_dict
 
     @staticmethod

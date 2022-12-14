@@ -99,10 +99,11 @@ def test_parse_snippet_with_invalid_snippet_range():
         _ = snippet_parser.parse_snippet(snippet_with_invalid_ranges_list)
 
     assert err.type == SPDXParsingError
-    assert err.value.messages == ["Error while parsing snippet: ['SetterError Snippet: type of argument "
+    assert err.value.messages == ["Error while constructing Snippet: ['SetterError Snippet: type of argument "
                                   '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError '
                                   'Snippet: type of argument "byte_range"[0] must be int; got str instead: '
                                   "(\\'310\\', 23)']"]
+
 
 def test_parse_invalid_snippet_range():
     snippet_parser = SnippetParser()

@@ -103,10 +103,11 @@ def test_parse_falsy_files():
     assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while parsing file Incomplete File: ['No checksums provided, checksums "
                                   "are mandatory for files.']",
-                                  "Error while constructing file None: ['SetterError File: type of argument "
-                                  '"name" must be str; got NoneType instead: None\']',
+                                  'Error while constructing File: [\'SetterError File: type of argument "name" '
+                                  "must be str; got NoneType instead: None']",
                                   'Error while parsing file None: ["Error while parsing checksum: [\'Algorithm '
                                   'MD not valid for checksum.\']"]']
+
 
 def test_parse_file_types():
     file_parser = FileParser()
@@ -115,6 +116,7 @@ def test_parse_file_types():
     file_types = file_parser.parse_file_types(file_types_list)
 
     assert file_types == [FileType.OTHER, FileType.APPLICATION]
+
 
 def test_parse_invalid_file_types():
     file_parser = FileParser()

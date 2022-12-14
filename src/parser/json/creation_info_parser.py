@@ -16,12 +16,12 @@ from src.model.checksum import Checksum
 from src.model.document import CreationInfo
 from src.model.external_document_ref import ExternalDocumentRef
 from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.model.version import Version
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import datetime_from_str, parse_optional_field
+from src.parser.json.dict_parsing_functions import datetime_from_str, parse_optional_field, \
+    try_construction_raise_parsing_error
 from src.parser.logger import Logger
 
 
@@ -77,14 +77,16 @@ class CreationInfoParser:
         document_comment: Optional[str] = doc_dict.get("comment")
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing doc {name}: {logger.get_messages()}"])
-        try:
-            creation_info = CreationInfo(spdx_version=spdx_version, spdx_id=spdx_id, name=name,
-                                         document_namespace=document_namespace, creators=creators, created=created,
-                                         license_list_version=license_list_version, document_comment=document_comment,
-                                         creator_comment=creator_comment, data_license=data_license,
-                                         external_document_refs=external_document_refs)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while parsing doc {name}: {err.get_messages()}"])
+
+        creation_info = try_construction_raise_parsing_error(CreationInfo,
+                                                             dict(spdx_version=spdx_version, spdx_id=spdx_id, name=name,
+                                                                  document_namespace=document_namespace,
+                                                                  creators=creators, created=created,
+                                                                  license_list_version=license_list_version,
+                                                                  document_comment=document_comment,
+                                                                  creator_comment=creator_comment,
+                                                                  data_license=data_license,
+                                                                  external_document_refs=external_document_refs))
 
         return creation_info
 
@@ -132,10 +134,8 @@ class CreationInfoParser:
         spdx_document: str = external_doc_ref_dict.get("spdxDocument")
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing external_doc_ref: {logger.get_messages()}"])
-        try:
-            external_doc_ref = ExternalDocumentRef(document_ref_id=external_document_id, document_uri=spdx_document,
-                                                   checksum=checksum)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while constructing ExternalDocumentRef: {err.get_messages()}"])
+        external_doc_ref = try_construction_raise_parsing_error(ExternalDocumentRef,
+                                                                dict(document_ref_id=external_document_id,
+                                                                     checksum=checksum, document_uri=spdx_document))
 
         return external_doc_ref

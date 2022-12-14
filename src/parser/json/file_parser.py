@@ -15,10 +15,9 @@ from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
-from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import parse_optional_field
+from src.parser.json.dict_parsing_functions import parse_optional_field, try_construction_raise_parsing_error
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
@@ -71,7 +70,7 @@ class FileParser:
             license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_optional_field(
                 file_dict.get("licenseConcluded"),
                 self.license_expression_parser.parse_license_expression)
-        except ConstructorTypeErrors as err:
+        except SPDXParsingError as err:
             logger.append_all(err.get_messages())
             license_concluded = None
         try:
@@ -79,7 +78,7 @@ class FileParser:
                 Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_optional_field(
                 file_dict.get("licenseInfoInFiles"),
                 self.license_expression_parser.parse_license_expression)
-        except ConstructorTypeErrors as err:
+        except SPDXParsingError as err:
             logger.append_all(err.get_messages())
             license_info_in_files = None
         notice_text: Optional[str] = file_dict.get("noticeText")
@@ -87,15 +86,15 @@ class FileParser:
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing file {name}: {logger.get_messages()}"])
 
-        try:
-            file = File(name=name, spdx_id=spdx_id, checksums=checksums, attribution_texts=attribution_texts,
-                        comment=comment, copyright_text=copyright_text,
-                        file_type=file_types, contributors=file_contributors, license_comment=license_comments,
-                        concluded_license=license_concluded, license_info_in_file=license_info_in_files,
-                        notice=notice_text)
-        except ConstructorTypeErrors as error:
-            raise SPDXParsingError([f"Error while constructing file {name}: {error.get_messages()}"])
-
+        file = try_construction_raise_parsing_error(File, dict(name=name, spdx_id=spdx_id, checksums=checksums,
+                                                               attribution_texts=attribution_texts,
+                                                               comment=comment, copyright_text=copyright_text,
+                                                               file_type=file_types, contributors=file_contributors,
+                                                               license_comment=license_comments,
+                                                               concluded_license=license_concluded,
+                                                               license_info_in_file=license_info_in_files,
+                                                               notice=notice_text)
+                                                    )
         return file
 
     @staticmethod

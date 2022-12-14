@@ -18,12 +18,11 @@ from src.model.package import Package, ExternalPackageRef, PackageVerificationCo
     ExternalPackageRefCategory
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
-from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
 from src.parser.json.dict_parsing_functions import datetime_from_str, parse_optional_field, \
-    transform_json_str_to_enum_name
+    transform_json_str_to_enum_name, try_construction_raise_parsing_error
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
@@ -88,14 +87,14 @@ class PackageParser:
             license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_optional_field(
                 package_dict.get("licenseConcluded"),
                 self.license_expression_parser.parse_license_expression)
-        except ConstructorTypeErrors as err:
+        except SPDXParsingError as err:
             logger.append_all(err.get_messages())
             license_concluded = None
         try:
             license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_optional_field(
                 package_dict.get("licenseDeclared"),
                 self.license_expression_parser.parse_license_expression)
-        except ConstructorTypeErrors as err:
+        except SPDXParsingError as err:
             logger.append_all(err.get_messages())
             license_declared = None
         try:
@@ -103,7 +102,7 @@ class PackageParser:
                 Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_optional_field(
                 package_dict.get("licenseInfoFromFiles"),
                 self.license_expression_parser.parse_license_expression)
-        except ConstructorTypeErrors as err:
+        except SPDXParsingError as err:
             logger.append_all(err.get_messages())
             license_info_from_file = None
         try:
@@ -151,22 +150,26 @@ class PackageParser:
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing Package {name}: {logger.get_messages()}"])
 
-        try:
-            package = Package(spdx_id=spdx_id, name=name, download_location=download_location, version=version_info,
-                              file_name=package_file_name, supplier=supplier, originator=originator,
-                              files_analyzed=files_analyzed,
-                              verification_code=package_verification_code, checksums=checksums, homepage=homepage,
-                              source_info=source_info,
-                              license_concluded=license_concluded, license_info_from_files=license_info_from_file,
-                              license_declared=license_declared,
-                              license_comment=license_comments, copyright_text=copyright_text, summary=summary,
-                              description=description,
-                              comment=comment, external_references=external_refs, attribution_texts=attribution_texts,
-                              primary_package_purpose=primary_package_purpose,
-                              release_date=release_date, built_date=built_date, valid_until_date=valid_until_date)
-
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while constructing Package {name}: {err.get_messages()}"])
+        package = try_construction_raise_parsing_error(Package, dict(spdx_id=spdx_id, name=name,
+                                                                     download_location=download_location,
+                                                                     version=version_info,
+                                                                     file_name=package_file_name, supplier=supplier,
+                                                                     originator=originator,
+                                                                     files_analyzed=files_analyzed,
+                                                                     verification_code=package_verification_code,
+                                                                     checksums=checksums, homepage=homepage,
+                                                                     source_info=source_info,
+                                                                     license_concluded=license_concluded,
+                                                                     license_info_from_files=license_info_from_file,
+                                                                     license_declared=license_declared,
+                                                                     license_comment=license_comments,
+                                                                     copyright_text=copyright_text, summary=summary,
+                                                                     description=description,
+                                                                     comment=comment, external_references=external_refs,
+                                                                     attribution_texts=attribution_texts,
+                                                                     primary_package_purpose=primary_package_purpose,
+                                                                     release_date=release_date, built_date=built_date,
+                                                                     valid_until_date=valid_until_date))
 
         return package
 
@@ -192,11 +195,10 @@ class PackageParser:
         comment = external_ref_dict.get("comment")
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing external ref: {logger.get_messages()}"])
-        try:
-            external_ref = ExternalPackageRef(category=ref_category, reference_type=ref_type, locator=ref_locator,
-                                              comment=comment)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while constructing external ref: {err.get_messages()}"])
+        external_ref = try_construction_raise_parsing_error(ExternalPackageRef,
+                                                            dict(category=ref_category, reference_type=ref_type,
+                                                                 locator=ref_locator,
+                                                                 comment=comment))
 
         return external_ref
 
@@ -214,13 +216,13 @@ class PackageParser:
     def parse_package_verification_code(verification_code_dict: Dict) -> PackageVerificationCode:
         excluded_files: List[str] = verification_code_dict.get("packageVerificationCodeExcludedFiles")
         verification_code_value: str = verification_code_dict.get("packageVerificationCodeValue")
-        try:
-            package_verification_code = PackageVerificationCode(value=verification_code_value,
-                                                                excluded_files=excluded_files)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while parsing package verification code: {err.get_messages()}"])
+
+        package_verification_code = try_construction_raise_parsing_error(PackageVerificationCode,
+                                                                         dict(value=verification_code_value,
+                                                                              excluded_files=excluded_files))
 
         return package_verification_code
+
 
     @staticmethod
     def parse_primary_package_purpose(primary_package_purpose: str) -> PackagePurpose:
@@ -228,6 +230,7 @@ class PackageParser:
             return PackagePurpose[transform_json_str_to_enum_name(primary_package_purpose)]
         except KeyError:
             raise SPDXParsingError([f"Invalid primaryPackagePurpose: {primary_package_purpose}"])
+
 
     @staticmethod
     def parse_download_location(download_location: str) -> Union[str, SpdxNoAssertion, SpdxNone]:

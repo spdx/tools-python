@@ -13,10 +13,9 @@ from typing import Dict, Optional, List
 
 from src.model.actor import Actor
 from src.model.annotation import Annotation, AnnotationType
-from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
-from src.parser.json.dict_parsing_functions import datetime_from_str
+from src.parser.json.dict_parsing_functions import datetime_from_str, try_construction_raise_parsing_error
 from src.parser.logger import Logger
 
 
@@ -61,7 +60,7 @@ class AnnotationParser:
         if files:
             for file in files:
                 file_spdx_id: str = file.get("SPDXID")
-                file_annotations:List[Dict] = file.get("annotations")
+                file_annotations: List[Dict] = file.get("annotations")
                 if file_annotations:
                     try:
                         annotations_list.extend(self.parse_annotations(file_annotations, spdx_id=file_spdx_id))
@@ -118,10 +117,11 @@ class AnnotationParser:
         annotation_comment: str = annotation.get("comment")
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing annotation: {logger.get_messages()}"])
-        try:
-            annotation = Annotation(spdx_id, annotation_type, annotator, annotation_date, annotation_comment)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while constructing annotation: {err.get_messages()}"])
+        annotation = try_construction_raise_parsing_error(Annotation,
+                                                          dict(spdx_id=spdx_id, annotation_type=annotation_type,
+                                                               annotator=annotator, annotation_date=annotation_date,
+                                                               annotation_comment=annotation_comment))
+
         return annotation
 
     @staticmethod
@@ -130,7 +130,6 @@ class AnnotationParser:
             return AnnotationType[annotation_type]
         except KeyError:
             raise SPDXParsingError([f"Invalid annotation type: {annotation_type}"])
-
 
     def parse_review(self, review_dict: Dict, spdx_id: str) -> Annotation:
         logger = Logger()
@@ -149,8 +148,8 @@ class AnnotationParser:
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing review: {logger.get_messages()}"])
 
-        try:
-            return Annotation(spdx_id=spdx_id, annotator=annotator, annotation_date=annotation_date,
-                          annotation_type=annotation_type, annotation_comment=comment)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while constructing review: {err.get_messages()}"])
+        annotation = try_construction_raise_parsing_error(Annotation,
+                                                          dict(spdx_id=spdx_id, annotation_type=annotation_type,
+                                                               annotator=annotator, annotation_date=annotation_date,
+                                                               annotation_comment=comment))
+        return annotation
