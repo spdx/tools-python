@@ -17,7 +17,8 @@ from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import parse_optional_field, try_construction_raise_parsing_error
+from src.parser.json.dict_parsing_functions import try_construction_raise_parsing_error, \
+    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
@@ -50,37 +51,34 @@ class FileParser:
         name: str = file_dict.get("fileName")
         spdx_id: str = file_dict.get("SPDXID")
         checksums_list: List[Dict] = file_dict.get("checksums")
-        try:
-            checksums: List[Checksum] = self.checksum_parser.parse_checksums(checksums_list)
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            checksums = []
+
+        checksums: List[Checksum] = try_parse_required_field_append_logger_when_failing(logger=logger,
+                                                                                        field=checksums_list,
+                                                                                        method_to_parse=self.checksum_parser.parse_checksums)
 
         attribution_texts: Optional[str] = file_dict.get("attributionTexts")
         comment: Optional[str] = file_dict.get("comment")
         copyright_text: Optional[str] = file_dict.get("copyrightText")
         file_contributors: List[str] = file_dict.get("fileContributors")
-        try:
-            file_types: List[FileType] = parse_optional_field(file_dict.get("fileTypes"), self.parse_file_types)
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            file_types = []
+        file_types: List[FileType] = try_parse_optional_field_append_logger_when_failing(logger=logger,
+                                                                                         field=file_dict.get(
+                                                                                             "fileTypes"),
+                                                                                         method_to_parse=self.parse_file_types)
+
         license_comments: Optional[str] = file_dict.get("licenseComments")
-        try:
-            license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_optional_field(
-                file_dict.get("licenseConcluded"),
-                self.license_expression_parser.parse_license_expression)
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            license_concluded = None
-        try:
-            license_info_in_files: Optional[
-                Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_optional_field(
-                file_dict.get("licenseInfoInFiles"),
-                self.license_expression_parser.parse_license_expression)
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            license_info_in_files = None
+
+        license_concluded: Optional[Union[
+            LicenseExpression, SpdxNoAssertion, SpdxNone]] = try_parse_optional_field_append_logger_when_failing(
+            logger=logger, field=file_dict.get("licenseConcluded"),
+            method_to_parse=self.license_expression_parser.parse_license_expression)
+
+        license_info_in_files: Optional[
+            Union[List[
+                LicenseExpression], SpdxNoAssertion, SpdxNone]] = try_parse_optional_field_append_logger_when_failing(
+            logger=logger,
+            field=file_dict.get("licenseInfoInFiles"),
+            method_to_parse=self.license_expression_parser.parse_license_expression)
+
         notice_text: Optional[str] = file_dict.get("noticeText")
 
         if logger.has_messages():

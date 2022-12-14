@@ -16,7 +16,8 @@ from src.model.snippet import Snippet
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import parse_optional_field, try_construction_raise_parsing_error
+from src.parser.json.dict_parsing_functions import try_construction_raise_parsing_error, \
+    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
 
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
@@ -52,32 +53,28 @@ class SnippetParser:
         spdx_id: str = snippet_dict.get("SPDXID")
         file_spdx_id: str = snippet_dict.get("snippetFromFile")
         name: Optional[str] = snippet_dict.get("name")
-        try:
-            ranges: Dict = self.parse_ranges(snippet_dict.get("ranges"))
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            ranges = {}
+        ranges: Dict = try_parse_required_field_append_logger_when_failing(logger=logger,
+                                                                           field=(snippet_dict.get("ranges")),
+                                                                           method_to_parse=self.parse_ranges,
+                                                                           default={})
         byte_range: Tuple[int, int] = ranges.get(RangeType.BYTE)
-
         line_range: Optional[Tuple[int, int]] = ranges.get(RangeType.LINE)
         attribution_texts: List[str] = snippet_dict.get("attributionTexts")
         comment: Optional[str] = snippet_dict.get("comment")
         copyright_text: Optional[str] = snippet_dict.get("copyrightText")
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
-        try:
-            concluded_license: Optional[Union[
-                LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_optional_field(
-                snippet_dict.get("licenseConcluded"), self.license_expression_parser.parse_license_expression)
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            concluded_license = None
-        try:
-            license_info: Optional[Union[List[
-                LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_optional_field(
-                snippet_dict.get("licenseInfoInSnippets"), self.license_expression_parser.parse_license_expression)
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            license_info = None
+        concluded_license: Optional[Union[
+            LicenseExpression, SpdxNoAssertion, SpdxNone]] = try_parse_optional_field_append_logger_when_failing(
+            logger=logger,
+            field=snippet_dict.get("licenseConcluded"),
+            method_to_parse=self.license_expression_parser.parse_license_expression)
+
+        license_info: Optional[Union[List[
+            LicenseExpression], SpdxNoAssertion, SpdxNone]] = try_parse_optional_field_append_logger_when_failing(
+            logger=logger,
+            field=snippet_dict.get("licenseInfoInSnippets"),
+            method_to_parse=self.license_expression_parser.parse_license_expression)
+
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing snippet: {logger.get_messages()}"])
 

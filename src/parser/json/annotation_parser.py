@@ -15,7 +15,8 @@ from src.model.actor import Actor
 from src.model.annotation import Annotation, AnnotationType
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
-from src.parser.json.dict_parsing_functions import datetime_from_str, try_construction_raise_parsing_error
+from src.parser.json.dict_parsing_functions import datetime_from_str, try_construction_raise_parsing_error, \
+    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
 from src.parser.logger import Logger
 
 
@@ -78,21 +79,21 @@ class AnnotationParser:
     def parse_annotation(self, annotation: Dict, spdx_id: Optional[str] = None) -> Annotation:
         logger = Logger()
         spdx_id: str = annotation.get("SPDXID") or spdx_id
-        try:
-            annotation_type: Optional[AnnotationType] = self.parse_annotation_type(annotation.get("annotationType"))
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            annotation_type = None
-        try:
-            annotator: Optional[Actor] = self.actor_parser.parse_actor(annotation.get("annotator"))
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            annotator = None
-        try:
-            annotation_date: Optional[datetime] = datetime_from_str(annotation.get("annotationDate"))
-        except TypeError:
-            logger.append("ValueError while parsing annotationDate.")
-            annotation_date = None
+
+        annotation_type: Optional[AnnotationType] = try_parse_required_field_append_logger_when_failing(
+            logger=logger, field=annotation.get("annotationType"),
+            method_to_parse=self.parse_annotation_type)
+
+        annotator: Optional[Actor] = try_parse_required_field_append_logger_when_failing(logger=logger,
+                                                                                         field=annotation.get(
+                                                                                             "annotator"),
+                                                                                         method_to_parse=self.actor_parser.parse_actor)
+
+        annotation_date: Optional[datetime] = try_parse_required_field_append_logger_when_failing(logger=logger,
+                                                                                                  field=annotation.get(
+                                                                                                      "annotationDate"),
+                                                                                                  method_to_parse=datetime_from_str)
+
         annotation_comment: str = annotation.get("comment")
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing annotation: {logger.get_messages()}"])
@@ -112,16 +113,17 @@ class AnnotationParser:
 
     def parse_review(self, review_dict: Dict, spdx_id: str) -> Annotation:
         logger = Logger()
-        try:
-            annotator: Optional[Actor] = self.actor_parser.parse_actor(review_dict.get("reviewer"))
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            annotator = None
-        try:
-            annotation_date: Optional[datetime] = datetime_from_str(review_dict.get("reviewDate"))
-        except TypeError:
-            logger.append("ValueError while parsing reviewDate.")
-            annotation_date = None
+
+        annotator: Optional[Actor] = try_parse_optional_field_append_logger_when_failing(logger=logger,
+                                                                                         field=review_dict.get(
+                                                                                             "reviewer"),
+                                                                                         method_to_parse=self.actor_parser.parse_actor)
+
+        annotation_date: Optional[datetime] = try_parse_required_field_append_logger_when_failing(logger=logger,
+                                                                                                  field=review_dict.get(
+                                                                                                      "reviewDate"),
+                                                                                                  method_to_parse=datetime_from_str)
+
         annotation_type = AnnotationType.REVIEW
         comment: str = review_dict.get("comment")
         if logger.has_messages():
