@@ -15,9 +15,10 @@ from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
-from src.parser.error import SPDXParsingError
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import try_construction_raise_parsing_error, \
+from src.parser.json.dict_parsing_functions import append_list_if_object_could_be_parsed_append_logger_if_not, \
+    raise_parsing_error_without_additional_text_if_logger_has_messages, \
+    raise_parsing_error_if_logger_has_messages, try_construction_raise_parsing_error, \
     try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
@@ -36,14 +37,10 @@ class FileParser:
     def parse_files(self, file_dict_list) -> List[File]:
         file_list = []
         for file_dict in file_dict_list:
-            try:
-                file: File = self.parse_file(file_dict)
-                file_list.append(file)
-            except SPDXParsingError as err:
-                self.logger.append_all(err.get_messages())
-                continue
-        if self.logger.has_messages():
-            raise SPDXParsingError(self.logger.get_messages())
+            file_list = append_list_if_object_could_be_parsed_append_logger_if_not(list_to_append=file_list,
+                                                                                   logger=self.logger, field=file_dict,
+                                                                                   method_to_parse=self.parse_file)
+        raise_parsing_error_without_additional_text_if_logger_has_messages(self.logger)
         return file_list
 
     def parse_file(self, file_dict: Dict) -> Optional[File]:
@@ -78,11 +75,8 @@ class FileParser:
             logger=logger,
             field=file_dict.get("licenseInfoInFiles"),
             method_to_parse=self.license_expression_parser.parse_license_expression)
-
         notice_text: Optional[str] = file_dict.get("noticeText")
-
-        if logger.has_messages():
-            raise SPDXParsingError([f"Error while parsing file {name}: {logger.get_messages()}"])
+        raise_parsing_error_if_logger_has_messages(logger, f"file {name}")
 
         file = try_construction_raise_parsing_error(File, dict(name=name, spdx_id=spdx_id, checksums=checksums,
                                                                attribution_texts=attribution_texts,
@@ -106,6 +100,5 @@ class FileParser:
                 logger.append(f"FileType {file_type} is not valid.")
                 continue
             file_types.append(file_type)
-        if logger.has_messages():
-            raise SPDXParsingError([f"Error while parsing file_types: {logger.get_messages()}"])
+        raise_parsing_error_if_logger_has_messages(logger, "file_types")
         return file_types

@@ -15,12 +15,14 @@ from src.model.actor import Actor
 from src.model.checksum import Checksum
 from src.model.document import CreationInfo
 from src.model.external_document_ref import ExternalDocumentRef
-from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.version import Version
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import datetime_from_str, try_construction_raise_parsing_error, \
+from src.parser.json.dict_parsing_functions import append_list_if_object_could_be_parsed_append_logger_if_not, \
+    datetime_from_str, raise_parsing_error_if_logger_has_messages, \
+    raise_parsing_error_without_additional_text_if_logger_has_messages, \
+    try_construction_raise_parsing_error, \
     try_parse_optional_field_append_logger_when_failing, \
     try_parse_required_field_append_logger_when_failing
 from src.parser.logger import Logger
@@ -71,8 +73,7 @@ class CreationInfoParser:
                                                                                                           "licenseListVersion"),
                                                                                                       method_to_parse=self.parse_version)
         document_comment: Optional[str] = doc_dict.get("comment")
-        if logger.has_messages():
-            raise SPDXParsingError([f"Error while parsing doc {name}: {logger.get_messages()}"])
+        raise_parsing_error_if_logger_has_messages(logger, f"Document: {name}")
 
         creation_info = try_construction_raise_parsing_error(CreationInfo,
                                                              dict(spdx_version=spdx_version, spdx_id=spdx_id, name=name,
@@ -90,13 +91,12 @@ class CreationInfoParser:
         logger = Logger()
         creators_list = []
         for creator_dict in creators_dict_list:
-            try:
-                creator: Union[Actor, SpdxNoAssertion] = self.actor_parser.parse_actor_or_no_assert(creator_dict)
-                creators_list.append(creator)
-            except SPDXParsingError as err:
-                logger.append_all(err.get_messages())
-        if logger.has_messages():
-            raise SPDXParsingError(logger.get_messages())
+            creators_list = append_list_if_object_could_be_parsed_append_logger_if_not(list_to_append=creators_list,
+                                                                                       logger=logger,
+                                                                                       field=creator_dict,
+                                                                                       method_to_parse=self.actor_parser.parse_actor_or_no_assert)
+
+        raise_parsing_error_without_additional_text_if_logger_has_messages(logger)
         return creators_list
 
     @staticmethod
@@ -116,8 +116,7 @@ class CreationInfoParser:
 
             external_document_refs.append(external_doc_ref)
 
-        if logger.has_messages():
-            raise SPDXParsingError(logger.get_messages())
+        raise_parsing_error_without_additional_text_if_logger_has_messages(logger)
         return external_document_refs
 
     def parse_external_doc_ref(self, external_doc_ref_dict: Dict) -> ExternalDocumentRef:
@@ -129,8 +128,7 @@ class CreationInfoParser:
 
         external_document_id: str = external_doc_ref_dict.get("externalDocumentId")
         spdx_document: str = external_doc_ref_dict.get("spdxDocument")
-        if logger.has_messages():
-            raise SPDXParsingError([f"Error while parsing external_doc_ref: {logger.get_messages()}"])
+        raise_parsing_error_if_logger_has_messages(logger, "ExternalDocRef")
         external_doc_ref = try_construction_raise_parsing_error(ExternalDocumentRef,
                                                                 dict(document_ref_id=external_document_id,
                                                                      checksum=checksum, document_uri=spdx_document))

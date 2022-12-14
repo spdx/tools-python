@@ -39,5 +39,5 @@ def test_invalid_checksum():
         _ = checksum_parser.parse_checksum(checksum_dict)
 
     assert err.typename == 'SPDXParsingError'
-    assert err.value.messages[0] == "Error while parsing checksum: ['Algorithm SHA not valid for checksum.']"
+    assert err.value.messages[0] == "Error while parsing Checksum: ['Algorithm SHA not valid for checksum.']"
 
