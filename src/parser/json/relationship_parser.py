@@ -13,7 +13,7 @@ from typing import Dict, List, Optional
 from src.model.relationship import Relationship, RelationshipType
 from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import transform_json_str_to_enum_name
+from src.parser.json.dict_parsing_functions import transform_json_str_to_enum_name, try_construction_raise_parsing_error
 from src.parser.logger import Logger
 
 
@@ -93,12 +93,11 @@ class RelationshipParser:
         relationship_comment: str = relationship_dict.get("comment")
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing relationship: {logger.get_messages()}"])
-        try:
-            relationship = Relationship(spdx_element_id=spdx_element_id,
-                                        relationship_type=relationship_type,
-                                        related_spdx_element_id=related_spdx_element, comment=relationship_comment)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while constructing relationship: {err.get_messages()}"])
+
+        relationship = try_construction_raise_parsing_error(Relationship, dict(spdx_element_id=spdx_element_id,
+                                                                               relationship_type=relationship_type,
+                                                                               related_spdx_element_id=related_spdx_element,
+                                                                               comment=relationship_comment))
         return relationship
 
     @staticmethod

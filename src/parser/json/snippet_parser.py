@@ -15,9 +15,8 @@ from src.model.license_expression import LicenseExpression
 from src.model.snippet import Snippet
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
-from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import parse_optional_field
+from src.parser.json.dict_parsing_functions import parse_optional_field, try_construction_raise_parsing_error
 
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
@@ -81,14 +80,17 @@ class SnippetParser:
             license_info = None
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing snippet: {logger.get_messages()}"])
-        try:
-            snippet = Snippet(spdx_id=spdx_id, name=name, byte_range=byte_range, file_spdx_id=file_spdx_id,
-                              line_range=line_range, attribution_texts=attribution_texts, comment=comment,
-                              copyright_text=copyright_text, license_comment=license_comment,
-                              concluded_license=concluded_license,
-                              license_info_in_snippet=license_info)
-        except ConstructorTypeErrors as err:
-            raise SPDXParsingError([f"Error while parsing snippet: {err.get_messages()}"])
+
+        snippet = try_construction_raise_parsing_error(Snippet,
+                                                       dict(spdx_id=spdx_id, name=name, byte_range=byte_range,
+                                                            file_spdx_id=file_spdx_id,
+                                                            line_range=line_range,
+                                                            attribution_texts=attribution_texts, comment=comment,
+                                                            copyright_text=copyright_text,
+                                                            license_comment=license_comment,
+                                                            concluded_license=concluded_license,
+                                                            license_info_in_snippet=license_info))
+
         return snippet
 
     def parse_ranges(self, ranges_from_snippet: List[Dict]) -> Dict:

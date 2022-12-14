@@ -13,8 +13,8 @@ from typing import Union, Pattern, Match
 
 from src.model.actor import Actor, ActorType
 from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
+from src.parser.json.dict_parsing_functions import try_construction_raise_parsing_error
 
 
 class ActorParser:
@@ -35,25 +35,18 @@ class ActorParser:
 
         if tool_match:
             name: str = tool_match.group(1).strip()
-            try:
-                creator = Actor(ActorType.TOOL, name=name)
-            except ConstructorTypeErrors as err:
-                raise SPDXParsingError(err.get_messages())
+            creator = try_construction_raise_parsing_error(Actor,dict(actor_type=ActorType.TOOL, name=name))
+
         elif person_match:
             name: str = person_match.group(1).strip()
             email: str = person_match.group(4).strip() if person_match.group(4) else None
-            try:
-                creator = Actor(ActorType.PERSON, name=name, email=email)
-            except ConstructorTypeErrors as err:
-                raise SPDXParsingError(err.get_messages())
+            creator = try_construction_raise_parsing_error(Actor,
+                                                           dict(actor_type=ActorType.PERSON, name=name, email=email))
         elif org_match:
             name: str = org_match.group(1).strip()
             email: str = org_match.group(4).strip() if org_match.group(4) else None
-            try:
-                creator = Actor(ActorType.ORGANIZATION, name=name, email=email)
-            except ConstructorTypeErrors as err:
-                raise SPDXParsingError(err.get_messages())
-
+            creator = try_construction_raise_parsing_error(Actor, dict(actor_type=ActorType.ORGANIZATION, name=name,
+                                                                       email=email))
         else:
             raise SPDXParsingError([f"Actor {actor} doesn't match any of person, organization or tool."])
 

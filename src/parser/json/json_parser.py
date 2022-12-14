@@ -12,11 +12,10 @@ import json
 from json import JSONDecodeError
 
 from src.model.document import Document, CreationInfo
-from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.json.annotation_parser import AnnotationParser
 from src.parser.json.creation_info_parser import CreationInfoParser
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import parse_optional_field
+from src.parser.json.dict_parsing_functions import parse_optional_field, try_construction_raise_parsing_error
 from src.parser.json.extracted_licensing_parser import ExtractedLicensingInfoParser
 from src.parser.json.file_parser import FileParser
 from src.parser.logger import Logger
@@ -59,7 +58,8 @@ class JsonParser:
         creation_info: CreationInfo = self.creation_info_parser.parse_creation_info(input_doc_as_dict)
 
         try:
-            packages = parse_optional_field(input_doc_as_dict.get("packages"), self.package_parser.parse_packages, default=[])
+            packages = parse_optional_field(input_doc_as_dict.get("packages"), self.package_parser.parse_packages,
+                                            default=[])
         except SPDXParsingError as err:
             self.logger.append_all(err.get_messages())
             packages = None
@@ -90,15 +90,16 @@ class JsonParser:
         try:
             extracted_licensing_info = parse_optional_field(input_doc_as_dict.get("hasExtractedLicensingInfos"),
                                                             self.extracted_licenses_parser.parse_extracted_licensing_infos)
-        except ConstructorTypeErrors as err:
+        except SPDXParsingError as err:
             self.logger.append_all(err.get_messages())
             extracted_licensing_info = None
         if self.logger.has_messages():
             raise SPDXParsingError(self.logger.get_messages())
 
-        document: Document = Document(creation_info=creation_info, packages=packages, files=files,
-                                      annotations=annotations,
-                                      snippets=snippets, relationships=relationships,
-                                      extracted_licensing_info=extracted_licensing_info)
+        document = try_construction_raise_parsing_error(Document, dict(creation_info=creation_info, packages=packages,
+                                                                       files=files,
+                                                                       annotations=annotations,
+                                                                       snippets=snippets, relationships=relationships,
+                                                                       extracted_licensing_info=extracted_licensing_info))
 
         return document
