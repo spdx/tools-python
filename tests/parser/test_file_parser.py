@@ -105,7 +105,7 @@ def test_parse_falsy_files():
                                   "are mandatory for files.']",
                                   'Error while constructing File: [\'SetterError File: type of argument "name" '
                                   "must be str; got NoneType instead: None']",
-                                  'Error while parsing file None: ["Error while parsing checksum: [\'Algorithm '
+                                  'Error while parsing file None: ["Error while parsing Checksum: [\'Algorithm '
                                   'MD not valid for checksum.\']"]']
 
 

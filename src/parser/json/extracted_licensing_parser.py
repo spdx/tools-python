@@ -12,8 +12,9 @@ from typing import Dict, List, Optional, Union
 
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import parse_optional_field, try_construction_raise_parsing_error
+from src.parser.json.dict_parsing_functions import parse_optional_field, \
+    raise_parsing_error_without_additional_text_if_logger_has_messages, \
+    append_list_if_object_could_be_parsed_append_logger_if_not, try_construction_raise_parsing_error
 from src.parser.logger import Logger
 
 
@@ -27,12 +28,12 @@ class ExtractedLicensingInfoParser:
         ExtractedLicensingInfo]:
         extracted_licensing_info_list = []
         for extracted_licensing_info_dict in extracted_licensing_info_dicts:
-            try:
-                extracted_licensing_info_list.append(self.parse_extracted_licensing_info(extracted_licensing_info_dict))
-            except SPDXParsingError as err:
-                self.logger.append_all(err.get_messages())
-        if self.logger.has_messages():
-            raise SPDXParsingError(self.logger.get_messages())
+            extracted_licensing_info_list = append_list_if_object_could_be_parsed_append_logger_if_not(
+                list_to_append=extracted_licensing_info_list,
+                logger=self.logger, field=extracted_licensing_info_dict,
+                method_to_parse=self.parse_extracted_licensing_info)
+
+        raise_parsing_error_without_additional_text_if_logger_has_messages(self.logger)
         return extracted_licensing_info_list
 
     def parse_extracted_licensing_info(self, extracted_licensing_info_dict: Dict) -> ExtractedLicensingInfo:

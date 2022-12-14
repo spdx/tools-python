@@ -16,7 +16,8 @@ from src.model.annotation import Annotation, AnnotationType
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.dict_parsing_functions import datetime_from_str, try_construction_raise_parsing_error, \
-    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
+    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing, \
+    append_list_if_object_could_be_parsed_append_logger_if_not, raise_parsing_error_if_logger_has_messages
 from src.parser.logger import Logger
 
 
@@ -34,12 +35,10 @@ class AnnotationParser:
         reviews: List[Dict] = input_doc_dict.get("revieweds")
         if reviews:
             for review in reviews:
-                try:
-                    review_annotation: Annotation = self.parse_review(review, spdx_id=input_doc_dict.get("SPDXID"))
-                    if review_annotation:
-                        annotations_list.append(review_annotation)
-                except SPDXParsingError as err:
-                    self.logger.append_all(err.get_messages())
+                annotations_list = append_list_if_object_could_be_parsed_append_logger_if_not(
+                    list_to_append=annotations_list, logger=self.logger, field=review,
+                    method_to_parse=lambda x: self.parse_review(x, spdx_id=input_doc_dict.get("SPDXID")))
+
         packages: List[Dict] = input_doc_dict.get("packages")
         self.parse_annotations_from_object(annotations_list, packages)
         files: List[Dict] = input_doc_dict.get("files")
@@ -47,8 +46,7 @@ class AnnotationParser:
         snippets: List[Dict] = input_doc_dict.get("snippets")
         self.parse_annotations_from_object(annotations_list, snippets)
 
-        if self.logger.has_messages():
-            raise SPDXParsingError(self.logger.get_messages())
+        raise_parsing_error_if_logger_has_messages(self.logger, "Annotations")
         return annotations_list
 
     def parse_annotations_from_object(self, annotations_list, element_list: List[Dict]):
@@ -57,22 +55,27 @@ class AnnotationParser:
                 element_spdx_id: str = element.get("SPDXID")
                 element_annotations: List[Dict] = element.get("annotations")
                 if element_annotations:
-                    try:
-                        annotations_list.extend(self.parse_annotations(element_annotations, spdx_id=element_spdx_id))
-                    except SPDXParsingError as err:
-                        self.logger.append_all(err.get_messages())
+                    annotations_list.extend(try_parse_required_field_append_logger_when_failing(logger=self.logger,
+                                                                                                field=element_annotations,
+                                                                                                method_to_parse=lambda
+                                                                                                    x: self.parse_annotations(
+                                                                                                    x,
+                                                                                                    spdx_id=element_spdx_id),
+                                                                                                default=[]))
 
     def parse_annotations(self, annotations_dict_list: List[Dict], spdx_id: Optional[str] = None) -> List[Annotation]:
         logger = Logger()
         annotations_list = []
         for annotation_dict in annotations_dict_list:
-            try:
-                annotation: Annotation = self.parse_annotation(annotation_dict, spdx_id=spdx_id)
-                annotations_list.append(annotation)
-            except SPDXParsingError as err:
-                logger.append_all(err.get_messages())
-        if logger.has_messages():
-            raise SPDXParsingError(logger.get_messages())
+            annotations_list = append_list_if_object_could_be_parsed_append_logger_if_not(
+                list_to_append=annotations_list,
+                logger=self.logger,
+                field=annotation_dict,
+                method_to_parse=lambda
+                    x: self.parse_annotation(
+                    x,
+                    spdx_id=spdx_id))
+        raise_parsing_error_if_logger_has_messages(logger, "Annotations")
 
         return annotations_list
 
@@ -95,8 +98,7 @@ class AnnotationParser:
                                                                                                   method_to_parse=datetime_from_str)
 
         annotation_comment: str = annotation.get("comment")
-        if logger.has_messages():
-            raise SPDXParsingError([f"Error while parsing annotation: {logger.get_messages()}"])
+        raise_parsing_error_if_logger_has_messages(logger, "Annotation")
         annotation = try_construction_raise_parsing_error(Annotation,
                                                           dict(spdx_id=spdx_id, annotation_type=annotation_type,
                                                                annotator=annotator, annotation_date=annotation_date,
@@ -113,7 +115,6 @@ class AnnotationParser:
 
     def parse_review(self, review_dict: Dict, spdx_id: str) -> Annotation:
         logger = Logger()
-
         annotator: Optional[Actor] = try_parse_optional_field_append_logger_when_failing(logger=logger,
                                                                                          field=review_dict.get(
                                                                                              "reviewer"),
@@ -126,8 +127,7 @@ class AnnotationParser:
 
         annotation_type = AnnotationType.REVIEW
         comment: str = review_dict.get("comment")
-        if logger.has_messages():
-            raise SPDXParsingError([f"Error while parsing review: {logger.get_messages()}"])
+        raise_parsing_error_if_logger_has_messages(logger, "Review")
 
         annotation = try_construction_raise_parsing_error(Annotation,
                                                           dict(spdx_id=spdx_id, annotation_type=annotation_type,

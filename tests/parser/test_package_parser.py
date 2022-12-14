@@ -171,7 +171,7 @@ def test_package_with_falsy_values():
 
     assert err.type == SPDXParsingError
     assert err.value.get_messages() == [
-        'Error while parsing Package Example Package: ["Error while parsing checksum: [\'Algorithm SHA not valid for checksum.\']"]']
+        'Error while parsing Package Example Package: ["Error while parsing Checksum: [\'Algorithm SHA not valid for checksum.\']"]']
 
 
 def test_parse_packages():
@@ -198,7 +198,7 @@ def test_parse_packages():
         _ = package_parser.parse_packages(packages_list)
 
     assert err.type == SPDXParsingError
-    assert err.value.messages == ['Error while parsing Package Example Package: ["Error while parsing checksum: '
+    assert err.value.messages == ['Error while parsing Package Example Package: ["Error while parsing Checksum: '
                                   '[\'Algorithm SHA not valid for checksum.\']"]',
                                   "Error while constructing Package: ['SetterError Package: type of argument "
                                   '"name" must be str; got int instead: 5\']']

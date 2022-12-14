@@ -20,9 +20,11 @@ from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import datetime_from_str, parse_optional_field, \
+from src.parser.json.dict_parsing_functions import append_list_if_object_could_be_parsed_append_logger_if_not, \
+    datetime_from_str, parse_optional_field, raise_parsing_error_without_additional_text_if_logger_has_messages, \
+    raise_parsing_error_if_logger_has_messages, \
     transform_json_str_to_enum_name, try_construction_raise_parsing_error, \
-    try_parse_optional_field_append_logger_when_failing
+    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
@@ -42,14 +44,12 @@ class PackageParser:
     def parse_packages(self, packages_dict_list: List[Dict]) -> List[Package]:
         packages_list = []
         for package_dict in packages_dict_list:
-            try:
-                package: Package = self.parse_package(package_dict)
-                packages_list.append(package)
-            except SPDXParsingError as err:
-                self.logger.append_all(err.get_messages())
-                continue
-        if self.logger.has_messages():
-            raise SPDXParsingError(self.logger.get_messages())
+            packages_list = append_list_if_object_could_be_parsed_append_logger_if_not(logger=self.logger,
+                                                                                       list_to_append=packages_list,
+                                                                                       field=package_dict,
+                                                                                       method_to_parse=self.parse_package)
+
+        raise_parsing_error_without_additional_text_if_logger_has_messages(self.logger)
 
         return packages_list
 
@@ -129,8 +129,7 @@ class PackageParser:
                                                                                                    method_to_parse=datetime_from_str)
 
         version_info: Optional[str] = package_dict.get("versionInfo")
-        if logger.has_messages():
-            raise SPDXParsingError([f"Error while parsing Package {name}: {logger.get_messages()}"])
+        raise_parsing_error_if_logger_has_messages(logger, f"Package {name}")
 
         package = try_construction_raise_parsing_error(Package, dict(spdx_id=spdx_id, name=name,
                                                                      download_location=download_location,
@@ -158,25 +157,21 @@ class PackageParser:
     def parse_external_refs(self, external_ref_dicts: List[Dict]) -> List[ExternalPackageRef]:
         external_refs = []
         for external_ref_dict in external_ref_dicts:
-            try:
-                external_ref: ExternalPackageRef = self.parse_external_ref(external_ref_dict)
-                external_refs.append(external_ref)
-            except SPDXParsingError as err:
-                self.logger.append_all(err.get_messages())
+            external_refs = append_list_if_object_could_be_parsed_append_logger_if_not(logger=self.logger,
+                                                                                       list_to_append=external_refs,
+                                                                                       field=external_ref_dict,
+                                                                                       method_to_parse=self.parse_external_ref)
+
         return external_refs
 
     def parse_external_ref(self, external_ref_dict: Dict) -> ExternalPackageRef:
         logger = Logger()
-        try:
-            ref_category = self.parse_external_ref_category(external_ref_dict.get("referenceCategory"))
-        except SPDXParsingError as err:
-            logger.append_all(err.get_messages())
-            ref_category = None
+        ref_category = try_parse_required_field_append_logger_when_failing(logger=logger, field=external_ref_dict.get(
+            "referenceCategory"), method_to_parse=self.parse_external_ref_category)
         ref_locator = external_ref_dict.get("referenceLocator")
         ref_type = external_ref_dict.get("referenceType")
         comment = external_ref_dict.get("comment")
-        if logger.has_messages():
-            raise SPDXParsingError([f"Error while parsing external ref: {logger.get_messages()}"])
+        raise_parsing_error_if_logger_has_messages(logger, "external  ref")
         external_ref = try_construction_raise_parsing_error(ExternalPackageRef,
                                                             dict(category=ref_category, reference_type=ref_type,
                                                                  locator=ref_locator,

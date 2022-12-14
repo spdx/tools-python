@@ -17,7 +17,8 @@ from src.model.package import Package
 from src.parser.json.annotation_parser import AnnotationParser
 from src.parser.json.creation_info_parser import CreationInfoParser
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import try_construction_raise_parsing_error, \
+from src.parser.json.dict_parsing_functions import raise_parsing_error_without_additional_text_if_logger_has_messages, \
+    try_construction_raise_parsing_error, \
     try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
 from src.parser.json.extracted_licensing_parser import ExtractedLicensingInfoParser
 from src.parser.json.file_parser import FileParser
@@ -86,8 +87,7 @@ class JsonParser:
                                                                                            "hasExtractedLicensingInfos"),
                                                                                        method_to_parse=self.extracted_licenses_parser.parse_extracted_licensing_infos)
 
-        if self.logger.has_messages():
-            raise SPDXParsingError(self.logger.get_messages())
+        raise_parsing_error_without_additional_text_if_logger_has_messages(self.logger)
 
         document = try_construction_raise_parsing_error(Document, dict(creation_info=creation_info, packages=packages,
                                                                        files=files,
