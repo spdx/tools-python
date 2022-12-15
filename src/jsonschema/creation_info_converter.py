@@ -14,7 +14,7 @@ from src.datetime_conversions import datetime_to_iso_string
 from src.jsonschema.converter import TypedConverter
 from src.jsonschema.creation_info_properties import CreationInfoProperty
 from src.jsonschema.json_property import JsonProperty
-from src.model.document import CreationInfo
+from src.model.document import CreationInfo, Document
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
@@ -28,7 +28,8 @@ class CreationInfoConverter(TypedConverter):
     def json_property_name(self, creation_info_property: CreationInfoProperty) -> str:
         return snake_case_to_camel_case(creation_info_property.name)
 
-    def get_property_value(self, creation_info: CreationInfo, creation_info_property: CreationInfoProperty) -> Any:
+    def _get_property_value(self, creation_info: CreationInfo, creation_info_property: CreationInfoProperty,
+                            _document: Document = None) -> Any:
         if creation_info_property == CreationInfoProperty.CREATED:
             return datetime_to_iso_string(creation_info.created)
         elif creation_info_property == CreationInfoProperty.CREATORS:
