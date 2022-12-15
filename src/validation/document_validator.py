@@ -43,7 +43,6 @@ class DocumentValidator:
         validation_messages.extend(self.extracted_licensing_info_validator.validate_extracted_licensing_infos(
             document.extracted_licensing_info))
 
-        # TODO: is this correct here? Also, make test for it
         document_id = document.creation_info.spdx_id
         document_describes_relationships = [relationship for relationship in document.relationships if
                                             relationship.relationship_type == RelationshipType.DESCRIBES and relationship.spdx_element_id == document_id]

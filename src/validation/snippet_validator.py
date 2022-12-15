@@ -3,7 +3,7 @@ from typing import List
 from src.model.document import Document
 from src.model.snippet import Snippet
 from src.validation.license_expression_validator import LicenseExpressionValidator
-from src.validation.spdx_id_validation import validate_spdx_id
+from src.validation.spdx_id_validators import validate_spdx_id
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
@@ -39,14 +39,14 @@ class SnippetValidator:
         if snippet.byte_range[0] < 1:
             validation_messages.append(
                 ValidationMessage(
-                    f'byte_range values must be greater than or equal to 1, but is: {snippet.byte_range}',
+                    f"byte_range values must be greater than or equal to 1, but is: {snippet.byte_range}",
                     context)
             )
 
         if snippet.byte_range[0] > snippet.byte_range[1]:
             validation_messages.append(
                 ValidationMessage(
-                    f'the first value of byte_range must be less than or equal to the second, but is: {snippet.byte_range}',
+                    f"the first value of byte_range must be less than or equal to the second, but is: {snippet.byte_range}",
                     context)
             )
 
@@ -54,14 +54,14 @@ class SnippetValidator:
             if snippet.line_range[0] < 1:
                 validation_messages.append(
                     ValidationMessage(
-                        f'line_range values must be greater than or equal to 1, but is: {snippet.line_range}',
+                        f"line_range values must be greater than or equal to 1, but is: {snippet.line_range}",
                         context)
                 )
 
             if snippet.line_range[0] > snippet.line_range[1]:
                 validation_messages.append(
                     ValidationMessage(
-                        f'the first value of line_range must be less than or equal to the second, but is: {snippet.line_range}',
+                        f"the first value of line_range must be less than or equal to the second, but is: {snippet.line_range}",
                         context)
                 )
 

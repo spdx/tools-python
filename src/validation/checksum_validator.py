@@ -44,7 +44,8 @@ class ChecksumValidator:
     def validate_checksum(self, checksum: Checksum) -> List[ValidationMessage]:
         validation_messages = []
         algorithm = checksum.algorithm
-        context = ValidationContext(parent_id=self.parent_id, element_type=SpdxElementType.CHECKSUM, full_element=checksum)
+        context = ValidationContext(parent_id=self.parent_id, element_type=SpdxElementType.CHECKSUM,
+                                    full_element=checksum)
 
         if not re.match("^[0-9a-f]{" + algorithm_length[algorithm] + "}$", checksum.value):
             if algorithm == ChecksumAlgorithm.BLAKE3:
@@ -54,7 +55,9 @@ class ChecksumValidator:
             else:
                 length = algorithm_length[algorithm]
             validation_messages.append(
-                ValidationMessage(f'value of {algorithm} must consist of {length} hexadecimal digits, but is: {checksum.value} (length: {len(checksum.value)} digits)', context)
+                ValidationMessage(
+                    f"value of {algorithm} must consist of {length} hexadecimal digits, but is: {checksum.value} (length: {len(checksum.value)} digits)",
+                    context)
             )
 
         return validation_messages

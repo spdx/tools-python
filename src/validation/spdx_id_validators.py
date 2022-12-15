@@ -1,11 +1,11 @@
 import re
-from typing import Optional, List, Tuple
+from typing import List
 
 from src.model.document import Document
 from src.model.file import File
 
 
-def is_valid_spdx_id(spdx_id: str) -> bool:
+def is_valid_internal_spdx_id(spdx_id: str) -> bool:
     return bool(re.match(r"^SPDXRef-[\da-zA-Z.-]+$", spdx_id))
 
 
@@ -40,7 +40,8 @@ def is_external_doc_ref_present_in_document(external_ref_id: str, document: Docu
     return external_ref_id in all_external_doc_ref_ids_in_document
 
 
-def validate_spdx_id(spdx_id: str, document: Document, check_document: bool = False, check_files: bool = False) -> List[str]:
+def validate_spdx_id(spdx_id: str, document: Document, check_document: bool = False, check_files: bool = False) -> List[
+    str]:
     """ Test that the given spdx_id (and a potential DocumentRef to an external document) is valid
     and, if it is a reference, actually exists in the document. Optionally checks files or the whole document
     for the existence of the spdx_id (i.e. if it is used as a reference). Returns a list of validation messages,
@@ -51,29 +52,34 @@ def validate_spdx_id(spdx_id: str, document: Document, check_document: bool = Fa
 
     # # # invalid case # # #
     if len(split_id) > 2:
-        return [f'spdx_id must not contain more than one colon in order to separate the external document reference id from the internal SPDX id, but is: {spdx_id}']
+        return [
+            f"spdx_id must not contain more than one colon in order to separate the external document reference id from the internal SPDX id, but is: {spdx_id}"]
 
     # # # case with external document ref prefix # # #
     if len(split_id) == 2:
         if not is_valid_external_doc_ref_id(split_id[0]):
-            validation_messages.append(f'the external document reference part of spdx_id must only contain letters, numbers, ".", "-" and "+" and must begin with "DocumentRef-", but is: {split_id[0]}')
-        if not is_valid_spdx_id(split_id[1]):
-            validation_messages.append(f'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: {split_id[1]}')
+            validation_messages.append(
+                f'the external document reference part of spdx_id must only contain letters, numbers, ".", "-" and "+" and must begin with "DocumentRef-", but is: {split_id[0]}')
+        if not is_valid_internal_spdx_id(split_id[1]):
+            validation_messages.append(
+                f'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: {split_id[1]}')
         if not is_external_doc_ref_present_in_document(split_id[0], document):
-            validation_messages.append(f'did not find the external document reference {split_id[0]} in the SPDX document')
+            validation_messages.append(
+                f"did not find the external document reference {split_id[0]} in the SPDX document")
 
         return validation_messages
 
     # # # "normal" case # # #
-    if not is_valid_spdx_id(spdx_id):
-        validation_messages.append(f'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: {spdx_id}')
+    if not is_valid_internal_spdx_id(spdx_id):
+        validation_messages.append(
+            f'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: {spdx_id}')
 
     if check_document:
         if not is_spdx_id_present_in_document(spdx_id, document):
-            validation_messages.append(f'did not find the referenced spdx_id {spdx_id} in the SPDX document')
+            validation_messages.append(f"did not find the referenced spdx_id {spdx_id} in the SPDX document")
 
     if check_files:
         if not is_spdx_id_present_in_files(spdx_id, document.files):
-            validation_messages.append(f'did not find the referenced spdx_id {spdx_id} in the SPDX document\'s files')
+            validation_messages.append(f"did not find the referenced spdx_id {spdx_id} in the SPDX document's files")
 
     return validation_messages

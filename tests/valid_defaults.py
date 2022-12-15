@@ -33,27 +33,12 @@ def get_creation_info(spdx_version="SPDX-2.3", spdx_id="SPDXRef-DOCUMENT", name=
     if creators is None:
         creators = [get_actor()]
 
-    if external_document_refs is None:
-        external_document_refs = []
-
     return CreationInfo(spdx_version, spdx_id, name, document_namespace, creators, created, creator_comment,
                         data_license, external_document_refs, license_list_version, document_comment)
 
 
 def get_document(creation_info=get_creation_info(), packages=None, files=None, snippets=None, annotations=None,
                  relationships=None, extracted_licensing_info=None) -> Document:
-    if packages is None:
-        packages = []
-    if files is None:
-        files = []
-    if snippets is None:
-        snippets = []
-    if annotations is None:
-        annotations = []
-    if relationships is None:
-        relationships = []
-    if extracted_licensing_info is None:
-        extracted_licensing_info = []
 
     return Document(creation_info, packages, files, snippets, annotations, relationships, extracted_licensing_info)
 
@@ -73,13 +58,9 @@ def get_extracted_licensing_info(license_id="LicenseRef-1", extracted_text="extr
 
 def get_file(name="./file/name.py", spdx_id="SPDXRef-File", checksums=None, file_type=None, concluded_license=None,
              license_info_in_file=None, license_comment=None, copyright_text=None, comment=None, notice=None,
-             contributors=None, attribution_texts=None):
+             contributors=None, attribution_texts=None) -> File:
     if checksums is None:
         checksums = [get_checksum()]
-    if contributors is None:
-        contributors = []
-    if attribution_texts is None:
-        attribution_texts = []
 
     return File(name, spdx_id, checksums, file_type, concluded_license, license_info_in_file, license_comment,
                 copyright_text, comment, notice, contributors, attribution_texts)
@@ -87,8 +68,6 @@ def get_file(name="./file/name.py", spdx_id="SPDXRef-File", checksums=None, file
 
 def get_package_verification_code(value="85ed0817af83a24ad8da68c2b5094de69833983c",
                                   excluded_files=None) -> PackageVerificationCode:
-    if excluded_files is None:
-        excluded_files = []
 
     return PackageVerificationCode(value, excluded_files)
 
@@ -105,12 +84,6 @@ def get_package(spdx_id="SPDXRef-Package", name="package name", download_locatio
                 license_declared=None, license_comment=None, copyright_text=None, summary=None, description=None,
                 comment=None, external_references=None, attribution_texts=None, primary_package_purpose=None,
                 release_date=None, built_date=None, valid_until_date=None) -> Package:
-    if checksums is None:
-        checksums = []
-    if external_references is None:
-        external_references = []
-    if attribution_texts is None:
-        attribution_texts = []
 
     return Package(spdx_id, name, download_location, version, file_name, supplier, originator, files_analyzed,
                    verification_code, checksums, homepage, source_info, license_concluded, license_info_from_files,
@@ -127,8 +100,6 @@ def get_relationship(spdx_element_id="SPDXRef-DOCUMENT", relationship_type=Relat
 def get_snippet(spdx_id="SPDXRef-Snippet", file_spdx_id="SPDXRef-File", byte_range=(200, 400), line_range=None,
                 concluded_license=None, license_info_in_snippet=None, license_comment=None, copyright_text=None,
                 comment=None, name=None, attribution_texts=None) -> Snippet:
-    if attribution_texts is None:
-        attribution_texts = []
 
     return Snippet(spdx_id, file_spdx_id, byte_range, line_range, concluded_license, license_info_in_snippet,
                    license_comment, copyright_text, comment, name, attribution_texts)

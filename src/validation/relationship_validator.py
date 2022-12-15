@@ -2,7 +2,7 @@ from typing import List
 
 from src.model.document import Document
 from src.model.relationship import Relationship, RelationshipType
-from src.validation.spdx_id_validation import validate_spdx_id
+from src.validation.spdx_id_validators import validate_spdx_id
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
@@ -37,6 +37,7 @@ class RelationshipValidator:
 
         if self.spdx_version != "2.3":
             if relationship_type == RelationshipType.SPECIFICATION_FOR or relationship_type == RelationshipType.REQUIREMENT_DESCRIPTION_FOR:
-                validation_messages.append(ValidationMessage(f'{relationship_type} is not supported for SPDX versions below 2.3', context))
+                validation_messages.append(
+                    ValidationMessage(f"{relationship_type} is not supported for SPDX versions below 2.3", context))
 
         return validation_messages

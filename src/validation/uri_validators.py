@@ -8,29 +8,29 @@ supported_download_repos: str = "(git|hg|svn|bzr)"
 git_pattern = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-]+)"
 bazaar_pattern = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)"
 download_location_pattern = (
-        "^(((" + supported_download_repos + "\\+)?" + url_pattern + ")|" + git_pattern + "|" + bazaar_pattern + ")$")
+    "^(((" + supported_download_repos + "\\+)?" + url_pattern + ")|" + git_pattern + "|" + bazaar_pattern + ")$")
 
 
 def validate_url(url: str) -> List[str]:
     if not re.match(url_pattern, url):
-        return [f'must be a valid URL, but is: {url}']
+        return [f"must be a valid URL, but is: {url}"]
 
     return []
 
 
-def validate_package_download_location(location: str) -> List[str]:
+def validate_download_location(location: str) -> List[str]:
     if not re.match(download_location_pattern, location):
-        return [f'must be a valid download location, but is: {location}']
+        return [f"must be a valid download location according to the specification, but is: {location}"]
 
     return []
 
 
 def validate_uri(uri: str) -> List[str]:
     if not isabsuri(uri):
-        return [f'must be a valid URI specified in RFC-3986, but is: {uri}']
+        return [f"must be a valid URI specified in RFC-3986, but is: {uri}"]
     else:
         split = urisplit(uri)
         if split.scheme is None:
-            return [f'must have a URI scheme, but is: {uri}']
+            return [f"must have a URI scheme, but is: {uri}"]
 
     return []

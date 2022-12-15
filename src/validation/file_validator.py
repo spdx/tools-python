@@ -4,9 +4,9 @@ from src.model.checksum import ChecksumAlgorithm
 from src.model.document import Document
 from src.model.file import File
 from src.validation.checksum_validator import ChecksumValidator
-from src.validation.spdx_id_validation import is_valid_spdx_id, validate_spdx_id
-from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from src.validation.license_expression_validator import LicenseExpressionValidator
+from src.validation.spdx_id_validators import validate_spdx_id
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 class FileValidator:
@@ -44,7 +44,7 @@ class FileValidator:
         if ChecksumAlgorithm.SHA1 not in [checksum.algorithm for checksum in file.checksums]:
             validation_messages.append(
                 ValidationMessage(
-                    f'checksums must contain a SHA1 algorithm checksum, but is: {file.checksums}',
+                    f"checksums must contain a SHA1 algorithm checksum, but only contains: {[checksum.algorithm for checksum in file.checksums]}",
                     context)
             )
 

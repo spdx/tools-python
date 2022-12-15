@@ -7,8 +7,8 @@ from src.validation.checksum_validator import ChecksumValidator
 from src.validation.external_package_ref_validator import ExternalPackageRefValidator
 from src.validation.license_expression_validator import LicenseExpressionValidator
 from src.validation.package_verification_code_validator import PackageVerificationCodeValidator
-from src.validation.spdx_id_validation import validate_spdx_id
-from src.validation.uri_validators import validate_url, validate_package_download_location
+from src.validation.spdx_id_validators import validate_spdx_id
+from src.validation.uri_validators import validate_url, validate_download_location
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
@@ -30,7 +30,7 @@ class PackageValidator:
         return validation_messages
 
     def validate_package(self, package: Package) -> List[ValidationMessage]:
-        checksum_validator = ChecksumValidator(self.spdx_version, parent_id=package.spdx_id)
+        checksum_validator = ChecksumValidator(self.spdx_version, package.spdx_id)
         verification_code_validator = PackageVerificationCodeValidator(self.spdx_version, package.spdx_id)
         external_package_ref_validator = ExternalPackageRefValidator(self.spdx_version, package.spdx_id)
 
@@ -43,8 +43,8 @@ class PackageValidator:
 
         download_location = package.download_location
         if isinstance(download_location, str):
-            for message in validate_package_download_location(download_location):
-                validation_messages.append(ValidationMessage("download_location " + message, context))
+            for message in validate_download_location(download_location):
+                validation_messages.append(ValidationMessage("package download_location " + message, context))
 
         homepage = package.homepage
         if isinstance(homepage, str):
@@ -55,7 +55,7 @@ class PackageValidator:
             if not package.files_analyzed:
                 validation_messages.append(
                     ValidationMessage(
-                        f'verification_code must be None if files_analyzed is False, but is: {package.verification_code}',
+                        f"verification_code must be None if files_analyzed is False, but is: {package.verification_code}",
                         context))
             else:
                 validation_messages.extend(
@@ -69,7 +69,7 @@ class PackageValidator:
             if package_contains_relationships:
                 validation_messages.append(
                     ValidationMessage(
-                        f'package must contain no elements if files_analyzed is False, but found {package_contains_relationships}',
+                        f"package must contain no elements if files_analyzed is False, but found {package_contains_relationships}",
                         context)
                 )
 
@@ -78,7 +78,7 @@ class PackageValidator:
             if contained_in_package_relationships:
                 validation_messages.append(
                     ValidationMessage(
-                        f'package must contain no elements if files_analyzed is False, but found {package_contains_relationships}',
+                        f"package must contain no elements if files_analyzed is False, but found {package_contains_relationships}",
                         context)
                 )
 
@@ -94,7 +94,7 @@ class PackageValidator:
             if not package.files_analyzed:
                 validation_messages.append(
                     ValidationMessage(
-                        f'license_info_from_files must be None if files_analyzed is False, but is: {package.license_info_from_files}',
+                        f"license_info_from_files must be None if files_analyzed is False, but is: {package.license_info_from_files}",
                         context)
                 )
             else:

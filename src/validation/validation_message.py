@@ -20,7 +20,7 @@ class SpdxElementType(Enum):
     EXTRACTED_LICENSING_INFO = auto()
 
 
-@dataclass(eq=True, frozen=True)
+@dataclass(frozen=True)
 class ValidationContext:
     spdx_id: Optional[str] = None  # not every type has an id, or it might be missing
     parent_id: Optional[str] = None  # if a parent is known and has a valid id
@@ -28,7 +28,7 @@ class ValidationContext:
     full_element: Any = None  # can be any class of the data model
 
 
-@dataclass(eq=True, frozen=True)
+@dataclass(frozen=True)
 class ValidationMessage:
     validation_message: str
     context: ValidationContext

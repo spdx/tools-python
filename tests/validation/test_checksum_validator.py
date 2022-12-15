@@ -37,7 +37,7 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
                           Checksum(ChecksumAlgorithm.MD6,
                                    "af1eec2a1b18886c3f3cc244349d91d8d4c41ce30a517d6ce9d79c8c17bb4b660d7f61beb7018b3924c6b8f96549fa39"),
                           Checksum(ChecksumAlgorithm.ADLER32, "02ec0130")])
-def test_correct_checksum(checksum):
+def test_valid_checksum(checksum):
     checksum_validator = ChecksumValidator("2.3", "parent_id")
 
     validation_messages: List[ValidationMessage] = checksum_validator.validate_checksum(checksum)
@@ -47,42 +47,42 @@ def test_correct_checksum(checksum):
 
 @pytest.mark.parametrize("checksum, expected_message",
                          [(Checksum(ChecksumAlgorithm.SHA1, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.SHA1 must consist of 40 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.SHA1 must consist of 40 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.SHA224, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.SHA224 must consist of 56 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.SHA224 must consist of 56 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.SHA256, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.SHA256 must consist of 64 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.SHA256 must consist of 64 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.SHA384, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.SHA384 must consist of 96 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.SHA384 must consist of 96 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.SHA512, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.SHA512 must consist of 128 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.SHA512 must consist of 128 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.SHA3_256, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.SHA3_256 must consist of 64 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.SHA3_256 must consist of 64 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.SHA3_384, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.SHA3_384 must consist of 96 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.SHA3_384 must consist of 96 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.SHA3_512, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.SHA3_512 must consist of 128 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.SHA3_512 must consist of 128 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.BLAKE2B_256, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.BLAKE2B_256 must consist of 64 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.BLAKE2B_256 must consist of 64 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.BLAKE2B_384, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.BLAKE2B_384 must consist of 96 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.BLAKE2B_384 must consist of 96 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.BLAKE2B_512, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.BLAKE2B_512 must consist of 128 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.BLAKE2B_512 must consist of 128 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.BLAKE3, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.BLAKE3 must consist of at least 256 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.BLAKE3 must consist of at least 256 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           (Checksum(ChecksumAlgorithm.MD2, "71c4025dd9897b364f3ebbb42c484ff43d00791c"),
-                           'value of ChecksumAlgorithm.MD2 must consist of 32 hexadecimal digits, but is: 71c4025dd9897b364f3ebbb42c484ff43d00791c (length: 40 digits)'),
+                           "value of ChecksumAlgorithm.MD2 must consist of 32 hexadecimal digits, but is: 71c4025dd9897b364f3ebbb42c484ff43d00791c (length: 40 digits)"),
                           (Checksum(ChecksumAlgorithm.MD4, "71c4025dd9897b364f3ebbb42c484ff43d00791c"),
-                           'value of ChecksumAlgorithm.MD4 must consist of 32 hexadecimal digits, but is: 71c4025dd9897b364f3ebbb42c484ff43d00791c (length: 40 digits)'),
+                           "value of ChecksumAlgorithm.MD4 must consist of 32 hexadecimal digits, but is: 71c4025dd9897b364f3ebbb42c484ff43d00791c (length: 40 digits)"),
                           (Checksum(ChecksumAlgorithm.MD5, "71c4025dd9897b364f3ebbb42c484ff43d00791c"),
-                           'value of ChecksumAlgorithm.MD5 must consist of 32 hexadecimal digits, but is: 71c4025dd9897b364f3ebbb42c484ff43d00791c (length: 40 digits)'),
+                           "value of ChecksumAlgorithm.MD5 must consist of 32 hexadecimal digits, but is: 71c4025dd9897b364f3ebbb42c484ff43d00791c (length: 40 digits)"),
                           (Checksum(ChecksumAlgorithm.MD6,
                                     "a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafed5"),
-                           'value of ChecksumAlgorithm.MD6 must consist of between 0 and 512 hexadecimal digits, but is: a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafed5 (length: 513 digits)'),
+                           "value of ChecksumAlgorithm.MD6 must consist of between 0 and 512 hexadecimal digits, but is: a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafed5 (length: 513 digits)"),
                           (Checksum(ChecksumAlgorithm.ADLER32, "af1eec2a1b18886c3f3cc244349d91d8"),
-                           'value of ChecksumAlgorithm.ADLER32 must consist of 8 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)'),
+                           "value of ChecksumAlgorithm.ADLER32 must consist of 8 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           ])
-def test_wrong_checksum(checksum, expected_message):
+def test_invalid_checksum(checksum, expected_message):
     parent_id = "parent_id"
     checksum_validator = ChecksumValidator("2.3", parent_id)
     validation_messages: List[ValidationMessage] = checksum_validator.validate_checksum(checksum)
