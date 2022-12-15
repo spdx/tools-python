@@ -1,11 +1,10 @@
-
-from uritools import isuri, isabsuri
 import pytest
 
 from src.validation.uri_validators import validate_url, validate_package_download_location, validate_uri
 
 
-@pytest.mark.parametrize("input_value", ['https://some.url', "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82...",
+@pytest.mark.parametrize("input_value", ['https://some.url',
+                                         "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82...",
                                          "http://some.url", "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz"])
 def test_valid_url(input_value):
     assert validate_url(input_value) == []
@@ -72,28 +71,30 @@ def test_valid_package_download_location(input_value):
 # TODO: more negative examples
 @pytest.mark.parametrize("input_value", [':::::', ])
 def test_invalid_package_download_location(input_value):
-    assert validate_package_download_location(input_value) == [f'must be a valid download location, but is: {input_value}']
+    assert validate_package_download_location(input_value) == [
+        f'must be a valid download location, but is: {input_value}']
 
 
-@pytest.mark.parametrize("input_value", ['https://some.uri', "http:////some", "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82...",
+@pytest.mark.parametrize("input_value", ['https://some.uri', "http:////some",
+                                         "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82...",
                                          'h://someweirdtest^?', "https://some.uri that goes on!?"])
 def test_valid_uri(input_value):
     message = validate_uri(input_value)
 
     assert message == []
-    
+
 
 @pytest.mark.parametrize("input_value", ["/invalid/uri", "http//uri", "http://some#uri", "some/uri", 'some weird test'])
 def test_invalid_uri(input_value):
     message = validate_uri(input_value)
-    
+
     assert message == [f'must be a valid URI specified in RFC-3986, but is: {input_value}']
 
 
 @pytest.mark.parametrize("input_value", ['://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82...'])
-@pytest.mark.skip("validate_uri() seems to invalidate URIs without scheme, so it does not run into this case. But I'm not sure yet if this covers all scheme-less examples.")
+@pytest.mark.skip(
+    "validate_uri() seems to invalidate URIs without scheme, so it does not run into this case. But I'm not sure yet if this covers all scheme-less examples.")
 def test_uri_without_scheme(input_value):
     message = validate_uri(input_value)
 
     assert message == [f'must have a URI scheme, but is: {input_value}']
-

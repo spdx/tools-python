@@ -4,9 +4,9 @@ from src.model.checksum import ChecksumAlgorithm
 from src.model.document import Document
 from src.model.file import File
 from src.validation.checksum_validator import ChecksumValidator
-from src.validation.spdx_id_validation import is_valid_spdx_id, validate_spdx_id
-from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from src.validation.license_expression_validator import LicenseExpressionValidator
+from src.validation.spdx_id_validation import validate_spdx_id
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
 class FileValidator:

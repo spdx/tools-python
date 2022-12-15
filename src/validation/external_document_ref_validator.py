@@ -1,5 +1,5 @@
 import re
-from typing import List, Optional
+from typing import List
 
 from src.model.external_document_ref import ExternalDocumentRef
 from src.validation.checksum_validator import ChecksumValidator
@@ -17,7 +17,8 @@ class ExternalDocumentRefValidator:
         self.parent_id = parent_id
         self.checksum_validator = ChecksumValidator(spdx_version, parent_id)
 
-    def validate_external_document_refs(self, external_document_refs: List[ExternalDocumentRef]) -> List[ValidationMessage]:
+    def validate_external_document_refs(self, external_document_refs: List[ExternalDocumentRef]) -> List[
+        ValidationMessage]:
         validation_messages = []
         for external_document_ref in external_document_refs:
             validation_messages.extend(self.validate_external_document_ref(external_document_ref))

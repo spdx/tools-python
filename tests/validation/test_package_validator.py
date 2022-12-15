@@ -41,7 +41,8 @@ def test_correct_package():
                            'license_info_from_files must be None if files_analyzed is False, but is: NONE'),
                           (get_package(files_analyzed=False, license_info_from_files=SpdxNoAssertion()),
                            'license_info_from_files must be None if files_analyzed is False, but is: NOASSERTION'),
-                          (get_package(files_analyzed=False, license_info_from_files=[LicenseExpression("some_license")]),
+                          (get_package(files_analyzed=False,
+                                       license_info_from_files=[LicenseExpression("some_license")]),
                            'license_info_from_files must be None if files_analyzed is False, but is: [LicenseExpression(expression_string=\'some_license\')]')
                           ])
 def test_wrong_package(package_input, expected_message):
@@ -51,7 +52,8 @@ def test_wrong_package(package_input, expected_message):
     validation_messages: List[ValidationMessage] = package_validator.validate_package(package)
 
     expected = ValidationMessage(expected_message,
-                                 ValidationContext(spdx_id=package.spdx_id, parent_id=parent_id, element_type=SpdxElementType.PACKAGE,
+                                 ValidationContext(spdx_id=package.spdx_id, parent_id=parent_id,
+                                                   element_type=SpdxElementType.PACKAGE,
                                                    full_element=package))
 
     assert validation_messages == [expected]

@@ -1,5 +1,6 @@
 import re
-from typing import List, Optional
+from typing import List
+
 from src.model.document import CreationInfo
 from src.validation.actor_validator import ActorValidator
 from src.validation.external_document_ref_validator import ExternalDocumentRefValidator

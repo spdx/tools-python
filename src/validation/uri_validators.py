@@ -8,7 +8,7 @@ supported_download_repos: str = "(git|hg|svn|bzr)"
 git_pattern = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-]+)"
 bazaar_pattern = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)"
 download_location_pattern = (
-        "^(((" + supported_download_repos + "\\+)?" + url_pattern + ")|" + git_pattern + "|" + bazaar_pattern + ")$")
+    "^(((" + supported_download_repos + "\\+)?" + url_pattern + ")|" + git_pattern + "|" + bazaar_pattern + ")$")
 
 
 def validate_url(url: str) -> List[str]:

@@ -12,7 +12,8 @@ class LicenseExpressionValidator:
     def __init__(self, spdx_version):
         self.spdx_version = spdx_version
 
-    def validate_license_expressions(self, license_expressions: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]]) -> List[ValidationMessage]:
+    def validate_license_expressions(self, license_expressions: Optional[
+        Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]]) -> List[ValidationMessage]:
         if license_expressions in [SpdxNoAssertion(), SpdxNone(), None]:
             return []
 

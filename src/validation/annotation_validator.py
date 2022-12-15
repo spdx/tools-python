@@ -39,4 +39,3 @@ class AnnotationValidator:
             validation_messages.append(ValidationMessage(message, context))
 
         return validation_messages
-

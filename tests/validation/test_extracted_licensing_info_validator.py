@@ -11,7 +11,8 @@ from tests.valid_defaults import get_extracted_licensing_info
 def test_correct_extracted_licensing_info():
     extracted_licensing_info_validator = ExtractedLicensingInfoValidator("2.3")
 
-    extracted_licensing_info = ExtractedLicensingInfo("LicenseRef-1", "extracted text", "license name", ["http://some.url"], "comment")
+    extracted_licensing_info = ExtractedLicensingInfo("LicenseRef-1", "extracted text", "license name",
+                                                      ["http://some.url"], "comment")
     validation_messages: List[ValidationMessage] = extracted_licensing_info_validator.validate_extracted_licensing_info(
         extracted_licensing_info)
 
@@ -29,11 +30,11 @@ def test_correct_extracted_licensing_info():
                           ])
 def test_wrong_extracted_licensing_info(extracted_licensing_info, expected_message):
     extracted_licensing_info_validator = ExtractedLicensingInfoValidator("2.3")
-    validation_messages: List[ValidationMessage] = extracted_licensing_info_validator.validate_extracted_licensing_info(extracted_licensing_info)
+    validation_messages: List[ValidationMessage] = extracted_licensing_info_validator.validate_extracted_licensing_info(
+        extracted_licensing_info)
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(element_type=SpdxElementType.EXTRACTED_LICENSING_INFO,
                                                    full_element=extracted_licensing_info))
 
     assert validation_messages == [expected]
-
