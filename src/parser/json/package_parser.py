@@ -20,11 +20,9 @@ from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import append_list_if_object_could_be_parsed_append_logger_if_not, \
-    datetime_from_str, parse_optional_field, raise_parsing_error_without_additional_text_if_logger_has_messages, \
-    raise_parsing_error_if_logger_has_messages, \
-    transform_json_str_to_enum_name, try_construction_raise_parsing_error, \
-    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
+from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, datetime_from_str, \
+    raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, construct_or_raise_parsing_error, \
+    parse_field_or_log_error
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
@@ -44,12 +42,10 @@ class PackageParser:
     def parse_packages(self, packages_dict_list: List[Dict]) -> List[Package]:
         packages_list = []
         for package_dict in packages_dict_list:
-            packages_list = append_list_if_object_could_be_parsed_append_logger_if_not(logger=self.logger,
-                                                                                       list_to_append=packages_list,
-                                                                                       field=package_dict,
-                                                                                       method_to_parse=self.parse_package)
+            packages_list = append_parsed_field_or_log_error(logger=self.logger, list_to_append_to=packages_list,
+                                                             field=package_dict, method_to_parse=self.parse_package)
 
-        raise_parsing_error_without_additional_text_if_logger_has_messages(self.logger)
+        raise_parsing_error_if_logger_has_messages(self.logger)
 
         return packages_list
 
@@ -59,123 +55,118 @@ class PackageParser:
         spdx_id: str = package_dict.get("SPDXID")
         attribution_texts: List[str] = package_dict.get("attributionTexts")
 
-        built_date: Optional[datetime] = try_parse_optional_field_append_logger_when_failing(logger=logger,
-                                                                                             field=package_dict.get(
-                                                                                                 "builtDate"),
-                                                                                             method_to_parse=datetime_from_str)
+        built_date: Optional[datetime] = parse_field_or_log_error(logger=logger, field=package_dict.get("builtDate"),
+                                                                  parsing_method=datetime_from_str, optional=True)
 
-        checksums = try_parse_optional_field_append_logger_when_failing(logger=logger,
-                                                                        field=package_dict.get("checksums"),
-                                                                        method_to_parse=self.checksum_parser.parse_checksums)
+        checksums = parse_field_or_log_error(logger=logger, field=package_dict.get("checksums"),
+                                             parsing_method=self.checksum_parser.parse_checksums, optional=True)
         comment: Optional[str] = package_dict.get("comment")
         copyright_text: Optional[str] = package_dict.get("copyrightText")
         description: Optional[str] = package_dict.get("description")
         download_location: Union[str, SpdxNoAssertion, SpdxNone] = self.parse_download_location(
             package_dict.get("downloadLocation"))
 
-        external_refs: List[ExternalPackageRef] = try_parse_optional_field_append_logger_when_failing(logger=logger,
-                                                                                                      field=package_dict.get(
-                                                                                                          "externalRefs"),
-                                                                                                      method_to_parse=self.parse_external_refs)
+        external_refs: List[ExternalPackageRef] = parse_field_or_log_error(logger=logger,
+                                                                           field=package_dict.get("externalRefs"),
+                                                                           parsing_method=self.parse_external_refs,
+                                                                           optional=True)
 
-        files_analyzed: Optional[bool] = parse_optional_field(package_dict.get("filesAnalyzed"), default=True)
+        files_analyzed: Optional[bool] = parse_field_or_log_error(logger=logger,
+                                                                  field=package_dict.get("filesAnalyzed"),
+                                                                  parsing_method=lambda x: x,
+                                                                  optional=True, default=True)
         homepage: Optional[str] = package_dict.get("homepage")
         license_comments: Optional[str] = package_dict.get("licenseComments")
-        license_concluded = try_parse_optional_field_append_logger_when_failing(logger, field=package_dict.get(
-            "licenseConcluded"),
-                                                                                method_to_parse=self.license_expression_parser.parse_license_expression,
-                                                                                default=None)
+        license_concluded = parse_field_or_log_error(logger=logger, field=package_dict.get("licenseConcluded"),
+                                                     parsing_method=self.license_expression_parser.parse_license_expression,
+                                                     default=None, optional=True)
 
-        license_declared: Optional[
-            Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = try_parse_optional_field_append_logger_when_failing(
+        license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
             logger=logger, field=package_dict.get("licenseDeclared"),
-            method_to_parse=self.license_expression_parser.parse_license_expression)
+            parsing_method=self.license_expression_parser.parse_license_expression, optional=True)
 
         license_info_from_file: Optional[
-            Union[List[
-                LicenseExpression], SpdxNoAssertion, SpdxNone]] = try_parse_optional_field_append_logger_when_failing(
+            Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
             logger=logger, field=package_dict.get("licenseInfoFromFiles"),
-            method_to_parse=self.license_expression_parser.parse_license_expression)
+            parsing_method=self.license_expression_parser.parse_license_expression, optional=True)
 
-        originator: Optional[Union[Actor, SpdxNoAssertion]] = try_parse_optional_field_append_logger_when_failing(
+        originator: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(
             logger=logger, field=package_dict.get("originator"),
-            method_to_parse=self.actor_parser.parse_actor_or_no_assert)
+            parsing_method=self.actor_parser.parse_actor_or_no_assertion, optional=True)
 
         package_file_name: Optional[str] = package_dict.get("packageFileName")
 
         package_verification_code: Optional[
-            PackageVerificationCode] = try_parse_optional_field_append_logger_when_failing(logger=logger,
-                                                                                           field=package_dict.get(
-                                                                                               "packageVerificationCode"),
-                                                                                           method_to_parse=self.parse_package_verification_code)
-        primary_package_purpose: Optional[PackagePurpose] = try_parse_optional_field_append_logger_when_failing(
+            PackageVerificationCode] = parse_field_or_log_error(logger=logger,
+                                                                field=package_dict.get("packageVerificationCode"),
+                                                                parsing_method=self.parse_package_verification_code,
+                                                                optional=True)
+        primary_package_purpose: Optional[PackagePurpose] = parse_field_or_log_error(
             logger=logger, field=package_dict.get("primaryPackagePurpose"),
-            method_to_parse=self.parse_primary_package_purpose)
+            parsing_method=self.parse_primary_package_purpose, optional=True)
 
-        release_date: Optional[datetime] = try_parse_optional_field_append_logger_when_failing(logger=logger,
-                                                                                               field=package_dict.get(
-                                                                                                   "releaseDate"),
-                                                                                               method_to_parse=datetime_from_str)
+        release_date: Optional[datetime] = parse_field_or_log_error(logger=logger,
+                                                                    field=package_dict.get("releaseDate"),
+                                                                    parsing_method=datetime_from_str, optional=True)
 
         source_info: Optional[str] = package_dict.get("sourceInfo")
         summary: Optional[str] = package_dict.get("summary")
-        supplier: Optional[Union[Actor, SpdxNoAssertion]] = try_parse_optional_field_append_logger_when_failing(
+        supplier: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(
             logger=logger, field=package_dict.get("supplier"),
-            method_to_parse=self.actor_parser.parse_actor_or_no_assert)
+            parsing_method=self.actor_parser.parse_actor_or_no_assertion, optional=True)
 
-        valid_until_date: Optional[datetime] = try_parse_optional_field_append_logger_when_failing(logger=logger,
-                                                                                                   field=package_dict.get(
-                                                                                                       "validUntilDate"),
-                                                                                                   method_to_parse=datetime_from_str)
+        valid_until_date: Optional[datetime] = parse_field_or_log_error(logger=logger,
+                                                                        field=package_dict.get("validUntilDate"),
+                                                                        parsing_method=datetime_from_str,
+                                                                        optional=True)
 
         version_info: Optional[str] = package_dict.get("versionInfo")
         raise_parsing_error_if_logger_has_messages(logger, f"Package {name}")
 
-        package = try_construction_raise_parsing_error(Package, dict(spdx_id=spdx_id, name=name,
-                                                                     download_location=download_location,
-                                                                     version=version_info,
-                                                                     file_name=package_file_name, supplier=supplier,
-                                                                     originator=originator,
-                                                                     files_analyzed=files_analyzed,
-                                                                     verification_code=package_verification_code,
-                                                                     checksums=checksums, homepage=homepage,
-                                                                     source_info=source_info,
-                                                                     license_concluded=license_concluded,
-                                                                     license_info_from_files=license_info_from_file,
-                                                                     license_declared=license_declared,
-                                                                     license_comment=license_comments,
-                                                                     copyright_text=copyright_text, summary=summary,
-                                                                     description=description,
-                                                                     comment=comment, external_references=external_refs,
-                                                                     attribution_texts=attribution_texts,
-                                                                     primary_package_purpose=primary_package_purpose,
-                                                                     release_date=release_date, built_date=built_date,
-                                                                     valid_until_date=valid_until_date))
+        package = construct_or_raise_parsing_error(Package, dict(spdx_id=spdx_id, name=name,
+                                                                 download_location=download_location,
+                                                                 version=version_info,
+                                                                 file_name=package_file_name, supplier=supplier,
+                                                                 originator=originator,
+                                                                 files_analyzed=files_analyzed,
+                                                                 verification_code=package_verification_code,
+                                                                 checksums=checksums, homepage=homepage,
+                                                                 source_info=source_info,
+                                                                 license_concluded=license_concluded,
+                                                                 license_info_from_files=license_info_from_file,
+                                                                 license_declared=license_declared,
+                                                                 license_comment=license_comments,
+                                                                 copyright_text=copyright_text, summary=summary,
+                                                                 description=description,
+                                                                 comment=comment, external_references=external_refs,
+                                                                 attribution_texts=attribution_texts,
+                                                                 primary_package_purpose=primary_package_purpose,
+                                                                 release_date=release_date, built_date=built_date,
+                                                                 valid_until_date=valid_until_date))
 
         return package
 
     def parse_external_refs(self, external_ref_dicts: List[Dict]) -> List[ExternalPackageRef]:
         external_refs = []
         for external_ref_dict in external_ref_dicts:
-            external_refs = append_list_if_object_could_be_parsed_append_logger_if_not(logger=self.logger,
-                                                                                       list_to_append=external_refs,
-                                                                                       field=external_ref_dict,
-                                                                                       method_to_parse=self.parse_external_ref)
+            external_refs = append_parsed_field_or_log_error(logger=self.logger, list_to_append_to=external_refs,
+                                                             field=external_ref_dict,
+                                                             method_to_parse=self.parse_external_ref)
 
         return external_refs
 
     def parse_external_ref(self, external_ref_dict: Dict) -> ExternalPackageRef:
         logger = Logger()
-        ref_category = try_parse_required_field_append_logger_when_failing(logger=logger, field=external_ref_dict.get(
-            "referenceCategory"), method_to_parse=self.parse_external_ref_category)
+        ref_category = parse_field_or_log_error(logger=logger, field=external_ref_dict.get("referenceCategory"),
+                                                parsing_method=self.parse_external_ref_category)
         ref_locator = external_ref_dict.get("referenceLocator")
         ref_type = external_ref_dict.get("referenceType")
         comment = external_ref_dict.get("comment")
         raise_parsing_error_if_logger_has_messages(logger, "external  ref")
-        external_ref = try_construction_raise_parsing_error(ExternalPackageRef,
-                                                            dict(category=ref_category, reference_type=ref_type,
-                                                                 locator=ref_locator,
-                                                                 comment=comment))
+        external_ref = construct_or_raise_parsing_error(ExternalPackageRef,
+                                                        dict(category=ref_category, reference_type=ref_type,
+                                                             locator=ref_locator,
+                                                             comment=comment))
 
         return external_ref
 
@@ -183,7 +174,7 @@ class PackageParser:
     def parse_external_ref_category(external_ref_category_str: str) -> ExternalPackageRefCategory:
         try:
             external_ref_category = ExternalPackageRefCategory[
-                transform_json_str_to_enum_name(external_ref_category_str)]
+                json_str_to_enum_name(external_ref_category_str)]
         except KeyError:
             raise SPDXParsingError([f"Category {external_ref_category_str} not valid for externalPackageRef."])
 
@@ -194,16 +185,16 @@ class PackageParser:
         excluded_files: List[str] = verification_code_dict.get("packageVerificationCodeExcludedFiles")
         verification_code_value: str = verification_code_dict.get("packageVerificationCodeValue")
 
-        package_verification_code = try_construction_raise_parsing_error(PackageVerificationCode,
-                                                                         dict(value=verification_code_value,
-                                                                              excluded_files=excluded_files))
+        package_verification_code = construct_or_raise_parsing_error(PackageVerificationCode,
+                                                                     dict(value=verification_code_value,
+                                                                          excluded_files=excluded_files))
 
         return package_verification_code
 
     @staticmethod
     def parse_primary_package_purpose(primary_package_purpose: str) -> PackagePurpose:
         try:
-            return PackagePurpose[transform_json_str_to_enum_name(primary_package_purpose)]
+            return PackagePurpose[json_str_to_enum_name(primary_package_purpose)]
         except KeyError:
             raise SPDXParsingError([f"Invalid primaryPackagePurpose: {primary_package_purpose}"])
 

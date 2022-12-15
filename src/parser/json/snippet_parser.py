@@ -16,8 +16,7 @@ from src.model.snippet import Snippet
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import try_construction_raise_parsing_error, \
-    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
+from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_error, parse_field_or_log_error
 
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
@@ -42,7 +41,7 @@ class SnippetParser:
             try:
                 snippets_list.append(self.parse_snippet(snippet_dict))
             except SPDXParsingError as err:
-                self.logger.append_all(err.get_messages())
+                self.logger.extend(err.get_messages())
         if self.logger.has_messages():
             raise SPDXParsingError(self.logger.get_messages())
 
@@ -53,10 +52,8 @@ class SnippetParser:
         spdx_id: str = snippet_dict.get("SPDXID")
         file_spdx_id: str = snippet_dict.get("snippetFromFile")
         name: Optional[str] = snippet_dict.get("name")
-        ranges: Dict = try_parse_required_field_append_logger_when_failing(logger=logger,
-                                                                           field=(snippet_dict.get("ranges")),
-                                                                           method_to_parse=self.parse_ranges,
-                                                                           default={})
+        ranges: Dict = parse_field_or_log_error(logger=logger, field=(snippet_dict.get("ranges")),
+                                                parsing_method=self.parse_ranges, default={})
         byte_range: Tuple[int, int] = ranges.get(RangeType.BYTE)
         line_range: Optional[Tuple[int, int]] = ranges.get(RangeType.LINE)
         attribution_texts: List[str] = snippet_dict.get("attributionTexts")
@@ -64,29 +61,27 @@ class SnippetParser:
         copyright_text: Optional[str] = snippet_dict.get("copyrightText")
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
         concluded_license: Optional[Union[
-            LicenseExpression, SpdxNoAssertion, SpdxNone]] = try_parse_optional_field_append_logger_when_failing(
-            logger=logger,
-            field=snippet_dict.get("licenseConcluded"),
-            method_to_parse=self.license_expression_parser.parse_license_expression)
+            LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
+            logger=logger, field=snippet_dict.get("licenseConcluded"),
+            parsing_method=self.license_expression_parser.parse_license_expression, optional=True)
 
         license_info: Optional[Union[List[
-            LicenseExpression], SpdxNoAssertion, SpdxNone]] = try_parse_optional_field_append_logger_when_failing(
-            logger=logger,
-            field=snippet_dict.get("licenseInfoInSnippets"),
-            method_to_parse=self.license_expression_parser.parse_license_expression)
+            LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
+            logger=logger, field=snippet_dict.get("licenseInfoInSnippets"),
+            parsing_method=self.license_expression_parser.parse_license_expression, optional=True)
 
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing snippet: {logger.get_messages()}"])
 
-        snippet = try_construction_raise_parsing_error(Snippet,
-                                                       dict(spdx_id=spdx_id, name=name, byte_range=byte_range,
-                                                            file_spdx_id=file_spdx_id,
-                                                            line_range=line_range,
-                                                            attribution_texts=attribution_texts, comment=comment,
-                                                            copyright_text=copyright_text,
-                                                            license_comment=license_comment,
-                                                            concluded_license=concluded_license,
-                                                            license_info_in_snippet=license_info))
+        snippet = construct_or_raise_parsing_error(Snippet,
+                                                   dict(spdx_id=spdx_id, name=name, byte_range=byte_range,
+                                                        file_spdx_id=file_spdx_id,
+                                                        line_range=line_range,
+                                                        attribution_texts=attribution_texts, comment=comment,
+                                                        copyright_text=copyright_text,
+                                                        license_comment=license_comment,
+                                                        concluded_license=concluded_license,
+                                                        license_info_in_snippet=license_info))
 
         return snippet
 

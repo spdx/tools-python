@@ -12,15 +12,19 @@ import json
 from json import JSONDecodeError
 from typing import List
 
+from src.model.annotation import Annotation
 from src.model.document import Document, CreationInfo
+from src.model.extracted_licensing_info import ExtractedLicensingInfo
+from src.model.file import File
 from src.model.package import Package
+from src.model.relationship import Relationship
+from src.model.snippet import Snippet
 from src.parser.json.annotation_parser import AnnotationParser
 from src.parser.json.creation_info_parser import CreationInfoParser
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import raise_parsing_error_without_additional_text_if_logger_has_messages, \
-    try_construction_raise_parsing_error, \
-    try_parse_optional_field_append_logger_when_failing, try_parse_required_field_append_logger_when_failing
-from src.parser.json.extracted_licensing_parser import ExtractedLicensingInfoParser
+from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, \
+    construct_or_raise_parsing_error, parse_field_or_log_error
+from src.parser.json.extracted_licensing_info_parser import ExtractedLicensingInfoParser
 from src.parser.json.file_parser import FileParser
 from src.parser.logger import Logger
 from src.parser.json.package_parser import PackageParser
@@ -34,7 +38,7 @@ class JsonParser:
     package_parser: PackageParser
     file_parser: FileParser
     snippet_parser: SnippetParser
-    extracted_licenses_parser: ExtractedLicensingInfoParser
+    extracted_licensing_info_parser: ExtractedLicensingInfoParser
     relationship_parser: RelationshipParser
     annotation_parser: AnnotationParser
 
@@ -44,7 +48,7 @@ class JsonParser:
         self.package_parser = PackageParser()
         self.file_parser = FileParser()
         self.snippet_parser = SnippetParser()
-        self.extracted_licenses_parser = ExtractedLicensingInfoParser()
+        self.extracted_licensing_info_parser = ExtractedLicensingInfoParser()
         self.relationship_parser = RelationshipParser()
         self.annotation_parser = AnnotationParser()
 
@@ -59,40 +63,36 @@ class JsonParser:
             self.logger.append(f"File {filename} is not a valid JSON file.")
             raise SPDXParsingError(self.logger.get_messages())
 
-        creation_info: CreationInfo = try_parse_required_field_append_logger_when_failing(logger=self.logger,
-                                                                                          field=input_doc_as_dict,
-                                                                                          method_to_parse=self.creation_info_parser.parse_creation_info)
+        creation_info: CreationInfo = parse_field_or_log_error(logger=self.logger, field=input_doc_as_dict,
+                                                               parsing_method=self.creation_info_parser.parse_creation_info)
 
-        packages: List[Package] = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
-                                                                                      field=input_doc_as_dict.get(
-                                                                                          "packages"),
-                                                                                      method_to_parse=self.package_parser.parse_packages,
-                                                                                      default=None)
+        packages: List[Package] = parse_field_or_log_error(logger=self.logger, field=input_doc_as_dict.get("packages"),
+                                                           parsing_method=self.package_parser.parse_packages,
+                                                           optional=True)
 
-        files = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
-                                                                    field=input_doc_as_dict.get("files"),
-                                                                    method_to_parse=self.file_parser.parse_files)
+        files: List[File] = parse_field_or_log_error(logger=self.logger, field=input_doc_as_dict.get("files"),
+                                                     parsing_method=self.file_parser.parse_files, optional=True)
 
-        annotations = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
-                                                                          field=input_doc_as_dict,
-                                                                          method_to_parse=self.annotation_parser.parse_all_annotations)
-        snippets = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
-                                                                       field=input_doc_as_dict.get("snippets"),
-                                                                       method_to_parse=self.snippet_parser.parse_snippets)
-        relationships = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
-                                                                            field=input_doc_as_dict,
-                                                                            method_to_parse=self.relationship_parser.parse_all_relationships)
-        extracted_licensing_info = try_parse_optional_field_append_logger_when_failing(logger=self.logger,
-                                                                                       field=input_doc_as_dict.get(
-                                                                                           "hasExtractedLicensingInfos"),
-                                                                                       method_to_parse=self.extracted_licenses_parser.parse_extracted_licensing_infos)
+        annotations: List[Annotation] = parse_field_or_log_error(logger=self.logger, field=input_doc_as_dict,
+                                                                 parsing_method=self.annotation_parser.parse_all_annotations,
+                                                                 optional=True)
+        snippets: List[Snippet] = parse_field_or_log_error(logger=self.logger, field=input_doc_as_dict.get("snippets"),
+                                                           parsing_method=self.snippet_parser.parse_snippets,
+                                                           optional=True)
+        relationships: List[Relationship] = parse_field_or_log_error(logger=self.logger, field=input_doc_as_dict,
+                                                                     parsing_method=self.relationship_parser.parse_all_relationships,
+                                                                     optional=True)
+        extracted_licensing_info: List[ExtractedLicensingInfo] = parse_field_or_log_error(logger=self.logger,
+                                                                                          field=input_doc_as_dict.get("hasExtractedLicensingInfos"),
+                                                                                          parsing_method=self.extracted_licensing_info_parser.parse_extracted_licensing_infos,
+                                                                                          optional=True)
 
-        raise_parsing_error_without_additional_text_if_logger_has_messages(self.logger)
+        raise_parsing_error_if_logger_has_messages(self.logger)
 
-        document = try_construction_raise_parsing_error(Document, dict(creation_info=creation_info, packages=packages,
-                                                                       files=files,
-                                                                       annotations=annotations,
-                                                                       snippets=snippets, relationships=relationships,
-                                                                       extracted_licensing_info=extracted_licensing_info))
+        document = construct_or_raise_parsing_error(Document, dict(creation_info=creation_info, packages=packages,
+                                                                   files=files,
+                                                                   annotations=annotations,
+                                                                   snippets=snippets, relationships=relationships,
+                                                                   extracted_licensing_info=extracted_licensing_info))
 
         return document

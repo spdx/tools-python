@@ -12,9 +12,8 @@ from typing import Dict, List, Optional, Union
 
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.parser.json.dict_parsing_functions import parse_optional_field, \
-    raise_parsing_error_without_additional_text_if_logger_has_messages, \
-    append_list_if_object_could_be_parsed_append_logger_if_not, try_construction_raise_parsing_error
+from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, \
+    append_parsed_field_or_log_error, construct_or_raise_parsing_error, parse_field_or_log_error
 from src.parser.logger import Logger
 
 
@@ -28,27 +27,30 @@ class ExtractedLicensingInfoParser:
         ExtractedLicensingInfo]:
         extracted_licensing_info_list = []
         for extracted_licensing_info_dict in extracted_licensing_info_dicts:
-            extracted_licensing_info_list = append_list_if_object_could_be_parsed_append_logger_if_not(
-                list_to_append=extracted_licensing_info_list,
+            extracted_licensing_info_list = append_parsed_field_or_log_error(
+                list_to_append_to=extracted_licensing_info_list,
                 logger=self.logger, field=extracted_licensing_info_dict,
                 method_to_parse=self.parse_extracted_licensing_info)
 
-        raise_parsing_error_without_additional_text_if_logger_has_messages(self.logger)
+        raise_parsing_error_if_logger_has_messages(self.logger)
         return extracted_licensing_info_list
 
     def parse_extracted_licensing_info(self, extracted_licensing_info_dict: Dict) -> ExtractedLicensingInfo:
         license_id: Optional[str] = extracted_licensing_info_dict.get("licenseId")
         extracted_text: Optional[str] = extracted_licensing_info_dict.get("extractedText")
-        license_name: Optional[Union[str, SpdxNoAssertion]] = parse_optional_field(
-            extracted_licensing_info_dict.get("name"), self.parse_extracted_licensing_info_name)
+        license_name: Optional[Union[str, SpdxNoAssertion]] = parse_field_or_log_error(logger=self.logger,
+                                                                                       field=extracted_licensing_info_dict.get(
+                                                                                           "name"),
+                                                                                       parsing_method=self.parse_extracted_licensing_info_name,
+                                                                                       optional=True)
         cross_references: List[str] = extracted_licensing_info_dict.get("seeAlsos")
         comment: str = extracted_licensing_info_dict.get("comment")
-        extracted_licensing_info_dict = try_construction_raise_parsing_error(ExtractedLicensingInfo,
-                                                                             dict(license_id=license_id,
-                                                                                  extracted_text=extracted_text,
-                                                                                  comment=comment,
-                                                                                  license_name=license_name,
-                                                                                  cross_references=cross_references))
+        extracted_licensing_info_dict = construct_or_raise_parsing_error(ExtractedLicensingInfo,
+                                                                         dict(license_id=license_id,
+                                                                              extracted_text=extracted_text,
+                                                                              comment=comment,
+                                                                              license_name=license_name,
+                                                                              cross_references=cross_references))
         return extracted_licensing_info_dict
 
     @staticmethod

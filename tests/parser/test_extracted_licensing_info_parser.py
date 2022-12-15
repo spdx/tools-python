@@ -12,7 +12,7 @@ import pytest
 
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.parser.error import SPDXParsingError
-from src.parser.json.extracted_licensing_parser import ExtractedLicensingInfoParser
+from src.parser.json.extracted_licensing_info_parser import ExtractedLicensingInfoParser
 
 
 def test_extracted_licensing_info_parser():
