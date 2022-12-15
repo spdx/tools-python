@@ -72,7 +72,7 @@ def test_valid_package_download_location(input_value):
 @pytest.mark.parametrize("input_value", [":::::", ])
 def test_invalid_package_download_location(input_value):
     assert validate_download_location(input_value) == [
-        f"must be a valid download location, but is: {input_value}"]
+        f"must be a valid download location according to the specification, but is: {input_value}"]
 
 
 @pytest.mark.parametrize("input_value", ["https://some.uri", "http:////some",

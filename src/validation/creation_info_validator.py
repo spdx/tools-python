@@ -32,7 +32,7 @@ class CreationInfoValidator:
         if creation_info.spdx_id != "SPDXRef-DOCUMENT":
             validation_messages.append(
                 ValidationMessage(
-                    f"spdx_id must be SPDXRef-DOCUMENT, but is: {creation_info.spdx_id}",
+                    f'spdx_id must be "SPDXRef-DOCUMENT", but is: {creation_info.spdx_id}',
                     context
                 )
             )
