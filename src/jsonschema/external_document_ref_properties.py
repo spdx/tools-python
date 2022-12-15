@@ -9,27 +9,11 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from enum import auto
-from typing import Any
 
-from src.jsonschema.checksum_properties import ChecksumProperty
-from src.jsonschema.common_conversions import convert_complex_type
 from src.jsonschema.json_property import JsonProperty
-from src.model.external_document_ref import ExternalDocumentRef
-from src.writer.casing_tools import snake_case_to_camel_case
 
 
 class ExternalDocumentRefProperty(JsonProperty):
     EXTERNAL_DOCUMENT_ID = auto()
     SPDX_DOCUMENT = auto()
     CHECKSUM = auto()
-
-    def json_property_name(self) -> str:
-        return snake_case_to_camel_case(self.name)
-
-    def get_property_value(self, external_document_ref: ExternalDocumentRef) -> Any:
-        if self == ExternalDocumentRefProperty.EXTERNAL_DOCUMENT_ID:
-            return external_document_ref.document_ref_id
-        elif self == ExternalDocumentRefProperty.SPDX_DOCUMENT:
-            return external_document_ref.document_uri
-        elif self == ExternalDocumentRefProperty.CHECKSUM:
-            return convert_complex_type(external_document_ref.checksum, ChecksumProperty)
