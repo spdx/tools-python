@@ -41,7 +41,7 @@ class ExternalDocumentRefValidator:
         for message in validate_uri(external_document_ref.document_uri):
             validation_messages.append(
                 ValidationMessage(
-                    'document_uri ' + message, context
+                    "document_uri " + message, context
                 )
             )
 

@@ -26,13 +26,10 @@ class AnnotationValidator:
 
     def validate_annotation(self, annotation: Annotation) -> List[ValidationMessage]:
         validation_messages = []
-        document_spdx_id: str = self.document.creation_info.spdx_id
         context = ValidationContext(element_type=SpdxElementType.ANNOTATION,
                                     full_element=annotation)
 
-        validation_messages.extend(
-            self.actor_validator.validate_actor(annotation.annotator)
-        )
+        validation_messages.extend(self.actor_validator.validate_actor(annotation.annotator))
 
         messages: List[str] = validate_spdx_id(annotation.spdx_id, self.document, check_document=True)
         for message in messages:

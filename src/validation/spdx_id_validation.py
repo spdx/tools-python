@@ -53,7 +53,7 @@ def validate_spdx_id(spdx_id: str, document: Document, check_document: bool = Fa
     # # # invalid case # # #
     if len(split_id) > 2:
         return [
-            f'spdx_id must not contain more than one colon in order to separate the external document reference id from the internal SPDX id, but is: {spdx_id}']
+            f"spdx_id must not contain more than one colon in order to separate the external document reference id from the internal SPDX id, but is: {spdx_id}"]
 
     # # # case with external document ref prefix # # #
     if len(split_id) == 2:
@@ -65,7 +65,7 @@ def validate_spdx_id(spdx_id: str, document: Document, check_document: bool = Fa
                 f'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: {split_id[1]}')
         if not is_external_doc_ref_present_in_document(split_id[0], document):
             validation_messages.append(
-                f'did not find the external document reference {split_id[0]} in the SPDX document')
+                f"did not find the external document reference {split_id[0]} in the SPDX document")
 
         return validation_messages
 
@@ -76,10 +76,10 @@ def validate_spdx_id(spdx_id: str, document: Document, check_document: bool = Fa
 
     if check_document:
         if not is_spdx_id_present_in_document(spdx_id, document):
-            validation_messages.append(f'did not find the referenced spdx_id {spdx_id} in the SPDX document')
+            validation_messages.append(f"did not find the referenced spdx_id {spdx_id} in the SPDX document")
 
     if check_files:
         if not is_spdx_id_present_in_files(spdx_id, document.files):
-            validation_messages.append(f'did not find the referenced spdx_id {spdx_id} in the SPDX document\'s files')
+            validation_messages.append(f"did not find the referenced spdx_id {spdx_id} in the SPDX document's files")
 
     return validation_messages

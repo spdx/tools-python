@@ -73,7 +73,7 @@ def get_extracted_licensing_info(license_id="LicenseRef-1", extracted_text="extr
 
 def get_file(name="./file/name.py", spdx_id="SPDXRef-File", checksums=None, file_type=None, concluded_license=None,
              license_info_in_file=None, license_comment=None, copyright_text=None, comment=None, notice=None,
-             contributors=None, attribution_texts=None):
+             contributors=None, attribution_texts=None) -> File:
     if checksums is None:
         checksums = [get_checksum()]
     if contributors is None:

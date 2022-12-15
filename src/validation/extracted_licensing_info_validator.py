@@ -39,7 +39,7 @@ class ExtractedLicensingInfoValidator:
 
         if license_id and not extracted_licensing_infos.extracted_text:
             validation_messages.append(
-                ValidationMessage('extracted_text must be provided if there is a license_id assigned', context)
+                ValidationMessage("extracted_text must be provided if there is a license_id assigned", context)
             )
 
         for cross_reference in extracted_licensing_infos.cross_references:

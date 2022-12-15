@@ -24,7 +24,7 @@ def test_correct_external_document_ref():
                           (get_external_document_ref(document_ref_id="DocumentRef-some_id"),
                            'document_ref_id must only contain letters, numbers, ".", "-" and "+" and must begin with "DocumentRef-", but is: DocumentRef-some_id'),
                           (get_external_document_ref(document_uri="some_uri"),
-                           'document_uri must be a valid URI specified in RFC-3986, but is: some_uri')
+                           "document_uri must be a valid URI specified in RFC-3986, but is: some_uri")
                           ])
 def test_wrong_external_document_ref(external_document_ref, expected_message):
     parent_id = "SPDXRef-DOCUMENT"

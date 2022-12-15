@@ -24,7 +24,7 @@ def test_correct_annotation():
                          [("SPDXRef-some_file", "SPDXRef-some_file",
                            'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-some_file'),
                           ("SPDXRef-File", "SPDXRef-hiddenFile",
-                           'did not find the referenced spdx_id SPDXRef-File in the SPDX document')
+                           "did not find the referenced spdx_id SPDXRef-File in the SPDX document")
                           ])
 def test_wrong_annotation(annotation_id, file_id, expected_message):
     annotation: Annotation = get_annotation(spdx_id=annotation_id)

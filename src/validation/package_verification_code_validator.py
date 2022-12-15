@@ -26,11 +26,11 @@ class PackageVerificationCodeValidator:
                         f'file name must be a relative path to the file, starting with "./", but is: {file}', context)
                 )
 
-        value = verification_code.value
+        value: str = verification_code.value
         if not re.match("^[0-9a-f]{40}$", value):
             validation_messages.append(
                 ValidationMessage(
-                    f'value of verification_code must consist of 40 hexadecimal digits, but is: {value} (length: {len(value)} digits)',
+                    f"value of verification_code must consist of 40 hexadecimal digits, but is: {value} (length: {len(value)} digits)",
                     context)
             )
 

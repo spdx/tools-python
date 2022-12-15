@@ -46,14 +46,12 @@ def test_correct_package():
                            'license_info_from_files must be None if files_analyzed is False, but is: [LicenseExpression(expression_string=\'some_license\')]')
                           ])
 def test_wrong_package(package_input, expected_message):
-    parent_id = "SPDXRef-DOCUMENT"
     package_validator = PackageValidator("2.3", get_document())
-    package = package_input
-    validation_messages: List[ValidationMessage] = package_validator.validate_package(package)
+    validation_messages: List[ValidationMessage] = package_validator.validate_package(package_input)
 
     expected = ValidationMessage(expected_message,
-                                 ValidationContext(spdx_id=package.spdx_id, parent_id=parent_id,
+                                 ValidationContext(spdx_id=package_input.spdx_id, parent_id="SPDXRef-DOCUMENT",
                                                    element_type=SpdxElementType.PACKAGE,
-                                                   full_element=package))
+                                                   full_element=package_input))
 
     assert validation_messages == [expected]

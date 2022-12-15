@@ -11,7 +11,7 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
 class CreationInfoValidator:
     spdx_version: str
 
-    def __init__(self, spdx_version):
+    def __init__(self, spdx_version: str):
         self.spdx_version = spdx_version
 
     def validate_creation_info(self, creation_info: CreationInfo) -> List[ValidationMessage]:
@@ -32,7 +32,7 @@ class CreationInfoValidator:
         if creation_info.spdx_id != "SPDXRef-DOCUMENT":
             validation_messages.append(
                 ValidationMessage(
-                    f'spdx_id must be SPDXRef-DOCUMENT, but is: {creation_info.spdx_id}',
+                    f"spdx_id must be SPDXRef-DOCUMENT, but is: {creation_info.spdx_id}",
                     context
                 )
             )
@@ -48,7 +48,7 @@ class CreationInfoValidator:
         for message in validate_uri(creation_info.document_namespace):
             validation_messages.append(
                 ValidationMessage(
-                    'document_namespace ' + message, context
+                    "document_namespace " + message, context
                 )
             )
 

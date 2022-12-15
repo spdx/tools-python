@@ -21,7 +21,7 @@ def test_correct_external_package_ref():
 
 @pytest.mark.parametrize("external_package_ref, expected_message",
                          [(get_external_package_ref(),
-                           'TBD'),
+                           "TBD"),
                           ])
 @pytest.mark.skip("add tests once external package ref validation is implemented")
 def wrong_external_package_ref(external_package_ref, expected_message):

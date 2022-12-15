@@ -19,7 +19,7 @@ def test_correct_actor_person():
 
 @pytest.mark.parametrize("actor, expected_message",
                          [(get_actor(actor_type=ActorType.TOOL, mail="mail@mail.com"),
-                           'email must be None if actor_type is TOOL, but is: mail@mail.com'),
+                           "email must be None if actor_type is TOOL, but is: mail@mail.com"),
                           ])
 def test_wrong_actor(actor, expected_message):
     parent_id = "SPDXRef-DOCUMENT"

@@ -56,7 +56,7 @@ class ChecksumValidator:
                 length = algorithm_length[algorithm]
             validation_messages.append(
                 ValidationMessage(
-                    f'value of {algorithm} must consist of {length} hexadecimal digits, but is: {checksum.value} (length: {len(checksum.value)} digits)',
+                    f"value of {algorithm} must consist of {length} hexadecimal digits, but is: {checksum.value} (length: {len(checksum.value)} digits)",
                     context)
             )
 
