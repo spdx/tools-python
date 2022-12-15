@@ -13,7 +13,7 @@ from tests.valid_defaults import get_checksum, get_external_package_ref, get_act
     get_package, get_document
 
 
-def test_correct_package():
+def test_valid_package():
     package_validator = PackageValidator("2.3", get_document())
 
     package = Package("SPDXRef-Package", "package name", "www.download.com", "version", "file_name", SpdxNoAssertion(),
@@ -45,7 +45,7 @@ def test_correct_package():
                                        license_info_from_files=[LicenseExpression("some_license")]),
                            'license_info_from_files must be None if files_analyzed is False, but is: [LicenseExpression(expression_string=\'some_license\')]')
                           ])
-def test_wrong_package(package_input, expected_message):
+def test_invalid_package(package_input, expected_message):
     package_validator = PackageValidator("2.3", get_document())
     validation_messages: List[ValidationMessage] = package_validator.validate_package(package_input)
 

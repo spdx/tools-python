@@ -5,7 +5,7 @@ from src.validation.license_expression_validator import LicenseExpressionValidat
 from src.validation.validation_message import ValidationMessage
 
 
-def test_correct_license_expression():
+def test_valid_license_expression():
     license_expression_validator = LicenseExpressionValidator("2.3")
 
     license_expression = LicenseExpression("LicenseRef-1")

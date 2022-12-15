@@ -37,7 +37,7 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
                           Checksum(ChecksumAlgorithm.MD6,
                                    "af1eec2a1b18886c3f3cc244349d91d8d4c41ce30a517d6ce9d79c8c17bb4b660d7f61beb7018b3924c6b8f96549fa39"),
                           Checksum(ChecksumAlgorithm.ADLER32, "02ec0130")])
-def test_correct_checksum(checksum):
+def test_valid_checksum(checksum):
     checksum_validator = ChecksumValidator("2.3", "parent_id")
 
     validation_messages: List[ValidationMessage] = checksum_validator.validate_checksum(checksum)
@@ -82,7 +82,7 @@ def test_correct_checksum(checksum):
                           (Checksum(ChecksumAlgorithm.ADLER32, "af1eec2a1b18886c3f3cc244349d91d8"),
                            "value of ChecksumAlgorithm.ADLER32 must consist of 8 hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)"),
                           ])
-def test_wrong_checksum(checksum, expected_message):
+def test_invalid_checksum(checksum, expected_message):
     parent_id = "parent_id"
     checksum_validator = ChecksumValidator("2.3", parent_id)
     validation_messages: List[ValidationMessage] = checksum_validator.validate_checksum(checksum)

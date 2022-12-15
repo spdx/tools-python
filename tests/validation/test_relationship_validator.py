@@ -9,7 +9,7 @@ from src.validation.validation_message import ValidationMessage, SpdxElementType
 from tests.valid_defaults import get_document, get_package, get_relationship, get_file
 
 
-def test_correct_relationship():
+def test_valid_relationship():
     document: Document = get_document(packages=[get_package(spdx_id="SPDXRef-Package")])
     relationship_validator = RelationshipValidator("2.3", document)
 
@@ -19,7 +19,7 @@ def test_correct_relationship():
     assert validation_messages == []
 
 
-@pytest.mark.parametrize("spdx_element_id, related_spdx_element_id, wrong_file_id, expected_message",
+@pytest.mark.parametrize("spdx_element_id, related_spdx_element_id, invalid_file_id, expected_message",
                          [("SPDXRef-some_file", "SPDXRef-File", "SPDXRef-some_file",
                            'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-some_file'),
                           ("SPDXRef-File", "SPDXRef-some_file", "SPDXRef-some_file",
@@ -29,10 +29,10 @@ def test_correct_relationship():
                           ("SPDXRef-hiddenFile", "SPDXRef-unknownFile", "SPDXRef-hiddenFile",
                            'did not find the referenced spdx_id SPDXRef-unknownFile in the SPDX document'),
                           ])
-def test_wrong_relationship(spdx_element_id, related_spdx_element_id, wrong_file_id, expected_message):
+def test_invalid_relationship(spdx_element_id, related_spdx_element_id, invalid_file_id, expected_message):
     relationship: Relationship = get_relationship(spdx_element_id=spdx_element_id,
                                                   related_spdx_element_id=related_spdx_element_id)
-    document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File"), get_file(spdx_id=wrong_file_id)])
+    document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File"), get_file(spdx_id=invalid_file_id)])
     relationship_validator = RelationshipValidator("2.3", document)
     validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
 

@@ -10,7 +10,7 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
 from tests.valid_defaults import get_actor, get_external_document_ref, get_creation_info
 
 
-def test_correct_creation_info():
+def test_valid_creation_info():
     creation_info_validator = CreationInfoValidator("2.3")
 
     creation_info = CreationInfo("SPDX-2.3", "SPDXRef-DOCUMENT", "document name", "https://some.uri",
@@ -33,7 +33,7 @@ def test_correct_creation_info():
           (get_creation_info(document_namespace="some_namespace"), "SPDXRef-DOCUMENT",
            "document_namespace must be a valid URI specified in RFC-3986, but is: some_namespace"),
           ])
-def test_wrong_creation_info(creation_info_input, expected_message, spdx_id):
+def test_invalid_creation_info(creation_info_input, expected_message, spdx_id):
     creation_info_validator = CreationInfoValidator("2.3")
     validation_messages: List[ValidationMessage] = creation_info_validator.validate_creation_info(creation_info_input)
 

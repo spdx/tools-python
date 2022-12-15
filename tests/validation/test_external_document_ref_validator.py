@@ -8,7 +8,7 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
 from tests.valid_defaults import get_checksum, get_external_document_ref
 
 
-def test_correct_external_document_ref():
+def test_valid_external_document_ref():
     external_document_ref_validator = ExternalDocumentRefValidator("2.3", "parent_id")
 
     external_document_ref = ExternalDocumentRef("DocumentRef-id", "http://some.uri", get_checksum())
@@ -26,7 +26,7 @@ def test_correct_external_document_ref():
                           (get_external_document_ref(document_uri="some_uri"),
                            "document_uri must be a valid URI specified in RFC-3986, but is: some_uri")
                           ])
-def test_wrong_external_document_ref(external_document_ref, expected_message):
+def test_invalid_external_document_ref(external_document_ref, expected_message):
     parent_id = "SPDXRef-DOCUMENT"
     external_document_ref_validator = ExternalDocumentRefValidator("2.3", parent_id)
     validation_messages: List[ValidationMessage] = external_document_ref_validator.validate_external_document_ref(

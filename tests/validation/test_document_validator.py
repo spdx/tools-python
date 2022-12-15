@@ -7,7 +7,7 @@ from tests.valid_defaults import get_creation_info, get_package, get_file, get_s
     get_relationship, get_extracted_licensing_info
 
 
-def test_correct_document():
+def test_valid_document():
     document_validator = DocumentValidator("2.3")
 
     document = Document(get_creation_info(), [get_package(), get_package()], [get_file(), get_file()],

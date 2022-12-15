@@ -10,7 +10,7 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
 from tests.valid_defaults import get_actor, get_annotation, get_document, get_file
 
 
-def test_correct_annotation():
+def test_valid_annotation():
     document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File")])
     annotation_validator = AnnotationValidator("2.3", document)
 
@@ -26,7 +26,7 @@ def test_correct_annotation():
                           ("SPDXRef-File", "SPDXRef-hiddenFile",
                            "did not find the referenced spdx_id SPDXRef-File in the SPDX document")
                           ])
-def test_wrong_annotation(annotation_id, file_id, expected_message):
+def test_invalid_annotation(annotation_id, file_id, expected_message):
     annotation: Annotation = get_annotation(spdx_id=annotation_id)
     document: Document = get_document(files=[get_file(spdx_id=file_id)])
     annotation_validator = AnnotationValidator("2.3", document)
