@@ -9,12 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from enum import Enum
-from typing import Any
 
 
 class JsonProperty(Enum):
-    def json_property_name(self) -> str:
-        raise NotImplementedError("Must be implemented")
-
-    def get_property_value(self, instance: Any) -> Any:
-        raise NotImplementedError("Must be implemented")
+    """
+    Parent class for all json property classes. Not meant to be instantiated directly, only to have a common parent
+    type that can be used in type hints.
+    """
+    pass
