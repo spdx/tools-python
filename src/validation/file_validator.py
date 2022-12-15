@@ -44,7 +44,7 @@ class FileValidator:
         if ChecksumAlgorithm.SHA1 not in [checksum.algorithm for checksum in file.checksums]:
             validation_messages.append(
                 ValidationMessage(
-                    f"checksums must contain a SHA1 algorithm checksum, but is: {file.checksums}",
+                    f"checksums must contain a SHA1 algorithm checksum, but only contains: {[checksum.algorithm for checksum in file.checksums]}",
                     context)
             )
 
