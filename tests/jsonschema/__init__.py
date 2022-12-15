@@ -8,13 +8,3 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import Any, Dict, Type
-
-from src.jsonschema.json_property import JsonProperty
-
-
-def convert_complex_type(instance: Any, property_type: Type[JsonProperty]) -> Dict:
-    result = {}
-    for property_name in property_type:
-        result[property_name.json_property_name()] = property_name.get_property_value(instance)
-    return result
