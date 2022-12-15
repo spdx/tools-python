@@ -17,12 +17,12 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.json_parser import JsonParser
 
 def test_json_parser_file_not_found():
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(FileNotFoundError) as err:
         wrong_file_path = os.path.join(os.path.dirname(__file__), 'test.json')
         _ = JsonParser().parse(wrong_file_path)
 
-    assert err.typename == "SPDXParsingError"
-    assert err.value.messages[0] == f"File {wrong_file_path} not found."
+    assert err.type == FileNotFoundError
+    assert err.value.args[1] == "No such file or directory"
 
 
 def test_json_parser_with_2_3_example():
