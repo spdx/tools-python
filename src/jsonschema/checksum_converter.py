@@ -14,6 +14,7 @@ from src.jsonschema.checksum_properties import ChecksumProperty
 from src.jsonschema.converter import TypedConverter
 from src.jsonschema.json_property import JsonProperty
 from src.model.checksum import Checksum, ChecksumAlgorithm
+from src.model.document import Document
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
@@ -28,7 +29,8 @@ class ChecksumConverter(TypedConverter):
     def json_property_name(self, checksum_property: ChecksumProperty) -> str:
         return snake_case_to_camel_case(checksum_property.name)
 
-    def get_property_value(self, checksum: Checksum, checksum_property: ChecksumProperty) -> str:
+    def _get_property_value(self, checksum: Checksum, checksum_property: ChecksumProperty,
+                            _document: Document = None) -> str:
         if checksum_property == ChecksumProperty.ALGORITHM:
             return algorithm_to_json_string(checksum.algorithm)
         elif checksum_property == ChecksumProperty.CHECKSUM_VALUE:

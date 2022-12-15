@@ -16,6 +16,7 @@ import pytest
 from src.jsonschema.converter import TypedConverter
 from src.jsonschema.json_property import JsonProperty
 from src.model.checksum import Checksum, ChecksumAlgorithm
+from src.model.document import Document
 from src.model.typing.dataclass_with_properties import dataclass_with_properties
 from src.model.typing.type_checks import check_types_and_set_values
 
@@ -42,7 +43,8 @@ class TestConverter(TypedConverter):
         else:
             return "jsonSecondName"
 
-    def get_property_value(self, instance: TestDataModelType, test_property: TestPropertyType) -> Any:
+    def _get_property_value(self, instance: TestDataModelType, test_property: TestPropertyType,
+                            _document: Document = None) -> Any:
         if test_property == TestPropertyType.FIRST_NAME:
             return instance.first_property
         elif test_property == TestPropertyType.SECOND_NAME:

@@ -12,6 +12,7 @@ from abc import ABC, abstractmethod
 from typing import Any, Type, Dict
 
 from src.jsonschema.json_property import JsonProperty
+from src.model.document import Document
 
 MISSING_IMPLEMENTATION_MESSAGE = "Must be implemented"
 
@@ -22,7 +23,7 @@ class TypedConverter(ABC):
         raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
 
     @abstractmethod
-    def get_property_value(self, instance: Any, property_thing: JsonProperty) -> Any:
+    def _get_property_value(self, instance: Any, property_thing: JsonProperty, document: Document = None) -> Any:
         raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
 
     @abstractmethod
@@ -33,13 +34,18 @@ class TypedConverter(ABC):
     def get_data_model_type(self) -> Type:
         raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
 
-    def convert(self, instance: Any) -> Dict:
+    def requires_full_document(self) -> bool:
+        return False
+
+    def convert(self, instance: Any, document: Document = None) -> Dict:
         if not isinstance(instance, self.get_data_model_type()):
             raise TypeError(
                 f"Converter of type {self.__class__} can only convert objects of type "
                 f"{self.get_data_model_type()}. Received {type(instance)} instead.")
+        if self.requires_full_document() and not document:
+            raise ValueError(f"Converter of type {self.__class__} requires the full document")
 
         result = {}
         for property_name in self.get_json_type():
-            result[self.json_property_name(property_name)] = self.get_property_value(instance, property_name)
+            result[self.json_property_name(property_name)] = self._get_property_value(instance, property_name, document)
         return result
