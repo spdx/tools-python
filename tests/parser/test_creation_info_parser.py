@@ -73,7 +73,7 @@ def test_parse_incomplete_creation_info():
         _ = creation_info_parser.parse_creation_info(doc_dict)
 
     assert err.type == SPDXParsingError
-    assert err.value.messages == ["Error while parsing doc Example Document: ['CreationInfo is not valid.']"]
+    assert err.value.messages == ["Error while parsing doc Example Document: ['CreationInfo does not exist.']"]
 
 
 def test_parse_invalid_creation_info():

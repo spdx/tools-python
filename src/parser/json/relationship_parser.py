@@ -13,10 +13,9 @@ from typing import Dict, List, Optional
 from src.model.relationship import Relationship, RelationshipType
 from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import append_list_if_object_could_be_parsed_append_logger_if_not, \
-    raise_parsing_error_if_logger_has_messages, raise_parsing_error_without_additional_text_if_logger_has_messages, \
-    transform_json_str_to_enum_name, \
-    try_construction_raise_parsing_error, try_parse_required_field_append_logger_when_failing
+from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, \
+    raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, construct_or_raise_parsing_error, \
+    parse_field_or_log_error
 from src.parser.logger import Logger
 
 
@@ -31,41 +30,36 @@ class RelationshipParser:
         relationships_dicts: List[Dict] = input_doc_dict.get("relationships")
         if relationships_dicts:
             relationships_list.extend(
-                try_parse_required_field_append_logger_when_failing(logger=self.logger, field=relationships_dicts,
-                                                                    method_to_parse=self.parse_relationships,
-                                                                    default=[]))
+                parse_field_or_log_error(logger=self.logger, field=relationships_dicts,
+                                         parsing_method=self.parse_relationships, default=[]))
 
         document_describes: List[str] = input_doc_dict.get("documentDescribes")
         doc_spdx_id: str = input_doc_dict.get("SPDXID")
         if document_describes:
             relationships_list.extend(
-                try_parse_required_field_append_logger_when_failing(logger=self.logger, field=document_describes,
-                                                                    method_to_parse=lambda
-                                                                        x: self.parse_document_describes(
-                                                                        doc_spdx_id=doc_spdx_id, described_spdx_ids=x,
-                                                                        created_relationships=relationships_list),
-                                                                    default=[]))
+                parse_field_or_log_error(logger=self.logger, field=document_describes, parsing_method=lambda
+                    x: self.parse_document_describes(
+                    doc_spdx_id=doc_spdx_id, described_spdx_ids=x,
+                    created_relationships=relationships_list), default=[]))
 
             package_dicts: List[Dict] = input_doc_dict.get("packages")
             if package_dicts:
                 relationships_list.extend(
-                    try_parse_required_field_append_logger_when_failing(logger=self.logger, field=package_dicts,
-                                                                        method_to_parse=lambda x: self.parse_has_files(
-                                                                            package_dicts=x,
-                                                                            created_relationships=relationships_list),
-                                                                        default=[]))
+                    parse_field_or_log_error(logger=self.logger, field=package_dicts,
+                                             parsing_method=lambda x: self.parse_has_files(
+                                                     package_dicts=x,
+                                                     created_relationships=relationships_list), default=[]))
 
             file_dicts: List[Dict] = input_doc_dict.get("files")
             if file_dicts:
                 # not implemented yet, deal with deprecated fields in file
                 relationships_list.extend(
-                    try_parse_required_field_append_logger_when_failing(logger=self.logger, field=file_dicts,
-                                                                        method_to_parse=self.parse_file_dependencies,
-                                                                        default=[]))
+                    parse_field_or_log_error(logger=self.logger, field=file_dicts,
+                                             parsing_method=self.parse_file_dependencies, default=[]))
 
             generated_relationships = self.parse_artifact_of(file_dicts=file_dicts)
 
-            raise_parsing_error_without_additional_text_if_logger_has_messages(self.logger)
+            raise_parsing_error_if_logger_has_messages(self.logger)
 
         return relationships_list
 
@@ -73,33 +67,34 @@ class RelationshipParser:
         logger = Logger()
         relationship_list = []
         for relationship_dict in relationship_dicts:
-            relationship_list = append_list_if_object_could_be_parsed_append_logger_if_not(logger=logger,
-                                                                                           list_to_append=relationship_list,
-                                                                                           field=relationship_dict,
-                                                                                           method_to_parse=self.parse_relationship)
-        raise_parsing_error_without_additional_text_if_logger_has_messages(logger)
+            relationship_list = append_parsed_field_or_log_error(logger=logger,
+                                                                 list_to_append_to=relationship_list,
+                                                                 field=relationship_dict,
+                                                                 method_to_parse=self.parse_relationship)
+        raise_parsing_error_if_logger_has_messages(logger)
         return relationship_list
 
     def parse_relationship(self, relationship_dict: Dict) -> Relationship:
         logger = Logger()
         spdx_element_id: str = relationship_dict.get("spdxElementId")
         related_spdx_element: str = relationship_dict.get("relatedSpdxElement")
-        relationship_type: Optional[RelationshipType] = try_parse_required_field_append_logger_when_failing(
-            logger=logger, field=relationship_dict.get("relationshipType"),
-            method_to_parse=self.parse_relationship_type)
+        relationship_type: Optional[RelationshipType] = parse_field_or_log_error(logger=logger,
+                                                                                 field=relationship_dict.get(
+                                                                                         "relationshipType"),
+                                                                                 parsing_method=self.parse_relationship_type)
         relationship_comment: str = relationship_dict.get("comment")
         raise_parsing_error_if_logger_has_messages(logger, "relationship")
 
-        relationship = try_construction_raise_parsing_error(Relationship, dict(spdx_element_id=spdx_element_id,
-                                                                               relationship_type=relationship_type,
-                                                                               related_spdx_element_id=related_spdx_element,
-                                                                               comment=relationship_comment))
+        relationship = construct_or_raise_parsing_error(Relationship, dict(spdx_element_id=spdx_element_id,
+                                                                           relationship_type=relationship_type,
+                                                                           related_spdx_element_id=related_spdx_element,
+                                                                           comment=relationship_comment))
         return relationship
 
     @staticmethod
     def parse_relationship_type(relationship_type_str: str) -> RelationshipType:
         try:
-            relationship_type = RelationshipType[transform_json_str_to_enum_name(relationship_type_str)]
+            relationship_type = RelationshipType[json_str_to_enum_name(relationship_type_str)]
         except KeyError:
             raise SPDXParsingError([f"RelationshipType {relationship_type_str} is not valid."])
         except AttributeError:
@@ -194,7 +189,7 @@ class RelationshipParser:
                                                            relationship_type=RelationshipType.DEPENDENCY_OF,
                                                            related_spdx_element_id=file_spdx_id)
                 except ConstructorTypeErrors as err:
-                    logger.append_all(err.get_messages())
+                    logger.extend(err.get_messages())
                     continue
                 dependency_relationships.append(dependency_relationship)
         raise_parsing_error_if_logger_has_messages(logger, "dependency relationship")

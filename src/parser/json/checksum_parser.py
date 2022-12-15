@@ -12,10 +12,8 @@ from typing import Dict, List
 
 from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import append_list_if_object_could_be_parsed_append_logger_if_not, \
-    raise_parsing_error_if_logger_has_messages, \
-    raise_parsing_error_without_additional_text_if_logger_has_messages, \
-    transform_json_str_to_enum_name, try_construction_raise_parsing_error
+from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, \
+    raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, construct_or_raise_parsing_error
 from src.parser.logger import Logger
 
 
@@ -31,18 +29,18 @@ class ChecksumParser:
 
         checksum_list = []
         for checksum_dict in checksum_dicts_list:
-            checksum_list = append_list_if_object_could_be_parsed_append_logger_if_not(logger=self.auxiliary_logger,
-                                                                                       list_to_append=checksum_list,
-                                                                                       field=checksum_dict,
-                                                                                       method_to_parse=self.parse_checksum)
+            checksum_list = append_parsed_field_or_log_error(logger=self.auxiliary_logger,
+                                                             list_to_append_to=checksum_list,
+                                                             field=checksum_dict,
+                                                             method_to_parse=self.parse_checksum)
 
-        raise_parsing_error_without_additional_text_if_logger_has_messages(self.auxiliary_logger)
+        raise_parsing_error_if_logger_has_messages(self.auxiliary_logger)
         return checksum_list
 
     @staticmethod
     def parse_checksum(checksum_dict: Dict) -> Checksum:
         logger = Logger()
-        algorithm = transform_json_str_to_enum_name(checksum_dict.get("algorithm"))
+        algorithm = json_str_to_enum_name(checksum_dict.get("algorithm"))
         try:
             checksum_algorithm = ChecksumAlgorithm[algorithm]
         except KeyError:
@@ -50,6 +48,6 @@ class ChecksumParser:
             checksum_algorithm = None
         checksum_value = checksum_dict.get("checksumValue")
         raise_parsing_error_if_logger_has_messages(logger, "Checksum")
-        checksum = try_construction_raise_parsing_error(Checksum,
-                                                        dict(algorithm=checksum_algorithm, value=checksum_value))
+        checksum = construct_or_raise_parsing_error(Checksum,
+                                                    dict(algorithm=checksum_algorithm, value=checksum_value))
         return checksum

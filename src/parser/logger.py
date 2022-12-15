@@ -20,7 +20,7 @@ class Logger:
     def append(self, message: str):
         self.messages.append(message)
 
-    def append_all(self, messages_to_append: List[str]):
+    def extend(self, messages_to_append: List[str]):
         for message in messages_to_append:
             self.messages.append(message)
 
