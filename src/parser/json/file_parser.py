@@ -35,8 +35,8 @@ class FileParser:
     def parse_files(self, file_dict_list) -> List[File]:
         file_list = []
         for file_dict in file_dict_list:
-            file_list = append_parsed_field_or_log_error(list_to_append_to=file_list,
-                                                         logger=self.logger, field=file_dict,
+            file_list = append_parsed_field_or_log_error(list_to_append_to=file_list, logger=self.logger,
+                                                         field=file_dict,
                                                          method_to_parse=self.parse_file)
         raise_parsing_error_if_logger_has_messages(self.logger)
         return file_list
@@ -60,9 +60,11 @@ class FileParser:
         license_comments: Optional[str] = file_dict.get("licenseComments")
 
         license_concluded: Optional[Union[
-            LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger=logger, field=file_dict.get("licenseConcluded"),
-            parsing_method=self.license_expression_parser.parse_license_expression, optional=True)
+            LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger=logger,
+                                                                                      field=file_dict.get(
+                                                                                          "licenseConcluded"),
+                                                                                      parsing_method=self.license_expression_parser.parse_license_expression,
+                                                                                      optional=True)
 
         license_info_in_files: Optional[
             Union[List[
@@ -73,9 +75,9 @@ class FileParser:
         raise_parsing_error_if_logger_has_messages(logger, f"file {name}")
 
         file = construct_or_raise_parsing_error(File, dict(name=name, spdx_id=spdx_id, checksums=checksums,
-                                                           attribution_texts=attribution_texts,
-                                                           comment=comment, copyright_text=copyright_text,
-                                                           file_type=file_types, contributors=file_contributors,
+                                                           attribution_texts=attribution_texts, comment=comment,
+                                                           copyright_text=copyright_text, file_type=file_types,
+                                                           contributors=file_contributors,
                                                            license_comment=license_comments,
                                                            concluded_license=license_concluded,
                                                            license_info_in_file=license_info_in_files,

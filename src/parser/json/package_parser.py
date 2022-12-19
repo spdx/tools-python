@@ -73,8 +73,8 @@ class PackageParser:
 
         files_analyzed: Optional[bool] = parse_field_or_log_error(logger=logger,
                                                                   field=package_dict.get("filesAnalyzed"),
-                                                                  parsing_method=lambda x: x,
-                                                                  optional=True, default=True)
+                                                                  parsing_method=lambda x: x, optional=True,
+                                                                  default=True)
         homepage: Optional[str] = package_dict.get("homepage")
         license_comments: Optional[str] = package_dict.get("licenseComments")
         license_concluded = parse_field_or_log_error(logger=logger, field=package_dict.get("licenseConcluded"),
@@ -123,26 +123,24 @@ class PackageParser:
         version_info: Optional[str] = package_dict.get("versionInfo")
         raise_parsing_error_if_logger_has_messages(logger, f"Package {name}")
 
-        package = construct_or_raise_parsing_error(Package, dict(spdx_id=spdx_id, name=name,
-                                                                 download_location=download_location,
-                                                                 version=version_info,
-                                                                 file_name=package_file_name, supplier=supplier,
-                                                                 originator=originator,
-                                                                 files_analyzed=files_analyzed,
-                                                                 verification_code=package_verification_code,
-                                                                 checksums=checksums, homepage=homepage,
-                                                                 source_info=source_info,
-                                                                 license_concluded=license_concluded,
-                                                                 license_info_from_files=license_info_from_file,
-                                                                 license_declared=license_declared,
-                                                                 license_comment=license_comments,
-                                                                 copyright_text=copyright_text, summary=summary,
-                                                                 description=description,
-                                                                 comment=comment, external_references=external_refs,
-                                                                 attribution_texts=attribution_texts,
-                                                                 primary_package_purpose=primary_package_purpose,
-                                                                 release_date=release_date, built_date=built_date,
-                                                                 valid_until_date=valid_until_date))
+        package = construct_or_raise_parsing_error(Package,
+                                                   dict(spdx_id=spdx_id, name=name, download_location=download_location,
+                                                        version=version_info, file_name=package_file_name,
+                                                        supplier=supplier, originator=originator,
+                                                        files_analyzed=files_analyzed,
+                                                        verification_code=package_verification_code,
+                                                        checksums=checksums, homepage=homepage, source_info=source_info,
+                                                        license_concluded=license_concluded,
+                                                        license_info_from_files=license_info_from_file,
+                                                        license_declared=license_declared,
+                                                        license_comment=license_comments,
+                                                        copyright_text=copyright_text, summary=summary,
+                                                        description=description, comment=comment,
+                                                        external_references=external_refs,
+                                                        attribution_texts=attribution_texts,
+                                                        primary_package_purpose=primary_package_purpose,
+                                                        release_date=release_date, built_date=built_date,
+                                                        valid_until_date=valid_until_date))
 
         return package
 
@@ -150,8 +148,7 @@ class PackageParser:
         external_refs = []
         for external_ref_dict in external_ref_dicts:
             external_refs = append_parsed_field_or_log_error(logger=self.logger, list_to_append_to=external_refs,
-                                                             field=external_ref_dict,
-                                                             method_to_parse=self.parse_external_ref)
+                                                             field=external_ref_dict, method_to_parse=self.parse_external_ref)
 
         return external_refs
 
@@ -165,8 +162,7 @@ class PackageParser:
         raise_parsing_error_if_logger_has_messages(logger, "external  ref")
         external_ref = construct_or_raise_parsing_error(ExternalPackageRef,
                                                         dict(category=ref_category, reference_type=ref_type,
-                                                             locator=ref_locator,
-                                                             comment=comment))
+                                                             locator=ref_locator, comment=comment))
 
         return external_ref
 

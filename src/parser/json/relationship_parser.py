@@ -37,18 +37,16 @@ class RelationshipParser:
         doc_spdx_id: str = input_doc_dict.get("SPDXID")
         if document_describes:
             relationships_list.extend(
-                parse_field_or_log_error(logger=self.logger, field=document_describes, parsing_method=lambda
-                    x: self.parse_document_describes(
-                    doc_spdx_id=doc_spdx_id, described_spdx_ids=x,
-                    created_relationships=relationships_list), default=[]))
+                parse_field_or_log_error(logger=self.logger, field=document_describes,
+                                         parsing_method=lambda x: self.parse_document_describes(doc_spdx_id=doc_spdx_id, described_spdx_ids=x, created_relationships=relationships_list),
+                                         default=[]))
 
             package_dicts: List[Dict] = input_doc_dict.get("packages")
             if package_dicts:
                 relationships_list.extend(
                     parse_field_or_log_error(logger=self.logger, field=package_dicts,
-                                             parsing_method=lambda x: self.parse_has_files(
-                                                     package_dicts=x,
-                                                     created_relationships=relationships_list), default=[]))
+                                             parsing_method=lambda x: self.parse_has_files(package_dicts=x, created_relationships=relationships_list),
+                                             default=[]))
 
             file_dicts: List[Dict] = input_doc_dict.get("files")
             if file_dicts:
@@ -67,10 +65,8 @@ class RelationshipParser:
         logger = Logger()
         relationship_list = []
         for relationship_dict in relationship_dicts:
-            relationship_list = append_parsed_field_or_log_error(logger=logger,
-                                                                 list_to_append_to=relationship_list,
-                                                                 field=relationship_dict,
-                                                                 method_to_parse=self.parse_relationship)
+            relationship_list = append_parsed_field_or_log_error(logger=logger, list_to_append_to=relationship_list,
+                                                                 field=relationship_dict, method_to_parse=self.parse_relationship)
         raise_parsing_error_if_logger_has_messages(logger)
         return relationship_list
 
@@ -79,8 +75,7 @@ class RelationshipParser:
         spdx_element_id: str = relationship_dict.get("spdxElementId")
         related_spdx_element: str = relationship_dict.get("relatedSpdxElement")
         relationship_type: Optional[RelationshipType] = parse_field_or_log_error(logger=logger,
-                                                                                 field=relationship_dict.get(
-                                                                                         "relationshipType"),
+                                                                                 field=relationship_dict.get("relationshipType"),
                                                                                  parsing_method=self.parse_relationship_type)
         relationship_comment: str = relationship_dict.get("comment")
         raise_parsing_error_if_logger_has_messages(logger, "relationship")

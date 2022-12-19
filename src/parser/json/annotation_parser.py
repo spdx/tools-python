@@ -56,17 +56,14 @@ class AnnotationParser:
                 if element_annotations:
                     annotations_list.extend(parse_field_or_log_error(
                         logger=self.logger, field=element_annotations,
-                        parsing_method=lambda x: self.parse_annotations(x, spdx_id=element_spdx_id),
-                        default=[]))
+                        parsing_method=lambda x: self.parse_annotations(x, spdx_id=element_spdx_id), default=[]))
 
     def parse_annotations(self, annotations_dict_list: List[Dict], spdx_id: Optional[str] = None) -> List[Annotation]:
         logger = Logger()
         annotations_list = []
         for annotation_dict in annotations_dict_list:
             annotations_list = append_parsed_field_or_log_error(
-                list_to_append_to=annotations_list,
-                logger=self.logger,
-                field=annotation_dict,
+                list_to_append_to=annotations_list, logger=self.logger, field=annotation_dict,
                 method_to_parse=lambda x: self.parse_annotation(x, spdx_id=spdx_id))
         raise_parsing_error_if_logger_has_messages(logger, "Annotations")
 
@@ -76,15 +73,13 @@ class AnnotationParser:
         logger = Logger()
         spdx_id: str = annotation.get("SPDXID") or spdx_id
 
-        annotation_type: Optional[AnnotationType] = parse_field_or_log_error(logger=logger,
-                                                                             field=annotation.get("annotationType"),
+        annotation_type: Optional[AnnotationType] = parse_field_or_log_error(logger=logger, field=annotation.get("annotationType"),
                                                                              parsing_method=self.parse_annotation_type)
 
         annotator: Optional[Actor] = parse_field_or_log_error(logger=logger, field=annotation.get("annotator"),
                                                               parsing_method=self.actor_parser.parse_actor)
 
-        annotation_date: Optional[datetime] = parse_field_or_log_error(logger=logger,
-                                                                       field=annotation.get("annotationDate"),
+        annotation_date: Optional[datetime] = parse_field_or_log_error(logger=logger, field=annotation.get("annotationDate"),
                                                                        parsing_method=datetime_from_str)
 
         annotation_comment: str = annotation.get("comment")
@@ -105,10 +100,8 @@ class AnnotationParser:
 
     def parse_review(self, review_dict: Dict, spdx_id: str) -> Annotation:
         logger = Logger()
-        annotator: Optional[Actor] = parse_field_or_log_error(logger=logger,
-                                                              field=review_dict.get("reviewer"),
-                                                              parsing_method=self.actor_parser.parse_actor,
-                                                              optional=True)
+        annotator: Optional[Actor] = parse_field_or_log_error(logger=logger, field=review_dict.get("reviewer"),
+                                                              parsing_method=self.actor_parser.parse_actor, optional=True)
 
         annotation_date: Optional[datetime] = parse_field_or_log_error(logger=logger, field=review_dict.get("reviewDate"),
                                                                        parsing_method=datetime_from_str)

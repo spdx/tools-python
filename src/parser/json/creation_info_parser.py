@@ -73,8 +73,7 @@ class CreationInfoParser:
                                                               document_namespace=document_namespace,
                                                               creators=creators, created=created,
                                                               license_list_version=license_list_version,
-                                                              document_comment=document_comment,
-                                                              creator_comment=creator_comment,
+                                                              document_comment=document_comment, creator_comment=creator_comment,
                                                               data_license=data_license,
                                                               external_document_refs=external_document_refs))
 
@@ -84,9 +83,7 @@ class CreationInfoParser:
         logger = Logger()
         creators_list = []
         for creator_dict in creators_list_from_dict:
-            creators_list = append_parsed_field_or_log_error(list_to_append_to=creators_list,
-                                                             logger=logger,
-                                                             field=creator_dict,
+            creators_list = append_parsed_field_or_log_error(list_to_append_to=creators_list, logger=logger, field=creator_dict,
                                                              method_to_parse=self.actor_parser.parse_actor_or_no_assertion)
 
         raise_parsing_error_if_logger_has_messages(logger)
@@ -103,8 +100,7 @@ class CreationInfoParser:
         logger = Logger()
         external_document_refs = []
         for external_ref_dict in external_document_refs_dict:
-            external_doc_ref: ExternalDocumentRef = parse_field_or_log_error(logger=logger,
-                                                                             field=external_ref_dict,
+            external_doc_ref: ExternalDocumentRef = parse_field_or_log_error(logger=logger, field=external_ref_dict,
                                                                              parsing_method=self.parse_external_doc_ref,
                                                                              optional=True)
 
