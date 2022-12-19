@@ -29,10 +29,8 @@ class ChecksumParser:
 
         checksum_list = []
         for checksum_dict in checksum_dicts_list:
-            checksum_list = append_parsed_field_or_log_error(logger=self.auxiliary_logger,
-                                                             list_to_append_to=checksum_list,
-                                                             field=checksum_dict,
-                                                             method_to_parse=self.parse_checksum)
+            checksum_list = append_parsed_field_or_log_error(logger=self.auxiliary_logger, list_to_append_to=checksum_list,
+                                                             field=checksum_dict, method_to_parse=self.parse_checksum)
 
         raise_parsing_error_if_logger_has_messages(self.auxiliary_logger)
         return checksum_list
@@ -48,6 +46,5 @@ class ChecksumParser:
             checksum_algorithm = None
         checksum_value = checksum_dict.get("checksumValue")
         raise_parsing_error_if_logger_has_messages(logger, "Checksum")
-        checksum = construct_or_raise_parsing_error(Checksum,
-                                                    dict(algorithm=checksum_algorithm, value=checksum_value))
+        checksum = construct_or_raise_parsing_error(Checksum, dict(algorithm=checksum_algorithm, value=checksum_value))
         return checksum

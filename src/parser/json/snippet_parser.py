@@ -75,11 +75,9 @@ class SnippetParser:
 
         snippet = construct_or_raise_parsing_error(Snippet,
                                                    dict(spdx_id=spdx_id, name=name, byte_range=byte_range,
-                                                        file_spdx_id=file_spdx_id,
-                                                        line_range=line_range,
+                                                        file_spdx_id=file_spdx_id, line_range=line_range,
                                                         attribution_texts=attribution_texts, comment=comment,
-                                                        copyright_text=copyright_text,
-                                                        license_comment=license_comment,
+                                                        copyright_text=copyright_text, license_comment=license_comment,
                                                         concluded_license=concluded_license,
                                                         license_info_in_snippet=license_info))
 
