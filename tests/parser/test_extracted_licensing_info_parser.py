@@ -53,7 +53,6 @@ def test_parse_invalid_extracted_licensing_info():
     with pytest.raises(SPDXParsingError) as err:
         _ = extracted_licensing_info_parser.parse_extracted_licensing_info(extracted_licensing_infos_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while constructing ExtractedLicensingInfo: ['SetterError "
                                   'ExtractedLicensingInfo: type of argument "comment" must be one of (str, '
                                   "NoneType); got int instead: 56']"]

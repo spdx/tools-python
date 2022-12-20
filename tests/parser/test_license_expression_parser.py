@@ -62,7 +62,6 @@ def test_invalid_license_expression(invalid_license_expression, expected_message
     with pytest.raises(SPDXParsingError) as err:
         _ = license_expression_parser.parse_license_expression(invalid_license_expression)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == expected_message
 
 

@@ -68,7 +68,6 @@ def test_parse_incomplete_file():
     with pytest.raises(SPDXParsingError) as err:
         _ = file_parser.parse_file(file_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while parsing file Incomplete File: ['No checksums provided, checksums are "
                                   "mandatory for files.']"]
 
@@ -100,7 +99,6 @@ def test_parse_falsy_files():
     with pytest.raises(SPDXParsingError) as err:
         _ = file_parser.parse_files(files)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while parsing file Incomplete File: ['No checksums provided, checksums "
                                   "are mandatory for files.']",
                                   'Error while constructing File: [\'SetterError File: type of argument "name" '
@@ -125,5 +123,4 @@ def test_parse_invalid_file_types():
     with pytest.raises(SPDXParsingError) as err:
         _ = file_parser.parse_file_types(file_types_list)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while parsing file_types: ['FileType APPLICAON is not valid.']"]

@@ -21,7 +21,6 @@ def test_json_parser_file_not_found():
         wrong_file_path = os.path.join(os.path.dirname(__file__), 'test.json')
         _ = JsonParser().parse(wrong_file_path)
 
-    assert err.type == FileNotFoundError
     assert err.value.args[1] == "No such file or directory"
 
 

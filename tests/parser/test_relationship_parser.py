@@ -44,7 +44,6 @@ def test_parse_incomplete_relationship():
     with pytest.raises(SPDXParsingError) as err:
         _ = relationship_parser.parse_relationship(relationship_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while parsing relationship: ['RelationshipType must be str, not "
                                   "NoneType.']"]
 def test_parse_relationship_type():
