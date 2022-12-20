@@ -43,6 +43,5 @@ def test_invalid_actor(actor_string, expected_message):
 
     with pytest.raises(SPDXParsingError) as err:
         _ = actor_parser.parse_actor(actor_string)
-    assert err.typename == 'SPDXParsingError'
-    assert err.value.messages[
-               0] == expected_message
+
+    assert err.value.messages[0] == expected_message

@@ -131,7 +131,6 @@ def test_incomplete_package():
     with pytest.raises(SPDXParsingError) as err:
         _ = package_parser.parse_package(package_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.get_messages() == ["Error while constructing Package: ['SetterError Package: type of "
                                         'argument "name" must be str; got NoneType instead: None\', \'SetterError '
                                         'Package: type of argument "download_location" must be one of (str, '
@@ -150,7 +149,6 @@ def test_package_with_setter_error():
     with pytest.raises(SPDXParsingError) as err:
         _ = package_parser.parse_package(package_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.get_messages() == ["Error while constructing Package: ['SetterError Package: type of argument "
                                         '"name" must be str; got int instead: 5\']']
 
@@ -169,7 +167,6 @@ def test_package_with_falsy_values():
     with pytest.raises(SPDXParsingError) as err:
         _ = package_parser.parse_package(package_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.get_messages() == [
         'Error while parsing Package Example Package: ["Error while parsing Checksum: [\'Algorithm SHA not valid for checksum.\']"]']
 
@@ -197,7 +194,6 @@ def test_parse_packages():
     with pytest.raises(SPDXParsingError) as err:
         _ = package_parser.parse_packages(packages_list)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ['Error while parsing Package Example Package: ["Error while parsing Checksum: '
                                   '[\'Algorithm SHA not valid for checksum.\']"]',
                                   "Error while constructing Package: ['SetterError Package: type of argument "

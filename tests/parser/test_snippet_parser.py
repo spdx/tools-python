@@ -73,7 +73,6 @@ def test_parse_incomplete_snippet():
     with pytest.raises(SPDXParsingError) as err:
         _ = snippet_parser.parse_snippet(incomplete_snippet_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while parsing snippet: ['No ranges dict provided.']"]
 
 
@@ -98,7 +97,6 @@ def test_parse_snippet_with_invalid_snippet_range():
     with pytest.raises(SPDXParsingError) as err:
         _ = snippet_parser.parse_snippet(snippet_with_invalid_ranges_list)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while constructing Snippet: ['SetterError Snippet: type of argument "
                                   '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError '
                                   'Snippet: type of argument "byte_range"[0] must be int; got str instead: '
@@ -134,7 +132,6 @@ def test_parse_invalid_snippet_range():
     with pytest.raises(SPDXParsingError) as err:
         _ = snippet_parser.parse_ranges(ranges)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while parsing ranges_dict: ['Type of startpointer is not the same as "
                                   "type of endpointer.', 'Type of startpointer is not the same as type of "
                                   "endpointer.']"]

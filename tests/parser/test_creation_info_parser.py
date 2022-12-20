@@ -72,7 +72,6 @@ def test_parse_incomplete_creation_info():
     with pytest.raises(SPDXParsingError) as err:
         _ = creation_info_parser.parse_creation_info(doc_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while parsing doc Example Document: ['CreationInfo does not exist.']"]
 
 
@@ -92,7 +91,6 @@ def test_parse_invalid_creation_info():
     with pytest.raises(SPDXParsingError) as err:
         _ = creation_info_parser.parse_creation_info(doc_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while constructing CreationInfo: ['SetterError CreationInfo: type of "
                                   'argument "document_namespace" must be str; got NoneType instead: None\', '
                                   '\'SetterError CreationInfo: type of argument "data_license" must be str; got '

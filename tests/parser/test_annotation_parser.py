@@ -114,6 +114,5 @@ def test_parse_incomplete_annotation():
     with pytest.raises(SPDXParsingError) as err:
         _ = annotation_parser.parse_annotation(annotation_dict)
 
-    assert err.type == SPDXParsingError
     assert err.value.messages == ["Error while parsing Annotation: ['Invalid annotation type: None', 'Could not "
                                   "convert str to datetime, invalid type: NoneType']"]
