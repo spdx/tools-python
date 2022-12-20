@@ -146,3 +146,32 @@ def test_successful_conversion(converter: PackageConverter):
     assert converted_dict[converter.json_property_name(PackageProperty.RELEASE_DATE)] == "2022-12-01T00:00:00Z"
     assert converted_dict[converter.json_property_name(PackageProperty.BUILT_DATE)] == "2022-12-02T00:00:00Z"
     assert converted_dict[converter.json_property_name(PackageProperty.VALID_UNTIL_DATE)] == "2022-12-03T00:00:00Z"
+
+
+def test_null_values(converter: PackageConverter):
+    package = Package(spdx_id="packageId", name="name", download_location="downloadLocation")
+
+    creation_info = CreationInfo("spdxVersion", "documentID", "documentName", "documentNamespace", [],
+                                 datetime(2022, 12, 4))
+    document = Document(creation_info, packages=[package])
+
+    converted_dict = converter.convert(package, document)
+
+    assert converter.json_property_name(PackageProperty.VERSION_INFO) not in converted_dict
+    assert converter.json_property_name(PackageProperty.PACKAGE_FILE_NAME) not in converted_dict
+    assert converter.json_property_name(PackageProperty.SUPPLIER) not in converted_dict
+    assert converter.json_property_name(PackageProperty.ORIGINATOR) not in converted_dict
+    assert converter.json_property_name(PackageProperty.PACKAGE_VERIFICATION_CODE) not in converted_dict
+    assert converter.json_property_name(PackageProperty.HOMEPAGE) not in converted_dict
+    assert converter.json_property_name(PackageProperty.SOURCE_INFO) not in converted_dict
+    assert converter.json_property_name(PackageProperty.LICENSE_CONCLUDED) not in converted_dict
+    assert converter.json_property_name(PackageProperty.LICENSE_DECLARED) not in converted_dict
+    assert converter.json_property_name(PackageProperty.LICENSE_COMMENTS) not in converted_dict
+    assert converter.json_property_name(PackageProperty.COPYRIGHT_TEXT) not in converted_dict
+    assert converter.json_property_name(PackageProperty.SUMMARY) not in converted_dict
+    assert converter.json_property_name(PackageProperty.DESCRIPTION) not in converted_dict
+    assert converter.json_property_name(PackageProperty.COMMENT) not in converted_dict
+    assert converter.json_property_name(PackageProperty.PRIMARY_PACKAGE_PURPOSE) not in converted_dict
+    assert converter.json_property_name(PackageProperty.BUILT_DATE) not in converted_dict
+    assert converter.json_property_name(PackageProperty.RELEASE_DATE) not in converted_dict
+    assert converter.json_property_name(PackageProperty.VALID_UNTIL_DATE) not in converted_dict

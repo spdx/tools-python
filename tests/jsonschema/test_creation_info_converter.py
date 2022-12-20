@@ -49,6 +49,15 @@ def test_successful_conversion(converter: CreationInfoConverter):
     assert converted_dict[converter.json_property_name(CreationInfoProperty.COMMENT)] == "comment"
 
 
+def test_null_values(converter: CreationInfoConverter):
+    creation_info = CreationInfo("irrelevant", "irrelevant", "irrelevant", "irrelevant", [], datetime(2022, 12, 1))
+
+    converted_dict = converter.convert(creation_info)
+
+    assert converter.json_property_name(CreationInfoProperty.LICENSE_LIST_VERSION) not in converted_dict
+    assert converter.json_property_name(CreationInfoProperty.COMMENT) not in converted_dict
+
+
 def test_json_type(converter: CreationInfoConverter):
     assert converter.get_json_type() == CreationInfoProperty
 

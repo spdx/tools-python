@@ -47,5 +47,8 @@ class TypedConverter(ABC):
 
         result = {}
         for property_name in self.get_json_type():
-            result[self.json_property_name(property_name)] = self._get_property_value(instance, property_name, document)
+            property_value = self._get_property_value(instance, property_name, document)
+            if property_value is None:
+                continue
+            result[self.json_property_name(property_name)] = property_value
         return result

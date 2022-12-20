@@ -15,6 +15,7 @@ from src.jsonschema.checksum_converter import ChecksumConverter
 from src.jsonschema.converter import TypedConverter
 from src.jsonschema.file_properties import FileProperty
 from src.jsonschema.json_property import JsonProperty
+from src.jsonschema.optional_utils import apply_if_present
 from src.model.document import Document
 from src.model.file import File
 from src.writer.casing_tools import snake_case_to_camel_case
@@ -49,7 +50,7 @@ class FileConverter(TypedConverter):
         elif file_property == FileProperty.COMMENT:
             return file.comment
         elif file_property == FileProperty.COPYRIGHT_TEXT:
-            return file.copyright_text
+            return apply_if_present(str, file.copyright_text)
         elif file_property == FileProperty.FILE_CONTRIBUTORS:
             return file.contributors
         elif file_property == FileProperty.FILE_DEPENDENCIES:
@@ -62,11 +63,11 @@ class FileConverter(TypedConverter):
         elif file_property == FileProperty.LICENSE_COMMENTS:
             return file.license_comment
         elif file_property == FileProperty.LICENSE_CONCLUDED:
-            return str(file.concluded_license)
+            return apply_if_present(str, file.concluded_license)
         elif file_property == FileProperty.LICENSE_INFO_IN_FILES:
             if isinstance(file.license_info_in_file, list):
                 return [str(license_expression) for license_expression in file.license_info_in_file]
-            return str(file.license_info_in_file)
+            return apply_if_present(str, file.license_info_in_file)
         elif file_property == FileProperty.NOTICE_TEXT:
             return file.notice
 

@@ -90,3 +90,18 @@ def test_successful_conversion(converter: SnippetConverter):
         {"startPointer": {"reference": file_spdx_id, "lineNumber": 3},
          "endPointer": {"reference": file_spdx_id, "lineNumber": 4}}]
     assert converted_dict[converter.json_property_name(SnippetProperty.SNIPPET_FROM_FILE)] == file_spdx_id
+
+
+def test_null_values(converter: SnippetConverter):
+    snippet = Snippet("spdxId", file_spdx_id="fileId", byte_range=(1, 2))
+
+    creation_info = CreationInfo("spdxVersion", "documentId", "documentName", "documentNamespace", [],
+                                 datetime(2022, 12, 4))
+    document = Document(creation_info, snippets=[snippet])
+    converted_dict = converter.convert(snippet, document)
+
+    assert converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED) not in converted_dict
+    assert converter.json_property_name(SnippetProperty.LICENSE_COMMENTS) not in converted_dict
+    assert converter.json_property_name(SnippetProperty.COPYRIGHT_TEXT) not in converted_dict
+    assert converter.json_property_name(SnippetProperty.COMMENT) not in converted_dict
+    assert converter.json_property_name(SnippetProperty.NAME) not in converted_dict
