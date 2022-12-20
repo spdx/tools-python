@@ -14,6 +14,7 @@ from src.datetime_conversions import datetime_to_iso_string
 from src.jsonschema.converter import TypedConverter
 from src.jsonschema.creation_info_properties import CreationInfoProperty
 from src.jsonschema.json_property import JsonProperty
+from src.jsonschema.optional_utils import apply_if_present
 from src.model.document import CreationInfo, Document
 from src.writer.casing_tools import snake_case_to_camel_case
 
@@ -35,6 +36,6 @@ class CreationInfoConverter(TypedConverter):
         elif creation_info_property == CreationInfoProperty.CREATORS:
             return [creator.to_serialized_string() for creator in creation_info.creators]
         elif creation_info_property == CreationInfoProperty.LICENSE_LIST_VERSION:
-            return str(creation_info.license_list_version)
+            return apply_if_present(str, creation_info.license_list_version)
         elif creation_info_property == CreationInfoProperty.COMMENT:
             return creation_info.creator_comment

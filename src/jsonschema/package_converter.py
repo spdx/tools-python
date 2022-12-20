@@ -16,6 +16,7 @@ from src.jsonschema.checksum_converter import ChecksumConverter
 from src.jsonschema.converter import TypedConverter
 from src.jsonschema.external_package_ref_converter import ExternalPackageRefConverter
 from src.jsonschema.json_property import JsonProperty
+from src.jsonschema.optional_utils import apply_if_present
 from src.jsonschema.package_properties import PackageProperty
 from src.jsonschema.package_verification_code_converter import PackageVerificationCodeConverter
 from src.jsonschema.relationship_filters import find_package_contains_file_relationships, \
@@ -53,13 +54,13 @@ class PackageConverter(TypedConverter):
         elif package_property == PackageProperty.ATTRIBUTION_TEXTS:
             return package.attribution_texts
         elif package_property == PackageProperty.BUILT_DATE:
-            return datetime_to_iso_string(package.built_date)
+            return apply_if_present(datetime_to_iso_string, package.built_date)
         elif package_property == PackageProperty.CHECKSUMS:
             return [self.checksum_converter.convert(checksum, document) for checksum in package.checksums]
         elif package_property == PackageProperty.COMMENT:
             return package.comment
         elif package_property == PackageProperty.COPYRIGHT_TEXT:
-            return str(package.copyright_text)
+            return apply_if_present(str, package.copyright_text)
         elif package_property == PackageProperty.DESCRIPTION:
             return package.description
         elif package_property == PackageProperty.DOWNLOAD_LOCATION:
@@ -76,31 +77,31 @@ class PackageConverter(TypedConverter):
                                              find_file_contained_by_package_relationships(document, package)]
             return package_contains_file_ids + file_contained_in_package_ids
         elif package_property == PackageProperty.HOMEPAGE:
-            return str(package.homepage)
+            return apply_if_present(str, package.homepage)
         elif package_property == PackageProperty.LICENSE_COMMENTS:
             return package.license_comment
         elif package_property == PackageProperty.LICENSE_CONCLUDED:
-            return str(package.license_concluded)
+            return apply_if_present(str, package.license_concluded)
         elif package_property == PackageProperty.LICENSE_DECLARED:
-            return str(package.license_declared)
+            return apply_if_present(str, package.license_declared)
         elif package_property == PackageProperty.LICENSE_INFO_FROM_FILES:
             if isinstance(package.license_info_from_files, list):
                 return [str(license_expression) for license_expression in package.license_info_from_files]
-            return str(package.license_info_from_files)
+            return apply_if_present(str, package.license_info_from_files)
         elif package_property == PackageProperty.NAME:
             return package.name
         elif package_property == PackageProperty.ORIGINATOR:
             if isinstance(package.originator, Actor):
                 return package.originator.to_serialized_string()
-            return str(package.originator)
+            return apply_if_present(str, package.originator)
         elif package_property == PackageProperty.PACKAGE_FILE_NAME:
             return package.file_name
         elif package_property == PackageProperty.PACKAGE_VERIFICATION_CODE:
-            return self.package_verification_code_converter.convert(package.verification_code)
+            return apply_if_present(self.package_verification_code_converter.convert, package.verification_code)
         elif package_property == PackageProperty.PRIMARY_PACKAGE_PURPOSE:
-            return package.primary_package_purpose.name
+            return package.primary_package_purpose.name if package.primary_package_purpose is not None else None
         elif package_property == PackageProperty.RELEASE_DATE:
-            return datetime_to_iso_string(package.release_date)
+            return apply_if_present(datetime_to_iso_string, package.release_date)
         elif package_property == PackageProperty.SOURCE_INFO:
             return package.source_info
         elif package_property == PackageProperty.SUMMARY:
@@ -108,9 +109,9 @@ class PackageConverter(TypedConverter):
         elif package_property == PackageProperty.SUPPLIER:
             if isinstance(package.supplier, Actor):
                 return package.supplier.to_serialized_string()
-            return str(package.supplier)
+            return apply_if_present(str, package.supplier)
         elif package_property == PackageProperty.VALID_UNTIL_DATE:
-            return datetime_to_iso_string(package.valid_until_date)
+            return apply_if_present(datetime_to_iso_string, package.valid_until_date)
         elif package_property == PackageProperty.VERSION_INFO:
             return package.version
 

@@ -100,3 +100,21 @@ def test_successful_conversion(converter: FileConverter):
     assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == ["licenseExpression2",
                                                                                                 "licenseExpression3"]
     assert converted_dict[converter.json_property_name(FileProperty.NOTICE_TEXT)] == "notice"
+
+
+def test_null_values(converter: FileConverter):
+    file = File(name="name", spdx_id="spdxId",
+                checksums=[Checksum(ChecksumAlgorithm.SHA224, "sha224"), Checksum(ChecksumAlgorithm.MD2, "md2")])
+
+    creation_info = CreationInfo("spdxVersion", "documentID", "documentName", "documentNamespace", [],
+                                 datetime(2022, 12, 4))
+
+    document = Document(creation_info, files=[file])
+
+    converted_dict = converter.convert(file, document)
+
+    assert converter.json_property_name(FileProperty.COPYRIGHT_TEXT) not in converted_dict
+    assert converter.json_property_name(FileProperty.LICENSE_CONCLUDED) not in converted_dict
+    assert converter.json_property_name(FileProperty.LICENSE_COMMENTS) not in converted_dict
+    assert converter.json_property_name(FileProperty.COMMENT) not in converted_dict
+    assert converter.json_property_name(FileProperty.NOTICE_TEXT) not in converted_dict

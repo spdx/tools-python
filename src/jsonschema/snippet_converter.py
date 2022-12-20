@@ -13,6 +13,7 @@ from typing import Type, Any, Tuple, Dict
 from src.jsonschema.annotation_converter import AnnotationConverter
 from src.jsonschema.converter import TypedConverter
 from src.jsonschema.json_property import JsonProperty
+from src.jsonschema.optional_utils import apply_if_present
 from src.jsonschema.snippet_properties import SnippetProperty
 from src.model.document import Document
 from src.model.snippet import Snippet
@@ -42,15 +43,15 @@ class SnippetConverter(TypedConverter):
         elif snippet_property == SnippetProperty.COMMENT:
             return snippet.comment
         elif snippet_property == SnippetProperty.COPYRIGHT_TEXT:
-            return snippet.copyright_text
+            return apply_if_present(str, snippet.copyright_text)
         elif snippet_property == SnippetProperty.LICENSE_COMMENTS:
             return snippet.license_comment
         elif snippet_property == SnippetProperty.LICENSE_CONCLUDED:
-            return str(snippet.concluded_license)
+            return apply_if_present(str, snippet.concluded_license)
         elif snippet_property == SnippetProperty.LICENSE_INFO_IN_SNIPPETS:
             if isinstance(snippet.license_info_in_snippet, list):
                 return [str(license_expression) for license_expression in snippet.license_info_in_snippet]
-            return str(snippet.license_info_in_snippet)
+            return apply_if_present(str, snippet.license_info_in_snippet)
         elif snippet_property == SnippetProperty.NAME:
             return snippet.name
         elif snippet_property == SnippetProperty.RANGES:
