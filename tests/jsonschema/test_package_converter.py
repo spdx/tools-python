@@ -21,9 +21,8 @@ from src.model.annotation import Annotation, AnnotationType
 from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import Document
 from src.model.license_expression import LicenseExpression
-from src.model.package import Package, PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, \
-    PackagePurpose
-from tests.fixtures import creation_info_fixture, package_fixture
+from src.model.package import Package, PackageVerificationCode, PackagePurpose
+from tests.fixtures import creation_info_fixture, package_fixture, external_package_ref_fixture
 
 
 @pytest.fixture
@@ -100,16 +99,13 @@ def test_successful_conversion(converter: PackageConverter):
                                                LicenseExpression("licenseExpression3")],
                       license_declared=LicenseExpression("licenseExpression4"), license_comment="licenseComment",
                       copyright_text="copyrightText", summary="summary", description="description", comment="comment",
-                      external_references=[
-                          ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "referenceType",
-                                             "referenceLocator")],
+                      external_references=[external_package_ref_fixture()],
                       attribution_texts=["attributionText1", "attributionText2"],
                       primary_package_purpose=PackagePurpose.APPLICATION, release_date=datetime(2022, 12, 1),
                       built_date=datetime(2022, 12, 2), valid_until_date=datetime(2022, 12, 3))
 
     annotation = Annotation(package.spdx_id, AnnotationType.REVIEW, Actor(ActorType.TOOL, "toolName"),
-                            datetime(2022, 12, 5),
-                            "review comment")
+                            datetime(2022, 12, 5), "review comment")
     document = Document(creation_info_fixture(), packages=[package], annotations=[annotation])
 
     converted_dict = converter.convert(package, document)
