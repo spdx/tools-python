@@ -64,7 +64,7 @@ def test_creating_describes_relationship():
     relationships = relationship_parser.parse_document_describes(doc_spdx_id="SPDXRef-DOCUMENT",
                                                                  described_spdx_ids=document_dict.get(
                                                                      "documentDescribes"),
-                                                                 created_relationships=[])
+                                                                 existing_relationships=[])
 
     assert len(relationships) == 3
     assert relationships == [Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-Package"),
@@ -105,7 +105,7 @@ def test_contains_relationship():
             }]
     }
 
-    relationships = relationship_parser.parse_has_files(document_dict.get("packages"), created_relationships=[])
+    relationships = relationship_parser.parse_has_files(document_dict.get("packages"), existing_relationships=[])
 
     assert len(relationships) == 2
     assert relationships == [
@@ -131,6 +131,6 @@ def test_single_contains_relationship():
                      related_spdx_element_id="SPDXRef-Package")]
 
     relationships = relationship_parser.parse_has_files(document_dict.get("packages"),
-                                                        created_relationships=created_relationships)
+                                                        existing_relationships=created_relationships)
 
     assert len(relationships) == 0
