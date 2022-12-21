@@ -63,8 +63,10 @@ def test_conversion():
 
     converted_dict = converter.convert(test_instance)
 
-    assert converted_dict.get("jsonFirstName") == "firstPropertyValue"
-    assert converted_dict.get("jsonSecondName") == 3
+    assert converted_dict == {
+        "jsonFirstName": "firstPropertyValue",
+        "jsonSecondName": 3
+    }
 
 
 def test_wrong_type():

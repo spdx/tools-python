@@ -88,26 +88,24 @@ def test_successful_conversion(converter: DocumentConverter):
 
     converted_dict = converter.convert(document)
 
-    assert converted_dict[converter.json_property_name(DocumentProperty.SPDX_ID)] == "spdxId"
-    assert converted_dict[converter.json_property_name(DocumentProperty.ANNOTATIONS)] == ["mock_converted_annotation"]
-    assert converted_dict[converter.json_property_name(DocumentProperty.COMMENT)] == "comment"
-    assert converted_dict[
-               converter.json_property_name(DocumentProperty.CREATION_INFO)] == "mock_converted_creation_info"
-    assert converted_dict[converter.json_property_name(DocumentProperty.DATA_LICENSE)] == "dataLicense"
-    assert converted_dict[
-               converter.json_property_name(
-                   DocumentProperty.EXTERNAL_DOCUMENT_REFS)] == ["mock_converted_external_ref"]
-    assert converted_dict[converter.json_property_name(DocumentProperty.HAS_EXTRACTED_LICENSING_INFO)] == [
-        "mock_converted_extracted_licensing_info"]
-    assert converted_dict[converter.json_property_name(DocumentProperty.NAME)] == "name"
-    assert converted_dict[converter.json_property_name(DocumentProperty.SPDX_VERSION)] == "spdxVersion"
-    assert converted_dict[converter.json_property_name(DocumentProperty.DOCUMENT_NAMESPACE)] == "namespace"
-    assert converted_dict[converter.json_property_name(DocumentProperty.DOCUMENT_DESCRIBES)] == ["describedElementId"]
-    assert converted_dict[converter.json_property_name(DocumentProperty.PACKAGES)] == ["mock_converted_package"]
-    assert converted_dict[converter.json_property_name(DocumentProperty.FILES)] == ["mock_converted_file"]
-    assert converted_dict[converter.json_property_name(DocumentProperty.SNIPPETS)] == ["mock_converted_snippet"]
-    assert converted_dict[converter.json_property_name(DocumentProperty.RELATIONSHIPS)] == [
-        "mock_converted_relationship"]
+    assert converted_dict == {
+        converter.json_property_name(DocumentProperty.SPDX_ID): "spdxId",
+        converter.json_property_name(DocumentProperty.ANNOTATIONS): ["mock_converted_annotation"],
+        converter.json_property_name(DocumentProperty.COMMENT): "comment",
+        converter.json_property_name(DocumentProperty.CREATION_INFO): "mock_converted_creation_info",
+        converter.json_property_name(DocumentProperty.DATA_LICENSE): "dataLicense",
+        converter.json_property_name(DocumentProperty.EXTERNAL_DOCUMENT_REFS): ["mock_converted_external_ref"],
+        converter.json_property_name(DocumentProperty.HAS_EXTRACTED_LICENSING_INFO): [
+            "mock_converted_extracted_licensing_info"],
+        converter.json_property_name(DocumentProperty.NAME): "name",
+        converter.json_property_name(DocumentProperty.SPDX_VERSION): "spdxVersion",
+        converter.json_property_name(DocumentProperty.DOCUMENT_NAMESPACE): "namespace",
+        converter.json_property_name(DocumentProperty.DOCUMENT_DESCRIBES): ["describedElementId"],
+        converter.json_property_name(DocumentProperty.PACKAGES): ["mock_converted_package"],
+        converter.json_property_name(DocumentProperty.FILES): ["mock_converted_file"],
+        converter.json_property_name(DocumentProperty.SNIPPETS): ["mock_converted_snippet"],
+        converter.json_property_name(DocumentProperty.RELATIONSHIPS): ["mock_converted_relationship"]
+    }
 
 
 def test_json_type(converter: DocumentConverter):

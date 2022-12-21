@@ -43,7 +43,9 @@ def test_successful_conversion(converter: RelationshipConverter):
 
     converted_dict = converter.convert(relationship)
 
-    assert converted_dict[converter.json_property_name(RelationshipProperty.SPDX_ELEMENT_ID)] == "spdxElementId"
-    assert converted_dict[converter.json_property_name(RelationshipProperty.COMMENT)] == "comment"
-    assert converted_dict[converter.json_property_name(RelationshipProperty.RELATED_SPDX_ELEMENT)] == "relatedElementId"
-    assert converted_dict[converter.json_property_name(RelationshipProperty.RELATIONSHIP_TYPE)] == "COPY_OF"
+    assert converted_dict == {
+        converter.json_property_name(RelationshipProperty.SPDX_ELEMENT_ID): "spdxElementId",
+        converter.json_property_name(RelationshipProperty.COMMENT): "comment",
+        converter.json_property_name(RelationshipProperty.RELATED_SPDX_ELEMENT): "relatedElementId",
+        converter.json_property_name(RelationshipProperty.RELATIONSHIP_TYPE): "COPY_OF"
+    }

@@ -74,23 +74,24 @@ def test_successful_conversion(converter: SnippetConverter):
     document = Document(creation_info_fixture(), snippets=[snippet], annotations=[annotation])
     converted_dict = converter.convert(snippet, document)
 
-    assert converted_dict[converter.json_property_name(SnippetProperty.SPDX_ID)] == "spdxId"
-    assert converted_dict[converter.json_property_name(SnippetProperty.ANNOTATIONS)] == ["mock_converted_annotation"]
-    assert converted_dict[converter.json_property_name(SnippetProperty.ATTRIBUTION_TEXTS)] == ["attributionText1",
-                                                                                               "attributionText2"]
-    assert converted_dict[converter.json_property_name(SnippetProperty.COMMENT)] == "comment"
-    assert converted_dict[converter.json_property_name(SnippetProperty.COPYRIGHT_TEXT)] == "copyrightText"
-    assert converted_dict[converter.json_property_name(SnippetProperty.LICENSE_COMMENTS)] == "licenseComment"
-    assert converted_dict[converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED)] == "licenseExpression1"
-    assert converted_dict[converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS)] == [
-        "licenseExpression2", "licenseExpression3"]
-    assert converted_dict[converter.json_property_name(SnippetProperty.NAME)] == "name"
-    assert converted_dict[converter.json_property_name(SnippetProperty.RANGES)] == [
-        {"startPointer": {"reference": file_spdx_id, "offset": 1},
-         "endPointer": {"reference": file_spdx_id, "offset": 2}},
-        {"startPointer": {"reference": file_spdx_id, "lineNumber": 3},
-         "endPointer": {"reference": file_spdx_id, "lineNumber": 4}}]
-    assert converted_dict[converter.json_property_name(SnippetProperty.SNIPPET_FROM_FILE)] == file_spdx_id
+    assert converted_dict == {
+        converter.json_property_name(SnippetProperty.SPDX_ID): "spdxId",
+        converter.json_property_name(SnippetProperty.ANNOTATIONS): ["mock_converted_annotation"],
+        converter.json_property_name(SnippetProperty.ATTRIBUTION_TEXTS): ["attributionText1", "attributionText2"],
+        converter.json_property_name(SnippetProperty.COMMENT): "comment",
+        converter.json_property_name(SnippetProperty.COPYRIGHT_TEXT): "copyrightText",
+        converter.json_property_name(SnippetProperty.LICENSE_COMMENTS): "licenseComment",
+        converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED): "licenseExpression1",
+        converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS): ["licenseExpression2",
+                                                                                 "licenseExpression3"],
+        converter.json_property_name(SnippetProperty.NAME): "name",
+        converter.json_property_name(SnippetProperty.RANGES): [
+            {"startPointer": {"reference": file_spdx_id, "offset": 1},
+             "endPointer": {"reference": file_spdx_id, "offset": 2}},
+            {"startPointer": {"reference": file_spdx_id, "lineNumber": 3},
+             "endPointer": {"reference": file_spdx_id, "lineNumber": 4}}],
+        converter.json_property_name(SnippetProperty.SNIPPET_FROM_FILE): file_spdx_id
+    }
 
 
 def test_null_values(converter: SnippetConverter):

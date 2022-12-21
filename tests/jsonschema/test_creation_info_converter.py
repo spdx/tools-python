@@ -43,11 +43,12 @@ def test_successful_conversion(converter: CreationInfoConverter):
         creation_info_fixture(creators=creators, created=created, creator_comment="comment",
                               license_list_version=Version(1, 2)))
 
-    assert converted_dict[converter.json_property_name(CreationInfoProperty.CREATED)] == datetime_to_iso_string(created)
-    assert converted_dict[converter.json_property_name(CreationInfoProperty.CREATORS)] == ["Person: personName",
-                                                                                           "Tool: toolName"]
-    assert converted_dict[converter.json_property_name(CreationInfoProperty.LICENSE_LIST_VERSION)] == "1.2"
-    assert converted_dict[converter.json_property_name(CreationInfoProperty.COMMENT)] == "comment"
+    assert converted_dict == {
+        converter.json_property_name(CreationInfoProperty.CREATED): datetime_to_iso_string(created),
+        converter.json_property_name(CreationInfoProperty.CREATORS): ["Person: personName", "Tool: toolName"],
+        converter.json_property_name(CreationInfoProperty.LICENSE_LIST_VERSION): "1.2",
+        converter.json_property_name(CreationInfoProperty.COMMENT): "comment"
+    }
 
 
 def test_null_values(converter: CreationInfoConverter):

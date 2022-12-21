@@ -112,37 +112,36 @@ def test_successful_conversion(converter: PackageConverter):
 
     converted_dict = converter.convert(package, document)
 
-    assert converted_dict[converter.json_property_name(PackageProperty.SPDX_ID)] == "packageId"
-    assert converted_dict[converter.json_property_name(PackageProperty.ANNOTATIONS)] == ["mock_converted_annotation"]
-    assert converted_dict[converter.json_property_name(PackageProperty.ATTRIBUTION_TEXTS)] == ["attributionText1",
-                                                                                               "attributionText2"]
-    assert converted_dict[converter.json_property_name(PackageProperty.NAME)] == "name"
-    assert converted_dict[converter.json_property_name(PackageProperty.DOWNLOAD_LOCATION)] == "downloadLocation"
-    assert converted_dict[converter.json_property_name(PackageProperty.VERSION_INFO)] == "version"
-    assert converted_dict[converter.json_property_name(PackageProperty.PACKAGE_FILE_NAME)] == "fileName"
-    assert converted_dict[converter.json_property_name(PackageProperty.SUPPLIER)] == "Person: supplierName"
-    assert converted_dict[converter.json_property_name(PackageProperty.ORIGINATOR)] == "Person: originatorName"
-    assert converted_dict[converter.json_property_name(PackageProperty.FILES_ANALYZED)]
-    assert converted_dict[converter.json_property_name(
-        PackageProperty.PACKAGE_VERIFICATION_CODE)] == "mock_converted_verification_code"
-    assert converted_dict[converter.json_property_name(PackageProperty.CHECKSUMS)] == ["mock_converted_checksum",
-                                                                                       "mock_converted_checksum"]
-    assert converted_dict[converter.json_property_name(PackageProperty.HOMEPAGE)] == "homepage"
-    assert converted_dict[converter.json_property_name(PackageProperty.SOURCE_INFO)] == "sourceInfo"
-    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_CONCLUDED)] == "licenseExpression1"
-    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == [
-        "licenseExpression2", "licenseExpression3"]
-    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_DECLARED)] == "licenseExpression4"
-    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_COMMENTS)] == "licenseComment"
-    assert converted_dict[converter.json_property_name(PackageProperty.COPYRIGHT_TEXT)] == "copyrightText"
-    assert converted_dict[converter.json_property_name(PackageProperty.SUMMARY)] == "summary"
-    assert converted_dict[converter.json_property_name(PackageProperty.DESCRIPTION)] == "description"
-    assert converted_dict[converter.json_property_name(PackageProperty.COMMENT)] == "comment"
-    assert converted_dict[converter.json_property_name(PackageProperty.EXTERNAL_REFS)] == ["mock_package_ref"]
-    assert converted_dict[converter.json_property_name(PackageProperty.PRIMARY_PACKAGE_PURPOSE)] == "APPLICATION"
-    assert converted_dict[converter.json_property_name(PackageProperty.RELEASE_DATE)] == "2022-12-01T00:00:00Z"
-    assert converted_dict[converter.json_property_name(PackageProperty.BUILT_DATE)] == "2022-12-02T00:00:00Z"
-    assert converted_dict[converter.json_property_name(PackageProperty.VALID_UNTIL_DATE)] == "2022-12-03T00:00:00Z"
+    assert converted_dict == {
+        converter.json_property_name(PackageProperty.SPDX_ID): "packageId",
+        converter.json_property_name(PackageProperty.ANNOTATIONS): ["mock_converted_annotation"],
+        converter.json_property_name(PackageProperty.ATTRIBUTION_TEXTS): ["attributionText1", "attributionText2"],
+        converter.json_property_name(PackageProperty.NAME): "name",
+        converter.json_property_name(PackageProperty.DOWNLOAD_LOCATION): "downloadLocation",
+        converter.json_property_name(PackageProperty.VERSION_INFO): "version",
+        converter.json_property_name(PackageProperty.PACKAGE_FILE_NAME): "fileName",
+        converter.json_property_name(PackageProperty.SUPPLIER): "Person: supplierName",
+        converter.json_property_name(PackageProperty.ORIGINATOR): "Person: originatorName",
+        converter.json_property_name(PackageProperty.FILES_ANALYZED): True,
+        converter.json_property_name(PackageProperty.PACKAGE_VERIFICATION_CODE): "mock_converted_verification_code",
+        converter.json_property_name(PackageProperty.CHECKSUMS): ["mock_converted_checksum", "mock_converted_checksum"],
+        converter.json_property_name(PackageProperty.HOMEPAGE): "homepage",
+        converter.json_property_name(PackageProperty.SOURCE_INFO): "sourceInfo",
+        converter.json_property_name(PackageProperty.LICENSE_CONCLUDED): "licenseExpression1",
+        converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES): ["licenseExpression2",
+                                                                                "licenseExpression3"],
+        converter.json_property_name(PackageProperty.LICENSE_DECLARED): "licenseExpression4",
+        converter.json_property_name(PackageProperty.LICENSE_COMMENTS): "licenseComment",
+        converter.json_property_name(PackageProperty.COPYRIGHT_TEXT): "copyrightText",
+        converter.json_property_name(PackageProperty.SUMMARY): "summary",
+        converter.json_property_name(PackageProperty.DESCRIPTION): "description",
+        converter.json_property_name(PackageProperty.COMMENT): "comment",
+        converter.json_property_name(PackageProperty.EXTERNAL_REFS): ["mock_package_ref"],
+        converter.json_property_name(PackageProperty.PRIMARY_PACKAGE_PURPOSE): "APPLICATION",
+        converter.json_property_name(PackageProperty.RELEASE_DATE): "2022-12-01T00:00:00Z",
+        converter.json_property_name(PackageProperty.BUILT_DATE): "2022-12-02T00:00:00Z",
+        converter.json_property_name(PackageProperty.VALID_UNTIL_DATE): "2022-12-03T00:00:00Z"
+    }
 
 
 def test_null_values(converter: PackageConverter):

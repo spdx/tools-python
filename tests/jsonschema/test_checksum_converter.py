@@ -31,8 +31,10 @@ def test_successful_conversion(converter: ChecksumConverter):
 
     converted_dict = converter.convert(checksum)
 
-    assert converted_dict[converter.json_property_name(ChecksumProperty.ALGORITHM)] == "SHA1"
-    assert converted_dict[converter.json_property_name(ChecksumProperty.CHECKSUM_VALUE)] == "123"
+    assert converted_dict == {
+        converter.json_property_name(ChecksumProperty.ALGORITHM): "SHA1",
+        converter.json_property_name(ChecksumProperty.CHECKSUM_VALUE): "123"
+    }
 
 
 def test_json_type(converter: ChecksumConverter):
