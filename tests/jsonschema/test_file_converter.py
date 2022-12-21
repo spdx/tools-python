@@ -19,9 +19,12 @@ from src.jsonschema.file_properties import FileProperty
 from src.model.actor import Actor, ActorType
 from src.model.annotation import Annotation, AnnotationType
 from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.document import CreationInfo, Document
+from src.model.document import Document
 from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
+from src.model.spdx_no_assertion import SpdxNoAssertion
+from src.model.spdx_none import SpdxNone
+from tests.fixtures import creation_info_fixture
 
 
 @pytest.fixture
@@ -73,12 +76,9 @@ def test_successful_conversion(converter: FileConverter):
                 contributors=["contributor1", "contributor2"],
                 attribution_texts=["attributionText1", "attributionText2"])
 
-    creation_info = CreationInfo("spdxVersion", "documentID", "documentName", "documentNamespace", [],
-                                 datetime(2022, 12, 4))
-
     annotations = [Annotation(file.spdx_id, AnnotationType.REVIEW, Actor(ActorType.PERSON, "annotatorName"),
                               datetime(2022, 12, 5), "review comment")]
-    document = Document(creation_info, files=[file], annotations=annotations)
+    document = Document(creation_info_fixture(), files=[file], annotations=annotations)
 
     converted_dict = converter.convert(file, document)
 
@@ -106,10 +106,7 @@ def test_null_values(converter: FileConverter):
     file = File(name="name", spdx_id="spdxId",
                 checksums=[Checksum(ChecksumAlgorithm.SHA224, "sha224"), Checksum(ChecksumAlgorithm.MD2, "md2")])
 
-    creation_info = CreationInfo("spdxVersion", "documentID", "documentName", "documentNamespace", [],
-                                 datetime(2022, 12, 4))
-
-    document = Document(creation_info, files=[file])
+    document = Document(creation_info_fixture(), files=[file])
 
     converted_dict = converter.convert(file, document)
 

@@ -19,10 +19,11 @@ from src.jsonschema.package_properties import PackageProperty
 from src.model.actor import Actor, ActorType
 from src.model.annotation import Annotation, AnnotationType
 from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.document import Document, CreationInfo
+from src.model.document import Document
 from src.model.license_expression import LicenseExpression
 from src.model.package import Package, PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, \
     PackagePurpose
+from tests.fixtures import creation_info_fixture
 
 
 @pytest.fixture
@@ -106,12 +107,10 @@ def test_successful_conversion(converter: PackageConverter):
                       primary_package_purpose=PackagePurpose.APPLICATION, release_date=datetime(2022, 12, 1),
                       built_date=datetime(2022, 12, 2), valid_until_date=datetime(2022, 12, 3))
 
-    creation_info = CreationInfo("spdxVersion", "documentID", "documentName", "documentNamespace", [],
-                                 datetime(2022, 12, 4))
     annotation = Annotation(package.spdx_id, AnnotationType.REVIEW, Actor(ActorType.TOOL, "toolName"),
                             datetime(2022, 12, 5),
                             "review comment")
-    document = Document(creation_info, packages=[package], annotations=[annotation])
+    document = Document(creation_info_fixture(), packages=[package], annotations=[annotation])
 
     converted_dict = converter.convert(package, document)
 
@@ -151,9 +150,7 @@ def test_successful_conversion(converter: PackageConverter):
 def test_null_values(converter: PackageConverter):
     package = Package(spdx_id="packageId", name="name", download_location="downloadLocation")
 
-    creation_info = CreationInfo("spdxVersion", "documentID", "documentName", "documentNamespace", [],
-                                 datetime(2022, 12, 4))
-    document = Document(creation_info, packages=[package])
+    document = Document(creation_info_fixture(), packages=[package])
 
     converted_dict = converter.convert(package, document)
 

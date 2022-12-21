@@ -18,9 +18,10 @@ from src.jsonschema.snippet_converter import SnippetConverter
 from src.jsonschema.snippet_properties import SnippetProperty
 from src.model.actor import Actor, ActorType
 from src.model.annotation import Annotation, AnnotationType
-from src.model.document import Document, CreationInfo
+from src.model.document import Document
 from src.model.license_expression import LicenseExpression
 from src.model.snippet import Snippet
+from tests.fixtures import creation_info_fixture
 
 
 @pytest.fixture
@@ -68,9 +69,7 @@ def test_successful_conversion(converter: SnippetConverter):
 
     annotation = Annotation(snippet.spdx_id, AnnotationType.OTHER, Actor(ActorType.PERSON, "annotatorName"),
                             datetime(2022, 12, 5), "other comment")
-    creation_info = CreationInfo("spdxVersion", "documentId", "documentName", "documentNamespace", [],
-                                 datetime(2022, 12, 4))
-    document = Document(creation_info, snippets=[snippet], annotations=[annotation])
+    document = Document(creation_info_fixture(), snippets=[snippet], annotations=[annotation])
     converted_dict = converter.convert(snippet, document)
 
     assert converted_dict[converter.json_property_name(SnippetProperty.SPDX_ID)] == "spdxId"
@@ -95,9 +94,7 @@ def test_successful_conversion(converter: SnippetConverter):
 def test_null_values(converter: SnippetConverter):
     snippet = Snippet("spdxId", file_spdx_id="fileId", byte_range=(1, 2))
 
-    creation_info = CreationInfo("spdxVersion", "documentId", "documentName", "documentNamespace", [],
-                                 datetime(2022, 12, 4))
-    document = Document(creation_info, snippets=[snippet])
+    document = Document(creation_info_fixture(), snippets=[snippet])
     converted_dict = converter.convert(snippet, document)
 
     assert converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED) not in converted_dict
