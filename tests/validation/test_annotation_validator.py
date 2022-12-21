@@ -21,9 +21,7 @@ def test_valid_annotation():
 
 
 @pytest.mark.parametrize("annotation_id, file_id, expected_message",
-                         [("SPDXRef-some_file", "SPDXRef-some_file",
-                           'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-some_file'),
-                          ("SPDXRef-File", "SPDXRef-hiddenFile",
+                         [("SPDXRef-File", "SPDXRef-hiddenFile",
                            "did not find the referenced spdx_id SPDXRef-File in the SPDX document")
                           ])
 def test_invalid_annotation(annotation_id, file_id, expected_message):

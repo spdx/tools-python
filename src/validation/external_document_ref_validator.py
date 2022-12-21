@@ -3,7 +3,7 @@ from typing import List
 
 from src.model.external_document_ref import ExternalDocumentRef
 from src.validation.checksum_validator import ChecksumValidator
-from src.validation.spdx_id_validation import is_valid_external_doc_ref_id
+from src.validation.spdx_id_validators import is_valid_external_doc_ref_id
 from src.validation.uri_validators import validate_uri
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 

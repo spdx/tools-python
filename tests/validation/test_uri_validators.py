@@ -10,7 +10,7 @@ def test_valid_url(input_value):
     assert validate_url(input_value) == []
 
 
-# TODO: more negative examples
+# TODO: more negative examples: https://github.com/spdx/tools-python/issues/377
 @pytest.mark.parametrize("input_value", [":::::", ])
 def test_invalid_url(input_value):
     assert validate_url(input_value) == [f"must be a valid URL, but is: {input_value}"]
@@ -68,7 +68,7 @@ def test_valid_package_download_location(input_value):
     assert validate_download_location(input_value) == []
 
 
-# TODO: more negative examples
+# TODO: more negative examples: https://github.com/spdx/tools-python/issues/377
 @pytest.mark.parametrize("input_value", [":::::", ])
 def test_invalid_package_download_location(input_value):
     assert validate_download_location(input_value) == [
@@ -93,7 +93,8 @@ def test_invalid_uri(input_value):
 
 @pytest.mark.parametrize("input_value", ["://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82..."])
 @pytest.mark.skip(
-    "validate_uri() seems to invalidate URIs without scheme, so it does not run into this case. But I'm not sure yet if this covers all scheme-less examples.")
+    "validate_uri() seems to invalidate URIs without scheme, so it does not run into this case. But I'm not sure yet if this covers all scheme-less examples."
+    "https://github.com/spdx/tools-python/issues/377")
 def test_uri_without_scheme(input_value):
     message = validate_uri(input_value)
 

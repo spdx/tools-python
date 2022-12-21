@@ -23,7 +23,7 @@ def test_valid_external_package_ref():
                          [(get_external_package_ref(),
                            "TBD"),
                           ])
-@pytest.mark.skip("add tests once external package ref validation is implemented")
+@pytest.mark.skip("add tests once external package ref validation is implemented: https://github.com/spdx/tools-python/issues/373")
 def test_invalid_external_package_ref(external_package_ref, expected_message):
     parent_id = "SPDXRef-Package"
     external_package_ref_validator = ExternalPackageRefValidator("2.3", parent_id)

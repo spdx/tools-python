@@ -2,7 +2,7 @@ from typing import List
 
 from src.model.document import Document
 from src.model.relationship import Relationship, RelationshipType
-from src.validation.spdx_id_validation import validate_spdx_id
+from src.validation.spdx_id_validators import validate_spdx_id
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 

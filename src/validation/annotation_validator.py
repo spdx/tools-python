@@ -3,7 +3,7 @@ from typing import List
 from src.model.annotation import Annotation
 from src.model.document import Document
 from src.validation.actor_validator import ActorValidator
-from src.validation.spdx_id_validation import validate_spdx_id
+from src.validation.spdx_id_validators import validate_spdx_id
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 

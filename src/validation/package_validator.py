@@ -7,7 +7,7 @@ from src.validation.checksum_validator import ChecksumValidator
 from src.validation.external_package_ref_validator import ExternalPackageRefValidator
 from src.validation.license_expression_validator import LicenseExpressionValidator
 from src.validation.package_verification_code_validator import PackageVerificationCodeValidator
-from src.validation.spdx_id_validation import validate_spdx_id
+from src.validation.spdx_id_validators import validate_spdx_id
 from src.validation.uri_validators import validate_url, validate_download_location
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 

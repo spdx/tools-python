@@ -21,9 +21,7 @@ def test_valid_extracted_licensing_info():
 
 # TODO: tests for licenses not on the SPDX License list (i.e. they must provide id, name and cross-references)
 @pytest.mark.parametrize("extracted_licensing_info, expected_message",
-                         [(get_extracted_licensing_info(license_id="SPDXRef-invalid"),
-                           'license_id must only contain letters, numbers, "." and "-" and must begin with "LicenseRef-", but is: SPDXRef-invalid'),
-                          (get_extracted_licensing_info(extracted_text=None),
+                         [(get_extracted_licensing_info(extracted_text=None),
                            'extracted_text must be provided if there is a license_id assigned'),
                           (get_extracted_licensing_info(cross_references=["invalid_url"]),
                            'cross_reference must be a valid URL, but is: invalid_url')

@@ -19,20 +19,16 @@ def test_valid_relationship():
     assert validation_messages == []
 
 
-@pytest.mark.parametrize("spdx_element_id, related_spdx_element_id, invalid_file_id, expected_message",
-                         [("SPDXRef-some_file", "SPDXRef-File", "SPDXRef-some_file",
-                           'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-some_file'),
-                          ("SPDXRef-File", "SPDXRef-some_file", "SPDXRef-some_file",
-                           'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-some_file'),
-                          ("SPDXRef-unknownFile", "SPDXRef-hiddenFile", "SPDXRef-hiddenFile",
+@pytest.mark.parametrize("spdx_element_id, related_spdx_element_id, expected_message",
+                         [("SPDXRef-unknownFile", "SPDXRef-File",
                            'did not find the referenced spdx_id SPDXRef-unknownFile in the SPDX document'),
-                          ("SPDXRef-hiddenFile", "SPDXRef-unknownFile", "SPDXRef-hiddenFile",
+                          ("SPDXRef-File", "SPDXRef-unknownFile",
                            'did not find the referenced spdx_id SPDXRef-unknownFile in the SPDX document'),
                           ])
-def test_invalid_relationship(spdx_element_id, related_spdx_element_id, invalid_file_id, expected_message):
+def test_unknown_spdx_id(spdx_element_id, related_spdx_element_id, expected_message):
     relationship: Relationship = get_relationship(spdx_element_id=spdx_element_id,
                                                   related_spdx_element_id=related_spdx_element_id)
-    document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File"), get_file(spdx_id=invalid_file_id)])
+    document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File")])
     relationship_validator = RelationshipValidator("2.3", document)
     validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
 

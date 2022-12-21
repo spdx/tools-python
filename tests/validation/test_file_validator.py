@@ -23,9 +23,7 @@ def test_valid_file():
 
 
 @pytest.mark.parametrize("file_input, spdx_id, expected_message",
-                         [(get_file(spdx_id="SPDXRef-some_file"), "SPDXRef-some_file",
-                           'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-some_file'),
-                          (get_file(name="invalid file name"), get_file().spdx_id,
+                         [(get_file(name="invalid file name"), get_file().spdx_id,
                            'file name must be a relative path to the file, starting with "./", but is: invalid file name'),
                           (get_file(checksums=[Checksum(ChecksumAlgorithm.MD2, "d4c41ce30a517d6ce9d79c8c17bb4b66")]),
                            get_file().spdx_id,
