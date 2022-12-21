@@ -23,7 +23,7 @@ from src.model.document import Document
 from src.model.license_expression import LicenseExpression
 from src.model.package import Package, PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, \
     PackagePurpose
-from tests.fixtures import creation_info_fixture
+from tests.fixtures import creation_info_fixture, package_fixture
 
 
 @pytest.fixture
@@ -148,7 +148,11 @@ def test_successful_conversion(converter: PackageConverter):
 
 
 def test_null_values(converter: PackageConverter):
-    package = Package(spdx_id="packageId", name="name", download_location="downloadLocation")
+    package = package_fixture(built_date=None, release_date=None, valid_until_date=None, homepage=None,
+                              license_concluded=None, license_declared=None, originator=None, verification_code=None,
+                              primary_package_purpose=None, supplier=None, version=None, file_name=None,
+                              source_info=None, license_comment=None, copyright_text=None, summary=None,
+                              description=None, comment=None)
 
     document = Document(creation_info_fixture(), packages=[package])
 
