@@ -18,7 +18,7 @@ from src.model.package import ExternalPackageRef
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class ExternalPackageRefConverter(TypedConverter):
+class ExternalPackageRefConverter(TypedConverter[ExternalPackageRef]):
     def json_property_name(self, external_ref_property: ExternalPackageRefProperty) -> str:
         return snake_case_to_camel_case(external_ref_property.name)
 
