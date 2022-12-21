@@ -27,7 +27,7 @@ from src.model.package import Package
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class PackageConverter(TypedConverter):
+class PackageConverter(TypedConverter[Package]):
     annotation_converter: AnnotationConverter
     checksum_converter: ChecksumConverter
     external_package_ref_converter: ExternalPackageRefConverter

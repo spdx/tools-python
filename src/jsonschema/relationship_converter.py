@@ -18,7 +18,7 @@ from src.model.relationship import Relationship
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class RelationshipConverter(TypedConverter):
+class RelationshipConverter(TypedConverter[Relationship]):
     def json_property_name(self, relationship_property: RelationshipProperty) -> str:
         return snake_case_to_camel_case(relationship_property.name)
 

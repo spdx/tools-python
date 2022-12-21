@@ -18,7 +18,7 @@ from src.model.document import Document
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class ChecksumConverter(TypedConverter):
+class ChecksumConverter(TypedConverter[Checksum]):
 
     def get_data_model_type(self) -> Type[Checksum]:
         return Checksum

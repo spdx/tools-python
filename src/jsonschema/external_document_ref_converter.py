@@ -19,22 +19,23 @@ from src.model.external_document_ref import ExternalDocumentRef
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class ExternalDocumentRefConverter(TypedConverter):
+class ExternalDocumentRefConverter(TypedConverter[ExternalDocumentRef]):
     checksum_converter: ChecksumConverter
 
     def __init__(self):
         self.checksum_converter = ChecksumConverter()
 
-    def json_property_name(self, property_thing: ExternalDocumentRefProperty) -> str:
-        return snake_case_to_camel_case(property_thing.name)
+    def json_property_name(self, external_document_ref_property: ExternalDocumentRefProperty) -> str:
+        return snake_case_to_camel_case(external_document_ref_property.name)
 
     def _get_property_value(self, external_document_ref: ExternalDocumentRef,
-                            property_thing: ExternalDocumentRefProperty, _document: Document = None) -> Any:
-        if property_thing == ExternalDocumentRefProperty.EXTERNAL_DOCUMENT_ID:
+                            external_document_ref_property: ExternalDocumentRefProperty,
+                            _document: Document = None) -> Any:
+        if external_document_ref_property == ExternalDocumentRefProperty.EXTERNAL_DOCUMENT_ID:
             return external_document_ref.document_ref_id
-        elif property_thing == ExternalDocumentRefProperty.SPDX_DOCUMENT:
+        elif external_document_ref_property == ExternalDocumentRefProperty.SPDX_DOCUMENT:
             return external_document_ref.document_uri
-        elif property_thing == ExternalDocumentRefProperty.CHECKSUM:
+        elif external_document_ref_property == ExternalDocumentRefProperty.CHECKSUM:
             return self.checksum_converter.convert(external_document_ref.checksum)
 
     def get_json_type(self) -> Type[JsonProperty]:

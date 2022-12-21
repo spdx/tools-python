@@ -18,7 +18,7 @@ from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class ExtractedLicensingInfoConverter(TypedConverter):
+class ExtractedLicensingInfoConverter(TypedConverter[ExtractedLicensingInfo]):
     def json_property_name(self, extracted_licensing_info_property: ExtractedLicensingInfoProperty) -> str:
         return snake_case_to_camel_case(extracted_licensing_info_property.name)
 

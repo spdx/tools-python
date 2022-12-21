@@ -20,7 +20,7 @@ from src.model.snippet import Snippet
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class SnippetConverter(TypedConverter):
+class SnippetConverter(TypedConverter[Snippet]):
     annotation_converter: AnnotationConverter
 
     def __init__(self):

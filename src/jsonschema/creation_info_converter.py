@@ -19,7 +19,7 @@ from src.model.document import CreationInfo, Document
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class CreationInfoConverter(TypedConverter):
+class CreationInfoConverter(TypedConverter[CreationInfo]):
     def get_data_model_type(self) -> Type[CreationInfo]:
         return CreationInfo
 

@@ -19,7 +19,7 @@ from src.model.document import Document
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class AnnotationConverter(TypedConverter):
+class AnnotationConverter(TypedConverter[Annotation]):
     def json_property_name(self, annotation_property: AnnotationProperty) -> str:
         return snake_case_to_camel_case(annotation_property.name)
 

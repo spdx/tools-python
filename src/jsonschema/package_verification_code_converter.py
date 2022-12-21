@@ -18,7 +18,7 @@ from src.model.package import PackageVerificationCode
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class PackageVerificationCodeConverter(TypedConverter):
+class PackageVerificationCodeConverter(TypedConverter[PackageVerificationCode]):
     def json_property_name(self, verification_code_property: PackageVerificationCodeProperty) -> str:
         return snake_case_to_camel_case(verification_code_property.name)
 

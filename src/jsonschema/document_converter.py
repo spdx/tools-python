@@ -29,7 +29,7 @@ from src.model.relationship import RelationshipType
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class DocumentConverter(TypedConverter):
+class DocumentConverter(TypedConverter[Document]):
     creation_info_converter: CreationInfoConverter
     external_document_ref_converter: ExternalDocumentRefConverter
     package_converter: PackageConverter

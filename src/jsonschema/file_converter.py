@@ -21,7 +21,7 @@ from src.model.file import File
 from src.writer.casing_tools import snake_case_to_camel_case
 
 
-class FileConverter(TypedConverter):
+class FileConverter(TypedConverter[File]):
     annotation_converter: AnnotationConverter
     checksum_converter: ChecksumConverter
 

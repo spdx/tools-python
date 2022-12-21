@@ -9,21 +9,23 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from abc import ABC, abstractmethod
-from typing import Any, Type, Dict
+from typing import Any, Type, Dict, TypeVar, Generic
 
 from src.jsonschema.json_property import JsonProperty
 from src.model.document import Document
 
 MISSING_IMPLEMENTATION_MESSAGE = "Must be implemented"
 
+T = TypeVar("T")
 
-class TypedConverter(ABC):
+
+class TypedConverter(ABC, Generic[T]):
     @abstractmethod
-    def json_property_name(self, property_thing: JsonProperty) -> str:
+    def json_property_name(self, json_property: JsonProperty) -> str:
         raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
 
     @abstractmethod
-    def _get_property_value(self, instance: Any, property_thing: JsonProperty, document: Document = None) -> Any:
+    def _get_property_value(self, instance: T, json_property: JsonProperty, document: Document = None) -> Any:
         raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
 
     @abstractmethod
@@ -31,13 +33,13 @@ class TypedConverter(ABC):
         raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
 
     @abstractmethod
-    def get_data_model_type(self) -> Type:
+    def get_data_model_type(self) -> Type[T]:
         raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
 
     def requires_full_document(self) -> bool:
         return False
 
-    def convert(self, instance: Any, document: Document = None) -> Dict:
+    def convert(self, instance: T, document: Document = None) -> Dict:
         if not isinstance(instance, self.get_data_model_type()):
             raise TypeError(
                 f"Converter of type {self.__class__} can only convert objects of type "
