@@ -48,9 +48,9 @@ def test_successful_conversion(converter: AnnotationConverter):
 
     converted_dict = converter.convert(annotation)
 
-    assert converted_dict[converter.json_property_name(AnnotationProperty.ANNOTATION_DATE)] == datetime_to_iso_string(
-        date)
-    assert converted_dict[converter.json_property_name(AnnotationProperty.ANNOTATION_TYPE)] == "REVIEW"
-    assert converted_dict[
-               converter.json_property_name(AnnotationProperty.ANNOTATOR)] == annotator.to_serialized_string()
-    assert converted_dict[converter.json_property_name(AnnotationProperty.COMMENT)] == "comment"
+    assert converted_dict == {
+        converter.json_property_name(AnnotationProperty.ANNOTATION_DATE): datetime_to_iso_string(date),
+        converter.json_property_name(AnnotationProperty.ANNOTATION_TYPE): "REVIEW",
+        converter.json_property_name(AnnotationProperty.ANNOTATOR): annotator.to_serialized_string(),
+        converter.json_property_name(AnnotationProperty.COMMENT): "comment"
+    }

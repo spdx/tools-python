@@ -43,8 +43,9 @@ def test_successful_conversion(converter: ExternalPackageRefConverter):
 
     converted_dict = converter.convert(external_package_ref)
 
-    assert converted_dict[converter.json_property_name(ExternalPackageRefProperty.COMMENT)] == "comment"
-    assert converted_dict[
-               converter.json_property_name(ExternalPackageRefProperty.REFERENCE_CATEGORY)] == "PACKAGE_MANAGER"
-    assert converted_dict[converter.json_property_name(ExternalPackageRefProperty.REFERENCE_LOCATOR)] == "locator"
-    assert converted_dict[converter.json_property_name(ExternalPackageRefProperty.REFERENCE_TYPE)] == "type"
+    assert converted_dict == {
+        converter.json_property_name(ExternalPackageRefProperty.COMMENT): "comment",
+        converter.json_property_name(ExternalPackageRefProperty.REFERENCE_CATEGORY): "PACKAGE_MANAGER",
+        converter.json_property_name(ExternalPackageRefProperty.REFERENCE_LOCATOR): "locator",
+        converter.json_property_name(ExternalPackageRefProperty.REFERENCE_TYPE): "type"
+    }

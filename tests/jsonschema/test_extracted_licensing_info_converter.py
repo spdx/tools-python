@@ -46,13 +46,13 @@ def test_successful_conversion(converter: ExtractedLicensingInfoConverter):
 
     converted_dict = converter.convert(extracted_licensing_info)
 
-    assert converted_dict[converter.json_property_name(ExtractedLicensingInfoProperty.LICENSE_ID)] == "licenseId"
-    assert converted_dict[
-               converter.json_property_name(ExtractedLicensingInfoProperty.EXTRACTED_TEXT)] == "Extracted text"
-    assert converted_dict[converter.json_property_name(ExtractedLicensingInfoProperty.NAME)] == "license name"
-    assert converted_dict[converter.json_property_name(ExtractedLicensingInfoProperty.SEE_ALSOS)] == ["reference1",
-                                                                                                      "reference2"]
-    assert converted_dict[converter.json_property_name(ExtractedLicensingInfoProperty.COMMENT)] == "comment"
+    assert converted_dict == {
+        converter.json_property_name(ExtractedLicensingInfoProperty.LICENSE_ID): "licenseId",
+        converter.json_property_name(ExtractedLicensingInfoProperty.EXTRACTED_TEXT): "Extracted text",
+        converter.json_property_name(ExtractedLicensingInfoProperty.NAME): "license name",
+        converter.json_property_name(ExtractedLicensingInfoProperty.SEE_ALSOS): ["reference1", "reference2"],
+        converter.json_property_name(ExtractedLicensingInfoProperty.COMMENT): "comment"
+    }
 
 
 def test_null_values(converter: ExtractedLicensingInfoConverter):

@@ -82,24 +82,21 @@ def test_successful_conversion(converter: FileConverter):
 
     converted_dict = converter.convert(file, document)
 
-    assert converted_dict[converter.json_property_name(FileProperty.SPDX_ID)] == "spdxId"
-    assert converted_dict[converter.json_property_name(FileProperty.ANNOTATIONS)] == ["mock_converted_annotation"]
-    assert converted_dict[converter.json_property_name(FileProperty.ATTRIBUTION_TEXTS)] == ["attributionText1",
-                                                                                            "attributionText2"]
-    assert converted_dict[converter.json_property_name(FileProperty.CHECKSUMS)] == ["mock_converted_checksum",
-                                                                                    "mock_converted_checksum"]
-    assert converted_dict[converter.json_property_name(FileProperty.COMMENT)] == "comment"
-    assert converted_dict[
-               converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == "copyrightText"
-    assert converted_dict[converter.json_property_name(FileProperty.FILE_CONTRIBUTORS)] == ["contributor1",
-                                                                                            "contributor2"]
-    assert converted_dict[converter.json_property_name(FileProperty.FILE_NAME)] == "name"
-    assert converted_dict[converter.json_property_name(FileProperty.FILE_TYPES)] == ["SPDX", "OTHER"]
-    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_COMMENTS)] == "licenseComment"
-    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_CONCLUDED)] == "licenseExpression1"
-    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == ["licenseExpression2",
-                                                                                                "licenseExpression3"]
-    assert converted_dict[converter.json_property_name(FileProperty.NOTICE_TEXT)] == "notice"
+    assert converted_dict == {
+        converter.json_property_name(FileProperty.SPDX_ID): "spdxId",
+        converter.json_property_name(FileProperty.ANNOTATIONS): ["mock_converted_annotation"],
+        converter.json_property_name(FileProperty.ATTRIBUTION_TEXTS): ["attributionText1", "attributionText2"],
+        converter.json_property_name(FileProperty.CHECKSUMS): ["mock_converted_checksum", "mock_converted_checksum"],
+        converter.json_property_name(FileProperty.COMMENT): "comment",
+        converter.json_property_name(FileProperty.COPYRIGHT_TEXT): "copyrightText",
+        converter.json_property_name(FileProperty.FILE_CONTRIBUTORS): ["contributor1", "contributor2"],
+        converter.json_property_name(FileProperty.FILE_NAME): "name",
+        converter.json_property_name(FileProperty.FILE_TYPES): ["SPDX", "OTHER"],
+        converter.json_property_name(FileProperty.LICENSE_COMMENTS): "licenseComment",
+        converter.json_property_name(FileProperty.LICENSE_CONCLUDED): "licenseExpression1",
+        converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES): ["licenseExpression2", "licenseExpression3"],
+        converter.json_property_name(FileProperty.NOTICE_TEXT): "notice"
+    }
 
 
 def test_null_values(converter: FileConverter):
