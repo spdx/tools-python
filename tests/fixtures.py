@@ -11,7 +11,10 @@
 from datetime import datetime
 
 from src.model.actor import Actor, ActorType
+from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import CreationInfo
+from src.model.file import File, FileType
+from src.model.license_expression import LicenseExpression
 from src.model.version import Version
 
 """Utility methods to create data model instances. All properties have valid defaults, so they don't need to be 
@@ -26,3 +29,19 @@ def creation_info_fixture(spdx_version="spdxVersion", spdx_id="documentId", name
     external_document_refs = [] if external_document_refs is None else external_document_refs
     return CreationInfo(spdx_version, spdx_id, name, namespace, creators, created, creator_comment, data_license,
                         external_document_refs, license_list_version, document_comment)
+
+
+def file_fixture(name="fileName", spdx_id="fileId", checksums=None, file_type=None,
+                 concluded_license=LicenseExpression("concludedLicenseExpression"), license_info_in_file=None,
+                 license_comment="licenseComment", copyright_text="copyrightText", comment="fileComment",
+                 notice="fileNotice", contributors=None, attribution_texts=None) -> File:
+    checksums = [Checksum(ChecksumAlgorithm.SHA1, "sha1")] if checksums is None else checksums
+    file_type = [FileType.TEXT] if file_type is None else file_type
+    license_info_in_file = [
+        LicenseExpression("licenseInfoInFileExpression")] if license_info_in_file is None else license_info_in_file
+    contributors = ["fileContributor"] if contributors is None else contributors
+    attribution_texts = ["fileAttributionText"] if attribution_texts is None else attribution_texts
+    return File(name=name, spdx_id=spdx_id, checksums=checksums, file_type=file_type,
+                concluded_license=concluded_license, license_info_in_file=license_info_in_file,
+                license_comment=license_comment, copyright_text=copyright_text, comment=comment, notice=notice,
+                contributors=contributors, attribution_texts=attribution_texts)

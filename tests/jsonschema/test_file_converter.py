@@ -22,9 +22,7 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import Document
 from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
-from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.model.spdx_none import SpdxNone
-from tests.fixtures import creation_info_fixture
+from tests.fixtures import creation_info_fixture, file_fixture
 
 
 @pytest.fixture
@@ -103,8 +101,7 @@ def test_successful_conversion(converter: FileConverter):
 
 
 def test_null_values(converter: FileConverter):
-    file = File(name="name", spdx_id="spdxId",
-                checksums=[Checksum(ChecksumAlgorithm.SHA224, "sha224"), Checksum(ChecksumAlgorithm.MD2, "md2")])
+    file = file_fixture(copyright_text=None, concluded_license=None, license_comment=None, comment=None, notice=None)
 
     document = Document(creation_info_fixture(), files=[file])
 
