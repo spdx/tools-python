@@ -21,3 +21,6 @@ class LicenseExpression:
 
     def __init__(self, expression_string: str):
         check_types_and_set_values(self, locals())
+
+    def __str__(self):
+        return self.expression_string
