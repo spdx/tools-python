@@ -27,7 +27,7 @@ class Snippet:
     concluded_license: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
     license_info_in_snippet: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None
     license_comment: Optional[str] = None
-    copyright_text: Optional[str] = None
+    copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None
     comment: Optional[str] = None
     name: Optional[str] = None
     attribution_texts: List[str] = field(default_factory=list)
