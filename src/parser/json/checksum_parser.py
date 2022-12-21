@@ -23,14 +23,14 @@ class ChecksumParser:
     def __init__(self):
         self.logger = Logger()
 
-    def parse_checksums(self, checksum_dicts_list: List[Dict]) -> List[Checksum]:
-        checksum_list = []
-        for checksum_dict in checksum_dicts_list:
-            checksum_list = append_parsed_field_or_log_error(self.logger, checksum_list, checksum_dict,
+    def parse_checksums(self, checksum_dicts: List[Dict]) -> List[Checksum]:
+        checksums = []
+        for checksum_dict in checksum_dicts:
+            checksums = append_parsed_field_or_log_error(self.logger, checksums, checksum_dict,
                                                              self.parse_checksum)
 
         raise_parsing_error_if_logger_has_messages(self.logger)
-        return checksum_list
+        return checksums
 
     @staticmethod
     def parse_checksum(checksum_dict: Dict) -> Checksum:

@@ -81,13 +81,13 @@ class CreationInfoParser:
 
     def parse_creators(self, creators_list_from_dict: List[str]) -> List[Actor]:
         logger = Logger()
-        creators_list = []
-        for creator_dict in creators_list_from_dict:
-            creators_list = append_parsed_field_or_log_error(logger, creators_list, creator_dict,
+        creators = []
+        for creator_str in creators_list_from_dict:
+            creators = append_parsed_field_or_log_error(logger, creators, creator_str,
                                                              self.actor_parser.parse_actor_or_no_assertion)
 
         raise_parsing_error_if_logger_has_messages(logger)
-        return creators_list
+        return creators
 
     @staticmethod
     def parse_version(version_str: str) -> Version:
@@ -96,14 +96,14 @@ class CreationInfoParser:
         except ValueError as err:
             raise SPDXParsingError([f"Error while parsing version {version_str}: {err.args[0]}"])
 
-    def parse_external_document_refs(self, external_document_refs_dict: List[Dict]) -> List[ExternalDocumentRef]:
+    def parse_external_document_refs(self, external_document_ref_dicts: List[Dict]) -> List[ExternalDocumentRef]:
         logger = Logger()
         external_document_refs = []
-        for external_ref_dict in external_document_refs_dict:
-            external_doc_ref: ExternalDocumentRef = parse_field_or_log_error(logger, external_ref_dict,
+        for external_document_ref_dict in external_document_ref_dicts:
+            external_document_ref: ExternalDocumentRef = parse_field_or_log_error(logger, external_document_ref_dict,
                                                                              self.parse_external_document_ref, True)
 
-            external_document_refs.append(external_doc_ref)
+            external_document_refs.append(external_document_ref)
 
         raise_parsing_error_if_logger_has_messages(logger)
         return external_document_refs
@@ -115,11 +115,11 @@ class CreationInfoParser:
 
         external_document_id: Optional[str] = external_document_ref_dict.get("externalDocumentId")
         document_uri: Optional[str] = external_document_ref_dict.get("spdxDocument")
-        raise_parsing_error_if_logger_has_messages(logger, "ExternalDocRef")
-        external_doc_ref: ExternalDocumentRef = construct_or_raise_parsing_error(ExternalDocumentRef,
+        raise_parsing_error_if_logger_has_messages(logger, "ExternalDocumentRef")
+        external_document_ref: ExternalDocumentRef = construct_or_raise_parsing_error(ExternalDocumentRef,
                                                                                  dict(
                                                                                      document_ref_id=external_document_id,
                                                                                      checksum=checksum,
                                                                                      document_uri=document_uri))
 
-        return external_doc_ref
+        return external_document_ref

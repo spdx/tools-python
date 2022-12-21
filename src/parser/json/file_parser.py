@@ -32,12 +32,12 @@ class FileParser:
         self.checksum_parser = ChecksumParser()
         self.license_expression_parser = LicenseExpressionParser()
 
-    def parse_files(self, file_dict_list) -> List[File]:
-        file_list = []
-        for file_dict in file_dict_list:
-            file_list = append_parsed_field_or_log_error(self.logger, file_list, file_dict, self.parse_file)
+    def parse_files(self, file_dicts: List[Dict]) -> List[File]:
+        files = []
+        for file_dict in file_dicts:
+            files = append_parsed_field_or_log_error(self.logger, files, file_dict, self.parse_file)
         raise_parsing_error_if_logger_has_messages(self.logger)
-        return file_list
+        return files
 
     def parse_file(self, file_dict: Dict) -> Optional[File]:
         logger = Logger()
