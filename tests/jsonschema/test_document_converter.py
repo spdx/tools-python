@@ -22,11 +22,9 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import Document
 from src.model.external_document_ref import ExternalDocumentRef
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
-from src.model.package import Package
 from src.model.relationship import Relationship, RelationshipType
 from src.model.snippet import Snippet
-from src.model.spdx_none import SpdxNone
-from tests.fixtures import creation_info_fixture, file_fixture
+from tests.fixtures import creation_info_fixture, file_fixture, package_fixture
 
 
 @pytest.fixture
@@ -75,15 +73,14 @@ def test_successful_conversion(converter: DocumentConverter):
                                           external_document_refs=[ExternalDocumentRef("docRefId", "externalDocumentUri",
                                                                                       Checksum(ChecksumAlgorithm.SHA1,
                                                                                                "sha1"))])
-    package = Package("packageID", "packageName", SpdxNone())
     snippet = Snippet("snippetId", "snippetFileId", (1, 2))
     document = Document(creation_info, annotations=[
         Annotation("annotationId", AnnotationType.REVIEW, Actor(ActorType.PERSON, "reviewerName"),
                    datetime(2022, 12, 1), "reviewComment")],
                         extracted_licensing_info=[ExtractedLicensingInfo("licenseId", "licenseText")], relationships=[
             Relationship(creation_info.spdx_id, RelationshipType.DESCRIBES, "describedElementId"),
-            Relationship("relationshipOriginId", RelationshipType.AMENDS, "relationShipTargetId")], packages=[package],
-                        files=[file_fixture()], snippets=[snippet])
+            Relationship("relationshipOriginId", RelationshipType.AMENDS, "relationShipTargetId")],
+                        packages=[package_fixture()], files=[file_fixture()], snippets=[snippet])
     converter.external_document_ref_converter.convert.return_value = "mock_converted_external_ref"
     converter.creation_info_converter.convert.return_value = "mock_converted_creation_info"
     converter.package_converter.convert.return_value = "mock_converted_package"
