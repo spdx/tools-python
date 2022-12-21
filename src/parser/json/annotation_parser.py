@@ -29,65 +29,64 @@ class AnnotationParser:
         self.actor_parser = ActorParser()
 
     def parse_all_annotations(self, input_doc_dict: Dict) -> List[Annotation]:
-        annotations_list = []
-        self.parse_annotations_from_object(annotations_list, [input_doc_dict])
+        annotations = []
+        self.parse_annotations_from_object(annotations, [input_doc_dict])
         reviews: List[Dict] = input_doc_dict.get("revieweds", [])
         for review in reviews:
-            annotations_list = append_parsed_field_or_log_error(self.logger, annotations_list, review,
+            annotations = append_parsed_field_or_log_error(self.logger, annotations, review,
                                                                 lambda x: self.parse_review(x,
                                                                                             spdx_id=input_doc_dict.get(
                                                                                                 "SPDXID")))
 
         packages: List[Dict] = input_doc_dict.get("packages", [])
-        self.parse_annotations_from_object(annotations_list, packages)
+        self.parse_annotations_from_object(annotations, packages)
         files: List[Dict] = input_doc_dict.get("files", [])
-        self.parse_annotations_from_object(annotations_list, files)
+        self.parse_annotations_from_object(annotations, files)
         snippets: List[Dict] = input_doc_dict.get("snippets", [])
-        self.parse_annotations_from_object(annotations_list, snippets)
+        self.parse_annotations_from_object(annotations, snippets)
 
         raise_parsing_error_if_logger_has_messages(self.logger, "Annotations")
-        return annotations_list
+        return annotations
 
-    def parse_annotations_from_object(self, annotations_list, element_list: List[Dict]):
+    def parse_annotations_from_object(self, annotations: List[Annotation], element_list: List[Dict]):
         for element in element_list:
             element_spdx_id: Optional[str] = element.get("SPDXID")
             element_annotations: List[Dict] = element.get("annotations", [])
-            annotations_list.extend(parse_field_or_log_error(self.logger, element_annotations,
-                                                             lambda x: self.parse_annotations(x,
-                                                                                              spdx_id=element_spdx_id),
-                                                             []))
+            annotations.extend(parse_field_or_log_error(self.logger, element_annotations,
+                                                        lambda x: self.parse_annotations(x, spdx_id=element_spdx_id),
+                                                        []))
 
-    def parse_annotations(self, annotations_dict_list: List[Dict], spdx_id: Optional[str] = None) -> List[Annotation]:
+    def parse_annotations(self, annotation_dicts: List[Dict], spdx_id: Optional[str] = None) -> List[Annotation]:
         logger = Logger()
-        annotations_list = []
-        for annotation_dict in annotations_dict_list:
-            annotations_list = append_parsed_field_or_log_error(self.logger, annotations_list, annotation_dict,
+        annotations = []
+        for annotation_dict in annotation_dicts:
+            annotations = append_parsed_field_or_log_error(self.logger, annotations, annotation_dict,
                                                                 lambda x: self.parse_annotation(x, spdx_id=spdx_id))
         raise_parsing_error_if_logger_has_messages(logger, "Annotations")
 
-        return annotations_list
+        return annotations
 
-    def parse_annotation(self, annotation: Dict, spdx_id: Optional[str] = None) -> Annotation:
+    def parse_annotation(self, annotation_dict: Dict, spdx_id: Optional[str] = None) -> Annotation:
         logger = Logger()
-        spdx_id: Optional[str] = annotation.get("SPDXID") or spdx_id
+        spdx_id: Optional[str] = annotation_dict.get("SPDXID") or spdx_id
 
-        annotation_type: Optional[AnnotationType] = parse_field_or_log_error(logger, annotation.get("annotationType"),
+        annotation_type: Optional[AnnotationType] = parse_field_or_log_error(logger, annotation_dict.get("annotationType"),
                                                                              self.parse_annotation_type)
 
-        annotator: Optional[Actor] = parse_field_or_log_error(logger, annotation.get("annotator"),
+        annotator: Optional[Actor] = parse_field_or_log_error(logger, annotation_dict.get("annotator"),
                                                               self.actor_parser.parse_actor)
 
-        annotation_date: Optional[datetime] = parse_field_or_log_error(logger, annotation.get("annotationDate"),
+        annotation_date: Optional[datetime] = parse_field_or_log_error(logger, annotation_dict.get("annotationDate"),
                                                                        datetime_from_str)
 
-        annotation_comment: Optional[str] = annotation.get("comment")
+        annotation_comment: Optional[str] = annotation_dict.get("comment")
         raise_parsing_error_if_logger_has_messages(logger, "Annotation")
-        annotation = construct_or_raise_parsing_error(Annotation,
-                                                      dict(spdx_id=spdx_id, annotation_type=annotation_type,
+        annotation_dict = construct_or_raise_parsing_error(Annotation,
+                                                           dict(spdx_id=spdx_id, annotation_type=annotation_type,
                                                            annotator=annotator, annotation_date=annotation_date,
                                                            annotation_comment=annotation_comment))
 
-        return annotation
+        return annotation_dict
 
     @staticmethod
     def parse_annotation_type(annotation_type: str) -> AnnotationType:

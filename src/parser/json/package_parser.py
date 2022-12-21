@@ -39,15 +39,14 @@ class PackageParser:
         self.license_expression_parser = LicenseExpressionParser()
         self.logger = Logger()
 
-    def parse_packages(self, packages_dict_list: List[Dict]) -> List[Package]:
-        packages_list = []
-        for package_dict in packages_dict_list:
-            packages_list = append_parsed_field_or_log_error(self.logger, packages_list, package_dict,
-                                                             self.parse_package)
+    def parse_packages(self, package_dicts: List[Dict]) -> List[Package]:
+        packages = []
+        for package_dict in package_dicts:
+            packages = append_parsed_field_or_log_error(self.logger, packages, package_dict, self.parse_package)
 
         raise_parsing_error_if_logger_has_messages(self.logger)
 
-        return packages_list
+        return packages
 
     def parse_package(self, package_dict: Dict) -> Package:
         logger = Logger()
