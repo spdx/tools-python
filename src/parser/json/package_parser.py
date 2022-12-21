@@ -55,10 +55,10 @@ class PackageParser:
         attribution_texts: List[str] = package_dict.get("attributionTexts", [])
 
         built_date: Optional[datetime] = parse_field_or_log_error(logger, package_dict.get("builtDate"),
-                                                                  datetime_from_str, True)
+                                                                  datetime_from_str)
 
         checksums = parse_field_or_log_error(logger, package_dict.get("checksums"),
-                                             self.checksum_parser.parse_checksums, True)
+                                             self.checksum_parser.parse_checksums)
         comment: Optional[str] = package_dict.get("comment")
         copyright_text: Optional[str] = package_dict.get("copyrightText")
         description: Optional[str] = package_dict.get("description")
@@ -66,47 +66,43 @@ class PackageParser:
             package_dict.get("downloadLocation"))
 
         external_refs: List[ExternalPackageRef] = parse_field_or_log_error(logger, package_dict.get("externalRefs"),
-                                                                           self.parse_external_refs, True)
+                                                                           self.parse_external_refs)
 
         files_analyzed: Optional[bool] = parse_field_or_log_error(logger, package_dict.get("filesAnalyzed"),
-                                                                  lambda x: x, True, True)
+                                                                  lambda x: x, True)
         homepage: Optional[str] = package_dict.get("homepage")
         license_comments: Optional[str] = package_dict.get("licenseComments")
         license_concluded = parse_field_or_log_error(logger, package_dict.get("licenseConcluded"),
-                                                     self.license_expression_parser.parse_license_expression, True,
-                                                     None)
+                                                     self.license_expression_parser.parse_license_expression, None)
 
         license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger, package_dict.get("licenseDeclared"), self.license_expression_parser.parse_license_expression, True)
+            logger, package_dict.get("licenseDeclared"), self.license_expression_parser.parse_license_expression)
 
         license_info_from_file: Optional[
             Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger,
                                                                                                   package_dict.get(
                                                                                                       "licenseInfoFromFiles"),
-                                                                                                  self.license_expression_parser.parse_license_expression,
-                                                                                                  True)
+                                                                                                  self.license_expression_parser.parse_license_expression)
         originator: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(logger,
                                                                                        package_dict.get("originator"),
-                                                                                       self.actor_parser.parse_actor_or_no_assertion,
-                                                                                       True)
+                                                                                       self.actor_parser.parse_actor_or_no_assertion)
         package_file_name: Optional[str] = package_dict.get("packageFileName")
 
         package_verification_code: Optional[
             PackageVerificationCode] = parse_field_or_log_error(logger, package_dict.get("packageVerificationCode"),
-                                                                self.parse_package_verification_code, True)
+                                                                self.parse_package_verification_code)
         primary_package_purpose: Optional[PackagePurpose] = parse_field_or_log_error(logger, package_dict.get(
-            "primaryPackagePurpose"), self.parse_primary_package_purpose, True)
+            "primaryPackagePurpose"), self.parse_primary_package_purpose)
 
         release_date: Optional[datetime] = parse_field_or_log_error(logger, package_dict.get("releaseDate"),
-                                                                    datetime_from_str, True)
+                                                                    datetime_from_str)
         source_info: Optional[str] = package_dict.get("sourceInfo")
         summary: Optional[str] = package_dict.get("summary")
         supplier: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(logger,
                                                                                      package_dict.get("supplier"),
-                                                                                     self.actor_parser.parse_actor_or_no_assertion,
-                                                                                     True)
+                                                                                     self.actor_parser.parse_actor_or_no_assertion)
         valid_until_date: Optional[datetime] = parse_field_or_log_error(logger, package_dict.get("validUntilDate"),
-                                                                        datetime_from_str, True)
+                                                                        datetime_from_str)
 
         version_info: Optional[str] = package_dict.get("versionInfo")
         raise_parsing_error_if_logger_has_messages(logger, f"Package {name}")

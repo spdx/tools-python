@@ -48,7 +48,7 @@ class CreationInfoParser:
             raise SPDXParsingError([f"Error while parsing document {name}: {logger.get_messages()}"])
 
         creators: List[Actor] = parse_field_or_log_error(logger, creation_info_dict.get("creators"),
-                                                         self.parse_creators, True)
+                                                         self.parse_creators)
 
         created: Optional[datetime] = parse_field_or_log_error(logger, creation_info_dict.get("created"),
                                                                datetime_from_str)
@@ -56,14 +56,11 @@ class CreationInfoParser:
         creator_comment: Optional[str] = creation_info_dict.get("comment")
         data_license: Optional[str] = doc_dict.get("dataLicense")
 
-        external_document_refs: List[ExternalDocumentRef] = parse_field_or_log_error(logger,
-                                                                                     doc_dict.get(
-                                                                                         "externalDocumentRefs"),
-                                                                                     self.parse_external_document_refs,
-                                                                                     True)
+        external_document_refs: List[ExternalDocumentRef] = parse_field_or_log_error(logger, doc_dict.get(
+            "externalDocumentRefs"), self.parse_external_document_refs)
         license_list_version: Optional[Version] = parse_field_or_log_error(logger,
                                                                            creation_info_dict.get("licenseListVersion"),
-                                                                           self.parse_version, True)
+                                                                           self.parse_version)
         document_comment: Optional[str] = doc_dict.get("comment")
         raise_parsing_error_if_logger_has_messages(logger, f"Document {name}")
 
@@ -101,7 +98,7 @@ class CreationInfoParser:
         external_document_refs = []
         for external_document_ref_dict in external_document_ref_dicts:
             external_document_ref: ExternalDocumentRef = parse_field_or_log_error(logger, external_document_ref_dict,
-                                                                             self.parse_external_document_ref, True)
+                                                                                  self.parse_external_document_ref)
 
             external_document_refs.append(external_document_ref)
 

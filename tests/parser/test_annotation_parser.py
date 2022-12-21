@@ -114,5 +114,11 @@ def test_parse_incomplete_annotation():
     with pytest.raises(SPDXParsingError) as err:
         _ = annotation_parser.parse_annotation(annotation_dict)
 
-    assert err.value.messages == ["Error while parsing Annotation: ['Invalid annotation type: None', 'Could not "
-                                  "convert str to datetime, invalid type: NoneType']"]
+    assert err.value.messages == ["Error while constructing Annotation: ['SetterError Annotation: type of "
+                                  'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError '
+                                  'Annotation: type of argument "annotation_type" must be '
+                                  "src.model.annotation.AnnotationType; got NoneType instead: None', "
+                                  '\'SetterError Annotation: type of argument "annotation_date" must be '
+                                  "datetime.datetime; got NoneType instead: None', 'SetterError Annotation: "
+                                  'type of argument "annotation_comment" must be str; got NoneType instead: '
+                                  "None']"]

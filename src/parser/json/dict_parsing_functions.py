@@ -39,19 +39,14 @@ def construct_or_raise_parsing_error(object_to_construct: Any, args_for_construc
     return constructed_object
 
 
-def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callable = lambda x: x, optional=False,
-                             default=None, ) -> Any:
+def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callable = lambda x: x, default=None) -> Any:
+    if not field:
+        return default
     try:
-        if optional:
-            if not field:
-                return default
-            parsed_element = parsing_method(field)
-        else:
-            parsed_element = parsing_method(field)
+        return parsing_method(field)
     except SPDXParsingError as err:
         logger.extend(err.get_messages())
-        parsed_element = default
-    return parsed_element
+        return default
 
 
 def append_parsed_field_or_log_error(logger: Logger, list_to_append_to: List[Any], field: Any,
