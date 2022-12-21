@@ -47,3 +47,12 @@ def test_successful_conversion(converter: PackageVerificationCodeConverter):
         PackageVerificationCodeProperty.PACKAGE_VERIFICATION_CODE_EXCLUDED_FILES)] == ["file1", "file2"]
     assert converted_dict[
                converter.json_property_name(PackageVerificationCodeProperty.PACKAGE_VERIFICATION_CODE_VALUE)] == "value"
+
+
+def test_null_values(converter: PackageVerificationCodeConverter):
+    package_verification_code = PackageVerificationCode("value")
+
+    converted_dict = converter.convert(package_verification_code)
+
+    assert converter.json_property_name(
+        PackageVerificationCodeProperty.PACKAGE_VERIFICATION_CODE_EXCLUDED_FILES) not in converted_dict

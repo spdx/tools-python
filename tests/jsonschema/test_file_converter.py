@@ -103,7 +103,8 @@ def test_successful_conversion(converter: FileConverter):
 
 
 def test_null_values(converter: FileConverter):
-    file = file_fixture(copyright_text=None, concluded_license=None, license_comment=None, comment=None, notice=None)
+    file = file_fixture(copyright_text=None, concluded_license=None, license_comment=None, comment=None, notice=None,
+                        attribution_texts=[], checksums=[], contributors=[], file_type=[], license_info_in_file=[])
     document = Document(creation_info_fixture(), files=[file])
 
     converted_dict = converter.convert(file, document)
@@ -113,6 +114,12 @@ def test_null_values(converter: FileConverter):
     assert converter.json_property_name(FileProperty.LICENSE_COMMENTS) not in converted_dict
     assert converter.json_property_name(FileProperty.COMMENT) not in converted_dict
     assert converter.json_property_name(FileProperty.NOTICE_TEXT) not in converted_dict
+    assert converter.json_property_name(FileProperty.ANNOTATIONS) not in converted_dict
+    assert converter.json_property_name(FileProperty.ATTRIBUTION_TEXTS) not in converted_dict
+    assert converter.json_property_name(FileProperty.CHECKSUMS) not in converted_dict
+    assert converter.json_property_name(FileProperty.FILE_CONTRIBUTORS) not in converted_dict
+    assert converter.json_property_name(FileProperty.FILE_TYPES) not in converted_dict
+    assert converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES) not in converted_dict
 
 
 def test_spdx_no_assertion(converter: FileConverter):

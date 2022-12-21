@@ -150,7 +150,8 @@ def test_null_values(converter: PackageConverter):
                               license_concluded=None, license_declared=None, originator=None, verification_code=None,
                               primary_package_purpose=None, supplier=None, version=None, file_name=None,
                               source_info=None, license_comment=None, copyright_text=None, summary=None,
-                              description=None, comment=None)
+                              description=None, comment=None, attribution_texts=[], checksums=[],
+                              external_references=[], license_info_from_files=[])
 
     document = Document(creation_info_fixture(), packages=[package])
 
@@ -174,6 +175,12 @@ def test_null_values(converter: PackageConverter):
     assert converter.json_property_name(PackageProperty.BUILT_DATE) not in converted_dict
     assert converter.json_property_name(PackageProperty.RELEASE_DATE) not in converted_dict
     assert converter.json_property_name(PackageProperty.VALID_UNTIL_DATE) not in converted_dict
+    assert converter.json_property_name(PackageProperty.ANNOTATIONS) not in converted_dict
+    assert converter.json_property_name(PackageProperty.ATTRIBUTION_TEXTS) not in converted_dict
+    assert converter.json_property_name(PackageProperty.CHECKSUMS) not in converted_dict
+    assert converter.json_property_name(PackageProperty.EXTERNAL_REFS) not in converted_dict
+    assert converter.json_property_name(PackageProperty.HAS_FILES) not in converted_dict
+    assert converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES) not in converted_dict
 
 
 def test_spdx_no_assertion(converter: PackageConverter):

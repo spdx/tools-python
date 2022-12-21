@@ -95,7 +95,7 @@ def test_successful_conversion(converter: SnippetConverter):
 
 def test_null_values(converter: SnippetConverter):
     snippet = snippet_fixture(concluded_license=None, license_comment=None, copyright_text=None, comment=None,
-                              name=None)
+                              name=None, attribution_texts=[], license_info_in_snippet=[])
 
     document = Document(creation_info_fixture(), snippets=[snippet])
     converted_dict = converter.convert(snippet, document)
@@ -105,6 +105,9 @@ def test_null_values(converter: SnippetConverter):
     assert converter.json_property_name(SnippetProperty.COPYRIGHT_TEXT) not in converted_dict
     assert converter.json_property_name(SnippetProperty.COMMENT) not in converted_dict
     assert converter.json_property_name(SnippetProperty.NAME) not in converted_dict
+    assert converter.json_property_name(SnippetProperty.ANNOTATIONS) not in converted_dict
+    assert converter.json_property_name(SnippetProperty.ATTRIBUTION_TEXTS) not in converted_dict
+    assert converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS) not in converted_dict
 
 
 def test_spdx_no_assertion(converter: SnippetConverter):

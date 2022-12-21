@@ -34,7 +34,7 @@ class CreationInfoConverter(TypedConverter[CreationInfo]):
         if creation_info_property == CreationInfoProperty.CREATED:
             return datetime_to_iso_string(creation_info.created)
         elif creation_info_property == CreationInfoProperty.CREATORS:
-            return [creator.to_serialized_string() for creator in creation_info.creators]
+            return [creator.to_serialized_string() for creator in creation_info.creators] or None
         elif creation_info_property == CreationInfoProperty.LICENSE_LIST_VERSION:
             return apply_if_present(str, creation_info.license_list_version)
         elif creation_info_property == CreationInfoProperty.COMMENT:

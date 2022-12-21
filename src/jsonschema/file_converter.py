@@ -39,34 +39,34 @@ class FileConverter(TypedConverter[File]):
             return file.spdx_id
         elif file_property == FileProperty.ANNOTATIONS:
             file_annotations = filter(lambda annotation: annotation.spdx_id == file.spdx_id, document.annotations)
-            return [self.annotation_converter.convert(annotation) for annotation in file_annotations]
+            return [self.annotation_converter.convert(annotation) for annotation in file_annotations] or None
         elif file_property == FileProperty.ARTIFACT_OFS:
             # Deprecated property, automatically converted during parsing
             pass
         elif file_property == FileProperty.ATTRIBUTION_TEXTS:
-            return file.attribution_texts
+            return file.attribution_texts or None
         elif file_property == FileProperty.CHECKSUMS:
-            return [self.checksum_converter.convert(checksum) for checksum in file.checksums]
+            return [self.checksum_converter.convert(checksum) for checksum in file.checksums] or None
         elif file_property == FileProperty.COMMENT:
             return file.comment
         elif file_property == FileProperty.COPYRIGHT_TEXT:
             return apply_if_present(str, file.copyright_text)
         elif file_property == FileProperty.FILE_CONTRIBUTORS:
-            return file.contributors
+            return file.contributors or None
         elif file_property == FileProperty.FILE_DEPENDENCIES:
             # Deprecated property, automatically converted during parsing
             pass
         elif file_property == FileProperty.FILE_NAME:
             return file.name
         elif file_property == FileProperty.FILE_TYPES:
-            return [file_type.name for file_type in file.file_type]
+            return [file_type.name for file_type in file.file_type] or None
         elif file_property == FileProperty.LICENSE_COMMENTS:
             return file.license_comment
         elif file_property == FileProperty.LICENSE_CONCLUDED:
             return apply_if_present(str, file.concluded_license)
         elif file_property == FileProperty.LICENSE_INFO_IN_FILES:
             if isinstance(file.license_info_in_file, list):
-                return [str(license_expression) for license_expression in file.license_info_in_file]
+                return [str(license_expression) for license_expression in file.license_info_in_file] or None
             return apply_if_present(str, file.license_info_in_file)
         elif file_property == FileProperty.NOTICE_TEXT:
             return file.notice

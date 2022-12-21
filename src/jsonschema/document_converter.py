@@ -71,7 +71,7 @@ class DocumentConverter(TypedConverter[Document]):
             element_ids.extend([snippet.spdx_id for snippet in document.snippets])
             document_annotations = filter(lambda annotation: annotation.spdx_id not in element_ids,
                                           document.annotations)
-            return [self.annotation_converter.convert(annotation) for annotation in document_annotations]
+            return [self.annotation_converter.convert(annotation) for annotation in document_annotations] or None
         elif document_property == DocumentProperty.COMMENT:
             return document.creation_info.document_comment
         elif document_property == DocumentProperty.CREATION_INFO:
@@ -80,10 +80,10 @@ class DocumentConverter(TypedConverter[Document]):
             return document.creation_info.data_license
         elif document_property == DocumentProperty.EXTERNAL_DOCUMENT_REFS:
             return [self.external_document_ref_converter.convert(external_document_ref) for
-                    external_document_ref in document.creation_info.external_document_refs]
+                    external_document_ref in document.creation_info.external_document_refs] or None
         elif document_property == DocumentProperty.HAS_EXTRACTED_LICENSING_INFO:
             return [self.extracted_licensing_info_converter.convert(licensing_info) for licensing_info in
-                    document.extracted_licensing_info]
+                    document.extracted_licensing_info] or None
         elif document_property == DocumentProperty.NAME:
             return document.creation_info.name
         elif document_property == DocumentProperty.SPDX_VERSION:
@@ -97,13 +97,13 @@ class DocumentConverter(TypedConverter[Document]):
             described_by_ids = [relationship.spdx_element_id for relationship in
                                 filter_by_type_and_target(document.relationships, RelationshipType.DESCRIBED_BY,
                                                           document.creation_info.spdx_id)]
-            return describes_ids + described_by_ids
+            return describes_ids + described_by_ids or None
         elif document_property == DocumentProperty.PACKAGES:
-            return [self.package_converter.convert(package, document) for package in document.packages]
+            return [self.package_converter.convert(package, document) for package in document.packages] or None
         elif document_property == DocumentProperty.FILES:
-            return [self.file_converter.convert(file, document) for file in document.files]
+            return [self.file_converter.convert(file, document) for file in document.files] or None
         elif document_property == DocumentProperty.SNIPPETS:
-            return [self.snippet_converter.convert(snippet, document) for snippet in document.snippets]
+            return [self.snippet_converter.convert(snippet, document) for snippet in document.snippets] or None
         elif document_property == DocumentProperty.RELATIONSHIPS:
             already_covered_relationships = filter_by_type_and_origin(document.relationships,
                                                                       RelationshipType.DESCRIBES,
@@ -117,4 +117,4 @@ class DocumentConverter(TypedConverter[Document]):
             relationships_to_ignore = [relationship for relationship in already_covered_relationships if
                                        relationship.comment is None]
             return [self.relationship_converter.convert(relationship) for relationship in document.relationships if
-                    relationship not in relationships_to_ignore]
+                    relationship not in relationships_to_ignore] or None

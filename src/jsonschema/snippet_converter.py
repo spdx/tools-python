@@ -37,9 +37,9 @@ class SnippetConverter(TypedConverter[Snippet]):
             return snippet.spdx_id
         elif snippet_property == SnippetProperty.ANNOTATIONS:
             snippet_annotations = filter(lambda annotation: annotation.spdx_id == snippet.spdx_id, document.annotations)
-            return [self.annotation_converter.convert(annotation) for annotation in snippet_annotations]
+            return [self.annotation_converter.convert(annotation) for annotation in snippet_annotations] or None
         elif snippet_property == SnippetProperty.ATTRIBUTION_TEXTS:
-            return snippet.attribution_texts
+            return snippet.attribution_texts or None
         elif snippet_property == SnippetProperty.COMMENT:
             return snippet.comment
         elif snippet_property == SnippetProperty.COPYRIGHT_TEXT:
@@ -50,7 +50,7 @@ class SnippetConverter(TypedConverter[Snippet]):
             return apply_if_present(str, snippet.concluded_license)
         elif snippet_property == SnippetProperty.LICENSE_INFO_IN_SNIPPETS:
             if isinstance(snippet.license_info_in_snippet, list):
-                return [str(license_expression) for license_expression in snippet.license_info_in_snippet]
+                return [str(license_expression) for license_expression in snippet.license_info_in_snippet] or None
             return apply_if_present(str, snippet.license_info_in_snippet)
         elif snippet_property == SnippetProperty.NAME:
             return snippet.name

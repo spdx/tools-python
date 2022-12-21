@@ -116,3 +116,18 @@ def test_json_type(converter: DocumentConverter):
 
 def test_data_model_type(converter: DocumentConverter):
     assert converter.get_data_model_type() == Document
+
+
+def test_null_values(converter: DocumentConverter):
+    document = Document(creation_info_fixture(external_document_refs=[]))
+
+    converted_dict = converter.convert(document)
+
+    assert converter.json_property_name(DocumentProperty.ANNOTATIONS) not in converted_dict
+    assert converter.json_property_name(DocumentProperty.EXTERNAL_DOCUMENT_REFS) not in converted_dict
+    assert converter.json_property_name(DocumentProperty.HAS_EXTRACTED_LICENSING_INFO) not in converted_dict
+    assert converter.json_property_name(DocumentProperty.DOCUMENT_DESCRIBES) not in converted_dict
+    assert converter.json_property_name(DocumentProperty.PACKAGES) not in converted_dict
+    assert converter.json_property_name(DocumentProperty.FILES) not in converted_dict
+    assert converter.json_property_name(DocumentProperty.SNIPPETS) not in converted_dict
+    assert converter.json_property_name(DocumentProperty.RELATIONSHIPS) not in converted_dict
