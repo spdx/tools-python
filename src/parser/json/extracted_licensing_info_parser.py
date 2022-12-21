@@ -38,9 +38,9 @@ class ExtractedLicensingInfoParser:
         license_id: Optional[str] = extracted_licensing_info_dict.get("licenseId")
         extracted_text: Optional[str] = extracted_licensing_info_dict.get("extractedText")
         license_name: Optional[Union[str, SpdxNoAssertion]] = parse_field_or_log_error(self.logger,
-                                                                                       extracted_licensing_info_dict.get("name"),
-                                                                                       self.parse_extracted_licensing_info_name,
-                                                                                       True)
+                                                                                       extracted_licensing_info_dict.get(
+                                                                                           "name"),
+                                                                                       self.parse_extracted_licensing_info_name)
         cross_references: List[str] = extracted_licensing_info_dict.get("seeAlsos", [])
         comment: Optional[str] = extracted_licensing_info_dict.get("comment")
         extracted_licensing_info = construct_or_raise_parsing_error(ExtractedLicensingInfo,

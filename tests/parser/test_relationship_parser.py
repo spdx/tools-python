@@ -44,14 +44,18 @@ def test_parse_incomplete_relationship():
     with pytest.raises(SPDXParsingError) as err:
         _ = relationship_parser.parse_relationship(relationship_dict)
 
-    assert err.value.messages == ["Error while parsing relationship: ['RelationshipType must be str, not "
-                                  "NoneType.']"]
+    assert err.value.messages == ["Error while constructing Relationship: ['SetterError Relationship: type of "
+                                  'argument "relationship_type" must be '
+                                  "src.model.relationship.RelationshipType; got NoneType instead: None']"]
+
+
 def test_parse_relationship_type():
     relationship_parser = RelationshipParser()
     relationship_type_str = "DEPENDENCY_OF"
 
     relationship_type = relationship_parser.parse_relationship_type(relationship_type_str)
     assert relationship_type == RelationshipType.DEPENDENCY_OF
+
 
 def test_creating_describes_relationship():
     relationship_parser = RelationshipParser()

@@ -59,11 +59,11 @@ class SnippetParser:
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
         concluded_license: Optional[Union[
             LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
-            "licenseConcluded"), self.license_expression_parser.parse_license_expression, True)
+            "licenseConcluded"), self.license_expression_parser.parse_license_expression)
 
         license_info: Optional[Union[List[
             LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
-            "licenseInfoInSnippets"), self.license_expression_parser.parse_license_expression, True)
+            "licenseInfoInSnippets"), self.license_expression_parser.parse_license_expression)
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing snippet: {logger.get_messages()}"])
 

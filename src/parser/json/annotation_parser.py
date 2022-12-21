@@ -54,7 +54,7 @@ class AnnotationParser:
             element_annotations: List[Dict] = element.get("annotations", [])
             annotations.extend(parse_field_or_log_error(self.logger, element_annotations,
                                                         lambda x: self.parse_annotations(x, spdx_id=element_spdx_id),
-                                                        []))
+                                                        default=[]))
 
     def parse_annotations(self, annotation_dicts: List[Dict], spdx_id: Optional[str] = None) -> List[Annotation]:
         logger = Logger()
@@ -70,7 +70,8 @@ class AnnotationParser:
         logger = Logger()
         spdx_id: Optional[str] = annotation_dict.get("SPDXID") or spdx_id
 
-        annotation_type: Optional[AnnotationType] = parse_field_or_log_error(logger, annotation_dict.get("annotationType"),
+        annotation_type: Optional[AnnotationType] = parse_field_or_log_error(logger,
+                                                                             annotation_dict.get("annotationType"),
                                                                              self.parse_annotation_type)
 
         annotator: Optional[Actor] = parse_field_or_log_error(logger, annotation_dict.get("annotator"),
@@ -98,7 +99,7 @@ class AnnotationParser:
     def parse_review(self, review_dict: Dict, spdx_id: str) -> Annotation:
         logger = Logger()
         annotator: Optional[Actor] = parse_field_or_log_error(logger, review_dict.get("reviewer"),
-                                                              self.actor_parser.parse_actor, True)
+                                                              self.actor_parser.parse_actor)
 
         annotation_date: Optional[datetime] = parse_field_or_log_error(logger, review_dict.get("reviewDate"),
                                                                        datetime_from_str)

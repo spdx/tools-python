@@ -28,24 +28,23 @@ class RelationshipParser:
     def parse_all_relationships(self, input_doc_dict: Dict) -> List[Relationship]:
         relationships = []
         relationship_dicts: List[Dict] = input_doc_dict.get("relationships", [])
-        if relationship_dicts:
-            relationships.extend(
-                parse_field_or_log_error(self.logger, relationship_dicts, self.parse_relationships, default=[]))
+        relationships.extend(
+            parse_field_or_log_error(self.logger, relationship_dicts, self.parse_relationships, []))
 
         document_describes: List[str] = input_doc_dict.get("documentDescribes", [])
         doc_spdx_id: Optional[str] = input_doc_dict.get("SPDXID")
 
-        relationships.extend(parse_field_or_log_error(self.logger, document_describes,
-                                                      lambda x: self.parse_document_describes(
-                                                          doc_spdx_id=doc_spdx_id, described_spdx_ids=x,
-                                                          existing_relationships=relationships), default=[]))
+        relationships.extend(
+            parse_field_or_log_error(self.logger, document_describes, lambda x: self.parse_document_describes(
+                doc_spdx_id=doc_spdx_id, described_spdx_ids=x,
+                existing_relationships=relationships), []))
 
         package_dicts: List[Dict] = input_doc_dict.get("packages", [])
 
-        relationships.extend(parse_field_or_log_error(self.logger, package_dicts,
-                                                      lambda x: self.parse_has_files(package_dicts=x,
-                                                                                     existing_relationships=relationships),
-                                                      default=[]))
+        relationships.extend(
+            parse_field_or_log_error(self.logger, package_dicts, lambda x: self.parse_has_files(package_dicts=x,
+                                                                                                existing_relationships=relationships),
+                                     []))
 
         file_dicts: List[Dict] = input_doc_dict.get("files", [])
 
