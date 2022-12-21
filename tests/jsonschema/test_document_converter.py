@@ -19,7 +19,7 @@ from src.jsonschema.document_properties import DocumentProperty
 from src.model.actor import Actor, ActorType
 from src.model.annotation import Annotation, AnnotationType
 from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.document import Document, CreationInfo
+from src.model.document import Document
 from src.model.external_document_ref import ExternalDocumentRef
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.file import File
@@ -27,6 +27,7 @@ from src.model.package import Package
 from src.model.relationship import Relationship, RelationshipType
 from src.model.snippet import Snippet
 from src.model.spdx_none import SpdxNone
+from tests.fixtures import creation_info_fixture
 
 
 @pytest.fixture
@@ -70,9 +71,11 @@ def test_json_property_names(converter: DocumentConverter, document_property: Do
 
 
 def test_successful_conversion(converter: DocumentConverter):
-    creation_info = CreationInfo("spdxVersion", "spdxId", "name", "namespace", [], datetime.today(),
-                                 document_comment="comment", data_license="dataLicense", external_document_refs=[
-            ExternalDocumentRef("docRefId", "externalDocumentUri", Checksum(ChecksumAlgorithm.SHA1, "sha1"))])
+    creation_info = creation_info_fixture(spdx_version="spdxVersion", spdx_id="spdxId", name="name",
+                                          namespace="namespace", document_comment="comment", data_license="dataLicense",
+                                          external_document_refs=[ExternalDocumentRef("docRefId", "externalDocumentUri",
+                                                                                      Checksum(ChecksumAlgorithm.SHA1,
+                                                                                               "sha1"))])
     package = Package("packageID", "packageName", SpdxNone())
     file = File("fileName", "fileId", [])
     snippet = Snippet("snippetId", "snippetFileId", (1, 2))

@@ -18,6 +18,7 @@ from src.jsonschema.creation_info_properties import CreationInfoProperty
 from src.model.actor import Actor, ActorType
 from src.model.document import CreationInfo
 from src.model.version import Version
+from tests.fixtures import creation_info_fixture
 
 
 @pytest.fixture
@@ -37,10 +38,10 @@ def test_json_property_names(converter: CreationInfoConverter, creation_info_pro
 def test_successful_conversion(converter: CreationInfoConverter):
     creators = [Actor(ActorType.PERSON, "personName"), Actor(ActorType.TOOL, "toolName")]
     created = datetime(2022, 12, 1)
-    creation_info = CreationInfo("irrelevant", "irrelevant", "irrelevant", "irrelevant", creators=creators,
-                                 created=created, creator_comment="comment", license_list_version=Version(1, 2))
 
-    converted_dict = converter.convert(creation_info)
+    converted_dict = converter.convert(
+        creation_info_fixture(creators=creators, created=created, creator_comment="comment",
+                              license_list_version=Version(1, 2)))
 
     assert converted_dict[converter.json_property_name(CreationInfoProperty.CREATED)] == datetime_to_iso_string(created)
     assert converted_dict[converter.json_property_name(CreationInfoProperty.CREATORS)] == ["Person: personName",
@@ -50,7 +51,7 @@ def test_successful_conversion(converter: CreationInfoConverter):
 
 
 def test_null_values(converter: CreationInfoConverter):
-    creation_info = CreationInfo("irrelevant", "irrelevant", "irrelevant", "irrelevant", [], datetime(2022, 12, 1))
+    creation_info = creation_info_fixture(license_list_version=None, creator_comment=None)
 
     converted_dict = converter.convert(creation_info)
 
