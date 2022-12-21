@@ -3,7 +3,7 @@ from typing import List
 import pytest
 
 from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.validation.checksum_validator import ChecksumValidator
+from src.validation.checksum_validator import validate_checksum
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
@@ -38,9 +38,7 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
                                    "af1eec2a1b18886c3f3cc244349d91d8d4c41ce30a517d6ce9d79c8c17bb4b660d7f61beb7018b3924c6b8f96549fa39"),
                           Checksum(ChecksumAlgorithm.ADLER32, "02ec0130")])
 def test_valid_checksum(checksum):
-    checksum_validator = ChecksumValidator("2.3", "parent_id")
-
-    validation_messages: List[ValidationMessage] = checksum_validator.validate_checksum(checksum)
+    validation_messages: List[ValidationMessage] = validate_checksum(checksum, "parent_id")
 
     assert validation_messages == []
 
@@ -84,8 +82,7 @@ def test_valid_checksum(checksum):
                           ])
 def test_invalid_checksum(checksum, expected_message):
     parent_id = "parent_id"
-    checksum_validator = ChecksumValidator("2.3", parent_id)
-    validation_messages: List[ValidationMessage] = checksum_validator.validate_checksum(checksum)
+    validation_messages: List[ValidationMessage] = validate_checksum(checksum, parent_id)
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(parent_id=parent_id, element_type=SpdxElementType.CHECKSUM,

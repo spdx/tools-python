@@ -6,7 +6,7 @@ from src.model.document import Document
 from src.model.license_expression import LicenseExpression
 from src.model.snippet import Snippet
 from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.validation.snippet_validator import SnippetValidator
+from src.validation.snippet_validator import validate_snippet
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.valid_defaults import get_snippet, get_document, get_file
 
@@ -14,12 +14,10 @@ from tests.valid_defaults import get_snippet, get_document, get_file
 def test_valid_snippet():
     document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File")])
 
-    snippet_validator = SnippetValidator("2.3", document)
-
     snippet = Snippet("SPDXRef-Snippet", "SPDXRef-File", (200, 400), (20, 40), LicenseExpression("some_license"),
                       SpdxNoAssertion(), "comment on license",
                       "copyright", "comment", "name", ["attribution"])
-    validation_messages: List[ValidationMessage] = snippet_validator.validate_snippet(snippet)
+    validation_messages: List[ValidationMessage] = validate_snippet(snippet, document)
 
     assert validation_messages == []
 
@@ -35,9 +33,7 @@ def test_valid_snippet():
                            "the first value of line_range must be less than or equal to the second, but is: (45, 23)")
                           ])
 def test_invalid_ranges(snippet_input, expected_message):
-    snippet_validator = SnippetValidator("2.3", get_document(files=[get_file()]))
-
-    validation_messages: List[ValidationMessage] = snippet_validator.validate_snippet(snippet_input)
+    validation_messages: List[ValidationMessage] = validate_snippet(snippet_input, get_document(files=[get_file()]))
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(spdx_id=snippet_input.spdx_id, element_type=SpdxElementType.SNIPPET,

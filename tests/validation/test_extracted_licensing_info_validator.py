@@ -3,18 +3,15 @@ from typing import List
 import pytest
 
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
-from src.validation.extracted_licensing_info_validator import ExtractedLicensingInfoValidator
+from src.validation.extracted_licensing_info_validator import validate_extracted_licensing_info
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.valid_defaults import get_extracted_licensing_info
 
 
 def test_valid_extracted_licensing_info():
-    extracted_licensing_info_validator = ExtractedLicensingInfoValidator("2.3")
-
     extracted_licensing_info = ExtractedLicensingInfo("LicenseRef-1", "extracted text", "license name",
                                                       ["http://some.url"], "comment")
-    validation_messages: List[ValidationMessage] = extracted_licensing_info_validator.validate_extracted_licensing_info(
-        extracted_licensing_info)
+    validation_messages: List[ValidationMessage] = validate_extracted_licensing_info(extracted_licensing_info)
 
     assert validation_messages == []
 
@@ -27,9 +24,7 @@ def test_valid_extracted_licensing_info():
                            'cross_reference must be a valid URL, but is: invalid_url')
                           ])
 def test_invalid_extracted_licensing_info(extracted_licensing_info, expected_message):
-    extracted_licensing_info_validator = ExtractedLicensingInfoValidator("2.3")
-    validation_messages: List[ValidationMessage] = extracted_licensing_info_validator.validate_extracted_licensing_info(
-        extracted_licensing_info)
+    validation_messages: List[ValidationMessage] = validate_extracted_licensing_info(extracted_licensing_info)
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(element_type=SpdxElementType.EXTRACTED_LICENSING_INFO,

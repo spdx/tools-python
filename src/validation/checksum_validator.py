@@ -26,38 +26,31 @@ algorithm_length: Dict = {
 }
 
 
-class ChecksumValidator:
-    spdx_version: str
-    parent_id: str
+def validate_checksums(checksums: List[Checksum], parent_id: str) -> List[ValidationMessage]:
+    validation_messages = []
+    for checksum in checksums:
+        validation_messages.extend(validate_checksum(checksum, parent_id))
 
-    def __init__(self, spdx_version: str, parent_id: str):
-        self.spdx_version = spdx_version
-        self.parent_id = parent_id
+    return validation_messages
 
-    def validate_checksums(self, checksums: List[Checksum]) -> List[ValidationMessage]:
-        validation_messages = []
-        for checksum in checksums:
-            validation_messages.extend(self.validate_checksum(checksum))
 
-        return validation_messages
+def validate_checksum(checksum: Checksum, parent_id: str) -> List[ValidationMessage]:
+    validation_messages = []
+    algorithm = checksum.algorithm
+    context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.CHECKSUM,
+                                full_element=checksum)
 
-    def validate_checksum(self, checksum: Checksum) -> List[ValidationMessage]:
-        validation_messages = []
-        algorithm = checksum.algorithm
-        context = ValidationContext(parent_id=self.parent_id, element_type=SpdxElementType.CHECKSUM,
-                                    full_element=checksum)
+    if not re.match("^[0-9a-f]{" + algorithm_length[algorithm] + "}$", checksum.value):
+        if algorithm == ChecksumAlgorithm.BLAKE3:
+            length = "at least 256"
+        elif algorithm == ChecksumAlgorithm.MD6:
+            length = "between 0 and 512"
+        else:
+            length = algorithm_length[algorithm]
+        validation_messages.append(
+            ValidationMessage(
+                f"value of {algorithm} must consist of {length} hexadecimal digits, but is: {checksum.value} (length: {len(checksum.value)} digits)",
+                context)
+        )
 
-        if not re.match("^[0-9a-f]{" + algorithm_length[algorithm] + "}$", checksum.value):
-            if algorithm == ChecksumAlgorithm.BLAKE3:
-                length = "at least 256"
-            elif algorithm == ChecksumAlgorithm.MD6:
-                length = "between 0 and 512"
-            else:
-                length = algorithm_length[algorithm]
-            validation_messages.append(
-                ValidationMessage(
-                    f"value of {algorithm} must consist of {length} hexadecimal digits, but is: {checksum.value} (length: {len(checksum.value)} digits)",
-                    context)
-            )
-
-        return validation_messages
+    return validation_messages

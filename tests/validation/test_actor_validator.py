@@ -3,16 +3,14 @@ from typing import List
 import pytest
 
 from src.model.actor import ActorType, Actor
-from src.validation.actor_validator import ActorValidator
+from src.validation.actor_validator import validate_actor
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.valid_defaults import get_actor
 
 
 def test_valid_actor_person():
-    actor_validator = ActorValidator("2.3", "SPDXRef-DOCUMENT")
-
     actor = Actor(ActorType.PERSON, "person name", "mail@mail.com")
-    validation_messages: List[ValidationMessage] = actor_validator.validate_actor(actor)
+    validation_messages: List[ValidationMessage] = validate_actor(actor, "SPDXRef-DOCUMENT")
 
     assert validation_messages == []
 
@@ -23,8 +21,7 @@ def test_valid_actor_person():
                           ])
 def test_invalid_actor(actor, expected_message):
     parent_id = "SPDXRef-DOCUMENT"
-    actor_validator = ActorValidator("2.3", parent_id)
-    validation_messages: List[ValidationMessage] = actor_validator.validate_actor(actor)
+    validation_messages: List[ValidationMessage] = validate_actor(actor, parent_id)
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(parent_id=parent_id, element_type=SpdxElementType.ACTOR,
