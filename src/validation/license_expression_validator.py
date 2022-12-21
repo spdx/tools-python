@@ -25,4 +25,5 @@ class LicenseExpressionValidator:
         return error_messages
 
     def validate_license_expression(self, license_expression: LicenseExpression) -> List[ValidationMessage]:
+        # TODO: implement this once we have a better license expression model: https://github.com/spdx/tools-python/issues/374
         return []

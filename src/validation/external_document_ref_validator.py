@@ -3,6 +3,7 @@ from typing import List
 
 from src.model.external_document_ref import ExternalDocumentRef
 from src.validation.checksum_validator import ChecksumValidator
+from src.validation.spdx_id_validation import is_valid_external_doc_ref_id
 from src.validation.uri_validators import validate_uri
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
@@ -30,7 +31,7 @@ class ExternalDocumentRefValidator:
         context = ValidationContext(parent_id=self.parent_id, element_type=SpdxElementType.EXTERNAL_DOCUMENT_REF,
                                     full_element=external_document_ref)
 
-        if not re.match(r"^DocumentRef-[\da-zA-Z.+-]+$", external_document_ref.document_ref_id):
+        if not is_valid_external_doc_ref_id(external_document_ref.document_ref_id):
             validation_messages.append(
                 ValidationMessage(
                     f'document_ref_id must only contain letters, numbers, ".", "-" and "+" and must begin with "DocumentRef-", but is: {external_document_ref.document_ref_id}',

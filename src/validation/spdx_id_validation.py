@@ -5,7 +5,7 @@ from src.model.document import Document
 from src.model.file import File
 
 
-def is_valid_spdx_id(spdx_id: str) -> bool:
+def is_valid_internal_spdx_id(spdx_id: str) -> bool:
     return bool(re.match(r"^SPDXRef-[\da-zA-Z.-]+$", spdx_id))
 
 
@@ -60,7 +60,7 @@ def validate_spdx_id(spdx_id: str, document: Document, check_document: bool = Fa
         if not is_valid_external_doc_ref_id(split_id[0]):
             validation_messages.append(
                 f'the external document reference part of spdx_id must only contain letters, numbers, ".", "-" and "+" and must begin with "DocumentRef-", but is: {split_id[0]}')
-        if not is_valid_spdx_id(split_id[1]):
+        if not is_valid_internal_spdx_id(split_id[1]):
             validation_messages.append(
                 f'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: {split_id[1]}')
         if not is_external_doc_ref_present_in_document(split_id[0], document):
@@ -70,7 +70,7 @@ def validate_spdx_id(spdx_id: str, document: Document, check_document: bool = Fa
         return validation_messages
 
     # # # "normal" case # # #
-    if not is_valid_spdx_id(spdx_id):
+    if not is_valid_internal_spdx_id(spdx_id):
         validation_messages.append(
             f'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: {spdx_id}')
 

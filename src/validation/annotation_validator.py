@@ -15,7 +15,7 @@ class AnnotationValidator:
     def __init__(self, spdx_version: str, document: Document):
         self.spdx_version = spdx_version
         self.document = document
-        self.actor_validator = ActorValidator(spdx_version, parent_id=None)
+        self.actor_validator = ActorValidator(spdx_version, parent_id="annotation")
 
     def validate_annotations(self, annotations: List[Annotation]) -> List[ValidationMessage]:
         validation_messages = []

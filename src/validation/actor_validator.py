@@ -8,7 +8,6 @@ class ActorValidator:
     spdx_version: str
     parent_id: str
 
-    # TODO: what is parent_id in the case of annotations?
     def __init__(self, spdx_version: str, parent_id: Optional[str]):
         self.spdx_version = spdx_version
         self.parent_id = parent_id

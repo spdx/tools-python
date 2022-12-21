@@ -27,5 +27,5 @@ class ExternalPackageRefValidator:
         return validation_messages
 
     def validate_external_package_ref(self, external_package_ref: ExternalPackageRef) -> List[ValidationMessage]:
-        # TODO: this is gonna be insane (Annex F)
+        # TODO: https://github.com/spdx/tools-python/issues/373
         return []

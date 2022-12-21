@@ -30,7 +30,7 @@ class PackageValidator:
         return validation_messages
 
     def validate_package(self, package: Package) -> List[ValidationMessage]:
-        checksum_validator = ChecksumValidator(self.spdx_version, parent_id=package.spdx_id)
+        checksum_validator = ChecksumValidator(self.spdx_version, package.spdx_id)
         verification_code_validator = PackageVerificationCodeValidator(self.spdx_version, package.spdx_id)
         external_package_ref_validator = ExternalPackageRefValidator(self.spdx_version, package.spdx_id)
 

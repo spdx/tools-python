@@ -14,9 +14,6 @@ class ExtractedLicensingInfoValidator:
 
     def validate_extracted_licensing_infos(self, extracted_licensing_infos: Optional[List[ExtractedLicensingInfo]]) -> \
     List[ValidationMessage]:
-        if extracted_licensing_infos is None:
-            return []
-
         validation_messages = []
         for extracted_licensing_info in extracted_licensing_infos:
             validation_messages.extend(self.validate_extracted_licensing_info(extracted_licensing_info))

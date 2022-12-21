@@ -18,4 +18,4 @@ def test_valid_document():
 
     assert validation_messages == []
 
-# TODO: some kind of super test is needed to test that all the subvalidations are correctly called
+# TODO: https://github.com/spdx/tools-python/issues/375
