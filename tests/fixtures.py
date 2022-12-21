@@ -13,6 +13,7 @@ from datetime import datetime
 from src.model.actor import Actor, ActorType
 from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import CreationInfo
+from src.model.external_document_ref import ExternalDocumentRef
 from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
 from src.model.package import Package, PackageVerificationCode, PackagePurpose
@@ -27,7 +28,8 @@ def creation_info_fixture(spdx_version="spdxVersion", spdx_id="documentId", name
                           creator_comment="creatorComment", data_license="CC0-1.0", external_document_refs=None,
                           license_list_version=Version(3, 19), document_comment="documentComment") -> CreationInfo:
     creators = [Actor(ActorType.PERSON, "creatorName")] if creators is None else creators
-    external_document_refs = [] if external_document_refs is None else external_document_refs
+    external_document_refs = [
+        external_document_ref_fixture()] if external_document_refs is None else external_document_refs
     return CreationInfo(spdx_version, spdx_id, name, namespace, creators, created, creator_comment, data_license,
                         external_document_refs, license_list_version, document_comment)
 
@@ -74,3 +76,9 @@ def package_fixture(spdx_id="packageId", name="packageName", download_location="
                    summary=summary, description=description, comment=comment, external_references=external_references,
                    attribution_texts=attribution_texts, primary_package_purpose=primary_package_purpose,
                    release_date=release_date, built_date=built_date, valid_until_date=valid_until_date)
+
+
+def external_document_ref_fixture(document_ref_id="externalDocumentRefId", document_uri="externalDocumentUri",
+                                  checksum=Checksum(ChecksumAlgorithm.MD5,
+                                                    "externalDocumentRefMd5")) -> ExternalDocumentRef:
+    return ExternalDocumentRef(document_ref_id=document_ref_id, document_uri=document_uri, checksum=checksum)

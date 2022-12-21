@@ -18,13 +18,11 @@ from src.jsonschema.document_converter import DocumentConverter
 from src.jsonschema.document_properties import DocumentProperty
 from src.model.actor import Actor, ActorType
 from src.model.annotation import Annotation, AnnotationType
-from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import Document
-from src.model.external_document_ref import ExternalDocumentRef
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.relationship import Relationship, RelationshipType
 from src.model.snippet import Snippet
-from tests.fixtures import creation_info_fixture, file_fixture, package_fixture
+from tests.fixtures import creation_info_fixture, file_fixture, package_fixture, external_document_ref_fixture
 
 
 @pytest.fixture
@@ -70,9 +68,7 @@ def test_json_property_names(converter: DocumentConverter, document_property: Do
 def test_successful_conversion(converter: DocumentConverter):
     creation_info = creation_info_fixture(spdx_version="spdxVersion", spdx_id="spdxId", name="name",
                                           namespace="namespace", document_comment="comment", data_license="dataLicense",
-                                          external_document_refs=[ExternalDocumentRef("docRefId", "externalDocumentUri",
-                                                                                      Checksum(ChecksumAlgorithm.SHA1,
-                                                                                               "sha1"))])
+                                          external_document_refs=[external_document_ref_fixture()])
     snippet = Snippet("snippetId", "snippetFileId", (1, 2))
     document = Document(creation_info, annotations=[
         Annotation("annotationId", AnnotationType.REVIEW, Actor(ActorType.PERSON, "reviewerName"),
