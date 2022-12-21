@@ -34,7 +34,7 @@ class ExtractedLicensingInfoConverter(TypedConverter[ExtractedLicensingInfo]):
         elif extracted_licensing_info_property == ExtractedLicensingInfoProperty.NAME:
             return extracted_licensing_info.license_name
         elif extracted_licensing_info_property == ExtractedLicensingInfoProperty.SEE_ALSOS:
-            return extracted_licensing_info.cross_references
+            return extracted_licensing_info.cross_references or None
 
     def get_json_type(self) -> Type[JsonProperty]:
         return ExtractedLicensingInfoProperty

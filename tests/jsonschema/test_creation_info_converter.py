@@ -51,12 +51,13 @@ def test_successful_conversion(converter: CreationInfoConverter):
 
 
 def test_null_values(converter: CreationInfoConverter):
-    creation_info = creation_info_fixture(license_list_version=None, creator_comment=None)
+    creation_info = creation_info_fixture(license_list_version=None, creator_comment=None, creators=[])
 
     converted_dict = converter.convert(creation_info)
 
     assert converter.json_property_name(CreationInfoProperty.LICENSE_LIST_VERSION) not in converted_dict
     assert converter.json_property_name(CreationInfoProperty.COMMENT) not in converted_dict
+    assert converter.json_property_name(CreationInfoProperty.CREATORS) not in converted_dict
 
 
 def test_json_type(converter: CreationInfoConverter):
