@@ -16,7 +16,8 @@ from src.model.snippet import Snippet
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_error, parse_field_or_log_error
+from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_error, parse_field_or_log_error, \
+    raise_parsing_error_if_logger_has_messages, append_parsed_field_or_log_error
 
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
@@ -35,24 +36,21 @@ class SnippetParser:
         self.logger = Logger()
         self.license_expression_parser = LicenseExpressionParser()
 
-    def parse_snippets(self, snippet_dicts_list: List[Dict]) -> List[Snippet]:
-        snippets_list = []
-        for snippet_dict in snippet_dicts_list:
-            try:
-                snippets_list.append(self.parse_snippet(snippet_dict))
-            except SPDXParsingError as err:
-                self.logger.extend(err.get_messages())
-        if self.logger.has_messages():
-            raise SPDXParsingError(self.logger.get_messages())
+    def parse_snippets(self, snippet_dicts: List[Dict]) -> List[Snippet]:
+        snippets = []
+        for snippet_dict in snippet_dicts:
+            snippets = append_parsed_field_or_log_error(self.logger, snippets, snippet_dict, self.parse_snippet)
 
-        return snippets_list
+        raise_parsing_error_if_logger_has_messages(self.logger)
+
+        return snippets
 
     def parse_snippet(self, snippet_dict: Dict) -> Snippet:
         logger = Logger()
         spdx_id: Optional[str] = snippet_dict.get("SPDXID")
         file_spdx_id: Optional[str] = snippet_dict.get("snippetFromFile")
         name: Optional[str] = snippet_dict.get("name")
-        ranges: Dict = parse_field_or_log_error(logger, snippet_dict.get("ranges"), self.parse_ranges, default={})
+        ranges: Dict = parse_field_or_log_error(logger, snippet_dict.get("ranges", []), self.parse_ranges, default={})
         byte_range: Tuple[int, int] = ranges.get(RangeType.BYTE)
         line_range: Optional[Tuple[int, int]] = ranges.get(RangeType.LINE)
         attribution_texts: List[str] = snippet_dict.get("attributionTexts", [])
@@ -80,8 +78,6 @@ class SnippetParser:
         return snippet
 
     def parse_ranges(self, ranges_from_snippet: List[Dict]) -> Dict:
-        if not ranges_from_snippet:
-            raise SPDXParsingError([f"No ranges dict provided."])
         logger = Logger()
         ranges = {}
         for range_dict in ranges_from_snippet:
@@ -92,7 +88,7 @@ class SnippetParser:
             except ValueError as error:
                 logger.append(error.args[0])
         if logger.has_messages():
-            raise SPDXParsingError([f"Error while parsing ranges_dict: {logger.get_messages()}"])
+            raise SPDXParsingError([f"Error while parsing snippet ranges: {logger.get_messages()}"])
         return ranges
 
     @staticmethod
@@ -108,8 +104,10 @@ class SnippetParser:
         return start, end
 
     def validate_range_and_get_type(self, range_dict: Dict) -> RangeType:
-        if ("startPointer" not in range_dict) or ("endPointer" not in range_dict):
-            raise ValueError("Start-/ Endpointer missing in ranges_dict.")
+        if "startPointer" not in range_dict:
+            raise ValueError("Startpointer missing in snippet ranges.")
+        if "endPointer" not in range_dict:
+            raise ValueError("Endpointer missing in snippet ranges.")
         start_pointer_type: RangeType = self.validate_pointer_and_get_type(range_dict["startPointer"])
         end_pointer_type: RangeType = self.validate_pointer_and_get_type(range_dict["endPointer"])
         if start_pointer_type != end_pointer_type:
@@ -118,7 +116,8 @@ class SnippetParser:
 
     @staticmethod
     def validate_pointer_and_get_type(pointer: Dict) -> RangeType:
-        if ("offset" in pointer and "lineNumber" in pointer) or (
-            "offset" not in pointer and "lineNumber" not in pointer):
-            raise ValueError("Couldn't determine type of pointer.")
+        if "offset" in pointer and "lineNumber" in pointer:
+            raise ValueError ('Couldn\'t determine type of pointer: "offset" and "lineNumber" provided as key.')
+        if "offset" not in pointer and "lineNumber" not in pointer:
+            raise ValueError('Couldn\'t determine type of pointer: neither "offset" nor "lineNumber" provided as key.')
         return RangeType.BYTE if "offset" in pointer else RangeType.LINE
