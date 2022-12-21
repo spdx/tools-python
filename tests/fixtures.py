@@ -18,6 +18,7 @@ from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
 from src.model.package import Package, PackageVerificationCode, PackagePurpose, ExternalPackageRef, \
     ExternalPackageRefCategory
+from src.model.snippet import Snippet
 from src.model.version import Version
 
 """Utility methods to create data model instances. All properties have valid defaults, so they don't need to be 
@@ -90,3 +91,17 @@ def external_package_ref_fixture(category=ExternalPackageRefCategory.PACKAGE_MAN
                                  locator="externalPackageRefLocator",
                                  comment="externalPackageRefComment") -> ExternalPackageRef:
     return ExternalPackageRef(category=category, reference_type=reference_type, locator=locator, comment=comment)
+
+
+def snippet_fixture(spdx_id="snippetId", file_spdx_id="snippetFromFileId", byte_range=(1, 2),
+                    line_range=(3, 4), concluded_license=LicenseExpression("snippetLicenseConcluded"),
+                    license_info_in_snippet=None, license_comment="snippetLicenseComment",
+                    copyright_text="licenseCopyrightText", comment="snippetComment", name="snippetName",
+                    attribution_texts=None) -> Snippet:
+    license_info_in_snippet = [
+        LicenseExpression("licenseInfoInSnippet")] if license_info_in_snippet is None else license_info_in_snippet
+    attribution_texts = ["snippetAttributionText"] if attribution_texts is None else attribution_texts
+    return Snippet(spdx_id=spdx_id, file_spdx_id=file_spdx_id, byte_range=byte_range, line_range=line_range,
+                   concluded_license=concluded_license, license_info_in_snippet=license_info_in_snippet,
+                   license_comment=license_comment, copyright_text=copyright_text, comment=comment, name=name,
+                   attribution_texts=attribution_texts)

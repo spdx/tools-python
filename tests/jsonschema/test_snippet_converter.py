@@ -21,7 +21,7 @@ from src.model.annotation import Annotation, AnnotationType
 from src.model.document import Document
 from src.model.license_expression import LicenseExpression
 from src.model.snippet import Snippet
-from tests.fixtures import creation_info_fixture
+from tests.fixtures import creation_info_fixture, snippet_fixture
 
 
 @pytest.fixture
@@ -92,7 +92,8 @@ def test_successful_conversion(converter: SnippetConverter):
 
 
 def test_null_values(converter: SnippetConverter):
-    snippet = Snippet("spdxId", file_spdx_id="fileId", byte_range=(1, 2))
+    snippet = snippet_fixture(concluded_license=None, license_comment=None, copyright_text=None, comment=None,
+                              name=None)
 
     document = Document(creation_info_fixture(), snippets=[snippet])
     converted_dict = converter.convert(snippet, document)
