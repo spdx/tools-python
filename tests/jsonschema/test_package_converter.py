@@ -22,6 +22,8 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import Document
 from src.model.license_expression import LicenseExpression
 from src.model.package import Package, PackageVerificationCode, PackagePurpose
+from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
+from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
 from tests.fixtures import creation_info_fixture, package_fixture, external_package_ref_fixture
 
 
@@ -172,3 +174,41 @@ def test_null_values(converter: PackageConverter):
     assert converter.json_property_name(PackageProperty.BUILT_DATE) not in converted_dict
     assert converter.json_property_name(PackageProperty.RELEASE_DATE) not in converted_dict
     assert converter.json_property_name(PackageProperty.VALID_UNTIL_DATE) not in converted_dict
+
+
+def test_spdx_no_assertion(converter: PackageConverter):
+    package = package_fixture(download_location=SpdxNoAssertion(), supplier=SpdxNoAssertion(),
+                              originator=SpdxNoAssertion(), homepage=SpdxNoAssertion(),
+                              license_concluded=SpdxNoAssertion(), license_info_from_files=SpdxNoAssertion(),
+                              license_declared=SpdxNoAssertion(), copyright_text=SpdxNoAssertion())
+
+    document = Document(creation_info_fixture(), packages=[package])
+
+    converted_dict = converter.convert(package, document)
+
+    assert converted_dict[converter.json_property_name(PackageProperty.DOWNLOAD_LOCATION)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.SUPPLIER)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.ORIGINATOR)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.HOMEPAGE)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_CONCLUDED)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[
+               converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_DECLARED)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.COPYRIGHT_TEXT)] == SPDX_NO_ASSERTION_STRING
+
+
+def test_spdx_none(converter: PackageConverter):
+    package = package_fixture(download_location=SpdxNone(), homepage=SpdxNone(),
+                              license_concluded=SpdxNone(), license_info_from_files=SpdxNone(),
+                              license_declared=SpdxNone(), copyright_text=SpdxNone())
+
+    document = Document(creation_info_fixture(), packages=[package])
+
+    converted_dict = converter.convert(package, document)
+
+    assert converted_dict[converter.json_property_name(PackageProperty.DOWNLOAD_LOCATION)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.HOMEPAGE)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_CONCLUDED)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_DECLARED)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.COPYRIGHT_TEXT)] == SPDX_NONE_STRING

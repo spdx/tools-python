@@ -22,6 +22,8 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import Document
 from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
+from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
+from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
 from tests.fixtures import creation_info_fixture, file_fixture
 
 
@@ -102,7 +104,6 @@ def test_successful_conversion(converter: FileConverter):
 
 def test_null_values(converter: FileConverter):
     file = file_fixture(copyright_text=None, concluded_license=None, license_comment=None, comment=None, notice=None)
-
     document = Document(creation_info_fixture(), files=[file])
 
     converted_dict = converter.convert(file, document)
@@ -112,3 +113,28 @@ def test_null_values(converter: FileConverter):
     assert converter.json_property_name(FileProperty.LICENSE_COMMENTS) not in converted_dict
     assert converter.json_property_name(FileProperty.COMMENT) not in converted_dict
     assert converter.json_property_name(FileProperty.NOTICE_TEXT) not in converted_dict
+
+
+def test_spdx_no_assertion(converter: FileConverter):
+    file = file_fixture(concluded_license=SpdxNoAssertion(), license_info_in_file=SpdxNoAssertion(),
+                        copyright_text=SpdxNoAssertion())
+    document = Document(creation_info_fixture(), files=[file])
+
+    converted_dict = converter.convert(file, document)
+
+    assert converted_dict[
+               converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_CONCLUDED)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == SPDX_NO_ASSERTION_STRING
+
+
+def test_spdx_none(converter: FileConverter):
+    file = file_fixture(concluded_license=SpdxNone(), license_info_in_file=SpdxNone(), copyright_text=SpdxNone())
+    document = Document(creation_info_fixture(), files=[file])
+
+    converted_dict = converter.convert(file, document)
+
+    assert converted_dict[
+               converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_CONCLUDED)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == SPDX_NONE_STRING

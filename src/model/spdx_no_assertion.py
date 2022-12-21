@@ -9,19 +9,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+SPDX_NO_ASSERTION_STRING = "NOASSERTION"
+
 
 class SpdxNoAssertion:
     """
     Represents the SPDX NOASSERTION value.
     """
 
-    _string_value: str = "NOASSERTION"
-
     def __str__(self):
-        return self._string_value
+        return SPDX_NO_ASSERTION_STRING
 
     def __repr__(self):
-        return self._string_value
+        return SPDX_NO_ASSERTION_STRING
 
     def __eq__(self, other):
         return isinstance(other, SpdxNoAssertion)
