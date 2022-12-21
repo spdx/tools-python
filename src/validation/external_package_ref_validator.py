@@ -1,31 +1,18 @@
 from typing import List
 
 from src.model.package import ExternalPackageRef
-from src.validation.checksum_validator import ChecksumValidator
-from src.validation.license_expression_validator import LicenseExpressionValidator
 from src.validation.validation_message import ValidationMessage
 
 
-class ExternalPackageRefValidator:
-    spdx_version: str
-    parent_id: str
-    checksum_validator: ChecksumValidator
-    license_expression_validator: LicenseExpressionValidator
+def validate_external_package_refs(external_package_refs: List[ExternalPackageRef], parent_id: str) -> List[
+    ValidationMessage]:
+    validation_messages = []
+    for external_package_ref in external_package_refs:
+        validation_messages.extend(validate_external_package_ref(external_package_ref, parent_id))
 
-    def __init__(self, spdx_version: str, parent_id: str):
-        self.spdx_version = spdx_version
-        self.parent_id = parent_id
-        self.checksum_validator = ChecksumValidator(spdx_version, parent_id)
-        self.license_expression_validator = LicenseExpressionValidator(spdx_version)
+    return validation_messages
 
-    def validate_external_package_refs(self, external_package_refs: List[ExternalPackageRef]) -> List[
-        ValidationMessage]:
-        validation_messages = []
-        for external_package_ref in external_package_refs:
-            validation_messages.extend(self.validate_external_package_ref(external_package_ref))
 
-        return validation_messages
-
-    def validate_external_package_ref(self, external_package_ref: ExternalPackageRef) -> List[ValidationMessage]:
-        # TODO: https://github.com/spdx/tools-python/issues/373
-        return []
+def validate_external_package_ref(external_package_ref: ExternalPackageRef, parent_id: str) -> List[ValidationMessage]:
+    # TODO: https://github.com/spdx/tools-python/issues/373
+    return []

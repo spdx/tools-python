@@ -6,18 +6,16 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.file import File, FileType
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
-from src.validation.file_validator import FileValidator
+from src.validation.file_validator import validate_file
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.valid_defaults import get_checksum, get_file, get_document
 
 
 def test_valid_file():
-    file_validator = FileValidator("2.3", get_document())
-
     file = File("./file/name.py", "SPDXRef-File", [get_checksum()], [FileType.OTHER, FileType.SPDX], SpdxNone(),
                 SpdxNoAssertion(),
                 "comment on license", "copyright", "comment", "notice", ["contributor"], ["attribution"])
-    validation_messages: List[ValidationMessage] = file_validator.validate_file(file)
+    validation_messages: List[ValidationMessage] = validate_file(file, get_document())
 
     assert validation_messages == []
 
@@ -30,8 +28,7 @@ def test_valid_file():
                            f'checksums must contain a SHA1 algorithm checksum, but only contains: [<ChecksumAlgorithm.MD2: 13>]')
                           ])
 def test_invalid_file(file_input, spdx_id, expected_message):
-    file_validator = FileValidator("2.3", get_document())
-    validation_messages: List[ValidationMessage] = file_validator.validate_file(file_input)
+    validation_messages: List[ValidationMessage] = validate_file(file_input, get_document())
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(spdx_id=spdx_id,

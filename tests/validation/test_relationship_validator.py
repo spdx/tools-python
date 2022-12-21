@@ -4,17 +4,16 @@ import pytest
 
 from src.model.document import Document
 from src.model.relationship import Relationship, RelationshipType
-from src.validation.relationship_validator import RelationshipValidator
+from src.validation.relationship_validator import validate_relationship
 from src.validation.validation_message import ValidationMessage, SpdxElementType, ValidationContext
 from tests.valid_defaults import get_document, get_package, get_relationship, get_file
 
 
 def test_valid_relationship():
     document: Document = get_document(packages=[get_package(spdx_id="SPDXRef-Package")])
-    relationship_validator = RelationshipValidator("2.3", document)
 
     relationship = Relationship("SPDXRef-DOCUMENT", RelationshipType.AMENDS, "SPDXRef-Package", comment="comment")
-    validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
+    validation_messages: List[ValidationMessage] = validate_relationship(relationship, document, "2.3")
 
     assert validation_messages == []
 
@@ -29,8 +28,7 @@ def test_unknown_spdx_id(spdx_element_id, related_spdx_element_id, expected_mess
     relationship: Relationship = get_relationship(spdx_element_id=spdx_element_id,
                                                   related_spdx_element_id=related_spdx_element_id)
     document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File")])
-    relationship_validator = RelationshipValidator("2.3", document)
-    validation_messages: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
+    validation_messages: List[ValidationMessage] = validate_relationship(relationship, document, "2.3")
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
@@ -47,9 +45,8 @@ def test_unknown_spdx_id(spdx_element_id, related_spdx_element_id, expected_mess
                            "RelationshipType.REQUIREMENT_DESCRIPTION_FOR is not supported for SPDX versions below 2.3")])
 def test_v2_3_only_types(relationship, expected_message):
     document: Document = get_document(packages=[get_package(spdx_id="SPDXRef-Package")])
-    relationship_validator = RelationshipValidator("2.2", document)
 
-    validation_message: List[ValidationMessage] = relationship_validator.validate_relationship(relationship)
+    validation_message: List[ValidationMessage] = validate_relationship(relationship, document, "2.2")
 
     expected = [ValidationMessage(expected_message,
                                   ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
