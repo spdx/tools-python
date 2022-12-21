@@ -9,19 +9,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+SPDX_NONE_STRING = "NONE"
+
 
 class SpdxNone:
     """
     Represents the SPDX NONE value.
     """
 
-    _string_value = "NONE"
-
     def __str__(self):
-        return self._string_value
+        return SPDX_NONE_STRING
 
     def __repr__(self):
-        return self._string_value
+        return SPDX_NONE_STRING
 
     def __eq__(self, other):
         return isinstance(other, SpdxNone)
