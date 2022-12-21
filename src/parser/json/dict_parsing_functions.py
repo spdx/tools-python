@@ -35,8 +35,7 @@ def construct_or_raise_parsing_error(object_to_construct: Any, args_for_construc
     return constructed_object
 
 
-def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callable = lambda x: x, default=None,
-                             optional=False) -> Any:
+def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callable = lambda x: x, optional=False, default=None,) -> Any:
     try:
         if optional:
             if not field:

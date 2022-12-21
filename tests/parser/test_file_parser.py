@@ -68,8 +68,8 @@ def test_parse_incomplete_file():
     with pytest.raises(SPDXParsingError) as err:
         _ = file_parser.parse_file(file_dict)
 
-    assert err.value.messages == ["Error while parsing file Incomplete File: ['No checksums provided, checksums are "
-                                  "mandatory for files.']"]
+    assert err.value.messages == ["Error while constructing File: ['SetterError File: type of argument "
+                                  '"checksums" must be a list; got NoneType instead: None\']']
 
 
 def test_parse_falsy_files():
@@ -99,8 +99,8 @@ def test_parse_falsy_files():
     with pytest.raises(SPDXParsingError) as err:
         _ = file_parser.parse_files(files)
 
-    assert err.value.messages == ["Error while parsing file Incomplete File: ['No checksums provided, checksums "
-                                  "are mandatory for files.']",
+    assert err.value.messages == ["Error while constructing File: ['SetterError File: type of argument "
+                                  '"checksums" must be a list; got NoneType instead: None\']',
                                   'Error while constructing File: [\'SetterError File: type of argument "name" '
                                   "must be str; got NoneType instead: None']",
                                   'Error while parsing file None: ["Error while parsing Checksum: [\'Algorithm '

@@ -21,8 +21,7 @@ class Logger:
         self.messages.append(message)
 
     def extend(self, messages_to_append: List[str]):
-        for message in messages_to_append:
-            self.messages.append(message)
+        self.messages.extend(messages_to_append)
 
     def has_messages(self):
         return bool(self.messages)

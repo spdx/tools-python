@@ -49,27 +49,23 @@ class SnippetParser:
 
     def parse_snippet(self, snippet_dict: Dict) -> Snippet:
         logger = Logger()
-        spdx_id: str = snippet_dict.get("SPDXID")
-        file_spdx_id: str = snippet_dict.get("snippetFromFile")
+        spdx_id: Optional[str] = snippet_dict.get("SPDXID")
+        file_spdx_id: Optional[str] = snippet_dict.get("snippetFromFile")
         name: Optional[str] = snippet_dict.get("name")
-        ranges: Dict = parse_field_or_log_error(logger=logger, field=(snippet_dict.get("ranges")),
-                                                parsing_method=self.parse_ranges, default={})
+        ranges: Dict = parse_field_or_log_error(logger, snippet_dict.get("ranges"), self.parse_ranges, default={})
         byte_range: Tuple[int, int] = ranges.get(RangeType.BYTE)
         line_range: Optional[Tuple[int, int]] = ranges.get(RangeType.LINE)
-        attribution_texts: List[str] = snippet_dict.get("attributionTexts")
+        attribution_texts: List[str] = snippet_dict.get("attributionTexts", [])
         comment: Optional[str] = snippet_dict.get("comment")
         copyright_text: Optional[str] = snippet_dict.get("copyrightText")
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
         concluded_license: Optional[Union[
-            LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger=logger, field=snippet_dict.get("licenseConcluded"),
-            parsing_method=self.license_expression_parser.parse_license_expression, optional=True)
+            LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
+            "licenseConcluded"), self.license_expression_parser.parse_license_expression, True)
 
         license_info: Optional[Union[List[
-            LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger=logger, field=snippet_dict.get("licenseInfoInSnippets"),
-            parsing_method=self.license_expression_parser.parse_license_expression, optional=True)
-
+            LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
+            "licenseInfoInSnippets"), self.license_expression_parser.parse_license_expression, True)
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing snippet: {logger.get_messages()}"])
 
@@ -114,8 +110,8 @@ class SnippetParser:
     def validate_range_and_get_type(self, range_dict: Dict) -> RangeType:
         if ("startPointer" not in range_dict) or ("endPointer" not in range_dict):
             raise ValueError("Start-/ Endpointer missing in ranges_dict.")
-        start_pointer_type = self.validate_pointer_and_get_type(range_dict["startPointer"])
-        end_pointer_type = self.validate_pointer_and_get_type(range_dict["endPointer"])
+        start_pointer_type: RangeType = self.validate_pointer_and_get_type(range_dict["startPointer"])
+        end_pointer_type: RangeType = self.validate_pointer_and_get_type(range_dict["endPointer"])
         if start_pointer_type != end_pointer_type:
             raise ValueError("Type of startpointer is not the same as type of endpointer.")
         return start_pointer_type
