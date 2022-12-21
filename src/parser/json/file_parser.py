@@ -35,42 +35,32 @@ class FileParser:
     def parse_files(self, file_dict_list) -> List[File]:
         file_list = []
         for file_dict in file_dict_list:
-            file_list = append_parsed_field_or_log_error(list_to_append_to=file_list, logger=self.logger,
-                                                         field=file_dict,
-                                                         method_to_parse=self.parse_file)
+            file_list = append_parsed_field_or_log_error(self.logger, file_list, file_dict, self.parse_file)
         raise_parsing_error_if_logger_has_messages(self.logger)
         return file_list
 
     def parse_file(self, file_dict: Dict) -> Optional[File]:
         logger = Logger()
-        name: str = file_dict.get("fileName")
-        spdx_id: str = file_dict.get("SPDXID")
-        checksums_list: List[Dict] = file_dict.get("checksums")
+        name: Optional[str] = file_dict.get("fileName")
+        spdx_id: Optional[str] = file_dict.get("SPDXID")
+        checksums_list: List[Dict] = file_dict.get("checksums", [])
+        checksums: List[Checksum] = parse_field_or_log_error(logger, checksums_list,
+                                                             self.checksum_parser.parse_checksums, True)
 
-        checksums: List[Checksum] = parse_field_or_log_error(logger=logger, field=checksums_list,
-                                                             parsing_method=self.checksum_parser.parse_checksums)
-
-        attribution_texts: Optional[str] = file_dict.get("attributionTexts")
+        attribution_texts: List[str] = file_dict.get("attributionTexts", [])
         comment: Optional[str] = file_dict.get("comment")
         copyright_text: Optional[str] = file_dict.get("copyrightText")
-        file_contributors: List[str] = file_dict.get("fileContributors")
-        file_types: List[FileType] = parse_field_or_log_error(logger=logger, field=file_dict.get("fileTypes"),
-                                                              parsing_method=self.parse_file_types, optional=True)
+        file_contributors: List[str] = file_dict.get("fileContributors", [])
+        file_types: List[FileType] = parse_field_or_log_error(logger, file_dict.get("fileTypes"), self.parse_file_types,
+                                                              True)
 
         license_comments: Optional[str] = file_dict.get("licenseComments")
 
-        license_concluded: Optional[Union[
-            LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger=logger,
-                                                                                      field=file_dict.get(
-                                                                                          "licenseConcluded"),
-                                                                                      parsing_method=self.license_expression_parser.parse_license_expression,
-                                                                                      optional=True)
+        license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
+            logger, file_dict.get("licenseConcluded"), self.license_expression_parser.parse_license_expression, True)
 
-        license_info_in_files: Optional[
-            Union[List[
-                LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger=logger, field=file_dict.get("licenseInfoInFiles"),
-            parsing_method=self.license_expression_parser.parse_license_expression, optional=True)
+        license_info_in_files: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
+            logger, file_dict.get("licenseInfoInFiles"), self.license_expression_parser.parse_license_expression, True)
         notice_text: Optional[str] = file_dict.get("noticeText")
         raise_parsing_error_if_logger_has_messages(logger, f"file {name}")
 

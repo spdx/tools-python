@@ -18,4 +18,4 @@ class SPDXParsingError(Exception):
         self.messages = messages
 
     def get_messages(self):
-        return self.messages
+        return list(self.messages)

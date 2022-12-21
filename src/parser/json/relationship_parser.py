@@ -27,37 +27,37 @@ class RelationshipParser:
 
     def parse_all_relationships(self, input_doc_dict: Dict) -> List[Relationship]:
         relationships_list = []
-        relationships_dicts: List[Dict] = input_doc_dict.get("relationships")
+        relationships_dicts: List[Dict] = input_doc_dict.get("relationships", [])
         if relationships_dicts:
             relationships_list.extend(
-                parse_field_or_log_error(logger=self.logger, field=relationships_dicts,
-                                         parsing_method=self.parse_relationships, default=[]))
+                parse_field_or_log_error(self.logger, relationships_dicts, self.parse_relationships, default=[]))
 
-        document_describes: List[str] = input_doc_dict.get("documentDescribes")
-        doc_spdx_id: str = input_doc_dict.get("SPDXID")
+        document_describes: List[str] = input_doc_dict.get("documentDescribes", [])
+        doc_spdx_id: Optional[str] = input_doc_dict.get("SPDXID")
         if document_describes:
             relationships_list.extend(
-                parse_field_or_log_error(logger=self.logger, field=document_describes,
-                                         parsing_method=lambda x: self.parse_document_describes(doc_spdx_id=doc_spdx_id, described_spdx_ids=x, created_relationships=relationships_list),
+                parse_field_or_log_error(self.logger, document_describes,
+                                         lambda x: self.parse_document_describes(doc_spdx_id=doc_spdx_id,
+                                                                                 described_spdx_ids=x,
+                                                                                 created_relationships=relationships_list),
                                          default=[]))
 
-            package_dicts: List[Dict] = input_doc_dict.get("packages")
-            if package_dicts:
-                relationships_list.extend(
-                    parse_field_or_log_error(logger=self.logger, field=package_dicts,
-                                             parsing_method=lambda x: self.parse_has_files(package_dicts=x, created_relationships=relationships_list),
-                                             default=[]))
+        package_dicts: List[Dict] = input_doc_dict.get("packages", [])
+        if package_dicts:
+            relationships_list.extend(parse_field_or_log_error(self.logger, package_dicts,
+                                                               lambda x: self.parse_has_files(package_dicts=x,
+                                                                                              created_relationships=relationships_list),
+                                                               default=[]))
 
-            file_dicts: List[Dict] = input_doc_dict.get("files")
-            if file_dicts:
-                # not implemented yet, deal with deprecated fields in file
-                relationships_list.extend(
-                    parse_field_or_log_error(logger=self.logger, field=file_dicts,
-                                             parsing_method=self.parse_file_dependencies, default=[]))
+        file_dicts: List[Dict] = input_doc_dict.get("files", [])
+        if file_dicts:
+            # not implemented yet: deal with deprecated fields in file
+            relationships_list.extend(
+                parse_field_or_log_error(self.logger, file_dicts, self.parse_file_dependencies, default=[]))
 
-            generated_relationships = self.parse_artifact_of(file_dicts=file_dicts)
+        generated_relationships = self.parse_artifact_of(file_dicts=file_dicts)
 
-            raise_parsing_error_if_logger_has_messages(self.logger)
+        raise_parsing_error_if_logger_has_messages(self.logger)
 
         return relationships_list
 
@@ -65,19 +65,18 @@ class RelationshipParser:
         logger = Logger()
         relationship_list = []
         for relationship_dict in relationship_dicts:
-            relationship_list = append_parsed_field_or_log_error(logger=logger, list_to_append_to=relationship_list,
-                                                                 field=relationship_dict, method_to_parse=self.parse_relationship)
+            relationship_list = append_parsed_field_or_log_error(logger, relationship_list, relationship_dict,
+                                                                 self.parse_relationship)
         raise_parsing_error_if_logger_has_messages(logger)
         return relationship_list
 
     def parse_relationship(self, relationship_dict: Dict) -> Relationship:
         logger = Logger()
-        spdx_element_id: str = relationship_dict.get("spdxElementId")
-        related_spdx_element: str = relationship_dict.get("relatedSpdxElement")
-        relationship_type: Optional[RelationshipType] = parse_field_or_log_error(logger=logger,
-                                                                                 field=relationship_dict.get("relationshipType"),
-                                                                                 parsing_method=self.parse_relationship_type)
-        relationship_comment: str = relationship_dict.get("comment")
+        spdx_element_id: Optional[str] = relationship_dict.get("spdxElementId")
+        related_spdx_element: Optional[str] = relationship_dict.get("relatedSpdxElement")
+        relationship_type: Optional[RelationshipType] = parse_field_or_log_error(logger, relationship_dict.get(
+            "relationshipType"), self.parse_relationship_type)
+        relationship_comment: Optional[str] = relationship_dict.get("comment")
         raise_parsing_error_if_logger_has_messages(logger, "relationship")
 
         relationship = construct_or_raise_parsing_error(Relationship, dict(spdx_element_id=spdx_element_id,
@@ -119,8 +118,8 @@ class RelationshipParser:
         logger = Logger()
         contains_relationships = []
         for package in package_dicts:
-            package_spdx_id = package.get("SPDXID")
-            contained_files = package.get("hasFiles")
+            package_spdx_id: Optional[str] = package.get("SPDXID")
+            contained_files: Optional[str] = package.get("hasFiles")
             if not contained_files:
                 continue
             for file_spdx_id in contained_files:

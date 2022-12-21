@@ -61,18 +61,27 @@ def test_creation_info_parser():
                                                                         document_uri="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301")]
 
 
-def test_parse_incomplete_creation_info():
+@pytest.mark.parametrize("incomplete_dict,expected_message",
+                         [({"spdxVersion": "2.3", "SPDXID": "SPDXRef-DOCUMENT", "name": "Example Document"},
+                           ["Error while parsing document Example Document: ['CreationInfo does not exist.']"]),
+                          ({"creationInfo": {"created": "2019-02-01T11:30:40Z"}},
+                           ["Error while constructing CreationInfo: ['SetterError CreationInfo: type of "
+                            'argument "spdx_version" must be str; got NoneType instead: None\', '
+                            '\'SetterError CreationInfo: type of argument "spdx_id" must be str; got '
+                            "NoneType instead: None', 'SetterError CreationInfo: type of argument "
+                            '"name" must be str; got NoneType instead: None\', \'SetterError '
+                            'CreationInfo: type of argument "document_namespace" must be str; got '
+                            "NoneType instead: None', 'SetterError CreationInfo: type of argument "
+                            '"creators" must be a list; got NoneType instead: None\', \'SetterError '
+                            'CreationInfo: type of argument "data_license" must be str; got NoneType '
+                            "instead: None']"])])
+def test_parse_incomplete_document_info(incomplete_dict, expected_message):
     creation_info_parser = CreationInfoParser()
-    doc_dict = {
-        "spdxVersion": "2.3",
-        "SPDXID": "SPDXRef-DOCUMENT",
-        "name": "Example Document"
-    }
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = creation_info_parser.parse_creation_info(doc_dict)
+        _ = creation_info_parser.parse_creation_info(incomplete_dict)
 
-    assert err.value.messages == ["Error while parsing doc Example Document: ['CreationInfo does not exist.']"]
+    assert err.value.messages == expected_message
 
 
 def test_parse_invalid_creation_info():

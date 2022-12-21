@@ -27,10 +27,9 @@ class ExtractedLicensingInfoParser:
         ExtractedLicensingInfo]:
         extracted_licensing_info_list = []
         for extracted_licensing_info_dict in extracted_licensing_info_dicts:
-            extracted_licensing_info_list = append_parsed_field_or_log_error(
-                list_to_append_to=extracted_licensing_info_list,
-                logger=self.logger, field=extracted_licensing_info_dict,
-                method_to_parse=self.parse_extracted_licensing_info)
+            extracted_licensing_info_list = append_parsed_field_or_log_error(self.logger, extracted_licensing_info_list,
+                                                                             extracted_licensing_info_dict,
+                                                                             self.parse_extracted_licensing_info)
 
         raise_parsing_error_if_logger_has_messages(self.logger)
         return extracted_licensing_info_list
@@ -38,15 +37,17 @@ class ExtractedLicensingInfoParser:
     def parse_extracted_licensing_info(self, extracted_licensing_info_dict: Dict) -> ExtractedLicensingInfo:
         license_id: Optional[str] = extracted_licensing_info_dict.get("licenseId")
         extracted_text: Optional[str] = extracted_licensing_info_dict.get("extractedText")
-        license_name: Optional[Union[str, SpdxNoAssertion]] = parse_field_or_log_error(logger=self.logger,
-                                                                                       field=extracted_licensing_info_dict.get("name"),
-                                                                                       parsing_method=self.parse_extracted_licensing_info_name,
-                                                                                       optional=True)
-        cross_references: List[str] = extracted_licensing_info_dict.get("seeAlsos")
-        comment: str = extracted_licensing_info_dict.get("comment")
+        license_name: Optional[Union[str, SpdxNoAssertion]] = parse_field_or_log_error(self.logger,
+                                                                                       extracted_licensing_info_dict.get("name"),
+                                                                                       self.parse_extracted_licensing_info_name,
+                                                                                       True)
+        cross_references: List[str] = extracted_licensing_info_dict.get("seeAlsos", [])
+        comment: Optional[str] = extracted_licensing_info_dict.get("comment")
         extracted_licensing_info_dict = construct_or_raise_parsing_error(ExtractedLicensingInfo,
-                                                                         dict(license_id=license_id, extracted_text=extracted_text,
-                                                                              comment=comment, license_name=license_name,
+                                                                         dict(license_id=license_id,
+                                                                              extracted_text=extracted_text,
+                                                                              comment=comment,
+                                                                              license_name=license_name,
                                                                               cross_references=cross_references))
         return extracted_licensing_info_dict
 
