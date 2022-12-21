@@ -21,8 +21,8 @@ from src.model.annotation import Annotation, AnnotationType
 from src.model.document import Document
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.relationship import Relationship, RelationshipType
-from src.model.snippet import Snippet
-from tests.fixtures import creation_info_fixture, file_fixture, package_fixture, external_document_ref_fixture
+from tests.fixtures import creation_info_fixture, file_fixture, package_fixture, external_document_ref_fixture, \
+    snippet_fixture
 
 
 @pytest.fixture
@@ -69,14 +69,13 @@ def test_successful_conversion(converter: DocumentConverter):
     creation_info = creation_info_fixture(spdx_version="spdxVersion", spdx_id="spdxId", name="name",
                                           namespace="namespace", document_comment="comment", data_license="dataLicense",
                                           external_document_refs=[external_document_ref_fixture()])
-    snippet = Snippet("snippetId", "snippetFileId", (1, 2))
     document = Document(creation_info, annotations=[
         Annotation("annotationId", AnnotationType.REVIEW, Actor(ActorType.PERSON, "reviewerName"),
                    datetime(2022, 12, 1), "reviewComment")],
                         extracted_licensing_info=[ExtractedLicensingInfo("licenseId", "licenseText")], relationships=[
             Relationship(creation_info.spdx_id, RelationshipType.DESCRIBES, "describedElementId"),
             Relationship("relationshipOriginId", RelationshipType.AMENDS, "relationShipTargetId")],
-                        packages=[package_fixture()], files=[file_fixture()], snippets=[snippet])
+                        packages=[package_fixture()], files=[file_fixture()], snippets=[snippet_fixture()])
     converter.external_document_ref_converter.convert.return_value = "mock_converted_external_ref"
     converter.creation_info_converter.convert.return_value = "mock_converted_creation_info"
     converter.package_converter.convert.return_value = "mock_converted_package"
