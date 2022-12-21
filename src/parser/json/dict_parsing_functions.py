@@ -19,7 +19,11 @@ from src.parser.logger import Logger
 def datetime_from_str(date_str: str) -> datetime:
     if not isinstance(date_str, str):
         raise SPDXParsingError([f"Could not convert str to datetime, invalid type: {type(date_str).__name__}"])
-    date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
+    try:
+        date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError:
+        raise SPDXParsingError(
+            [f'Could not convert str to datetime, format of {date_str} does not match "%Y-%m-%dT%H:%M:%SZ"'])
     return date
 
 
@@ -35,7 +39,8 @@ def construct_or_raise_parsing_error(object_to_construct: Any, args_for_construc
     return constructed_object
 
 
-def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callable = lambda x: x, optional=False, default=None,) -> Any:
+def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callable = lambda x: x, optional=False,
+                             default=None, ) -> Any:
     try:
         if optional:
             if not field:
