@@ -16,7 +16,8 @@ from src.model.document import CreationInfo
 from src.model.external_document_ref import ExternalDocumentRef
 from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
-from src.model.package import Package, PackageVerificationCode, PackagePurpose
+from src.model.package import Package, PackageVerificationCode, PackagePurpose, ExternalPackageRef, \
+    ExternalPackageRefCategory
 from src.model.version import Version
 
 """Utility methods to create data model instances. All properties have valid defaults, so they don't need to be 
@@ -66,7 +67,7 @@ def package_fixture(spdx_id="packageId", name="packageName", download_location="
     checksums = [Checksum(ChecksumAlgorithm.SHA1, "packageSha1")] if checksums is None else checksums
     license_info_from_files = [
         LicenseExpression("licenseInfoFromFile")] if license_info_from_files is None else license_info_from_files
-    external_references = [] if external_references is None else external_references
+    external_references = [external_package_ref_fixture()] if external_references is None else external_references
     attribution_texts = ["packageAttributionText"] if attribution_texts is None else attribution_texts
     return Package(spdx_id=spdx_id, name=name, download_location=download_location, version=version,
                    file_name=file_name, supplier=supplier, originator=originator, files_analyzed=files_analyzed,
@@ -82,3 +83,10 @@ def external_document_ref_fixture(document_ref_id="externalDocumentRefId", docum
                                   checksum=Checksum(ChecksumAlgorithm.MD5,
                                                     "externalDocumentRefMd5")) -> ExternalDocumentRef:
     return ExternalDocumentRef(document_ref_id=document_ref_id, document_uri=document_uri, checksum=checksum)
+
+
+def external_package_ref_fixture(category=ExternalPackageRefCategory.PACKAGE_MANAGER,
+                                 reference_type="externalPackageRefType",
+                                 locator="externalPackageRefLocator",
+                                 comment="externalPackageRefComment") -> ExternalPackageRef:
+    return ExternalPackageRef(category=category, reference_type=reference_type, locator=locator, comment=comment)
