@@ -1,0 +1,101 @@
+{
+    "SPDXID": "documentId",
+    "annotations": [
+        {
+            "annotationDate": "2022-12-02T00:00:00Z",
+            "annotationType": "REVIEW",
+            "annotator": "Person: reviewerName",
+            "comment": "reviewComment"
+        }
+    ],
+    "comment": "comment",
+    "creationInfo": {
+        "created": "2022-12-01T00:00:00Z",
+        "creators": [
+            "Tool: tools-python (tools-python@github.com)"
+        ]
+    },
+    "dataLicense": "dataLicense",
+    "externalDocumentRefs": [
+        {
+            "externalDocumentId": "docRefId",
+            "spdxDocument": "externalDocumentUri",
+            "checksum": {
+                "algorithm": "SHA1",
+                "checksumValue": "externalRefSha1"
+            }
+        }
+    ],
+    "hasExtractedLicensingInfo": [
+        {
+            "extractedText": "licenseText",
+            "licenseId": "licenseId"
+        }
+    ],
+    "name": "documentName",
+    "spdxVersion": "spdxVersion",
+    "documentNamespace": "documentNamespace",
+    "documentDescribes": [
+        "packageId",
+        "fileId"
+    ],
+    "packages": [
+        {
+            "SPDXID": "packageId",
+            "downloadLocation": "NONE",
+            "filesAnalyzed": true,
+            "name": "packageName"
+        }
+    ],
+    "files": [
+        {
+            "SPDXID": "fileId",
+            "annotations": [
+                {
+                    "annotationDate": "2022-12-03T00:00:00Z",
+                    "annotationType": "OTHER",
+                    "annotator": "Tool: toolName",
+                    "comment": "otherComment"
+                }
+            ],
+            "checksums": [
+                {
+                    "algorithm": "SHA1",
+                    "checksumValue": "fileSha1"
+                }
+            ],
+            "fileName": "fileName"
+        }
+    ],
+    "snippets": [
+        {
+            "SPDXID": "snippetId",
+            "ranges": [
+                {
+                    "startPointer": {
+                        "reference": "snippetFileId",
+                        "offset": 1
+                    },
+                    "endPointer": {
+                        "reference": "snippetFileId",
+                        "offset": 2
+                    }
+                }
+            ],
+            "snippetFromFile": "snippetFileId"
+        }
+    ],
+    "relationships": [
+        {
+            "spdxElementId": "documentId",
+            "comment": "relationshipComment",
+            "relatedSpdxElement": "fileId",
+            "relationshipType": "DESCRIBES"
+        },
+        {
+            "spdxElementId": "relationshipOriginId",
+            "relatedSpdxElement": "relationShipTargetId",
+            "relationshipType": "AMENDS"
+        }
+    ]
+}
