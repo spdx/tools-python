@@ -13,9 +13,9 @@ from typing import Dict, List, Optional
 from src.model.relationship import Relationship, RelationshipType
 from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, \
-    raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, construct_or_raise_parsing_error, \
-    parse_field_or_log_error
+from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, \
+    construct_or_raise_parsing_error, \
+    parse_field_or_log_error, parse_list_of_elements
 from src.parser.logger import Logger
 
 
@@ -29,7 +29,7 @@ class RelationshipParser:
         relationships = []
         relationship_dicts: List[Dict] = input_doc_dict.get("relationships", [])
         relationships.extend(
-            parse_field_or_log_error(self.logger, relationship_dicts, self.parse_relationships, []))
+            parse_field_or_log_error(self.logger, relationship_dicts, self.parse_relationship, [], True))
 
         document_describes: List[str] = input_doc_dict.get("documentDescribes", [])
         doc_spdx_id: Optional[str] = input_doc_dict.get("SPDXID")
@@ -54,15 +54,6 @@ class RelationshipParser:
 
         raise_parsing_error_if_logger_has_messages(self.logger)
 
-        return relationships
-
-    def parse_relationships(self, relationship_dicts: List[Dict]) -> List[Relationship]:
-        logger = Logger()
-        relationships = []
-        for relationship_dict in relationship_dicts:
-            relationships = append_parsed_field_or_log_error(logger, relationships, relationship_dict,
-                                                             self.parse_relationship)
-        raise_parsing_error_if_logger_has_messages(logger)
         return relationships
 
     def parse_relationship(self, relationship_dict: Dict) -> Relationship:

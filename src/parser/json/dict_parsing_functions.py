@@ -43,11 +43,15 @@ def construct_or_raise_parsing_error(object_to_construct: Any, args_for_construc
     return constructed_object
 
 
-def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callable = lambda x: x, default=None) -> Any:
+def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callable = lambda x: x, default: Any = None,
+                             field_is_list: bool = False) -> Any:
     if not field:
         return default
     try:
-        return parsing_method(field)
+        if field_is_list:
+            return parse_list_of_elements(field, parsing_method)
+        else:
+            return parsing_method(field)
     except SPDXParsingError as err:
         logger.extend(err.get_messages())
         return default
@@ -70,7 +74,7 @@ def raise_parsing_error_if_logger_has_messages(logger: Logger, parsed_object_nam
         else:
             raise SPDXParsingError(logger.get_messages())
 
-def parse_field_or_no_assertion_or_none(field: str, method_for_field: Callable=lambda x: x) -> Union[SpdxNoAssertion, SpdxNone, Any]:
+def parse_field_or_no_assertion_or_none(field: str, method_for_field: Callable=lambda x: x) -> Any:
     if field == SpdxNoAssertion().__str__():
         return SpdxNoAssertion()
     elif field == SpdxNone().__str__():
@@ -78,8 +82,18 @@ def parse_field_or_no_assertion_or_none(field: str, method_for_field: Callable=l
     else:
         return method_for_field(field)
 
-def parse_field_or_no_assertion(field: str, method_for_field: Callable = lambda x: x) -> Union[SpdxNoAssertion, Any]:
+def parse_field_or_no_assertion(field: str, method_for_field: Callable = lambda x: x) -> Any:
     if field == SpdxNoAssertion().__str__():
         return SpdxNoAssertion()
     else:
         return method_for_field(field)
+
+
+def parse_list_of_elements(list_of_elements: List[Dict], method_to_parse_element: Callable, logger=None) -> List[Any]:
+    if not logger:
+        logger = Logger()
+    parsed_elements = []
+    for element_dict in list_of_elements:
+        parsed_elements = append_parsed_field_or_log_error(logger, parsed_elements, element_dict, method_to_parse_element)
+    raise_parsing_error_if_logger_has_messages(logger)
+    return parsed_elements

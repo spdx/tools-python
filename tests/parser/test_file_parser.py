@@ -16,6 +16,7 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.file import FileType
 from src.model.license_expression import LicenseExpression
 from src.parser.error import SPDXParsingError
+from src.parser.json.dict_parsing_functions import parse_list_of_elements
 from src.parser.json.file_parser import FileParser
 
 
@@ -102,7 +103,7 @@ def test_parse_invalid_files():
              ]
 
     with pytest.raises(SPDXParsingError) as err:
-        file_parser.parse_files(files)
+        parse_list_of_elements(files, file_parser.parse_file)
     TestCase().assertCountEqual(err.value.get_messages(), [
         "Error while constructing File: ['SetterError File: type of argument " '"checksums" must be a list; got NoneType instead: None\']',
         'Error while constructing File: [\'SetterError File: type of argument "name" ' "must be str; got NoneType instead: None']",

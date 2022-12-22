@@ -22,7 +22,7 @@ from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
 from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, datetime_from_str, \
     raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, construct_or_raise_parsing_error, \
-    parse_field_or_log_error, parse_field_or_no_assertion_or_none, parse_field_or_no_assertion
+    parse_field_or_log_error, parse_field_or_no_assertion_or_none, parse_field_or_no_assertion, parse_list_of_elements
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
@@ -39,15 +39,6 @@ class PackageParser:
         self.license_expression_parser = LicenseExpressionParser()
         self.logger = Logger()
 
-    def parse_packages(self, package_dicts: List[Dict]) -> List[Package]:
-        packages = []
-        for package_dict in package_dicts:
-            packages = append_parsed_field_or_log_error(self.logger, packages, package_dict, self.parse_package)
-
-        raise_parsing_error_if_logger_has_messages(self.logger)
-
-        return packages
-
     def parse_package(self, package_dict: Dict) -> Package:
         logger = Logger()
         name: Optional[str] = package_dict.get("name")
@@ -57,8 +48,8 @@ class PackageParser:
         built_date: Optional[datetime] = parse_field_or_log_error(logger, package_dict.get("builtDate"),
                                                                   datetime_from_str)
 
-        checksums = parse_field_or_log_error(logger, package_dict.get("checksums"),
-                                             self.checksum_parser.parse_checksums)
+        checksums = parse_field_or_log_error(logger, package_dict.get("checksums"), self.checksum_parser.parse_checksum,
+                                             field_is_list=True)
         comment: Optional[str] = package_dict.get("comment")
         copyright_text: Optional[str] = package_dict.get("copyrightText")
         description: Optional[str] = package_dict.get("description")
@@ -73,16 +64,22 @@ class PackageParser:
         homepage: Optional[str] = package_dict.get("homepage")
         license_comments: Optional[str] = package_dict.get("licenseComments")
         license_concluded = parse_field_or_log_error(logger, package_dict.get("licenseConcluded"),
-                                                     lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression), None)
+                                                     lambda x: parse_field_or_no_assertion_or_none(x,
+                                                                                                   self.license_expression_parser.parse_license_expression),
+                                                     None)
 
         license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger, package_dict.get("licenseDeclared"), lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression))
+            logger, package_dict.get("licenseDeclared"),
+            lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression))
 
         license_info_from_file: Optional[
             Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger,
                                                                                                   package_dict.get(
                                                                                                       "licenseInfoFromFiles"),
-                                                                                                  lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expressions))
+                                                                                                  lambda
+                                                                                                      x: parse_field_or_no_assertion_or_none(
+                                                                                                      x,
+                                                                                                      self.license_expression_parser.parse_license_expressions))
         originator: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(logger,
                                                                                        package_dict.get("originator"),
                                                                                        lambda
@@ -101,12 +98,9 @@ class PackageParser:
                                                                     datetime_from_str)
         source_info: Optional[str] = package_dict.get("sourceInfo")
         summary: Optional[str] = package_dict.get("summary")
-        supplier: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(logger,
-                                                                                     package_dict.get("supplier"),
-                                                                                     lambda
-                                                                                         x: parse_field_or_no_assertion(
-                                                                                         x,
-                                                                                         self.actor_parser.parse_actor))
+        supplier: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(
+            logger, package_dict.get("supplier"),
+            lambda x: parse_field_or_no_assertion(x, self.actor_parser.parse_actor))
         valid_until_date: Optional[datetime] = parse_field_or_log_error(logger, package_dict.get("validUntilDate"),
                                                                         datetime_from_str)
 
@@ -182,4 +176,3 @@ class PackageParser:
             return PackagePurpose[json_str_to_enum_name(primary_package_purpose)]
         except KeyError:
             raise SPDXParsingError([f"Invalid PrimaryPackagePurpose: {primary_package_purpose}"])
-

@@ -16,7 +16,8 @@ from src.model.annotation import Annotation, AnnotationType
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.dict_parsing_functions import datetime_from_str, construct_or_raise_parsing_error, \
-    parse_field_or_log_error, append_parsed_field_or_log_error, raise_parsing_error_if_logger_has_messages
+    parse_field_or_log_error, append_parsed_field_or_log_error, raise_parsing_error_if_logger_has_messages, \
+    parse_list_of_elements
 from src.parser.logger import Logger
 
 
@@ -53,18 +54,8 @@ class AnnotationParser:
             element_spdx_id: Optional[str] = element.get("SPDXID")
             element_annotations: List[Dict] = element.get("annotations", [])
             annotations.extend(parse_field_or_log_error(self.logger, element_annotations,
-                                                        lambda x: self.parse_annotations(x, spdx_id=element_spdx_id),
-                                                        default=[]))
-
-    def parse_annotations(self, annotation_dicts: List[Dict], spdx_id: Optional[str] = None) -> List[Annotation]:
-        logger = Logger()
-        annotations = []
-        for annotation_dict in annotation_dicts:
-            annotations = append_parsed_field_or_log_error(self.logger, annotations, annotation_dict,
-                                                                lambda x: self.parse_annotation(x, spdx_id=spdx_id))
-        raise_parsing_error_if_logger_has_messages(logger, "annotations")
-
-        return annotations
+                                                        lambda y: self.parse_annotation(y, spdx_id=element_spdx_id),
+                                                        [], True))
 
     def parse_annotation(self, annotation_dict: Dict, spdx_id: Optional[str] = None) -> Annotation:
         logger = Logger()
