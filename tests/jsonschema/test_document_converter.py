@@ -38,10 +38,10 @@ from tests.mock_utils import assert_mock_method_called_with_arguments, assert_no
 @mock.patch('src.jsonschema.file_converter.FileConverter', autospec=True)
 @mock.patch('src.jsonschema.snippet_converter.SnippetConverter', autospec=True)
 @mock.patch('src.jsonschema.relationship_converter.RelationshipConverter', autospec=True)
-def converter(external_ref_converter_mock: MagicMock, creation_info_converter_mock: MagicMock,
-              package_converter_mock: MagicMock, annotation_converter_mock: MagicMock,
-              extracted_licensing_info_converter_mock: MagicMock, file_converter_mock: MagicMock,
-              snippet_converter_mock: MagicMock, relationship_converter_mock: MagicMock) -> DocumentConverter:
+def converter(relationship_converter_mock: MagicMock, snippet_converter_mock: MagicMock, file_converter_mock: MagicMock,
+              extracted_licensing_info_converter_mock: MagicMock, annotation_converter_mock: MagicMock,
+              package_converter_mock: MagicMock, external_ref_converter_mock: MagicMock,
+              creation_info_converter_mock: MagicMock) -> DocumentConverter:
     converter = DocumentConverter()
     converter.creation_info_converter = creation_info_converter_mock()
     converter.external_document_ref_converter = external_ref_converter_mock()

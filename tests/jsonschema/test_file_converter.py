@@ -33,7 +33,7 @@ from tests.mock_utils import assert_mock_method_called_with_arguments
 @pytest.fixture
 @mock.patch('src.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
 @mock.patch('src.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
-def converter(checksum_converter_mock: MagicMock, annotation_converter_mock: MagicMock) -> FileConverter:
+def converter(annotation_converter_mock: MagicMock, checksum_converter_mock: MagicMock) -> FileConverter:
     converter = FileConverter()
     converter.checksum_converter = checksum_converter_mock()
     converter.annotation_converter = annotation_converter_mock()
