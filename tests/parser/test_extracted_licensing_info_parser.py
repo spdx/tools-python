@@ -8,6 +8,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from unittest import TestCase
+
 import pytest
 
 from src.model.spdx_no_assertion import SpdxNoAssertion
@@ -15,7 +17,7 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.extracted_licensing_info_parser import ExtractedLicensingInfoParser
 
 
-def test_extracted_licensing_info_parser():
+def test_parse_extracted_licensing_info():
     extracted_licensing_info_parser = ExtractedLicensingInfoParser()
 
     extracted_licensing_infos_dict = {
@@ -51,11 +53,10 @@ def test_parse_invalid_extracted_licensing_info():
     }
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = extracted_licensing_info_parser.parse_extracted_licensing_info(extracted_licensing_infos_dict)
+        extracted_licensing_info_parser.parse_extracted_licensing_info(extracted_licensing_infos_dict)
 
-    assert err.value.messages == ["Error while constructing ExtractedLicensingInfo: ['SetterError "
-                                  'ExtractedLicensingInfo: type of argument "comment" must be one of (str, '
-                                  "NoneType); got int instead: 56']"]
+    TestCase().assertCountEqual(err.value.get_messages(), [
+        "Error while constructing ExtractedLicensingInfo: ['SetterError " 'ExtractedLicensingInfo: type of argument "comment" must be one of (str, ' "NoneType); got int instead: 56']"])
 
 
 def test_parse_extracted_licensing_info_name():

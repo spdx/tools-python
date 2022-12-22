@@ -8,6 +8,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from unittest import TestCase
+
 import pytest
 
 from src.model.license_expression import LicenseExpression
@@ -15,7 +17,7 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.snippet_parser import SnippetParser
 
 
-def test_snippet_parser():
+def test_parse_snippet():
     snippet_parser = SnippetParser()
 
     snippet_dict = {
@@ -71,12 +73,11 @@ def test_parse_incomplete_snippet():
     }
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = snippet_parser.parse_snippet(incomplete_snippet_dict)
+        snippet_parser.parse_snippet(incomplete_snippet_dict)
 
-    assert err.value.messages == ["Error while constructing Snippet: ['SetterError Snippet: type of argument "
-                                  '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError '
-                                  'Snippet: type of argument "byte_range" must be a tuple; got NoneType '
-                                  "instead: None']"]
+    TestCase().assertCountEqual(err.value.get_messages(), [
+        "Error while constructing Snippet: ['SetterError Snippet: type of argument " '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError Snippet: type of argument "byte_range" must be a tuple; got NoneType '
+        "instead: None']"])
 
 
 def test_parse_snippet_with_invalid_snippet_range():
@@ -98,12 +99,13 @@ def test_parse_snippet_with_invalid_snippet_range():
     }
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = snippet_parser.parse_snippet(snippet_with_invalid_ranges_list)
+        snippet_parser.parse_snippet(snippet_with_invalid_ranges_list)
 
-    assert err.value.messages == ["Error while constructing Snippet: ['SetterError Snippet: type of argument "
-                                  '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError '
-                                  'Snippet: type of argument "byte_range"[0] must be int; got str instead: '
-                                  "(\\'310\\', 23)']"]
+    TestCase().assertCountEqual(err.value.get_messages(),
+                                ["Error while constructing Snippet: ['SetterError Snippet: type of argument "
+                                 '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError '
+                                 'Snippet: type of argument "byte_range"[0] must be int; got str instead: '
+                                 "(\\'310\\', 23)']"])
 
 
 def test_parse_invalid_snippet_range():
@@ -133,8 +135,7 @@ def test_parse_invalid_snippet_range():
     ]
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = snippet_parser.parse_ranges(ranges)
+        snippet_parser.parse_ranges(ranges)
 
-    assert err.value.messages == ["Error while parsing snippet ranges: ['Type of startpointer is not the same as "
-                                  "type of endpointer.', 'Type of startpointer is not the same as type of "
-                                  "endpointer.']"]
+    TestCase().assertCountEqual(err.value.get_messages(), [
+        "Error while parsing snippet ranges: ['Type of startpointer is not the same as type of endpointer.', 'Type of startpointer is not the same as type of endpointer.']"])

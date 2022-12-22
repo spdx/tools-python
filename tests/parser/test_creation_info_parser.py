@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import datetime
+from unittest import TestCase
 
 import pytest
 
@@ -20,7 +21,7 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.creation_info_parser import CreationInfoParser
 
 
-def test_creation_info_parser():
+def test_pares_creation_info():
     creation_info_parser = CreationInfoParser()
     doc_dict = {
         "spdxVersion": "2.3",
@@ -50,9 +51,9 @@ def test_creation_info_parser():
     assert creation_info.name == "Example Document"
     assert creation_info.document_namespace == "namespace"
     assert creation_info.created == datetime(2010, 1, 29, 18, 30, 22)
-    assert creation_info.creators == [Actor(ActorType.TOOL, "LicenseFind-1.0"),
-                                      Actor(ActorType.ORGANIZATION, "ExampleCodeInspect"),
-                                      Actor(ActorType.PERSON, "Jane Doe")]
+    TestCase().assertCountEqual(creation_info.creators, [Actor(ActorType.TOOL, "LicenseFind-1.0"),
+                                                         Actor(ActorType.ORGANIZATION, "ExampleCodeInspect"),
+                                                         Actor(ActorType.PERSON, "Jane Doe")])
     assert creation_info.license_list_version == Version(3, 7)
     assert creation_info.external_document_refs == [ExternalDocumentRef(document_ref_id="DocumentRef-spdx-tool-1.2",
                                                                         checksum=Checksum(
@@ -79,9 +80,9 @@ def test_parse_incomplete_document_info(incomplete_dict, expected_message):
     creation_info_parser = CreationInfoParser()
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = creation_info_parser.parse_creation_info(incomplete_dict)
+        creation_info_parser.parse_creation_info(incomplete_dict)
 
-    assert err.value.messages == expected_message
+    TestCase().assertCountEqual(err.value.get_messages(), expected_message)
 
 
 def test_parse_invalid_creation_info():
@@ -98,9 +99,7 @@ def test_parse_invalid_creation_info():
     }
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = creation_info_parser.parse_creation_info(doc_dict)
+        creation_info_parser.parse_creation_info(doc_dict)
 
-    assert err.value.messages == ["Error while constructing CreationInfo: ['SetterError CreationInfo: type of "
-                                  'argument "document_namespace" must be str; got NoneType instead: None\', '
-                                  '\'SetterError CreationInfo: type of argument "data_license" must be str; got '
-                                  "NoneType instead: None']"]
+    TestCase().assertCountEqual(err.value.get_messages(), [
+        "Error while constructing CreationInfo: ['SetterError CreationInfo: type of " 'argument "document_namespace" must be str; got NoneType instead: None\', \'SetterError CreationInfo: type of argument "data_license" must be str; got ' "NoneType instead: None']"])
