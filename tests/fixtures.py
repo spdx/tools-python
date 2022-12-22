@@ -131,10 +131,15 @@ def document_fixture(creation_info=None, packages=None, files=None, snippets=Non
     files = [file_fixture()] if files is None else files
     snippets = [snippet_fixture()] if snippets is None else snippets
     annotations = [annotation_fixture()] if annotations is None else annotations
-    relationships = [Relationship("relationshipOriginId", RelationshipType.DESCRIBES, "relationshipTargetId",
-                                  "relationshipComment")] if relationships is None else relationships
+    relationships = [relationship_fixture()] if relationships is None else relationships
     extracted_licensing_info = [
         extracted_licensing_info_fixture()] if extracted_licensing_info is None else extracted_licensing_info
     return Document(creation_info=creation_info, packages=packages, files=files, snippets=snippets,
                     annotations=annotations, relationships=relationships,
                     extracted_licensing_info=extracted_licensing_info)
+
+
+def relationship_fixture(spdx_element_id="relationshipOriginId", relationship_type=RelationshipType.DESCRIBES,
+                         related_spdx_element_id="relationshipTargetId", comment="relationshipComment") -> Relationship:
+    return Relationship(spdx_element_id=spdx_element_id, relationship_type=relationship_type,
+                        related_spdx_element_id=related_spdx_element_id, comment=comment)
