@@ -9,11 +9,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from datetime import datetime
+from typing import Union
 from unittest import mock
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
 
+from src.jsonschema.annotation_converter import AnnotationConverter
 from src.jsonschema.snippet_converter import SnippetConverter
 from src.jsonschema.snippet_properties import SnippetProperty
 from src.model.actor import Actor, ActorType
@@ -23,7 +25,8 @@ from src.model.license_expression import LicenseExpression
 from src.model.snippet import Snippet
 from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
-from tests.fixtures import creation_info_fixture, snippet_fixture
+from tests.fixtures import creation_info_fixture, snippet_fixture, document_fixture, annotation_fixture
+from tests.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
@@ -131,3 +134,28 @@ def test_spdx_none(converter: SnippetConverter):
     assert converted_dict[converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED)] == SPDX_NONE_STRING
     assert converted_dict[
                converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS)] == SPDX_NONE_STRING
+
+
+def test_snippet_annotations(converter: SnippetConverter):
+    snippet = snippet_fixture(spdx_id="snippetId")
+    document = document_fixture(snippets=[snippet])
+    first_snippet_annotation = annotation_fixture(spdx_id=snippet.spdx_id)
+    second_snippet_annotation = annotation_fixture(spdx_id=snippet.spdx_id)
+    document_annotation = annotation_fixture(spdx_id=document.creation_info.spdx_id)
+    package_annotation = annotation_fixture(spdx_id=document.packages[0].spdx_id)
+    file_annotation = annotation_fixture(spdx_id=document.files[0].spdx_id)
+    other_annotation = annotation_fixture(spdx_id="otherId")
+    annotations = [first_snippet_annotation, second_snippet_annotation, document_annotation, package_annotation,
+                   file_annotation, other_annotation]
+    document.annotations = annotations
+
+    # Weird type hint to make warnings about unresolved references from the mock class disappear
+    annotation_converter: Union[AnnotationConverter, NonCallableMagicMock] = converter.annotation_converter
+    annotation_converter.convert.return_value = "mock_converted_annotation"
+
+    converted_dict = converter.convert(snippet, document)
+
+    assert_mock_method_called_with_arguments(annotation_converter, "convert", first_snippet_annotation,
+                                             second_snippet_annotation)
+    converted_file_annotations = converted_dict.get(converter.json_property_name(SnippetProperty.ANNOTATIONS))
+    assert converted_file_annotations == ["mock_converted_annotation", "mock_converted_annotation"]
