@@ -11,13 +11,16 @@
 from datetime import datetime
 
 from src.model.actor import Actor, ActorType
+from src.model.annotation import Annotation, AnnotationType
 from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.document import CreationInfo
+from src.model.document import CreationInfo, Document
 from src.model.external_document_ref import ExternalDocumentRef
+from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
 from src.model.package import Package, PackageVerificationCode, PackagePurpose, ExternalPackageRef, \
     ExternalPackageRefCategory
+from src.model.relationship import Relationship, RelationshipType
 from src.model.snippet import Snippet
 from src.model.version import Version
 
@@ -105,3 +108,33 @@ def snippet_fixture(spdx_id="snippetId", file_spdx_id="snippetFromFileId", byte_
                    concluded_license=concluded_license, license_info_in_snippet=license_info_in_snippet,
                    license_comment=license_comment, copyright_text=copyright_text, comment=comment, name=name,
                    attribution_texts=attribution_texts)
+
+
+def annotation_fixture(spdx_id="annotatedElementId", annotation_type=AnnotationType.REVIEW,
+                       annotator=Actor(ActorType.PERSON, "annotatorName"), annotation_date=datetime(2022, 12, 1),
+                       annotation_comment="annotationComment") -> Annotation:
+    return Annotation(spdx_id=spdx_id, annotation_type=annotation_type, annotator=annotator,
+                      annotation_date=annotation_date, annotation_comment=annotation_comment)
+
+
+def extracted_licensing_info_fixture(license_id="licenseId", extracted_text="extractedText", license_name="licenseName",
+                                     cross_references=None, comment="licenseComment") -> ExtractedLicensingInfo:
+    cross_references = ["crossReference"] if cross_references is None else cross_references
+    return ExtractedLicensingInfo(license_id=license_id, extracted_text=extracted_text, license_name=license_name,
+                                  cross_references=cross_references, comment=comment)
+
+
+def document_fixture(creation_info=None, packages=None, files=None, snippets=None, annotations=None, relationships=None,
+                     extracted_licensing_info=None) -> Document:
+    creation_info = creation_info_fixture() if creation_info is None else creation_info
+    packages = [package_fixture()] if packages is None else packages
+    files = [file_fixture()] if files is None else files
+    snippets = [snippet_fixture()] if snippets is None else snippets
+    annotations = [annotation_fixture()] if annotations is None else annotations
+    relationships = [Relationship("relationshipOriginId", RelationshipType.DESCRIBES, "relationshipTargetId",
+                                  "relationshipComment")] if relationships is None else relationships
+    extracted_licensing_info = [
+        extracted_licensing_info_fixture()] if extracted_licensing_info is None else extracted_licensing_info
+    return Document(creation_info=creation_info, packages=packages, files=files, snippets=snippets,
+                    annotations=annotations, relationships=relationships,
+                    extracted_licensing_info=extracted_licensing_info)
