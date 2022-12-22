@@ -11,13 +11,13 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
 def validate_snippets(snippets: List[Snippet], document: Document) -> List[ValidationMessage]:
     validation_messages = []
     for snippet in snippets:
-        validation_messages.extend(validate_snippet(snippet, document))
+        validation_messages.extend(validate_snippet_within_document(snippet, document))
 
     return validation_messages
 
 
-def validate_snippet(snippet: Snippet, document: Document) -> List[ValidationMessage]:
-    validation_messages = []
+def validate_snippet_within_document(snippet: Snippet, document: Document) -> List[ValidationMessage]:
+    validation_messages: List[ValidationMessage] = []
     context = ValidationContext(spdx_id=snippet.spdx_id, element_type=SpdxElementType.SNIPPET, full_element=snippet)
 
     messages: List[str] = validate_spdx_id(snippet.spdx_id, document)
@@ -27,6 +27,14 @@ def validate_snippet(snippet: Snippet, document: Document) -> List[ValidationMes
     messages: List[str] = validate_spdx_id(snippet.file_spdx_id, document, check_files=True)
     for message in messages:
         validation_messages.append(ValidationMessage(message, context))
+
+    validation_messages.extend(validate_snippet(snippet, context))
+
+    return validation_messages
+
+
+def validate_snippet(snippet: Snippet, context: ValidationContext) -> List[ValidationMessage]:
+    validation_messages = []
 
     if snippet.byte_range[0] < 1:
         validation_messages.append(
