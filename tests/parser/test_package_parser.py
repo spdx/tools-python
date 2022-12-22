@@ -18,6 +18,7 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.license_expression import LicenseExpression
 from src.model.package import PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
 from src.parser.error import SPDXParsingError
+from src.parser.json.dict_parsing_functions import parse_list_of_elements
 from src.parser.json.package_parser import PackageParser
 
 
@@ -179,7 +180,7 @@ def test_parse_packages():
     ]
 
     with pytest.raises(SPDXParsingError) as err:
-        package_parser.parse_packages(packages_list)
+        parse_list_of_elements(packages_list, package_parser.parse_package)
 
     TestCase().assertCountEqual(err.value.get_messages(),
                                 ['Error while parsing Package: ["Error while parsing Checksum: '

@@ -17,7 +17,7 @@ from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
 from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_error, parse_field_or_log_error, \
-    raise_parsing_error_if_logger_has_messages, append_parsed_field_or_log_error, parse_field_or_no_assertion_or_none
+    parse_field_or_no_assertion_or_none
 
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
@@ -36,15 +36,6 @@ class SnippetParser:
         self.logger = Logger()
         self.license_expression_parser = LicenseExpressionParser()
 
-    def parse_snippets(self, snippet_dicts: List[Dict]) -> List[Snippet]:
-        snippets = []
-        for snippet_dict in snippet_dicts:
-            snippets = append_parsed_field_or_log_error(self.logger, snippets, snippet_dict, self.parse_snippet)
-
-        raise_parsing_error_if_logger_has_messages(self.logger)
-
-        return snippets
-
     def parse_snippet(self, snippet_dict: Dict) -> Snippet:
         logger = Logger()
         spdx_id: Optional[str] = snippet_dict.get("SPDXID")
@@ -59,19 +50,13 @@ class SnippetParser:
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
         concluded_license: Optional[Union[
             LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
-            "licenseConcluded"),
-                                                                                      lambda
-                                                                                          x: parse_field_or_no_assertion_or_none(
-                                                                                          x,
-                                                                                          self.license_expression_parser.parse_license_expression))
+            "licenseConcluded"), lambda x: parse_field_or_no_assertion_or_none(x,
+                                                                               self.license_expression_parser.parse_license_expression))
 
         license_info: Optional[Union[List[
             LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
-            "licenseInfoInSnippets"),
-                                                                                       lambda
-                                                                                           x: parse_field_or_no_assertion_or_none(
-                                                                                           x,
-                                                                                           self.license_expression_parser.parse_license_expressions))
+            "licenseInfoInSnippets"), lambda x: parse_field_or_no_assertion_or_none(x,
+                                                                                    self.license_expression_parser.parse_license_expressions))
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing snippet: {logger.get_messages()}"])
 

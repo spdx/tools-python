@@ -15,7 +15,7 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.annotation_parser import AnnotationParser
 from src.parser.json.creation_info_parser import CreationInfoParser
 from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, \
-    construct_or_raise_parsing_error
+    construct_or_raise_parsing_error, parse_list_of_elements
 from src.parser.json.extracted_licensing_info_parser import ExtractedLicensingInfoParser
 from src.parser.json.file_parser import FileParser
 from src.parser.logger import Logger
@@ -50,13 +50,21 @@ class JsonParser:
             input_doc_as_dict = json.load(file)
 
         fields_to_parse = [("creation_info", input_doc_as_dict, self.creation_info_parser.parse_creation_info, False),
-                           ("packages", input_doc_as_dict.get("packages"), self.package_parser.parse_packages, True),
-                           ("files", input_doc_as_dict.get("files"), self.file_parser.parse_files, True),
+                           ("packages", input_doc_as_dict.get("packages"), lambda x: parse_list_of_elements(x,
+                                                                                                            self.package_parser.parse_package,
+                                                                                                            self.package_parser.logger), True),
+                           ("files", input_doc_as_dict.get("files"), lambda x: parse_list_of_elements(x,
+                                                                                                      self.file_parser.parse_file,
+                                                                                                      self.file_parser.logger), True),
                            ("annotations", input_doc_as_dict, self.annotation_parser.parse_all_annotations, True),
-                           ("snippets", input_doc_as_dict.get("snippets"), self.snippet_parser.parse_snippets, True),
+                           ("snippets", input_doc_as_dict.get("snippets"), lambda x: parse_list_of_elements(x,
+                                                                                                            self.snippet_parser.parse_snippet,
+                                                                                                            self.snippet_parser.logger), True),
                            ("relationships", input_doc_as_dict, self.relationship_parser.parse_all_relationships, True),
                            ("extracted_licensing_info", input_doc_as_dict.get("hasExtractedLicensingInfos"),
-                            self.extracted_licensing_info_parser.parse_extracted_licensing_infos, True)]
+                            lambda x: parse_list_of_elements(x,
+                                                             self.extracted_licensing_info_parser.parse_extracted_licensing_info,
+                                                             self.extracted_licensing_info_parser.logger), True)]
 
         parsed_fields = {}
 
