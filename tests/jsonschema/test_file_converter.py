@@ -9,11 +9,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from datetime import datetime
+from typing import Union
 from unittest import mock
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
 
+from src.jsonschema.annotation_converter import AnnotationConverter
 from src.jsonschema.file_converter import FileConverter
 from src.jsonschema.file_properties import FileProperty
 from src.model.actor import Actor, ActorType
@@ -24,7 +26,8 @@ from src.model.file import File, FileType
 from src.model.license_expression import LicenseExpression
 from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
-from tests.fixtures import creation_info_fixture, file_fixture
+from tests.fixtures import creation_info_fixture, file_fixture, annotation_fixture, document_fixture
+from tests.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
@@ -142,3 +145,28 @@ def test_spdx_none(converter: FileConverter):
                converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(FileProperty.LICENSE_CONCLUDED)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == SPDX_NONE_STRING
+
+
+def test_file_annotations(converter: FileConverter):
+    file = file_fixture(spdx_id="fileId")
+    document = document_fixture(files=[file])
+    first_file_annotation = annotation_fixture(spdx_id=file.spdx_id)
+    second_file_annotation = annotation_fixture(spdx_id=file.spdx_id)
+    document_annotation = annotation_fixture(spdx_id=document.creation_info.spdx_id)
+    package_annotation = annotation_fixture(spdx_id=document.packages[0].spdx_id)
+    snippet_annotation = annotation_fixture(spdx_id=document.snippets[0].spdx_id)
+    other_annotation = annotation_fixture(spdx_id="otherId")
+    annotations = [first_file_annotation, second_file_annotation, document_annotation, package_annotation,
+                   snippet_annotation, other_annotation]
+    document.annotations = annotations
+
+    # Weird type hint to make warnings about unresolved references from the mock class disappear
+    annotation_converter: Union[AnnotationConverter, NonCallableMagicMock] = converter.annotation_converter
+    annotation_converter.convert.return_value = "mock_converted_annotation"
+
+    converted_dict = converter.convert(file, document)
+
+    assert_mock_method_called_with_arguments(annotation_converter, "convert", first_file_annotation,
+                                             second_file_annotation)
+    converted_file_annotations = converted_dict.get(converter.json_property_name(FileProperty.ANNOTATIONS))
+    assert converted_file_annotations == ["mock_converted_annotation", "mock_converted_annotation"]

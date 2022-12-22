@@ -9,11 +9,13 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from datetime import datetime
+from typing import Union
 from unittest import mock
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
 
+from src.jsonschema.annotation_converter import AnnotationConverter
 from src.jsonschema.package_converter import PackageConverter
 from src.jsonschema.package_properties import PackageProperty
 from src.model.actor import Actor, ActorType
@@ -24,7 +26,9 @@ from src.model.license_expression import LicenseExpression
 from src.model.package import Package, PackageVerificationCode, PackagePurpose
 from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
-from tests.fixtures import creation_info_fixture, package_fixture, external_package_ref_fixture
+from tests.fixtures import creation_info_fixture, package_fixture, external_package_ref_fixture, document_fixture, \
+    annotation_fixture
+from tests.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
@@ -218,3 +222,28 @@ def test_spdx_none(converter: PackageConverter):
     assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_DECLARED)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.COPYRIGHT_TEXT)] == SPDX_NONE_STRING
+
+
+def test_package_annotations(converter: PackageConverter):
+    package = package_fixture(spdx_id="packageId")
+    document = document_fixture(packages=[package])
+    first_package_annotation = annotation_fixture(spdx_id=package.spdx_id)
+    second_package_annotation = annotation_fixture(spdx_id=package.spdx_id)
+    document_annotation = annotation_fixture(spdx_id=document.creation_info.spdx_id)
+    file_annotation = annotation_fixture(spdx_id=document.files[0].spdx_id)
+    snippet_annotation = annotation_fixture(spdx_id=document.snippets[0].spdx_id)
+    other_annotation = annotation_fixture(spdx_id="otherId")
+    annotations = [first_package_annotation, second_package_annotation, document_annotation, file_annotation,
+                   snippet_annotation, other_annotation]
+    document.annotations = annotations
+
+    # Weird type hint to make warnings about unresolved references from the mock class disappear
+    annotation_converter: Union[AnnotationConverter, NonCallableMagicMock] = converter.annotation_converter
+    annotation_converter.convert.return_value = "mock_converted_annotation"
+
+    converted_dict = converter.convert(package, document)
+
+    assert_mock_method_called_with_arguments(annotation_converter, "convert", first_package_annotation,
+                                             second_package_annotation)
+    converted_file_annotations = converted_dict.get(converter.json_property_name(PackageProperty.ANNOTATIONS))
+    assert converted_file_annotations == ["mock_converted_annotation", "mock_converted_annotation"]
