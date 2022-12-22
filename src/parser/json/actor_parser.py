@@ -18,11 +18,6 @@ from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_er
 
 
 class ActorParser:
-    def parse_actor_or_no_assertion(self, actor_or_no_assertion: str) -> Union[SpdxNoAssertion, Actor]:
-        if actor_or_no_assertion == SpdxNoAssertion.__str__:
-            return SpdxNoAssertion()
-        else:
-            return self.parse_actor(actor_or_no_assertion)
 
     @staticmethod
     def parse_actor(actor: str) -> Actor:

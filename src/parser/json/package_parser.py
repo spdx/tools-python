@@ -22,7 +22,7 @@ from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
 from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, datetime_from_str, \
     raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, construct_or_raise_parsing_error, \
-    parse_field_or_log_error
+    parse_field_or_log_error, parse_field_or_no_assertion_or_none, parse_field_or_no_assertion
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
@@ -62,7 +62,7 @@ class PackageParser:
         comment: Optional[str] = package_dict.get("comment")
         copyright_text: Optional[str] = package_dict.get("copyrightText")
         description: Optional[str] = package_dict.get("description")
-        download_location: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = self.parse_download_location(
+        download_location: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = parse_field_or_no_assertion_or_none(
             package_dict.get("downloadLocation"))
 
         external_refs: List[ExternalPackageRef] = parse_field_or_log_error(logger, package_dict.get("externalRefs"),
@@ -73,19 +73,22 @@ class PackageParser:
         homepage: Optional[str] = package_dict.get("homepage")
         license_comments: Optional[str] = package_dict.get("licenseComments")
         license_concluded = parse_field_or_log_error(logger, package_dict.get("licenseConcluded"),
-                                                     self.license_expression_parser.parse_license_expression, None)
+                                                     lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression), None)
 
         license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger, package_dict.get("licenseDeclared"), self.license_expression_parser.parse_license_expression)
+            logger, package_dict.get("licenseDeclared"), lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression))
 
         license_info_from_file: Optional[
             Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger,
                                                                                                   package_dict.get(
                                                                                                       "licenseInfoFromFiles"),
-                                                                                                  self.license_expression_parser.parse_license_expression)
+                                                                                                  lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expressions))
         originator: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(logger,
                                                                                        package_dict.get("originator"),
-                                                                                       self.actor_parser.parse_actor_or_no_assertion)
+                                                                                       lambda
+                                                                                           x: parse_field_or_no_assertion(
+                                                                                           x,
+                                                                                           self.actor_parser.parse_actor))
         package_file_name: Optional[str] = package_dict.get("packageFileName")
 
         package_verification_code: Optional[
@@ -100,7 +103,10 @@ class PackageParser:
         summary: Optional[str] = package_dict.get("summary")
         supplier: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(logger,
                                                                                      package_dict.get("supplier"),
-                                                                                     self.actor_parser.parse_actor_or_no_assertion)
+                                                                                     lambda
+                                                                                         x: parse_field_or_no_assertion(
+                                                                                         x,
+                                                                                         self.actor_parser.parse_actor))
         valid_until_date: Optional[datetime] = parse_field_or_log_error(logger, package_dict.get("validUntilDate"),
                                                                         datetime_from_str)
 
@@ -177,10 +183,3 @@ class PackageParser:
         except KeyError:
             raise SPDXParsingError([f"Invalid PrimaryPackagePurpose: {primary_package_purpose}"])
 
-    @staticmethod
-    def parse_download_location(download_location: str) -> Union[str, SpdxNoAssertion, SpdxNone]:
-        if download_location == SpdxNone().__str__():
-            return SpdxNone()
-        if download_location == SpdxNoAssertion().__str__():
-            return SpdxNoAssertion()
-        return download_location

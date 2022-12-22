@@ -17,7 +17,8 @@ from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.json.checksum_parser import ChecksumParser
 from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, \
-    raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error, parse_field_or_log_error
+    raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error, parse_field_or_log_error, \
+    parse_field_or_no_assertion_or_none
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
@@ -56,10 +57,10 @@ class FileParser:
         license_comments: Optional[str] = file_dict.get("licenseComments")
 
         license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger, file_dict.get("licenseConcluded"), self.license_expression_parser.parse_license_expression)
+            logger, file_dict.get("licenseConcluded"), lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression))
 
         license_info_in_files: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger, file_dict.get("licenseInfoInFiles"), self.license_expression_parser.parse_license_expression)
+            logger, file_dict.get("licenseInfoInFiles"), lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expressions))
         notice_text: Optional[str] = file_dict.get("noticeText")
         raise_parsing_error_if_logger_has_messages(logger, "File")
 

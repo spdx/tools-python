@@ -17,7 +17,7 @@ from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
 from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_error, parse_field_or_log_error, \
-    raise_parsing_error_if_logger_has_messages, append_parsed_field_or_log_error
+    raise_parsing_error_if_logger_has_messages, append_parsed_field_or_log_error, parse_field_or_no_assertion_or_none
 
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
@@ -59,11 +59,19 @@ class SnippetParser:
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
         concluded_license: Optional[Union[
             LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
-            "licenseConcluded"), self.license_expression_parser.parse_license_expression)
+            "licenseConcluded"),
+                                                                                      lambda
+                                                                                          x: parse_field_or_no_assertion_or_none(
+                                                                                          x,
+                                                                                          self.license_expression_parser.parse_license_expression))
 
         license_info: Optional[Union[List[
             LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
-            "licenseInfoInSnippets"), self.license_expression_parser.parse_license_expression)
+            "licenseInfoInSnippets"),
+                                                                                       lambda
+                                                                                           x: parse_field_or_no_assertion_or_none(
+                                                                                           x,
+                                                                                           self.license_expression_parser.parse_license_expressions))
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing snippet: {logger.get_messages()}"])
 
@@ -117,7 +125,7 @@ class SnippetParser:
     @staticmethod
     def validate_pointer_and_get_type(pointer: Dict) -> RangeType:
         if "offset" in pointer and "lineNumber" in pointer:
-            raise ValueError ('Couldn\'t determine type of pointer: "offset" and "lineNumber" provided as key.')
+            raise ValueError('Couldn\'t determine type of pointer: "offset" and "lineNumber" provided as key.')
         if "offset" not in pointer and "lineNumber" not in pointer:
             raise ValueError('Couldn\'t determine type of pointer: neither "offset" nor "lineNumber" provided as key.')
         return RangeType.BYTE if "offset" in pointer else RangeType.LINE

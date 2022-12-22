@@ -13,8 +13,11 @@ from unittest import TestCase
 
 import pytest
 
+from src.model.spdx_no_assertion import SpdxNoAssertion
+from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import datetime_from_str, json_str_to_enum_name
+from src.parser.json.dict_parsing_functions import datetime_from_str, json_str_to_enum_name, \
+    parse_field_or_no_assertion, parse_field_or_no_assertion_or_none
 
 
 def test_datetime_from_str():
@@ -35,6 +38,7 @@ def test_datetime_from_str_error(invalid_date_str, expected_message):
 
     TestCase().assertCountEqual(err.value.get_messages(), expected_message)
 
+
 def test_json_str_to_enum():
     json_str = "BLAKE2b-256"
 
@@ -42,10 +46,26 @@ def test_json_str_to_enum():
 
     assert enum_name == "BLAKE2B_256"
 
+
 @pytest.mark.parametrize("invalid_json_str,expected_message",
                          [(5, ["Type for enum must be str not int"])])
-def test_invalid_json_str_to_enum(invalid_json_str,expected_message):
+def test_invalid_json_str_to_enum(invalid_json_str, expected_message):
     with pytest.raises(SPDXParsingError) as err:
         json_str_to_enum_name(invalid_json_str)
 
     TestCase().assertCountEqual(err.value.get_messages(), expected_message)
+
+
+@pytest.mark.parametrize("input_str,expected_type", [("NOASSERTION", SpdxNoAssertion), ("example string", str)])
+def test_parse_field_or_no_assertion(input_str, expected_type):
+    resulting_value = parse_field_or_no_assertion(input_str, lambda x: x)
+
+    assert type(resulting_value) == expected_type
+
+
+@pytest.mark.parametrize("input_str,expected_type",
+                         [("NOASSERTION", SpdxNoAssertion), ("NONE", SpdxNone), ("example string", str)])
+def test_parse_field_or_no_assertion_or_none(input_str, expected_type):
+    resulting_value = parse_field_or_no_assertion_or_none(input_str, lambda x: x)
+
+    assert type(resulting_value) == expected_type

@@ -13,7 +13,7 @@ from typing import Dict, List, Optional, Union
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, \
-    append_parsed_field_or_log_error, construct_or_raise_parsing_error, parse_field_or_log_error
+    append_parsed_field_or_log_error, construct_or_raise_parsing_error, parse_field_or_no_assertion
 from src.parser.logger import Logger
 
 
@@ -28,8 +28,8 @@ class ExtractedLicensingInfoParser:
         extracted_licensing_infos = []
         for extracted_licensing_info_dict in extracted_licensing_info_dicts:
             extracted_licensing_infos = append_parsed_field_or_log_error(self.logger, extracted_licensing_infos,
-                                                                             extracted_licensing_info_dict,
-                                                                             self.parse_extracted_licensing_info)
+                                                                         extracted_licensing_info_dict,
+                                                                         self.parse_extracted_licensing_info)
 
         raise_parsing_error_if_logger_has_messages(self.logger)
         return extracted_licensing_infos
@@ -37,23 +37,14 @@ class ExtractedLicensingInfoParser:
     def parse_extracted_licensing_info(self, extracted_licensing_info_dict: Dict) -> ExtractedLicensingInfo:
         license_id: Optional[str] = extracted_licensing_info_dict.get("licenseId")
         extracted_text: Optional[str] = extracted_licensing_info_dict.get("extractedText")
-        license_name: Optional[Union[str, SpdxNoAssertion]] = parse_field_or_log_error(self.logger,
-                                                                                       extracted_licensing_info_dict.get(
-                                                                                           "name"),
-                                                                                       self.parse_extracted_licensing_info_name)
+        license_name: Optional[Union[str, SpdxNoAssertion]] = parse_field_or_no_assertion(
+            extracted_licensing_info_dict.get("name"))
         cross_references: List[str] = extracted_licensing_info_dict.get("seeAlsos", [])
         comment: Optional[str] = extracted_licensing_info_dict.get("comment")
         extracted_licensing_info = construct_or_raise_parsing_error(ExtractedLicensingInfo,
-                                                                         dict(license_id=license_id,
-                                                                              extracted_text=extracted_text,
-                                                                              comment=comment,
-                                                                              license_name=license_name,
-                                                                              cross_references=cross_references))
+                                                                    dict(license_id=license_id,
+                                                                         extracted_text=extracted_text,
+                                                                         comment=comment,
+                                                                         license_name=license_name,
+                                                                         cross_references=cross_references))
         return extracted_licensing_info
-
-    @staticmethod
-    def parse_extracted_licensing_info_name(extracted_licensing_info_name_or_no_assertion) -> Union[str, SpdxNoAssertion]:
-        if extracted_licensing_info_name_or_no_assertion == SpdxNoAssertion().__str__():
-            return SpdxNoAssertion()
-        else:
-            return extracted_licensing_info_name_or_no_assertion
