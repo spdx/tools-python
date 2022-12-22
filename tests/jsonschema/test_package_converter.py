@@ -37,9 +37,8 @@ from tests.mock_utils import assert_mock_method_called_with_arguments
 @mock.patch('src.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
 @mock.patch('src.jsonschema.package_verification_code_converter.PackageVerificationCodeConverter', autospec=True)
 @mock.patch('src.jsonschema.external_package_ref_converter.ExternalPackageRefConverter', autospec=True)
-def converter(checksum_converter_mock: MagicMock, annotation_converter_mock: MagicMock,
-              verification_code_converter_mock: MagicMock,
-              package_ref_converter_mock: MagicMock) -> PackageConverter:
+def converter(package_ref_converter_mock: MagicMock, verification_code_converter_mock: MagicMock,
+              annotation_converter_mock: MagicMock, checksum_converter_mock: MagicMock) -> PackageConverter:
     converter = PackageConverter()
     converter.checksum_converter = checksum_converter_mock()
     converter.annotation_converter = annotation_converter_mock()
