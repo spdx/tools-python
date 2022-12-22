@@ -20,7 +20,8 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
 from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, datetime_from_str, \
-    raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error, parse_field_or_log_error
+    raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error, parse_field_or_log_error, \
+    parse_field_or_no_assertion
 from src.parser.logger import Logger
 
 
@@ -80,8 +81,7 @@ class CreationInfoParser:
         logger = Logger()
         creators = []
         for creator_str in creators_list_from_dict:
-            creators = append_parsed_field_or_log_error(logger, creators, creator_str,
-                                                             self.actor_parser.parse_actor_or_no_assertion)
+            creators = append_parsed_field_or_log_error(logger, creators, creator_str, lambda x: parse_field_or_no_assertion(x, self.actor_parser.parse_actor))
 
         raise_parsing_error_if_logger_has_messages(logger)
         return creators

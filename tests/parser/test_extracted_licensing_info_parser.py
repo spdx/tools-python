@@ -58,12 +58,3 @@ def test_parse_invalid_extracted_licensing_info():
     TestCase().assertCountEqual(err.value.get_messages(), [
         "Error while constructing ExtractedLicensingInfo: ['SetterError " 'ExtractedLicensingInfo: type of argument "comment" must be one of (str, ' "NoneType); got int instead: 56']"])
 
-
-def test_parse_extracted_licensing_info_name():
-    extracted_licensing_info_parser = ExtractedLicensingInfoParser()
-    extracted_licensing_info_name_str = "NOASSERTION"
-
-    extracted_licensing_info_name = extracted_licensing_info_parser.parse_extracted_licensing_info_name(
-        extracted_licensing_info_name_str)
-
-    assert type(extracted_licensing_info_name) == SpdxNoAssertion

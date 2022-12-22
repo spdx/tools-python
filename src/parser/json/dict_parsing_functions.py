@@ -9,8 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import datetime
-from typing import Any, Callable, Dict, List
+from typing import Any, Callable, Dict, List, Union
 
+from src.model.spdx_no_assertion import SpdxNoAssertion
+from src.model.spdx_none import SpdxNone
 from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 from src.parser.logger import Logger
@@ -67,3 +69,17 @@ def raise_parsing_error_if_logger_has_messages(logger: Logger, parsed_object_nam
             raise SPDXParsingError([f"Error while parsing {parsed_object_name}: {logger.get_messages()}"])
         else:
             raise SPDXParsingError(logger.get_messages())
+
+def parse_field_or_no_assertion_or_none(field: str, method_for_field: Callable=lambda x: x) -> Union[SpdxNoAssertion, SpdxNone, Any]:
+    if field == SpdxNoAssertion().__str__():
+        return SpdxNoAssertion()
+    elif field == SpdxNone().__str__():
+        return SpdxNone()
+    else:
+        return method_for_field(field)
+
+def parse_field_or_no_assertion(field: str, method_for_field: Callable = lambda x: x) -> Union[SpdxNoAssertion, Any]:
+    if field == SpdxNoAssertion().__str__():
+        return SpdxNoAssertion()
+    else:
+        return method_for_field(field)
