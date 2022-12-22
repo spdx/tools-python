@@ -16,7 +16,7 @@ def assert_mock_method_called_with_arguments(mock_object: NonCallableMagicMock, 
     for running_index in range(len(args)):
         call = mock_object.method_calls[running_index]
         assert call[0] == method_name
-        assert call.args[0] == args[running_index]
+        assert call[1][0] == args[running_index]
 
 
 def assert_no_mock_methods_called(mock_object: NonCallableMagicMock):
