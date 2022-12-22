@@ -24,7 +24,7 @@ from src.model.document import Document
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.relationship import Relationship, RelationshipType
 from tests.fixtures import creation_info_fixture, file_fixture, package_fixture, external_document_ref_fixture, \
-    snippet_fixture, annotation_fixture
+    snippet_fixture, annotation_fixture, document_fixture, relationship_fixture
 from tests.mock_utils import assert_mock_method_called_with_arguments
 
 
@@ -160,3 +160,24 @@ def test_document_annotations(converter: DocumentConverter):
     assert_mock_method_called_with_arguments(annotation_converter, "convert", document_annotation, other_annotation)
     converted_document_annotations = converted_dict.get(converter.json_property_name(DocumentProperty.ANNOTATIONS))
     assert converted_document_annotations == ["mock_converted_annotation", "mock_converted_annotation"]
+
+
+def test_document_describes(converter: DocumentConverter):
+    document = document_fixture()
+    document_id = document.creation_info.spdx_id
+    document_describes_relationship = relationship_fixture(spdx_element_id=document_id,
+                                                           relationship_type=RelationshipType.DESCRIBES,
+                                                           related_spdx_element_id="describesId")
+    described_by_document_relationship = relationship_fixture(related_spdx_element_id=document_id,
+                                                              relationship_type=RelationshipType.DESCRIBED_BY,
+                                                              spdx_element_id="describedById")
+    other_describes_relationship = relationship_fixture(relationship_type=RelationshipType.DESCRIBES)
+    other_relationship = relationship_fixture(spdx_element_id=document_id, relationship_type=RelationshipType.CONTAINS)
+    document.relationships = [document_describes_relationship, described_by_document_relationship,
+                              other_describes_relationship, other_relationship]
+
+    converted_dict = converter.convert(document)
+
+    document_describes = converted_dict.get(converter.json_property_name(DocumentProperty.DOCUMENT_DESCRIBES))
+    assert document_describes == [document_describes_relationship.related_spdx_element_id,
+                                  described_by_document_relationship.spdx_element_id]

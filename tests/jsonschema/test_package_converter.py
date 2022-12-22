@@ -24,10 +24,11 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.document import Document
 from src.model.license_expression import LicenseExpression
 from src.model.package import Package, PackageVerificationCode, PackagePurpose
+from src.model.relationship import RelationshipType
 from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
 from tests.fixtures import creation_info_fixture, package_fixture, external_package_ref_fixture, document_fixture, \
-    annotation_fixture
+    annotation_fixture, file_fixture, relationship_fixture, snippet_fixture
 from tests.mock_utils import assert_mock_method_called_with_arguments
 
 
@@ -247,3 +248,33 @@ def test_package_annotations(converter: PackageConverter):
                                              second_package_annotation)
     converted_file_annotations = converted_dict.get(converter.json_property_name(PackageProperty.ANNOTATIONS))
     assert converted_file_annotations == ["mock_converted_annotation", "mock_converted_annotation"]
+
+
+def test_has_files(converter: PackageConverter):
+    package = package_fixture()
+    first_contained_file = file_fixture(spdx_id="firstFileId")
+    second_contained_file = file_fixture(spdx_id="secondFileId")
+    non_contained_file = file_fixture(spdx_id="otherFileId")
+    snippet = snippet_fixture()
+    document = document_fixture(packages=[package],
+                                files=[first_contained_file, second_contained_file, non_contained_file],
+                                snippets=[snippet])
+    package_contains_file_relationship = relationship_fixture(spdx_element_id=package.spdx_id,
+                                                              relationship_type=RelationshipType.CONTAINS,
+                                                              related_spdx_element_id=first_contained_file.spdx_id)
+    file_contained_in_package_relationship = relationship_fixture(spdx_element_id=second_contained_file.spdx_id,
+                                                                  relationship_type=RelationshipType.CONTAINED_BY,
+                                                                  related_spdx_element_id=package.spdx_id)
+    package_contains_snippet_relationship = relationship_fixture(spdx_element_id=package.spdx_id,
+                                                                 relationship_type=RelationshipType.CONTAINS,
+                                                                 related_spdx_element_id=snippet.spdx_id)
+    package_describes_file_relationship = relationship_fixture(spdx_element_id=package.spdx_id,
+                                                               relationship_type=RelationshipType.DESCRIBES,
+                                                               related_spdx_element_id=non_contained_file.spdx_id)
+    document.relationships = [package_contains_file_relationship, file_contained_in_package_relationship,
+                              package_contains_snippet_relationship, package_describes_file_relationship]
+
+    converted_dict = converter.convert(package, document)
+
+    has_files = converted_dict.get(converter.json_property_name(PackageProperty.HAS_FILES))
+    assert has_files == [first_contained_file.spdx_id, second_contained_file.spdx_id]
