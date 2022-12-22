@@ -18,6 +18,7 @@ import pytest
 from src.jsonschema.annotation_converter import AnnotationConverter
 from src.jsonschema.document_converter import DocumentConverter
 from src.jsonschema.document_properties import DocumentProperty
+from src.jsonschema.relationship_converter import RelationshipConverter
 from src.model.actor import Actor, ActorType
 from src.model.annotation import Annotation, AnnotationType
 from src.model.document import Document
@@ -25,7 +26,7 @@ from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.relationship import Relationship, RelationshipType
 from tests.fixtures import creation_info_fixture, file_fixture, package_fixture, external_document_ref_fixture, \
     snippet_fixture, annotation_fixture, document_fixture, relationship_fixture
-from tests.mock_utils import assert_mock_method_called_with_arguments
+from tests.mock_utils import assert_mock_method_called_with_arguments, assert_no_mock_methods_called
 
 
 @pytest.fixture
@@ -181,3 +182,45 @@ def test_document_describes(converter: DocumentConverter):
     document_describes = converted_dict.get(converter.json_property_name(DocumentProperty.DOCUMENT_DESCRIBES))
     assert document_describes == [document_describes_relationship.related_spdx_element_id,
                                   described_by_document_relationship.spdx_element_id]
+
+
+DOCUMENT_ID = "docConverterTestDocumentId"
+PACKAGE_ID = "docConverterTestPackageId"
+FILE_ID = "docConverterTestFileId"
+
+
+@pytest.mark.parametrize("relationship,should_be_written",
+                         [(relationship_fixture(DOCUMENT_ID, RelationshipType.DESCRIBES), True),
+                          (relationship_fixture(DOCUMENT_ID, RelationshipType.DESCRIBES, comment=None), False),
+                          (relationship_fixture(relationship_type=RelationshipType.DESCRIBED_BY,
+                                                related_spdx_element_id=DOCUMENT_ID), True),
+                          (relationship_fixture(relationship_type=RelationshipType.DESCRIBED_BY,
+                                                related_spdx_element_id=DOCUMENT_ID, comment=None), False),
+                          (relationship_fixture(DOCUMENT_ID, RelationshipType.AMENDS, comment=None), True),
+                          (relationship_fixture(PACKAGE_ID, RelationshipType.CONTAINS, FILE_ID), True),
+                          (relationship_fixture(PACKAGE_ID, RelationshipType.CONTAINS, FILE_ID, comment=None), False),
+                          (relationship_fixture(FILE_ID, RelationshipType.CONTAINED_BY, PACKAGE_ID), True),
+                          (relationship_fixture(FILE_ID, RelationshipType.CONTAINED_BY, PACKAGE_ID, comment=None),
+                           False),
+                          (relationship_fixture(PACKAGE_ID, RelationshipType.CONTAINS, comment=None), True),
+                          (relationship_fixture(PACKAGE_ID, RelationshipType.COPY_OF, FILE_ID, comment=None), True)])
+def test_document_relationships(converter: DocumentConverter, relationship: Relationship, should_be_written: bool):
+    package = package_fixture(spdx_id=PACKAGE_ID)
+    file = file_fixture(spdx_id=FILE_ID)
+    document = document_fixture(creation_info_fixture(spdx_id=DOCUMENT_ID), packages=[package], files=[file],
+                                relationships=[relationship])
+
+    # Weird type hint to make warnings about unresolved references from the mock class disappear
+    relationship_converter: Union[RelationshipConverter, NonCallableMagicMock] = converter.relationship_converter
+    relationship_converter.convert.return_value = "mock_converted_relationship"
+
+    converted_dict = converter.convert(document)
+
+    relationships = converted_dict.get(converter.json_property_name(DocumentProperty.RELATIONSHIPS))
+
+    if should_be_written:
+        assert_mock_method_called_with_arguments(relationship_converter, "convert", relationship)
+        assert relationships == ["mock_converted_relationship"]
+    else:
+        assert_no_mock_methods_called(relationship_converter)
+        assert relationships is None
