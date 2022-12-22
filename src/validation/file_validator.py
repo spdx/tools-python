@@ -12,17 +12,25 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
 def validate_files(files: List[File], document: Document) -> List[ValidationMessage]:
     validation_messages = []
     for file in files:
-        validation_messages.extend(validate_file(file, document))
+        validation_messages.extend(validate_file_within_document(file, document))
 
     return validation_messages
 
 
-def validate_file(file: File, document: Document) -> List[ValidationMessage]:
-    validation_messages = []
+def validate_file_within_document(file: File, document: Document) -> List[ValidationMessage]:
+    validation_messages: List[ValidationMessage] = []
     context = ValidationContext(spdx_id=file.spdx_id, element_type=SpdxElementType.FILE, full_element=file)
 
     for message in validate_spdx_id(file.spdx_id, document):
         validation_messages.append(ValidationMessage(message, context))
+
+    validation_messages.extend(validate_file(file, context))
+
+    return validation_messages
+
+
+def validate_file(file: File, context: ValidationContext) -> List[ValidationMessage]:
+    validation_messages = []
 
     if not file.name.startswith("./"):
         validation_messages.append(
