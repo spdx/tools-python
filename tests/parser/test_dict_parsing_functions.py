@@ -9,6 +9,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from datetime import datetime
+from unittest import TestCase
 
 import pytest
 
@@ -30,9 +31,9 @@ def test_datetime_from_str():
                                           '"%Y-%m-%dT%H:%M:%SZ"'])])
 def test_datetime_from_str_error(invalid_date_str, expected_message):
     with pytest.raises(SPDXParsingError) as err:
-        _ = datetime_from_str(invalid_date_str)
+        datetime_from_str(invalid_date_str)
 
-    assert err.value.messages == expected_message
+    TestCase().assertCountEqual(err.value.get_messages(), expected_message)
 
 def test_json_str_to_enum():
     json_str = "BLAKE2b-256"
@@ -45,6 +46,6 @@ def test_json_str_to_enum():
                          [(5, ["Type for enum must be str not int"])])
 def test_invalid_json_str_to_enum(invalid_json_str,expected_message):
     with pytest.raises(SPDXParsingError) as err:
-        _ = json_str_to_enum_name(invalid_json_str)
+        json_str_to_enum_name(invalid_json_str)
 
-    assert err.value.messages == expected_message
+    TestCase().assertCountEqual(err.value.get_messages(), expected_message)

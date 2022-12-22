@@ -8,6 +8,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from unittest import TestCase
+
 import pytest
 
 from src.model.checksum import Checksum, ChecksumAlgorithm
@@ -17,7 +19,7 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.file_parser import FileParser
 
 
-def test_file_parser():
+def test_parse_file():
     file_parser = FileParser()
     file_dict = {
         "SPDXID": "SPDXRef-File",
@@ -45,15 +47,17 @@ def test_file_parser():
 
     assert file.name == "./package/foo.c"
     assert file.spdx_id == "SPDXRef-File"
-    assert file.checksums == [Checksum(ChecksumAlgorithm.SHA1, "d6a770ba38583ed4bb4525bd96e50461655d2758"),
-                              Checksum(ChecksumAlgorithm.MD5, "624c1abb3664f4b35547e7c73864ad24")]
+    TestCase().assertCountEqual(file.checksums,
+                                [Checksum(ChecksumAlgorithm.SHA1, "d6a770ba38583ed4bb4525bd96e50461655d2758"),
+                                 Checksum(ChecksumAlgorithm.MD5, "624c1abb3664f4b35547e7c73864ad24")])
     assert file.comment == "The concluded license was taken from the package level that the file was included in.\nThis information was found in the COPYING.txt file in the xyz directory."
     assert file.copyright_text == "Copyright 2008-2010 John Smith"
     assert file.file_type == [FileType.SOURCE]
-    assert file.contributors == ["The Regents of the University of California",
-                                 "Modified by Paul Mundt lethal@linux-sh.org", "IBM Corporation"]
+    TestCase().assertCountEqual(file.contributors, ["The Regents of the University of California",
+                                                    "Modified by Paul Mundt lethal@linux-sh.org", "IBM Corporation"])
     assert file.concluded_license == LicenseExpression("(LGPL-2.0-only OR LicenseRef-2)")
-    assert file.license_info_in_file == [LicenseExpression("GPL-2.0-only"), LicenseExpression("LicenseRef-2")]
+    TestCase().assertCountEqual(file.license_info_in_file,
+                                [LicenseExpression("GPL-2.0-only"), LicenseExpression("LicenseRef-2")])
     assert file.license_comment == "The concluded license was taken from the package level that the file was included in."
     assert file.attribution_texts == ["Some attribution text."]
 
@@ -66,13 +70,14 @@ def test_parse_incomplete_file():
     }
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = file_parser.parse_file(file_dict)
+        file_parser.parse_file(file_dict)
 
-    assert err.value.messages == ["Error while constructing File: ['SetterError File: type of argument "
-                                  '"checksums" must be a list; got NoneType instead: None\']']
+    TestCase().assertCountEqual(err.value.get_messages(),
+                                ["Error while constructing File: ['SetterError File: type of argument "
+                                 '"checksums" must be a list; got NoneType instead: None\']'])
 
 
-def test_parse_falsy_files():
+def test_parse_invalid_files():
     file_parser = FileParser()
     files = [{"SPDXID": "SPDXRef-File",
               "fileName": "Incomplete File"},
@@ -97,14 +102,11 @@ def test_parse_falsy_files():
              ]
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = file_parser.parse_files(files)
-
-    assert err.value.messages == ["Error while constructing File: ['SetterError File: type of argument "
-                                  '"checksums" must be a list; got NoneType instead: None\']',
-                                  'Error while constructing File: [\'SetterError File: type of argument "name" '
-                                  "must be str; got NoneType instead: None']",
-                                  'Error while parsing File: ["Error while parsing Checksum: [\'Invalid Algorithm '
-                                  'for checksum: MD\']"]']
+        file_parser.parse_files(files)
+    TestCase().assertCountEqual(err.value.get_messages(), [
+        "Error while constructing File: ['SetterError File: type of argument " '"checksums" must be a list; got NoneType instead: None\']',
+        'Error while constructing File: [\'SetterError File: type of argument "name" ' "must be str; got NoneType instead: None']",
+        'Error while parsing File: ["Error while parsing Checksum: [\'Invalid Algorithm for checksum: MD\']"]'])
 
 
 def test_parse_file_types():
@@ -113,7 +115,7 @@ def test_parse_file_types():
 
     file_types = file_parser.parse_file_types(file_types_list)
 
-    assert file_types == [FileType.OTHER, FileType.APPLICATION]
+    TestCase().assertCountEqual(file_types, [FileType.OTHER, FileType.APPLICATION])
 
 
 def test_parse_invalid_file_types():
@@ -121,6 +123,6 @@ def test_parse_invalid_file_types():
     file_types_list = ["OTHER", "APPLICAON"]
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = file_parser.parse_file_types(file_types_list)
+        file_parser.parse_file_types(file_types_list)
 
-    assert err.value.messages == ["Error while parsing FileType: ['Invalid FileType: APPLICAON']"]
+    TestCase().assertCountEqual(err.value.get_messages(), ["Error while parsing FileType: ['Invalid FileType: APPLICAON']"])

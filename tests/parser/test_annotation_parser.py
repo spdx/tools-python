@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import datetime
+from unittest import TestCase
 
 import pytest
 
@@ -18,7 +19,7 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.annotation_parser import AnnotationParser
 
 
-def test_annotation_parser():
+def test_parse_annotation():
     annotation_parser = AnnotationParser()
     annotation_dict = {
         "annotationDate": "2010-01-29T18:30:22Z",
@@ -33,6 +34,7 @@ def test_annotation_parser():
     assert annotation.annotation_type == AnnotationType.OTHER
     assert annotation.annotation_date == datetime.datetime(2010, 1, 29, 18, 30, 22)
     assert annotation.annotation_comment == "Document level annotation"
+    assert annotation.spdx_id == "SPDXRef-DOCUMENT"
 
 
 def test_parse_all_annotations():
@@ -42,9 +44,9 @@ def test_parse_all_annotations():
         "packages": [
             {"SPDXID": "SPDXRef-Package",
              "annotations": [
-                 {"annotationDate": "2010-01-29T18:30:22Z",
-                  "annotationType": "OTHER",
-                  "annotator": "Person: Jane Doe ()",
+                 {"annotationDate": "2010-01-29T17:30:22Z",
+                  "annotationType": "REVIEW",
+                  "annotator": "Person: Mick Doe ()",
                   "comment": "Package level annotation"}
              ]}],
         "files": [
@@ -59,9 +61,9 @@ def test_parse_all_annotations():
         "snippets": [
             {"SPDXID": "SPDXRef-Snippet",
              "annotations": [
-                 {"annotationDate": "2010-01-29T18:30:22Z",
-                  "annotationType": "OTHER",
-                  "annotator": "Person: Jane Doe ()",
+                 {"annotationDate": "2022-01-29T18:30:32Z",
+                  "annotationType": "REVIEW",
+                  "annotator": "Person: Jonas Rie (jonas@example.com)",
                   "comment": "Snippet level annotation"}
              ]}],
         "revieweds":
@@ -75,50 +77,40 @@ def test_parse_all_annotations():
     annotations = annotation_parser.parse_all_annotations(input_doc_dict=doc_dict)
 
     assert len(annotations) == 4
-    assert annotations == [Annotation(spdx_id='SPDXRef-DOCUMENT',
-                                      annotation_type=AnnotationType.REVIEW,
-                                      annotator=Actor(actor_type=ActorType.PERSON,
-                                                      name='Jane Doe',
-                                                      email=None),
-                                      annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),
-                                      annotation_comment='Review annotation'),
-                           Annotation(spdx_id='SPDXRef-Package',
-                                      annotation_type=AnnotationType.OTHER,
-                                      annotator=Actor(actor_type=ActorType.PERSON,
-                                                      name='Jane Doe',
-                                                      email=None),
-                                      annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),
-                                      annotation_comment='Package level annotation'),
-                           Annotation(spdx_id='SPDXRef-File',
-                                      annotation_type=AnnotationType.OTHER,
-                                      annotator=Actor(actor_type=ActorType.PERSON,
-                                                      name='Jane Doe',
-                                                      email=None),
-                                      annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),
-                                      annotation_comment='File level annotation'),
-                           Annotation(spdx_id='SPDXRef-Snippet',
-                                      annotation_type=AnnotationType.OTHER,
-                                      annotator=Actor(actor_type=ActorType.PERSON,
-                                                      name='Jane Doe',
-                                                      email=None),
-                                      annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),
-                                      annotation_comment='Snippet level annotation')]
+    test_case = TestCase()
+    test_case.maxDiff = None
+    test_case.assertCountEqual(annotations, [Annotation(spdx_id="SPDXRef-DOCUMENT",
+                                                         annotation_type=AnnotationType.REVIEW,
+                                                         annotator=Actor(actor_type=ActorType.PERSON, name="Jane Doe",
+                                                                         email=None),
+                                                         annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),
+                                                         annotation_comment="Review annotation"),
+                                              Annotation(spdx_id="SPDXRef-Package",
+                                                         annotation_type=AnnotationType.REVIEW,
+                                                         annotator=Actor(actor_type=ActorType.PERSON, name="Mick Doe",
+                                                                         email=None),
+                                                         annotation_date=datetime.datetime(2010, 1, 29, 17, 30, 22),
+                                                         annotation_comment="Package level annotation"),
+                                              Annotation(spdx_id="SPDXRef-File", annotation_type=AnnotationType.OTHER,
+                                                         annotator=Actor(actor_type=ActorType.PERSON, name="Jane Doe",
+                                                                         email=None),
+                                                         annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),
+                                                         annotation_comment="File level annotation"),
+                                              Annotation(spdx_id="SPDXRef-Snippet",
+                                                         annotation_type=AnnotationType.REVIEW,
+                                                         annotator=Actor(actor_type=ActorType.PERSON, name="Jonas Rie",
+                                                                         email="jonas@example.com"),
+                                                         annotation_date=datetime.datetime(2022, 1, 29, 18, 30, 32),
+                                                         annotation_comment="Snippet level annotation")])
 
 
-def test_parse_incomplete_annotation():
+@pytest.mark.parametrize("incomplete_annotation_dict,expected_message", [({"annotator": "Person: Jane Doe ()"}, [
+    "Error while constructing Annotation: ['SetterError Annotation: type of " 'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError Annotation: type of argument "annotation_type" must be ' "src.model.annotation.AnnotationType; got NoneType instead: None', " '\'SetterError Annotation: type of argument "annotation_date" must be ' "datetime.datetime; got NoneType instead: None', 'SetterError Annotation: " 'type of argument "annotation_comment" must be str; got NoneType instead: ' "None']"]),
+                                                                         ({"annotationDate": "2010-01-29T18:30:22Z"}, ["Error while constructing Annotation: ['SetterError Annotation: type of " 'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError Annotation: type of argument "annotation_type" must be ' "src.model.annotation.AnnotationType; got NoneType instead: None', " '\'SetterError Annotation: type of argument "annotator" must be ' "src.model.actor.Actor; got NoneType instead: None', 'SetterError Annotation: " 'type of argument "annotation_comment" must be str; got NoneType instead: ' "None']"])])
+def test_parse_incomplete_annotation(incomplete_annotation_dict, expected_message):
     annotation_parser = AnnotationParser()
-    annotation_dict = {
-        "annotator": "Person: Jane Doe ()"
-    }
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = annotation_parser.parse_annotation(annotation_dict)
+        annotation_parser.parse_annotation(incomplete_annotation_dict)
 
-    assert err.value.messages == ["Error while constructing Annotation: ['SetterError Annotation: type of "
-                                  'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError '
-                                  'Annotation: type of argument "annotation_type" must be '
-                                  "src.model.annotation.AnnotationType; got NoneType instead: None', "
-                                  '\'SetterError Annotation: type of argument "annotation_date" must be '
-                                  "datetime.datetime; got NoneType instead: None', 'SetterError Annotation: "
-                                  'type of argument "annotation_comment" must be str; got NoneType instead: '
-                                  "None']"]
+    TestCase().assertCountEqual(err.value.get_messages(), expected_message)

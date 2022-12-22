@@ -16,15 +16,15 @@ from src.model.document import Document
 from src.parser.error import SPDXParsingError
 from src.parser.json.json_parser import JsonParser
 
-def test_json_parser_file_not_found():
+def test_parse_json_file_not_found():
     with pytest.raises(FileNotFoundError) as err:
-        wrong_file_path = os.path.join(os.path.dirname(__file__), 'test.json')
-        _ = JsonParser().parse(wrong_file_path)
+        wrong_file_path = os.path.join(os.path.dirname(__file__), 'hnjfkjsedhnflsiafg.json')
+        JsonParser().parse(wrong_file_path)
 
     assert err.value.args[1] == "No such file or directory"
 
 
-def test_json_parser_with_2_3_example():
+def test_parse_json_with_2_3_example():
     doc = JsonParser().parse(os.path.join(os.path.dirname(__file__),"../data/formats/SPDXJSONExample-v2.3.spdx.json"))
     assert type(doc) == Document
     assert len(doc.annotations) == 5
@@ -34,7 +34,7 @@ def test_json_parser_with_2_3_example():
     assert len(doc.relationships) == 23
     assert len(doc.extracted_licensing_info) == 5
 
-def test_json_parser_with_2_2_example():
+def test_parse_json_with_2_2_example():
     doc = JsonParser().parse(os.path.join(os.path.dirname(__file__),"../data/formats/SPDXJSONExample-v2.2.spdx.json"))
     assert type(doc) == Document
     assert len(doc.annotations) == 5
@@ -44,7 +44,7 @@ def test_json_parser_with_2_2_example():
     assert len(doc.relationships) == 11
     assert len(doc.extracted_licensing_info) == 5
 
-def test_json_parser_with():
+def test_parse_json_with_2_1_example():
     doc = JsonParser().parse(os.path.join(os.path.dirname(__file__),"../data/formats/SPDXJsonExample.json"))
     assert type(doc) == Document
     assert len(doc.annotations) == 1

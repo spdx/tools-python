@@ -8,6 +8,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from unittest import TestCase
+
 import pytest
 
 from src.model.checksum import ChecksumAlgorithm
@@ -15,7 +17,7 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.checksum_parser import ChecksumParser
 
 
-def test_checksum_parser():
+def test_parse_checksum():
     checksum_parser = ChecksumParser()
     checksum_dict = {
         "algorithm": "SHA1",
@@ -28,7 +30,7 @@ def test_checksum_parser():
     assert checksum.algorithm == ChecksumAlgorithm.SHA1
 
 
-def test_invalid_checksum():
+def test_parse_invalid_checksum():
     checksum_parser = ChecksumParser()
     checksum_dict = {
         "algorithm": "SHA",
@@ -36,19 +38,20 @@ def test_invalid_checksum():
     }
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = checksum_parser.parse_checksum(checksum_dict)
+        checksum_parser.parse_checksum(checksum_dict)
 
-    assert err.value.messages[0] == "Error while parsing Checksum: ['Invalid Algorithm for checksum: SHA']"
+    TestCase().assertCountEqual(err.value.get_messages(),
+                                ["Error while parsing Checksum: ['Invalid Algorithm for checksum: SHA']"])
 
 
-def test_incomplete_checksum():
+def test_parse_incomplete_checksum():
     checksum_parser = ChecksumParser()
     checksum_dict = {
         "algorithm": "SHA1"
     }
 
     with pytest.raises(SPDXParsingError) as err:
-        _ = checksum_parser.parse_checksum(checksum_dict)
+        checksum_parser.parse_checksum(checksum_dict)
 
-    assert err.value.messages == [
-        "Error while constructing Checksum: ['SetterError Checksum: type of argument \"value\" must be str; got NoneType instead: None']"]
+    TestCase().assertCountEqual(err.value.get_messages(), [
+        "Error while constructing Checksum: ['SetterError Checksum: type of argument \"value\" must be str; got NoneType instead: None']"])
