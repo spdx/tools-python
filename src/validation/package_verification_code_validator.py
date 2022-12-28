@@ -5,7 +5,7 @@ from src.model.package import PackageVerificationCode
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-# TODO: make test for this
+# TODO: make test for this (https://github.com/spdx/tools-python/issues/386)
 def validate_verification_code(verification_code: PackageVerificationCode, parent_id: str) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.PACKAGE_VERIFICATION_CODE,

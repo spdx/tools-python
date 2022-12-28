@@ -48,7 +48,7 @@ def validate_package_within_document(package: Package, document: Document) -> Li
         if contained_in_package_relationships:
             validation_messages.append(
                 ValidationMessage(
-                    f"package must contain no elements if files_analyzed is False, but found {package_contains_relationships}",
+                    f"package must contain no elements if files_analyzed is False, but found {contained_in_package_relationships}",
                     context)
             )
 
@@ -72,28 +72,31 @@ def validate_package(package: Package, context: Optional[ValidationContext] = No
         for message in validate_url(homepage):
             validation_messages.append(ValidationMessage("homepage " + message, context))
 
-    if package.verification_code:
+    # TODO: is verification_code required if files_analyzed=True? (https://github.com/spdx/tools-python/issues/386)
+    verification_code = package.verification_code
+    if verification_code:
         if not package.files_analyzed:
             validation_messages.append(
                 ValidationMessage(
-                    f"verification_code must be None if files_analyzed is False, but is: {package.verification_code}",
+                    f"verification_code must be None if files_analyzed is False, but is: {verification_code}",
                     context))
         else:
-            validation_messages.extend(validate_verification_code(package.verification_code, package.spdx_id))
+            validation_messages.extend(validate_verification_code(verification_code, package.spdx_id))
 
     validation_messages.extend(validate_checksums(package.checksums, package.spdx_id))
 
     validation_messages.extend(validate_license_expression(package.license_concluded))
 
-    if package.license_info_from_files:
+    license_info_from_files = package.license_info_from_files
+    if license_info_from_files:
         if not package.files_analyzed:
             validation_messages.append(
                 ValidationMessage(
-                    f"license_info_from_files must be None if files_analyzed is False, but is: {package.license_info_from_files}",
+                    f"license_info_from_files must be None if files_analyzed is False, but is: {license_info_from_files}",
                     context)
             )
         else:
-            validation_messages.extend(validate_license_expressions(package.license_info_from_files))
+            validation_messages.extend(validate_license_expressions(license_info_from_files))
 
     validation_messages.extend(validate_license_expression(package.license_declared))
 

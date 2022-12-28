@@ -25,7 +25,6 @@ def test_valid_package():
     assert validation_messages == []
 
 
-# TODO: is verification_code required if files_analyzed=True?
 @pytest.mark.parametrize("package_input, expected_message",
                          [(get_package(files_analyzed=False, verification_code=get_package_verification_code()),
                            f'verification_code must be None if files_analyzed is False, but is: {get_package_verification_code()}'),

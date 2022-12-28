@@ -1,4 +1,3 @@
-import re
 from typing import List
 
 from src.model.external_document_ref import ExternalDocumentRef
