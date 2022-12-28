@@ -43,7 +43,7 @@ def validate_package_within_document(package: Package, document: Document) -> Li
     for message in validate_spdx_id(package.spdx_id, document):
         validation_messages.append(ValidationMessage(message, context))
 
-    # TODO: make test for this
+    # TODO: make test for this (https://github.com/spdx/tools-python/issues/386)
     if not package.files_analyzed:
         package_contains_relationships = [relationship for relationship in document.relationships if
                                           relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == package.spdx_id]
