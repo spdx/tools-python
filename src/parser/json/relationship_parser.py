@@ -41,10 +41,9 @@ class RelationshipParser:
 
         package_dicts: List[Dict] = input_doc_dict.get("packages", [])
 
-        relationships.extend(
-            parse_field_or_log_error(self.logger, package_dicts, lambda x: self.parse_has_files(package_dicts=x,
-                                                                                                existing_relationships=relationships),
-                                     []))
+        relationships.extend(parse_field_or_log_error(
+            self.logger, package_dicts,
+            lambda x: self.parse_has_files(package_dicts=x, existing_relationships=relationships), []))
 
         file_dicts: List[Dict] = input_doc_dict.get("files", [])
 
@@ -144,13 +143,13 @@ class RelationshipParser:
     def invert_relationship(self, relationship: Relationship) -> Relationship:
         return Relationship(related_spdx_element_id=relationship.spdx_element_id,
                             spdx_element_id=relationship.related_spdx_element_id,
-                            relationship_type=self.invvert_relationship_types[relationship.relationship_type],
+                            relationship_type=self.invert_relationship_types[relationship.relationship_type],
                             comment=relationship.comment)
 
-    invvert_relationship_types = {RelationshipType.DESCRIBES: RelationshipType.DESCRIBED_BY,
-                                  RelationshipType.DESCRIBED_BY: RelationshipType.DESCRIBES,
-                                  RelationshipType.CONTAINS: RelationshipType.CONTAINED_BY,
-                                  RelationshipType.CONTAINED_BY: RelationshipType.CONTAINS}
+    invert_relationship_types = {RelationshipType.DESCRIBES: RelationshipType.DESCRIBED_BY,
+                                 RelationshipType.DESCRIBED_BY: RelationshipType.DESCRIBES,
+                                 RelationshipType.CONTAINS: RelationshipType.CONTAINED_BY,
+                                 RelationshipType.CONTAINED_BY: RelationshipType.CONTAINS}
 
     @staticmethod
     def parse_file_dependencies(file_dicts: List[Dict]) -> List[

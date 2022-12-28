@@ -107,7 +107,7 @@ def test_parse_invalid_files():
     TestCase().assertCountEqual(err.value.get_messages(), [
         "Error while constructing File: ['SetterError File: type of argument " '"checksums" must be a list; got NoneType instead: None\']',
         'Error while constructing File: [\'SetterError File: type of argument "name" ' "must be str; got NoneType instead: None']",
-        'Error while parsing File: ["Error while parsing Checksum: [\'Invalid Algorithm for checksum: MD\']"]'])
+        'Error while parsing File: ["Error while parsing Checksum: [\'Invalid ChecksumAlgorithm: MD\']"]'])
 
 
 def test_parse_file_types():

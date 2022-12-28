@@ -63,29 +63,23 @@ class PackageParser:
                                                                   lambda x: x, True)
         homepage: Optional[str] = package_dict.get("homepage")
         license_comments: Optional[str] = package_dict.get("licenseComments")
-        license_concluded = parse_field_or_log_error(logger, package_dict.get("licenseConcluded"),
-                                                     lambda x: parse_field_or_no_assertion_or_none(x,
-                                                                                                   self.license_expression_parser.parse_license_expression),
-                                                     None)
+        license_concluded = parse_field_or_log_error(
+            logger, package_dict.get("licenseConcluded"),
+            lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression),
+            None)
 
         license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
             logger, package_dict.get("licenseDeclared"),
             lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression))
 
-        license_info_from_file: Optional[
-            Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger,
-                                                                                                  package_dict.get(
-                                                                                                      "licenseInfoFromFiles"),
-                                                                                                  lambda
-                                                                                                      x: parse_field_or_no_assertion_or_none(
-                                                                                                      x,
-                                                                                                      self.license_expression_parser.parse_license_expressions))
-        originator: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(logger,
-                                                                                       package_dict.get("originator"),
-                                                                                       lambda
-                                                                                           x: parse_field_or_no_assertion(
-                                                                                           x,
-                                                                                           self.actor_parser.parse_actor))
+        license_info_from_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = \
+            parse_field_or_log_error(
+                logger, package_dict.get("licenseInfoFromFiles"),
+                lambda x: parse_field_or_no_assertion_or_none(x,
+                                                              self.license_expression_parser.parse_license_expressions))
+        originator: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(
+            logger, package_dict.get("originator"),
+            lambda x: parse_field_or_no_assertion(x, self.actor_parser.parse_actor))
         package_file_name: Optional[str] = package_dict.get("packageFileName")
 
         package_verification_code: Optional[
@@ -155,7 +149,7 @@ class PackageParser:
             external_ref_category = ExternalPackageRefCategory[
                 json_str_to_enum_name(external_ref_category_str)]
         except KeyError:
-            raise SPDXParsingError([f"Invalid Category for ExternalPackageRef {external_ref_category_str}"])
+            raise SPDXParsingError([f"Invalid ExternalPackageRefCategory: {external_ref_category_str}"])
 
         return external_ref_category
 
