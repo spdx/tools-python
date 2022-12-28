@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from src.model.document import Document
 from src.model.snippet import Snippet
@@ -8,17 +8,22 @@ from src.validation.spdx_id_validators import validate_spdx_id
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_snippets(snippets: List[Snippet], document: Document) -> List[ValidationMessage]:
+def validate_snippets(snippets: List[Snippet], document: Optional[Document] = None) -> List[ValidationMessage]:
     validation_messages = []
-    for snippet in snippets:
-        validation_messages.extend(validate_snippet_within_document(snippet, document))
+    if document:
+        for snippet in snippets:
+            validation_messages.extend(validate_snippet_within_document(snippet, document))
+    else:
+        for snippet in snippets:
+            validation_messages.extend(validate_snippet(snippet))
 
     return validation_messages
 
 
 def validate_snippet_within_document(snippet: Snippet, document: Document) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
-    context = ValidationContext(spdx_id=snippet.spdx_id, element_type=SpdxElementType.SNIPPET, full_element=snippet)
+    context = ValidationContext(spdx_id=snippet.spdx_id, parent_id=document.creation_info.spdx_id,
+                                element_type=SpdxElementType.SNIPPET, full_element=snippet)
 
     messages: List[str] = validate_spdx_id(snippet.spdx_id, document)
     for message in messages:
@@ -33,8 +38,10 @@ def validate_snippet_within_document(snippet: Snippet, document: Document) -> Li
     return validation_messages
 
 
-def validate_snippet(snippet: Snippet, context: ValidationContext) -> List[ValidationMessage]:
+def validate_snippet(snippet: Snippet, context: Optional[ValidationContext] = None) -> List[ValidationMessage]:
     validation_messages = []
+    if not context:
+        context = ValidationContext(spdx_id=snippet.spdx_id, element_type=SpdxElementType.SNIPPET, full_element=snippet)
 
     if snippet.byte_range[0] < 1:
         validation_messages.append(

@@ -32,6 +32,7 @@ def test_invalid_file(file_input, spdx_id, expected_message):
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(spdx_id=spdx_id,
+                                                   parent_id=get_document().creation_info.spdx_id,
                                                    element_type=SpdxElementType.FILE,
                                                    full_element=file_input))
 

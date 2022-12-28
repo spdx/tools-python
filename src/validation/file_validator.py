@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from src.model.checksum import ChecksumAlgorithm
 from src.model.document import Document
@@ -9,17 +9,22 @@ from src.validation.spdx_id_validators import validate_spdx_id
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_files(files: List[File], document: Document) -> List[ValidationMessage]:
+def validate_files(files: List[File], document: Optional[Document] = None) -> List[ValidationMessage]:
     validation_messages = []
-    for file in files:
-        validation_messages.extend(validate_file_within_document(file, document))
+    if document:
+        for file in files:
+            validation_messages.extend(validate_file_within_document(file, document))
+    else:
+        for file in files:
+            validation_messages.extend(validate_file(file))
 
     return validation_messages
 
 
 def validate_file_within_document(file: File, document: Document) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
-    context = ValidationContext(spdx_id=file.spdx_id, element_type=SpdxElementType.FILE, full_element=file)
+    context = ValidationContext(spdx_id=file.spdx_id, parent_id=document.creation_info.spdx_id,
+                                element_type=SpdxElementType.FILE, full_element=file)
 
     for message in validate_spdx_id(file.spdx_id, document):
         validation_messages.append(ValidationMessage(message, context))
@@ -29,8 +34,10 @@ def validate_file_within_document(file: File, document: Document) -> List[Valida
     return validation_messages
 
 
-def validate_file(file: File, context: ValidationContext) -> List[ValidationMessage]:
+def validate_file(file: File, context: Optional[ValidationContext] = None) -> List[ValidationMessage]:
     validation_messages = []
+    if not context:
+        context = ValidationContext(spdx_id=file.spdx_id, element_type=SpdxElementType.FILE, full_element=file)
 
     if not file.name.startswith("./"):
         validation_messages.append(

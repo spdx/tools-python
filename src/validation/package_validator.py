@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from src.model.document import Document
 from src.model.package import Package
@@ -12,10 +12,14 @@ from src.validation.uri_validators import validate_url, validate_download_locati
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_packages(packages: List[Package], document: Document) -> List[ValidationMessage]:
+def validate_packages(packages: List[Package], document: Optional[Document] = None) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
-    for package in packages:
-        validation_messages.extend(validate_package_within_document(package, document))
+    if document:
+        for package in packages:
+            validation_messages.extend(validate_package_within_document(package, document))
+    else:
+        for package in packages:
+            validation_messages.extend(validate_package(package))
 
     return validation_messages
 
@@ -53,8 +57,10 @@ def validate_package_within_document(package: Package, document: Document) -> Li
     return validation_messages
 
 
-def validate_package(package: Package, context: ValidationContext) -> List[ValidationMessage]:
+def validate_package(package: Package, context: Optional[ValidationContext] = None) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
+    if not context:
+        context = ValidationContext(spdx_id=package.spdx_id, element_type=SpdxElementType.PACKAGE, full_element=package)
 
     download_location = package.download_location
     if isinstance(download_location, str):
