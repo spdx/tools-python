@@ -38,15 +38,17 @@ def test_invalid_checksum():
     with pytest.raises(SPDXParsingError) as err:
         _ = checksum_parser.parse_checksum(checksum_dict)
 
-    assert err.value.messages[0] == "Error while parsing Checksum: ['Algorithm SHA not valid for checksum.']"
+    assert err.value.messages[0] == "Error while parsing Checksum: ['Invalid Algorithm for checksum: SHA']"
+
 
 def test_incomplete_checksum():
     checksum_parser = ChecksumParser()
-    checksum_dict= {
+    checksum_dict = {
         "algorithm": "SHA1"
     }
 
     with pytest.raises(SPDXParsingError) as err:
         _ = checksum_parser.parse_checksum(checksum_dict)
 
-    assert err.value.messages == ["Error while constructing Checksum: ['SetterError Checksum: type of argument \"value\" must be str; got NoneType instead: None']"]
+    assert err.value.messages == [
+        "Error while constructing Checksum: ['SetterError Checksum: type of argument \"value\" must be str; got NoneType instead: None']"]

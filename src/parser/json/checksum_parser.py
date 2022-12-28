@@ -39,7 +39,7 @@ class ChecksumParser:
         try:
             checksum_algorithm = ChecksumAlgorithm[algorithm]
         except KeyError:
-            logger.append(f"Algorithm {algorithm} not valid for checksum.")
+            logger.append(f"Invalid Algorithm for checksum: {algorithm}")
             checksum_algorithm = None
         checksum_value: Optional[str] = checksum_dict.get("checksumValue")
         raise_parsing_error_if_logger_has_messages(logger, "Checksum")

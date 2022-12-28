@@ -13,7 +13,7 @@ from datetime import datetime
 import pytest
 
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import datetime_from_str
+from src.parser.json.dict_parsing_functions import datetime_from_str, json_str_to_enum_name
 
 
 def test_datetime_from_str():
@@ -25,11 +25,26 @@ def test_datetime_from_str():
 
 
 @pytest.mark.parametrize("invalid_date_str,expected_message",
-                         [(5, ['Could not convert str to datetime, invalid type: int']),
+                         [(5, ["Could not convert str to datetime, invalid type: int"]),
                           ("2010-02-03", ['Could not convert str to datetime, format of 2010-02-03 does not match '
                                           '"%Y-%m-%dT%H:%M:%SZ"'])])
 def test_datetime_from_str_error(invalid_date_str, expected_message):
     with pytest.raises(SPDXParsingError) as err:
         _ = datetime_from_str(invalid_date_str)
+
+    assert err.value.messages == expected_message
+
+def test_json_str_to_enum():
+    json_str = "BLAKE2b-256"
+
+    enum_name = json_str_to_enum_name(json_str)
+
+    assert enum_name == "BLAKE2B_256"
+
+@pytest.mark.parametrize("invalid_json_str,expected_message",
+                         [(5, ["Type for enum must be str not int"])])
+def test_invalid_json_str_to_enum(invalid_json_str,expected_message):
+    with pytest.raises(SPDXParsingError) as err:
+        _ = json_str_to_enum_name(invalid_json_str)
 
     assert err.value.messages == expected_message

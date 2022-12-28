@@ -45,7 +45,7 @@ class AnnotationParser:
         snippets: List[Dict] = input_doc_dict.get("snippets", [])
         self.parse_annotations_from_object(annotations, snippets)
 
-        raise_parsing_error_if_logger_has_messages(self.logger, "Annotations")
+        raise_parsing_error_if_logger_has_messages(self.logger, "annotations")
         return annotations
 
     def parse_annotations_from_object(self, annotations: List[Annotation], element_list: List[Dict]):
@@ -62,7 +62,7 @@ class AnnotationParser:
         for annotation_dict in annotation_dicts:
             annotations = append_parsed_field_or_log_error(self.logger, annotations, annotation_dict,
                                                                 lambda x: self.parse_annotation(x, spdx_id=spdx_id))
-        raise_parsing_error_if_logger_has_messages(logger, "Annotations")
+        raise_parsing_error_if_logger_has_messages(logger, "annotations")
 
         return annotations
 
@@ -94,7 +94,7 @@ class AnnotationParser:
         try:
             return AnnotationType[annotation_type]
         except KeyError:
-            raise SPDXParsingError([f"Invalid annotation type: {annotation_type}"])
+            raise SPDXParsingError([f"Invalid AnnotationType: {annotation_type}"])
 
     def parse_review(self, review_dict: Dict, spdx_id: str) -> Annotation:
         logger = Logger()
@@ -106,7 +106,7 @@ class AnnotationParser:
 
         annotation_type = AnnotationType.REVIEW
         comment: Optional[str] = review_dict.get("comment")
-        raise_parsing_error_if_logger_has_messages(logger, "Review")
+        raise_parsing_error_if_logger_has_messages(logger, "Annotation from revieweds")
 
         annotation = construct_or_raise_parsing_error(Annotation,
                                                       dict(spdx_id=spdx_id, annotation_type=annotation_type,
