@@ -37,7 +37,9 @@ def test_invalid_ranges(snippet_input, expected_message):
                                                                                     get_document(files=[get_file()]))
 
     expected = ValidationMessage(expected_message,
-                                 ValidationContext(spdx_id=snippet_input.spdx_id, element_type=SpdxElementType.SNIPPET,
+                                 ValidationContext(spdx_id=snippet_input.spdx_id,
+                                                   parent_id=get_document().creation_info.spdx_id,
+                                                   element_type=SpdxElementType.SNIPPET,
                                                    full_element=snippet_input))
 
     assert validation_messages == [expected]
