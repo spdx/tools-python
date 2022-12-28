@@ -28,6 +28,8 @@ def datetime_from_str(date_str: str) -> datetime:
 
 
 def json_str_to_enum_name(json_str: str) -> str:
+    if not isinstance(json_str, str):
+        raise SPDXParsingError([f"Type for enum must be str not {type(json_str).__name__}"])
     return json_str.replace("-", "_").upper()
 
 

@@ -105,7 +105,7 @@ class PackageParser:
                                                                         datetime_from_str)
 
         version_info: Optional[str] = package_dict.get("versionInfo")
-        raise_parsing_error_if_logger_has_messages(logger, f"Package {name}")
+        raise_parsing_error_if_logger_has_messages(logger, "Package")
 
         package = construct_or_raise_parsing_error(Package,
                                                    dict(spdx_id=spdx_id, name=name, download_location=download_location,
@@ -142,7 +142,7 @@ class PackageParser:
         ref_locator: Optional[str] = external_ref_dict.get("referenceLocator")
         ref_type: Optional[str] = external_ref_dict.get("referenceType")
         comment: Optional[str] = external_ref_dict.get("comment")
-        raise_parsing_error_if_logger_has_messages(logger, "external  ref")
+        raise_parsing_error_if_logger_has_messages(logger, "ExternalPackageRef")
         external_ref = construct_or_raise_parsing_error(ExternalPackageRef,
                                                         dict(category=ref_category, reference_type=ref_type,
                                                              locator=ref_locator, comment=comment))
@@ -155,7 +155,7 @@ class PackageParser:
             external_ref_category = ExternalPackageRefCategory[
                 json_str_to_enum_name(external_ref_category_str)]
         except KeyError:
-            raise SPDXParsingError([f"Category {external_ref_category_str} not valid for externalPackageRef."])
+            raise SPDXParsingError([f"Invalid Category for ExternalPackageRef {external_ref_category_str}"])
 
         return external_ref_category
 
@@ -175,7 +175,7 @@ class PackageParser:
         try:
             return PackagePurpose[json_str_to_enum_name(primary_package_purpose)]
         except KeyError:
-            raise SPDXParsingError([f"Invalid primaryPackagePurpose: {primary_package_purpose}"])
+            raise SPDXParsingError([f"Invalid PrimaryPackagePurpose: {primary_package_purpose}"])
 
     @staticmethod
     def parse_download_location(download_location: str) -> Union[str, SpdxNoAssertion, SpdxNone]:

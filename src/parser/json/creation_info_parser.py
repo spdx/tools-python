@@ -62,7 +62,7 @@ class CreationInfoParser:
                                                                            creation_info_dict.get("licenseListVersion"),
                                                                            self.parse_version)
         document_comment: Optional[str] = doc_dict.get("comment")
-        raise_parsing_error_if_logger_has_messages(logger, f"Document {name}")
+        raise_parsing_error_if_logger_has_messages(logger, "Document")
 
         creation_info = construct_or_raise_parsing_error(CreationInfo,
                                                          dict(spdx_version=spdx_version, spdx_id=spdx_id, name=name,

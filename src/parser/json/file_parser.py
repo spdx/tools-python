@@ -61,7 +61,7 @@ class FileParser:
         license_info_in_files: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
             logger, file_dict.get("licenseInfoInFiles"), self.license_expression_parser.parse_license_expression)
         notice_text: Optional[str] = file_dict.get("noticeText")
-        raise_parsing_error_if_logger_has_messages(logger, f"file {name}")
+        raise_parsing_error_if_logger_has_messages(logger, "File")
 
         file = construct_or_raise_parsing_error(File, dict(name=name, spdx_id=spdx_id, checksums=checksums,
                                                            attribution_texts=attribution_texts, comment=comment,
@@ -82,8 +82,8 @@ class FileParser:
             try:
                 file_type = FileType[file_type]
             except KeyError:
-                logger.append(f"FileType {file_type} is not valid.")
+                logger.append(f"Invalid FileType: {file_type}")
                 continue
             file_types.append(file_type)
-        raise_parsing_error_if_logger_has_messages(logger, "file_types")
+        raise_parsing_error_if_logger_has_messages(logger, "FileType")
         return file_types

@@ -72,7 +72,7 @@ class RelationshipParser:
         relationship_type: Optional[RelationshipType] = parse_field_or_log_error(logger, relationship_dict.get(
             "relationshipType"), self.parse_relationship_type)
         relationship_comment: Optional[str] = relationship_dict.get("comment")
-        raise_parsing_error_if_logger_has_messages(logger, "relationship")
+        raise_parsing_error_if_logger_has_messages(logger, "Relationship")
 
         relationship = construct_or_raise_parsing_error(Relationship, dict(spdx_element_id=spdx_element_id,
                                                                            relationship_type=relationship_type,
@@ -85,9 +85,7 @@ class RelationshipParser:
         try:
             relationship_type = RelationshipType[json_str_to_enum_name(relationship_type_str)]
         except KeyError:
-            raise SPDXParsingError([f"RelationshipType {relationship_type_str} is not valid."])
-        except AttributeError:
-            raise SPDXParsingError([f"RelationshipType must be str, not {type(relationship_type_str).__name__}."])
+            raise SPDXParsingError([f"Invalid RelationshipType: {relationship_type_str}"])
         return relationship_type
 
     def parse_document_describes(self, doc_spdx_id: str, described_spdx_ids: List[str],
@@ -104,7 +102,7 @@ class RelationshipParser:
                 continue
             if not self.check_if_relationship_exists(describes_relationship, existing_relationships):
                 describes_relationships.append(describes_relationship)
-        raise_parsing_error_if_logger_has_messages(logger, "describes_relationship")
+        raise_parsing_error_if_logger_has_messages(logger, "document describes relationships")
 
         return describes_relationships
 
@@ -128,7 +126,7 @@ class RelationshipParser:
                 if not self.check_if_relationship_exists(relationship=contains_relationship,
                                                          existing_relationships=existing_relationships):
                     contains_relationships.append(contains_relationship)
-        raise_parsing_error_if_logger_has_messages(logger, "describes_relationship")
+        raise_parsing_error_if_logger_has_messages(logger, "package contains relationships")
 
         return contains_relationships
 

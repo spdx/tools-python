@@ -103,8 +103,8 @@ def test_parse_falsy_files():
                                   '"checksums" must be a list; got NoneType instead: None\']',
                                   'Error while constructing File: [\'SetterError File: type of argument "name" '
                                   "must be str; got NoneType instead: None']",
-                                  'Error while parsing file None: ["Error while parsing Checksum: [\'Algorithm '
-                                  'MD not valid for checksum.\']"]']
+                                  'Error while parsing File: ["Error while parsing Checksum: [\'Invalid Algorithm '
+                                  'for checksum: MD\']"]']
 
 
 def test_parse_file_types():
@@ -123,4 +123,4 @@ def test_parse_invalid_file_types():
     with pytest.raises(SPDXParsingError) as err:
         _ = file_parser.parse_file_types(file_types_list)
 
-    assert err.value.messages == ["Error while parsing file_types: ['FileType APPLICAON is not valid.']"]
+    assert err.value.messages == ["Error while parsing FileType: ['Invalid FileType: APPLICAON']"]
