@@ -129,13 +129,13 @@ def test_parse_has_files_without_duplicating_relationships():
                 "hasFiles": ["SPDXRef-File1", "SPDXRef-File2"]
             }]
     }
-    created_relationships = [
+    existing_relationships = [
         Relationship(spdx_element_id="SPDXRef-Package", relationship_type=RelationshipType.CONTAINS,
                      related_spdx_element_id="SPDXRef-File1", comment="This relationship has a comment."),
         Relationship(spdx_element_id="SPDXRef-File2", relationship_type=RelationshipType.CONTAINED_BY,
                      related_spdx_element_id="SPDXRef-Package")]
 
     relationships = relationship_parser.parse_has_files(document_dict.get("packages"),
-                                                        existing_relationships=created_relationships)
+                                                        existing_relationships=existing_relationships)
 
     assert len(relationships) == 0

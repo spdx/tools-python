@@ -21,7 +21,7 @@ from src.parser.error import SPDXParsingError
 from src.parser.json.creation_info_parser import CreationInfoParser
 
 
-def test_pares_creation_info():
+def test_parse_creation_info():
     creation_info_parser = CreationInfoParser()
     doc_dict = {
         "spdxVersion": "2.3",

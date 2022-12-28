@@ -156,7 +156,7 @@ def test_parse_invalid_package():
         package_parser.parse_package(package_dict)
 
     TestCase().assertCountEqual(err.value.get_messages(), [
-        'Error while parsing Package: ["Error while parsing Checksum: [\'Invalid Algorithm for checksum: SHA\']"]'])
+        'Error while parsing Package: ["Error while parsing Checksum: [\'Invalid ChecksumAlgorithm: SHA\']"]'])
 
 
 def test_parse_packages():
@@ -184,7 +184,7 @@ def test_parse_packages():
 
     TestCase().assertCountEqual(err.value.get_messages(),
                                 ['Error while parsing Package: ["Error while parsing Checksum: '
-                                 '[\'Invalid Algorithm for checksum: SHA\']"]',
+                                 '[\'Invalid ChecksumAlgorithm: SHA\']"]',
                                  "Error while constructing Package: ['SetterError Package: type of argument "
                                  '"name" must be str; got int instead: 5\']'])
 
@@ -200,3 +200,12 @@ def test_parse_external_ref():
 
     TestCase().assertCountEqual(err.value.get_messages(), [
         "Error while constructing ExternalPackageRef: ['SetterError " 'ExternalPackageRef: type of argument "category" must be ' "src.model.package.ExternalPackageRefCategory; got NoneType instead: None', " '\'SetterError ExternalPackageRef: type of argument "locator" must be str; ' "got NoneType instead: None']"])
+
+def test_parse_invalid_external_package_ref_category():
+    package_parser = PackageParser()
+    external_package_ref_category = "TEST"
+
+    with pytest.raises(SPDXParsingError) as err:
+        package_parser.parse_external_ref_category(external_package_ref_category)
+
+    TestCase().assertCountEqual(err.value.get_messages(), ["Invalid ExternalPackageRefCategory: TEST"])

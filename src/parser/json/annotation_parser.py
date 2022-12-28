@@ -34,11 +34,8 @@ class AnnotationParser:
         self.parse_annotations_from_object(annotations, [input_doc_dict])
         reviews: List[Dict] = input_doc_dict.get("revieweds", [])
         for review in reviews:
-            annotations = append_parsed_field_or_log_error(self.logger, annotations, review,
-                                                                lambda x: self.parse_review(x,
-                                                                                            spdx_id=input_doc_dict.get(
-                                                                                                "SPDXID")))
-
+            annotations = append_parsed_field_or_log_error(
+                self.logger, annotations, review, lambda x: self.parse_review(x, spdx_id=input_doc_dict.get("SPDXID")))
         packages: List[Dict] = input_doc_dict.get("packages", [])
         self.parse_annotations_from_object(annotations, packages)
         files: List[Dict] = input_doc_dict.get("files", [])
@@ -54,8 +51,9 @@ class AnnotationParser:
             element_spdx_id: Optional[str] = element.get("SPDXID")
             element_annotations: List[Dict] = element.get("annotations", [])
             annotations.extend(parse_field_or_log_error(self.logger, element_annotations,
-                                                        lambda y: self.parse_annotation(y, spdx_id=element_spdx_id),
-                                                        [], True))
+
+                                                            lambda y: self.parse_annotation(y, spdx_id=element_spdx_id),
+                                                            [], True))
 
     def parse_annotation(self, annotation_dict: Dict, spdx_id: Optional[str] = None) -> Annotation:
         logger = Logger()
@@ -75,8 +73,8 @@ class AnnotationParser:
         raise_parsing_error_if_logger_has_messages(logger, "Annotation")
         annotation_dict = construct_or_raise_parsing_error(Annotation,
                                                            dict(spdx_id=spdx_id, annotation_type=annotation_type,
-                                                           annotator=annotator, annotation_date=annotation_date,
-                                                           annotation_comment=annotation_comment))
+                                                                annotator=annotator, annotation_date=annotation_date,
+                                                                annotation_comment=annotation_comment))
 
         return annotation_dict
 

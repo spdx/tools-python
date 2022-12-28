@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import datetime
-from typing import Any, Callable, Dict, List, Union
+from typing import Any, Callable, Dict, List, Union, Optional
 
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
@@ -74,7 +74,8 @@ def raise_parsing_error_if_logger_has_messages(logger: Logger, parsed_object_nam
         else:
             raise SPDXParsingError(logger.get_messages())
 
-def parse_field_or_no_assertion_or_none(field: str, method_for_field: Callable=lambda x: x) -> Any:
+
+def parse_field_or_no_assertion_or_none(field: Optional[str], method_for_field: Callable = lambda x: x) -> Any:
     if field == SpdxNoAssertion().__str__():
         return SpdxNoAssertion()
     elif field == SpdxNone().__str__():
@@ -82,7 +83,8 @@ def parse_field_or_no_assertion_or_none(field: str, method_for_field: Callable=l
     else:
         return method_for_field(field)
 
-def parse_field_or_no_assertion(field: str, method_for_field: Callable = lambda x: x) -> Any:
+
+def parse_field_or_no_assertion(field: Optional[str], method_for_field: Callable = lambda x: x) -> Any:
     if field == SpdxNoAssertion().__str__():
         return SpdxNoAssertion()
     else:
@@ -94,6 +96,7 @@ def parse_list_of_elements(list_of_elements: List[Dict], method_to_parse_element
         logger = Logger()
     parsed_elements = []
     for element_dict in list_of_elements:
-        parsed_elements = append_parsed_field_or_log_error(logger, parsed_elements, element_dict, method_to_parse_element)
+        parsed_elements = append_parsed_field_or_log_error(logger, parsed_elements, element_dict,
+                                                           method_to_parse_element)
     raise_parsing_error_if_logger_has_messages(logger)
     return parsed_elements
