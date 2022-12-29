@@ -22,7 +22,7 @@ from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
 from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, datetime_from_str, \
     raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, construct_or_raise_parsing_error, \
-    parse_field_or_log_error, parse_field_or_no_assertion_or_none, parse_field_or_no_assertion, parse_list_of_elements
+    parse_field_or_log_error, parse_field_or_no_assertion_or_none, parse_field_or_no_assertion
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 

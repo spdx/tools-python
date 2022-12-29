@@ -13,7 +13,6 @@ import os
 import pytest
 
 from src.model.document import Document
-from src.parser.error import SPDXParsingError
 from src.parser.json.json_parser import JsonParser
 
 def test_parse_json_file_not_found():
