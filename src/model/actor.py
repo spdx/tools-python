@@ -29,3 +29,10 @@ class Actor:
 
     def __init__(self, actor_type: ActorType, name: str, email: Optional[str] = None):
         check_types_and_set_values(self, locals())
+
+    def to_serialized_string(self) -> str:
+        """
+        All serialization formats use the same representation of an actor, so this method is included in the data model
+        """
+        optional_email = f" ({self.email})" if self.email else ""
+        return "".join([f"{self.actor_type.name.title()}:", f" {self.name}", optional_email])
