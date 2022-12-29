@@ -19,9 +19,10 @@ from src.model.version import Version
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
 from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, datetime_from_str, \
+from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, \
     raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error, parse_field_or_log_error, \
     parse_field_or_no_assertion
+from src.datetime_conversions import datetime_from_str
 from src.parser.logger import Logger
 
 

@@ -8,7 +8,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional
 
 from src.model.spdx_no_assertion import SpdxNoAssertion
@@ -16,17 +15,6 @@ from src.model.spdx_none import SpdxNone
 from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 from src.parser.logger import Logger
-
-
-def datetime_from_str(date_str: str) -> datetime:
-    if not isinstance(date_str, str):
-        raise SPDXParsingError([f"Could not convert str to datetime, invalid type: {type(date_str).__name__}"])
-    try:
-        date = datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
-    except ValueError:
-        raise SPDXParsingError(
-            [f'Could not convert str to datetime, format of {date_str} does not match "%Y-%m-%dT%H:%M:%SZ"'])
-    return date
 
 
 def json_str_to_enum_name(json_str: str) -> str:
