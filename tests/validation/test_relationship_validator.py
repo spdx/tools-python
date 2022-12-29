@@ -15,15 +15,19 @@ import pytest
 
 from src.model.document import Document
 from src.model.relationship import Relationship, RelationshipType
+from src.model.spdx_no_assertion import SpdxNoAssertion
+from src.model.spdx_none import SpdxNone
 from src.validation.relationship_validator import validate_relationship
 from src.validation.validation_message import ValidationMessage, SpdxElementType, ValidationContext
 from tests.valid_defaults import get_document, get_package, get_relationship, get_file
 
 
-def test_valid_relationship():
+@pytest.mark.parametrize("related_spdx_element",
+                         ["SPDXRef-Package", SpdxNoAssertion(), SpdxNone()])
+def test_valid_relationship(related_spdx_element):
     document: Document = get_document(packages=[get_package(spdx_id="SPDXRef-Package")])
 
-    relationship = Relationship("SPDXRef-DOCUMENT", RelationshipType.AMENDS, "SPDXRef-Package", comment="comment")
+    relationship = Relationship("SPDXRef-DOCUMENT", RelationshipType.AMENDS, related_spdx_element, comment="comment")
     validation_messages: List[ValidationMessage] = validate_relationship(relationship, document, "2.3")
 
     assert validation_messages == []

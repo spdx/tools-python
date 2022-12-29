@@ -15,7 +15,7 @@ from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
 from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, \
     construct_or_raise_parsing_error, \
-    parse_field_or_log_error, parse_list_of_elements
+    parse_field_or_log_error, parse_field_or_no_assertion_or_none
 from src.parser.logger import Logger
 
 
@@ -58,7 +58,7 @@ class RelationshipParser:
     def parse_relationship(self, relationship_dict: Dict) -> Relationship:
         logger = Logger()
         spdx_element_id: Optional[str] = relationship_dict.get("spdxElementId")
-        related_spdx_element: Optional[str] = relationship_dict.get("relatedSpdxElement")
+        related_spdx_element: Optional[str] = parse_field_or_no_assertion_or_none(relationship_dict.get("relatedSpdxElement"))
         relationship_type: Optional[RelationshipType] = parse_field_or_log_error(logger, relationship_dict.get(
             "relationshipType"), self.parse_relationship_type)
         relationship_comment: Optional[str] = relationship_dict.get("comment")

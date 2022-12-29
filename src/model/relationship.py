@@ -9,8 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from enum import auto, Enum
-from typing import Optional
+from typing import Optional, Union
 
+from src.model.spdx_no_assertion import SpdxNoAssertion
+from src.model.spdx_none import SpdxNone
 from src.model.typing.dataclass_with_properties import dataclass_with_properties
 from src.model.typing.type_checks import check_types_and_set_values
 
@@ -67,9 +69,9 @@ class RelationshipType(Enum):
 class Relationship:
     spdx_element_id: str
     relationship_type: RelationshipType
-    related_spdx_element_id: str
+    related_spdx_element_id: Union[str, SpdxNone, SpdxNoAssertion]
     comment: Optional[str] = None
 
-    def __init__(self, spdx_element_id: str, relationship_type: RelationshipType, related_spdx_element_id: str,
-                 comment: Optional[str] = None):
+    def __init__(self, spdx_element_id: str, relationship_type: RelationshipType,
+                 related_spdx_element_id: Union[str, SpdxNone, SpdxNoAssertion], comment: Optional[str] = None):
         check_types_and_set_values(self, locals())

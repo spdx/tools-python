@@ -9,10 +9,12 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import List
+from typing import List, Union
 
 from src.model.document import Document
 from src.model.relationship import Relationship, RelationshipType
+from src.model.spdx_no_assertion import SpdxNoAssertion
+from src.model.spdx_none import SpdxNone
 from src.validation.spdx_id_validators import validate_spdx_id
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
@@ -30,12 +32,14 @@ def validate_relationship(relationship: Relationship, document: Document, spdx_v
     context = ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
                                 full_element=relationship)
 
-    first_id: str = relationship.spdx_element_id
-    second_id: str = relationship.related_spdx_element_id
     relationship_type: RelationshipType = relationship.relationship_type
 
-    for spdx_id in [first_id, second_id]:
-        messages: List[str] = validate_spdx_id(spdx_id, document, check_document=True)
+    messages: List[str] = validate_spdx_id(relationship.spdx_element_id, document, check_document=True)
+    for message in messages:
+        validation_messages.append(ValidationMessage(message, context))
+
+    if relationship.related_spdx_element_id not in [SpdxNone(), SpdxNoAssertion()]:
+        messages: List[str] = validate_spdx_id(relationship.related_spdx_element_id, document, check_document=True)
         for message in messages:
             validation_messages.append(ValidationMessage(message, context))
 
