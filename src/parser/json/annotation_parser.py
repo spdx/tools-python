@@ -15,8 +15,9 @@ from src.model.actor import Actor
 from src.model.annotation import Annotation, AnnotationType
 from src.parser.error import SPDXParsingError
 from src.parser.json.actor_parser import ActorParser
-from src.parser.json.dict_parsing_functions import datetime_from_str, construct_or_raise_parsing_error, \
+from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_error, \
     parse_field_or_log_error, append_parsed_field_or_log_error, raise_parsing_error_if_logger_has_messages
+from src.datetime_conversions import datetime_from_str
 from src.parser.logger import Logger
 
 
