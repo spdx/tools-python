@@ -9,10 +9,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import re
-from typing import Union, Pattern, Match, Optional
+from typing import Pattern, Match, Optional
 
 from src.model.actor import Actor, ActorType
-from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.parser.error import SPDXParsingError
 from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_error
 

@@ -18,7 +18,7 @@ from src.model.spdx_none import SpdxNone
 from src.parser.json.checksum_parser import ChecksumParser
 from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, \
     construct_or_raise_parsing_error, parse_field_or_log_error, \
-    parse_field_or_no_assertion_or_none, parse_list_of_elements
+    parse_field_or_no_assertion_or_none
 from src.parser.json.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
