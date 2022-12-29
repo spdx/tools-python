@@ -66,8 +66,9 @@ def write_package(package: Package, text_output: TextIO):
         if external_reference.comment:
             write_text_value("ExternalRefComment", external_reference.comment, text_output)
 
-    write_value("PrimaryPackagePurpose", transform_enum_name_to_tv(package.primary_package_purpose.name),
-                text_output, True)
+    if package.primary_package_purpose:
+        write_value("PrimaryPackagePurpose", transform_enum_name_to_tv(package.primary_package_purpose.name),
+                    text_output)
 
     if package.built_date:
         write_value("BuiltDate", datetime_to_iso_string(package.built_date), text_output)
