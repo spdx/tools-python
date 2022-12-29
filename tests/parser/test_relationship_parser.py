@@ -13,6 +13,7 @@ from unittest import TestCase
 import pytest
 
 from src.model.relationship import RelationshipType, Relationship
+from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.parser.error import SPDXParsingError
 from src.parser.json.relationship_parser import RelationshipParser
 
@@ -23,7 +24,7 @@ def test_parse_relationship():
     relationship_dict = {
         "spdxElementId": "SPDXRef-DOCUMENT",
         "relationshipType": "CONTAINS",
-        "relatedSpdxElement": "SPDXRef-Package",
+        "relatedSpdxElement": "NOASSERTION",
         "comment": "Comment."
     }
 
@@ -31,7 +32,7 @@ def test_parse_relationship():
 
     assert relationship.relationship_type == RelationshipType.CONTAINS
     assert relationship.spdx_element_id == "SPDXRef-DOCUMENT"
-    assert relationship.related_spdx_element_id == "SPDXRef-Package"
+    assert relationship.related_spdx_element_id == SpdxNoAssertion()
     assert relationship.comment == "Comment."
 
 
