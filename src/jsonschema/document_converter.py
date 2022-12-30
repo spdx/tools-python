@@ -86,9 +86,6 @@ class DocumentConverter(TypedConverter):
                     document.extracted_licensing_info]
         elif document_property == DocumentProperty.NAME:
             return document.creation_info.name
-        elif document_property == DocumentProperty.REVIEWEDS:
-            # Deprecated, converted to relationship on parsing
-            pass
         elif document_property == DocumentProperty.SPDX_VERSION:
             return document.creation_info.spdx_version
         elif document_property == DocumentProperty.DOCUMENT_NAMESPACE:

@@ -22,7 +22,6 @@ class DocumentProperty(JsonProperty):
     EXTERNAL_DOCUMENT_REFS = auto()
     HAS_EXTRACTED_LICENSING_INFO = auto()
     NAME = auto()
-    REVIEWEDS = auto()
     SPDX_VERSION = auto()
     DOCUMENT_NAMESPACE = auto()
     DOCUMENT_DESCRIBES = auto()
