@@ -17,9 +17,6 @@ from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, wr
 
 
 def write_creation_info(creation_info: CreationInfo, text_output: TextIO):
-    """
-    Write the creation info to text_output.
-    """
     write_value("SPDXVersion", creation_info.spdx_version, text_output)
     write_value("DataLicense", creation_info.data_license, text_output)
     write_value("DocumentNamespace", creation_info.document_namespace, text_output, True)
@@ -36,11 +33,7 @@ def write_creation_info(creation_info: CreationInfo, text_output: TextIO):
     write_separator(text_output)
 
     text_output.write("## Creation Information\n")
-    # Write sorted creators
     for creator in creation_info.creators:
         write_value("Creator", creator.to_serialized_string(), text_output)
-
-    # write created
     write_value("Created", datetime_to_iso_string(creation_info.created), text_output)
-    # possible comment
     write_text_value("CreatorComment", creation_info.creator_comment, text_output, True)

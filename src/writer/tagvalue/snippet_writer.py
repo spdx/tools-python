@@ -16,9 +16,6 @@ from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, wr
 
 
 def write_snippet(snippet: Snippet, output_text: TextIO):
-    """
-    Write snippet fields to out.
-    """
     output_text.write("## Snippet Information\n")
     write_value("SnippetSPDXID", snippet.spdx_id, output_text)
     write_value("SnippetFromFileSPDXID", snippet.file_spdx_id, output_text)

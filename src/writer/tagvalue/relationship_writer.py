@@ -15,9 +15,6 @@ from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, wr
 
 
 def write_relationship(relationship: Relationship, text_output: TextIO):
-    """
-    Write a relationship to text_output.
-    """
     write_value("Relationship", " ".join(
         [relationship.spdx_element_id, relationship.relationship_type.name, relationship.related_spdx_element_id]),
                 text_output)
