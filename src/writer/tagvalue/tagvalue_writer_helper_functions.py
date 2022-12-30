@@ -50,9 +50,8 @@ def transform_enum_name_to_tv(enum_str: str) -> str:
 
 
 def write_optional_heading(optional_field: Any, heading: str, text_output: TextIO):
-    if not optional_field:
-        return
-    text_output.write(heading)
+    if optional_field:
+        text_output.write(heading)
 
 
 def write_list_of_elements(list_of_elements: List[Any], write_method: Callable[[Any, TextIO], None],
@@ -66,12 +65,8 @@ def write_list_of_elements(list_of_elements: List[Any], write_method: Callable[[
 def write_actor_or_no_assertion(tag: str, element_to_write: Any, text_output: TextIO, optional: bool):
     if optional and not element_to_write:
         return
-    if isinstance(element_to_write, SpdxNoAssertion):
-        write_value(tag, element_to_write, text_output)
-        return
     if isinstance(element_to_write, Actor):
         write_value(tag, element_to_write.to_serialized_string(), text_output)
-        return
     else:
         write_value(tag, element_to_write, text_output)
 
@@ -81,16 +76,11 @@ def write_field_or_none_or_no_assertion(tag: str, element_to_write: Union[
                                         optional: bool = False):
     if optional and not element_to_write:
         return
-    if isinstance(element_to_write, (SpdxNone, SpdxNoAssertion)):
+    if isinstance(element_to_write, (SpdxNone, SpdxNoAssertion, str)):
         write_value(tag, element_to_write, text_output)
-        return
-    if isinstance(element_to_write, LicenseExpression):
+    elif isinstance(element_to_write, LicenseExpression):
         write_value(tag, element_to_write.expression_string, text_output)
-        return
-    if isinstance(element_to_write, str):
-        write_value(tag, element_to_write, text_output)
-        return
-    if isinstance(element_to_write, list):
+    elif isinstance(element_to_write, list):
         for element in element_to_write:
             write_value(tag, element.expression_string, text_output)
 
@@ -122,10 +112,11 @@ def scan_relationships(relationships: List[Relationship], packages: List[Package
     return relationships_to_write, contained_files_by_package_id
 
 
-def determine_files_containing_snippets(snippets: List[Snippet], files: List[File]) -> Dict:
-    contained_snippets_by_file_id = dict()
+def get_file_ids_with_contained_snippets(snippets: List[Snippet], files: List[File]) -> Dict:
+    file_ids_with_contained_snippets = dict()
+    file_spdx_ids: List[str] = [file.spdx_id for file in files]
     for snippet in snippets:
-        if snippet.file_spdx_id in [file.spdx_id for file in files]:
-            contained_snippets_by_file_id.setdefault(snippet.file_spdx_id, []).append(snippet)
+        if snippet.file_spdx_id in file_spdx_ids:
+            file_ids_with_contained_snippets.setdefault(snippet.file_spdx_id, []).append(snippet)
 
-    return contained_snippets_by_file_id
+    return file_ids_with_contained_snippets

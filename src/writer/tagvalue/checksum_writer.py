@@ -18,7 +18,7 @@ def write_checksum_to_tag_value(checksum: Checksum) -> str:
         algorithm_name = CHECKSUM_ALGORITHM_TO_TV.get(algorithm_name)
         if algorithm_name is None:
             raise ValueError(f"Missing conversion rule for converting {checksum.algorithm.name} to tag-value string")
-    return "{0}: {1}".format(algorithm_name, checksum.value)
+    return f"{algorithm_name}: {checksum.value}"
 
 
 CHECKSUM_ALGORITHM_TO_TV = {
