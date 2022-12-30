@@ -38,7 +38,7 @@ def test_json_property_names(converter: ExternalDocumentRefConverter,
 
 
 def test_successful_conversion(converter: ExternalDocumentRefConverter):
-    converter.checksum_converter.convert.return_value = "dummy_converted_checksum"
+    converter.checksum_converter.convert.return_value = "mock_converted_checksum"
     checksum = Checksum(ChecksumAlgorithm.SHA1, "123")
     external_document_ref = ExternalDocumentRef("document_ref_id", "document_uri", checksum)
 
@@ -48,7 +48,7 @@ def test_successful_conversion(converter: ExternalDocumentRefConverter):
                converter.json_property_name(ExternalDocumentRefProperty.EXTERNAL_DOCUMENT_ID)] == "document_ref_id"
     assert converted_dict[converter.json_property_name(ExternalDocumentRefProperty.SPDX_DOCUMENT)] == "document_uri"
     assert converted_dict[
-               converter.json_property_name(ExternalDocumentRefProperty.CHECKSUM)] == "dummy_converted_checksum"
+               converter.json_property_name(ExternalDocumentRefProperty.CHECKSUM)] == "mock_converted_checksum"
 
 
 def test_json_type(converter: ExternalDocumentRefConverter):
