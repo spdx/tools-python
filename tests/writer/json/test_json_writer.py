@@ -46,16 +46,18 @@ def test_write_json(temporary_file_path: str):
     package = Package("packageId", "packageName", SpdxNone())
     file = File("fileName", "fileId", [Checksum(ChecksumAlgorithm.SHA1, "fileSha1")])
     snippet = Snippet("snippetId", "snippetFileId", (1, 2))
-    document = Document(creation_info, annotations=[
+    relationships = [
+        Relationship(creation_info.spdx_id, RelationshipType.DESCRIBES, "packageId"),
+        Relationship(creation_info.spdx_id, RelationshipType.DESCRIBES, "fileId", "relationshipComment"),
+        Relationship("relationshipOriginId", RelationshipType.AMENDS, "relationShipTargetId")]
+    annotations = [
         Annotation("documentId", AnnotationType.REVIEW, Actor(ActorType.PERSON, "reviewerName"),
                    datetime(2022, 12, 2), "reviewComment"),
         Annotation("fileId", AnnotationType.OTHER, Actor(ActorType.TOOL, "toolName"), datetime(2022, 12, 3),
-                   "otherComment")],
-                        extracted_licensing_info=[ExtractedLicensingInfo("licenseId", "licenseText")], relationships=[
-            Relationship(creation_info.spdx_id, RelationshipType.DESCRIBES, "packageId"),
-            Relationship(creation_info.spdx_id, RelationshipType.DESCRIBES, "fileId", "relationshipComment"),
-            Relationship("relationshipOriginId", RelationshipType.AMENDS, "relationShipTargetId")], packages=[package],
-                        files=[file], snippets=[snippet])
+                   "otherComment")]
+    extracted_licensing_info = [ExtractedLicensingInfo("licenseId", "licenseText")]
+    document = Document(creation_info, annotations=annotations, extracted_licensing_info=extracted_licensing_info,
+                        relationships=relationships, packages=[package], files=[file], snippets=[snippet])
     writer.write_document(document, temporary_file_path)
 
     with open(temporary_file_path) as written_file:
