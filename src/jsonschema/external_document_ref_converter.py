@@ -16,7 +16,6 @@ from src.jsonschema.external_document_ref_properties import ExternalDocumentRefP
 from src.jsonschema.json_property import JsonProperty
 from src.model.document import Document
 from src.model.external_document_ref import ExternalDocumentRef
-from src.writer.casing_tools import snake_case_to_camel_case
 
 
 class ExternalDocumentRefConverter(TypedConverter[ExternalDocumentRef]):
@@ -24,9 +23,6 @@ class ExternalDocumentRefConverter(TypedConverter[ExternalDocumentRef]):
 
     def __init__(self):
         self.checksum_converter = ChecksumConverter()
-
-    def json_property_name(self, external_document_ref_property: ExternalDocumentRefProperty) -> str:
-        return snake_case_to_camel_case(external_document_ref_property.name)
 
     def _get_property_value(self, external_document_ref: ExternalDocumentRef,
                             external_document_ref_property: ExternalDocumentRefProperty,

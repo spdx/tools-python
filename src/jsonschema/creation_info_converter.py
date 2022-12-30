@@ -16,7 +16,6 @@ from src.jsonschema.creation_info_properties import CreationInfoProperty
 from src.jsonschema.json_property import JsonProperty
 from src.jsonschema.optional_utils import apply_if_present
 from src.model.document import CreationInfo, Document
-from src.writer.casing_tools import snake_case_to_camel_case
 
 
 class CreationInfoConverter(TypedConverter[CreationInfo]):
@@ -25,9 +24,6 @@ class CreationInfoConverter(TypedConverter[CreationInfo]):
 
     def get_json_type(self) -> Type[JsonProperty]:
         return CreationInfoProperty
-
-    def json_property_name(self, creation_info_property: CreationInfoProperty) -> str:
-        return snake_case_to_camel_case(creation_info_property.name)
 
     def _get_property_value(self, creation_info: CreationInfo, creation_info_property: CreationInfoProperty,
                             _document: Document = None) -> Any:

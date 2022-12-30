@@ -19,12 +19,11 @@ from src.jsonschema.json_property import JsonProperty
 from src.jsonschema.optional_utils import apply_if_present
 from src.jsonschema.package_properties import PackageProperty
 from src.jsonschema.package_verification_code_converter import PackageVerificationCodeConverter
-from src.model.relationship_filters import find_package_contains_file_relationships, \
-    find_file_contained_by_package_relationships
 from src.model.actor import Actor
 from src.model.document import Document
 from src.model.package import Package
-from src.writer.casing_tools import snake_case_to_camel_case
+from src.model.relationship_filters import find_package_contains_file_relationships, \
+    find_file_contained_by_package_relationships
 
 
 class PackageConverter(TypedConverter[Package]):
@@ -42,7 +41,7 @@ class PackageConverter(TypedConverter[Package]):
     def json_property_name(self, package_property: PackageProperty) -> str:
         if package_property == PackageProperty.SPDX_ID:
             return "SPDXID"
-        return snake_case_to_camel_case(package_property.name)
+        return super().json_property_name(package_property)
 
     def _get_property_value(self, package: Package, package_property: PackageProperty,
                             document: Document = None) -> Any:
