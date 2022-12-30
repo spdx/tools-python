@@ -29,18 +29,10 @@ def write_document_to_file(document: Document, file_name: str):
 
 
 def write_document(document: Document, text_output: TextIO):
-    """
-    Write a SPDX tag value document.
-    - document - src.document instance.
-    - text_output - file like object that will be written to.
-    """
-
     text_output.write("## Document Information\n")
-    # Write out creation info
     write_creation_info(document.creation_info, text_output)
     write_separator(text_output)
 
-    # Write sorted annotations
     write_optional_heading(document.annotations, "## Annotations\n", text_output)
     write_list_of_elements(document.annotations, write_annotation, text_output, True)
 
@@ -52,18 +44,15 @@ def write_document(document: Document, text_output: TextIO):
     filed_snippet_ids = [snippet.spdx_id for snippets_list in contained_snippets_by_file_id.values()
                          for snippet in snippets_list]
 
-    # Write Relationships
     write_optional_heading(relationships_to_write, "## Relationships\n", text_output)
     write_list_of_elements(relationships_to_write, write_relationship, text_output)
     write_separator(text_output)
 
-    # Write snippet info
     for snippet in document.snippets:
         if snippet.spdx_id not in filed_snippet_ids:
             write_snippet(snippet, text_output)
             write_separator(text_output)
 
-    # Write file info
     for file in document.files:
         if file.spdx_id not in packaged_file_ids:
             write_file(file, text_output)
@@ -71,7 +60,6 @@ def write_document(document: Document, text_output: TextIO):
             if file.spdx_id in contained_snippets_by_file_id:
                 write_list_of_elements(contained_snippets_by_file_id[file.spdx_id], write_snippet, text_output, True)
 
-    # Write package info
     for package in document.packages:
         write_package(package, text_output)
         write_separator(text_output)

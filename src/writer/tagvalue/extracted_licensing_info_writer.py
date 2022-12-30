@@ -15,9 +15,6 @@ from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, wr
 
 
 def write_extracted_licensing_info(extracted_licensing_info: ExtractedLicensingInfo, text_output: TextIO):
-    """
-    Write extracted licenses fields to out.
-    """
     write_value("LicenseID", extracted_licensing_info.license_id, text_output)
     write_value("LicenseName", extracted_licensing_info.license_name, text_output, True)
     write_text_value("LicenseComment", extracted_licensing_info.comment, text_output, True)

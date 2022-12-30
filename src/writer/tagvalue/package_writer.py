@@ -18,9 +18,6 @@ from src.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 
 
 def write_package(package: Package, text_output: TextIO):
-    """
-    Write all package information to text_output.
-    """
     text_output.write("## Package Information\n")
 
     write_value("PackageName", package.name, text_output, True)

@@ -17,9 +17,6 @@ from src.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 
 
 def write_file(file: File, text_output: TextIO):
-    """
-    Write all file information to output_text.
-    """
     text_output.write("## File Information\n")
     write_value("FileName", file.name, text_output)
     write_value("SPDXID", file.spdx_id, text_output, True)
