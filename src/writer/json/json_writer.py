@@ -14,13 +14,9 @@ from src.jsonschema.document_converter import DocumentConverter
 from src.model.document import Document
 
 
-class JsonWriter:
-    converter: DocumentConverter
-
-    def __init__(self):
-        self.converter = DocumentConverter()
-
-    def write_document(self, document: Document, file_name: str) -> None:
-        document_dict = self.converter.convert(document)
-        with open(file_name, "w") as out:
-            json.dump(document_dict, out, indent=4)
+def write_document(document: Document, file_name: str, converter: DocumentConverter = None):
+    if converter is None:
+        converter = DocumentConverter()
+    document_dict = converter.convert(document)
+    with open(file_name, "w") as out:
+        json.dump(document_dict, out, indent=4)

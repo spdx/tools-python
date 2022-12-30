@@ -25,7 +25,7 @@ from src.model.package import Package
 from src.model.relationship import RelationshipType, Relationship
 from src.model.snippet import Snippet
 from src.model.spdx_none import SpdxNone
-from src.writer.json.json_writer import JsonWriter
+from src.writer.json.json_writer import write_document
 
 
 @pytest.fixture
@@ -36,7 +36,6 @@ def temporary_file_path() -> str:
 
 
 def test_write_json(temporary_file_path: str):
-    writer = JsonWriter()
     creation_info = CreationInfo("spdxVersion", "documentId", "documentName", "documentNamespace",
                                  [Actor(ActorType.TOOL, "tools-python", "tools-python@github.com")],
                                  datetime(2022, 12, 1), document_comment="comment", data_license="dataLicense",
@@ -58,7 +57,7 @@ def test_write_json(temporary_file_path: str):
     extracted_licensing_info = [ExtractedLicensingInfo("licenseId", "licenseText")]
     document = Document(creation_info, annotations=annotations, extracted_licensing_info=extracted_licensing_info,
                         relationships=relationships, packages=[package], files=[file], snippets=[snippet])
-    writer.write_document(document, temporary_file_path)
+    write_document(document, temporary_file_path)
 
     with open(temporary_file_path) as written_file:
         written_json = json.load(written_file)
