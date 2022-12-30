@@ -20,7 +20,7 @@ from src.jsonschema.file_converter import FileConverter
 from src.jsonschema.json_property import JsonProperty
 from src.jsonschema.package_converter import PackageConverter
 from src.jsonschema.relationship_converter import RelationshipConverter
-from src.jsonschema.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target, \
+from src.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target, \
     find_package_contains_file_relationships, \
     find_file_contained_by_package_relationships
 from src.jsonschema.snippet_converter import SnippetConverter
