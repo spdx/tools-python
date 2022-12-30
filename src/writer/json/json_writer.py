@@ -9,12 +9,20 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 import json
+from typing import List
 
 from src.jsonschema.document_converter import DocumentConverter
 from src.model.document import Document
+from src.validation.document_validator import validate_full_spdx_document
+from src.validation.validation_message import ValidationMessage
 
 
-def write_document(document: Document, file_name: str, converter: DocumentConverter = None):
+def write_document(document: Document, file_name: str, validate: bool = True, converter: DocumentConverter = None):
+    if validate:
+        validation_messages: List[ValidationMessage] = validate_full_spdx_document(document,
+                                                                                   document.creation_info.spdx_version)
+        if validation_messages:
+            raise ValueError(f"Document is not valid. The following errors were detected: {validation_messages}")
     if converter is None:
         converter = DocumentConverter()
     document_dict = converter.convert(document)

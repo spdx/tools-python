@@ -26,6 +26,7 @@ from src.model.relationship import RelationshipType, Relationship
 from src.model.snippet import Snippet
 from src.model.spdx_none import SpdxNone
 from src.writer.json.json_writer import write_document
+from tests.fixtures import document_fixture
 
 
 @pytest.fixture
@@ -57,7 +58,8 @@ def test_write_json(temporary_file_path: str):
     extracted_licensing_info = [ExtractedLicensingInfo("licenseId", "licenseText")]
     document = Document(creation_info, annotations=annotations, extracted_licensing_info=extracted_licensing_info,
                         relationships=relationships, packages=[package], files=[file], snippets=[snippet])
-    write_document(document, temporary_file_path)
+    # TODO: Enable validation once test data is valid, https://github.com/spdx/tools-python/issues/397
+    write_document(document, temporary_file_path, validate=False)
 
     with open(temporary_file_path) as written_file:
         written_json = json.load(written_file)
@@ -66,3 +68,19 @@ def test_write_json(temporary_file_path: str):
         expected_json = json.load(expected_file)
 
     assert written_json == expected_json
+
+
+def test_document_is_validated():
+    document = document_fixture()
+    document.creation_info.spdx_id = "InvalidId"
+
+    with pytest.raises(ValueError) as error:
+        write_document(document, "dummy_path")
+    assert "Document is not valid" in error.value.args[0]
+
+
+def test_document_validation_can_be_overridden(temporary_file_path: str):
+    document = document_fixture()
+    document.creation_info.spdx_id = "InvalidId"
+
+    write_document(document, temporary_file_path, validate=False)
