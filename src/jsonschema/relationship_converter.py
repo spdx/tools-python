@@ -15,13 +15,9 @@ from src.jsonschema.json_property import JsonProperty
 from src.jsonschema.relationship_properties import RelationshipProperty
 from src.model.document import Document
 from src.model.relationship import Relationship
-from src.writer.casing_tools import snake_case_to_camel_case
 
 
 class RelationshipConverter(TypedConverter[Relationship]):
-    def json_property_name(self, relationship_property: RelationshipProperty) -> str:
-        return snake_case_to_camel_case(relationship_property.name)
-
     def _get_property_value(self, relationship: Relationship, relationship_property: RelationshipProperty,
                             document: Document = None) -> Any:
         if relationship_property == RelationshipProperty.SPDX_ELEMENT_ID:

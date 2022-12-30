@@ -17,7 +17,6 @@ from src.jsonschema.optional_utils import apply_if_present
 from src.jsonschema.snippet_properties import SnippetProperty
 from src.model.document import Document
 from src.model.snippet import Snippet
-from src.writer.casing_tools import snake_case_to_camel_case
 
 
 class SnippetConverter(TypedConverter[Snippet]):
@@ -29,7 +28,7 @@ class SnippetConverter(TypedConverter[Snippet]):
     def json_property_name(self, snippet_property: SnippetProperty) -> str:
         if snippet_property == SnippetProperty.SPDX_ID:
             return "SPDXID"
-        return snake_case_to_camel_case(snippet_property.name)
+        return super().json_property_name(snippet_property)
 
     def _get_property_value(self, snippet: Snippet, snippet_property: SnippetProperty,
                             document: Document = None) -> Any:

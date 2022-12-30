@@ -16,13 +16,9 @@ from src.jsonschema.converter import TypedConverter
 from src.jsonschema.json_property import JsonProperty
 from src.model.annotation import Annotation
 from src.model.document import Document
-from src.writer.casing_tools import snake_case_to_camel_case
 
 
 class AnnotationConverter(TypedConverter[Annotation]):
-    def json_property_name(self, annotation_property: AnnotationProperty) -> str:
-        return snake_case_to_camel_case(annotation_property.name)
-
     def _get_property_value(self, annotation: Annotation, annotation_property: AnnotationProperty,
                             document: Document = None) -> Any:
         if annotation_property == AnnotationProperty.ANNOTATION_DATE:

@@ -13,6 +13,7 @@ from typing import Any, Type, Dict, TypeVar, Generic
 
 from src.jsonschema.json_property import JsonProperty
 from src.model.document import Document
+from src.writer.casing_tools import snake_case_to_camel_case
 
 MISSING_IMPLEMENTATION_MESSAGE = "Must be implemented"
 
@@ -20,9 +21,6 @@ T = TypeVar("T")
 
 
 class TypedConverter(ABC, Generic[T]):
-    @abstractmethod
-    def json_property_name(self, json_property: JsonProperty) -> str:
-        raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
 
     @abstractmethod
     def _get_property_value(self, instance: T, json_property: JsonProperty, document: Document = None) -> Any:
@@ -35,6 +33,9 @@ class TypedConverter(ABC, Generic[T]):
     @abstractmethod
     def get_data_model_type(self) -> Type[T]:
         raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
+
+    def json_property_name(self, json_property: JsonProperty) -> str:
+        return snake_case_to_camel_case(json_property.name)
 
     def requires_full_document(self) -> bool:
         return False

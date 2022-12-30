@@ -18,7 +18,6 @@ from src.jsonschema.json_property import JsonProperty
 from src.jsonschema.optional_utils import apply_if_present
 from src.model.document import Document
 from src.model.file import File
-from src.writer.casing_tools import snake_case_to_camel_case
 
 
 class FileConverter(TypedConverter[File]):
@@ -32,7 +31,7 @@ class FileConverter(TypedConverter[File]):
     def json_property_name(self, file_property: FileProperty) -> str:
         if file_property == FileProperty.SPDX_ID:
             return "SPDXID"
-        return snake_case_to_camel_case(file_property.name)
+        return super().json_property_name(file_property)
 
     def _get_property_value(self, file: Any, file_property: FileProperty, document: Document = None) -> Any:
         if file_property == FileProperty.SPDX_ID:

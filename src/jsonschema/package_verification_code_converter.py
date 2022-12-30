@@ -15,13 +15,9 @@ from src.jsonschema.json_property import JsonProperty
 from src.jsonschema.package_verification_code_properties import PackageVerificationCodeProperty
 from src.model.document import Document
 from src.model.package import PackageVerificationCode
-from src.writer.casing_tools import snake_case_to_camel_case
 
 
 class PackageVerificationCodeConverter(TypedConverter[PackageVerificationCode]):
-    def json_property_name(self, verification_code_property: PackageVerificationCodeProperty) -> str:
-        return snake_case_to_camel_case(verification_code_property.name)
-
     def _get_property_value(self, verification_code: PackageVerificationCode,
                             verification_code_property: PackageVerificationCodeProperty,
                             document: Document = None) -> Any:

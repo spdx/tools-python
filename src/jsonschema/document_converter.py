@@ -20,13 +20,12 @@ from src.jsonschema.file_converter import FileConverter
 from src.jsonschema.json_property import JsonProperty
 from src.jsonschema.package_converter import PackageConverter
 from src.jsonschema.relationship_converter import RelationshipConverter
-from src.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target, \
-    find_package_contains_file_relationships, \
-    find_file_contained_by_package_relationships
 from src.jsonschema.snippet_converter import SnippetConverter
 from src.model.document import Document
 from src.model.relationship import RelationshipType
-from src.writer.casing_tools import snake_case_to_camel_case
+from src.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target, \
+    find_package_contains_file_relationships, \
+    find_file_contained_by_package_relationships
 
 
 class DocumentConverter(TypedConverter[Document]):
@@ -58,7 +57,7 @@ class DocumentConverter(TypedConverter[Document]):
     def json_property_name(self, document_property: DocumentProperty) -> str:
         if document_property == DocumentProperty.SPDX_ID:
             return "SPDXID"
-        return snake_case_to_camel_case(document_property.name)
+        return super().json_property_name(document_property)
 
     def _get_property_value(self, document: Document, document_property: DocumentProperty,
                             _document: Document = None) -> Any:
