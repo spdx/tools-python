@@ -12,7 +12,7 @@ from typing import TextIO
 
 from src.model.file import File
 from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, \
-    write_field_or_none_or_no_assertion
+    write_license_expression
 from src.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 
 
@@ -24,9 +24,9 @@ def write_file(file: File, text_output: TextIO):
         write_value("FileType", file_type.name, text_output)
     for file_checksum in file.checksums:
         write_value("FileChecksum", write_checksum_to_tag_value(file_checksum), text_output)
-    write_field_or_none_or_no_assertion("LicenseConcluded", file.concluded_license, text_output)
-    write_field_or_none_or_no_assertion("LicenseInfoInFile", file.license_info_in_file, text_output)
-    write_field_or_none_or_no_assertion("FileCopyrightText", file.copyright_text, text_output)
+    write_license_expression("LicenseConcluded", file.concluded_license, text_output)
+    write_license_expression("LicenseInfoInFile", file.license_info_in_file, text_output)
+    write_text_value("FileCopyrightText", file.copyright_text, text_output)
     write_text_value("LicenseComments", file.license_comment, text_output)
 
     for attribution_text in file.attribution_texts:

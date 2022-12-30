@@ -13,7 +13,7 @@ from typing import TextIO
 from src.datetime_conversions import datetime_to_iso_string
 from src.model.package import Package, PackageVerificationCode
 from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, \
-    write_field_or_none_or_no_assertion, transform_enum_name_to_tv, write_actor_or_no_assertion
+    write_license_expression, transform_enum_name_to_tv, write_actor
 from src.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 
 
@@ -31,25 +31,25 @@ def write_package(package: Package, text_output: TextIO):
 
     write_text_value("PackageSourceInfo", package.source_info, text_output)
     write_value("PackageFileName", package.file_name, text_output)
-    write_actor_or_no_assertion("PackageSupplier", package.supplier, text_output)
-    write_actor_or_no_assertion("PackageOriginator", package.originator, text_output)
+    write_actor("PackageSupplier", package.supplier, text_output)
+    write_actor("PackageOriginator", package.originator, text_output)
 
     for package_checksum in package.checksums:
         write_value("PackageChecksum", write_checksum_to_tag_value(package_checksum), text_output)
 
     if package.verification_code:
-        package_verification_code = write_package_verification_code(package.verification_code)
+        package_verification_code = get_package_verification_code_string(package.verification_code)
         write_value("PackageVerificationCode", package_verification_code, text_output)
 
     write_text_value("PackageDescription", package.description, text_output)
     write_text_value("PackageComment", package.comment, text_output)
 
-    write_field_or_none_or_no_assertion("PackageLicenseDeclared", package.license_declared, text_output)
-    write_field_or_none_or_no_assertion("PackageLicenseConcluded", package.license_concluded, text_output)
-    write_field_or_none_or_no_assertion("PackageLicenseInfoFromFiles", package.license_info_from_files, text_output)
+    write_license_expression("PackageLicenseDeclared", package.license_declared, text_output)
+    write_license_expression("PackageLicenseConcluded", package.license_concluded, text_output)
+    write_license_expression("PackageLicenseInfoFromFiles", package.license_info_from_files, text_output)
 
     write_text_value("PackageLicenseComments", package.license_comment, text_output)
-    write_field_or_none_or_no_assertion("PackageCopyrightText", package.copyright_text, text_output)
+    write_text_value("PackageCopyrightText", package.copyright_text, text_output)
 
     write_value("PackageHomePage", package.homepage, text_output)
 
@@ -74,7 +74,7 @@ def write_package(package: Package, text_output: TextIO):
         write_value("ValidUntilDate", datetime_to_iso_string(package.valid_until_date), text_output)
 
 
-def write_package_verification_code(verification_code: PackageVerificationCode):
+def get_package_verification_code_string(verification_code: PackageVerificationCode) -> str:
     if not verification_code.excluded_files:
         return verification_code.value
 

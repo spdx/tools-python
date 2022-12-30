@@ -12,7 +12,7 @@ from typing import TextIO
 
 from src.model.snippet import Snippet
 from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, write_range, \
-    write_field_or_none_or_no_assertion
+    write_license_expression
 
 
 def write_snippet(snippet: Snippet, output_text: TextIO):
@@ -27,5 +27,5 @@ def write_snippet(snippet: Snippet, output_text: TextIO):
     write_text_value("SnippetLicenseComments", snippet.license_comment, output_text)
     for attribution_text in snippet.attribution_texts:
         write_text_value("SnippetAttributionText", attribution_text, output_text)
-    write_field_or_none_or_no_assertion("SnippetLicenseConcluded", snippet.concluded_license, output_text)
-    write_field_or_none_or_no_assertion("LicenseInfoInSnippet", snippet.license_info_in_snippet, output_text)
+    write_license_expression("SnippetLicenseConcluded", snippet.concluded_license, output_text)
+    write_license_expression("LicenseInfoInSnippet", snippet.license_info_in_snippet, output_text)

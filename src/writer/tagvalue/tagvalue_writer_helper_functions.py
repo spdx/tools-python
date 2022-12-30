@@ -8,7 +8,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import TextIO, Tuple, List, Dict, Any, Union, Callable
+from typing import TextIO, Tuple, List, Dict, Any, Union, Callable, Optional
 
 from src.model.actor import Actor
 from src.model.file import File
@@ -24,18 +24,18 @@ def write_separator(out: TextIO):
     out.write("\n")
 
 
-def write_value(tag: str, value: Union[bool, str, SpdxNone, SpdxNoAssertion], out: TextIO):
+def write_value(tag: str, value: Optional[Union[bool, str, SpdxNone, SpdxNoAssertion]], out: TextIO):
     if value:
         out.write(f"{tag}: {value}\n")
 
 
-def write_range(tag: str, value: Tuple[int, int], out: TextIO):
+def write_range(tag: str, value: Optional[Tuple[int, int]], out: TextIO):
     if value:
         out.write(f"{tag}: {value[0]}:{value[1]}\n")
 
 
-def write_text_value(tag: str, value: str, out: TextIO):
-    if value and "\n" in value:
+def write_text_value(tag: str, value: Optional[Union[str, SpdxNone, SpdxNoAssertion]], out: TextIO):
+    if isinstance(value, str) and "\n" in value:
         out.write(f"{tag}: <text>{value}</text>\n")
     else:
         write_value(tag, value, out)
@@ -58,15 +58,15 @@ def write_list_of_elements(list_of_elements: List[Any], write_method: Callable[[
             write_separator(text_output)
 
 
-def write_actor_or_no_assertion(tag: str, element_to_write: Any, text_output: TextIO):
+def write_actor(tag: str, element_to_write: Optional[Union[Actor, SpdxNoAssertion]], text_output: TextIO):
     if isinstance(element_to_write, Actor):
         write_value(tag, element_to_write.to_serialized_string(), text_output)
     else:
         write_value(tag, element_to_write, text_output)
 
 
-def write_field_or_none_or_no_assertion(tag: str, element_to_write: Union[
-    List[LicenseExpression], LicenseExpression, SpdxNoAssertion, SpdxNone], text_output: TextIO):
+def write_license_expression(tag: str, element_to_write: Optional[Union[
+    List[LicenseExpression], LicenseExpression, SpdxNoAssertion, SpdxNone]], text_output: TextIO):
     if isinstance(element_to_write, (SpdxNone, SpdxNoAssertion, str)):
         write_value(tag, element_to_write, text_output)
     elif isinstance(element_to_write, LicenseExpression):
