@@ -20,7 +20,7 @@ from src.writer.tagvalue.package_writer import write_package
 from src.writer.tagvalue.relationship_writer import write_relationship
 from src.writer.tagvalue.snippet_writer import write_snippet
 from src.writer.tagvalue.tagvalue_writer_helper_functions import write_separator, scan_relationships, \
-    determine_files_containing_snippets, write_optional_heading, write_list_of_elements
+    get_file_ids_with_contained_snippets, write_optional_heading, write_list_of_elements
 
 
 def write_document_to_file(document: Document, file_name: str):
@@ -38,10 +38,10 @@ def write_document(document: Document, text_output: TextIO):
 
     relationships_to_write, contained_files_by_package_id = scan_relationships(document.relationships,
                                                                                document.packages, document.files)
-    contained_snippets_by_file_id = determine_files_containing_snippets(document.snippets, document.files)
+    file_ids_with_contained_snippets = get_file_ids_with_contained_snippets(document.snippets, document.files)
     packaged_file_ids = [file.spdx_id for files_list in contained_files_by_package_id.values()
                          for file in files_list]
-    filed_snippet_ids = [snippet.spdx_id for snippets_list in contained_snippets_by_file_id.values()
+    filed_snippet_ids = [snippet.spdx_id for snippets_list in file_ids_with_contained_snippets.values()
                          for snippet in snippets_list]
 
     write_optional_heading(relationships_to_write, "## Relationships\n", text_output)
@@ -57,8 +57,8 @@ def write_document(document: Document, text_output: TextIO):
         if file.spdx_id not in packaged_file_ids:
             write_file(file, text_output)
             write_separator(text_output)
-            if file.spdx_id in contained_snippets_by_file_id:
-                write_list_of_elements(contained_snippets_by_file_id[file.spdx_id], write_snippet, text_output, True)
+            if file.spdx_id in file_ids_with_contained_snippets:
+                write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output, True)
 
     for package in document.packages:
         write_package(package, text_output)
@@ -67,8 +67,8 @@ def write_document(document: Document, text_output: TextIO):
             for file in contained_files_by_package_id[package.spdx_id]:
                 write_file(file, text_output)
                 write_separator(text_output)
-                if file.spdx_id in contained_snippets_by_file_id:
-                    write_list_of_elements(contained_snippets_by_file_id[file.spdx_id], write_snippet, text_output, True)
+                if file.spdx_id in file_ids_with_contained_snippets:
+                    write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output, True)
                     break
 
     write_optional_heading(document.extracted_licensing_info, "## License Information\n", text_output)
