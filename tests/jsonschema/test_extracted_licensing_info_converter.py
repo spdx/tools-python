@@ -13,6 +13,8 @@ import pytest
 from src.jsonschema.extracted_licensing_info_converter import ExtractedLicensingInfoConverter
 from src.jsonschema.extracted_licensing_info_properties import ExtractedLicensingInfoProperty
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
+from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
+from tests.fixtures import extracted_licensing_info_fixture
 
 
 @pytest.fixture
@@ -65,3 +67,11 @@ def test_null_values(converter: ExtractedLicensingInfoConverter):
     assert converter.json_property_name(ExtractedLicensingInfoProperty.NAME) not in converted_dict
     assert converter.json_property_name(ExtractedLicensingInfoProperty.SEE_ALSOS) not in converted_dict
     assert converter.json_property_name(ExtractedLicensingInfoProperty.COMMENT) not in converted_dict
+
+
+def test_spdx_no_assertion(converter: ExtractedLicensingInfoConverter):
+    extracted_licensing_info = extracted_licensing_info_fixture(license_name=SpdxNoAssertion())
+
+    converted_dict = converter.convert(extracted_licensing_info)
+
+    assert converted_dict[converter.json_property_name(ExtractedLicensingInfoProperty.NAME)] == SPDX_NO_ASSERTION_STRING

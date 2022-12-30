@@ -13,6 +13,7 @@ from typing import Type, Any
 from src.jsonschema.converter import TypedConverter
 from src.jsonschema.extracted_licensing_info_properties import ExtractedLicensingInfoProperty
 from src.jsonschema.json_property import JsonProperty
+from src.jsonschema.optional_utils import apply_if_present
 from src.model.document import Document
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.writer.casing_tools import snake_case_to_camel_case
@@ -32,7 +33,7 @@ class ExtractedLicensingInfoConverter(TypedConverter[ExtractedLicensingInfo]):
         elif extracted_licensing_info_property == ExtractedLicensingInfoProperty.LICENSE_ID:
             return extracted_licensing_info.license_id
         elif extracted_licensing_info_property == ExtractedLicensingInfoProperty.NAME:
-            return extracted_licensing_info.license_name
+            return apply_if_present(str, extracted_licensing_info.license_name)
         elif extracted_licensing_info_property == ExtractedLicensingInfoProperty.SEE_ALSOS:
             return extracted_licensing_info.cross_references or None
 
