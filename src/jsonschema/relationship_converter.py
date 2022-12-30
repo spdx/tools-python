@@ -25,7 +25,7 @@ class RelationshipConverter(TypedConverter[Relationship]):
         elif relationship_property == RelationshipProperty.COMMENT:
             return relationship.comment
         elif relationship_property == RelationshipProperty.RELATED_SPDX_ELEMENT:
-            return relationship.related_spdx_element_id
+            return str(relationship.related_spdx_element_id)
         elif relationship_property == RelationshipProperty.RELATIONSHIP_TYPE:
             return relationship.relationship_type.name
 
