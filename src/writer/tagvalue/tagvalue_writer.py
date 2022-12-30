@@ -69,7 +69,6 @@ def write_document(document: Document, text_output: TextIO):
                 write_separator(text_output)
                 if file.spdx_id in file_ids_with_contained_snippets:
                     write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output)
-                    break
 
     write_optional_heading(document.extracted_licensing_info, "## License Information\n", text_output)
     write_list_of_elements(document.extracted_licensing_info, write_extracted_licensing_info, text_output)

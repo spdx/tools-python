@@ -48,7 +48,6 @@ SPDXID: packageId
 PackageDownloadLocation: NONE
 FilesAnalyzed: True
 
-
 ## License Information
 LicenseID: licenseId
 ExtractedText: licenseText
