@@ -10,8 +10,6 @@
 #  limitations under the License.
 from datetime import datetime
 
-from src.parser.error import SPDXParsingError
-
 
 def datetime_from_str(date_str: str) -> datetime:
     if not isinstance(date_str, str):
