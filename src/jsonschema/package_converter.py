@@ -19,7 +19,7 @@ from src.jsonschema.json_property import JsonProperty
 from src.jsonschema.optional_utils import apply_if_present
 from src.jsonschema.package_properties import PackageProperty
 from src.jsonschema.package_verification_code_converter import PackageVerificationCodeConverter
-from src.jsonschema.relationship_filters import find_package_contains_file_relationships, \
+from src.model.relationship_filters import find_package_contains_file_relationships, \
     find_file_contained_by_package_relationships
 from src.model.actor import Actor
 from src.model.document import Document
