@@ -16,8 +16,8 @@ from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, wr
 
 def write_extracted_licensing_info(extracted_licensing_info: ExtractedLicensingInfo, text_output: TextIO):
     write_value("LicenseID", extracted_licensing_info.license_id, text_output)
-    write_value("LicenseName", extracted_licensing_info.license_name, text_output, True)
-    write_text_value("LicenseComment", extracted_licensing_info.comment, text_output, True)
+    write_value("LicenseName", extracted_licensing_info.license_name, text_output)
+    write_text_value("LicenseComment", extracted_licensing_info.comment, text_output)
 
     for cross_reference in sorted(extracted_licensing_info.cross_references):
         write_value("LicenseCrossReference", cross_reference, text_output)

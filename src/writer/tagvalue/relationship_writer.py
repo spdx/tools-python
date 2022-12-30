@@ -18,4 +18,4 @@ def write_relationship(relationship: Relationship, text_output: TextIO):
     write_value("Relationship", " ".join(
         [relationship.spdx_element_id, relationship.relationship_type.name, relationship.related_spdx_element_id]),
                 text_output)
-    write_text_value("RelationshipComment", relationship.comment, text_output, True)
+    write_text_value("RelationshipComment", relationship.comment, text_output)
