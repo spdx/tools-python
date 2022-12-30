@@ -14,5 +14,5 @@ T = TypeVar("T")
 S = TypeVar("S")
 
 
-def apply_if_present(function: Callable[[T], S], optional_value: Optional[T]) -> S:
+def apply_if_present(function: Callable[[T], S], optional_value: Optional[T]) -> Optional[S]:
     return function(optional_value) if optional_value else None
