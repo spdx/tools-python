@@ -34,7 +34,7 @@ def write_document(document: Document, text_output: TextIO):
     write_separator(text_output)
 
     write_optional_heading(document.annotations, "## Annotations\n", text_output)
-    write_list_of_elements(document.annotations, write_annotation, text_output, True)
+    write_list_of_elements(document.annotations, write_annotation, text_output)
 
     relationships_to_write, contained_files_by_package_id = scan_relationships(document.relationships,
                                                                                document.packages, document.files)
@@ -58,7 +58,7 @@ def write_document(document: Document, text_output: TextIO):
             write_file(file, text_output)
             write_separator(text_output)
             if file.spdx_id in file_ids_with_contained_snippets:
-                write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output, True)
+                write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output)
 
     for package in document.packages:
         write_package(package, text_output)
@@ -68,8 +68,8 @@ def write_document(document: Document, text_output: TextIO):
                 write_file(file, text_output)
                 write_separator(text_output)
                 if file.spdx_id in file_ids_with_contained_snippets:
-                    write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output, True)
+                    write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output)
                     break
 
     write_optional_heading(document.extracted_licensing_info, "## License Information\n", text_output)
-    write_list_of_elements(document.extracted_licensing_info, write_extracted_licensing_info, text_output, True)
+    write_list_of_elements(document.extracted_licensing_info, write_extracted_licensing_info, text_output)

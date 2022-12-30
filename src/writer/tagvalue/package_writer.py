@@ -20,46 +20,45 @@ from src.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 def write_package(package: Package, text_output: TextIO):
     text_output.write("## Package Information\n")
 
-    write_value("PackageName", package.name, text_output, True)
-    write_value("SPDXID", package.spdx_id, text_output, True)
-    write_value("PackageVersion", package.version, text_output, True)
+    write_value("PackageName", package.name, text_output)
+    write_value("SPDXID", package.spdx_id, text_output)
+    write_value("PackageVersion", package.version, text_output)
     write_value("PackageDownloadLocation", package.download_location, text_output)
-    write_value("FilesAnalyzed", package.files_analyzed, text_output, True)
-    write_text_value("PackageSummary", package.summary, text_output, True)
+    write_value("FilesAnalyzed", package.files_analyzed, text_output)
+    write_text_value("PackageSummary", package.summary, text_output)
     for attribution_text in package.attribution_texts:
         write_text_value("PackageAttributionText", attribution_text, text_output)
 
-    write_text_value("PackageSourceInfo", package.source_info, text_output, True)
-    write_value("PackageFileName", package.file_name, text_output, True)
-    write_actor_or_no_assertion("PackageSupplier", package.supplier, text_output, True)
-    write_actor_or_no_assertion("PackageOriginator", package.originator, text_output, True)
+    write_text_value("PackageSourceInfo", package.source_info, text_output)
+    write_value("PackageFileName", package.file_name, text_output)
+    write_actor_or_no_assertion("PackageSupplier", package.supplier, text_output)
+    write_actor_or_no_assertion("PackageOriginator", package.originator, text_output)
 
     for package_checksum in package.checksums:
-        write_value("PackageChecksum", write_checksum_to_tag_value(package_checksum), text_output, True)
+        write_value("PackageChecksum", write_checksum_to_tag_value(package_checksum), text_output)
 
     if package.verification_code:
         package_verification_code = write_package_verification_code(package.verification_code)
-        write_value("PackageVerificationCode", package_verification_code, text_output, True)
+        write_value("PackageVerificationCode", package_verification_code, text_output)
 
-    write_text_value("PackageDescription", package.description, text_output, True)
-    write_text_value("PackageComment", package.comment, text_output, True)
+    write_text_value("PackageDescription", package.description, text_output)
+    write_text_value("PackageComment", package.comment, text_output)
 
-    write_field_or_none_or_no_assertion("PackageLicenseDeclared", package.license_declared, text_output, True)
-    write_field_or_none_or_no_assertion("PackageLicenseConcluded", package.license_concluded, text_output, True)
-    write_field_or_none_or_no_assertion("PackageLicenseInfoFromFiles", package.license_info_from_files, text_output,
-                                        True)
+    write_field_or_none_or_no_assertion("PackageLicenseDeclared", package.license_declared, text_output)
+    write_field_or_none_or_no_assertion("PackageLicenseConcluded", package.license_concluded, text_output)
+    write_field_or_none_or_no_assertion("PackageLicenseInfoFromFiles", package.license_info_from_files, text_output)
 
-    write_text_value("PackageLicenseComments", package.license_comment, text_output, True)
-    write_field_or_none_or_no_assertion("PackageCopyrightText", package.copyright_text, text_output, True)
+    write_text_value("PackageLicenseComments", package.license_comment, text_output)
+    write_field_or_none_or_no_assertion("PackageCopyrightText", package.copyright_text, text_output)
 
-    write_value("PackageHomePage", package.homepage, text_output, True)
+    write_value("PackageHomePage", package.homepage, text_output)
 
     for external_reference in package.external_references:
         external_reference_str = " ".join(
             [transform_enum_name_to_tv(external_reference.category.name), external_reference.reference_type,
              external_reference.locator]
         )
-        write_value("ExternalRef", external_reference_str, text_output, True)
+        write_value("ExternalRef", external_reference_str, text_output)
         if external_reference.comment:
             write_text_value("ExternalRefComment", external_reference.comment, text_output)
 
