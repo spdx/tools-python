@@ -13,6 +13,9 @@ import pytest
 from src.jsonschema.relationship_converter import RelationshipConverter
 from src.jsonschema.relationship_properties import RelationshipProperty
 from src.model.relationship import Relationship, RelationshipType
+from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
+from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
+from tests.fixtures import relationship_fixture
 
 
 @pytest.fixture
@@ -49,3 +52,20 @@ def test_successful_conversion(converter: RelationshipConverter):
         converter.json_property_name(RelationshipProperty.RELATED_SPDX_ELEMENT): "relatedElementId",
         converter.json_property_name(RelationshipProperty.RELATIONSHIP_TYPE): "COPY_OF"
     }
+
+
+def test_spdx_no_assertion(converter: RelationshipConverter):
+    relationship = relationship_fixture(related_spdx_element_id=SpdxNoAssertion())
+
+    converted_dict = converter.convert(relationship)
+
+    assert converted_dict[
+               converter.json_property_name(RelationshipProperty.RELATED_SPDX_ELEMENT)] == SPDX_NO_ASSERTION_STRING
+
+
+def test_spdx_none(converter: RelationshipConverter):
+    relationship = relationship_fixture(related_spdx_element_id=SpdxNone())
+
+    converted_dict = converter.convert(relationship)
+
+    assert converted_dict[converter.json_property_name(RelationshipProperty.RELATED_SPDX_ELEMENT)] == SPDX_NONE_STRING
