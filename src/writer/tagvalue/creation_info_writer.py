@@ -37,8 +37,3 @@ def write_creation_info(creation_info: CreationInfo, text_output: TextIO):
         write_value("Creator", creator.to_serialized_string(), text_output)
     write_value("Created", datetime_to_iso_string(creation_info.created), text_output)
     write_text_value("CreatorComment", creation_info.creator_comment, text_output)
-
-
-
-
-

@@ -42,7 +42,9 @@ def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callabl
             return parsing_method(field)
     except SPDXParsingError as err:
         logger.extend(err.get_messages())
-        return default
+    except (TypeError, ValueError) as err:
+        logger.extend(err.args[0])
+    return default
 
 
 def append_parsed_field_or_log_error(logger: Logger, list_to_append_to: List[Any], field: Any,
@@ -52,6 +54,8 @@ def append_parsed_field_or_log_error(logger: Logger, list_to_append_to: List[Any
         list_to_append_to.append(parsed_element)
     except SPDXParsingError as err:
         logger.extend(err.get_messages())
+    except (TypeError, ValueError) as err:
+        logger.extend(err.args[0])
     return list_to_append_to
 
 

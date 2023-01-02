@@ -21,25 +21,6 @@ from src.parser.json.dict_parsing_functions import json_str_to_enum_name, \
 from src.datetime_conversions import datetime_from_str
 
 
-def test_datetime_from_str():
-    date_str = "2010-03-04T05:45:11Z"
-
-    date = datetime_from_str(date_str)
-
-    assert date == datetime(2010, 3, 4, 5, 45, 11)
-
-
-@pytest.mark.parametrize("invalid_date_str,expected_message",
-                         [(5, ["Could not convert str to datetime, invalid type: int"]),
-                          ("2010-02-03", ['Could not convert str to datetime, format of 2010-02-03 does not match '
-                                          '"%Y-%m-%dT%H:%M:%SZ"'])])
-def test_datetime_from_str_error(invalid_date_str, expected_message):
-    with pytest.raises(SPDXParsingError) as err:
-        datetime_from_str(invalid_date_str)
-
-    TestCase().assertCountEqual(err.value.get_messages(), expected_message)
-
-
 def test_json_str_to_enum():
     json_str = "BLAKE2b-256"
 

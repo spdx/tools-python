@@ -23,5 +23,3 @@ def write_extracted_licensing_info(extracted_licensing_info: ExtractedLicensingI
         write_value("LicenseCrossReference", cross_reference, text_output)
 
     write_text_value("LicenseComment", extracted_licensing_info.comment, text_output)
-
-
