@@ -18,6 +18,6 @@ from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, wr
 def write_annotation(annotation: Annotation, text_output: TextIO):
     write_value("Annotator", annotation.annotator.to_serialized_string(), text_output)
     write_value("AnnotationDate", datetime_to_iso_string(annotation.annotation_date), text_output)
-    write_text_value("AnnotationComment", annotation.annotation_comment, text_output)
     write_value("AnnotationType", annotation.annotation_type.name, text_output)
     write_value("SPDXREF", annotation.spdx_id, text_output)
+    write_text_value("AnnotationComment", annotation.annotation_comment, text_output)

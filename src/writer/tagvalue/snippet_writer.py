@@ -17,15 +17,19 @@ from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, wr
 
 def write_snippet(snippet: Snippet, output_text: TextIO):
     output_text.write("## Snippet Information\n")
+
     write_value("SnippetSPDXID", snippet.spdx_id, output_text)
     write_value("SnippetFromFileSPDXID", snippet.file_spdx_id, output_text)
-    write_text_value("SnippetCopyrightText", snippet.copyright_text, output_text)
     write_range("SnippetByteRange", snippet.byte_range, output_text)
     write_range("SnippetLineRange", snippet.line_range, output_text)
-    write_value("SnippetName", snippet.name, output_text)
-    write_text_value("SnippetComment", snippet.comment, output_text)
-    write_text_value("SnippetLicenseComments", snippet.license_comment, output_text)
-    for attribution_text in snippet.attribution_texts:
-        write_text_value("SnippetAttributionText", attribution_text, output_text)
+
     write_license_expression("SnippetLicenseConcluded", snippet.concluded_license, output_text)
     write_license_expression("LicenseInfoInSnippet", snippet.license_info_in_snippet, output_text)
+    write_text_value("SnippetLicenseComments", snippet.license_comment, output_text)
+    write_text_value("SnippetCopyrightText", snippet.copyright_text, output_text)
+
+    write_text_value("SnippetComment", snippet.comment, output_text)
+    write_value("SnippetName", snippet.name, output_text)
+
+    for attribution_text in snippet.attribution_texts:
+        write_text_value("SnippetAttributionText", attribution_text, output_text)
