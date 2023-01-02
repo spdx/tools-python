@@ -18,6 +18,11 @@ from src.validation.validation_message import ValidationMessage
 
 
 def write_document(document: Document, file_name: str, validate: bool = True, converter: DocumentConverter = None):
+    """
+    Serializes the provided document to json and writes it to a file with the provided name. Unless validate is set
+    to False, validates the document before serialization. Unless a DocumentConverter instance is provided,
+    a new one is created.
+    """
     if validate:
         validation_messages: List[ValidationMessage] = validate_full_spdx_document(document,
                                                                                    document.creation_info.spdx_version)

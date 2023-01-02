@@ -15,4 +15,7 @@ S = TypeVar("S")
 
 
 def apply_if_present(function: Callable[[T], S], optional_value: Optional[T]) -> Optional[S]:
+    """
+    Apply the passed function to the optional value if it is not None. Else returns None.
+    """
     return function(optional_value) if optional_value else None
