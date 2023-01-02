@@ -28,8 +28,8 @@ class TypedConverter(ABC, Generic[T]):
     - get_json_type and get_data_model_type: return the data model type and the corresponding JsonProperty subclass.
     These methods are abstract in the base class and need to be implemented in subclasses.
     - json_property_name: converts an enum value of a JsonProperty subclass to the corresponding property name in the
-    json schema. The default implementation simply converts to snake case. Can be overridden in case of exceptions
-    like "SPDXID".
+    json schema. The default implementation simply converts from snake case to camel case. Can be overridden in case
+    of exceptions like "SPDXID".
     - convert: converts an instance of type T (one of the data model types) to a dictionary representation. In some
     cases, the full document is required (see below). The logic should be generic for all types.
     - requires_full_document: indicates whether the full document is required for conversion. Returns False by
