@@ -8,20 +8,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from src.parser.error import SPDXParsingError
+from src.formats import file_name_to_format, FileFormat
 from src.parser.json.json_parser import JsonParser
 
 
 def parse_file(file_name: str):
-    if file_name.endswith(".rdf") or file_name.endswith(".rdf.xml"):
+    input_format = file_name_to_format(file_name)
+    if input_format == FileFormat.RDF:
         raise NotImplementedError("Currently, the rdf parser is not implemented")
-    elif file_name.endswith(".tag") or file_name.endswith(".spdx"):
+    elif input_format == FileFormat.TAG_VALUE:
         raise NotImplementedError("Currently, the tag-value parser is not implemented")
-    elif file_name.endswith(".json"):
+    elif input_format == FileFormat.JSON:
         return JsonParser().parse(file_name)
-    elif file_name.endswith(".xml"):
+    elif input_format == FileFormat.XML:
         raise NotImplementedError("Currently, the xml parser is not implemented")
-    elif file_name.endswith(".yaml") or file_name.endswith(".yml"):
+    elif input_format == FileFormat.YAML:
         raise NotImplementedError("Currently, the yaml parser is not implemented")
-    else:
-        raise SPDXParsingError(["Unsupported file type: " + str(file_name)])
