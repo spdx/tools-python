@@ -30,10 +30,8 @@ from src.writer.tagvalue.tagvalue_writer import write_document
 @click.option("--printout", is_flag=True, help="print the parsed document to stdout in tag-value format")
 def main(file, version, validate, printout):
     """
-    COMMAND-LINE TOOL for parsing file of RDF, XML, JSON, YAML and XML format.
-
+    CLI-tool for parsing file of RDF, TAG-VALUE, JSON, YAML and XML format.
     To use : run `pyspdxtools_parser` using terminal or run `pyspdxtools_parser --file <file name>`
-
     """
     try:
         document: Document = parse_file(file)
@@ -56,14 +54,6 @@ def main(file, version, validate, printout):
                 print(message.validation_message)
         else:
             print("The document is valid.")
-
-    # raise NotImplementedError("Currently, no parsers are implemented")
-
-    # Parse document
-    # First one to implement is the Json parser: https://github.com/spdx/tools-python/issues/305
-
-    # Print all document properties - or possibly a selection of them. Should be human-readable, so using indentation
-    # for nested properties is probably a good idea.
 
 
 if __name__ == "__main__":
