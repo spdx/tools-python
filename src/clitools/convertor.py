@@ -11,99 +11,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import os
-
 import click
 
-
-def print_help_msg(command):
-    with click.Context(command) as ctx:
-        click.echo(command.get_help(ctx))
-
-
-def determine_infile_and_outfile(infile, outfile, src, from_, to):
-    if infile is not None and outfile is not None:
-        """
-        when the CLI is of given format:
-        ' pyspdxtools_convertor ---infile <input_file> ---outfile <output_file>.
-        """
-        return infile, outfile
-
-    elif infile is None and outfile is None and len(src) == 2:
-        """
-        ' pyspdxtools_convertor -f/--from <type> <input_file> -t/--to <type> <output_file>.
-        """
-        infile = src[0]
-        outfile = src[1]
-        if from_ is not None:
-            infile_path = os.path.splitext(infile)[0]
-            infile = infile_path + "." + from_
-        if to is not None:
-            outfile_path = os.path.splitext(outfile)[0]
-            outfile = outfile_path + "." + to
-        return infile, outfile
-
-    elif infile is None and outfile is not None:
-        """
-        ' pyspdxtools_convertor -f/--from <type> <input_file> --outfile <output_file> '
-        """
-        infile = src[0]
-        if from_ is not None:
-            infile_path = os.path.splitext(infile)[0]
-            infile = infile_path + "." + from_
-        return infile, outfile
-
-    elif infile is not None and outfile is None:
-        """
-        ' pyspdxtools_convertor --infile <input_file> -t/--to <type> <output_file>'
-        """
-        outfile = src[0]
-        if to is not None:
-            outfile_path = os.path.splitext(outfile)[0]
-            outfile = outfile_path + "." + to
-        return infile, outfile
-
-    else:
-        raise ValueError("Given arguments for convertor are invalid.")
+from src.model.document import Document
+from src.parser.parse_anything import parse_file
+from src.writer.write_anything import write_file
 
 
 @click.command()
-@click.argument("src", nargs=-1)
-@click.option("--infile", "-i", help="The file to be converted ")
-@click.option("--outfile", "-o", help="The file after converting")
-@click.option(
-    "--to",
-    "-t",
-    type=click.Choice(["json", "rdf", "yaml", "xml", "tag"], case_sensitive=False)
-)
-@click.option(
-    "--from",
-    "-f",
-    "from_",
-    type=click.Choice(["tag", "rdf"], case_sensitive=False))
-@click.option("--force", is_flag=True, help="convert even if there are some parsing errors or inconsistencies")
-def main(infile, outfile, src, from_, to, force):
+@click.option("--infile", "-i", help="The file containing the document to be converted")
+@click.option("--outfile", "-o", help="The file to write the converted document to")
+def main(infile, outfile):
     """
-    CLI-TOOL for converting a RDF or TAG file to RDF, JSON, YAML, TAG or XML format.
-
-    To use : run 'pyspdxtools_convertor -f <from_TYPE> <input file> -t <to_TYPE> <output_file>' command on terminal
-    or use ' pyspdxtools_convertor --infile <input file name> --outfile <output file name> '
-
+    CLI-tool for converting SPDX documents between RDF, TAG-VALUE, JSON, YAML and XML formats.
+    Formats are determined by the file endings.
+    To use, run: 'pyspdxtools_convertor --infile <input file name> --outfile <output file name> '
     """
     try:
-        infile, outfile = determine_infile_and_outfile(infile, outfile, src, from_, to)
-    except ValueError as err:
-        print(err)
-        print_help_msg(main)
+        document: Document = parse_file(infile)
+
+        write_file(document, outfile)
+    except NotImplementedError as err:
+        print(err.args[0])
+        print("Please note that this project is currently undergoing a major refactoring and therefore missing "
+              "a few features which will be added in time.\n"
+              "In the meanwhile, please use the current PyPI release version 0.7.0.")
         return
-
-    raise NotImplementedError("Currently, conversion is not implemented")
-
-    # Parse document from infile
-    # First one to implement is the Json parser: https://github.com/spdx/tools-python/issues/305
-
-    # Write document to outfile
-    # First writer to implement is the Json writer: https://github.com/spdx/tools-python/issues/359
 
 
 if __name__ == "__main__":
