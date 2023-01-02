@@ -11,23 +11,53 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
+from typing import List
+
 import click
 
-from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.model.spdx_none import SpdxNone
+from src.model.document import Document
+from src.parser.parse_anything import parse_file
+from src.validation.document_validator import validate_full_spdx_document
+from src.validation.validation_message import ValidationMessage
+from src.writer.tagvalue.tagvalue_writer import write_document
 
 
 @click.command()
 @click.option("--file", prompt="File name", help="The file to be parsed")
-@click.option("--force", is_flag=True, help="print information even if there are some parsing errors")
-def main(file, force):
+@click.option("--version", prompt="SPDX version", help="The SPDX version to be used during validation")
+@click.option("--validate", is_flag=True, help="validate the provided document")
+@click.option("--printout", is_flag=True, help="print the parsed document to stdout in tag-value format")
+def main(file, version, validate, printout):
     """
     COMMAND-LINE TOOL for parsing file of RDF, XML, JSON, YAML and XML format.
 
     To use : run `pyspdxtools_parser` using terminal or run `pyspdxtools_parser --file <file name>`
 
     """
-    raise NotImplementedError("Currently, no parsers are implemented")
+    try:
+        document: Document = parse_file(file)
+    except NotImplementedError as err:
+        print(err.args[0])
+        print("Please note that this project is currently undergoing a major refactoring and therefore missing "
+              "a few features which will be added in time.\n"
+              "In the meanwhile, please use the current PyPI release version 0.7.0.")
+        return
+
+    if printout:
+        write_document(document, sys.stdout)
+        print("")
+
+    if validate:
+        validation_messages: List[ValidationMessage] = validate_full_spdx_document(document, version)
+        if validation_messages:
+            print("The document is invalid. The following issues have been found:")
+            for message in validation_messages:
+                print(message.validation_message)
+        else:
+            print("The document is valid.")
+
+    # raise NotImplementedError("Currently, no parsers are implemented")
 
     # Parse document
     # First one to implement is the Json parser: https://github.com/spdx/tools-python/issues/305
