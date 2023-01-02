@@ -12,6 +12,7 @@
 import re
 from typing import List
 
+from src.document_utils import get_contained_spdx_element_ids
 from src.model.document import Document
 from src.model.file import File
 
@@ -36,10 +37,7 @@ def is_spdx_id_present_in_document(spdx_id: str, document: Document) -> bool:
 
 def get_list_of_all_spdx_ids(document: Document) -> List[str]:
     all_spdx_ids_in_document: List[str] = [document.creation_info.spdx_id]
-
-    all_spdx_ids_in_document.extend([package.spdx_id for package in document.packages])
-    all_spdx_ids_in_document.extend([file.spdx_id for file in document.files])
-    all_spdx_ids_in_document.extend([snippet.spdx_id for snippet in document.snippets])
+    all_spdx_ids_in_document.extend(get_contained_spdx_element_ids(document))
 
     return all_spdx_ids_in_document
 

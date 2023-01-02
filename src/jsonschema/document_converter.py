@@ -10,6 +10,7 @@
 #  limitations under the License.
 from typing import Type, Any
 
+from src.document_utils import get_contained_spdx_element_ids
 from src.jsonschema.annotation_converter import AnnotationConverter
 from src.jsonschema.converter import TypedConverter
 from src.jsonschema.creation_info_converter import CreationInfoConverter
@@ -65,9 +66,7 @@ class DocumentConverter(TypedConverter[Document]):
             return document.creation_info.spdx_id
         elif document_property == DocumentProperty.ANNOTATIONS:
             # annotations referencing files, packages or snippets will be added to those elements directly
-            element_ids = [file.spdx_id for file in document.files]
-            element_ids.extend([package.spdx_id for package in document.packages])
-            element_ids.extend([snippet.spdx_id for snippet in document.snippets])
+            element_ids = get_contained_spdx_element_ids(document)
             document_annotations = filter(lambda annotation: annotation.spdx_id not in element_ids,
                                           document.annotations)
             return [self.annotation_converter.convert(annotation) for annotation in document_annotations] or None
