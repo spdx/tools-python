@@ -29,13 +29,6 @@ def write_document_to_file(document: Document, file_name: str):
 
 
 def write_document(document: Document, text_output: TextIO):
-    text_output.write("## Document Information\n")
-    write_creation_info(document.creation_info, text_output)
-    write_separator(text_output)
-
-    write_optional_heading(document.annotations, "## Annotations\n", text_output)
-    write_list_of_elements(document.annotations, write_annotation, text_output)
-
     relationships_to_write, contained_files_by_package_id = scan_relationships(document.relationships,
                                                                                document.packages, document.files)
     file_ids_with_contained_snippets = get_file_ids_with_contained_snippets(document.snippets, document.files)
@@ -44,8 +37,8 @@ def write_document(document: Document, text_output: TextIO):
     filed_snippet_ids = [snippet.spdx_id for snippets_list in file_ids_with_contained_snippets.values()
                          for snippet in snippets_list]
 
-    write_optional_heading(relationships_to_write, "## Relationships\n", text_output)
-    write_list_of_elements(relationships_to_write, write_relationship, text_output)
+    text_output.write("## Document Information\n")
+    write_creation_info(document.creation_info, text_output)
     write_separator(text_output)
 
     for snippet in document.snippets:
@@ -58,7 +51,8 @@ def write_document(document: Document, text_output: TextIO):
             write_file(file, text_output)
             write_separator(text_output)
             if file.spdx_id in file_ids_with_contained_snippets:
-                write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output)
+                write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output,
+                                       with_separator=True)
 
     for package in document.packages:
         write_package(package, text_output)
@@ -68,7 +62,16 @@ def write_document(document: Document, text_output: TextIO):
                 write_file(file, text_output)
                 write_separator(text_output)
                 if file.spdx_id in file_ids_with_contained_snippets:
-                    write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output)
+                    write_list_of_elements(file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output,
+                                           with_separator=True)
 
     write_optional_heading(document.extracted_licensing_info, "## License Information\n", text_output)
-    write_list_of_elements(document.extracted_licensing_info, write_extracted_licensing_info, text_output)
+    write_list_of_elements(document.extracted_licensing_info, write_extracted_licensing_info, text_output,
+                           with_separator=True)
+
+    write_optional_heading(relationships_to_write, "## Relationships\n", text_output)
+    write_list_of_elements(relationships_to_write, write_relationship, text_output)
+    write_separator(text_output)
+
+    write_optional_heading(document.annotations, "## Annotations\n", text_output)
+    write_list_of_elements(document.annotations, write_annotation, text_output, with_separator=True)

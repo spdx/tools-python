@@ -1,46 +1,28 @@
 ## Document Information
 SPDXVersion: spdxVersion
 DataLicense: dataLicense
-DocumentNamespace: documentNamespace
-DocumentName: documentName
 SPDXID: documentId
+DocumentName: documentName
+DocumentNamespace: documentNamespace
 DocumentComment: comment
 
 ## External Document References
 ExternalDocumentRef: docRefId externalDocumentUri SHA1: externalRefSha1
 
 ## Creation Information
+LicenseListVersion: spdxVersion
 Creator: Tool: tools-python (tools-python@github.com)
 Created: 2022-12-01T00:00:00Z
-
-## Annotations
-Annotator: Person: reviewerName
-AnnotationDate: 2022-12-02T00:00:00Z
-AnnotationComment: reviewComment
-AnnotationType: REVIEW
-SPDXREF: documentId
-
-Annotator: Tool: toolName
-AnnotationDate: 2022-12-03T00:00:00Z
-AnnotationComment: otherComment
-AnnotationType: OTHER
-SPDXREF: fileId
-
-## Relationships
-Relationship: documentId DESCRIBES packageId
-Relationship: documentId DESCRIBES fileId
-RelationshipComment: relationshipComment
-Relationship: relationshipOriginId AMENDS relationShipTargetId
-
-## Snippet Information
-SnippetSPDXID: snippetId
-SnippetFromFileSPDXID: snippetFileId
-SnippetByteRange: 1:2
 
 ## File Information
 FileName: fileName
 SPDXID: fileId
 FileChecksum: SHA1: fileSha1
+
+## Snippet Information
+SnippetSPDXID: snippetId
+SnippetFromFileSPDXID: fileId
+SnippetByteRange: 1:2
 
 ## Package Information
 PackageName: packageName
@@ -51,3 +33,22 @@ FilesAnalyzed: True
 ## License Information
 LicenseID: licenseId
 ExtractedText: licenseText
+
+## Relationships
+Relationship: documentId DESCRIBES packageId
+Relationship: documentId DESCRIBES fileId
+RelationshipComment: relationshipComment
+Relationship: relationshipOriginId AMENDS relationShipTargetId
+
+## Annotations
+Annotator: Person: reviewerName
+AnnotationDate: 2022-12-02T00:00:00Z
+AnnotationType: REVIEW
+SPDXREF: documentId
+AnnotationComment: reviewComment
+
+Annotator: Tool: toolName
+AnnotationDate: 2022-12-03T00:00:00Z
+AnnotationType: OTHER
+SPDXREF: fileId
+AnnotationComment: otherComment

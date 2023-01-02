@@ -44,7 +44,7 @@ def test_write_tag_value(temporary_file_path: str):
                                                                                       "externalRefSha1"))])
     package = Package("packageId", "packageName", SpdxNone())
     file = File("fileName", "fileId", [Checksum(ChecksumAlgorithm.SHA1, "fileSha1")])
-    snippet = Snippet("snippetId", "snippetFileId", (1, 2))
+    snippet = Snippet("snippetId", "fileId", (1, 2))
     annotations = [
         Annotation("documentId", AnnotationType.REVIEW, Actor(ActorType.PERSON, "reviewerName"), datetime(2022, 12, 2),
                    "reviewComment"),

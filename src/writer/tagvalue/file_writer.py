@@ -18,22 +18,26 @@ from src.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 
 def write_file(file: File, text_output: TextIO):
     text_output.write("## File Information\n")
+
     write_value("FileName", file.name, text_output)
     write_value("SPDXID", file.spdx_id, text_output)
+
     for file_type in file.file_type:
         write_value("FileType", file_type.name, text_output)
+
     for file_checksum in file.checksums:
         write_value("FileChecksum", write_checksum_to_tag_value(file_checksum), text_output)
+
     write_license_expression("LicenseConcluded", file.concluded_license, text_output)
     write_license_expression("LicenseInfoInFile", file.license_info_in_file, text_output)
-    write_text_value("FileCopyrightText", file.copyright_text, text_output)
     write_text_value("LicenseComments", file.license_comment, text_output)
-
-    for attribution_text in file.attribution_texts:
-        write_text_value("FileAttributionText", attribution_text, text_output)
+    write_text_value("FileCopyrightText", file.copyright_text, text_output)
 
     write_text_value("FileComment", file.comment, text_output)
     write_text_value("FileNotice", file.notice, text_output)
 
     for contributor in sorted(file.contributors):
         write_value("FileContributor", contributor, text_output)
+
+    for attribution_text in file.attribution_texts:
+        write_text_value("FileAttributionText", attribution_text, text_output)

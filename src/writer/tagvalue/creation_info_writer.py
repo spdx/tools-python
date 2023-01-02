@@ -19,10 +19,9 @@ from src.writer.tagvalue.tagvalue_writer_helper_functions import write_value, wr
 def write_creation_info(creation_info: CreationInfo, text_output: TextIO):
     write_value("SPDXVersion", creation_info.spdx_version, text_output)
     write_value("DataLicense", creation_info.data_license, text_output)
-    write_value("DocumentNamespace", creation_info.document_namespace, text_output)
-    write_value("DocumentName", creation_info.name, text_output)
-    write_value("LicenseListVersion", str(creation_info.spdx_version), text_output)
     write_value("SPDXID", creation_info.spdx_id, text_output)
+    write_value("DocumentName", creation_info.name, text_output)
+    write_value("DocumentNamespace", creation_info.document_namespace, text_output)
     write_text_value("DocumentComment", creation_info.document_comment, text_output)
 
     write_optional_heading(creation_info.external_document_refs, "\n## External Document References\n", text_output)
@@ -33,7 +32,13 @@ def write_creation_info(creation_info: CreationInfo, text_output: TextIO):
     write_separator(text_output)
 
     text_output.write("## Creation Information\n")
+    write_value("LicenseListVersion", str(creation_info.spdx_version), text_output)
     for creator in creation_info.creators:
         write_value("Creator", creator.to_serialized_string(), text_output)
     write_value("Created", datetime_to_iso_string(creation_info.created), text_output)
     write_text_value("CreatorComment", creation_info.creator_comment, text_output)
+
+
+
+
+
