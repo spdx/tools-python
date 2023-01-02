@@ -13,6 +13,7 @@ from typing import List
 
 from src.model.document import Document
 from src.model.relationship import RelationshipType
+from src.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target
 from src.validation.annotation_validator import validate_annotations
 from src.validation.creation_info_validator import validate_creation_info
 from src.validation.extracted_licensing_info_validator import validate_extracted_licensing_infos
@@ -35,15 +36,16 @@ def validate_full_spdx_document(document: Document, spdx_version: str) -> List[V
     validation_messages.extend(validate_extracted_licensing_infos(document.extracted_licensing_info))
 
     document_id = document.creation_info.spdx_id
-    document_describes_relationships = [relationship for relationship in document.relationships if
-                                        relationship.relationship_type == RelationshipType.DESCRIBES and relationship.spdx_element_id == document_id]
-    described_by_document_relationships = [relationship for relationship in document.relationships if
-                                           relationship.relationship_type == RelationshipType.DESCRIBED_BY and relationship.related_spdx_element_id == document_id]
+    document_describes_relationships = filter_by_type_and_origin(document.relationships, RelationshipType.DESCRIBES,
+                                                                 document_id)
+    described_by_document_relationships = filter_by_type_and_target(document.relationships,
+                                                                    RelationshipType.DESCRIBED_BY, document_id)
 
     if not document_describes_relationships + described_by_document_relationships:
         validation_messages.append(
             ValidationMessage(
-                f'there must be at least one relationship "{document_id} DESCRIBES ..." or "... DESCRIBED_BY {document_id}"',
+                f'there must be at least one relationship "{document_id} DESCRIBES ..." or "... DESCRIBED_BY '
+                f'{document_id}"',
                 ValidationContext(spdx_id=document_id,
                                   element_type=SpdxElementType.DOCUMENT)))
 
