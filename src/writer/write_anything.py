@@ -10,13 +10,14 @@
 #  limitations under the License.
 from src.formats import file_name_to_format, FileFormat
 from src.model.document import Document
+from src.writer.json import json_writer
 from src.writer.tagvalue import tagvalue_writer
 
 
 def write_file(document: Document, file_name: str):
     output_format = file_name_to_format(file_name)
     if output_format == FileFormat.JSON:
-        raise NotImplementedError("Currently, the json writer is not implemented")
+        json_writer.write_document(document, file_name)
     elif output_format == FileFormat.YAML:
         raise NotImplementedError("Currently, the yaml writer is not implemented")
     elif output_format == FileFormat.XML:
