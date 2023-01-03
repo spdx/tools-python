@@ -13,6 +13,7 @@ from typing import Dict, Any
 import xmltodict
 
 from src.model.document import Document
+from src.parser.error import SPDXParsingError
 from src.parser.jsonlikedict.json_like_dict_parser import JsonLikeDictParser
 
 
@@ -40,6 +41,7 @@ LIST_LIKE_FIELDS = [
     "ranges",
     "licenseInfoInSnippets",
     "packageVerificationCodeExcludedFiles",
+    "attributionTexts"
     ]
 
 
@@ -47,7 +49,10 @@ def parse_from_file(file_name: str) -> Document:
     with open(file_name) as file:
         parsed_xml: Dict = xmltodict.parse(file.read(), encoding="utf-8")
 
-    input_doc_as_dict: Dict = _fix_list_like_fields(parsed_xml)
+    input_doc_as_dict: Dict = _fix_list_like_fields(parsed_xml).get("Document")
+
+    if not input_doc_as_dict:
+        raise SPDXParsingError(['Did not find the XML top level tag "Document".'])
 
     return JsonLikeDictParser().parse(input_doc_as_dict)
 

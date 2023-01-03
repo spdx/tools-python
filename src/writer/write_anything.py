@@ -12,16 +12,18 @@ from src.formats import file_name_to_format, FileFormat
 from src.model.document import Document
 from src.writer.json import json_writer
 from src.writer.tagvalue import tagvalue_writer
+from src.writer.xml import xml_writer
+from src.writer.yaml import yaml_writer
 
 
 def write_file(document: Document, file_name: str, validate: bool = True):
     output_format = file_name_to_format(file_name)
     if output_format == FileFormat.JSON:
-        json_writer.write_document(document, file_name, validate)
+        json_writer.write_document(document, file_name, validate=False)
     elif output_format == FileFormat.YAML:
-        raise NotImplementedError("Currently, the yaml writer is not implemented")
+        yaml_writer.write_document_to_file(document, file_name, validate=False)
     elif output_format == FileFormat.XML:
-        raise NotImplementedError("Currently, the xml writer is not implemented")
+        xml_writer.write_document_to_file(document, file_name, validate=False)
     elif output_format == FileFormat.TAG_VALUE:
         tagvalue_writer.write_document_to_file(document, file_name)
     elif output_format == FileFormat.RDF_XML:
