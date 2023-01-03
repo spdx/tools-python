@@ -16,10 +16,10 @@ from src.model.snippet import Snippet
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_error, parse_field_or_log_error, \
+from src.parser.jsonlikedict.dict_parsing_functions import construct_or_raise_parsing_error, parse_field_or_log_error, \
     parse_field_or_no_assertion_or_none
 
-from src.parser.json.license_expression_parser import LicenseExpressionParser
+from src.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
 

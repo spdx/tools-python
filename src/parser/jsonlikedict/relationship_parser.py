@@ -13,7 +13,7 @@ from typing import Dict, List, Optional
 from src.model.relationship import Relationship, RelationshipType
 from src.model.typing.constructor_type_errors import ConstructorTypeErrors
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, \
+from src.parser.jsonlikedict.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, \
     construct_or_raise_parsing_error, \
     parse_field_or_log_error, parse_field_or_no_assertion_or_none
 from src.parser.logger import Logger

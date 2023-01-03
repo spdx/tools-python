@@ -12,7 +12,7 @@ from typing import Dict, List, Optional, Union
 
 from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.parser.json.dict_parsing_functions import construct_or_raise_parsing_error, parse_field_or_no_assertion
+from src.parser.jsonlikedict.dict_parsing_functions import construct_or_raise_parsing_error, parse_field_or_no_assertion
 from src.parser.logger import Logger
 
 

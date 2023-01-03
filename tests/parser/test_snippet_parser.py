@@ -14,7 +14,7 @@ import pytest
 
 from src.model.license_expression import LicenseExpression
 from src.parser.error import SPDXParsingError
-from src.parser.json.snippet_parser import SnippetParser
+from src.parser.jsonlikedict.snippet_parser import SnippetParser
 
 
 def test_parse_snippet():

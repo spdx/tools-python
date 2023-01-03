@@ -14,7 +14,7 @@ import pytest
 
 from src.model.license_expression import LicenseExpression
 from src.parser.error import SPDXParsingError
-from src.parser.json.license_expression_parser import LicenseExpressionParser
+from src.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 
 
 @pytest.mark.parametrize("invalid_license_expression,expected_message",

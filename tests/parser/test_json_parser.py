@@ -13,18 +13,18 @@ import os
 import pytest
 
 from src.model.document import Document
-from src.parser.json.json_parser import JsonParser
+from src.parser.jsonlikedict.json_parser import JsonLikeDictParser
 
 def test_parse_json_file_not_found():
     with pytest.raises(FileNotFoundError) as err:
         wrong_file_path = os.path.join(os.path.dirname(__file__), 'hnjfkjsedhnflsiafg.json')
-        JsonParser().parse(wrong_file_path)
+        JsonLikeDictParser().parse(wrong_file_path)
 
     assert err.value.args[1] == "No such file or directory"
 
 
 def test_parse_json_with_2_3_example():
-    doc = JsonParser().parse(os.path.join(os.path.dirname(__file__),"../data/formats/SPDXJSONExample-v2.3.spdx.json"))
+    doc = JsonLikeDictParser().parse(os.path.join(os.path.dirname(__file__), "../data/formats/SPDXJSONExample-v2.3.spdx.json"))
     assert type(doc) == Document
     assert len(doc.annotations) == 5
     assert len(doc.files) == 5
@@ -34,7 +34,7 @@ def test_parse_json_with_2_3_example():
     assert len(doc.extracted_licensing_info) == 5
 
 def test_parse_json_with_2_2_example():
-    doc = JsonParser().parse(os.path.join(os.path.dirname(__file__),"../data/formats/SPDXJSONExample-v2.2.spdx.json"))
+    doc = JsonLikeDictParser().parse(os.path.join(os.path.dirname(__file__), "../data/formats/SPDXJSONExample-v2.2.spdx.json"))
     assert type(doc) == Document
     assert len(doc.annotations) == 5
     assert len(doc.files) == 4
@@ -44,7 +44,7 @@ def test_parse_json_with_2_2_example():
     assert len(doc.extracted_licensing_info) == 5
 
 def test_parse_json_with_2_1_example():
-    doc = JsonParser().parse(os.path.join(os.path.dirname(__file__),"../data/formats/SPDXJsonExample.json"))
+    doc = JsonLikeDictParser().parse(os.path.join(os.path.dirname(__file__), "../data/formats/SPDXJsonExample.json"))
     assert type(doc) == Document
     assert len(doc.annotations) == 1
     assert len(doc.files) == 2

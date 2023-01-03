@@ -18,8 +18,8 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.license_expression import LicenseExpression
 from src.model.package import PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import parse_list_of_elements
-from src.parser.json.package_parser import PackageParser
+from src.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
+from src.parser.jsonlikedict.package_parser import PackageParser
 
 
 def test_parse_package():

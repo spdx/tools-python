@@ -13,7 +13,7 @@ from unittest import TestCase
 
 from src.model.actor import ActorType
 from src.parser.error import SPDXParsingError
-from src.parser.json.actor_parser import ActorParser
+from src.parser.jsonlikedict.actor_parser import ActorParser
 
 
 @pytest.mark.parametrize("actor_string,expected_type,expected_name,expected_mail", [

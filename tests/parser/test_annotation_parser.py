@@ -16,7 +16,7 @@ import pytest
 from src.model.actor import Actor, ActorType
 from src.model.annotation import AnnotationType, Annotation
 from src.parser.error import SPDXParsingError
-from src.parser.json.annotation_parser import AnnotationParser
+from src.parser.jsonlikedict.annotation_parser import AnnotationParser
 
 
 def test_parse_annotation():

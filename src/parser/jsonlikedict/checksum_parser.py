@@ -11,7 +11,7 @@
 from typing import Dict, Optional
 
 from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, \
+from src.parser.jsonlikedict.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, \
     construct_or_raise_parsing_error
 from src.parser.logger import Logger
 

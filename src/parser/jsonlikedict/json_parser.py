@@ -12,19 +12,19 @@ import json
 
 from src.model.document import Document
 from src.parser.error import SPDXParsingError
-from src.parser.json.annotation_parser import AnnotationParser
-from src.parser.json.creation_info_parser import CreationInfoParser
-from src.parser.json.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, \
+from src.parser.jsonlikedict.annotation_parser import AnnotationParser
+from src.parser.jsonlikedict.creation_info_parser import CreationInfoParser
+from src.parser.jsonlikedict.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, \
     construct_or_raise_parsing_error, parse_list_of_elements
-from src.parser.json.extracted_licensing_info_parser import ExtractedLicensingInfoParser
-from src.parser.json.file_parser import FileParser
+from src.parser.jsonlikedict.extracted_licensing_info_parser import ExtractedLicensingInfoParser
+from src.parser.jsonlikedict.file_parser import FileParser
 from src.parser.logger import Logger
-from src.parser.json.package_parser import PackageParser
-from src.parser.json.relationship_parser import RelationshipParser
-from src.parser.json.snippet_parser import SnippetParser
+from src.parser.jsonlikedict.package_parser import PackageParser
+from src.parser.jsonlikedict.relationship_parser import RelationshipParser
+from src.parser.jsonlikedict.snippet_parser import SnippetParser
 
 
-class JsonParser:
+class JsonLikeDictParser:
     logger: Logger
     creation_info_parser: CreationInfoParser
     package_parser: PackageParser
