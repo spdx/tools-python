@@ -18,7 +18,7 @@ from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.external_document_ref import ExternalDocumentRef
 from src.model.version import Version
 from src.parser.error import SPDXParsingError
-from src.parser.json.creation_info_parser import CreationInfoParser
+from src.parser.jsonlikedict.creation_info_parser import CreationInfoParser
 
 
 def test_parse_creation_info():

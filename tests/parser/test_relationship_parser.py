@@ -15,7 +15,7 @@ import pytest
 from src.model.relationship import RelationshipType, Relationship
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.parser.error import SPDXParsingError
-from src.parser.json.relationship_parser import RelationshipParser
+from src.parser.jsonlikedict.relationship_parser import RelationshipParser
 
 
 def test_parse_relationship():

@@ -16,7 +16,7 @@ import pytest
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
-from src.parser.json.dict_parsing_functions import json_str_to_enum_name, \
+from src.parser.jsonlikedict.dict_parsing_functions import json_str_to_enum_name, \
     parse_field_or_no_assertion, parse_field_or_no_assertion_or_none
 from src.datetime_conversions import datetime_from_str
 

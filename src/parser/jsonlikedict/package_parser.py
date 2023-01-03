@@ -18,13 +18,13 @@ from src.model.package import Package, ExternalPackageRef, PackageVerificationCo
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.parser.error import SPDXParsingError
-from src.parser.json.actor_parser import ActorParser
-from src.parser.json.checksum_parser import ChecksumParser
-from src.parser.json.dict_parsing_functions import append_parsed_field_or_log_error, \
+from src.parser.jsonlikedict.actor_parser import ActorParser
+from src.parser.jsonlikedict.checksum_parser import ChecksumParser
+from src.parser.jsonlikedict.dict_parsing_functions import append_parsed_field_or_log_error, \
     raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, construct_or_raise_parsing_error, \
     parse_field_or_log_error, parse_field_or_no_assertion_or_none, parse_field_or_no_assertion
 from src.datetime_conversions import datetime_from_str
-from src.parser.json.license_expression_parser import LicenseExpressionParser
+from src.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 from src.parser.logger import Logger
 
 
