@@ -18,7 +18,7 @@ from src.validation.document_validator import validate_full_spdx_document
 from src.validation.validation_message import ValidationMessage
 
 
-def write_document(document: Document, file_name: str, validate: bool = True, converter: DocumentConverter = None):
+def write_document_to_file(document: Document, file_name: str, validate: bool = True, converter: DocumentConverter = None):
     """
     Serializes the provided document to XML and writes it to a file with the provided name. Unless validate is set
     to False, validates the document before serialization. Unless a DocumentConverter instance is provided,
@@ -31,6 +31,6 @@ def write_document(document: Document, file_name: str, validate: bool = True, co
             raise ValueError(f"Document is not valid. The following errors were detected: {validation_messages}")
     if converter is None:
         converter = DocumentConverter()
-    document_dict = converter.convert(document)
+    document_dict = {"Document": converter.convert(document)}
     with open(file_name, "w") as out:
         xmltodict.unparse(document_dict, out, encoding="utf-8", pretty=True)

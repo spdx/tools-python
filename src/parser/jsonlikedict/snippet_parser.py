@@ -41,9 +41,13 @@ class SnippetParser:
         spdx_id: Optional[str] = snippet_dict.get("SPDXID")
         file_spdx_id: Optional[str] = snippet_dict.get("snippetFromFile")
         name: Optional[str] = snippet_dict.get("name")
+        
         ranges: Dict = parse_field_or_log_error(logger, snippet_dict.get("ranges", []), self.parse_ranges, default={})
-        byte_range: Tuple[int, int] = ranges.get(RangeType.BYTE)
-        line_range: Optional[Tuple[int, int]] = ranges.get(RangeType.LINE)
+        byte_range: Optional[Tuple[Union[int, str], Union[int, str]]] = ranges.get(RangeType.BYTE)
+        line_range: Optional[Tuple[Union[int, str], Union[int, str]]] = ranges.get(RangeType.LINE)
+        byte_range = self.convert_range_from_str(byte_range)
+        line_range = self.convert_range_from_str(line_range)
+
         attribution_texts: List[str] = snippet_dict.get("attributionTexts", [])
         comment: Optional[str] = snippet_dict.get("comment")
         copyright_text: Optional[str] = snippet_dict.get("copyrightText")
@@ -114,3 +118,15 @@ class SnippetParser:
         if "offset" not in pointer and "lineNumber" not in pointer:
             raise ValueError('Couldn\'t determine type of pointer: neither "offset" nor "lineNumber" provided as key.')
         return RangeType.BYTE if "offset" in pointer else RangeType.LINE
+
+    @staticmethod
+    def convert_range_from_str(_range: Tuple[Union[int, str], Union[int, str]]) -> Tuple[Union[int, str], Union[int, str]]:
+        # XML does not support integers, so we have to convert from string (if possible)
+        if not _range:
+            return _range
+
+        if isinstance(_range[0], str) and _range[0].isdigit():
+            _range = int(_range[0]), _range[1]
+        if isinstance(_range[1], str) and _range[1].isdigit():
+            _range = _range[0], int(_range[1])
+        return _range

@@ -92,7 +92,7 @@ def test_parse_snippet_with_invalid_snippet_range():
                     "reference": "SPDXRef-DoapSource"
                 },
                 "startPointer": {
-                    "offset": "310",
+                    "offset": "310s",
                     "reference": "SPDXRef-DoapSource"
                 }
             }]
@@ -105,7 +105,7 @@ def test_parse_snippet_with_invalid_snippet_range():
                                 ["Error while constructing Snippet: ['SetterError Snippet: type of argument "
                                  '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError '
                                  'Snippet: type of argument "byte_range"[0] must be int; got str instead: '
-                                 "(\\'310\\', 23)']"])
+                                 "(\\'310s\\', 23)']"])
 
 
 def test_parse_invalid_snippet_range():

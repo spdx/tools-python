@@ -9,7 +9,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from src.formats import file_name_to_format, FileFormat
-from src.parser.json.json_parser import JsonParser
+from src.parser.json import json_parser
+from src.parser.xml import xml_parser
+from src.parser.yaml import yaml_parser
 
 
 def parse_file(file_name: str):
@@ -19,8 +21,8 @@ def parse_file(file_name: str):
     elif input_format == FileFormat.TAG_VALUE:
         raise NotImplementedError("Currently, the tag-value parser is not implemented")
     elif input_format == FileFormat.JSON:
-        return JsonParser().parse(file_name)
+        return json_parser.parse_from_file(file_name)
     elif input_format == FileFormat.XML:
-        raise NotImplementedError("Currently, the xml parser is not implemented")
+        return xml_parser.parse_from_file(file_name)
     elif input_format == FileFormat.YAML:
-        raise NotImplementedError("Currently, the yaml parser is not implemented")
+        return yaml_parser.parse_from_file(file_name)
