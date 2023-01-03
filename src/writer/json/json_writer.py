@@ -24,8 +24,7 @@ def write_document(document: Document, file_name: str, validate: bool = True, co
     a new one is created.
     """
     if validate:
-        validation_messages: List[ValidationMessage] = validate_full_spdx_document(document,
-                                                                                   document.creation_info.spdx_version)
+        validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
         if validation_messages:
             raise ValueError(f"Document is not valid. The following errors were detected: {validation_messages}")
     if converter is None:

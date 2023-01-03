@@ -18,7 +18,7 @@ from tests.fixtures import document_fixture
 
 def test_valid_document():
     document = document_fixture()
-    validation_messages: List[ValidationMessage] = validate_full_spdx_document(document, "2.3")
+    validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
 
     assert validation_messages == []
 
