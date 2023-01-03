@@ -58,34 +58,22 @@ This is the result of an initial GSoC contribution by @[ah450](https://github.co
 
 ## Command-line usage:
 
-1. **PARSER** (for parsing any format):
+1. **PARSING/VALIDATING** (for parsing any format):
 
-* Use `pyspdxtools_parser --file <filename>` where `<filename>` is the location of the file.              
-If you are using a source distribution, try running: `pyspdxtools_parser --file tests/data/formats/SPDXRdfExample.rdf`.
+* Use `pyspdxtools -i <filename>` where `<filename>` is the location of the file.              
+  If you are using a source distribution, try running: `pyspdxtools -i tests/data/formats/SPDXJSONExample-v2.3.spdx.json`.
 
-* Or you can use `pyspdxtools_parser` only, and it will automatically prompt/ask for `filename`.
+* Or you can use `pyspdxtools` only, and it will automatically prompt/ask for the `input file path`.
 
-* For help use `pyspdxtools_parser --help`
+2. **CONVERTING** (for converting one format to another):
 
+* Use `pyspdxtools -i <input_file> -o <output_file>` where `<input_file>` is the location of the file to be converted
+  and `<output_file>` is the location of the output file. The output format is inferred automatically from the file ending.
+  If you are using a source distribution, try running : `pyspdxtools -i tests/data/formats/SPDXJSONExample-v2.3.spdx.json -o output.tag` 
 
-2. **CONVERTOR** (for converting one format to another):
-
-* If I/O formats are known:
-
-    * Use `pyspdxtools_convertor --infile/-i <input_file> --outfile/-o <output_file>` where `<input_file>` is the location of the file to be converted
-    and `<output_file>` is the location of the output file.  
-    If you are using a source distribution, try running : `pyspdxtools_convertor --infile tests/data/formats/SPDXRdfExample.rdf --outfile output.json` 
-
-* If I/O formats are not known:
-
-    * Use `pyspdxtools_convertor --from/-f <input_format> <input_file> --to/-t <output_format> <output_file>` where `<input_format>` is the manually entered format of the input file
-    and `<out_format>` is the manually entered format of the output file. 
-    If you are using a source distribution, try running : `pyspdxtools_convertor --from tag tests/data/formats/SPDXTagExample.in --to yaml output.out` 
-
-* If one of the formats is known and the other is not, you can use a mixture of the above two points.  
-Example (if you are using a source distribution): `pyspdxtools_convertor -f rdf tests/data/formats/SPDXRdfExample.xyz -o output.xml`
-
-* For help use `pyspdxtools_convertor --help`
+* If you want to skip the validation process, provide the `--novalidation` flag, like so:  
+  `pyspdxtools -i tests/data/formats/SPDXJSONExample-v2.3.spdx.json -o output.tag --novalidation`
+* For help use `pyspdxtools --help`
 
 # Installation
 
