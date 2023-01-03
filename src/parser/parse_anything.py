@@ -14,7 +14,7 @@ from src.parser.json.json_parser import JsonParser
 
 def parse_file(file_name: str):
     input_format = file_name_to_format(file_name)
-    if input_format == FileFormat.RDF:
+    if input_format == FileFormat.RDF_XML:
         raise NotImplementedError("Currently, the rdf parser is not implemented")
     elif input_format == FileFormat.TAG_VALUE:
         raise NotImplementedError("Currently, the tag-value parser is not implemented")

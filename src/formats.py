@@ -18,12 +18,12 @@ class FileFormat(Enum):
     YAML = auto()
     XML = auto()
     TAG_VALUE = auto()
-    RDF = auto()
+    RDF_XML = auto()
 
 
 def file_name_to_format(file_name: str) -> FileFormat:
     if file_name.endswith(".rdf") or file_name.endswith(".rdf.xml"):
-        return FileFormat.RDF
+        return FileFormat.RDF_XML
     elif file_name.endswith(".tag") or file_name.endswith(".spdx"):
         return FileFormat.TAG_VALUE
     elif file_name.endswith(".json"):
