@@ -32,7 +32,7 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
     """
     CLI-tool for validating SPDX documents and converting between RDF, TAG-VALUE, JSON, YAML and XML formats.
     Formats are determined by the file endings.
-    To use, run: 'pyspdxtools_convertor --infile <input file name> --outfile <output file name>'
+    To use, run: 'pyspdxtools --infile <input file name> --outfile <output file name>'
     """
     try:
         document: Document = parse_file(infile)

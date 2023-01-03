@@ -31,8 +31,7 @@ dynamic = ["version"]
 test = ["pytest"]
 
 [project.scripts]
-pyspdxtools_convertor = "src.clitools.convertor:main"
-pyspdxtools_parser = "src.clitools.parser:main"
+pyspdxtools = "src.clitools.pyspdxtools:main"
 
 [tool.setuptools]
 zip-safe = false  # because of the uses of __file__: https://github.com/spdx/tools-python/issues/257
