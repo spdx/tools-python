@@ -43,9 +43,9 @@ def validate_relationship(relationship: Relationship, document: Document, spdx_v
         for message in messages:
             validation_messages.append(ValidationMessage(message, context))
 
-    if spdx_version != "2.3":
+    if spdx_version != "SPDX-2.3":
         if relationship_type == RelationshipType.SPECIFICATION_FOR or relationship_type == RelationshipType.REQUIREMENT_DESCRIPTION_FOR:
             validation_messages.append(
-                ValidationMessage(f"{relationship_type} is not supported for SPDX versions below 2.3", context))
+                ValidationMessage(f"{relationship_type} is not supported for SPDX versions below SPDX-2.3", context))
 
     return validation_messages

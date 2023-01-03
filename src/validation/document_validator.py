@@ -24,10 +24,13 @@ from src.validation.snippet_validator import validate_snippets
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_full_spdx_document(document: Document, spdx_version: str) -> List[ValidationMessage]:
+def validate_full_spdx_document(document: Document, spdx_version: str = None) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
 
-    validation_messages.extend(validate_creation_info(document.creation_info))
+    if not spdx_version:
+        spdx_version = document.creation_info.spdx_version
+
+    validation_messages.extend(validate_creation_info(document.creation_info, spdx_version))
     validation_messages.extend(validate_packages(document.packages, document))
     validation_messages.extend(validate_files(document.files, document))
     validation_messages.extend(validate_snippets(document.snippets, document))

@@ -19,7 +19,7 @@ from src.validation.uri_validators import validate_uri
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_creation_info(creation_info: CreationInfo) -> List[ValidationMessage]:
+def validate_creation_info(creation_info: CreationInfo, spdx_version: str) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
 
     context = ValidationContext(spdx_id=creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
@@ -30,6 +30,11 @@ def validate_creation_info(creation_info: CreationInfo) -> List[ValidationMessag
                 f'spdx_version must be of the form "SPDX-[major].[minor]" but is: {creation_info.spdx_version}',
                 context
             )
+        )
+    elif spdx_version != creation_info.spdx_version:
+        validation_messages.append(
+            ValidationMessage(f"provided SPDX version {spdx_version} does not match "
+                              f"the document's SPDX version {creation_info.spdx_version}", context)
         )
 
     if creation_info.spdx_id != "SPDXRef-DOCUMENT":

@@ -40,7 +40,7 @@ def test_valid_relationship(related_spdx_element):
 def test_unknown_spdx_id(spdx_element_id, related_spdx_element_id, expected_message):
     relationship: Relationship = relationship_fixture(spdx_element_id=spdx_element_id,
                                                       related_spdx_element_id=related_spdx_element_id)
-    validation_messages: List[ValidationMessage] = validate_relationship(relationship, document_fixture(), "2.3")
+    validation_messages: List[ValidationMessage] = validate_relationship(relationship, document_fixture(), "SPDX-2.3")
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
@@ -51,14 +51,14 @@ def test_unknown_spdx_id(spdx_element_id, related_spdx_element_id, expected_mess
 
 @pytest.mark.parametrize("relationship, expected_message",
                          [(Relationship("SPDXRef-DOCUMENT", RelationshipType.SPECIFICATION_FOR, "SPDXRef-Package"),
-                           "RelationshipType.SPECIFICATION_FOR is not supported for SPDX versions below 2.3"),
+                           "RelationshipType.SPECIFICATION_FOR is not supported for SPDX versions below SPDX-2.3"),
                           (Relationship("SPDXRef-DOCUMENT", RelationshipType.REQUIREMENT_DESCRIPTION_FOR,
                                         "SPDXRef-Package"),
-                           "RelationshipType.REQUIREMENT_DESCRIPTION_FOR is not supported for SPDX versions below 2.3")])
+                           "RelationshipType.REQUIREMENT_DESCRIPTION_FOR is not supported for SPDX versions below SPDX-2.3")])
 def test_v2_3_only_types(relationship, expected_message):
     document: Document = document_fixture()
 
-    validation_message: List[ValidationMessage] = validate_relationship(relationship, document, "2.2")
+    validation_message: List[ValidationMessage] = validate_relationship(relationship, document, "SPDX-2.2")
 
     expected = [ValidationMessage(expected_message,
                                   ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
