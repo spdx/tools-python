@@ -16,10 +16,12 @@ import pytest
 from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.validation.checksum_validator import validate_checksum
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from tests.fixtures import checksum_fixture
 
 
 @pytest.mark.parametrize("checksum",
-                         [Checksum(ChecksumAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c"),
+                         [checksum_fixture(),
+                          Checksum(ChecksumAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c"),
                           Checksum(ChecksumAlgorithm.SHA224,
                                    "9c9f4e27d957a123cc32d86afe33ae53b1184192cccb23b0f257f588"),
                           Checksum(ChecksumAlgorithm.SHA256,

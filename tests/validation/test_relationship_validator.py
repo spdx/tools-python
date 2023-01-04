@@ -19,16 +19,14 @@ from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.validation.relationship_validator import validate_relationship
 from src.validation.validation_message import ValidationMessage, SpdxElementType, ValidationContext
-from tests.valid_defaults import get_document, get_package, get_relationship, get_file
+from tests.fixtures import document_fixture, relationship_fixture
 
 
 @pytest.mark.parametrize("related_spdx_element",
                          ["SPDXRef-Package", SpdxNoAssertion(), SpdxNone()])
 def test_valid_relationship(related_spdx_element):
-    document: Document = get_document(packages=[get_package(spdx_id="SPDXRef-Package")])
-
-    relationship = Relationship("SPDXRef-DOCUMENT", RelationshipType.AMENDS, related_spdx_element, comment="comment")
-    validation_messages: List[ValidationMessage] = validate_relationship(relationship, document, "2.3")
+    relationship = Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, related_spdx_element, comment="comment")
+    validation_messages: List[ValidationMessage] = validate_relationship(relationship, document_fixture(), "2.3")
 
     assert validation_messages == []
 
@@ -40,10 +38,9 @@ def test_valid_relationship(related_spdx_element):
                            'did not find the referenced spdx_id SPDXRef-unknownFile in the SPDX document'),
                           ])
 def test_unknown_spdx_id(spdx_element_id, related_spdx_element_id, expected_message):
-    relationship: Relationship = get_relationship(spdx_element_id=spdx_element_id,
-                                                  related_spdx_element_id=related_spdx_element_id)
-    document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File")])
-    validation_messages: List[ValidationMessage] = validate_relationship(relationship, document, "2.3")
+    relationship: Relationship = relationship_fixture(spdx_element_id=spdx_element_id,
+                                                      related_spdx_element_id=related_spdx_element_id)
+    validation_messages: List[ValidationMessage] = validate_relationship(relationship, document_fixture(), "2.3")
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(element_type=SpdxElementType.RELATIONSHIP,
@@ -59,7 +56,7 @@ def test_unknown_spdx_id(spdx_element_id, related_spdx_element_id, expected_mess
                                         "SPDXRef-Package"),
                            "RelationshipType.REQUIREMENT_DESCRIPTION_FOR is not supported for SPDX versions below 2.3")])
 def test_v2_3_only_types(relationship, expected_message):
-    document: Document = get_document(packages=[get_package(spdx_id="SPDXRef-Package")])
+    document: Document = document_fixture()
 
     validation_message: List[ValidationMessage] = validate_relationship(relationship, document, "2.2")
 
