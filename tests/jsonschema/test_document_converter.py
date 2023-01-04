@@ -172,7 +172,8 @@ def test_document_describes(converter: DocumentConverter):
     described_by_document_relationship = relationship_fixture(related_spdx_element_id=document_id,
                                                               relationship_type=RelationshipType.DESCRIBED_BY,
                                                               spdx_element_id="describedById")
-    other_describes_relationship = relationship_fixture(relationship_type=RelationshipType.DESCRIBES)
+    other_describes_relationship = relationship_fixture(spdx_element_id="DocumentRef-external",
+                                                        relationship_type=RelationshipType.DESCRIBES)
     other_relationship = relationship_fixture(spdx_element_id=document_id, relationship_type=RelationshipType.CONTAINS)
     document.relationships = [document_describes_relationship, described_by_document_relationship,
                               other_describes_relationship, other_relationship]
