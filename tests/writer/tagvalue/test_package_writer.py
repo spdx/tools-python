@@ -11,22 +11,27 @@
 from datetime import datetime
 from unittest.mock import patch, mock_open, call
 
+from src.model.actor import ActorType, Actor
+from src.model.checksum import Checksum, ChecksumAlgorithm
 from src.model.license_expression import LicenseExpression
-from src.model.package import PackagePurpose
+from src.model.package import PackagePurpose, Package, PackageVerificationCode, ExternalPackageRef, \
+    ExternalPackageRefCategory
 from src.model.spdx_no_assertion import SpdxNoAssertion
 from src.model.spdx_none import SpdxNone
 from src.writer.tagvalue.package_writer import write_package
-from tests.valid_defaults import get_package, get_package_verification_code, get_actor, get_checksum, \
-    get_external_package_ref
 
 
 def test_package_writer():
-    package = get_package("SPDXRef-Package", "package name", "www.download.com", "version", "file_name", SpdxNoAssertion(),
-                      get_actor(), True,
-                      get_package_verification_code(), [get_checksum()], "https://homepage.com", "source_info", None,
-                      [LicenseExpression("expression")],
+    package = Package("SPDXRef-Package", "package name", "www.download.com", "version", "file_name", SpdxNoAssertion(),
+                      Actor(ActorType.PERSON, "person name", "email@mail.com"), True,
+                      PackageVerificationCode("85ed0817af83a24ad8da68c2b5094de69833983c"),
+                      [Checksum(ChecksumAlgorithm.SHA1, "85ed0817af83a24ad8da68c2b5094de69833983c")],
+                      "https://homepage.com", "source_info", None, [LicenseExpression("expression")],
                       SpdxNone(), "comment on license", "copyright", "summary", "description", "comment",
-                      [get_external_package_ref()], ["text"], PackagePurpose.OTHER, datetime(2022, 1, 1), None, None)
+                      [ExternalPackageRef(ExternalPackageRefCategory.SECURITY, "cpe22Type",
+                                          "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
+                                          "external package ref comment")],
+                      ["text"], PackagePurpose.OTHER, datetime(2022, 1, 1), None, None)
 
     m = mock_open()
     with patch('{}.open'.format(__name__), m, create=True):
@@ -42,7 +47,7 @@ def test_package_writer():
          call('PackageVersion: version\n'),
          call('PackageFileName: file_name\n'),
          call('PackageSupplier: NOASSERTION\n'),
-         call('PackageOriginator: Person: person name\n'),
+         call('PackageOriginator: Person: person name (email@mail.com)\n'),
          call('PackageDownloadLocation: www.download.com\n'),
          call('FilesAnalyzed: True\n'),
          call('PackageVerificationCode: 85ed0817af83a24ad8da68c2b5094de69833983c\n'),

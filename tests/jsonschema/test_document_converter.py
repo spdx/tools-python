@@ -71,7 +71,7 @@ def test_json_property_names(converter: DocumentConverter, document_property: Do
 
 def test_successful_conversion(converter: DocumentConverter):
     creation_info = creation_info_fixture(spdx_version="spdxVersion", spdx_id="spdxId", name="name",
-                                          namespace="namespace", document_comment="comment", data_license="dataLicense",
+                                          document_namespace="namespace", document_comment="comment", data_license="dataLicense",
                                           external_document_refs=[external_document_ref_fixture()])
     document = Document(creation_info, annotations=[
         Annotation("annotationId", AnnotationType.REVIEW, Actor(ActorType.PERSON, "reviewerName"),

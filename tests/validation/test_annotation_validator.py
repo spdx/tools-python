@@ -9,23 +9,19 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from datetime import datetime
 from typing import List
 
 import pytest
 
-from src.model.annotation import Annotation, AnnotationType
+from src.model.annotation import Annotation
 from src.model.document import Document
 from src.validation.annotation_validator import validate_annotation
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.valid_defaults import get_actor, get_annotation, get_document, get_file
+from tests.fixtures import document_fixture, annotation_fixture, file_fixture
 
 
 def test_valid_annotation():
-    document: Document = get_document(files=[get_file(spdx_id="SPDXRef-File")])
-
-    annotation = Annotation("SPDXRef-File", AnnotationType.OTHER, get_actor(), datetime(2022, 1, 1), "comment")
-    validation_messages: List[ValidationMessage] = validate_annotation(annotation, document)
+    validation_messages: List[ValidationMessage] = validate_annotation(annotation_fixture(), document_fixture())
 
     assert validation_messages == []
 
@@ -35,8 +31,8 @@ def test_valid_annotation():
                            "did not find the referenced spdx_id SPDXRef-File in the SPDX document")
                           ])
 def test_invalid_annotation(annotation_id, file_id, expected_message):
-    annotation: Annotation = get_annotation(spdx_id=annotation_id)
-    document: Document = get_document(files=[get_file(spdx_id=file_id)])
+    annotation: Annotation = annotation_fixture(spdx_id=annotation_id)
+    document: Document = document_fixture(files=[file_fixture(spdx_id=file_id)])
     validation_messages: List[ValidationMessage] = validate_annotation(annotation, document)
 
     expected = ValidationMessage(expected_message,

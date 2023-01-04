@@ -11,15 +11,13 @@
 
 from typing import List
 
-from src.model.external_document_ref import ExternalDocumentRef
 from src.validation.external_document_ref_validator import validate_external_document_ref
 from src.validation.validation_message import ValidationMessage
-from tests.valid_defaults import get_checksum
+from tests.fixtures import external_document_ref_fixture
 
 
 def test_valid_external_document_ref():
-
-    external_document_ref = ExternalDocumentRef("DocumentRef-id", "http://some.uri", get_checksum())
+    external_document_ref = external_document_ref_fixture()
     validation_messages: List[ValidationMessage] = validate_external_document_ref(external_document_ref, "parent_id")
 
     assert validation_messages == []

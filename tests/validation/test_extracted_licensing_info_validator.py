@@ -13,15 +13,13 @@ from typing import List
 
 import pytest
 
-from src.model.extracted_licensing_info import ExtractedLicensingInfo
 from src.validation.extracted_licensing_info_validator import validate_extracted_licensing_info
 from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.valid_defaults import get_extracted_licensing_info
+from tests.fixtures import extracted_licensing_info_fixture
 
 
 def test_valid_extracted_licensing_info():
-    extracted_licensing_info = ExtractedLicensingInfo("LicenseRef-1", "extracted text", "license name",
-                                                      ["http://some.url"], "comment")
+    extracted_licensing_info = extracted_licensing_info_fixture()
     validation_messages: List[ValidationMessage] = validate_extracted_licensing_info(extracted_licensing_info)
 
     assert validation_messages == []
@@ -29,9 +27,9 @@ def test_valid_extracted_licensing_info():
 
 # TODO: tests for licenses not on the SPDX License list (i.e. they must provide id, name and cross-references)
 @pytest.mark.parametrize("extracted_licensing_info, expected_message",
-                         [(get_extracted_licensing_info(extracted_text=None),
+                         [(extracted_licensing_info_fixture(extracted_text=None),
                            'extracted_text must be provided if there is a license_id assigned'),
-                          (get_extracted_licensing_info(cross_references=["invalid_url"]),
+                          (extracted_licensing_info_fixture(cross_references=["invalid_url"]),
                            'cross_reference must be a valid URL, but is: invalid_url')
                           ])
 def test_invalid_extracted_licensing_info(extracted_licensing_info, expected_message):
