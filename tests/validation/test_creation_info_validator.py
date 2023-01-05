@@ -27,9 +27,7 @@ def test_valid_creation_info():
 
 @pytest.mark.parametrize \
         ("creation_info_input, spdx_id, expected_message",
-         [(creation_info_fixture(spdx_version="version-2.3"), "SPDXRef-DOCUMENT",
-           'spdx_version must be of the form "SPDX-[major].[minor]" but is: version-2.3'),
-          (creation_info_fixture(spdx_id="SPDXRef-doc"), "SPDXRef-doc",
+         [(creation_info_fixture(spdx_id="SPDXRef-doc"), "SPDXRef-doc",
            'spdx_id must be "SPDXRef-DOCUMENT", but is: SPDXRef-doc'),
           (creation_info_fixture(data_license="MIT"), "SPDXRef-DOCUMENT",
            'data_license must be "CC0-1.0", but is: MIT'),

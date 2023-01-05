@@ -8,7 +8,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
+import re
 from typing import List
 
 from src.model.document import Document
@@ -27,10 +27,32 @@ from src.validation.validation_message import ValidationMessage, ValidationConte
 def validate_full_spdx_document(document: Document, spdx_version: str = None) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
 
+    # SPDX version validation has to happen here because subsequent validators rely on it
+    document_version: str = document.creation_info.spdx_version
+    context = ValidationContext(spdx_id=document.creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
     if not spdx_version:
-        spdx_version = document.creation_info.spdx_version
+        spdx_version = document_version
 
-    validation_messages.extend(validate_creation_info(document.creation_info, spdx_version))
+    if not re.match(r"^SPDX-\d+.\d+$", document_version):
+        validation_messages.append(
+            ValidationMessage(
+                f'the document\'s spdx_version must be of the form "SPDX-[major].[minor]" but is: {document_version}',
+                context
+            )
+        )
+    elif spdx_version != document_version:
+        validation_messages.append(
+            ValidationMessage(f"provided SPDX version {spdx_version} does not match "
+                              f"the document's SPDX version {document_version}", context)
+        )
+
+    if validation_messages:
+        validation_messages.append(ValidationMessage("There are issues concerning the SPDX version of the document. "
+                                                     "As subsequent validation relies on the correct version, "
+                                                     "the validation process has been cancelled.", context))
+        return validation_messages
+
+    validation_messages.extend(validate_creation_info(document.creation_info))
     validation_messages.extend(validate_packages(document.packages, document))
     validation_messages.extend(validate_files(document.files, document))
     validation_messages.extend(validate_snippets(document.snippets, document))
