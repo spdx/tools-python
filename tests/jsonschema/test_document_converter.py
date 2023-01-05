@@ -63,7 +63,7 @@ def converter(relationship_converter_mock: MagicMock, snippet_converter_mock: Ma
                           (DocumentProperty.PACKAGES, "packages"), (DocumentProperty.FILES, "files"),
                           (DocumentProperty.SNIPPETS, "snippets"), (DocumentProperty.ANNOTATIONS, "annotations"),
                           (DocumentProperty.RELATIONSHIPS, "relationships"),
-                          (DocumentProperty.HAS_EXTRACTED_LICENSING_INFO, "hasExtractedLicensingInfo")])
+                          (DocumentProperty.HAS_EXTRACTED_LICENSING_INFOS, "hasExtractedLicensingInfos")])
 def test_json_property_names(converter: DocumentConverter, document_property: DocumentProperty,
                              expected: str):
     assert converter.json_property_name(document_property) == expected
@@ -99,7 +99,7 @@ def test_successful_conversion(converter: DocumentConverter):
         converter.json_property_name(DocumentProperty.CREATION_INFO): "mock_converted_creation_info",
         converter.json_property_name(DocumentProperty.DATA_LICENSE): "dataLicense",
         converter.json_property_name(DocumentProperty.EXTERNAL_DOCUMENT_REFS): ["mock_converted_external_ref"],
-        converter.json_property_name(DocumentProperty.HAS_EXTRACTED_LICENSING_INFO): [
+        converter.json_property_name(DocumentProperty.HAS_EXTRACTED_LICENSING_INFOS): [
             "mock_converted_extracted_licensing_info"],
         converter.json_property_name(DocumentProperty.NAME): "name",
         converter.json_property_name(DocumentProperty.SPDX_VERSION): "spdxVersion",
@@ -127,7 +127,7 @@ def test_null_values(converter: DocumentConverter):
 
     assert converter.json_property_name(DocumentProperty.ANNOTATIONS) not in converted_dict
     assert converter.json_property_name(DocumentProperty.EXTERNAL_DOCUMENT_REFS) not in converted_dict
-    assert converter.json_property_name(DocumentProperty.HAS_EXTRACTED_LICENSING_INFO) not in converted_dict
+    assert converter.json_property_name(DocumentProperty.HAS_EXTRACTED_LICENSING_INFOS) not in converted_dict
     assert converter.json_property_name(DocumentProperty.DOCUMENT_DESCRIBES) not in converted_dict
     assert converter.json_property_name(DocumentProperty.PACKAGES) not in converted_dict
     assert converter.json_property_name(DocumentProperty.FILES) not in converted_dict
