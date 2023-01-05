@@ -60,10 +60,11 @@ class PackageParser:
         external_refs: List[ExternalPackageRef] = parse_field_or_log_error(logger, package_dict.get("externalRefs"),
                                                                            self.parse_external_refs)
 
-        files_analyzed: Optional[Union[bool, str]] = parse_field_or_log_error(logger, package_dict.get("filesAnalyzed"),
-                                                                  lambda x: x, True)
+        files_analyzed: Optional[Union[bool, str]] = package_dict.get("filesAnalyzed")
 
-        if isinstance(files_analyzed, str): # XML does not support boolean typed values
+        if files_analyzed is None: # default value is True
+            files_analyzed = True
+        elif isinstance(files_analyzed, str): # XML does not support boolean typed values
             if files_analyzed.lower() == "true":
                 files_analyzed = True
             elif files_analyzed.lower() == "false":
