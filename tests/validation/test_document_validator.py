@@ -9,11 +9,14 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from typing import List
+from typing import List, Optional
 
+import pytest
+
+from src.model.document import Document, CreationInfo
 from src.validation.document_validator import validate_full_spdx_document
-from src.validation.validation_message import ValidationMessage
-from tests.fixtures import document_fixture
+from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from tests.fixtures import document_fixture, creation_info_fixture
 
 
 def test_valid_document():
@@ -22,4 +25,34 @@ def test_valid_document():
 
     assert validation_messages == []
 
-# TODO: https://github.com/spdx/tools-python/issues/375
+
+@pytest.mark.parametrize("creation_info, version_input, expected_message",
+                         [(creation_info_fixture(spdx_version="SPDX-2.3"), "SPDX-2.3", None),
+                          (creation_info_fixture(spdx_version="SPDX-2.3"), None, None),
+                          (creation_info_fixture(spdx_version="SPDX-2.3"), "SPDX-2.2",
+                           "provided SPDX version SPDX-2.2 does not match the document's SPDX version SPDX-2.3"),
+                          (creation_info_fixture(spdx_version="SPDX-2.3"), "SPDX2.3",
+                           "provided SPDX version SPDX2.3 does not match the document's SPDX version SPDX-2.3"),
+                          (creation_info_fixture(spdx_version="SPDX2.3"), "SPDX-2.3",
+                           'the document\'s spdx_version must be of the form "SPDX-[major].[minor]" but is: SPDX2.3'),
+                          (creation_info_fixture(spdx_version="SPDX2.3"), None,
+                           'the document\'s spdx_version must be of the form "SPDX-[major].[minor]" but is: SPDX2.3'),
+                          (creation_info_fixture(spdx_version="SPDX2.3"), "SPDX2.3",
+                           'the document\'s spdx_version must be of the form "SPDX-[major].[minor]" but is: SPDX2.3'),
+                          ])
+def test_spdx_version_handling(creation_info: CreationInfo, version_input: str, expected_message: Optional[str]):
+    document: Document = document_fixture(creation_info=creation_info)
+    validation_messages: List[ValidationMessage] = validate_full_spdx_document(document, version_input)
+
+    context = ValidationContext(spdx_id=creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
+    expected: List[ValidationMessage] = []
+
+    if expected_message:
+        expected.append(ValidationMessage(expected_message, context))
+        expected.append(ValidationMessage("There are issues concerning the SPDX version of the document. "
+                                          "As subsequent validation relies on the correct version, "
+                                          "the validation process has been cancelled.", context))
+
+    assert validation_messages == expected
+
+    # TODO: https://github.com/spdx/tools-python/issues/375
