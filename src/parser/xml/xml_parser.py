@@ -20,7 +20,7 @@ from src.parser.jsonlikedict.json_like_dict_parser import JsonLikeDictParser
 LIST_LIKE_FIELDS = [
     "creators",
     "externalDocumentRefs",
-    "extractedLicenseInfos",
+    "hasExtractedLicensingInfos",
     "seeAlsos",
     "annotations",
     "relationships",

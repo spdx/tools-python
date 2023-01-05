@@ -20,7 +20,7 @@ class DocumentProperty(JsonProperty):
     CREATION_INFO = auto()
     DATA_LICENSE = auto()
     EXTERNAL_DOCUMENT_REFS = auto()
-    HAS_EXTRACTED_LICENSING_INFO = auto()
+    HAS_EXTRACTED_LICENSING_INFOS = auto()
     NAME = auto()
     SPDX_VERSION = auto()
     DOCUMENT_NAMESPACE = auto()

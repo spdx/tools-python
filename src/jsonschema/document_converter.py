@@ -79,7 +79,7 @@ class DocumentConverter(TypedConverter[Document]):
         elif document_property == DocumentProperty.EXTERNAL_DOCUMENT_REFS:
             return [self.external_document_ref_converter.convert(external_document_ref) for
                     external_document_ref in document.creation_info.external_document_refs] or None
-        elif document_property == DocumentProperty.HAS_EXTRACTED_LICENSING_INFO:
+        elif document_property == DocumentProperty.HAS_EXTRACTED_LICENSING_INFOS:
             return [self.extracted_licensing_info_converter.convert(licensing_info) for licensing_info in
                     document.extracted_licensing_info] or None
         elif document_property == DocumentProperty.NAME:
