@@ -26,3 +26,5 @@ jobs:
         shell: bash
       - name: Run tests
         run: pytest
+      - name: Run CLI
+        run: pyspdxtools -i ./tests/data/formats/SPDXJSONExample-v2.3.spdx.json
