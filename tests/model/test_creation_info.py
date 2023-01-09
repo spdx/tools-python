@@ -3,12 +3,12 @@ from unittest import mock
 
 import pytest
 
-from src.model.document import CreationInfo
-from src.model.version import Version
+from spdx.model.document import CreationInfo
+from spdx.model.version import Version
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
-@mock.patch('src.model.external_document_ref.ExternalDocumentRef', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.external_document_ref.ExternalDocumentRef', autospec=True)
 def test_correct_initialization(actor, ext_ref):
     creation_info = CreationInfo("version", "id", "name", "namespace", [actor, actor], datetime(2022, 1, 1),
                                  "creator_comment", "CC0-1.1", [ext_ref, ext_ref], Version(6, 3), "doc_comment")
@@ -25,25 +25,25 @@ def test_correct_initialization(actor, ext_ref):
     assert creation_info.document_comment == "doc_comment"
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_spdx_version(actor):
     with pytest.raises(TypeError):
         CreationInfo(42, "id", "name", "namespace", [actor, actor], datetime(2022, 1, 1))
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_spdx_id(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", 42, "name", "namespace", [actor, actor], datetime(2022, 1, 1))
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_name(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", "id", 42, "namespace", [actor, actor], datetime(2022, 1, 1))
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_document_namespace(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", "id", "name", 42, [actor, actor], datetime(2022, 1, 1))
@@ -54,40 +54,40 @@ def test_wrong_type_in_creators():
         CreationInfo("version", "id", "name", "namespace", ["person"], datetime(2022, 1, 1))
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_created(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", "id", "name", "namespace", [actor, actor], "2022-01-01")
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_creator_comment(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", "id", "name", "namespace", [actor, actor], datetime(2022, 1, 1),
                      creator_comment=["string"])
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_data_license(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", "id", "name", "namespace", [actor, actor], datetime(2022, 1, 1), data_license=42)
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_external_document_refs(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", "id", "name", "namespace", [actor, actor], datetime(2022, 1, 1),
                      external_document_refs=())
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_license_list_version(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", "id", "name", "namespace", [actor, actor], datetime(2022, 1, 1),
                      license_list_version="6.4")
 
 
-@mock.patch('src.model.actor.Actor', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_wrong_type_in_document_comment(actor):
     with pytest.raises(TypeError):
         CreationInfo("version", "id", "name", "namespace", [actor, actor], datetime(2022, 1, 1), document_comment=["1"])

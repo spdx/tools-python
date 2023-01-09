@@ -13,9 +13,9 @@ from typing import List, Optional
 
 import pytest
 
-from src.model.document import Document, CreationInfo
-from src.validation.document_validator import validate_full_spdx_document
-from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.model.document import Document, CreationInfo
+from spdx.validation.document_validator import validate_full_spdx_document
+from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.fixtures import document_fixture, creation_info_fixture
 
 

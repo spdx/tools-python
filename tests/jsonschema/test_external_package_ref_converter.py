@@ -10,9 +10,9 @@
 # limitations under the License.
 import pytest
 
-from src.jsonschema.external_package_ref_converter import ExternalPackageRefConverter
-from src.jsonschema.external_package_ref_properties import ExternalPackageRefProperty
-from src.model.package import ExternalPackageRef, ExternalPackageRefCategory
+from spdx.jsonschema.external_package_ref_converter import ExternalPackageRefConverter
+from spdx.jsonschema.external_package_ref_properties import ExternalPackageRefProperty
+from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 
 
 @pytest.fixture

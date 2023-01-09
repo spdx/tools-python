@@ -1,7 +1,7 @@
 import pytest
 
-from src.model.relationship import Relationship, RelationshipType
-from src.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.relationship import Relationship, RelationshipType
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
 
 
 def test_correct_initialization():

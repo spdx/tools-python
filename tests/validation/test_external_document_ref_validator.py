@@ -11,8 +11,8 @@
 
 from typing import List
 
-from src.validation.external_document_ref_validator import validate_external_document_ref
-from src.validation.validation_message import ValidationMessage
+from spdx.validation.external_document_ref_validator import validate_external_document_ref
+from spdx.validation.validation_message import ValidationMessage
 from tests.fixtures import external_document_ref_fixture
 
 

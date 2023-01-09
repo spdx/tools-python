@@ -15,29 +15,29 @@ from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
 
-from src.jsonschema.annotation_converter import AnnotationConverter
-from src.jsonschema.document_converter import DocumentConverter
-from src.jsonschema.document_properties import DocumentProperty
-from src.jsonschema.relationship_converter import RelationshipConverter
-from src.model.actor import Actor, ActorType
-from src.model.annotation import Annotation, AnnotationType
-from src.model.document import Document
-from src.model.extracted_licensing_info import ExtractedLicensingInfo
-from src.model.relationship import Relationship, RelationshipType
+from spdx.jsonschema.annotation_converter import AnnotationConverter
+from spdx.jsonschema.document_converter import DocumentConverter
+from spdx.jsonschema.document_properties import DocumentProperty
+from spdx.jsonschema.relationship_converter import RelationshipConverter
+from spdx.model.actor import Actor, ActorType
+from spdx.model.annotation import Annotation, AnnotationType
+from spdx.model.document import Document
+from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx.model.relationship import Relationship, RelationshipType
 from tests.fixtures import creation_info_fixture, file_fixture, package_fixture, external_document_ref_fixture, \
     snippet_fixture, annotation_fixture, document_fixture, relationship_fixture
 from tests.mock_utils import assert_mock_method_called_with_arguments, assert_no_mock_methods_called
 
 
 @pytest.fixture
-@mock.patch('src.jsonschema.creation_info_converter.CreationInfoConverter', autospec=True)
-@mock.patch('src.jsonschema.external_document_ref_converter.ExternalDocumentRefConverter', autospec=True)
-@mock.patch('src.jsonschema.package_converter.PackageConverter', autospec=True)
-@mock.patch('src.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
-@mock.patch('src.jsonschema.extracted_licensing_info_converter.ExtractedLicensingInfoConverter', autospec=True)
-@mock.patch('src.jsonschema.file_converter.FileConverter', autospec=True)
-@mock.patch('src.jsonschema.snippet_converter.SnippetConverter', autospec=True)
-@mock.patch('src.jsonschema.relationship_converter.RelationshipConverter', autospec=True)
+@mock.patch('spdx.jsonschema.creation_info_converter.CreationInfoConverter', autospec=True)
+@mock.patch('spdx.jsonschema.external_document_ref_converter.ExternalDocumentRefConverter', autospec=True)
+@mock.patch('spdx.jsonschema.package_converter.PackageConverter', autospec=True)
+@mock.patch('spdx.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
+@mock.patch('spdx.jsonschema.extracted_licensing_info_converter.ExtractedLicensingInfoConverter', autospec=True)
+@mock.patch('spdx.jsonschema.file_converter.FileConverter', autospec=True)
+@mock.patch('spdx.jsonschema.snippet_converter.SnippetConverter', autospec=True)
+@mock.patch('spdx.jsonschema.relationship_converter.RelationshipConverter', autospec=True)
 def converter(relationship_converter_mock: MagicMock, snippet_converter_mock: MagicMock, file_converter_mock: MagicMock,
               extracted_licensing_info_converter_mock: MagicMock, annotation_converter_mock: MagicMock,
               package_converter_mock: MagicMock, external_ref_converter_mock: MagicMock,

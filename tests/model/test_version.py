@@ -12,7 +12,7 @@
 
 import pytest
 
-from src.model.version import Version
+from spdx.model.version import Version
 
 
 @pytest.mark.parametrize("input_string,expected", [("1.2", Version(1, 2)), ("12.345", Version(12, 345))])

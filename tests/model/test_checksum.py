@@ -1,6 +1,6 @@
 import pytest
 
-from src.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
 
 
 def test_correct_initialization():

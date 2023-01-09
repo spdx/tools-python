@@ -10,9 +10,9 @@
 # limitations under the License.
 import pytest
 
-from src.jsonschema.checksum_converter import ChecksumConverter
-from src.jsonschema.checksum_properties import ChecksumProperty
-from src.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.jsonschema.checksum_converter import ChecksumConverter
+from spdx.jsonschema.checksum_properties import ChecksumProperty
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
 
 
 @pytest.fixture

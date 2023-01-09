@@ -13,12 +13,12 @@ from unittest import TestCase
 
 import pytest
 
-from src.model.actor import Actor, ActorType
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.external_document_ref import ExternalDocumentRef
-from src.model.version import Version
-from src.parser.error import SPDXParsingError
-from src.parser.jsonlikedict.creation_info_parser import CreationInfoParser
+from spdx.model.actor import Actor, ActorType
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.external_document_ref import ExternalDocumentRef
+from spdx.model.version import Version
+from spdx.parser.error import SPDXParsingError
+from spdx.parser.jsonlikedict.creation_info_parser import CreationInfoParser
 
 
 def test_parse_creation_info():

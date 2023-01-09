@@ -13,10 +13,10 @@ from unittest import TestCase
 
 import pytest
 
-from src.model.actor import Actor, ActorType
-from src.model.annotation import AnnotationType, Annotation
-from src.parser.error import SPDXParsingError
-from src.parser.jsonlikedict.annotation_parser import AnnotationParser
+from spdx.model.actor import Actor, ActorType
+from spdx.model.annotation import AnnotationType, Annotation
+from spdx.parser.error import SPDXParsingError
+from spdx.parser.jsonlikedict.annotation_parser import AnnotationParser
 
 
 def test_parse_annotation():
@@ -105,8 +105,8 @@ def test_parse_all_annotations():
 
 
 @pytest.mark.parametrize("incomplete_annotation_dict,expected_message", [({"annotator": "Person: Jane Doe ()"}, [
-    "Error while constructing Annotation: ['SetterError Annotation: type of " 'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError Annotation: type of argument "annotation_type" must be ' "src.model.annotation.AnnotationType; got NoneType instead: None', " '\'SetterError Annotation: type of argument "annotation_date" must be ' "datetime.datetime; got NoneType instead: None', 'SetterError Annotation: " 'type of argument "annotation_comment" must be str; got NoneType instead: ' "None']"]),
-                                                                         ({"annotationDate": "2010-01-29T18:30:22Z"}, ["Error while constructing Annotation: ['SetterError Annotation: type of " 'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError Annotation: type of argument "annotation_type" must be ' "src.model.annotation.AnnotationType; got NoneType instead: None', " '\'SetterError Annotation: type of argument "annotator" must be ' "src.model.actor.Actor; got NoneType instead: None', 'SetterError Annotation: " 'type of argument "annotation_comment" must be str; got NoneType instead: ' "None']"])])
+    "Error while constructing Annotation: ['SetterError Annotation: type of " 'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError Annotation: type of argument "annotation_type" must be ' "spdx.model.annotation.AnnotationType; got NoneType instead: None', " '\'SetterError Annotation: type of argument "annotation_date" must be ' "datetime.datetime; got NoneType instead: None', 'SetterError Annotation: " 'type of argument "annotation_comment" must be str; got NoneType instead: ' "None']"]),
+                                                                         ({"annotationDate": "2010-01-29T18:30:22Z"}, ["Error while constructing Annotation: ['SetterError Annotation: type of " 'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError Annotation: type of argument "annotation_type" must be ' "spdx.model.annotation.AnnotationType; got NoneType instead: None', " '\'SetterError Annotation: type of argument "annotator" must be ' "spdx.model.actor.Actor; got NoneType instead: None', 'SetterError Annotation: " 'type of argument "annotation_comment" must be str; got NoneType instead: ' "None']"])])
 def test_parse_incomplete_annotation(incomplete_annotation_dict, expected_message):
     annotation_parser = AnnotationParser()
 

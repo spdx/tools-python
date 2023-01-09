@@ -10,19 +10,19 @@
 # limitations under the License.
 from datetime import datetime
 
-from src.model.actor import Actor, ActorType
-from src.model.annotation import Annotation, AnnotationType
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.document import CreationInfo, Document
-from src.model.external_document_ref import ExternalDocumentRef
-from src.model.extracted_licensing_info import ExtractedLicensingInfo
-from src.model.file import File, FileType
-from src.model.license_expression import LicenseExpression
-from src.model.package import Package, PackageVerificationCode, PackagePurpose, ExternalPackageRef, \
+from spdx.model.actor import Actor, ActorType
+from spdx.model.annotation import Annotation, AnnotationType
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.document import CreationInfo, Document
+from spdx.model.external_document_ref import ExternalDocumentRef
+from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx.model.file import File, FileType
+from spdx.model.license_expression import LicenseExpression
+from spdx.model.package import Package, PackageVerificationCode, PackagePurpose, ExternalPackageRef, \
     ExternalPackageRefCategory
-from src.model.relationship import Relationship, RelationshipType
-from src.model.snippet import Snippet
-from src.model.version import Version
+from spdx.model.relationship import Relationship, RelationshipType
+from spdx.model.snippet import Snippet
+from spdx.model.version import Version
 
 """Utility methods to create data model instances. All properties have valid defaults, so they don't need to be 
 specified unless relevant for the test."""

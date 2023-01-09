@@ -15,28 +15,28 @@ from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
 
-from src.jsonschema.annotation_converter import AnnotationConverter
-from src.jsonschema.package_converter import PackageConverter
-from src.jsonschema.package_properties import PackageProperty
-from src.model.actor import Actor, ActorType
-from src.model.annotation import Annotation, AnnotationType
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.document import Document
-from src.model.license_expression import LicenseExpression
-from src.model.package import Package, PackageVerificationCode, PackagePurpose
-from src.model.relationship import RelationshipType
-from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
-from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
+from spdx.jsonschema.annotation_converter import AnnotationConverter
+from spdx.jsonschema.package_converter import PackageConverter
+from spdx.jsonschema.package_properties import PackageProperty
+from spdx.model.actor import Actor, ActorType
+from spdx.model.annotation import Annotation, AnnotationType
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.document import Document
+from spdx.model.license_expression import LicenseExpression
+from spdx.model.package import Package, PackageVerificationCode, PackagePurpose
+from spdx.model.relationship import RelationshipType
+from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
+from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
 from tests.fixtures import creation_info_fixture, package_fixture, external_package_ref_fixture, document_fixture, \
     annotation_fixture, file_fixture, relationship_fixture, snippet_fixture
 from tests.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
-@mock.patch('src.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
-@mock.patch('src.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
-@mock.patch('src.jsonschema.package_verification_code_converter.PackageVerificationCodeConverter', autospec=True)
-@mock.patch('src.jsonschema.external_package_ref_converter.ExternalPackageRefConverter', autospec=True)
+@mock.patch('spdx.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
+@mock.patch('spdx.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
+@mock.patch('spdx.jsonschema.package_verification_code_converter.PackageVerificationCodeConverter', autospec=True)
+@mock.patch('spdx.jsonschema.external_package_ref_converter.ExternalPackageRefConverter', autospec=True)
 def converter(package_ref_converter_mock: MagicMock, verification_code_converter_mock: MagicMock,
               annotation_converter_mock: MagicMock, checksum_converter_mock: MagicMock) -> PackageConverter:
     converter = PackageConverter()

@@ -13,13 +13,13 @@ from unittest import TestCase
 
 import pytest
 
-from src.model.actor import Actor, ActorType
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.license_expression import LicenseExpression
-from src.model.package import PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
-from src.parser.error import SPDXParsingError
-from src.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
-from src.parser.jsonlikedict.package_parser import PackageParser
+from spdx.model.actor import Actor, ActorType
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.license_expression import LicenseExpression
+from spdx.model.package import PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
+from spdx.parser.error import SPDXParsingError
+from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
+from spdx.parser.jsonlikedict.package_parser import PackageParser
 
 
 def test_parse_package():
@@ -128,7 +128,7 @@ def test_parse_package():
 
 
 @pytest.mark.parametrize("incomplete_package_dict,expected_message", [({"SPDXID": "SPDXRef-Package"}, [
-    "Error while constructing Package: ['SetterError Package: type of " 'argument "name" must be str; got NoneType instead: None\', \'SetterError Package: type of argument "download_location" must be one of (str, src.model.spdx_no_assertion.SpdxNoAssertion, src.model.spdx_none.SpdxNone); ' "got NoneType instead: None']"]),
+    "Error while constructing Package: ['SetterError Package: type of " 'argument "name" must be str; got NoneType instead: None\', \'SetterError Package: type of argument "download_location" must be one of (str, spdx.model.spdx_no_assertion.SpdxNoAssertion, spdx.model.spdx_none.SpdxNone); ' "got NoneType instead: None']"]),
                                                                       ({"SPDXID": "SPDXRef-Package", "name": 5,
                                                                         "downloadLocation": "NONE"}, [
                                                                            "Error while constructing Package: ['SetterError Package: type of argument " '"name" must be str; got int instead: 5\']'])])
@@ -199,7 +199,7 @@ def test_parse_external_ref():
         package_parser.parse_external_ref(external_ref)
 
     TestCase().assertCountEqual(err.value.get_messages(), [
-        "Error while constructing ExternalPackageRef: ['SetterError " 'ExternalPackageRef: type of argument "category" must be ' "src.model.package.ExternalPackageRefCategory; got NoneType instead: None', " '\'SetterError ExternalPackageRef: type of argument "locator" must be str; ' "got NoneType instead: None']"])
+        "Error while constructing ExternalPackageRef: ['SetterError " 'ExternalPackageRef: type of argument "category" must be ' "spdx.model.package.ExternalPackageRefCategory; got NoneType instead: None', " '\'SetterError ExternalPackageRef: type of argument "locator" must be str; ' "got NoneType instead: None']"])
 
 def test_parse_invalid_external_package_ref_category():
     package_parser = PackageParser()

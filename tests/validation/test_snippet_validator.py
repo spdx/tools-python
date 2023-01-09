@@ -13,8 +13,8 @@ from typing import List
 
 import pytest
 
-from src.validation.snippet_validator import validate_snippet_within_document
-from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.snippet_validator import validate_snippet_within_document
+from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.fixtures import document_fixture, snippet_fixture
 
 

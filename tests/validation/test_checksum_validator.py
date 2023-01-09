@@ -13,9 +13,9 @@ from typing import List
 
 import pytest
 
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.validation.checksum_validator import validate_checksum
-from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.validation.checksum_validator import validate_checksum
+from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.fixtures import checksum_fixture
 
 

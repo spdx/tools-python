@@ -14,18 +14,18 @@ from datetime import datetime
 
 import pytest
 
-from src.model.actor import Actor, ActorType
-from src.model.annotation import Annotation, AnnotationType
-from src.model.checksum import ChecksumAlgorithm, Checksum
-from src.model.document import CreationInfo, Document
-from src.model.external_document_ref import ExternalDocumentRef
-from src.model.extracted_licensing_info import ExtractedLicensingInfo
-from src.model.file import File
-from src.model.package import Package
-from src.model.relationship import RelationshipType, Relationship
-from src.model.snippet import Snippet
-from src.model.spdx_none import SpdxNone
-from src.writer.json.json_writer import write_document
+from spdx.model.actor import Actor, ActorType
+from spdx.model.annotation import Annotation, AnnotationType
+from spdx.model.checksum import ChecksumAlgorithm, Checksum
+from spdx.model.document import CreationInfo, Document
+from spdx.model.external_document_ref import ExternalDocumentRef
+from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx.model.file import File
+from spdx.model.package import Package
+from spdx.model.relationship import RelationshipType, Relationship
+from spdx.model.snippet import Snippet
+from spdx.model.spdx_none import SpdxNone
+from spdx.writer.json.json_writer import write_document
 from tests.fixtures import document_fixture
 
 

@@ -12,7 +12,7 @@
 
 import pytest
 
-from src.model.license import determine_full_name, determine_identifier
+from spdx.model.license import determine_full_name, determine_identifier
 
 
 @pytest.mark.parametrize("identifier,full_name,expected",

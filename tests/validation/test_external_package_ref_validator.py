@@ -13,8 +13,8 @@ from typing import List
 
 import pytest
 
-from src.validation.external_package_ref_validator import validate_external_package_ref
-from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.external_package_ref_validator import validate_external_package_ref
+from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.fixtures import external_package_ref_fixture
 
 

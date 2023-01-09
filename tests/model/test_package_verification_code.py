@@ -1,6 +1,6 @@
 import pytest
 
-from src.model.package import PackageVerificationCode
+from spdx.model.package import PackageVerificationCode
 
 
 def test_correct_initialization():

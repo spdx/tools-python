@@ -13,12 +13,12 @@ from typing import List
 
 import pytest
 
-from src.model.document import Document
-from src.model.relationship import Relationship, RelationshipType
-from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.model.spdx_none import SpdxNone
-from src.validation.relationship_validator import validate_relationship
-from src.validation.validation_message import ValidationMessage, SpdxElementType, ValidationContext
+from spdx.model.document import Document
+from spdx.model.relationship import Relationship, RelationshipType
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
+from spdx.validation.relationship_validator import validate_relationship
+from spdx.validation.validation_message import ValidationMessage, SpdxElementType, ValidationContext
 from tests.fixtures import document_fixture, relationship_fixture
 
 
