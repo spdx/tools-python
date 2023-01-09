@@ -8,30 +8,14 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from datetime import datetime
 from unittest.mock import patch, mock_open, call
 
-from spdx.model.actor import ActorType, Actor
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.license_expression import LicenseExpression
-from spdx.model.package import PackagePurpose, Package, PackageVerificationCode, ExternalPackageRef, \
-    ExternalPackageRefCategory
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.model.spdx_none import SpdxNone
+from tests.fixtures import package_fixture
 from spdx.writer.tagvalue.package_writer import write_package
 
 
 def test_package_writer():
-    package = Package("SPDXRef-Package", "package name", "www.download.com", "version", "file_name", SpdxNoAssertion(),
-                      Actor(ActorType.PERSON, "person name", "email@mail.com"), True,
-                      PackageVerificationCode("85ed0817af83a24ad8da68c2b5094de69833983c"),
-                      [Checksum(ChecksumAlgorithm.SHA1, "85ed0817af83a24ad8da68c2b5094de69833983c")],
-                      "https://homepage.com", "source_info", None, [LicenseExpression("expression")],
-                      SpdxNone(), "comment on license", "copyright", "summary", "description", "comment",
-                      [ExternalPackageRef(ExternalPackageRefCategory.SECURITY, "cpe22Type",
-                                          "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-                                          "external package ref comment")],
-                      ["text"], PackagePurpose.OTHER, datetime(2022, 1, 1), None, None)
+    package = package_fixture()
 
     m = mock_open()
     with patch('{}.open'.format(__name__), m, create=True):
@@ -42,27 +26,30 @@ def test_package_writer():
     handle = m()
     handle.write.assert_has_calls(
         [call('## Package Information\n'),
-         call('PackageName: package name\n'),
+         call('PackageName: packageName\n'),
          call('SPDXID: SPDXRef-Package\n'),
-         call('PackageVersion: version\n'),
-         call('PackageFileName: file_name\n'),
-         call('PackageSupplier: NOASSERTION\n'),
-         call('PackageOriginator: Person: person name (email@mail.com)\n'),
-         call('PackageDownloadLocation: www.download.com\n'),
+         call('PackageVersion: 12.2\n'),
+         call('PackageFileName: ./packageFileName\n'),
+         call('PackageSupplier: Person: supplierName (some@mail.com)\n'),
+         call('PackageOriginator: Person: originatorName (some@mail.com)\n'),
+         call('PackageDownloadLocation: https://download.com\n'),
          call('FilesAnalyzed: True\n'),
-         call('PackageVerificationCode: 85ed0817af83a24ad8da68c2b5094de69833983c\n'),
-         call('PackageChecksum: SHA1: 85ed0817af83a24ad8da68c2b5094de69833983c\n'),
+         call('PackageVerificationCode: 85ed0817af83a24ad8da68c2b5094de69833983c (excludes: ./exclude.py)\n'),
+         call('PackageChecksum: SHA1: 71c4025dd9897b364f3ebbb42c484ff43d00791c\n'),
          call('PackageHomePage: https://homepage.com\n'),
-         call('PackageSourceInfo: source_info\n'),
-         call('PackageLicenseInfoFromFiles: expression\n'),
-         call('PackageLicenseDeclared: NONE\n'),
-         call('PackageLicenseComments: comment on license\n'),
-         call('PackageCopyrightText: copyright\n'),
-         call('PackageSummary: summary\n'),
-         call('PackageDescription: description\n'),
-         call('PackageComment: comment\n'),
-         call('ExternalRef: SECURITY cpe22Type cpe:/o:canonical:ubuntu_linux:10.04:-:lts\n'),
-         call('ExternalRefComment: external package ref comment\n'),
-         call('PackageAttributionText: text\n'),
-         call('PrimaryPackagePurpose: OTHER\n'),
-         call('ReleaseDate: 2022-01-01T00:00:00Z\n')])
+         call('PackageSourceInfo: sourceInfo\n'),
+         call('PackageLicenseConcluded: packageLicenseConcluded\n'),
+         call('PackageLicenseInfoFromFiles: licenseInfoFromFile\n'),
+         call('PackageLicenseDeclared: packageLicenseDeclared\n'),
+         call('PackageLicenseComments: packageLicenseComment\n'),
+         call('PackageCopyrightText: packageCopyrightText\n'),
+         call('PackageSummary: packageSummary\n'),
+         call('PackageDescription: packageDescription\n'),
+         call('PackageComment: packageComment\n'),
+         call('ExternalRef: PACKAGE-MANAGER maven-central org.apache.tomcat:tomcat:9.0.0.M4\n'),
+         call('ExternalRefComment: externalPackageRefComment\n'),
+         call('PackageAttributionText: packageAttributionText\n'),
+         call('PrimaryPackagePurpose: SOURCE\n'),
+         call('ReleaseDate: 2022-12-01T00:00:00Z\n'),
+         call('BuiltDate: 2022-12-02T00:00:00Z\n'),
+         call('ValidUntilDate: 2022-12-03T00:00:00Z\n')])

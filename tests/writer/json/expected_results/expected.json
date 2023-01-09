@@ -1,101 +1,175 @@
 {
-    "SPDXID": "documentId",
-    "annotations": [
-        {
-            "annotationDate": "2022-12-02T00:00:00Z",
-            "annotationType": "REVIEW",
-            "annotator": "Person: reviewerName",
-            "comment": "reviewComment"
-        }
-    ],
-    "comment": "comment",
+    "SPDXID": "SPDXRef-DOCUMENT",
+    "comment": "documentComment",
     "creationInfo": {
+        "comment": "creatorComment",
         "created": "2022-12-01T00:00:00Z",
         "creators": [
-            "Tool: tools-python (tools-python@github.com)"
-        ]
+            "Person: creatorName (some@mail.com)"
+        ],
+        "licenseListVersion": "3.19"
     },
-    "dataLicense": "dataLicense",
+    "dataLicense": "CC0-1.0",
+    "documentDescribes": [
+        "SPDXRef-File"
+    ],
+    "documentNamespace": "https://some.namespace",
     "externalDocumentRefs": [
         {
-            "externalDocumentId": "docRefId",
-            "spdxDocument": "externalDocumentUri",
             "checksum": {
                 "algorithm": "SHA1",
-                "checksumValue": "externalRefSha1"
-            }
-        }
-    ],
-    "hasExtractedLicensingInfos": [
-        {
-            "extractedText": "licenseText",
-            "licenseId": "licenseId"
-        }
-    ],
-    "name": "documentName",
-    "spdxVersion": "spdxVersion",
-    "documentNamespace": "documentNamespace",
-    "documentDescribes": [
-        "packageId",
-        "fileId"
-    ],
-    "packages": [
-        {
-            "SPDXID": "packageId",
-            "downloadLocation": "NONE",
-            "filesAnalyzed": true,
-            "name": "packageName"
+                "checksumValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
+            },
+            "externalDocumentId": "DocumentRef-external",
+            "spdxDocument": "https://namespace.com"
         }
     ],
     "files": [
         {
-            "SPDXID": "fileId",
+            "SPDXID": "SPDXRef-File",
             "annotations": [
                 {
-                    "annotationDate": "2022-12-03T00:00:00Z",
-                    "annotationType": "OTHER",
-                    "annotator": "Tool: toolName",
-                    "comment": "otherComment"
+                    "annotationDate": "2022-12-01T00:00:00Z",
+                    "annotationType": "REVIEW",
+                    "annotator": "Person: annotatorName (some@mail.com)",
+                    "comment": "annotationComment"
                 }
+            ],
+            "attributionTexts": [
+                "fileAttributionText"
             ],
             "checksums": [
                 {
                     "algorithm": "SHA1",
-                    "checksumValue": "fileSha1"
+                    "checksumValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
                 }
             ],
-            "fileName": "fileName"
+            "comment": "fileComment",
+            "copyrightText": "copyrightText",
+            "fileContributors": [
+                "fileContributor"
+            ],
+            "fileName": "./fileName.py",
+            "fileTypes": [
+                "TEXT"
+            ],
+            "licenseComments": "licenseComment",
+            "licenseConcluded": "concludedLicenseExpression",
+            "licenseInfoInFiles": [
+                "licenseInfoInFileExpression"
+            ],
+            "noticeText": "fileNotice"
         }
     ],
-    "snippets": [
+    "hasExtractedLicensingInfos": [
         {
-            "SPDXID": "snippetId",
-            "ranges": [
+            "comment": "licenseComment",
+            "extractedText": "extractedText",
+            "licenseId": "LicenseRef-1",
+            "name": "licenseName",
+            "seeAlsos": [
+                "https://see.also"
+            ]
+        }
+    ],
+    "name": "documentName",
+    "packages": [
+        {
+            "SPDXID": "SPDXRef-Package",
+            "attributionTexts": [
+                "packageAttributionText"
+            ],
+            "builtDate": "2022-12-02T00:00:00Z",
+            "checksums": [
                 {
-                    "startPointer": {
-                        "reference": "snippetFileId",
-                        "offset": 1
-                    },
-                    "endPointer": {
-                        "reference": "snippetFileId",
-                        "offset": 2
-                    }
+                    "algorithm": "SHA1",
+                    "checksumValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
                 }
             ],
-            "snippetFromFile": "snippetFileId"
+            "comment": "packageComment",
+            "copyrightText": "packageCopyrightText",
+            "description": "packageDescription",
+            "downloadLocation": "https://download.com",
+            "externalRefs": [
+                {
+                    "comment": "externalPackageRefComment",
+                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceLocator": "org.apache.tomcat:tomcat:9.0.0.M4",
+                    "referenceType": "maven-central"
+                }
+            ],
+            "filesAnalyzed": true,
+            "homepage": "https://homepage.com",
+            "licenseComments": "packageLicenseComment",
+            "licenseConcluded": "packageLicenseConcluded",
+            "licenseDeclared": "packageLicenseDeclared",
+            "licenseInfoFromFiles": [
+                "licenseInfoFromFile"
+            ],
+            "name": "packageName",
+            "originator": "Person: originatorName (some@mail.com)",
+            "packageFileName": "./packageFileName",
+            "packageVerificationCode": {
+                "packageVerificationCodeExcludedFiles": [
+                    "./exclude.py"
+                ],
+                "packageVerificationCodeValue": "85ed0817af83a24ad8da68c2b5094de69833983c"
+            },
+            "primaryPackagePurpose": "SOURCE",
+            "releaseDate": "2022-12-01T00:00:00Z",
+            "sourceInfo": "sourceInfo",
+            "summary": "packageSummary",
+            "supplier": "Person: supplierName (some@mail.com)",
+            "validUntilDate": "2022-12-03T00:00:00Z",
+            "versionInfo": "12.2"
         }
     ],
     "relationships": [
         {
-            "spdxElementId": "documentId",
             "comment": "relationshipComment",
-            "relatedSpdxElement": "fileId",
-            "relationshipType": "DESCRIBES"
-        },
-        {
-            "spdxElementId": "relationshipOriginId",
-            "relatedSpdxElement": "relationShipTargetId",
-            "relationshipType": "AMENDS"
+            "relatedSpdxElement": "SPDXRef-File",
+            "relationshipType": "DESCRIBES",
+            "spdxElementId": "SPDXRef-DOCUMENT"
         }
-    ]
+    ],
+    "snippets": [
+        {
+            "SPDXID": "SPDXRef-Snippet",
+            "attributionTexts": [
+                "snippetAttributionText"
+            ],
+            "comment": "snippetComment",
+            "copyrightText": "licenseCopyrightText",
+            "licenseComments": "snippetLicenseComment",
+            "licenseConcluded": "snippetLicenseConcluded",
+            "licenseInfoInSnippets": [
+                "licenseInfoInSnippet"
+            ],
+            "name": "snippetName",
+            "ranges": [
+                {
+                    "endPointer": {
+                        "offset": 2,
+                        "reference": "SPDXRef-File"
+                    },
+                    "startPointer": {
+                        "offset": 1,
+                        "reference": "SPDXRef-File"
+                    }
+                },
+                {
+                    "endPointer": {
+                        "lineNumber": 4,
+                        "reference": "SPDXRef-File"
+                    },
+                    "startPointer": {
+                        "lineNumber": 3,
+                        "reference": "SPDXRef-File"
+                    }
+                }
+            ],
+            "snippetFromFile": "SPDXRef-File"
+        }
+    ],
+    "spdxVersion": "SPDX-2.3"
 }
