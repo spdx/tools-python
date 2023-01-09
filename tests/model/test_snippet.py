@@ -1,8 +1,8 @@
 import pytest
 
-from src.model.snippet import Snippet
-from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.model.spdx_none import SpdxNone
+from spdx.model.snippet import Snippet
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
 
 
 def test_correct_initialization():

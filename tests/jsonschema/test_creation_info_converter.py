@@ -12,12 +12,12 @@ from datetime import datetime
 
 import pytest
 
-from src.datetime_conversions import datetime_to_iso_string
-from src.jsonschema.creation_info_converter import CreationInfoConverter
-from src.jsonschema.creation_info_properties import CreationInfoProperty
-from src.model.actor import Actor, ActorType
-from src.model.document import CreationInfo
-from src.model.version import Version
+from spdx.datetime_conversions import datetime_to_iso_string
+from spdx.jsonschema.creation_info_converter import CreationInfoConverter
+from spdx.jsonschema.creation_info_properties import CreationInfoProperty
+from spdx.model.actor import Actor, ActorType
+from spdx.model.document import CreationInfo
+from spdx.model.version import Version
 from tests.fixtures import creation_info_fixture
 
 

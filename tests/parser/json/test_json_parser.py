@@ -12,8 +12,8 @@
 import os
 import pytest
 
-from src.model.document import Document
-from src.parser.json import json_parser
+from spdx.model.document import Document
+from spdx.parser.json import json_parser
 
 def test_parse_json_file_not_found():
     with pytest.raises(FileNotFoundError) as err:

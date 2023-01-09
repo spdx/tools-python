@@ -13,14 +13,14 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from src.jsonschema.external_document_ref_converter import ExternalDocumentRefConverter
-from src.jsonschema.external_document_ref_properties import ExternalDocumentRefProperty
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.external_document_ref import ExternalDocumentRef
+from spdx.jsonschema.external_document_ref_converter import ExternalDocumentRefConverter
+from spdx.jsonschema.external_document_ref_properties import ExternalDocumentRefProperty
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.external_document_ref import ExternalDocumentRef
 
 
 @pytest.fixture
-@mock.patch('src.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
+@mock.patch('spdx.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
 def converter(checksum_converter_magic_mock: MagicMock) -> ExternalDocumentRefConverter:
     mocked_checksum_converter = checksum_converter_magic_mock()
     converter = ExternalDocumentRefConverter()

@@ -13,8 +13,8 @@ from typing import List
 
 import pytest
 
-from src.validation.creation_info_validator import validate_creation_info
-from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.creation_info_validator import validate_creation_info
+from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.fixtures import creation_info_fixture
 
 

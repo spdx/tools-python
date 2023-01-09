@@ -11,14 +11,14 @@
 from datetime import datetime
 from unittest.mock import patch, mock_open, call
 
-from src.model.actor import ActorType, Actor
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.license_expression import LicenseExpression
-from src.model.package import PackagePurpose, Package, PackageVerificationCode, ExternalPackageRef, \
+from spdx.model.actor import ActorType, Actor
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.license_expression import LicenseExpression
+from spdx.model.package import PackagePurpose, Package, PackageVerificationCode, ExternalPackageRef, \
     ExternalPackageRefCategory
-from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.model.spdx_none import SpdxNone
-from src.writer.tagvalue.package_writer import write_package
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
+from spdx.writer.tagvalue.package_writer import write_package
 
 
 def test_package_writer():

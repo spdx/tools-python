@@ -12,9 +12,9 @@ from unittest import TestCase
 
 import pytest
 
-from src.model.license_expression import LicenseExpression
-from src.parser.error import SPDXParsingError
-from src.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
+from spdx.model.license_expression import LicenseExpression
+from spdx.parser.error import SPDXParsingError
+from spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 
 
 @pytest.mark.parametrize("invalid_license_expression,expected_message",

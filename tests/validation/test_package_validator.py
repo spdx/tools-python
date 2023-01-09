@@ -13,11 +13,11 @@ from typing import List
 
 import pytest
 
-from src.model.license_expression import LicenseExpression
-from src.model.spdx_no_assertion import SpdxNoAssertion
-from src.model.spdx_none import SpdxNone
-from src.validation.package_validator import validate_package_within_document
-from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.model.license_expression import LicenseExpression
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
+from spdx.validation.package_validator import validate_package_within_document
+from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.fixtures import package_fixture, package_verification_code_fixture, document_fixture
 
 

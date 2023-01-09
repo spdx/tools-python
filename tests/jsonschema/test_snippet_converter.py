@@ -15,22 +15,22 @@ from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
 
-from src.jsonschema.annotation_converter import AnnotationConverter
-from src.jsonschema.snippet_converter import SnippetConverter
-from src.jsonschema.snippet_properties import SnippetProperty
-from src.model.actor import Actor, ActorType
-from src.model.annotation import Annotation, AnnotationType
-from src.model.document import Document
-from src.model.license_expression import LicenseExpression
-from src.model.snippet import Snippet
-from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
-from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
+from spdx.jsonschema.annotation_converter import AnnotationConverter
+from spdx.jsonschema.snippet_converter import SnippetConverter
+from spdx.jsonschema.snippet_properties import SnippetProperty
+from spdx.model.actor import Actor, ActorType
+from spdx.model.annotation import Annotation, AnnotationType
+from spdx.model.document import Document
+from spdx.model.license_expression import LicenseExpression
+from spdx.model.snippet import Snippet
+from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
+from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
 from tests.fixtures import creation_info_fixture, snippet_fixture, document_fixture, annotation_fixture
 from tests.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
-@mock.patch('src.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
+@mock.patch('spdx.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
 def converter(annotation_converter_mock: MagicMock) -> SnippetConverter:
     converter = SnippetConverter()
     converter.annotation_converter = annotation_converter_mock()

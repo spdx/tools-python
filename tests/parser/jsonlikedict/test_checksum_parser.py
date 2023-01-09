@@ -12,9 +12,9 @@ from unittest import TestCase
 
 import pytest
 
-from src.model.checksum import ChecksumAlgorithm
-from src.parser.error import SPDXParsingError
-from src.parser.jsonlikedict.checksum_parser import ChecksumParser
+from spdx.model.checksum import ChecksumAlgorithm
+from spdx.parser.error import SPDXParsingError
+from spdx.parser.jsonlikedict.checksum_parser import ChecksumParser
 
 
 def test_parse_checksum():

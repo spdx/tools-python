@@ -1,6 +1,6 @@
 import pytest
 
-from src.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 
 
 def test_correct_initialization():

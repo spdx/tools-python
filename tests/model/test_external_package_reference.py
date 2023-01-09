@@ -1,6 +1,6 @@
 import pytest
 
-from src.model.package import ExternalPackageRef, ExternalPackageRefCategory
+from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 
 
 def test_correct_initialization():

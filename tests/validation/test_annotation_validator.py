@@ -13,10 +13,10 @@ from typing import List
 
 import pytest
 
-from src.model.annotation import Annotation
-from src.model.document import Document
-from src.validation.annotation_validator import validate_annotation
-from src.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.model.annotation import Annotation
+from spdx.model.document import Document
+from spdx.validation.annotation_validator import validate_annotation
+from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.fixtures import document_fixture, annotation_fixture, file_fixture
 
 

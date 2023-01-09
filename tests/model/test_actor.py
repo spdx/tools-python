@@ -1,6 +1,6 @@
 import pytest
 
-from src.model.actor import Actor, ActorType
+from spdx.model.actor import Actor, ActorType
 
 
 def test_correct_initialization():

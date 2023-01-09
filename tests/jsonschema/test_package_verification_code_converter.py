@@ -10,9 +10,9 @@
 # limitations under the License.
 import pytest
 
-from src.jsonschema.package_verification_code_converter import PackageVerificationCodeConverter
-from src.jsonschema.package_verification_code_properties import PackageVerificationCodeProperty
-from src.model.package import PackageVerificationCode
+from spdx.jsonschema.package_verification_code_converter import PackageVerificationCodeConverter
+from spdx.jsonschema.package_verification_code_properties import PackageVerificationCodeProperty
+from spdx.model.package import PackageVerificationCode
 
 
 @pytest.fixture

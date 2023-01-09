@@ -13,12 +13,12 @@ from typing import Type, Any
 
 import pytest
 
-from src.jsonschema.converter import TypedConverter
-from src.jsonschema.json_property import JsonProperty
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.document import Document
-from src.model.typing.dataclass_with_properties import dataclass_with_properties
-from src.model.typing.type_checks import check_types_and_set_values
+from spdx.jsonschema.converter import TypedConverter
+from spdx.jsonschema.json_property import JsonProperty
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.document import Document
+from spdx.model.typing.dataclass_with_properties import dataclass_with_properties
+from spdx.model.typing.type_checks import check_types_and_set_values
 
 
 class TestPropertyType(JsonProperty):

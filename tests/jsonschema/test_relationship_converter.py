@@ -10,11 +10,11 @@
 # limitations under the License.
 import pytest
 
-from src.jsonschema.relationship_converter import RelationshipConverter
-from src.jsonschema.relationship_properties import RelationshipProperty
-from src.model.relationship import Relationship, RelationshipType
-from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
-from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
+from spdx.jsonschema.relationship_converter import RelationshipConverter
+from spdx.jsonschema.relationship_properties import RelationshipProperty
+from spdx.model.relationship import Relationship, RelationshipType
+from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
+from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
 from tests.fixtures import relationship_fixture
 
 

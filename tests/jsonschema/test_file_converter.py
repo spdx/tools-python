@@ -15,24 +15,24 @@ from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
 
-from src.jsonschema.annotation_converter import AnnotationConverter
-from src.jsonschema.file_converter import FileConverter
-from src.jsonschema.file_properties import FileProperty
-from src.model.actor import Actor, ActorType
-from src.model.annotation import Annotation, AnnotationType
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.document import Document
-from src.model.file import File, FileType
-from src.model.license_expression import LicenseExpression
-from src.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
-from src.model.spdx_none import SpdxNone, SPDX_NONE_STRING
+from spdx.jsonschema.annotation_converter import AnnotationConverter
+from spdx.jsonschema.file_converter import FileConverter
+from spdx.jsonschema.file_properties import FileProperty
+from spdx.model.actor import Actor, ActorType
+from spdx.model.annotation import Annotation, AnnotationType
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.document import Document
+from spdx.model.file import File, FileType
+from spdx.model.license_expression import LicenseExpression
+from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
+from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
 from tests.fixtures import creation_info_fixture, file_fixture, annotation_fixture, document_fixture
 from tests.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
-@mock.patch('src.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
-@mock.patch('src.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
+@mock.patch('spdx.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
+@mock.patch('spdx.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
 def converter(annotation_converter_mock: MagicMock, checksum_converter_mock: MagicMock) -> FileConverter:
     converter = FileConverter()
     converter.checksum_converter = checksum_converter_mock()

@@ -12,12 +12,12 @@ from unittest import TestCase
 
 import pytest
 
-from src.model.checksum import Checksum, ChecksumAlgorithm
-from src.model.file import FileType
-from src.model.license_expression import LicenseExpression
-from src.parser.error import SPDXParsingError
-from src.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
-from src.parser.jsonlikedict.file_parser import FileParser
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.file import FileType
+from spdx.model.license_expression import LicenseExpression
+from spdx.parser.error import SPDXParsingError
+from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
+from spdx.parser.jsonlikedict.file_parser import FileParser
 
 
 def test_parse_file():
