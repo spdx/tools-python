@@ -10,21 +10,10 @@
 #  limitations under the License.
 
 import os
-from datetime import datetime
 
 import pytest
 
-from spdx.model.actor import Actor, ActorType
-from spdx.model.annotation import Annotation, AnnotationType
-from spdx.model.checksum import ChecksumAlgorithm, Checksum
-from spdx.model.document import CreationInfo, Document
-from spdx.model.external_document_ref import ExternalDocumentRef
-from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
-from spdx.model.file import File
-from spdx.model.package import Package
-from spdx.model.relationship import RelationshipType, Relationship
-from spdx.model.snippet import Snippet
-from spdx.model.spdx_none import SpdxNone
+from tests.fixtures import document_fixture
 from spdx.writer.tagvalue.tagvalue_writer import write_document_to_file
 
 
@@ -36,26 +25,7 @@ def temporary_file_path() -> str:
 
 
 def test_write_tag_value(temporary_file_path: str):
-    creation_info = CreationInfo("spdxVersion", "documentId", "documentName", "documentNamespace",
-                                 [Actor(ActorType.TOOL, "tools-python", "tools-python@github.com")],
-                                 datetime(2022, 12, 1), document_comment="comment", data_license="dataLicense",
-                                 external_document_refs=[ExternalDocumentRef("docRefId", "externalDocumentUri",
-                                                                             Checksum(ChecksumAlgorithm.SHA1,
-                                                                                      "externalRefSha1"))])
-    package = Package("packageId", "packageName", SpdxNone())
-    file = File("fileName", "fileId", [Checksum(ChecksumAlgorithm.SHA1, "fileSha1")])
-    snippet = Snippet("snippetId", "fileId", (1, 2))
-    annotations = [
-        Annotation("documentId", AnnotationType.REVIEW, Actor(ActorType.PERSON, "reviewerName"), datetime(2022, 12, 2),
-                   "reviewComment"),
-        Annotation("fileId", AnnotationType.OTHER, Actor(ActorType.TOOL, "toolName"), datetime(2022, 12, 3),
-                   "otherComment")]
-    extracted_licensing_info = [ExtractedLicensingInfo("licenseId", "licenseText")]
-    relationships = [Relationship(creation_info.spdx_id, RelationshipType.DESCRIBES, "packageId"),
-                     Relationship(creation_info.spdx_id, RelationshipType.DESCRIBES, "fileId", "relationshipComment"),
-                     Relationship("relationshipOriginId", RelationshipType.AMENDS, "relationShipTargetId")]
-    document = Document(creation_info, annotations=annotations, extracted_licensing_info=extracted_licensing_info,
-                        relationships=relationships, packages=[package], files=[file], snippets=[snippet])
+    document = document_fixture()
 
     write_document_to_file(document, temporary_file_path)
 
