@@ -14,7 +14,7 @@ from spdx.jsonschema.extracted_licensing_info_converter import ExtractedLicensin
 from spdx.jsonschema.extracted_licensing_info_properties import ExtractedLicensingInfoProperty
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
-from tests.fixtures import extracted_licensing_info_fixture
+from tests.spdx.fixtures import extracted_licensing_info_fixture
 
 
 @pytest.fixture

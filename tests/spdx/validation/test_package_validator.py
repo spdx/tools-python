@@ -18,7 +18,7 @@ from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.validation.package_validator import validate_package_within_document
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.fixtures import package_fixture, package_verification_code_fixture, document_fixture
+from tests.spdx.fixtures import package_fixture, package_verification_code_fixture, document_fixture
 
 
 def test_valid_package():

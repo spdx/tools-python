@@ -18,7 +18,7 @@ from spdx.jsonschema.creation_info_properties import CreationInfoProperty
 from spdx.model.actor import Actor, ActorType
 from spdx.model.document import CreationInfo
 from spdx.model.version import Version
-from tests.fixtures import creation_info_fixture
+from tests.spdx.fixtures import creation_info_fixture
 
 
 @pytest.fixture

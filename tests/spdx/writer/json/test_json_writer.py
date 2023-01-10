@@ -14,7 +14,7 @@ import os
 import pytest
 
 from spdx.writer.json.json_writer import write_document
-from tests.fixtures import document_fixture
+from tests.spdx.fixtures import document_fixture
 
 
 @pytest.fixture

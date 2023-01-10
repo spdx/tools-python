@@ -16,7 +16,7 @@ import pytest
 from spdx.model.document import Document, CreationInfo
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.fixtures import document_fixture, creation_info_fixture
+from tests.spdx.fixtures import document_fixture, creation_info_fixture
 
 
 def test_valid_document():

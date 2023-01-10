@@ -19,7 +19,7 @@ from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.validation.relationship_validator import validate_relationship
 from spdx.validation.validation_message import ValidationMessage, SpdxElementType, ValidationContext
-from tests.fixtures import document_fixture, relationship_fixture
+from tests.spdx.fixtures import document_fixture, relationship_fixture
 
 
 @pytest.mark.parametrize("related_spdx_element",
