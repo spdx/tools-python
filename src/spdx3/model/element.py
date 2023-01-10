@@ -11,7 +11,7 @@
 from typing import Optional
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx3.model.core.creation_information import CreationInformation
+from spdx3.model.creation_information import CreationInformation
 
 
 @dataclass_with_properties
