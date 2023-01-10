@@ -15,7 +15,7 @@ from common.typing.type_checks import check_types_and_set_values
 from spdx3.model.creation_information import CreationInformation
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx3.model.core.element import Artifact
+from spdx3.model.element import Artifact
 from spdx3.model.software.software_purpose import SoftwarePurpose
 
 
