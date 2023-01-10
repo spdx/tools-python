@@ -11,7 +11,7 @@
 from typing import Dict, List, Optional
 
 from spdx.model.relationship import Relationship, RelationshipType
-from spdx.model.typing.constructor_type_errors import ConstructorTypeErrors
+from common.typing.constructor_type_errors import ConstructorTypeErrors
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, \
     json_str_to_enum_name, \

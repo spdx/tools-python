@@ -1,6 +1,6 @@
 from typing import Any, Dict
 
-from spdx.model.typing.constructor_type_errors import ConstructorTypeErrors
+from common.typing.constructor_type_errors import ConstructorTypeErrors
 
 
 def check_types_and_set_values(instance_under_construction: Any, local_variables: Dict) -> None:
