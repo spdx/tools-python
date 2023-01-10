@@ -10,8 +10,8 @@
 # limitations under the License.
 
 from spdx.model.checksum import Checksum
-from spdx.model.typing.dataclass_with_properties import dataclass_with_properties
-from spdx.model.typing.type_checks import check_types_and_set_values
+from common.typing.dataclass_with_properties import dataclass_with_properties
+from common.typing.type_checks import check_types_and_set_values
 
 
 @dataclass_with_properties

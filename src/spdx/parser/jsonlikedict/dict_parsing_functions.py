@@ -12,7 +12,7 @@ from typing import Any, Callable, Dict, List, Optional
 
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from spdx.model.typing.constructor_type_errors import ConstructorTypeErrors
+from common.typing.constructor_type_errors import ConstructorTypeErrors
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 
