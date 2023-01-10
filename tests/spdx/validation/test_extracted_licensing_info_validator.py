@@ -15,7 +15,7 @@ import pytest
 
 from spdx.validation.extracted_licensing_info_validator import validate_extracted_licensing_info
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.fixtures import extracted_licensing_info_fixture
+from tests.spdx.fixtures import extracted_licensing_info_fixture
 
 
 def test_valid_extracted_licensing_info():

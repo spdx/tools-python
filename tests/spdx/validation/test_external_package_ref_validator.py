@@ -15,7 +15,7 @@ import pytest
 
 from spdx.validation.external_package_ref_validator import validate_external_package_ref
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.fixtures import external_package_ref_fixture
+from tests.spdx.fixtures import external_package_ref_fixture
 
 
 def test_valid_external_package_ref():

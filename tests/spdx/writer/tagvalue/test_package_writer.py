@@ -10,7 +10,7 @@
 #  limitations under the License.
 from unittest.mock import patch, mock_open, call
 
-from tests.fixtures import package_fixture
+from tests.spdx.fixtures import package_fixture
 from spdx.writer.tagvalue.package_writer import write_package
 
 

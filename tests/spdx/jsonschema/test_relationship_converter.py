@@ -15,7 +15,7 @@ from spdx.jsonschema.relationship_properties import RelationshipProperty
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
-from tests.fixtures import relationship_fixture
+from tests.spdx.fixtures import relationship_fixture
 
 
 @pytest.fixture

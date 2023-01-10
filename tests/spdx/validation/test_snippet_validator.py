@@ -15,7 +15,7 @@ import pytest
 
 from spdx.validation.snippet_validator import validate_snippet_within_document
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.fixtures import document_fixture, snippet_fixture
+from tests.spdx.fixtures import document_fixture, snippet_fixture
 
 
 def test_valid_snippet():

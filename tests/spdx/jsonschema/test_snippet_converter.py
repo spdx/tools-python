@@ -25,8 +25,8 @@ from spdx.model.license_expression import LicenseExpression
 from spdx.model.snippet import Snippet
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
-from tests.fixtures import creation_info_fixture, snippet_fixture, document_fixture, annotation_fixture
-from tests.mock_utils import assert_mock_method_called_with_arguments
+from tests.spdx.fixtures import creation_info_fixture, snippet_fixture, document_fixture, annotation_fixture
+from tests.spdx.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
