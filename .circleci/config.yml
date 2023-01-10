@@ -1,0 +1,15 @@
+# Empty Circle CI configuration file to make pipeline pass
+
+version: 2.1
+
+jobs:
+  empty-job:
+    docker:
+      - image: python:3.11
+    steps:
+      - run: echo "Empty Job to make CircleCI green, we switched to https://github.com/spdx/tools-python/actions"
+
+workflows:
+  simple-workflow:
+    jobs:
+      - empty-job
