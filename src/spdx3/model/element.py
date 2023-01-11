@@ -10,6 +10,8 @@
 # limitations under the License.
 from dataclasses import field
 from typing import Optional, List
+
+from common.typing.constructor_type_errors import ConstructorTypeErrors
 from common.typing.type_checks import check_types_and_set_values
 from common.typing.dataclass_with_properties import dataclass_with_properties
 
@@ -26,30 +28,38 @@ class Element:
     summary: Optional[str] = None
     description: Optional[str] = None
     comment: Optional[str] = None
-    verified_using: None  = None # placeholder for IntegrityMethod
-    external_references: None = None # placeholder for ExternalReference
-    external_identifier: None = None # placeholder for ExternalIdentifier
-    extension: None  # placeholder for extension
+    verified_using: None = None  # placeholder for IntegrityMethod
+    external_references: None = None  # placeholder for ExternalReference
+    external_identifier: None = None  # placeholder for ExternalIdentifier
+    extension: None = None  # placeholder for extension
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None):
-        check_types_and_set_values(self, locals())
+        check_types_and_set_values(self, locals(), origin_class=Element)
 
 
 @dataclass_with_properties
 class Artifact(Element):
-    originated_by: None  # placeholder for Actor
+    originated_by: None = None  # placeholder for Actor
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None):
-        Element.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
-                         external_references, external_identifier, extension)
-        check_types_and_set_values(self, locals())
-
+        errors = []
+        try:
+            super().__init__(spdx_id, creation_info, name, summary, description, comment, verified_using,
+                             external_references, external_identifier, extension)
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        try:
+            check_types_and_set_values(self, locals(), origin_class=Artifact)
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        if errors:
+            raise ConstructorTypeErrors(errors)
 
 @dataclass_with_properties
 class Collection(Element):
@@ -62,9 +72,18 @@ class Collection(Element):
                  extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
                  import_element: Optional[List[ExternalMap]] = None):
         import_element = [] if import_element is None else import_element
-        Element.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
+        errors = []
+        try:
+            Element.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
                          external_references, external_identifier, extension)
-        check_types_and_set_values(self, locals())
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        try:
+            check_types_and_set_values(self, locals(), origin_class=Collection)
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        if errors:
+            raise ConstructorTypeErrors(errors)
 
 
 @dataclass_with_properties
@@ -76,10 +95,20 @@ class Bundle(Collection):
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
                  import_element: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
-        Collection.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
-                            external_references, external_identifier, extension, originated_by, namespace,
-                            import_element)
-        check_types_and_set_values(self, locals())
+        errors = []
+        try:
+            Collection.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
+                                external_references, external_identifier, extension, originated_by, namespace,
+                                import_element)
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+
+        try:
+            check_types_and_set_values(self, locals(), origin_class=Bundle)
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        if errors:
+            raise ConstructorTypeErrors(errors)
 
 
 @dataclass_with_properties
@@ -89,6 +118,16 @@ class Bom(Bundle):
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
                  import_element: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
-        Bundle.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
-                        external_references, external_identifier, extension, originated_by, namespace,
-                        import_element, context)
+        errors = []
+        try:
+            Bundle.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
+                            external_references, external_identifier, extension, originated_by, namespace,
+                            import_element, context)
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        try:
+            check_types_and_set_values(self, locals(), origin_class=Bom)
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        if errors:
+            raise ConstructorTypeErrors(errors)
