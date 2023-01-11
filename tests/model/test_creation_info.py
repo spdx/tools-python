@@ -7,8 +7,8 @@ from spdx.model.document import CreationInfo
 from spdx.model.version import Version
 
 
-@mock.patch('spdx.model.actor.Actor', autospec=True)
 @mock.patch('spdx.model.external_document_ref.ExternalDocumentRef', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_correct_initialization(actor, ext_ref):
     creation_info = CreationInfo("version", "id", "name", "namespace", [actor, actor], datetime(2022, 1, 1),
                                  "creator_comment", "CC0-1.1", [ext_ref, ext_ref], Version(6, 3), "doc_comment")
