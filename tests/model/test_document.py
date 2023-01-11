@@ -5,13 +5,13 @@ import pytest
 from spdx.model.document import Document
 
 
-@mock.patch('spdx.model.document.CreationInfo', autospec=True)
-@mock.patch('spdx.model.package.Package', autospec=True)
-@mock.patch('spdx.model.file.File', autospec=True)
-@mock.patch('spdx.model.snippet.Snippet', autospec=True)
-@mock.patch('spdx.model.annotation.Annotation', autospec=True)
-@mock.patch('spdx.model.relationship.Relationship', autospec=True)
 @mock.patch('spdx.model.extracted_licensing_info.ExtractedLicensingInfo', autospec=True)
+@mock.patch('spdx.model.relationship.Relationship', autospec=True)
+@mock.patch('spdx.model.annotation.Annotation', autospec=True)
+@mock.patch('spdx.model.snippet.Snippet', autospec=True)
+@mock.patch('spdx.model.file.File', autospec=True)
+@mock.patch('spdx.model.package.Package', autospec=True)
+@mock.patch('spdx.model.document.CreationInfo', autospec=True)
 def test_correct_initialization(creation_info, package, file, snippet, annotation, relationship,
                                 extracted_lic):
     document = Document(creation_info, [package, package], [file, file], [snippet, snippet], [annotation, annotation],

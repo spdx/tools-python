@@ -10,10 +10,10 @@ from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 
 
-@mock.patch('spdx.model.actor.Actor', autospec=True)
-@mock.patch('spdx.model.package.PackageVerificationCode', autospec=True)
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
 @mock.patch('spdx.model.package.ExternalPackageRef', autospec=True)
+@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch('spdx.model.package.PackageVerificationCode', autospec=True)
+@mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_correct_initialization(actor, verif_code, checksum, ext_ref):
     package = Package("id", "name", SpdxNoAssertion(), "version", "file_name", SpdxNoAssertion(), actor, True,
                       verif_code, [checksum], "homepage", "source_info", None, [LicenseExpression("expression")],
