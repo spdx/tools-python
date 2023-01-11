@@ -16,15 +16,15 @@ from common.typing.type_checks import check_types_and_set_values
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
 
+
 @dataclass_with_properties
 class CreationInformation:
     spec_version: Version
     created: datetime
-    created_by: None # placeholder for Actor
-    profile: List[str] # or create an Enum for ProfileIdentifier?
+    created_by: None  # placeholder for Actor
+    profile: List[str]  # or create an Enum for ProfileIdentifier?
     data_license: str
 
-    def __init__(self, spec_version: Version, created: datetime, created_by, profile: List[str], data_license: str = "CC0"):
-        check_types_and_set_values(self,locals())
-
-
+    def __init__(self, spec_version: Version, created: datetime, created_by, profile: List[str],
+                 data_license: str = "CC0"):
+        check_types_and_set_values(self, locals())
