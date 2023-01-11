@@ -3,7 +3,7 @@ from typing import Any, Dict
 from common.typing.constructor_type_errors import ConstructorTypeErrors
 
 
-def check_types_and_set_values(instance_under_construction: Any, local_variables: Dict) -> None:
+def check_types_and_set_values(instance_under_construction: Any, local_variables: Dict, origin_class: Any = None) -> None:
     """
     Helper method to accumulate all type errors encountered during a constructor call and return them in a
     ConstructorTypeErrors instance.
@@ -12,9 +12,13 @@ def check_types_and_set_values(instance_under_construction: Any, local_variables
     return all type violations in one go.
     As an aside, defining constructors "manually" using this utility method helps avoid a nasty PyCharm bug:
     https://youtrack.jetbrains.com/issue/PY-34569
+    With the additional parameter origin_class we ensure that the attributes from the class that calls this method
+    are set. If we use inheritance the instance_under_construction object might be a child object.
     """
+    if not origin_class:
+        origin_class = instance_under_construction
     errors = []
-    for key, value_type in instance_under_construction.__annotations__.items():
+    for key, value_type in origin_class.__annotations__.items():
         value = local_variables.get(key)
         try:
             setattr(instance_under_construction, key, value)
