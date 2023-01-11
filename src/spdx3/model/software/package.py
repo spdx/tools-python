@@ -8,7 +8,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Optional
+from typing import Optional, List
+
+from common.typing.constructor_type_errors import ConstructorTypeErrors
 
 from spdx3.model.creation_information import CreationInformation
 
@@ -22,7 +24,7 @@ from spdx3.model.software.software_purpose import SoftwarePurpose
 @dataclass_with_properties
 class Package(Artifact):
     content_identifier: Optional[str]  = None # anyURI
-    package_purpose: Optional[SoftwarePurpose] = None
+    package_purpose: Optional[List[SoftwarePurpose]] = None
     download_location: Optional[str] = None # anyURI
     package_uri: Optional[str] = None # anyURI
     homepage: Optional[str] = None # anyURI
@@ -31,8 +33,19 @@ class Package(Artifact):
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None, content_identifier: Optional[str] = None,
-                 package_purpose: Optional[SoftwarePurpose] = None, download_location: Optional[str] = None,
+                 package_purpose: Optional[List[SoftwarePurpose]] = None, download_location: Optional[str] = None,
                  package_uri: Optional[str] = None, homepage: Optional[str] = None):
-        Artifact.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
-                          external_references, external_identifier, extension, originated_by)
-        check_types_and_set_values(self, locals())
+        package_purpose = [] if package_purpose is None else package_purpose
+        errors = []
+        try:
+            Artifact.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
+                              external_references, external_identifier, extension, originated_by)
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        try:
+            check_types_and_set_values(self, locals())
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+
+        if errors:
+            raise ConstructorTypeErrors(errors)
