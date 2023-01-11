@@ -8,14 +8,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Optional
 from common.typing.type_checks import check_types_and_set_values
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
 
 @dataclass_with_properties
 class NamespaceMap:
-    prefix: str
-    namespace: str # anyURI
+    prefix: Optional[str]  = None
+    namespace: Optional[str] = None # anyURI
 
-    def __init__(self, prefix: str, namespace: str):
+    def __init__(self, prefix: Optional[str] = None, namespace: Optional[str] = None):
         check_types_and_set_values(self, locals())
