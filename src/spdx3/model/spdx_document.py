@@ -10,6 +10,10 @@
 # limitations under the License.
 from typing import Optional, List
 
+from common.typing.type_checks import check_types_and_set_values
+
+from common.typing.constructor_type_errors import ConstructorTypeErrors
+
 from spdx3.model.creation_information import CreationInformation
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
@@ -26,7 +30,16 @@ class SpdxDocument(Bundle):
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
                  import_element: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
-        Bundle.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
+        errors = []
+        try:
+            super().__init__(spdx_id, creation_info, name, summary, description, comment, verified_using,
                         external_references, external_identifier, extension, originated_by, namespace,
                         import_element, context)
-
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        try:
+            check_types_and_set_values(self, locals(), origin_class=SpdxDocument)
+        except ConstructorTypeErrors as err:
+            errors.extend(err.get_messages())
+        if errors:
+            raise ConstructorTypeErrors(errors)
