@@ -8,6 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Optional
 from common.typing.type_checks import check_types_and_set_values
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
@@ -15,9 +16,9 @@ from common.typing.dataclass_with_properties import dataclass_with_properties
 
 @dataclass_with_properties
 class ExternalMap:
-    external_id: str # anyURI
-    verified_using: None # placeholder for IntegrityMethod
-    location_hint: str # anyURI
+    external_id: str  # anyURI
+    verified_using: None  # placeholder for IntegrityMethod
+    location_hint: Optional[str] = None  # anyURI
 
-    def __init__(self, external_id: str, verified_using : None, location_hint : str):
+    def __init__(self, external_id: str, verified_using: None, location_hint: Optional[str] = None):
         check_types_and_set_values(self, locals())
