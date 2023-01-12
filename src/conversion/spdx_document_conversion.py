@@ -9,7 +9,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from conversion.convert_creation_information import convert_creation_information
+from conversion.creation_information_conversion import convert_creation_information
 from spdx3.model.spdx_document import SpdxDocument
 
 from spdx.model.document import Document as Document2
