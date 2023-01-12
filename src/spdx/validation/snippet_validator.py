@@ -83,7 +83,7 @@ def validate_snippet(snippet: Snippet, context: Optional[ValidationContext] = No
                     context)
             )
 
-    validation_messages.extend(validate_license_expression(snippet.concluded_license))
+    validation_messages.extend(validate_license_expression(snippet.license_concluded))
 
     validation_messages.extend(validate_license_expressions(snippet.license_info_in_snippet))
 

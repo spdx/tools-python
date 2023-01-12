@@ -24,7 +24,7 @@ class Snippet:
     file_spdx_id: str
     byte_range: Tuple[int, int]
     line_range: Optional[Tuple[int, int]] = None
-    concluded_license: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
+    license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
     license_info_in_snippet: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None
     license_comment: Optional[str] = None
     copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None
@@ -34,7 +34,7 @@ class Snippet:
 
     def __init__(self, spdx_id: str, file_spdx_id: str, byte_range: Tuple[int, int],
                  line_range: Optional[Tuple[int, int]] = None,
-                 concluded_license: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+                 license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
                  license_info_in_snippet: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None,
                  license_comment: Optional[str] = None, copyright_text: Optional[str] = None,
                  comment: Optional[str] = None, name: Optional[str] = None, attribution_texts: List[str] = None):

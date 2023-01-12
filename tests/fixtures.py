@@ -53,7 +53,7 @@ def creation_info_fixture(spdx_version="SPDX-2.3", spdx_id="SPDXRef-DOCUMENT", n
 
 
 def file_fixture(name="./fileName.py", spdx_id="SPDXRef-File", checksums=None, file_type=None,
-                 concluded_license=LicenseExpression("concludedLicenseExpression"), license_info_in_file=None,
+                 license_concluded=LicenseExpression("licenseConcludedExpression"), license_info_in_file=None,
                  license_comment="licenseComment", copyright_text="copyrightText", comment="fileComment",
                  notice="fileNotice", contributors=None, attribution_texts=None) -> File:
     checksums = [checksum_fixture()] if checksums is None else checksums
@@ -63,7 +63,7 @@ def file_fixture(name="./fileName.py", spdx_id="SPDXRef-File", checksums=None, f
     contributors = ["fileContributor"] if contributors is None else contributors
     attribution_texts = ["fileAttributionText"] if attribution_texts is None else attribution_texts
     return File(name=name, spdx_id=spdx_id, checksums=checksums, file_type=file_type,
-                concluded_license=concluded_license, license_info_in_file=license_info_in_file,
+                license_concluded=license_concluded, license_info_in_file=license_info_in_file,
                 license_comment=license_comment, copyright_text=copyright_text, comment=comment, notice=notice,
                 contributors=contributors, attribution_texts=attribution_texts)
 
@@ -108,7 +108,7 @@ def external_package_ref_fixture(category=ExternalPackageRefCategory.PACKAGE_MAN
 
 
 def snippet_fixture(spdx_id="SPDXRef-Snippet", file_spdx_id="SPDXRef-File", byte_range=(1, 2),
-                    line_range=(3, 4), concluded_license=LicenseExpression("snippetLicenseConcluded"),
+                    line_range=(3, 4), license_concluded=LicenseExpression("snippetLicenseConcluded"),
                     license_info_in_snippet=None, license_comment="snippetLicenseComment",
                     copyright_text="licenseCopyrightText", comment="snippetComment", name="snippetName",
                     attribution_texts=None) -> Snippet:
@@ -116,7 +116,7 @@ def snippet_fixture(spdx_id="SPDXRef-Snippet", file_spdx_id="SPDXRef-File", byte
         LicenseExpression("licenseInfoInSnippet")] if license_info_in_snippet is None else license_info_in_snippet
     attribution_texts = ["snippetAttributionText"] if attribution_texts is None else attribution_texts
     return Snippet(spdx_id=spdx_id, file_spdx_id=file_spdx_id, byte_range=byte_range, line_range=line_range,
-                   concluded_license=concluded_license, license_info_in_snippet=license_info_in_snippet,
+                   license_concluded=license_concluded, license_info_in_snippet=license_info_in_snippet,
                    license_comment=license_comment, copyright_text=copyright_text, comment=comment, name=name,
                    attribution_texts=attribution_texts)
 

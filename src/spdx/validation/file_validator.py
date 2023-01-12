@@ -65,7 +65,7 @@ def validate_file(file: File, context: Optional[ValidationContext] = None) -> Li
 
     validation_messages.extend(validate_checksums(file.checksums, file.spdx_id))
 
-    validation_messages.extend(validate_license_expression(file.concluded_license))
+    validation_messages.extend(validate_license_expression(file.license_concluded))
 
     validation_messages.extend(validate_license_expressions(file.license_info_in_file))
 

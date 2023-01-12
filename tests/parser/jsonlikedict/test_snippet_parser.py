@@ -61,7 +61,7 @@ def test_parse_snippet():
     assert snippet.line_range == (5, 23)
     assert snippet.file_spdx_id == "SPDXRef-DoapSource"
     assert snippet.license_info_in_snippet == [LicenseExpression("GPL-2.0-only")]
-    assert snippet.concluded_license == LicenseExpression("GPL-2.0-only")
+    assert snippet.license_concluded == LicenseExpression("GPL-2.0-only")
     assert snippet.attribution_texts == ["Some example attibution text."]
 
 

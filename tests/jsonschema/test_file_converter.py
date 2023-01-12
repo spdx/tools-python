@@ -73,7 +73,7 @@ def test_successful_conversion(converter: FileConverter):
     converter.annotation_converter.convert.return_value = "mock_converted_annotation"
     file = File(name="name", spdx_id="spdxId",
                 checksums=[Checksum(ChecksumAlgorithm.SHA224, "sha224"), Checksum(ChecksumAlgorithm.MD2, "md2")],
-                file_type=[FileType.SPDX, FileType.OTHER], concluded_license=LicenseExpression("licenseExpression1"),
+                file_type=[FileType.SPDX, FileType.OTHER], license_concluded=LicenseExpression("licenseExpression1"),
                 license_info_in_file=[LicenseExpression("licenseExpression2"), LicenseExpression("licenseExpression3")],
                 license_comment="licenseComment", copyright_text="copyrightText", comment="comment", notice="notice",
                 contributors=["contributor1", "contributor2"],
@@ -103,7 +103,7 @@ def test_successful_conversion(converter: FileConverter):
 
 
 def test_null_values(converter: FileConverter):
-    file = file_fixture(copyright_text=None, concluded_license=None, license_comment=None, comment=None, notice=None,
+    file = file_fixture(copyright_text=None, license_concluded=None, license_comment=None, comment=None, notice=None,
                         attribution_texts=[], checksums=[], contributors=[], file_type=[], license_info_in_file=[])
     document = Document(creation_info_fixture(), files=[file])
 
@@ -123,7 +123,7 @@ def test_null_values(converter: FileConverter):
 
 
 def test_spdx_no_assertion(converter: FileConverter):
-    file = file_fixture(concluded_license=SpdxNoAssertion(), license_info_in_file=SpdxNoAssertion(),
+    file = file_fixture(license_concluded=SpdxNoAssertion(), license_info_in_file=SpdxNoAssertion(),
                         copyright_text=SpdxNoAssertion())
     document = Document(creation_info_fixture(), files=[file])
 
@@ -136,7 +136,7 @@ def test_spdx_no_assertion(converter: FileConverter):
 
 
 def test_spdx_none(converter: FileConverter):
-    file = file_fixture(concluded_license=SpdxNone(), license_info_in_file=SpdxNone(), copyright_text=SpdxNone())
+    file = file_fixture(license_concluded=SpdxNone(), license_info_in_file=SpdxNone(), copyright_text=SpdxNone())
     document = Document(creation_info_fixture(), files=[file])
 
     converted_dict = converter.convert(file, document)

@@ -56,7 +56,7 @@ def test_parse_file():
     assert file.file_type == [FileType.SOURCE]
     TestCase().assertCountEqual(file.contributors, ["The Regents of the University of California",
                                                     "Modified by Paul Mundt lethal@linux-sh.org", "IBM Corporation"])
-    assert file.concluded_license == LicenseExpression("(LGPL-2.0-only OR LicenseRef-2)")
+    assert file.license_concluded == LicenseExpression("(LGPL-2.0-only OR LicenseRef-2)")
     TestCase().assertCountEqual(file.license_info_in_file,
                                 [LicenseExpression("GPL-2.0-only"), LicenseExpression("LicenseRef-2")])
     assert file.license_comment == "The concluded license was taken from the package level that the file was included in."
