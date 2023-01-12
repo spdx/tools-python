@@ -16,6 +16,7 @@ from spdx3.model.spdx_document import SpdxDocument
 from conversion.spdx_document_conversion import convert_spdx_document
 from tests.fixtures import document_fixture
 
+
 def test_convert_spdx_document():
     document: Document = document_fixture()
 
@@ -24,3 +25,4 @@ def test_convert_spdx_document():
     assert spdx_document.spdx_id == "SPDXRef-DOCUMENT"
     assert spdx_document.name == "documentName"
     assert spdx_document.creation_info.spec_version == Version("3.0.0")
+    assert len(spdx_document.elements) == 1 # so far only package conversion is implemented, so there is only one element
