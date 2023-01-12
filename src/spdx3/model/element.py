@@ -64,14 +64,14 @@ class Artifact(Element):
 @dataclass_with_properties
 class Collection(Element):
     namespace: Optional[NamespaceMap] = None
-    import_element: Optional[List[ExternalMap]] = field(default_factory=list)
+    imports: Optional[List[ExternalMap]] = field(default_factory=list)
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
-                 import_element: Optional[List[ExternalMap]] = None):
-        import_element = [] if import_element is None else import_element
+                 imports: Optional[List[ExternalMap]] = None):
+        imports = [] if imports is None else imports
         errors = []
         try:
             Element.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
@@ -94,12 +94,12 @@ class Bundle(Collection):
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
-                 import_element: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
+                 imports: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
         errors = []
         try:
             Collection.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
                                 external_references, external_identifier, extension, originated_by, namespace,
-                                import_element)
+                                imports)
         except ConstructorTypeErrors as err:
             errors.extend(err.get_messages())
 
@@ -117,12 +117,12 @@ class Bom(Bundle):
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
-                 import_element: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
+                 imports: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
         errors = []
         try:
             Bundle.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
                             external_references, external_identifier, extension, originated_by, namespace,
-                            import_element, context)
+                            imports, context)
         except ConstructorTypeErrors as err:
             errors.extend(err.get_messages())
         try:
