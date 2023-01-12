@@ -92,3 +92,8 @@ def parse_list_of_elements(list_of_elements: List[Dict], method_to_parse_element
                                                            method_to_parse_element)
     raise_parsing_error_if_logger_has_messages(logger)
     return parsed_elements
+
+
+def delete_duplicates_from_list(list_with_potential_duplicates: List[Any]) -> List[Any]:
+    list_without_duplicates = list(dict.fromkeys(list_with_potential_duplicates))
+    return list_without_duplicates

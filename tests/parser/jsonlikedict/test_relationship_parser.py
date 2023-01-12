@@ -79,26 +79,39 @@ def test_parse_document_describes():
                                  Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-Snippet")])
 
 
-def test_parse_document_describes_without_duplicating_relationships():
+@pytest.mark.parametrize("document_describes,relationships,parsed_relationships",
+                         [(["SPDXRef-Package", "SPDXRef-File"], [
+                             {"spdxElementId": "SPDXRef-DOCUMENT", "relatedSpdxElement": "SPDXRef-Package",
+                              "relationshipType": "DESCRIBES", "comment": "This relationship has a comment."},
+                             {"spdxElementId": "SPDXRef-File", "relatedSpdxElement": "SPDXRef-DOCUMENT",
+                              "relationshipType": "DESCRIBED_BY", "comment": "This relationship has a comment."}], [
+                               Relationship(related_spdx_element_id="SPDXRef-Package",
+                                            relationship_type=RelationshipType.DESCRIBES,
+                                            spdx_element_id="SPDXRef-DOCUMENT",
+                                            comment="This relationship has a comment."),
+                               Relationship(related_spdx_element_id="SPDXRef-DOCUMENT",
+                                            relationship_type=RelationshipType.DESCRIBED_BY,
+                                            spdx_element_id="SPDXRef-File",
+                                            comment="This relationship has a comment.")]),
+                          (["SPDXRef-Package", "SPDXRef-File", "SPDXRef-Package"], [], [
+                              Relationship(related_spdx_element_id="SPDXRef-Package",
+                                           relationship_type=RelationshipType.DESCRIBES,
+                                           spdx_element_id="SPDXRef-DOCUMENT"),
+                              Relationship(related_spdx_element_id="SPDXRef-File",
+                                           relationship_type=RelationshipType.DESCRIBES,
+                                           spdx_element_id="SPDXRef-DOCUMENT")])])
+def test_parse_document_describes_without_duplicating_relationships(document_describes, relationships,
+                                                                    parsed_relationships):
     relationship_parser = RelationshipParser()
     document_dict = {
         "SPDXID": "SPDXRef-DOCUMENT",
-        "documentDescribes": ["SPDXRef-Package", "SPDXRef-File"],
-        "relationships": [{"spdxElementId": "SPDXRef-DOCUMENT", "relatedSpdxElement": "SPDXRef-Package",
-                           "relationshipType": "DESCRIBES",
-                           "comment": "This relationship has a comment."},
-                          {"spdxElementId": "SPDXRef-File", "relatedSpdxElement": "SPDXRef-DOCUMENT",
-                           "relationshipType": "DESCRIBED_BY", "comment": "This relationship has a comment."}
-                          ]}
+        "documentDescribes": document_describes,
+        "relationships": relationships}
 
     relationships = relationship_parser.parse_all_relationships(document_dict)
 
-    assert len(relationships) == 2
-    TestCase().assertCountEqual(relationships, [
-        Relationship(related_spdx_element_id="SPDXRef-Package", relationship_type=RelationshipType.DESCRIBES,
-                     spdx_element_id="SPDXRef-DOCUMENT", comment="This relationship has a comment."),
-        Relationship(related_spdx_element_id="SPDXRef-DOCUMENT", relationship_type=RelationshipType.DESCRIBED_BY,
-                     spdx_element_id="SPDXRef-File", comment="This relationship has a comment.")])
+    assert len(relationships) == len(parsed_relationships)
+    TestCase().assertCountEqual(relationships, parsed_relationships)
 
 
 def test_parse_has_files():
@@ -121,22 +134,34 @@ def test_parse_has_files():
                      related_spdx_element_id="SPDXRef-File2")])
 
 
-def test_parse_has_files_without_duplicating_relationships():
+@pytest.mark.parametrize("has_files,existing_relationships,contains_relationships",
+                         [(["SPDXRef-File1", "SPDXRef-File2"], [
+                             Relationship(spdx_element_id="SPDXRef-Package",
+                                          relationship_type=RelationshipType.CONTAINS,
+                                          related_spdx_element_id="SPDXRef-File1",
+                                          comment="This relationship has a comment."),
+                             Relationship(spdx_element_id="SPDXRef-File2",
+                                          relationship_type=RelationshipType.CONTAINED_BY,
+                                          related_spdx_element_id="SPDXRef-Package")], []),
+                          (["SPDXRef-File1", "SPDXRef-File2", "SPDXRef-File1"], [], [
+                              Relationship(spdx_element_id="SPDXRef-Package",
+                                          relationship_type=RelationshipType.CONTAINS,
+                                          related_spdx_element_id="SPDXRef-File1"),
+                              Relationship(spdx_element_id="SPDXRef-Package",
+                                          relationship_type=RelationshipType.CONTAINS,
+                                          related_spdx_element_id="SPDXRef-File2")])])
+def test_parse_has_files_without_duplicating_relationships(has_files, existing_relationships,
+                                                           contains_relationships):
     relationship_parser = RelationshipParser()
     document_dict = {
         "packages":
             [{
                 "SPDXID": "SPDXRef-Package",
-                "hasFiles": ["SPDXRef-File1", "SPDXRef-File2"]
+                "hasFiles": has_files
             }]
     }
-    existing_relationships = [
-        Relationship(spdx_element_id="SPDXRef-Package", relationship_type=RelationshipType.CONTAINS,
-                     related_spdx_element_id="SPDXRef-File1", comment="This relationship has a comment."),
-        Relationship(spdx_element_id="SPDXRef-File2", relationship_type=RelationshipType.CONTAINED_BY,
-                     related_spdx_element_id="SPDXRef-Package")]
-
     relationships = relationship_parser.parse_has_files(document_dict.get("packages"),
                                                         existing_relationships=existing_relationships)
 
-    assert len(relationships) == 0
+    assert len(relationships) == len(contains_relationships)
+    TestCase().assertCountEqual(relationships, contains_relationships)

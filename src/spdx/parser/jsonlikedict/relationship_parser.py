@@ -13,9 +13,10 @@ from typing import Dict, List, Optional
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.typing.constructor_type_errors import ConstructorTypeErrors
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, json_str_to_enum_name, \
+from spdx.parser.jsonlikedict.dict_parsing_functions import raise_parsing_error_if_logger_has_messages, \
+    json_str_to_enum_name, \
     construct_or_raise_parsing_error, \
-    parse_field_or_log_error, parse_field_or_no_assertion_or_none
+    parse_field_or_log_error, parse_field_or_no_assertion_or_none, delete_duplicates_from_list
 from spdx.parser.logger import Logger
 
 
@@ -31,7 +32,7 @@ class RelationshipParser:
         relationships.extend(
             parse_field_or_log_error(self.logger, relationship_dicts, self.parse_relationship, [], True))
 
-        document_describes: List[str] = input_doc_dict.get("documentDescribes", [])
+        document_describes: List[str] = delete_duplicates_from_list(input_doc_dict.get("documentDescribes", []))
         doc_spdx_id: Optional[str] = input_doc_dict.get("SPDXID")
 
         relationships.extend(
@@ -102,7 +103,7 @@ class RelationshipParser:
         contains_relationships = []
         for package in package_dicts:
             package_spdx_id: Optional[str] = package.get("SPDXID")
-            contained_files: Optional[str] = package.get("hasFiles")
+            contained_files: List[str] = delete_duplicates_from_list(package.get("hasFiles", []))
             if not contained_files:
                 continue
             for file_spdx_id in contained_files:
