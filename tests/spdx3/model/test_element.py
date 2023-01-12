@@ -59,12 +59,12 @@ def test_invalid_initialization_artifact(creation_info):
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization_collection(creation_information, namespace_map, external_map):
     collection = Collection("SPDXRef-Collection", creation_information, namespace=namespace_map,
-                            import_element=[external_map])
+                            imports=[external_map])
 
     assert collection.spdx_id == "SPDXRef-Collection"
     assert collection.creation_info == creation_information
     assert collection.namespace == namespace_map
-    assert collection.import_element == [external_map]
+    assert collection.imports == [external_map]
 
 
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
@@ -72,9 +72,9 @@ def test_correct_initialization_collection(creation_information, namespace_map, 
 def test_invalid_initialization_collection(creation_information, namespace_map):
     with pytest.raises(TypeError) as err:
         Collection("SPDXRef-Collection", creation_information, namespace=namespace_map,
-                   import_element=["ExternalMap"])
+                   imports=["ExternalMap"])
 
-    assert err.value.args[0] == ['SetterError Collection: type of argument "import_element" must be one of '
+    assert err.value.args[0] == ['SetterError Collection: type of argument "imports" must be one of '
                                  '(List[spdx3.model.external_map.ExternalMap], NoneType); got list instead: '
                                  "['ExternalMap']"]
 
