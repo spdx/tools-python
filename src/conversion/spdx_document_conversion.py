@@ -10,6 +10,7 @@
 #  limitations under the License.
 
 from conversion.creation_information_conversion import convert_creation_information
+from conversion.file_conversion import convert_file
 from conversion.package_conversion import convert_package
 from spdx3.model.spdx_document import SpdxDocument
 
@@ -22,6 +23,9 @@ def convert_spdx_document(document: Document2) -> SpdxDocument:
     spdx_document: SpdxDocument = convert_creation_information(document.creation_info)
     for package in document.packages:
         spdx_document.elements.append(convert_package(package, creation_information=spdx_document.creation_info))
+
+    for file in document.files:
+        spdx_document.elements.append(convert_file(file, creation_information=spdx_document.creation_info))
 
     return spdx_document
 
