@@ -23,7 +23,7 @@ def write_snippet(snippet: Snippet, output_text: TextIO):
     write_range("SnippetByteRange", snippet.byte_range, output_text)
     write_range("SnippetLineRange", snippet.line_range, output_text)
 
-    write_license_expression("SnippetLicenseConcluded", snippet.concluded_license, output_text)
+    write_license_expression("SnippetLicenseConcluded", snippet.license_concluded, output_text)
     write_license_expression("LicenseInfoInSnippet", snippet.license_info_in_snippet, output_text)
     write_text_value("SnippetLicenseComments", snippet.license_comment, output_text)
     write_text_value("SnippetCopyrightText", snippet.copyright_text, output_text)

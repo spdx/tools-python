@@ -66,7 +66,7 @@ def test_successful_conversion(converter: SnippetConverter):
     converter.annotation_converter.convert.return_value = "mock_converted_annotation"
     file_spdx_id = "fileSpdxId"
     snippet = Snippet("spdxId", file_spdx_id=file_spdx_id, byte_range=(1, 2), line_range=(3, 4),
-                      concluded_license=LicenseExpression("licenseExpression1"),
+                      license_concluded=LicenseExpression("licenseExpression1"),
                       license_info_in_snippet=[LicenseExpression("licenseExpression2"),
                                                LicenseExpression("licenseExpression3")],
                       license_comment="licenseComment", copyright_text="copyrightText", comment="comment", name="name",
@@ -98,7 +98,7 @@ def test_successful_conversion(converter: SnippetConverter):
 
 
 def test_null_values(converter: SnippetConverter):
-    snippet = snippet_fixture(concluded_license=None, license_comment=None, copyright_text=None, comment=None,
+    snippet = snippet_fixture(license_concluded=None, license_comment=None, copyright_text=None, comment=None,
                               name=None, attribution_texts=[], license_info_in_snippet=[])
 
     document = Document(creation_info_fixture(), snippets=[snippet])
@@ -115,7 +115,7 @@ def test_null_values(converter: SnippetConverter):
 
 
 def test_spdx_no_assertion(converter: SnippetConverter):
-    snippet = snippet_fixture(concluded_license=SpdxNoAssertion(), license_info_in_snippet=SpdxNoAssertion())
+    snippet = snippet_fixture(license_concluded=SpdxNoAssertion(), license_info_in_snippet=SpdxNoAssertion())
 
     document = Document(creation_info_fixture(), snippets=[snippet])
     converted_dict = converter.convert(snippet, document)
@@ -126,7 +126,7 @@ def test_spdx_no_assertion(converter: SnippetConverter):
 
 
 def test_spdx_none(converter: SnippetConverter):
-    snippet = snippet_fixture(concluded_license=SpdxNone(), license_info_in_snippet=SpdxNone())
+    snippet = snippet_fixture(license_concluded=SpdxNone(), license_info_in_snippet=SpdxNone())
 
     document = Document(creation_info_fixture(), snippets=[snippet])
     converted_dict = converter.convert(snippet, document)

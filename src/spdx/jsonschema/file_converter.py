@@ -62,7 +62,7 @@ class FileConverter(TypedConverter[File]):
         elif file_property == FileProperty.LICENSE_COMMENTS:
             return file.license_comment
         elif file_property == FileProperty.LICENSE_CONCLUDED:
-            return apply_if_present(str, file.concluded_license)
+            return apply_if_present(str, file.license_concluded)
         elif file_property == FileProperty.LICENSE_INFO_IN_FILES:
             if isinstance(file.license_info_in_file, list):
                 return [str(license_expression) for license_expression in file.license_info_in_file] or None

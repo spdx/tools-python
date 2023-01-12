@@ -54,7 +54,7 @@
                 "TEXT"
             ],
             "licenseComments": "licenseComment",
-            "licenseConcluded": "concludedLicenseExpression",
+            "licenseConcluded": "licenseConcludedExpression",
             "licenseInfoInFiles": [
                 "licenseInfoInFileExpression"
             ],

@@ -52,7 +52,7 @@ class SnippetParser:
         comment: Optional[str] = snippet_dict.get("comment")
         copyright_text: Optional[str] = snippet_dict.get("copyrightText")
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
-        concluded_license: Optional[Union[
+        license_concluded: Optional[Union[
             LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
             "licenseConcluded"), lambda x: parse_field_or_no_assertion_or_none(x,
                                                                                self.license_expression_parser.parse_license_expression))
@@ -69,7 +69,7 @@ class SnippetParser:
                                                         file_spdx_id=file_spdx_id, line_range=line_range,
                                                         attribution_texts=attribution_texts, comment=comment,
                                                         copyright_text=copyright_text, license_comment=license_comment,
-                                                        concluded_license=concluded_license,
+                                                        license_concluded=license_concluded,
                                                         license_info_in_snippet=license_info))
 
         return snippet

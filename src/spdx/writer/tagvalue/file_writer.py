@@ -28,7 +28,7 @@ def write_file(file: File, text_output: TextIO):
     for file_checksum in file.checksums:
         write_value("FileChecksum", write_checksum_to_tag_value(file_checksum), text_output)
 
-    write_license_expression("LicenseConcluded", file.concluded_license, text_output)
+    write_license_expression("LicenseConcluded", file.license_concluded, text_output)
     write_license_expression("LicenseInfoInFile", file.license_info_in_file, text_output)
     write_text_value("LicenseComments", file.license_comment, text_output)
     write_text_value("FileCopyrightText", file.copyright_text, text_output)

@@ -64,7 +64,7 @@ class FileParser:
                                                            copyright_text=copyright_text, file_type=file_types,
                                                            contributors=file_contributors,
                                                            license_comment=license_comments,
-                                                           concluded_license=license_concluded,
+                                                           license_concluded=license_concluded,
                                                            license_info_in_file=license_info_in_files,
                                                            notice=notice_text)
                                                 )
