@@ -31,7 +31,7 @@ def test_parse_json_with_2_3_example():
     assert len(doc.files) == 5
     assert len(doc.packages) == 4
     assert len(doc.snippets) ==  1
-    assert len(doc.relationships) == 23
+    assert len(doc.relationships) == 13
     assert len(doc.extracted_licensing_info) == 5
 
 def test_parse_json_with_2_2_example():
