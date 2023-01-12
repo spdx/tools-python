@@ -12,6 +12,7 @@
 from conversion.creation_information_conversion import convert_creation_information
 from conversion.file_conversion import convert_file
 from conversion.package_conversion import convert_package
+from conversion.snippet_conversion import convert_snippet
 from spdx3.model.spdx_document import SpdxDocument
 
 from spdx.model.document import Document as Document2
@@ -26,6 +27,9 @@ def convert_spdx_document(document: Document2) -> SpdxDocument:
 
     for file in document.files:
         spdx_document.elements.append(convert_file(file, creation_information=spdx_document.creation_info))
+
+    for snippet in document.snippets:
+        spdx_document.elements.append(convert_snippet(snippet, creation_information=spdx_document.creation_info))
 
     return spdx_document
 
