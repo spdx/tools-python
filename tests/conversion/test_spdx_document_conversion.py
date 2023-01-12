@@ -25,4 +25,4 @@ def test_convert_spdx_document():
     assert spdx_document.spdx_id == "SPDXRef-DOCUMENT"
     assert spdx_document.name == "documentName"
     assert spdx_document.creation_info.spec_version == Version("3.0.0")
-    assert len(spdx_document.elements) == 1 # so far only package conversion is implemented, so there is only one element
+    assert len(spdx_document.elements) == 2 # so far only package and file conversion are implemented, so there are only two elements (one package, one file)
