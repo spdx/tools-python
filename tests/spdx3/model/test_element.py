@@ -12,7 +12,7 @@ from unittest import mock
 
 import pytest
 
-from spdx3.model.element import Element, Artifact, Collection, Bundle, Bom
+from spdx3.model.element import Element, Artifact, SpdxCollection, Bundle, Bom
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation")
@@ -57,24 +57,34 @@ def test_invalid_initialization_artifact(creation_info):
 @mock.patch("spdx3.model.external_map.ExternalMap", autospec=True)
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_collection(creation_information, namespace_map, external_map):
-    collection = Collection("SPDXRef-Collection", creation_information, namespace=namespace_map,
-                            imports=[external_map])
+def test_correct_initialization_spdx_collection(creation_information, namespace_map, external_map):
+    element = Element("SPDXRef-Element",
+                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
+    spdx_collection = SpdxCollection("SPDXRef-Collection", creation_information, elements=[element],
+                                     root_elements=[element],
+                                     namespaces=[namespace_map], imports=[external_map])
 
-    assert collection.spdx_id == "SPDXRef-Collection"
-    assert collection.creation_info == creation_information
-    assert collection.namespace == namespace_map
-    assert collection.imports == [external_map]
+    assert spdx_collection.spdx_id == "SPDXRef-Collection"
+    assert spdx_collection.creation_info == creation_information
+    assert spdx_collection.elements == [element]
+    assert spdx_collection.root_elements == [element]
+    assert spdx_collection.namespaces == [namespace_map]
+    assert spdx_collection.imports == [external_map]
 
 
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_invalid_initialization_collection(creation_information, namespace_map):
+def test_invalid_initialization_spdx_collection(creation_information, namespace_map):
     with pytest.raises(TypeError) as err:
-        Collection("SPDXRef-Collection", creation_information, namespace=namespace_map,
-                   imports=["ExternalMap"])
+        SpdxCollection("SPDXRef-Collection", creation_information, elements=[None], root_elements=3,
+                       namespaces=namespace_map,
+                       imports=["ExternalMap"])
 
-    assert err.value.args[0] == ['SetterError Collection: type of argument "imports" must be one of '
+    assert err.value.args[0] == ['SetterError SpdxCollection: type of argument "elements"[0] must be '
+                                 'spdx3.model.element.Element; got NoneType instead: [None]',
+                                 'SetterError SpdxCollection: type of argument "root_elements" must be a list; '
+                                 'got int instead: 3',
+                                 'SetterError SpdxCollection: type of argument "imports" must be one of '
                                  '(List[spdx3.model.external_map.ExternalMap], NoneType); got list instead: '
                                  "['ExternalMap']"]
 
@@ -82,23 +92,23 @@ def test_invalid_initialization_collection(creation_information, namespace_map):
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization_bundle(creation_information, namespace):
-    bundle = Bundle("SPDXRef-Bundle", creation_information, namespace=namespace, context="context")
+    bundle = Bundle("SPDXRef-Bundle", creation_information, namespaces=[namespace], context="context")
 
     assert bundle.spdx_id == "SPDXRef-Bundle"
     assert bundle.creation_info == creation_information
     assert bundle.context == "context"
-    assert bundle.namespace == namespace
+    assert bundle.namespaces == [namespace]
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_invalid_initialization_bundle(creation_information):
     with pytest.raises(TypeError) as err:
-        Bundle(4, creation_information, namespace=True, context=["yes"])
+        Bundle(4, creation_information, namespaces=True, context=["yes"])
 
     assert err.value.args[0] == ['SetterError Bundle: type of argument "spdx_id" must be str; got int instead: '
                                  '4',
-                                 'SetterError Bundle: type of argument "namespace" must be one of '
-                                 '(spdx3.model.namespace_map.NamespaceMap, NoneType); got bool instead: True',
+                                 'SetterError Bundle: type of argument "namespaces" must be one of '
+                                 '(List[spdx3.model.namespace_map.NamespaceMap], NoneType); got bool instead: True',
                                  'SetterError Bundle: type of argument "context" must be one of (str, '
                                  "NoneType); got list instead: ['yes']"]
 
