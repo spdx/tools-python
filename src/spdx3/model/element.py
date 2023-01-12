@@ -61,25 +61,31 @@ class Artifact(Element):
         if errors:
             raise ConstructorTypeErrors(errors)
 
+
 @dataclass_with_properties
-class Collection(Element):
-    namespace: Optional[NamespaceMap] = None
+class SpdxCollection(Element):
+    elements: List[Element] = field(default_factory=list)
+    root_elements: List[Element] = field(default_factory=list)
+    namespaces: Optional[List[NamespaceMap]] = field(default_factory=list)
     imports: Optional[List[ExternalMap]] = field(default_factory=list)
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
-                 extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
-                 imports: Optional[List[ExternalMap]] = None):
+                 extension: None = None, elements: List[Element] = None, root_elements: List[Element] = None,
+                 namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None):
+        elements = [] if elements is None else elements
+        root_elements = [] if root_elements is None else root_elements
+        namespaces = [] if namespaces is None else namespaces
         imports = [] if imports is None else imports
         errors = []
         try:
-            Element.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
-                         external_references, external_identifier, extension)
+            super().__init__(spdx_id, creation_info, name, summary, description, comment, verified_using,
+                             external_references, external_identifier, extension)
         except ConstructorTypeErrors as err:
             errors.extend(err.get_messages())
         try:
-            check_types_and_set_values(self, locals(), origin_class=Collection)
+            check_types_and_set_values(self, locals(), origin_class=SpdxCollection)
         except ConstructorTypeErrors as err:
             errors.extend(err.get_messages())
         if errors:
@@ -87,19 +93,21 @@ class Collection(Element):
 
 
 @dataclass_with_properties
-class Bundle(Collection):
+class Bundle(SpdxCollection):
     context: Optional[str] = None
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
-                 extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
-                 imports: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
+                 extension: None = None, elements: List[Element] = None, root_elements: List[Element] = None,
+                 namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
+                 context: Optional[str] = None):
         errors = []
         try:
-            Collection.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
-                                external_references, external_identifier, extension, originated_by, namespace,
-                                imports)
+            SpdxCollection.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
+                                    external_references, external_identifier, extension, elements, root_elements,
+                                    namespaces,
+                                    imports)
         except ConstructorTypeErrors as err:
             errors.extend(err.get_messages())
 
@@ -116,12 +124,13 @@ class Bom(Bundle):
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
-                 extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
-                 imports: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
+                 extension: None = None, elements: List[Element] = None, root_elements: List[Element] = None,
+                 namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
+                 context: Optional[str] = None):
         errors = []
         try:
             Bundle.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
-                            external_references, external_identifier, extension, originated_by, namespace,
+                            external_references, external_identifier, extension, elements, root_elements, namespaces,
                             imports, context)
         except ConstructorTypeErrors as err:
             errors.extend(err.get_messages())
