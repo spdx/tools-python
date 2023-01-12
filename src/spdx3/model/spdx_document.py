@@ -29,12 +29,12 @@ class SpdxDocument(Bundle):
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None, namespace: Optional[NamespaceMap] = None,
-                 import_element: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
+                 imports: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
         errors = []
         try:
             super().__init__(spdx_id, creation_info, name, summary, description, comment, verified_using,
                         external_references, external_identifier, extension, originated_by, namespace,
-                        import_element, context)
+                        imports, context)
         except ConstructorTypeErrors as err:
             errors.extend(err.get_messages())
         try:
