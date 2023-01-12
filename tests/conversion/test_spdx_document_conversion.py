@@ -13,10 +13,10 @@ from semantic_version import Version
 from spdx.model.document import Document
 from spdx3.model.spdx_document import SpdxDocument
 
-from conversion.convert_spdx_document import convert_spdx_document
+from conversion.spdx_document_conversion import convert_spdx_document
 from tests.fixtures import document_fixture
 
-def test_spdx_document_conversion():
+def test_convert_spdx_document():
     document: Document = document_fixture()
 
     spdx_document: SpdxDocument = convert_spdx_document(document)
