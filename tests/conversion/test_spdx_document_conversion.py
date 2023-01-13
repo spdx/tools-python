@@ -10,7 +10,7 @@
 #  limitations under the License.
 from semantic_version import Version
 
-from spdx.model.document import Document
+from spdx.model.document import Document as Spdx2_Document
 from spdx3.model.spdx_document import SpdxDocument
 
 from conversion.spdx_document_conversion import convert_spdx_document
@@ -18,9 +18,9 @@ from tests.fixtures import document_fixture
 
 
 def test_convert_spdx_document():
-    document: Document = document_fixture()
+    spdx2_document: Spdx2_Document = document_fixture()
 
-    spdx_document: SpdxDocument = convert_spdx_document(document)
+    spdx_document: SpdxDocument = convert_spdx_document(spdx2_document)
 
     assert spdx_document.spdx_id == "SPDXRef-DOCUMENT"
     assert spdx_document.name == "documentName"
