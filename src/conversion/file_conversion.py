@@ -13,12 +13,12 @@ from spdx3.model.software.file import File
 
 from spdx3.model.creation_information import CreationInformation
 
-from spdx.model.file import File as File2
+from spdx.model.file import File as Spdx2_File
 
 
-def convert_file(file2: File2, creation_information: CreationInformation) -> File:
-    name = file2.name
-    spdx_id = file2.spdx_id
+def convert_file(spdx2_file: Spdx2_File, creation_information: CreationInformation) -> File:
+    name = spdx2_file.name
+    spdx_id = spdx2_file.spdx_id
     # file.checksums -> file.verifiedUsing
     print("\n")
     print_missing_conversion("file.checksums", 1, "for IntegrityMethod")
@@ -28,7 +28,7 @@ def convert_file(file2: File2, creation_information: CreationInformation) -> Fil
         "file.concluded_license, file.license_info_in_file, file.license_comment, file.copyright_text", 0,
         "missing definition for license profile")
 
-    comment = file2.comment
+    comment = spdx2_file.comment
     print_missing_conversion("file.notice, file.contributors, file.attribution_texts", 0,
                              "missing definition for license profile")
 
