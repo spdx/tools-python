@@ -12,7 +12,7 @@ from datetime import datetime
 
 from semantic_version import Version
 
-from spdx3.conversion.message import print_missing_conversion
+from spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx3.model.spdx_document import SpdxDocument
 
 from spdx3.model.creation_information import CreationInformation
@@ -20,7 +20,7 @@ from spdx3.model.creation_information import CreationInformation
 from spdx.model.document import CreationInfo as Spdx2_CreationInfo
 
 
-def convert_creation_information(spdx2_creation_info: Spdx2_CreationInfo) -> SpdxDocument:
+def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo) -> SpdxDocument:
     # creation_info.spdx_id -> spdx_document.spdx_id
     spdx_id = spdx2_creation_info.spdx_id
 
