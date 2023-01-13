@@ -13,19 +13,19 @@ from spdx3.model.software.snippet import Snippet
 
 from spdx3.model.creation_information import CreationInformation
 
-from spdx.model.snippet import Snippet as Snippet2
+from spdx.model.snippet import Snippet as Spdx2_Snippet
 
 
-def convert_snippet(snippet2: Snippet2, creation_information: CreationInformation) -> Snippet:
-    spdx_id = snippet2.spdx_id
+def convert_snippet(spdx2_snippet: Spdx2_Snippet, creation_information: CreationInformation) -> Snippet:
+    spdx_id = spdx2_snippet.spdx_id
     print("\n")
     print_missing_conversion("snippet.file_spdx_id", 0)
-    byte_range = snippet2.byte_range
-    line_range = snippet2.line_range
+    byte_range = spdx2_snippet.byte_range
+    line_range = spdx2_snippet.line_range
     print_missing_conversion("snippet.concluded_license, snippet.license_info_in_snippet, snippet.license_comment,"
                              "snippet.copyright_text", 0, "missing definitions for license profile")
-    comment = snippet2.comment
-    name = snippet2.name
+    comment = spdx2_snippet.comment
+    name = spdx2_snippet.name
 
     print_missing_conversion("snippet.attribution_texts", 0, "missing definitions for license profile")
 
