@@ -14,13 +14,13 @@ from conversion.package_conversion import convert_package
 from spdx3.model.software.package import Package
 
 from tests.fixtures import package_fixture
-from spdx.model.package import Package as Package2
+from spdx.model.package import Package as Spdx2_Package
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation")
 def test_convert_package(creation_information):
-    package2: Package2 = package_fixture()
+    spdx2_package: Spdx2_Package = package_fixture()
 
-    package: Package = convert_package(package2, creation_information=creation_information)
+    package: Package = convert_package(spdx2_package, creation_information=creation_information)
 
     assert package.spdx_id == "SPDXRef-Package"
