@@ -10,14 +10,14 @@
 #  limitations under the License.
 from spdx3.model.creation_information import CreationInformation
 
-from spdx3.conversion.message import print_missing_conversion
+from spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx3.model.software.software_purpose import SoftwarePurpose
 
 from spdx.model.package import Package as Spdx2_Package
 from spdx3.model.software.package import Package
 
 
-def convert_package(spdx2_package: Spdx2_Package, creation_information: CreationInformation) -> Package:
+def bump_package(spdx2_package: Spdx2_Package, creation_information: CreationInformation) -> Package:
     spdx_id = spdx2_package.spdx_id
     name = spdx2_package.name
     download_location = spdx2_package.download_location

@@ -8,7 +8,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from spdx3.conversion.message import print_missing_conversion
+from spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx3.model.software.file import File
 
 from spdx3.model.creation_information import CreationInformation
@@ -16,7 +16,7 @@ from spdx3.model.creation_information import CreationInformation
 from spdx.model.file import File as Spdx2_File
 
 
-def convert_file(spdx2_file: Spdx2_File, creation_information: CreationInformation) -> File:
+def bump_file(spdx2_file: Spdx2_File, creation_information: CreationInformation) -> File:
     name = spdx2_file.name
     spdx_id = spdx2_file.spdx_id
     # file.checksums -> file.verifiedUsing
