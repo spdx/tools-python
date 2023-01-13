@@ -10,17 +10,18 @@
 #  limitations under the License.
 from unittest import mock
 
-from spdx3.conversion.file_conversion import convert_file
-from spdx3.model.software.file import File
+from spdx3.bump_from_spdx2.package import bump_package
+from spdx3.model.software.package import Package
 
-from tests.fixtures import file_fixture
-from spdx.model.file import File as Spdx2_File
+from tests.fixtures import package_fixture
+from spdx.model.package import Package as Spdx2_Package
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation")
-def test_convert_file(creation_information):
-    spdx2_file: Spdx2_File = file_fixture()
+def test_bump_package(creation_information):
+    spdx2_package: Spdx2_Package = package_fixture()
 
-    file: File = convert_file(spdx2_file, creation_information=creation_information)
+    package: Package = bump_package(spdx2_package, creation_information=creation_information)
 
-    assert file.spdx_id == "SPDXRef-File"
+
+    assert package.spdx_id == "SPDXRef-Package"
