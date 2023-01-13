@@ -10,7 +10,7 @@
 #  limitations under the License.
 from unittest import mock
 
-from conversion.snippet_conversion import convert_snippet
+from spdx3.conversion.snippet_conversion import convert_snippet
 from tests.fixtures import snippet_fixture
 from spdx.model.snippet import Snippet as Spdx2_Snippet
 from spdx3.model.software.snippet import Snippet

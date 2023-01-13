@@ -9,10 +9,10 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-from conversion.creation_information_conversion import convert_creation_information
-from conversion.file_conversion import convert_file
-from conversion.package_conversion import convert_package
-from conversion.snippet_conversion import convert_snippet
+from spdx3.conversion.creation_information_conversion import convert_creation_information
+from spdx3.conversion.file_conversion import convert_file
+from spdx3.conversion.package_conversion import convert_package
+from spdx3.conversion.snippet_conversion import convert_snippet
 from spdx3.model.spdx_document import SpdxDocument
 
 from spdx.model.document import Document as Spdx2_Document
