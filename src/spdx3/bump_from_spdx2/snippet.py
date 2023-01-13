@@ -8,7 +8,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from spdx3.conversion.message import print_missing_conversion
+from spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx3.model.software.snippet import Snippet
 
 from spdx3.model.creation_information import CreationInformation
@@ -16,7 +16,7 @@ from spdx3.model.creation_information import CreationInformation
 from spdx.model.snippet import Snippet as Spdx2_Snippet
 
 
-def convert_snippet(spdx2_snippet: Spdx2_Snippet, creation_information: CreationInformation) -> Snippet:
+def bump_snippet(spdx2_snippet: Spdx2_Snippet, creation_information: CreationInformation) -> Snippet:
     spdx_id = spdx2_snippet.spdx_id
     print("\n")
     print_missing_conversion("snippet.file_spdx_id", 0)

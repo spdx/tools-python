@@ -10,16 +10,17 @@
 #  limitations under the License.
 from unittest import mock
 
-from spdx3.conversion.snippet_conversion import convert_snippet
-from tests.fixtures import snippet_fixture
-from spdx.model.snippet import Snippet as Spdx2_Snippet
-from spdx3.model.software.snippet import Snippet
+from spdx3.bump_from_spdx2.file import bump_file
+from spdx3.model.software.file import File
+
+from tests.fixtures import file_fixture
+from spdx.model.file import File as Spdx2_File
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_convert_snippet(creation_information):
-    spdx2_snippet: Spdx2_Snippet = snippet_fixture()
+@mock.patch("spdx3.model.creation_information.CreationInformation")
+def test_bump_file(creation_information):
+    spdx2_file: Spdx2_File = file_fixture()
 
-    snippet: Snippet = convert_snippet(spdx2_snippet, creation_information=creation_information)
+    file: File = bump_file(spdx2_file, creation_information=creation_information)
 
-    assert snippet.spdx_id == "SPDXRef-Snippet"
+    assert file.spdx_id == "SPDXRef-File"
