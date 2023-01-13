@@ -12,7 +12,7 @@ from datetime import datetime
 
 from semantic_version import Version
 
-from conversion.message import print_missing_conversion
+from spdx3.conversion.message import print_missing_conversion
 from spdx3.model.spdx_document import SpdxDocument
 
 from spdx3.model.creation_information import CreationInformation

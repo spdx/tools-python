@@ -10,7 +10,7 @@
 #  limitations under the License.
 from spdx3.model.creation_information import CreationInformation
 
-from conversion.message import print_missing_conversion
+from spdx3.conversion.message import print_missing_conversion
 from spdx3.model.software.software_purpose import SoftwarePurpose
 
 from spdx.model.package import Package as Spdx2_Package
