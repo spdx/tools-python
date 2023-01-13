@@ -15,12 +15,12 @@ from conversion.package_conversion import convert_package
 from conversion.snippet_conversion import convert_snippet
 from spdx3.model.spdx_document import SpdxDocument
 
-from spdx.model.document import Document as Document2
+from spdx.model.document import Document as Spdx2_Document
 
 """ We want to implement a conversion from the data model in src.spdx to the data model in src.spdx3.
     As there are many fundamental differences between these version we want each conversion method to take
     the object from src.spdx and return all objects that the input is translated to."""
-def convert_spdx_document(document: Document2) -> SpdxDocument:
+def convert_spdx_document(document: Spdx2_Document) -> SpdxDocument:
     spdx_document: SpdxDocument = convert_creation_information(document.creation_info)
     for package in document.packages:
         spdx_document.elements.append(convert_package(package, creation_information=spdx_document.creation_info))
