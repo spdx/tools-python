@@ -12,14 +12,14 @@ from unittest import mock
 
 from conversion.snippet_conversion import convert_snippet
 from tests.fixtures import snippet_fixture
-from spdx.model.snippet import Snippet as Snippet2
+from spdx.model.snippet import Snippet as Spdx2_Snippet
 from spdx3.model.software.snippet import Snippet
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_convert_snippet(creation_information):
-    snippet2: Snippet2 = snippet_fixture()
+    spdx2_snippet: Spdx2_Snippet = snippet_fixture()
 
-    snippet: Snippet = convert_snippet(snippet2, creation_information=creation_information)
+    snippet: Snippet = convert_snippet(spdx2_snippet, creation_information=creation_information)
 
     assert snippet.spdx_id == "SPDXRef-Snippet"

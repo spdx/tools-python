@@ -13,14 +13,14 @@ from spdx3.model.creation_information import CreationInformation
 from conversion.message import print_missing_conversion
 from spdx3.model.software.software_purpose import SoftwarePurpose
 
-from spdx.model.package import Package as Package2
+from spdx.model.package import Package as Spdx2_Package
 from spdx3.model.software.package import Package
 
 
-def convert_package(package2: Package2, creation_information: CreationInformation) -> Package:
-    spdx_id = package2.spdx_id
-    name = package2.name
-    download_location = package2.download_location
+def convert_package(spdx2_package: Spdx2_Package, creation_information: CreationInformation) -> Package:
+    spdx_id = spdx2_package.spdx_id
+    name = spdx2_package.name
+    download_location = spdx2_package.download_location
     # package2.version -> ?
     print("\n")
     print_missing_conversion("package2.version", 0)
@@ -36,18 +36,18 @@ def convert_package(package2: Package2, creation_information: CreationInformatio
     print_missing_conversion("package2.verification_code", 1, "of IntegrityMethod")
     # package.checksums -> package.verified_using
     print_missing_conversion("package2.checksums", 1, "of IntegrityMethod")
-    homepage = package2.homepage
+    homepage = spdx2_package.homepage
     print_missing_conversion("package2.source_info", 0)
     print_missing_conversion("package2.license_concluded, package2.license_info_from_files, package2.license_declared, "
                              "package2.license_comment, package2.copyright_text", 0,
                              "and missing definition of license profile")
-    summary = package2.summary
-    description = package2.description
-    comment = package2.comment
+    summary = spdx2_package.summary
+    description = spdx2_package.description
+    comment = spdx2_package.comment
     print_missing_conversion("package2.external_references", 1, "of ExternalReferences / ExternalIdentifiers")
     print_missing_conversion("package2.attribution_texts", 0)
     package_purpose = [SoftwarePurpose[
-        package2.primary_package_purpose.name]] if package2.primary_package_purpose else []
+        spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
     print_missing_conversion("package2.release_date, package2.built_date, package2.valid_until_date", 0)
 
     package = Package(spdx_id, creation_information, name, download_location=download_location, homepage=homepage, summary=summary,
