@@ -13,7 +13,7 @@ from semantic_version import Version
 from spdx.model.document import Document as Spdx2_Document
 from spdx3.model.spdx_document import SpdxDocument
 
-from conversion.spdx_document_conversion import convert_spdx_document
+from spdx3.conversion.spdx_document_conversion import convert_spdx_document
 from tests.fixtures import document_fixture
 
 
