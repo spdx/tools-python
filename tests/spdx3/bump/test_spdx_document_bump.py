@@ -13,16 +13,16 @@ from semantic_version import Version
 from spdx.model.document import Document as Spdx2_Document
 from spdx3.model.spdx_document import SpdxDocument
 
-from spdx3.conversion.spdx_document_conversion import convert_spdx_document
+from spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
 from tests.fixtures import document_fixture
 
 
-def test_convert_spdx_document():
+def test_bump_spdx_document():
     spdx2_document: Spdx2_Document = document_fixture()
 
-    spdx_document: SpdxDocument = convert_spdx_document(spdx2_document)
+    spdx_document: SpdxDocument = bump_spdx_document(spdx2_document)
 
     assert spdx_document.spdx_id == "SPDXRef-DOCUMENT"
     assert spdx_document.name == "documentName"
     assert spdx_document.creation_info.spec_version == Version("3.0.0")
-    assert len(spdx_document.elements) == 3 # document_fixture has exactly one package, one file and one snippet which are added to the elements list during conversion
+    assert len(spdx_document.elements) == 3 # document_fixture has exactly one package, one file and one snippet which are added to the elements list during bump_from_spdx2
