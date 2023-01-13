@@ -17,32 +17,32 @@ from spdx3.model.spdx_document import SpdxDocument
 
 from spdx3.model.creation_information import CreationInformation
 
-from spdx.model.document import CreationInfo
+from spdx.model.document import CreationInfo as Spdx2_CreationInfo
 
 
-def convert_creation_information(creation_info: CreationInfo) -> SpdxDocument:
+def convert_creation_information(spdx2_creation_info: Spdx2_CreationInfo) -> SpdxDocument:
     # creation_info.spdx_id -> spdx_document.spdx_id
-    spdx_id = creation_info.spdx_id
+    spdx_id = spdx2_creation_info.spdx_id
 
     # creation_info.name -> spdx_document.name
-    name = creation_info.name
+    name = spdx2_creation_info.name
 
     # creation_info.document_namespace -> ?
     print("\n")
     print_missing_conversion("creation_info.document_namespace", 0)
     # creation_info.creators -> creation_information.creators (not implemented yet)
     print_missing_conversion("creation_info.creators", 1, "of creators")
-    created: datetime = creation_info.created
+    created: datetime = spdx2_creation_info.created
     # creation_info.creator_comment -> ?
     print_missing_conversion("creation_info.creator_comment", 0)
-    data_license = creation_info.data_license
+    data_license = spdx2_creation_info.data_license
     # creation_info.external_document_refs -> spdx_document.imports
-    imports = creation_info.external_document_refs
+    imports = spdx2_creation_info.external_document_refs
     print_missing_conversion("creation_info.external_document_refs", 0, "ExternalDocumentRef -> ExternalMap")
     # creation_info.license_list_version -> ?
     print_missing_conversion("creation_info.license_list_version",0)
     # creation_info.document_comment -> spdx_document.comment
-    document_comment = creation_info.document_comment
+    document_comment = spdx2_creation_info.document_comment
     creation_information = CreationInformation(Version("3.0.0"), created, None, [], data_license)
     spdx_document = SpdxDocument(spdx_id=spdx_id, creation_info=creation_information, name=name, comment=document_comment)
 
