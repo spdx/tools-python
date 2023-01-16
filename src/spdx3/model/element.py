@@ -16,6 +16,7 @@ from common.typing.dataclass_with_properties import dataclass_with_properties
 
 from spdx3.model.creation_information import CreationInformation
 from spdx3.model.external_map import ExternalMap
+from spdx3.model.integrity_method import IntegrityMethod
 from spdx3.model.namespace_map import NamespaceMap
 
 
@@ -29,15 +30,16 @@ class Element:
     summary: Optional[str] = None
     description: Optional[str] = None
     comment: Optional[str] = None
-    verified_using: None = None  # placeholder for IntegrityMethod
+    verified_using: Optional[List[IntegrityMethod]] = field(default_factory=list)
     external_references: None = None  # placeholder for ExternalReference
     external_identifier: None = None  # placeholder for ExternalIdentifier
     extension: None = None  # placeholder for extension
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
-                 verified_using: None = None, external_references: None = None, external_identifier: None = None,
-                 extension: None = None):
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None):
+        verified_using = [] if verified_using is None else verified_using
         check_types_and_set_values(self, locals())
 
 
@@ -47,12 +49,12 @@ class Artifact(Element):
     """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
     class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
     class but as we have taken care of all fields this warning can be ignored."""
+
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
-                 verified_using: None = None, external_references: None = None, external_identifier: None = None,
-                 extension: None = None, originated_by: None = None):
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None, originated_by: None = None):
         check_types_and_set_values(self, locals())
-
 
 
 @dataclass_with_properties
@@ -65,14 +67,17 @@ class SpdxCollection(Element):
     """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
     class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
     class but as we have taken care of all fields this warning can be ignored."""
+
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
-                 description: Optional[str] = None, comment: Optional[str] = None, verified_using: None = None,
-                 external_references: None = None, external_identifier: None = None, extension: None = None,
+                 description: Optional[str] = None, comment: Optional[str] = None,
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None):
         namespaces = [] if namespaces is None else namespaces
         imports = [] if imports is None else imports
         check_types_and_set_values(self, locals())
+
 
 @dataclass_with_properties
 class Bundle(SpdxCollection):
@@ -80,11 +85,14 @@ class Bundle(SpdxCollection):
     """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
     class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
     class but as we have taken care of all fields this warning can be ignored."""
+
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
-                 description: Optional[str] = None, comment: Optional[str] = None, verified_using: None = None,
-                 external_references: None = None, external_identifier: None = None, extension: None = None,
-                 namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
+                 description: Optional[str] = None, comment: Optional[str] = None,
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None,
+                 namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
+                 context: Optional[str] = None):
         check_types_and_set_values(self, locals())
 
 
@@ -93,10 +101,12 @@ class Bom(Bundle):
     """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
     class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super
     class but as we have taken care of all fields this warning can be ignored."""
+
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
-                 description: Optional[str] = None, comment: Optional[str] = None, verified_using: None = None,
-                 external_references: None = None, external_identifier: None = None, extension: None = None,
+                 description: Optional[str] = None, comment: Optional[str] = None,
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
                  context: Optional[str] = None):
         check_types_and_set_values(self, locals())
