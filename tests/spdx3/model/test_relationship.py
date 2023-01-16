@@ -12,16 +12,12 @@ from unittest import mock
 
 import pytest
 
-from spdx3.model.element import Element
-
 from spdx3.model.relationship import Relationship, RelationshipType, RelationshipCompleteness
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation")
-def test_correct_initialization(creation_information):
-    element = Element("SPDXRef-Element",
-                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
-
+@mock.patch("spdx3.model.element.Element", autospec=True)
+@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+def test_correct_initialization(creation_information, element):
     relationship = Relationship("SPDXRef-Relationship", creation_information, element, [element, element],
                                 RelationshipType.DESCRIBES, completeness=RelationshipCompleteness.UNKNOWN)
 
@@ -33,7 +29,7 @@ def test_correct_initialization(creation_information):
     assert relationship.completeness == RelationshipCompleteness.UNKNOWN
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation")
+@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Relationship("SPDXRef-Relationship", creation_information, "Element", 5, "Relationshiptype", completeness=True)
