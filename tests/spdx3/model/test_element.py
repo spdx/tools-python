@@ -56,10 +56,9 @@ def test_invalid_initialization_artifact(creation_info):
 
 @mock.patch("spdx3.model.external_map.ExternalMap", autospec=True)
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
+@mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_spdx_collection(creation_information, namespace_map, external_map):
-    element = Element("SPDXRef-Element",
-                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
+def test_correct_initialization_spdx_collection(creation_information, element, namespace_map, external_map):
     spdx_collection = SpdxCollection("SPDXRef-Collection", creation_information, elements=[element],
                                      root_elements=[element], namespaces=[namespace_map], imports=[external_map])
 
@@ -89,10 +88,9 @@ def test_invalid_initialization_spdx_collection(creation_information, namespace_
 
 
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
+@mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_bundle(creation_information, namespace):
-    element = Element("SPDXRef-Element",
-                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
+def test_correct_initialization_bundle(creation_information, element, namespace):
     bundle = Bundle("SPDXRef-Bundle", creation_information, elements=[element], root_elements=[element],
                     namespaces=[namespace], context="context")
 
@@ -104,10 +102,9 @@ def test_correct_initialization_bundle(creation_information, namespace):
     assert bundle.namespaces == [namespace]
 
 
+@mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_invalid_initialization_bundle(creation_information):
-    element = Element("SPDXRef-Element",
-                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
+def test_invalid_initialization_bundle(creation_information, element):
     with pytest.raises(TypeError) as err:
         Bundle(4, creation_information, elements=[element], root_elements=[element], namespaces=True, context=["yes"])
 
@@ -119,10 +116,9 @@ def test_invalid_initialization_bundle(creation_information):
                                  "NoneType); got list instead: ['yes']"]
 
 
+@mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_bom(creation_information):
-    element = Element("SPDXRef-Element",
-                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
+def test_correct_initialization_bom(creation_information, element):
     bom = Bom("SPDXRef-Bom", creation_information, elements=[element], root_elements=[element])
 
     assert bom.spdx_id == "SPDXRef-Bom"
