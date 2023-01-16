@@ -11,7 +11,6 @@
 from dataclasses import field
 from typing import Optional, List
 
-from common.typing.constructor_type_errors import ConstructorTypeErrors
 from common.typing.type_checks import check_types_and_set_values
 from common.typing.dataclass_with_properties import dataclass_with_properties
 
@@ -22,6 +21,8 @@ from spdx3.model.namespace_map import NamespaceMap
 
 @dataclass_with_properties
 class Element:
+    # This should be an abstract class and should not be instantiated directly.
+    # We need to investigate if we can combine dataclasses with abstract base classes (https://github.com/spdx/tools-python/issues/431)
     spdx_id: str  # IRI
     creation_info: CreationInformation
     name: Optional[str] = None
@@ -37,29 +38,21 @@ class Element:
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None):
-        check_types_and_set_values(self, locals(), origin_class=Element)
+        check_types_and_set_values(self, locals())
 
 
 @dataclass_with_properties
 class Artifact(Element):
     originated_by: None = None  # placeholder for Actor
-
+    """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
+    class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
+    class but as we have taken care of all fields this warning can be ignored."""
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, originated_by: None = None):
-        errors = []
-        try:
-            super().__init__(spdx_id, creation_info, name, summary, description, comment, verified_using,
-                             external_references, external_identifier, extension)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        try:
-            check_types_and_set_values(self, locals(), origin_class=Artifact)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        if errors:
-            raise ConstructorTypeErrors(errors)
+        check_types_and_set_values(self, locals())
+
 
 
 @dataclass_with_properties
@@ -69,7 +62,9 @@ class SpdxCollection(Element):
     root_elements: List[Element] = field(default_factory=list)
     namespaces: Optional[List[NamespaceMap]] = field(default_factory=list)
     imports: Optional[List[ExternalMap]] = field(default_factory=list)
-
+    """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
+    class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
+    class but as we have taken care of all fields this warning can be ignored."""
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
                  description: Optional[str] = None, comment: Optional[str] = None, verified_using: None = None,
@@ -77,63 +72,31 @@ class SpdxCollection(Element):
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None):
         namespaces = [] if namespaces is None else namespaces
         imports = [] if imports is None else imports
-        errors = []
-        try:
-            super().__init__(spdx_id, creation_info, name, summary, description, comment, verified_using,
-                             external_references, external_identifier, extension)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        try:
-            check_types_and_set_values(self, locals(), origin_class=SpdxCollection)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        if errors:
-            raise ConstructorTypeErrors(errors)
-
+        check_types_and_set_values(self, locals())
 
 @dataclass_with_properties
 class Bundle(SpdxCollection):
     context: Optional[str] = None
-
+    """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
+    class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
+    class but as we have taken care of all fields this warning can be ignored."""
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
                  description: Optional[str] = None, comment: Optional[str] = None, verified_using: None = None,
                  external_references: None = None, external_identifier: None = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None, context: Optional[str] = None):
-        errors = []
-        try:
-            SpdxCollection.__init__(self, spdx_id, creation_info, elements, root_elements, name, summary, description,
-                                    comment, verified_using, external_references, external_identifier, extension, namespaces,
-                                    imports)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-
-        try:
-            check_types_and_set_values(self, locals(), origin_class=Bundle)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        if errors:
-            raise ConstructorTypeErrors(errors)
+        check_types_and_set_values(self, locals())
 
 
 @dataclass_with_properties
 class Bom(Bundle):
+    """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
+    class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super
+    class but as we have taken care of all fields this warning can be ignored."""
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
                  description: Optional[str] = None, comment: Optional[str] = None, verified_using: None = None,
                  external_references: None = None, external_identifier: None = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
                  context: Optional[str] = None):
-        errors = []
-        try:
-            Bundle.__init__(self, spdx_id, creation_info, elements, root_elements, name, summary, description, comment, verified_using,
-                            external_references, external_identifier, extension, namespaces,
-                            imports, context)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        try:
-            check_types_and_set_values(self, locals(), origin_class=Bom)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        if errors:
-            raise ConstructorTypeErrors(errors)
+        check_types_and_set_values(self, locals())
