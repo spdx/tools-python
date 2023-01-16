@@ -3,7 +3,7 @@ from typing import Any, Dict
 from common.typing.constructor_type_errors import ConstructorTypeErrors
 
 
-def check_types_and_set_values(instance_under_construction: Any, local_variables: Dict, origin_class: Any = None) -> None:
+def check_types_and_set_values(instance_under_construction: Any, local_variables: Dict) -> None:
     """
     Helper method to accumulate all type errors encountered during a constructor call and return them in a
     ConstructorTypeErrors instance.
@@ -15,10 +15,8 @@ def check_types_and_set_values(instance_under_construction: Any, local_variables
     With the additional parameter origin_class we ensure that the attributes from the class that calls this method
     are set. If we use inheritance the instance_under_construction object might be a child object.
     """
-    if not origin_class:
-        origin_class = instance_under_construction
     errors = []
-    for key, value_type in origin_class.__annotations__.items():
+    for key in instance_under_construction.__dataclass_fields__.keys():
         value = local_variables.get(key)
         try:
             setattr(instance_under_construction, key, value)
