@@ -10,8 +10,6 @@
 # limitations under the License.
 from typing import Optional, List
 
-from common.typing.constructor_type_errors import ConstructorTypeErrors
-
 from spdx3.model.creation_information import CreationInformation
 
 from common.typing.type_checks import check_types_and_set_values
@@ -28,7 +26,7 @@ class Package(Artifact):
     download_location: Optional[str] = None # anyURI
     package_uri: Optional[str] = None # anyURI
     homepage: Optional[str] = None # anyURI
-
+    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
@@ -36,16 +34,4 @@ class Package(Artifact):
                  package_purpose: Optional[List[SoftwarePurpose]] = None, download_location: Optional[str] = None,
                  package_uri: Optional[str] = None, homepage: Optional[str] = None):
         package_purpose = [] if package_purpose is None else package_purpose
-        errors = []
-        try:
-            Artifact.__init__(self, spdx_id, creation_info, name, summary, description, comment, verified_using,
-                              external_references, external_identifier, extension, originated_by)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        try:
-            check_types_and_set_values(self, locals())
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-
-        if errors:
-            raise ConstructorTypeErrors(errors)
+        check_types_and_set_values(self, locals())
