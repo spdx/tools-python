@@ -11,15 +11,13 @@
 from unittest import mock
 
 import pytest
-from spdx3.model.element import Element
 
 from spdx3.model.spdx_document import SpdxDocument
 
 
+@mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information):
-    element = Element("SPDXRef-Element",
-                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
+def test_correct_initialization(creation_information, element):
     spdx_document = SpdxDocument("SPDXRef-DOCUMENT", creation_information, "Test document", elements=[element],
                                  root_elements=[element])
 
