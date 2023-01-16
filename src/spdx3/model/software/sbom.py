@@ -12,8 +12,6 @@ from typing import Optional, List
 
 from common.typing.type_checks import check_types_and_set_values
 
-from common.typing.constructor_type_errors import ConstructorTypeErrors
-
 from spdx3.model.creation_information import CreationInformation
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
@@ -24,22 +22,12 @@ from spdx3.model.namespace_map import NamespaceMap
 
 @dataclass_with_properties
 class Sbom(Bom):
+    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
                  description: Optional[str] = None, comment: Optional[str] = None, verified_using: None = None,
                  external_references: None = None, external_identifier: None = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
                  context: Optional[str] = None):
-        errors = []
-        try:
-            Bom.__init__(self, spdx_id, creation_info, elements, root_elements, name, summary, description, comment,
-                         verified_using, external_references, external_identifier, extension, namespaces, imports,
-                         context)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        try:
-            check_types_and_set_values(self, locals())
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        if errors:
-            raise ConstructorTypeErrors(errors)
+        check_types_and_set_values(self, locals())
+
