@@ -12,7 +12,6 @@ from enum import Enum, auto
 from typing import List, Optional
 
 from common.typing.type_checks import check_types_and_set_values
-from common.typing.constructor_type_errors import ConstructorTypeErrors
 
 from spdx3.model.creation_information import CreationInformation
 
@@ -77,21 +76,10 @@ class Relationship(Element):
     to: List[Element] = None
     relationship_type: RelationshipType = None
     completeness: Optional[RelationshipCompleteness] = None
-
+    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
     def __init__(self, spdx_id: str, creation_info: CreationInformation, from_element: Element, to: List[Element],
                  relationship_type: RelationshipType, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
                  extension: None = None, completeness: Optional[RelationshipCompleteness] = None):
-        errors = []
-        try:
-            super().__init__(spdx_id, creation_info, name, summary, description, comment, verified_using,
-                             external_references, external_identifier, extension)
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        try:
-            check_types_and_set_values(self, locals())
-        except ConstructorTypeErrors as err:
-            errors.extend(err.get_messages())
-        if errors:
-            raise ConstructorTypeErrors(errors)
+        check_types_and_set_values(self, locals())
