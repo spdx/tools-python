@@ -18,7 +18,7 @@ from spdx3.model.bundle import Bundle
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
 @mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_bundle(creation_information, element, namespace):
+def test_correct_initialization(creation_information, element, namespace):
     bundle = Bundle("SPDXRef-Bundle", creation_information, elements=[element], root_elements=[element],
                     namespaces=[namespace], context="context")
 
@@ -32,7 +32,7 @@ def test_correct_initialization_bundle(creation_information, element, namespace)
 
 @mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_invalid_initialization_bundle(creation_information, element):
+def test_invalid_initialization(creation_information, element):
     with pytest.raises(TypeError) as err:
         Bundle(4, creation_information, elements=[element], root_elements=[element], namespaces=True, context=["yes"])
 

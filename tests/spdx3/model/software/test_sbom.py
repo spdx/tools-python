@@ -17,7 +17,7 @@ from spdx3.model.software.sbom import Sbom
 
 @mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_sbom(creation_information, element):
+def test_correct_initialization(creation_information, element):
     sbom = Sbom("SPDXRef-Sbom", creation_information, elements=[element, element], root_elements=[element])
 
     assert sbom.spdx_id == "SPDXRef-Sbom"
@@ -25,7 +25,7 @@ def test_correct_initialization_sbom(creation_information, element):
     assert sbom.elements == [element, element]
     assert sbom.root_elements == [element]
 
-def test_invalid_initialization_sbom():
+def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         Sbom(2, {"creation_info": [3, 4, 5]}, elements=[], root_elements=[])
 
