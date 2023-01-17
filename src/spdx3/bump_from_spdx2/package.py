@@ -8,6 +8,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+from spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx3.model.creation_information import CreationInformation
 
 from spdx3.bump_from_spdx2.message import print_missing_conversion
@@ -35,7 +36,7 @@ def bump_package(spdx2_package: Spdx2_Package, creation_information: CreationInf
     # package.verification_code -> package.verified_using
     print_missing_conversion("package2.verification_code", 1, "of IntegrityMethod")
     # package.checksums -> package.verified_using
-    print_missing_conversion("package2.checksums", 1, "of IntegrityMethod")
+    integrity_methods = [bump_checksum(checksum) for checksum in spdx2_package.checksums]
     homepage = spdx2_package.homepage
     print_missing_conversion("package2.source_info", 0)
     print_missing_conversion("package2.license_concluded, package2.license_info_from_files, package2.license_declared, "
@@ -50,6 +51,7 @@ def bump_package(spdx2_package: Spdx2_Package, creation_information: CreationInf
         spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
     print_missing_conversion("package2.release_date, package2.built_date, package2.valid_until_date", 0)
 
-    package = Package(spdx_id, creation_information, name, download_location=download_location, homepage=homepage, summary=summary,
-                      description=description, comment=comment, package_purpose=package_purpose)
+    package = Package(spdx_id, creation_information, name, verified_using=integrity_methods,
+                      download_location=download_location, homepage=homepage, summary=summary, description=description,
+                      comment=comment, package_purpose=package_purpose)
     return package
