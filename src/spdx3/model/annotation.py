@@ -1,0 +1,41 @@
+# Copyright (c) 2023 spdx contributors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#   http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+from dataclasses import field
+from enum import Enum, auto
+from typing import Optional, List
+
+from common.typing.dataclass_with_properties import dataclass_with_properties
+from common.typing.type_checks import check_types_and_set_values
+
+from spdx3.model.integrity_method import IntegrityMethod
+
+from spdx3.model.creation_information import CreationInformation
+
+from spdx3.model.element import Element
+
+class AnnotationType(Enum):
+    REVIEW = auto()
+    OTHER = auto()
+
+@dataclass_with_properties
+class Annotation(Element):
+    annotation_type: AnnotationType = None
+    subject: List[Element] = field(default_factory=list)
+    content_type: Optional[str] = None # placeholder for MediaType
+    statement: Optional[str] = None
+    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
+    def __init__(self, spdx_id: str, creation_info: CreationInformation, annotation_type: AnnotationType,
+                 subject: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
+                 description: Optional[str] = None, comment: Optional[str] = None,
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None, content_type: Optional[str] = None,
+                 statement: Optional[str] = None):
+        check_types_and_set_values(self, locals())
