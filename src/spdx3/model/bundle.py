@@ -2,7 +2,7 @@
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#   http://www.apache.org/licenses/LICENSE-2.0
+#    http://www.apache.org/licenses/LICENSE-2.0
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -10,25 +10,28 @@
 # limitations under the License.
 from typing import Optional, List
 
-from common.typing.type_checks import check_types_and_set_values
-
-from spdx3.model.creation_information import CreationInformation
-
 from common.typing.dataclass_with_properties import dataclass_with_properties
+from common.typing.type_checks import check_types_and_set_values
+from spdx3.model.creation_information import CreationInformation
 from spdx3.model.element import Element
-from spdx3.model.bom import Bom
+from spdx3.model.spdx_collection import SpdxCollection
 from spdx3.model.external_map import ExternalMap
+from spdx3.model.integrity_method import IntegrityMethod
 from spdx3.model.namespace_map import NamespaceMap
 
 
 @dataclass_with_properties
-class Sbom(Bom):
-    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
+class Bundle(SpdxCollection):
+    context: Optional[str] = None
+    """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
+    class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
+    class but as we have taken care of all fields this warning can be ignored."""
+
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
-                 description: Optional[str] = None, comment: Optional[str] = None, verified_using: None = None,
-                 external_references: None = None, external_identifier: None = None, extension: None = None,
+                 description: Optional[str] = None, comment: Optional[str] = None,
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
                  context: Optional[str] = None):
         check_types_and_set_values(self, locals())
-
