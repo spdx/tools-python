@@ -18,7 +18,7 @@ from spdx3.model.software.package import Package
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_package(creation_information):
+def test_correct_initialization(creation_information):
     package = Package("SPDXRef-Package", creation_information, content_identifier="https://any.uri",
                       package_purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH],
                       download_location="https://downloadlocation", package_uri="https://package.uri",
@@ -34,7 +34,7 @@ def test_correct_initialization_package(creation_information):
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_invalid_initialization_package(creation_information):
+def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Package("SPDXRef-Package", creation_information, content_identifier=3, package_purpose=SoftwarePurpose.FILE,
                 download_location=4, package_uri=["uris"], homepage=True)

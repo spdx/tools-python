@@ -19,7 +19,7 @@ from spdx3.model.spdx_collection import SpdxCollection
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
 @mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_spdx_collection(creation_information, element, namespace_map, external_map):
+def test_correct_initialization(creation_information, element, namespace_map, external_map):
     spdx_collection = SpdxCollection("SPDXRef-Collection", creation_information, elements=[element],
                                      root_elements=[element], namespaces=[namespace_map], imports=[external_map])
 
@@ -33,7 +33,7 @@ def test_correct_initialization_spdx_collection(creation_information, element, n
 
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_invalid_initialization_spdx_collection(creation_information, namespace_map):
+def test_invalid_initialization(creation_information, namespace_map):
     with pytest.raises(TypeError) as err:
         SpdxCollection("SPDXRef-Collection", creation_information, elements=[None], root_elements=3,
                        namespaces=namespace_map,
