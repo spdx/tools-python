@@ -44,7 +44,7 @@ def test_invalid_initialization():
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_incomplete_initialization(creation_information):
     with pytest.raises(TypeError) as err:
-        SpdxDocument("SPDXRef-Docuement", creation_information)
+        SpdxDocument("SPDXRef-Document", creation_information)
 
-    assert err.value.args[
-               0] == "SpdxDocument.__init__() missing 3 required positional arguments: 'name', 'elements', and 'root_elements'"
+    assert "__init__() missing 3 required positional arguments: 'name', 'elements', and 'root_elements'" in \
+           err.value.args[0]
