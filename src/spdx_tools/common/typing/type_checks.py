@@ -23,8 +23,6 @@ def check_types_and_set_values(instance_under_construction: Any, local_variables
     return all type violations in one go.
     As an aside, defining constructors "manually" using this utility method helps avoid a nasty PyCharm bug:
     https://youtrack.jetbrains.com/issue/PY-34569
-    With the additional parameter origin_class we ensure that the attributes from the class that calls this method
-    are set. If we use inheritance the instance_under_construction object might be a child object.
     """
     errors = []
     for field in fields(instance_under_construction):
