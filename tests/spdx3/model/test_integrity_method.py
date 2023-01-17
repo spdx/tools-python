@@ -10,7 +10,7 @@
 # limitations under the License.
 import pytest
 
-from spdx3.model.integrity_method import IntegrityMethod, Hash, HashAlgorithm
+from spdx3.model.integrity_method import IntegrityMethod
 
 
 def test_correct_initialization_integrity_method():
@@ -25,20 +25,3 @@ def test_invalid_initialization_integrity_method():
 
     assert err.value.args[0] == ['SetterError IntegrityMethod: type of argument "comment" must be one of (str, '
                                  "NoneType); got list instead: ['some comments', 'and some more comments']"]
-
-
-def test_correct_initialization_hash():
-    hash = Hash(algorithm=HashAlgorithm.SHA1, hash_value="value")
-
-    assert hash.algorithm == HashAlgorithm.SHA1
-    assert hash.hash_value == "value"
-
-
-def test_invalid_initialization_hash():
-    with pytest.raises(TypeError) as err:
-        Hash("SHA1", 345)
-
-    assert err.value.args[0] == ['SetterError Hash: type of argument "algorithm" must be '
-                                 'spdx3.model.integrity_method.HashAlgorithm; got str instead: SHA1',
-                                 'SetterError Hash: type of argument "hash_value" must be str; got int '
-                                 'instead: 345']
