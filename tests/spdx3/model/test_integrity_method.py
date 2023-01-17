@@ -13,13 +13,13 @@ import pytest
 from spdx3.model.integrity_method import IntegrityMethod
 
 
-def test_correct_initialization_integrity_method():
+def test_correct_initialization():
     integrity_method = IntegrityMethod(comment="This is a comment.")
 
     assert integrity_method.comment == "This is a comment."
 
 
-def test_invalid_initialization_integrity_method():
+def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         IntegrityMethod(["some comments", "and some more comments"])
 
