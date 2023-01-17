@@ -16,7 +16,7 @@ from spdx3.model.artifact import Artifact
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_artifact(creation_info):
+def test_correct_initialization(creation_info):
     artifact = Artifact("SPDXRef-Artifact", creation_info, originated_by=None)
 
     assert artifact.spdx_id == "SPDXRef-Artifact"
@@ -25,7 +25,7 @@ def test_correct_initialization_artifact(creation_info):
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_invalid_initialization_artifact(creation_info):
+def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         Artifact(65, creation_info, originated_by=54)
 
