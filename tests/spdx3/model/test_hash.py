@@ -13,14 +13,14 @@ import pytest
 from spdx3.model.hash import Hash, HashAlgorithm
 
 
-def test_correct_initialization_hash():
+def test_correct_initialization():
     hash = Hash(algorithm=HashAlgorithm.SHA1, hash_value="value")
 
     assert hash.algorithm == HashAlgorithm.SHA1
     assert hash.hash_value == "value"
 
 
-def test_invalid_initialization_hash():
+def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         Hash("SHA1", 345)
 
