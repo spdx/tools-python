@@ -16,7 +16,7 @@ from spdx3.model.creation_information import CreationInformation
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx3.model.software.software_purpose import SoftwarePurpose
-from spdx3.model.element import Artifact
+from spdx3.model.artifact import Artifact
 
 
 @dataclass_with_properties
