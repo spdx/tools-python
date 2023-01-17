@@ -16,7 +16,7 @@ from spdx3.model.element import Element
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation")
-def test_correct_initialization_element(creation_info):
+def test_correct_initialization(creation_info):
     element = Element("SPDXRef-Element", creation_info)
 
     assert element.spdx_id == "SPDXRef-Element"
@@ -24,7 +24,7 @@ def test_correct_initialization_element(creation_info):
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_invalid_initialization_element(creation_info):
+def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         Element(54, creation_info, name=76)
 
