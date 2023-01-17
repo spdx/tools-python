@@ -4,6 +4,7 @@
 from unittest import mock
 
 import pytest
+from spdx3.model.element import Element
 
 from spdx_tools.spdx3.model.software import Sbom, SBOMType
 
