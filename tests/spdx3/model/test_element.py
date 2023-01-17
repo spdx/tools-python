@@ -61,8 +61,7 @@ def test_correct_initialization_spdx_collection(creation_information, namespace_
     element = Element("SPDXRef-Element",
                       creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
     spdx_collection = SpdxCollection("SPDXRef-Collection", creation_information, elements=[element],
-                                     root_elements=[element],
-                                     namespaces=[namespace_map], imports=[external_map])
+                                     root_elements=[element], namespaces=[namespace_map], imports=[external_map])
 
     assert spdx_collection.spdx_id == "SPDXRef-Collection"
     assert spdx_collection.creation_info == creation_information
@@ -92,18 +91,25 @@ def test_invalid_initialization_spdx_collection(creation_information, namespace_
 @mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization_bundle(creation_information, namespace):
-    bundle = Bundle("SPDXRef-Bundle", creation_information, namespaces=[namespace], context="context")
+    element = Element("SPDXRef-Element",
+                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
+    bundle = Bundle("SPDXRef-Bundle", creation_information, elements=[element], root_elements=[element],
+                    namespaces=[namespace], context="context")
 
     assert bundle.spdx_id == "SPDXRef-Bundle"
     assert bundle.creation_info == creation_information
+    assert bundle.elements == [element]
+    assert bundle.root_elements == [element]
     assert bundle.context == "context"
     assert bundle.namespaces == [namespace]
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_invalid_initialization_bundle(creation_information):
+    element = Element("SPDXRef-Element",
+                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
     with pytest.raises(TypeError) as err:
-        Bundle(4, creation_information, namespaces=True, context=["yes"])
+        Bundle(4, creation_information, elements=[element], root_elements=[element], namespaces=True, context=["yes"])
 
     assert err.value.args[0] == ['SetterError Bundle: type of argument "spdx_id" must be str; got int instead: '
                                  '4',
@@ -115,17 +121,23 @@ def test_invalid_initialization_bundle(creation_information):
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization_bom(creation_information):
-    bom = Bom("SPDXRef-Bom", creation_information)
+    element = Element("SPDXRef-Element",
+                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
+    bom = Bom("SPDXRef-Bom", creation_information, elements=[element], root_elements=[element])
 
     assert bom.spdx_id == "SPDXRef-Bom"
     assert bom.creation_info == creation_information
+    assert bom.elements == [element]
+    assert bom.root_elements == [element]
 
 
 def test_invalid_initialization_bom():
     with pytest.raises(TypeError) as err:
-        Bom(1, "Creation Information")
+        Bom(1, "Creation Information", elements=[5], root_elements=[])
 
     assert err.value.args[0] == ['SetterError Bom: type of argument "spdx_id" must be str; got int instead: 1',
                                  'SetterError Bom: type of argument "creation_info" must be '
                                  'spdx3.model.creation_information.CreationInformation; got str instead: '
-                                 'Creation Information']
+                                 'Creation Information',
+                                 'SetterError Bom: type of argument "elements"[0] must be '
+                                 'spdx3.model.element.Element; got int instead: [5]']
