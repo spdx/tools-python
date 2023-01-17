@@ -11,16 +11,18 @@
 from unittest import mock
 
 from spdx3.bump_from_spdx2.file import bump_file
+from spdx3.model.integrity_method import IntegrityMethod, Hash, HashAlgorithm
 from spdx3.model.software.file import File
 
 from tests.fixtures import file_fixture
 from spdx.model.file import File as Spdx2_File
 
-
-@mock.patch("spdx3.model.creation_information.CreationInformation")
+@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_bump_file(creation_information):
     spdx2_file: Spdx2_File = file_fixture()
+    integrity_method: Hash = Hash(HashAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c")
 
     file: File = bump_file(spdx2_file, creation_information=creation_information)
 
     assert file.spdx_id == "SPDXRef-File"
+    assert file.verified_using == [integrity_method]
