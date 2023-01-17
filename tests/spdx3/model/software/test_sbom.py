@@ -24,7 +24,6 @@ def test_correct_initialization(creation_info):
     assert sbom.root_element == ["spdx_id3"]
     assert sbom.sbom_type == [SBOMType.DESIGN]
 
-
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         Sbom(2, {"creation_info": [3, 4, 5]}, element=[], root_element=[])
