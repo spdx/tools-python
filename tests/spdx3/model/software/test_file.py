@@ -18,7 +18,7 @@ from spdx3.model.software.file import File
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization_file(creation_information):
+def test_correct_initialization(creation_information):
     file = File("SPDXRef-File", creation_information, content_identifier="https://any.uri",
                 file_purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE], content_type="MediaType")
 
@@ -30,7 +30,7 @@ def test_correct_initialization_file(creation_information):
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_invalid_initialization_file(creation_information):
+def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         File(1, creation_information, content_identifier=3, file_purpose=SoftwarePurpose.FILE,
              content_type=SoftwarePurpose.ARCHIVE)

@@ -18,7 +18,7 @@ from spdx3.model.software.snippet import Snippet
 
 
 @mock.patch("spdx3.model.software.snippet.Snippet", autospec=True)
-def test_correct_initialization_snippet(creation_information):
+def test_correct_initialization(creation_information):
     snippet = Snippet("SPDXRef-Snippet", creation_information, content_identifier="https://content.identifier",
                       snippet_purpose=[SoftwarePurpose.SOURCE], byte_range=(3, 4), line_range=(346, 456))
 
@@ -31,7 +31,7 @@ def test_correct_initialization_snippet(creation_information):
 
 
 @mock.patch("spdx3.model.software.snippet.Snippet", autospec=True)
-def test_invalid_initialization_snippet(creation_information):
+def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Snippet(2, creation_information, originated_by=34, byte_range="34:45")
 
