@@ -11,21 +11,26 @@
 from unittest import mock
 
 import pytest
+from spdx3.model.element import Element
 
 from spdx3.model.software.sbom import Sbom
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization_sbom(creation_information):
-    sbom = Sbom("SPDXRef-Sbom", creation_information)
+    element = Element("SPDXRef-Element",
+                      creation_info=creation_information)  # using a mock here leads to failure as check_types_and_set_values accesses the element class
+
+    sbom = Sbom("SPDXRef-Sbom", creation_information, elements=[element, element], root_elements=[element])
 
     assert sbom.spdx_id == "SPDXRef-Sbom"
     assert sbom.creation_info == creation_information
-
+    assert sbom.elements == [element, element]
+    assert sbom.root_elements == [element]
 
 def test_invalid_initialization_sbom():
     with pytest.raises(TypeError) as err:
-        Sbom(2, {"creation_info": [3, 4, 5]})
+        Sbom(2, {"creation_info": [3, 4, 5]}, elements=[], root_elements=[])
 
     assert err.value.args[0] == ['SetterError Sbom: type of argument "spdx_id" must be str; got int instead: 2',
                                  'SetterError Sbom: type of argument "creation_info" must be '
