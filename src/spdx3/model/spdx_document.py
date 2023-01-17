@@ -15,7 +15,8 @@ from common.typing.type_checks import check_types_and_set_values
 from spdx3.model.creation_information import CreationInformation
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx3.model.element import Bundle, Element
+from spdx3.model.element import Element
+from spdx3.model.bundle import Bundle
 from spdx3.model.external_map import ExternalMap
 from spdx3.model.namespace_map import NamespaceMap
 
