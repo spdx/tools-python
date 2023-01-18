@@ -23,9 +23,7 @@ from spdx3.model.namespace_map import NamespaceMap
 @dataclass_with_properties
 class Bundle(SpdxCollection):
     context: Optional[str] = None
-    """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
-    class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
-    class but as we have taken care of all fields this warning can be ignored."""
+    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
