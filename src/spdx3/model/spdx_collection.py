@@ -22,14 +22,14 @@ from spdx3.model.namespace_map import NamespaceMap
 
 @dataclass_with_properties
 class SpdxCollection(Element):
+    # This should be an abstract class and should not be instantiated directly.
+    # We need to investigate if we can combine dataclasses with abstract base classes (https://github.com/spdx/tools-python/issues/431)
     # due to the inheritance we need to make all fields non-default in the __annotation__, the __init__ method still raises an error if required fields are not set
     elements: List[Element] = field(default_factory=list)
     root_elements: List[Element] = field(default_factory=list)
     namespaces: Optional[List[NamespaceMap]] = field(default_factory=list)
     imports: Optional[List[ExternalMap]] = field(default_factory=list)
-    """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
-    class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
-    class but as we have taken care of all fields this warning can be ignored."""
+    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
