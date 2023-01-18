@@ -19,11 +19,11 @@ from spdx3.model.integrity_method import IntegrityMethod
 
 @dataclass_with_properties
 class Artifact(Element):
+    # This should be an abstract class and should not be instantiated directly.
+    # We need to investigate if we can combine dataclasses with abstract base classes (https://github.com/spdx/tools-python/issues/431)
     originated_by: None = None  # placeholder for Actor
-    """We overwrite the constructor of the inherited class so that all fields (including the fields from the parent
-    class) are set. Pycharm (and probably also other IDEs) warns about a missing call to the constructor of the super 
-    class but as we have taken care of all fields this warning can be ignored."""
 
+    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
