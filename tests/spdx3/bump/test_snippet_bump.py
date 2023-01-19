@@ -11,7 +11,7 @@
 from unittest import mock
 
 from spdx3.bump_from_spdx2.snippet import bump_snippet
-from tests.fixtures import snippet_fixture
+from tests.spdx.fixtures import snippet_fixture
 from spdx.model.snippet import Snippet as Spdx2_Snippet
 from spdx3.model.software.snippet import Snippet
 
