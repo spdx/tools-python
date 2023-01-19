@@ -31,4 +31,7 @@ class Bom(Bundle):
                  external_identifier: None = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
                  context: Optional[str] = None):
+        verified_using = [] if verified_using is None else verified_using
+        namespaces = [] if namespaces is None else namespaces
+        imports = [] if imports is None else imports
         check_types_and_set_values(self, locals())
