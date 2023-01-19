@@ -24,8 +24,8 @@ from spdx3.model.namespace_map import NamespaceMap
 class Bundle(SpdxCollection):
     context: Optional[str] = None
 
-    def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
-                 root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
+    def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[str],
+                 root_elements: List[str], name: Optional[str] = None, summary: Optional[str] = None,
                  description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
                  external_identifier: None = None, extension: None = None,
