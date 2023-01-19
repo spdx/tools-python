@@ -15,10 +15,10 @@ from spdx3.model.creation_information import CreationInformation
 from spdx3.writer.console.console import write_value
 
 
-def write_creation_info(creation_info: CreationInformation, text_output: TextIO):
+def write_creation_info(creation_info: CreationInformation, text_output: TextIO, indent: bool = True):
     text_output.write("# Creation Information\n")
-    write_value("specVersion", str(creation_info.spec_version), text_output)
-    write_value("created", datetime_to_iso_string(creation_info.created), text_output)
+    write_value("specVersion", str(creation_info.spec_version), text_output, indent)
+    write_value("created", datetime_to_iso_string(creation_info.created), text_output, indent)
     # write_value("Created By", creation_info.created_by, text_output) not implemented yet
-    write_value("profile", ", ".join(creation_info.profile), text_output)
-    write_value("data license", creation_info.data_license, text_output)
+    write_value("profile", ", ".join(creation_info.profile), text_output, indent)
+    write_value("data license", creation_info.data_license, text_output, indent)
