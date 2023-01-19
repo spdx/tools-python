@@ -76,7 +76,6 @@ class Relationship(Element):
     to: List[Element] = None
     relationship_type: RelationshipType = None
     completeness: Optional[RelationshipCompleteness] = None
-    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
     def __init__(self, spdx_id: str, creation_info: CreationInformation, from_element: Element, to: List[Element],
                  relationship_type: RelationshipType, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
