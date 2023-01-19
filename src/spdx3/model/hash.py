@@ -15,6 +15,7 @@ from common.typing.dataclass_with_properties import dataclass_with_properties
 from common.typing.type_checks import check_types_and_set_values
 from spdx3.model.integrity_method import IntegrityMethod
 
+
 class HashAlgorithm(Enum):
     BLAKE2B256 = auto()
     BLAKE2B384 = auto()
@@ -42,8 +43,6 @@ class HashAlgorithm(Enum):
 class Hash(IntegrityMethod):
     algorithm: HashAlgorithm = None
     hash_value: str = None
-    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
 
     def __init__(self, algorithm: HashAlgorithm, hash_value: str, comment: Optional[str] = None):
         check_types_and_set_values(self, locals())
-
