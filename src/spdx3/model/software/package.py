@@ -35,5 +35,6 @@ class Package(Artifact):
                  content_identifier: Optional[str] = None, package_purpose: Optional[List[SoftwarePurpose]] = None,
                  download_location: Optional[str] = None, package_uri: Optional[str] = None,
                  homepage: Optional[str] = None):
+        verified_using = [] if verified_using is None else verified_using
         package_purpose = [] if package_purpose is None else package_purpose
         check_types_and_set_values(self, locals())
