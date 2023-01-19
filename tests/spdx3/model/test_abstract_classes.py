@@ -10,18 +10,16 @@
 # limitations under the License.
 import pytest
 
+from spdx3.model.artifact import Artifact
+from spdx3.model.element import Element
 from spdx3.model.integrity_method import IntegrityMethod
+from spdx3.model.spdx_collection import SpdxCollection
 
 
-def test_correct_initialization():
-    integrity_method = IntegrityMethod(comment="This is a comment.")
-
-    assert integrity_method.comment == "This is a comment."
-
-
-def test_invalid_initialization():
+@pytest.mark.parametrize("abstract_class", [Element, Artifact, SpdxCollection, IntegrityMethod])
+def test_initialization_throws_error(abstract_class):
     with pytest.raises(TypeError) as err:
-        IntegrityMethod(["some comments", "and some more comments"])
+        abstract_class()
 
-    assert err.value.args[0] == ['SetterError IntegrityMethod: type of argument "comment" must be one of (str, '
-                                 "NoneType); got list instead: ['some comments', 'and some more comments']"]
+    assert err.value.args[
+               0] == f"Can't instantiate abstract class {abstract_class.__name__} with abstract method __init__"
