@@ -12,6 +12,8 @@ from dataclasses import field
 from enum import Enum, auto
 from typing import Optional, List
 
+from spdx3.model.external_reference import ExternalReference
+
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from common.typing.type_checks import check_types_and_set_values
 
@@ -21,21 +23,25 @@ from spdx3.model.creation_information import CreationInformation
 
 from spdx3.model.element import Element
 
+
 class AnnotationType(Enum):
     REVIEW = auto()
     OTHER = auto()
+
 
 @dataclass_with_properties
 class Annotation(Element):
     annotation_type: AnnotationType = None
     subject: List[str] = field(default_factory=list)
-    content_type: Optional[str] = None # placeholder for MediaType
+    content_type: Optional[str] = None  # placeholder for MediaType
     statement: Optional[str] = None
+
     def __init__(self, spdx_id: str, creation_info: CreationInformation, annotation_type: AnnotationType,
                  subject: List[str], name: Optional[str] = None, summary: Optional[str] = None,
                  description: Optional[str] = None, comment: Optional[str] = None,
-                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
-                 external_identifier: None = None, extension: None = None, content_type: Optional[str] = None,
-                 statement: Optional[str] = None):
+                 verified_using: Optional[List[IntegrityMethod]] = None,
+                 external_references: Optional[List[ExternalReference]] = None, external_identifier: None = None,
+                 extension: None = None, content_type: Optional[str] = None, statement: Optional[str] = None):
         verified_using = [] if verified_using is None else verified_using
+        external_references = [] if external_references is None else external_references
         check_types_and_set_values(self, locals())
