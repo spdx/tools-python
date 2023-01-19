@@ -43,7 +43,7 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo) -> SpdxDo
     print_missing_conversion("creation_info.license_list_version", 0)
     # creation_info.document_comment -> spdx_document.comment
     document_comment = spdx2_creation_info.document_comment
-    creation_information = CreationInformation(Version("3.0.0"), created, None, [], data_license)
+    creation_information = CreationInformation(Version("3.0.0"), created, None, ["core", "software", "licensing"], data_license)
     spdx_document = SpdxDocument(spdx_id=spdx_id, creation_info=creation_information, name=name,
                                  comment=document_comment, elements=[], root_elements=[])
 
