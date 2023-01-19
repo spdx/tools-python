@@ -30,6 +30,6 @@ def bump_spdx_document(document: Spdx2_Document) -> SpdxDocument:
 
     for snippet in document.snippets:
         spdx_document.elements.append(bump_snippet(snippet, creation_information=spdx_document.creation_info))
-
+    print("\n")
     return spdx_document
 
