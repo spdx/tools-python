@@ -10,10 +10,10 @@
 # limitations under the License.
 import pytest
 
-from fixtures import checksum_fixture
+from tests.spdx.fixtures import checksum_fixture
 from spdx.model.checksum import ChecksumAlgorithm
 from spdx3.bump_from_spdx2.checksum import bump_checksum, convert_checksum_algorithm_to_hash_algorithm
-from spdx3.model.integrity_method import HashAlgorithm
+from spdx3.model.hash import HashAlgorithm
 
 
 def test_bump_checksum():

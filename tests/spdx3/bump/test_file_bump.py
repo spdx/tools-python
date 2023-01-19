@@ -11,10 +11,10 @@
 from unittest import mock
 
 from spdx3.bump_from_spdx2.file import bump_file
-from spdx3.model.integrity_method import IntegrityMethod, Hash, HashAlgorithm
+from spdx3.model.hash import Hash, HashAlgorithm
 from spdx3.model.software.file import File
 
-from tests.fixtures import file_fixture
+from tests.spdx.fixtures import file_fixture
 from spdx.model.file import File as Spdx2_File
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
