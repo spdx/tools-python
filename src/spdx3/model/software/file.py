@@ -30,7 +30,8 @@ class File(Artifact):
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
                  external_identifier: None = None, extension: None = None, originated_by: None = None,
-                 content_identifier: Optional[str] = None, file_purpose: Optional[SoftwarePurpose] = None,
+                 content_identifier: Optional[str] = None, file_purpose: Optional[List[SoftwarePurpose]] = None,
                  content_type: Optional[str] = None):
+        verified_using = [] if verified_using is None else verified_using
         file_purpose = [] if file_purpose is None else file_purpose
         check_types_and_set_values(self, locals())
