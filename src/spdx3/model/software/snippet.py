@@ -10,6 +10,8 @@
 # limitations under the License.
 from typing import Optional, Tuple, List
 
+from spdx3.model.external_reference import ExternalReference
+
 from common.typing.type_checks import check_types_and_set_values
 
 from spdx3.model.creation_information import CreationInformation
@@ -29,10 +31,12 @@ class Snippet(Artifact):
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
-                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
-                 external_identifier: None = None, extension: None = None, originated_by: None = None,
-                 content_identifier: Optional[str] = None, snippet_purpose: Optional[List[SoftwarePurpose]] = None,
-                 byte_range: Optional[Tuple[int, int]] = None, line_range: Optional[Tuple[int, int]] = None):
+                 verified_using: Optional[List[IntegrityMethod]] = None,
+                 external_references: Optional[List[ExternalReference]] = None, external_identifier: None = None,
+                 extension: None = None, originated_by: None = None, content_identifier: Optional[str] = None,
+                 snippet_purpose: Optional[List[SoftwarePurpose]] = None, byte_range: Optional[Tuple[int, int]] = None,
+                 line_range: Optional[Tuple[int, int]] = None):
         verified_using = [] if verified_using is None else verified_using
+        external_references = [] if external_references is None else external_references
         snippet_purpose = [] if snippet_purpose is None else snippet_purpose
         check_types_and_set_values(self, locals())
