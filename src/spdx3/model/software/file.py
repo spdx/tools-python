@@ -16,19 +16,21 @@ from spdx3.model.creation_information import CreationInformation
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx3.model.artifact import Artifact
+from spdx3.model.integrity_method import IntegrityMethod
 from spdx3.model.software.software_purpose import SoftwarePurpose
 
 
 @dataclass_with_properties
 class File(Artifact):
-    content_identifier: Optional[str]  = None # should be a valid URI
+    content_identifier: Optional[str] = None  # should be a valid URI
     file_purpose: Optional[List[SoftwarePurpose]] = None
-    content_type: Optional[str] = None # placeholder for MediaType
+    content_type: Optional[str] = None  # placeholder for MediaType
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
-                 verified_using: None = None, external_references: None = None, external_identifier: None = None,
-                 extension: None = None, originated_by: None = None, content_identifier: Optional[str] = None,
-                 file_purpose: Optional[SoftwarePurpose] = None, content_type: Optional[str] = None):
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None, originated_by: None = None,
+                 content_identifier: Optional[str] = None, file_purpose: Optional[SoftwarePurpose] = None,
+                 content_type: Optional[str] = None):
         file_purpose = [] if file_purpose is None else file_purpose
         check_types_and_set_values(self, locals())
