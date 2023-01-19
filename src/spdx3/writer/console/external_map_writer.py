@@ -18,7 +18,7 @@ from spdx3.writer.console.hash_writer import write_hash
 
 def write_external_map(external_map: ExternalMap, text_output: TextIO):
     write_value("external_id", external_map.external_id, text_output)
-    write_optional_heading(external_map.verified_using, "# Verified using", text_output)
+    write_optional_heading(external_map.verified_using, "verified using\n", text_output)
     for integrity_method in external_map.verified_using:
         # for now Hash is the only child class of the abstract class IntegrityMethod, as soon as there are more inherited
         # classes we need to implement a logic that determines the correct write function for the "integrity_method" object
