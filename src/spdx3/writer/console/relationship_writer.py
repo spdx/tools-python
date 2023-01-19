@@ -19,4 +19,4 @@ def write_relationship(relationship: Relationship, text_output: TextIO):
     write_value("from_element", relationship.from_element, text_output)
     write_value("to", ", ".join(relationship.to), text_output)
     write_value("relationship_type", relationship.relationship_type.name, text_output)
-    write_value("completeness", relationship.completeness.name, text_output)
+    write_value("completeness", relationship.completeness.name if relationship.completeness else None, text_output)
