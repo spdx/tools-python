@@ -14,7 +14,7 @@ from spdx.model.document import Document as Spdx2_Document
 from spdx3.model.spdx_document import SpdxDocument
 
 from spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
-from tests.fixtures import document_fixture
+from tests.spdx.fixtures import document_fixture
 
 
 def test_bump_spdx_document():

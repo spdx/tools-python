@@ -9,7 +9,8 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 from spdx.model.checksum import Checksum as Spdx2_Checksum, ChecksumAlgorithm
-from spdx3.model.integrity_method import IntegrityMethod, HashAlgorithm, Hash
+from spdx3.model.integrity_method import IntegrityMethod
+from spdx3.model.hash import HashAlgorithm, Hash
 
 
 def bump_checksum(spdx2_checksum: Spdx2_Checksum) -> IntegrityMethod:
