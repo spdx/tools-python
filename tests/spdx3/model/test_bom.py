@@ -16,15 +16,14 @@ import pytest
 from spdx3.model.bom import Bom
 
 
-@mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information, element):
-    bom = Bom("SPDXRef-Bom", creation_information, elements=[element], root_elements=[element])
+def test_correct_initialization(creation_information):
+    bom = Bom("SPDXRef-Bom", creation_information, elements=["spdx_id1"], root_elements=["spdx_id2"])
 
     assert bom.spdx_id == "SPDXRef-Bom"
     assert bom.creation_info == creation_information
-    assert bom.elements == [element]
-    assert bom.root_elements == [element]
+    assert bom.elements == ["spdx_id1"]
+    assert bom.root_elements == ["spdx_id2"]
 
 
 def test_invalid_initialization():
@@ -36,4 +35,4 @@ def test_invalid_initialization():
                                  'spdx3.model.creation_information.CreationInformation; got str instead: '
                                  'Creation Information',
                                  'SetterError Bom: type of argument "elements"[0] must be '
-                                 'spdx3.model.element.Element; got int instead: [5]']
+                                 'str; got int instead: [5]']
