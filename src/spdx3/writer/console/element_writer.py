@@ -25,7 +25,7 @@ def write_element_properties(element: Element, text_output: TextIO):
     write_value("summary", element.summary, text_output)
     write_value("description", element.description, text_output)
     write_value("comment", element.comment, text_output)
-    write_optional_heading(element.verified_using, "Verified using", text_output)
+    write_optional_heading(element.verified_using, "verified using:\n", text_output)
     for integrity_method in element.verified_using:
         # for now Hash is the only child class of the abstract class IntegrityMethod, as soon as there are more inherited
         # classes we need to implement a logic that determines the correct write function for the "integrity_method" object
