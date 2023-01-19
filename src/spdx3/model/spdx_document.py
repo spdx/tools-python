@@ -30,6 +30,9 @@ class SpdxDocument(Bundle):
                  root_elements: List[Element], summary: Optional[str] = None, description: Optional[str] = None,
                  comment: Optional[str] = None, verified_using: Optional[List[IntegrityMethod]] = None,
                  external_references: None = None, external_identifier: None = None, extension: None = None,
-                 namespace: Optional[NamespaceMap] = None, imports: Optional[List[ExternalMap]] = None,
+                 namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
                  context: Optional[str] = None):
+        verified_using = [] if verified_using is None else verified_using
+        namespaces = [] if namespaces is None else namespaces
+        imports = [] if imports is None else imports
         check_types_and_set_values(self, locals())
