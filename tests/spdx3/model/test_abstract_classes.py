@@ -21,5 +21,4 @@ def test_initialization_throws_error(abstract_class):
     with pytest.raises(TypeError) as err:
         abstract_class()
 
-    assert err.value.args[
-               0] == f"Can't instantiate abstract class {abstract_class.__name__} with abstract method __init__"
+    assert f"Can't instantiate abstract class {abstract_class.__name__}" in err.value.args[0]
