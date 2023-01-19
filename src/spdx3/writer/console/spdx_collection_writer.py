@@ -19,7 +19,7 @@ from spdx3.writer.console.namespace_map_writer import write_namespace_map
 
 def write_collection(collection: SpdxCollection, text_output: TextIO):
     write_element_properties(collection, text_output)
-    text_output.write(f"# Elements: {', '.join(collection.elements)}\n")
+    text_output.write(f"elements: {', '.join(collection.elements)}\n")
     write_optional_heading(collection.namespaces, "# Namespaces\n", text_output)
     for namespace_map in collection.namespaces:
         write_namespace_map(namespace_map, text_output)
