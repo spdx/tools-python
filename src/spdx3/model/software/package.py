@@ -26,7 +26,7 @@ class Package(Artifact):
     download_location: Optional[str] = None # anyURI
     package_uri: Optional[str] = None # anyURI
     homepage: Optional[str] = None # anyURI
-    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
+
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: Optional[str] = None,
                  summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: None = None, external_references: None = None, external_identifier: None = None,
