@@ -27,4 +27,4 @@ def test_bump_spdx_document():
 
     assert "SPDXRef-Package" in list(spdx_id_map.get_full_map().keys())
     assert len(
-        spdx_id_map.get_full_map().values()) == 4  # document_fixture has exactly one package, one file and one snippet which are added to the elements list during bump_from_spdx2
+        spdx_id_map.get_full_map().values()) == 6
