@@ -26,8 +26,8 @@ from spdx3.model.namespace_map import NamespaceMap
 class SpdxDocument(Bundle):
     # The inherited field "name" is required for a SpdxDocument, no longer optional.
     # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
-    def __init__(self, spdx_id: str, creation_info: CreationInformation, name: str, elements: List[Element],
-                 root_elements: List[Element], summary: Optional[str] = None, description: Optional[str] = None,
+    def __init__(self, spdx_id: str, creation_info: CreationInformation, name: str, elements: List[str],
+                 root_elements: List[str], summary: Optional[str] = None, description: Optional[str] = None,
                  comment: Optional[str] = None, verified_using: Optional[List[IntegrityMethod]] = None,
                  external_references: None = None, external_identifier: None = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
