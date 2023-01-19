@@ -12,24 +12,44 @@
 from spdx3.bump_from_spdx2.creation_information import bump_creation_information
 from spdx3.bump_from_spdx2.file import bump_file
 from spdx3.bump_from_spdx2.package import bump_package
+from spdx3.bump_from_spdx2.relationship import bump_relationship
 from spdx3.bump_from_spdx2.snippet import bump_snippet
+from spdx3.model.creation_information import CreationInformation
 from spdx3.model.spdx_document import SpdxDocument
 
 from spdx.model.document import Document as Spdx2_Document
+from spdx3.spdx_id_map import SpdxIdMap
 
 """ We want to implement a bump_from_spdx2 from the data model in src.spdx to the data model in src.spdx3.
     As there are many fundamental differences between these version we want each bump_from_spdx2 method to take
     the object from src.spdx and return all objects that the input is translated to."""
-def bump_spdx_document(document: Spdx2_Document) -> SpdxDocument:
+def bump_spdx_document(document: Spdx2_Document) -> SpdxIdMap:
+    spdx_id_map = SpdxIdMap()
     spdx_document: SpdxDocument = bump_creation_information(document.creation_info)
-    for package in document.packages:
-        spdx_document.elements.append(bump_package(package, creation_information=spdx_document.creation_info))
+    creation_info: CreationInformation = spdx_document.creation_info
 
-    for file in document.files:
-        spdx_document.elements.append(bump_file(file, creation_information=spdx_document.creation_info))
+    for spdx2_package in document.packages:
+        package = bump_package(spdx2_package, creation_information=creation_info)
+        spdx_id_map.add_element(package)
+        spdx_document.elements.append(package.spdx_id)
 
-    for snippet in document.snippets:
-        spdx_document.elements.append(bump_snippet(snippet, creation_information=spdx_document.creation_info))
+    for spdx2_file in document.files:
+        file = bump_file(spdx2_file, creation_information=creation_info)
+        spdx_id_map.add_element(file)
+        spdx_document.elements.append(file.spdx_id)
+
+    for spdx2_snippet in document.snippets:
+        snippet = bump_snippet(spdx2_snippet, creation_information=creation_info)
+        spdx_id_map.add_element(snippet)
+        spdx_document.elements.append(snippet.spdx_id)
+
+    for spdx2_relationship in document.relationships:
+        relationship = bump_relationship(spdx2_relationship, creation_information=creation_info)
+        spdx_id_map.add_element(relationship)
+        spdx_document.elements.append(relationship.spdx_id)
+
+    spdx_id_map.add_element(spdx_document)
+
     print("\n")
-    return spdx_document
+    return spdx_id_map
 
