@@ -19,7 +19,7 @@ from spdx3.model.software.file import File
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
-    file = File("SPDXRef-File", creation_information, content_identifier="https://any.uri",
+    file = File("SPDXRef-File", creation_information, verified_using=None, content_identifier="https://any.uri",
                 file_purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE], content_type="MediaType")
 
     assert file.spdx_id == "SPDXRef-File"
