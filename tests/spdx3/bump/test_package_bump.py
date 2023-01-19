@@ -13,7 +13,7 @@ from unittest import mock
 from spdx3.bump_from_spdx2.package import bump_package
 from spdx3.model.software.package import Package
 
-from tests.fixtures import package_fixture
+from tests.spdx.fixtures import package_fixture
 from spdx.model.package import Package as Spdx2_Package
 
 
