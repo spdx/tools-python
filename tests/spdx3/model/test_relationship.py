@@ -15,16 +15,15 @@ import pytest
 from spdx3.model.relationship import Relationship, RelationshipType, RelationshipCompleteness
 
 
-@mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information, element):
-    relationship = Relationship("SPDXRef-Relationship", creation_information, element, [element, element],
+def test_correct_initialization(creation_information):
+    relationship = Relationship("SPDXRef-Relationship", creation_information, "spdx_id1", ["spdx_id2", "spdx_id3"],
                                 RelationshipType.DESCRIBES, completeness=RelationshipCompleteness.UNKNOWN)
 
     assert relationship.spdx_id == "SPDXRef-Relationship"
     assert relationship.creation_info == creation_information
-    assert relationship.from_element == element
-    assert relationship.to == [element, element]
+    assert relationship.from_element == "spdx_id1"
+    assert relationship.to == ["spdx_id2", "spdx_id3"]
     assert relationship.relationship_type == RelationshipType.DESCRIBES
     assert relationship.completeness == RelationshipCompleteness.UNKNOWN
 
@@ -32,10 +31,10 @@ def test_correct_initialization(creation_information, element):
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
-        Relationship("SPDXRef-Relationship", creation_information, "Element", 5, "Relationshiptype", completeness=True)
+        Relationship("SPDXRef-Relationship", creation_information, 42, 5, "Relationshiptype", completeness=True)
 
     assert err.value.args[0] == ['SetterError Relationship: type of argument "from_element" must be '
-                                 'spdx3.model.element.Element; got str instead: Element',
+                                 'str; got int instead: 42',
                                  'SetterError Relationship: type of argument "to" must be a list; got int '
                                  'instead: 5',
                                  'SetterError Relationship: type of argument "relationship_type" must be '

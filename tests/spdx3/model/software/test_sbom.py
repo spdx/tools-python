@@ -15,15 +15,14 @@ import pytest
 from spdx3.model.software.sbom import Sbom
 
 
-@mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information, element):
-    sbom = Sbom("SPDXRef-Sbom", creation_information, elements=[element, element], root_elements=[element])
+def test_correct_initialization(creation_information):
+    sbom = Sbom("SPDXRef-Sbom", creation_information, elements=["spdx_id1", "spdx_id2"], root_elements=["spdx_id3"])
 
     assert sbom.spdx_id == "SPDXRef-Sbom"
     assert sbom.creation_info == creation_information
-    assert sbom.elements == [element, element]
-    assert sbom.root_elements == [element]
+    assert sbom.elements == ["spdx_id1", "spdx_id2"]
+    assert sbom.root_elements == ["spdx_id3"]
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
