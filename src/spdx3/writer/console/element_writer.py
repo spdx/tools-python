@@ -21,7 +21,7 @@ from spdx3.writer.console.hash_writer import write_hash
 def write_element_properties(element: Element, text_output: TextIO):
     write_value("SPDXID", element.spdx_id, text_output)
     write_value("name", element.name, text_output)
-    write_creation_info(element.creation_info, text_output)
+    write_creation_info(element.creation_info, text_output, True)
     write_value("summary", element.summary, text_output)
     write_value("description", element.description, text_output)
     write_value("comment", element.comment, text_output)
