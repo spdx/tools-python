@@ -8,7 +8,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-
+from spdx3.bump_from_spdx2.annotation import bump_annotation
 from spdx3.bump_from_spdx2.creation_information import bump_creation_information
 from spdx3.bump_from_spdx2.file import bump_file
 from spdx3.bump_from_spdx2.package import bump_package
@@ -29,24 +29,29 @@ def bump_spdx_document(document: Spdx2_Document) -> SpdxIdMap:
     creation_info: CreationInformation = spdx_document.creation_info
 
     for spdx2_package in document.packages:
-        package = bump_package(spdx2_package, creation_information=creation_info)
+        package = bump_package(spdx2_package, creation_info)
         spdx_id_map.add_element(package)
         spdx_document.elements.append(package.spdx_id)
 
     for spdx2_file in document.files:
-        file = bump_file(spdx2_file, creation_information=creation_info)
+        file = bump_file(spdx2_file, creation_info)
         spdx_id_map.add_element(file)
         spdx_document.elements.append(file.spdx_id)
 
     for spdx2_snippet in document.snippets:
-        snippet = bump_snippet(spdx2_snippet, creation_information=creation_info)
+        snippet = bump_snippet(spdx2_snippet, creation_info)
         spdx_id_map.add_element(snippet)
         spdx_document.elements.append(snippet.spdx_id)
 
-    for spdx2_relationship in document.relationships:
-        relationship = bump_relationship(spdx2_relationship, creation_information=creation_info)
+    for counter, spdx2_relationship in enumerate(document.relationships):
+        relationship = bump_relationship(spdx2_relationship, creation_info, counter)
         spdx_id_map.add_element(relationship)
         spdx_document.elements.append(relationship.spdx_id)
+
+    for counter, spdx2_annotation in enumerate(document.annotations):
+        annotation = bump_annotation(spdx2_annotation, creation_info, counter)
+        spdx_id_map.add_element(annotation)
+        spdx_document.elements.append(annotation.spdx_id)
 
     spdx_id_map.add_element(spdx_document)
 
