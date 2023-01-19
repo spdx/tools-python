@@ -18,6 +18,7 @@ from spdx3.model.creation_information import CreationInformation
 from spdx3.model.element import Element
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
+from spdx3.model.integrity_method import IntegrityMethod
 
 
 class RelationshipType(Enum):
@@ -76,9 +77,11 @@ class Relationship(Element):
     to: List[Element] = None
     relationship_type: RelationshipType = None
     completeness: Optional[RelationshipCompleteness] = None
+
     def __init__(self, spdx_id: str, creation_info: CreationInformation, from_element: Element, to: List[Element],
-                 relationship_type: RelationshipType, name: Optional[str] = None,
-                 summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
-                 verified_using: None = None, external_references: None = None, external_identifier: None = None,
-                 extension: None = None, completeness: Optional[RelationshipCompleteness] = None):
+                 relationship_type: RelationshipType, name: Optional[str] = None, summary: Optional[str] = None,
+                 description: Optional[str] = None, comment: Optional[str] = None,
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None,
+                 completeness: Optional[RelationshipCompleteness] = None):
         check_types_and_set_values(self, locals())
