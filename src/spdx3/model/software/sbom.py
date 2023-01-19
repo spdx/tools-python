@@ -18,6 +18,7 @@ from common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx3.model.element import Element
 from spdx3.model.bom import Bom
 from spdx3.model.external_map import ExternalMap
+from spdx3.model.integrity_method import IntegrityMethod
 from spdx3.model.namespace_map import NamespaceMap
 
 
@@ -26,9 +27,9 @@ class Sbom(Bom):
     # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
     def __init__(self, spdx_id: str, creation_info: CreationInformation, elements: List[Element],
                  root_elements: List[Element], name: Optional[str] = None, summary: Optional[str] = None,
-                 description: Optional[str] = None, comment: Optional[str] = None, verified_using: None = None,
-                 external_references: None = None, external_identifier: None = None, extension: None = None,
+                 description: Optional[str] = None, comment: Optional[str] = None,
+                 verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
+                 external_identifier: None = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
                  context: Optional[str] = None):
         check_types_and_set_values(self, locals())
-
