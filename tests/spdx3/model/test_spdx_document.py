@@ -15,17 +15,16 @@ import pytest
 from spdx3.model.spdx_document import SpdxDocument
 
 
-@mock.patch("spdx3.model.element.Element", autospec=True)
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information, element):
-    spdx_document = SpdxDocument("SPDXRef-DOCUMENT", creation_information, "Test document", elements=[element],
-                                 root_elements=[element])
+def test_correct_initialization(creation_information):
+    spdx_document = SpdxDocument("SPDXRef-DOCUMENT", creation_information, "Test document", elements=["spdx_id1"],
+                                 root_elements=["spdx_id2"])
 
     assert spdx_document.spdx_id == "SPDXRef-DOCUMENT"
     assert spdx_document.creation_info == creation_information
     assert spdx_document.name == "Test document"
-    assert spdx_document.elements == [element]
-    assert spdx_document.root_elements == [element]
+    assert spdx_document.elements == ["spdx_id1"]
+    assert spdx_document.root_elements == ["spdx_id2"]
 
 
 def test_invalid_initialization():
@@ -38,7 +37,7 @@ def test_invalid_initialization():
                                  'spdx3.model.creation_information.CreationInformation; got dict instead: '
                                  "{'info': 5}",
                                  'SetterError SpdxDocument: type of argument "elements"[0] must be '
-                                 'spdx3.model.element.Element; got int instead: [8]']
+                                 'str; got int instead: [8]']
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
