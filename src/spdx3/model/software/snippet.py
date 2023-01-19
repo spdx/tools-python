@@ -33,5 +33,6 @@ class Snippet(Artifact):
                  external_identifier: None = None, extension: None = None, originated_by: None = None,
                  content_identifier: Optional[str] = None, snippet_purpose: Optional[List[SoftwarePurpose]] = None,
                  byte_range: Optional[Tuple[int, int]] = None, line_range: Optional[Tuple[int, int]] = None):
+        verified_using = [] if verified_using is None else verified_using
         snippet_purpose = [] if snippet_purpose is None else snippet_purpose
         check_types_and_set_values(self, locals())

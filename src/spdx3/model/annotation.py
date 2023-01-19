@@ -37,4 +37,5 @@ class Annotation(Element):
                  verified_using: Optional[List[IntegrityMethod]] = None, external_references: None = None,
                  external_identifier: None = None, extension: None = None, content_type: Optional[str] = None,
                  statement: Optional[str] = None):
+        verified_using = [] if verified_using is None else verified_using
         check_types_and_set_values(self, locals())
