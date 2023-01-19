@@ -28,6 +28,8 @@ def bump_spdx_document(document: Spdx2_Document) -> SpdxIdMap:
     spdx_document: SpdxDocument = bump_creation_information(document.creation_info)
     creation_info: CreationInformation = spdx_document.creation_info
 
+    spdx_id_map.add_element(spdx_document)
+
     for spdx2_package in document.packages:
         package = bump_package(spdx2_package, creation_info)
         spdx_id_map.add_element(package)
@@ -53,7 +55,7 @@ def bump_spdx_document(document: Spdx2_Document) -> SpdxIdMap:
         spdx_id_map.add_element(annotation)
         spdx_document.elements.append(annotation.spdx_id)
 
-    spdx_id_map.add_element(spdx_document)
+
 
     print("\n")
     return spdx_id_map
