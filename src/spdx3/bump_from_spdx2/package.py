@@ -8,6 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx3.model.creation_information import CreationInformation
 
@@ -21,7 +22,7 @@ from spdx3.model.software.package import Package
 def bump_package(spdx2_package: Spdx2_Package, creation_information: CreationInformation) -> Package:
     spdx_id = spdx2_package.spdx_id
     name = spdx2_package.name
-    download_location = spdx2_package.download_location
+    download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
     # package2.version -> ?
     print("\n")
     print_missing_conversion("package2.version", 0)
