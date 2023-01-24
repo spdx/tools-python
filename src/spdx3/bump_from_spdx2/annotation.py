@@ -22,7 +22,6 @@ def bump_annotation(spdx2_annotation: Spdx2_Annotation, creation_info: CreationI
     spdx_id: str = f"SPDXRef-Annotation-{counter}"
     creation_info.created = spdx2_annotation.annotation_date
     # creation_info.created_by = bump_actor(spdx2_annotation.annotator)   waiting for entity implementation
-    print("\n")
     print_missing_conversion("annotation.annotator", 1, "of Entity")
     annotation_type: AnnotationType = AnnotationType[spdx2_annotation.annotation_type.name]
     subject: List[str] = [spdx2_annotation.spdx_id]

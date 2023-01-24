@@ -18,7 +18,6 @@ from spdx.model.snippet import Snippet as Spdx2_Snippet
 
 def bump_snippet(spdx2_snippet: Spdx2_Snippet, creation_information: CreationInformation) -> Snippet:
     spdx_id = spdx2_snippet.spdx_id
-    print("\n")
     print_missing_conversion("snippet.file_spdx_id", 0)
     byte_range = spdx2_snippet.byte_range
     line_range = spdx2_snippet.line_range
