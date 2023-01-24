@@ -16,13 +16,14 @@ import pytest
 from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 from spdx.validation.external_package_ref_validator import validate_external_package_ref
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.spdx.fixtures import external_package_ref_fixture
+
 
 @pytest.mark.parametrize("category, reference_type, locator",
                          [(ExternalPackageRefCategory.SECURITY, "cpe22Type", "cpe:/o:canonical:ubuntu_linux:10.04:-:lts"),
                           (ExternalPackageRefCategory.SECURITY, "cpe23Type", "cpe:2.3:o:canonical:ubuntu_linux:10.04:-:lts:*:*:*:*:*"),
                           (ExternalPackageRefCategory.SECURITY, "advisory", "https://nvd.nist.gov/vuln/detail/CVE-2020-28498"),
                           (ExternalPackageRefCategory.SECURITY, "fix", "https://github.com/indutny/elliptic/commit/441b7428"),
+                          (ExternalPackageRefCategory.SECURITY, "url", "https://github.com/christianlundkvist/blog/blob/master/2020_05_26_secp256k1_twist_attacks/secp256k1_twist_attacks.md"),
                           (ExternalPackageRefCategory.SECURITY, "swid", "swid:2df9de35-0aff-4a86-ace6-f7dddd1ade4c"),
                           (ExternalPackageRefCategory.PACKAGE_MANAGER, "maven-central", "org.apache.tomcat:tomcat:9.0.0.M4"),
                           (ExternalPackageRefCategory.PACKAGE_MANAGER, "npm", "http-server@0.3.0"),
@@ -45,13 +46,69 @@ def test_valid_external_package_ref(category, reference_type, locator):
     assert validation_messages == []
 
 
-@pytest.mark.parametrize("external_package_ref, expected_message",
-                         [(external_package_ref_fixture(),
-                           "TBD"),
+@pytest.mark.parametrize("category, reference_type, locator, expected_message",
+                         [(ExternalPackageRefCategory.SECURITY, "cpe22Typo", "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
+                           "externalPackageRef type in category SECURITY must be one of [cpe22Type, cpe23Type, advisory, fix, url, swid], but is: cpe22Typo"),
+                          (ExternalPackageRefCategory.PACKAGE_MANAGER, "nugat", "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
+                           "externalPackageRef type in category PACKAGE_MANAGER must be one of [maven-central, npm, nuget, bower, purl], but is: nugat"),
+                          (ExternalPackageRefCategory.PERSISTENT_ID, "git-oid", "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
+                           "externalPackageRef type in category PERSISTENT_ID must be one of [swh, gitoid], but is: git-oid")
                           ])
-@pytest.mark.skip(
-    "add tests once external package ref validation is implemented: https://github.com/spdx/tools-python/issues/373")
-def test_invalid_external_package_ref(external_package_ref, expected_message):
+def test_invalid_external_package_ref_types(category, reference_type, locator, expected_message):
+    external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
+    parent_id = "SPDXRef-Package"
+    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id)
+
+    expected = ValidationMessage(expected_message,
+                                 ValidationContext(parent_id=parent_id,
+                                                   element_type=SpdxElementType.EXTERNAL_PACKAGE_REF,
+                                                   full_element=external_package_ref))
+
+    assert validation_messages == [expected]
+
+
+CPE22TYPE_REGEX = r'^c[pP][eE]:/[AHOaho]?(:[A-Za-z0-9._\-~%]*){0,6}$'
+CPE23TYPE_REGEX = r'^cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}$'
+MAVEN_CENTRAL_REGEX = r'^[^:]+:[^:]+(:[^:]+)?$'
+NPM_REGEX = r'^[^@]+@[^@]+$'
+NUGET_REGEX = r'^[^/]+/[^/]+$'
+BOWER_REGEX = r'^[^#]+#[^#]+$'
+PURL_REGEX = None  # TODO: add negative test for purl
+SWH_REGEX = r'^swh:1:(snp|rel|rev|dir|cnt):[0-9a-fA-F]{40}$'
+GITOID_REGEX = r'^gitoid:(blob|tree|commit|tag):(sha1:[0-9a-fA-F]{40}|sha256:[0-9a-fA-F]{64})$'
+
+@pytest.mark.parametrize("category, reference_type, locator, expected_message",
+                         [(ExternalPackageRefCategory.SECURITY, "cpe22Type", "cpe:o:canonical:ubuntu_linux:10.04:-:lts",
+                           f'externalPackageRef locator of type "cpe22Type" must conform with the regex {CPE22TYPE_REGEX}, but is: cpe:o:canonical:ubuntu_linux:10.04:-:lts'),
+                          (ExternalPackageRefCategory.SECURITY, "cpe23Type", "cpe:2.3:/o:canonical:ubuntu_linux:10.04:-:lts:*:*:*:*:*",
+                           f'externalPackageRef locator of type "cpe23Type" must conform with the regex {CPE23TYPE_REGEX}, but is: cpe:2.3:/o:canonical:ubuntu_linux:10.04:-:lts:*:*:*:*:*'),
+                          (ExternalPackageRefCategory.SECURITY, "advisory", "http://locatorurl",
+                           f'externalPackageRef locator of type "advisory" must be a valid URL, but is: http://locatorurl'),
+                          (ExternalPackageRefCategory.SECURITY, "fix", "http://fixurl",
+                           f'externalPackageRef locator of type "fix" must be a valid URL, but is: http://fixurl'),
+                          (ExternalPackageRefCategory.SECURITY, "url", "http://url",
+                           f'externalPackageRef locator of type "url" must be a valid URL, but is: http://url'),
+                          (ExternalPackageRefCategory.SECURITY, "swid", "2df9de35-0aff-4a86-ace6-f7dddd1ade4c",
+                           f'externalPackageRef locator of type "swid" must be a valid URI specified in RFC-3986, but is: 2df9de35-0aff-4a86-ace6-f7dddd1ade4c'),
+                          (ExternalPackageRefCategory.PACKAGE_MANAGER, "maven-central", "org.apache.tomcat:tomcat:tomcat:9.0.0.M4",
+                           f'externalPackageRef locator of type "maven-central" must conform with the regex {MAVEN_CENTRAL_REGEX}, but is: org.apache.tomcat:tomcat:tomcat:9.0.0.M4'),
+                          (ExternalPackageRefCategory.PACKAGE_MANAGER, "npm", "http-server:0.3.0",
+                           f'externalPackageRef locator of type "npm" must conform with the regex {NPM_REGEX}, but is: http-server:0.3.0'),
+                          (ExternalPackageRefCategory.PACKAGE_MANAGER, "nuget", "Microsoft.AspNet.MVC@5.0.0",
+                           f'externalPackageRef locator of type "nuget" must conform with the regex {NUGET_REGEX}, but is: Microsoft.AspNet.MVC@5.0.0'),
+                          (ExternalPackageRefCategory.PACKAGE_MANAGER, "bower", "modernizr:2.6.2",
+                           f'externalPackageRef locator of type "bower" must conform with the regex {BOWER_REGEX}, but is: modernizr:2.6.2'),
+                          (ExternalPackageRefCategory.PERSISTENT_ID, "swh", "swh:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2",
+                           f'externalPackageRef locator of type "swh" must conform with the regex {SWH_REGEX}, but is: swh:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2'),
+                          (ExternalPackageRefCategory.PERSISTENT_ID, "gitoid", "gitoid:blob:sha1:3557f7eb43c621c71483743d4b37059bb80933e7f71277c0c3b3846159d1f61c",
+                           f'externalPackageRef locator of type "gitoid" must conform with the regex {GITOID_REGEX}, but is: gitoid:blob:sha1:3557f7eb43c621c71483743d4b37059bb80933e7f71277c0c3b3846159d1f61c'),
+                          (ExternalPackageRefCategory.PERSISTENT_ID, "gitoid", "gitoid:blob:sha256:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+                           f'externalPackageRef locator of type "gitoid" must conform with the regex {GITOID_REGEX}, but is: gitoid:blob:sha256:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64'),
+                          (ExternalPackageRefCategory.OTHER, "id string", "locator string",
+                           "externalPackageRef type in category OTHER must contain no spaces, but is: locator string"),
+                          ])
+def test_invalid_external_package_ref_locators(category, reference_type, locator, expected_message):
+    external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
     parent_id = "SPDXRef-Package"
     validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id)
 
