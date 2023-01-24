@@ -19,7 +19,7 @@ def add_annotation_info_to_graph(annotation: Annotation, graph: Graph, doc_names
     annotation_resource = URIRef(f"{doc_namespace}#{annotation.spdx_id}")
     annotation_node = BNode()
     graph.add((annotation_node, RDF.type, spdx_namespace().Annotation))
-    graph.add((annotation_node, spdx_namespace().annotationType, Literal(annotation.annotation_type.name)))
+    graph.add((annotation_node, spdx_namespace().annotationType, spdx_namespace()[f"annotationType_{annotation.annotation_type.name.lower()}"]))
     graph.add((annotation_node, spdx_namespace().annotator, Literal(annotation.annotator.to_serialized_string())))
     graph.add(
         (annotation_node, spdx_namespace().annotationDate, Literal(datetime_to_iso_string(annotation.annotation_date))))
