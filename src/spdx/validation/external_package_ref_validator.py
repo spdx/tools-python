@@ -128,7 +128,7 @@ def validate_external_package_ref(external_package_ref: ExternalPackageRef, pare
     elif external_package_ref.category == ExternalPackageRefCategory.OTHER:
         if " " in external_package_ref.locator:
             validation_messages.append(
-                ValidationMessage(f"externalPackageRef locator must contain no spaces, but is: {external_package_ref.locator}", context)
+                ValidationMessage(f"externalPackageRef type in category OTHER must contain no spaces, but is: {external_package_ref.locator}", context)
             )
 
 
