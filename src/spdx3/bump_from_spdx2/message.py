@@ -9,8 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import sys
+
+
 MISSING_CONVERSION_REASONS = {0: "missing conversion rule", 1: "missing implementation"}
 
 
 def print_missing_conversion(field: str, reason, additional_information: str= ""):
-    print(f"{field} not converted: {MISSING_CONVERSION_REASONS[reason]} {additional_information}")
+    print(f"{field} not converted: {MISSING_CONVERSION_REASONS[reason]} {additional_information}", file=sys.stderr)
