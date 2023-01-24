@@ -57,6 +57,5 @@ def bump_spdx_document(document: Spdx2_Document) -> SpdxIdMap:
 
 
 
-    print("\n")
     return spdx_id_map
 

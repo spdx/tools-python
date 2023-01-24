@@ -22,7 +22,6 @@ def bump_file(spdx2_file: Spdx2_File, creation_information: CreationInformation)
     spdx_id = spdx2_file.spdx_id
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_file.checksums]
     # file.checksums -> file.verifiedUsing
-    print("\n")
     # file.file_types -> file.content_type (MediaType with Cardinality 1)
     print_missing_conversion("file.file_type", 0, "different cardinalities")
     print_missing_conversion(
