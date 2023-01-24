@@ -29,7 +29,6 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo) -> SpdxDo
     name = spdx2_creation_info.name
 
     # creation_info.document_namespace -> ?
-    print("\n")
     print_missing_conversion("creation_info.document_namespace", 0)
     # creation_info.creators -> creation_information.creators (not implemented yet)
     print_missing_conversion("creation_info.creators", 1, "of creators")

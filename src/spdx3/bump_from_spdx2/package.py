@@ -24,7 +24,6 @@ def bump_package(spdx2_package: Spdx2_Package, creation_information: CreationInf
     name = spdx2_package.name
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
     # package2.version -> ?
-    print("\n")
     print_missing_conversion("package2.version", 0)
     # package.file_name -> ?
     print_missing_conversion("package2.file_name", 0)
