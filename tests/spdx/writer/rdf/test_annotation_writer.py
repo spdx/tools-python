@@ -27,5 +27,5 @@ def test_add_annotation_info_to_graph():
     assert (None, None, spdx_namespace().Annotation) in graph
     assert (None, spdx_namespace().annotationType, spdx_namespace().annotationType_review) in graph
     assert (None, spdx_namespace().annotationDate, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
-    assert (None, spdx_namespace().annotator, Literal("Person: annotatorName"))
+    assert (None, spdx_namespace().annotator, Literal("Person: annotatorName (some@mail.com)")) in graph
     assert (None, RDFS.comment, Literal("annotationComment")) in graph
