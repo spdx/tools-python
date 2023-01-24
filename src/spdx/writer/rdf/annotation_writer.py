@@ -8,19 +8,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, Literal, RDFS, URIRef, RDF
+from rdflib import Graph, Literal, RDFS, URIRef, RDF, BNode
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.annotation import Annotation
 from spdx.writer.rdf.writer_utils import spdx_namespace
 
 
-def add_annotation_info_to_graph(annotation: Annotation, graph: Graph):
-    annotation_node = URIRef(annotation.spdx_id)
-
+def add_annotation_info_to_graph(annotation: Annotation, graph: Graph, doc_namespace: str):
+    annotation_resource = URIRef(f"{doc_namespace}#{annotation.spdx_id}")
+    annotation_node = BNode()
     graph.add((annotation_node, RDF.type, spdx_namespace().Annotation))
     graph.add((annotation_node, spdx_namespace().annotationType, Literal(annotation.annotation_type.name)))
     graph.add((annotation_node, spdx_namespace().annotator, Literal(annotation.annotator.to_serialized_string())))
     graph.add(
         (annotation_node, spdx_namespace().annotationDate, Literal(datetime_to_iso_string(annotation.annotation_date))))
     graph.add((annotation_node, RDFS.comment, Literal(annotation.annotation_comment)))
+
+    graph.add((annotation_resource, spdx_namespace().annotation, annotation_node))

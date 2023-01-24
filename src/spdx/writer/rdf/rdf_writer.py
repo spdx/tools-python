@@ -12,6 +12,7 @@ from rdflib import Graph
 from rdflib.compare import to_isomorphic
 
 from spdx.model.document import Document
+from spdx.writer.rdf.annotation_writer import add_annotation_info_to_graph
 from spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
 from spdx.writer.rdf.writer_utils import spdx_namespace
 
@@ -20,6 +21,8 @@ def write_document_to_file(document: Document, file_name: str):
     graph = Graph()
 
     add_creation_info_to_graph(document.creation_info, graph)
+    for annotation in document.annotations:
+        add_annotation_info_to_graph(annotation, graph, document.creation_info.document_namespace)
 
     graph = to_isomorphic(graph)
     graph.bind("spdx", spdx_namespace())
