@@ -8,19 +8,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph
-from rdflib.compare import to_isomorphic
-
-from spdx.model.document import Document
-from spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from rdflib import Namespace
 
 
-def write_document_to_file(document: Document, file_name: str):
-    graph = Graph()
-
-    add_creation_info_to_graph(document.creation_info, graph)
-
-    graph = to_isomorphic(graph)
-    graph.bind("spdx", spdx_namespace())
-    graph.serialize(file_name, "pretty-xml", encoding="UTF-8")
+def spdx_namespace():
+    return Namespace("http://spdx.org/rdf/terms#")
