@@ -42,12 +42,12 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
         if not novalidation:
             validation_messages: List[ValidationMessage] = validate_full_spdx_document(document, version)
             if validation_messages:
-                print("The document is invalid. The following issues have been found:")
+                print("The document is invalid. The following issues have been found:", file=sys.stderr)
                 for message in validation_messages:
-                    print(message.validation_message)
+                    print(message.validation_message, file=sys.stderr)
                 sys.exit(1)
             else:
-                print("The document is valid.")
+                print("The document is valid.", file=sys.stderr)
 
         if outfile == "-":
             spdx_id_map: SpdxIdMap = bump_spdx_document(document)
