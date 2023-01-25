@@ -84,13 +84,13 @@ def test_valid_external_package_ref(category, reference_type, locator):
 @pytest.mark.parametrize("category, reference_type, locator, expected_message",
                          [(
                           ExternalPackageRefCategory.SECURITY, "cpe22Typo", "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-                          "externalPackageRef type in category SECURITY must be one of [cpe22Type, cpe23Type, advisory, fix, url, swid], but is: cpe22Typo"),
+                          "externalPackageRef type in category SECURITY must be one of ['cpe22Type', 'cpe23Type', 'advisory', 'fix', 'url', 'swid'], but is: cpe22Typo"),
                           (ExternalPackageRefCategory.PACKAGE_MANAGER, "nugat",
                            "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-                           "externalPackageRef type in category PACKAGE_MANAGER must be one of [maven-central, npm, nuget, bower, purl], but is: nugat"),
+                           "externalPackageRef type in category PACKAGE_MANAGER must be one of ['maven-central', 'npm', 'nuget', 'bower', 'purl'], but is: nugat"),
                           (ExternalPackageRefCategory.PERSISTENT_ID, "git-oid",
                            "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-                           "externalPackageRef type in category PERSISTENT_ID must be one of [swh, gitoid], but is: git-oid")
+                           "externalPackageRef type in category PERSISTENT_ID must be one of ['swh', 'gitoid'], but is: git-oid")
                           ])
 def test_invalid_external_package_ref_types(category, reference_type, locator, expected_message):
     external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
@@ -140,7 +140,7 @@ def test_invalid_external_package_ref_types(category, reference_type, locator, e
                            "gitoid:blob:sha256:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
                            f'externalPackageRef locator of type "gitoid" must conform with the regex {GITOID_REGEX}, but is: gitoid:blob:sha256:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64'),
                           (ExternalPackageRefCategory.OTHER, "id string", "locator string",
-                           "externalPackageRef type in category OTHER must contain no spaces, but is: locator string"),
+                           "externalPackageRef locator in category OTHER must contain no spaces, but is: locator string"),
                           ])
 def test_invalid_external_package_ref_locators(category, reference_type, locator, expected_message):
     external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
