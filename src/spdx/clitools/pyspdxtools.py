@@ -26,7 +26,7 @@ from spdx.writer.write_anything import write_file
 @click.command()
 @click.option("--infile", "-i", prompt="input file path", help="The file containing the document to be validated or converted.")
 @click.option("--outfile", "-o", help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion).")
-@click.option("--version", help='The SPDX version to be used during parsing and validation (format "SPDX-2.3").', default="SPDX-2.3")
+@click.option("--version", help='The SPDX version to be used during parsing and validation (format "SPDX-2.3"). Will be read from the document if not provided.', default=None)
 @click.option("--novalidation", is_flag=True, help="Don't validate the provided document.")
 def main(infile: str, outfile: str, version: str, novalidation: bool):
     """
@@ -39,27 +39,29 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
 
         if outfile == "-":
             tagvalue_writer.write_document(document, sys.stdout)
-            print("")
 
         if not novalidation:
+            if not version:
+                version = document.creation_info.spdx_version
+
             validation_messages: List[ValidationMessage] = validate_full_spdx_document(document, version)
             if validation_messages:
-                print("The document is invalid. The following issues have been found:")
+                print("The document is invalid. The following issues have been found:", file=sys.stderr)
                 for message in validation_messages:
-                    print(message.validation_message)
+                    print(message.validation_message, file=sys.stderr)
                 sys.exit(1)
             else:
-                print("The document is valid.")
+                print("The document is valid.", file=sys.stderr)
 
         if outfile and outfile != "-":
             write_file(document, outfile, validate=False)
 
     except NotImplementedError as err:
-        print(err.args[0])
+        print(err.args[0], file=sys.stderr)
         print("Please note that this project is currently undergoing a major refactoring and therefore missing "
               "a few features which will be added in time (refer to https://github.com/spdx/tools-python/issues "
               "for insights into the current status).\n"
-              "In the meantime, please use the PyPI release version 0.7.0.")
+              "In the meantime, please use the PyPI release version 0.7.0.", file=sys.stderr)
         sys.exit(1)
 
 
