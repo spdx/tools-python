@@ -128,7 +128,7 @@ GITOID_REGEX = r'^gitoid:(blob|tree|commit|tag):(sha1:[0-9a-fA-F]{40}|sha256:[0-
                           (ExternalPackageRefCategory.SECURITY, "url", "http://url",
                            f'externalPackageRef locator of type "url" must be a valid URL, but is: http://url'),
                           (ExternalPackageRefCategory.SECURITY, "swid", "2df9de35-0aff-4a86-ace6-f7dddd1ade4c",
-                           f'externalPackageRef locator of type "swid" must be a valid URI specified in RFC-3986, but is: 2df9de35-0aff-4a86-ace6-f7dddd1ade4c'),
+                           f'externalPackageRef locator of type "swid" must be a valid URI with scheme swid, but is: 2df9de35-0aff-4a86-ace6-f7dddd1ade4c'),
                           (ExternalPackageRefCategory.PACKAGE_MANAGER, "maven-central",
                            "org.apache.tomcat:tomcat:tomcat:9.0.0.M4",
                            f'externalPackageRef locator of type "maven-central" must conform with the regex {MAVEN_CENTRAL_REGEX}, but is: org.apache.tomcat:tomcat:tomcat:9.0.0.M4'),
