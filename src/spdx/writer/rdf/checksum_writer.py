@@ -11,6 +11,7 @@
 from rdflib import Graph, URIRef, BNode, RDF, Literal
 
 from spdx.model.checksum import Checksum
+from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.writer_utils import spdx_namespace
 
 
@@ -18,7 +19,7 @@ def add_checksum_information_to_graph(checksum: Checksum, graph: Graph, parent_n
     checksum_node = BNode()
     graph.add((checksum_node, RDF.type, spdx_namespace.Checksum))
     graph.add((checksum_node, spdx_namespace.algorithm,
-               spdx_namespace[f"checksumAlgorithm_{checksum.algorithm.name.lower()}"]))
+               spdx_namespace[f"checksumAlgorithm_{snake_case_to_camel_case(checksum.algorithm.name)}"]))
     graph.add((checksum_node, spdx_namespace.checksumValue, Literal(checksum.value)))
 
     graph.add((parent_node, spdx_namespace.checksum, checksum_node))
