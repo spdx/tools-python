@@ -8,8 +8,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Namespace
+from typing import Union, Any
+
+from rdflib import Namespace, Graph, Literal
+from rdflib.term import Node
 
 
-def spdx_namespace():
-    return Namespace("http://spdx.org/rdf/terms#")
+
+def add_literal_value_if_exists(graph: Graph, parent: Node, predicate: Node, value: Union[Any, list]):
+    if not value:
+        return
+    if not isinstance(value, list):
+        graph.add((parent, predicate, Literal(str(value))))
+        return
+
+    for element in value:
+        element_triple = (parent, predicate, Literal(str(element)))
+        graph.add(element_triple)
