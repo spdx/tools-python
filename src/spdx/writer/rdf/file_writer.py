@@ -15,7 +15,7 @@ from rdflib.term import Node
 
 from spdx.model.file import File
 from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value_if_exists
 
 
 def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str):
@@ -42,13 +42,3 @@ def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str):
         graph.add((file_resource, spdx_namespace().attributionText, Literal(attribution_text)))
 
 
-def add_literal_value_if_exists(graph: Graph, parent: Node, predicate: Node, value: Union[Any, list]):
-    if not value:
-        return
-    if not isinstance(value, list):
-        graph.add((parent, predicate, Literal(str(value))))
-        return
-
-    for element in value:
-        element_triple = (parent, predicate, Literal(str(element)))
-        graph.add(element_triple)
