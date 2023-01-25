@@ -18,11 +18,11 @@ from spdx.writer.rdf.writer_utils import spdx_namespace
 def add_annotation_info_to_graph(annotation: Annotation, graph: Graph, doc_namespace: str):
     annotation_resource = URIRef(f"{doc_namespace}#{annotation.spdx_id}")
     annotation_node = BNode()
-    graph.add((annotation_node, RDF.type, spdx_namespace().Annotation))
-    graph.add((annotation_node, spdx_namespace().annotationType, spdx_namespace()[f"annotationType_{annotation.annotation_type.name.lower()}"]))
-    graph.add((annotation_node, spdx_namespace().annotator, Literal(annotation.annotator.to_serialized_string())))
+    graph.add((annotation_node, RDF.type, spdx_namespace.Annotation))
+    graph.add((annotation_node, spdx_namespace.annotationType, spdx_namespace[f"annotationType_{annotation.annotation_type.name.lower()}"]))
+    graph.add((annotation_node, spdx_namespace.annotator, Literal(annotation.annotator.to_serialized_string())))
     graph.add(
-        (annotation_node, spdx_namespace().annotationDate, Literal(datetime_to_iso_string(annotation.annotation_date))))
+        (annotation_node, spdx_namespace.annotationDate, Literal(datetime_to_iso_string(annotation.annotation_date))))
     graph.add((annotation_node, RDFS.comment, Literal(annotation.annotation_comment)))
 
-    graph.add((annotation_resource, spdx_namespace().annotation, annotation_node))
+    graph.add((annotation_resource, spdx_namespace.annotation, annotation_node))

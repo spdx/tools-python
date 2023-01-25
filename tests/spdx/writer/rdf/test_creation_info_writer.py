@@ -24,14 +24,14 @@ def test_add_creation_info_to_graph():
 
     add_creation_info_to_graph(creation_info, graph)
 
-    assert (None, None, spdx_namespace().SpdxDocument) in graph
+    assert (None, None, spdx_namespace.SpdxDocument) in graph
     assert (URIRef(f"{creation_info.document_namespace}#{creation_info.spdx_id}"), None, None) in graph
-    assert (None, spdx_namespace().creationInfo, None) in graph
-    assert (None, spdx_namespace().name, Literal("documentName")) in graph
-    assert (None, spdx_namespace().specVersion, Literal("SPDX-2.3")) in graph
+    assert (None, spdx_namespace.creationInfo, None) in graph
+    assert (None, spdx_namespace.name, Literal("documentName")) in graph
+    assert (None, spdx_namespace.specVersion, Literal("SPDX-2.3")) in graph
 
-    assert (None, None, spdx_namespace().CreationInfo) in graph
-    assert (None, spdx_namespace().created, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
+    assert (None, None, spdx_namespace.CreationInfo) in graph
+    assert (None, spdx_namespace.created, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
     assert (None, RDFS.comment, Literal("creatorComment")) in graph
-    assert (None, spdx_namespace().licenseListVersion, Literal("3.19")) in graph
-    assert (None, spdx_namespace().creator, Literal("Person: creatorName (some@mail.com)")) in graph
+    assert (None, spdx_namespace.licenseListVersion, Literal("3.19")) in graph
+    assert (None, spdx_namespace.creator, Literal("Person: creatorName (some@mail.com)")) in graph

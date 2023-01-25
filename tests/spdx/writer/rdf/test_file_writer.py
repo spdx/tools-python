@@ -21,15 +21,15 @@ def test_add_file_information_to_graph():
 
     add_file_information_to_graph(file, graph, "anyURI")
 
-    assert (URIRef("anyURI#SPDXRef-File"), RDF.type, spdx_namespace().File) in graph
-    assert (None, spdx_namespace().fileName, Literal("./fileName.py")) in graph
-    assert (None, spdx_namespace().fileType, spdx_namespace().fileType_text) in graph
-    assert (None, spdx_namespace().licenseComments, Literal("licenseComment")) in graph
-    assert (None, spdx_namespace().licenseConcluded, Literal("licenseConcludedExpression")) in graph
-    assert (None, spdx_namespace().licenseInfoInFile, Literal("licenseInfoInFileExpression")) in graph
-    assert (None, spdx_namespace().copyrightText, Literal("copyrightText")) in graph
+    assert (URIRef("anyURI#SPDXRef-File"), RDF.type, spdx_namespace.File) in graph
+    assert (None, spdx_namespace.fileName, Literal("./fileName.py")) in graph
+    assert (None, spdx_namespace.fileType, spdx_namespace.fileType_text) in graph
+    assert (None, spdx_namespace.licenseComments, Literal("licenseComment")) in graph
+    assert (None, spdx_namespace.licenseConcluded, Literal("licenseConcludedExpression")) in graph
+    assert (None, spdx_namespace.licenseInfoInFile, Literal("licenseInfoInFileExpression")) in graph
+    assert (None, spdx_namespace.copyrightText, Literal("copyrightText")) in graph
     assert (None, RDFS.comment, Literal("fileComment")) in graph
-    assert (None, spdx_namespace().noticeText, Literal("fileNotice")) in graph
-    assert (None, spdx_namespace().fileContributor, Literal("fileContributor")) in graph
-    assert (None, spdx_namespace().checksum, None) in graph
-    assert (None, spdx_namespace().attributionText, Literal("fileAttributionText")) in graph
+    assert (None, spdx_namespace.noticeText, Literal("fileNotice")) in graph
+    assert (None, spdx_namespace.fileContributor, Literal("fileContributor")) in graph
+    assert (None, spdx_namespace.checksum, None) in graph
+    assert (None, spdx_namespace.attributionText, Literal("fileAttributionText")) in graph

@@ -16,9 +16,9 @@ from spdx.writer.rdf.writer_utils import spdx_namespace
 
 def add_checksum_information_to_graph(checksum: Checksum, graph: Graph, parent_node: URIRef):
     checksum_node = BNode()
-    graph.add((checksum_node, RDF.type, spdx_namespace().Checksum))
-    graph.add((checksum_node, spdx_namespace().algorithm,
-               spdx_namespace()[f"checksumAlgorithm_{checksum.algorithm.name.lower()}"]))
-    graph.add((checksum_node, spdx_namespace().checksumValue, Literal(checksum.value)))
+    graph.add((checksum_node, RDF.type, spdx_namespace.Checksum))
+    graph.add((checksum_node, spdx_namespace.algorithm,
+               spdx_namespace[f"checksumAlgorithm_{checksum.algorithm.name.lower()}"]))
+    graph.add((checksum_node, spdx_namespace.checksumValue, Literal(checksum.value)))
 
-    graph.add((parent_node, spdx_namespace().checksum, checksum_node))
+    graph.add((parent_node, spdx_namespace.checksum, checksum_node))
