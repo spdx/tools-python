@@ -36,3 +36,6 @@ class Actor:
         """
         optional_email = f" ({self.email})" if self.email else ""
         return "".join([f"{self.actor_type.name.title()}:", f" {self.name}", optional_email])
+
+    def __str__(self):
+        return self.to_serialized_string()
