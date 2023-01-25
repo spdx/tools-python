@@ -50,10 +50,10 @@ def validate_file(file: File, context: Optional[ValidationContext] = None) -> Li
     if not context:
         context = ValidationContext(spdx_id=file.spdx_id, element_type=SpdxElementType.FILE, full_element=file)
 
-    if not file.name.startswith("./"):
+    if file.name.startswith("/"):
         validation_messages.append(
             ValidationMessage(
-                f'file name must be a relative path to the file, starting with "./", but is: {file.name}', context)
+                f'file name must not be an absolute path starting with "/", but is: {file.name}', context)
         )
 
     if ChecksumAlgorithm.SHA1 not in [checksum.algorithm for checksum in file.checksums]:
