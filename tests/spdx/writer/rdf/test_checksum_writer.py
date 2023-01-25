@@ -21,6 +21,6 @@ def test_add_checksum_information_to_graph():
 
     add_checksum_information_to_graph(checksum, graph, URIRef("TestURI"))
 
-    assert (None, None, spdx_namespace().Checksum) in graph
-    assert (None, spdx_namespace().algorithm, spdx_namespace().checksumAlgorithm_sha1) in graph
-    assert (None, spdx_namespace().checksumValue, Literal("71c4025dd9897b364f3ebbb42c484ff43d00791c")) in graph
+    assert (None, None, spdx_namespace.Checksum) in graph
+    assert (None, spdx_namespace.algorithm, spdx_namespace.checksumAlgorithm_sha1) in graph
+    assert (None, spdx_namespace.checksumValue, Literal("71c4025dd9897b364f3ebbb42c484ff43d00791c")) in graph
