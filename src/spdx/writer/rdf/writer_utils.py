@@ -8,15 +8,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Union, Any
+from datetime import datetime
+from typing import Union, Any, Optional
 
 from rdflib import Namespace, Graph, Literal
 from rdflib.term import Node
 
+from spdx.datetime_conversions import datetime_to_iso_string
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
+
 spdx_namespace = Namespace("http://spdx.org/rdf/terms#")
 
 
-def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Union[Any, list]):
+def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Any):
     if not value:
         return
     if not isinstance(value, list):
@@ -26,3 +31,24 @@ def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Union[
     for element in value:
         element_triple = (parent, predicate, Literal(str(element)))
         graph.add(element_triple)
+
+def add_literal_or_no_assertion_or_none(graph: Graph, parent: Node, predicate: Node, value: Any):
+    if not value:
+        return
+    if isinstance(value, SpdxNone):
+        graph.add((parent, predicate, spdx_namespace.none))
+        return
+    add_literal_or_no_assertion(graph, parent, predicate, value)
+
+def add_literal_or_no_assertion(graph: Graph, parent: Node, predicate: Node, value: Any):
+    if not value:
+        return
+    if isinstance(value, SpdxNoAssertion):
+        graph.add((parent, predicate, spdx_namespace.noassertion))
+        return
+    add_literal_value(graph,parent, predicate, value)
+
+def add_datetime_to_graph(graph: Graph, parent: Node, predicate: Node, value: Optional[datetime]):
+    if not value:
+        return
+    graph.add((parent, predicate, Literal(datetime_to_iso_string(value))))
