@@ -36,4 +36,4 @@ def add_creation_info_to_graph(creation_info: CreationInfo, graph: Graph):
 
     graph.add((doc_node, spdx_namespace.creationInfo, creation_info_node))
 
-    return
+    return doc_node
