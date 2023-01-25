@@ -15,16 +15,16 @@ from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 from spdx.validation.uri_validators import validate_url, validate_uri
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
-
 CPE22TYPE_REGEX = r'^c[pP][eE]:/[AHOaho]?(:[A-Za-z0-9._\-~%]*){0,6}$'
 CPE23TYPE_REGEX = r'^cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}$'
 MAVEN_CENTRAL_REGEX = r'^[^:]+:[^:]+(:[^:]+)?$'
 NPM_REGEX = r'^[^@]+@[^@]+$'
 NUGET_REGEX = r'^[^/]+/[^/]+$'
 BOWER_REGEX = r'^[^#]+#[^#]+$'
-PURL_REGEX = None  # TODO
+PURL_REGEX = r'^pkg:.+(\/.+)?\/.+(@.+)?(\?.+)?(#.+)?$'
 SWH_REGEX = r'^swh:1:(snp|rel|rev|dir|cnt):[0-9a-fA-F]{40}$'
 GITOID_REGEX = r'^gitoid:(blob|tree|commit|tag):(sha1:[0-9a-fA-F]{40}|sha256:[0-9a-fA-F]{64})$'
+
 
 def validate_external_package_refs(external_package_refs: List[ExternalPackageRef], parent_id: str) -> List[
     ValidationMessage]:
@@ -34,15 +34,19 @@ def validate_external_package_refs(external_package_refs: List[ExternalPackageRe
 
     return validation_messages
 
+
 def validate_external_package_ref(external_package_ref: ExternalPackageRef, parent_id: str) -> List[ValidationMessage]:
     validation_messages = []
-    context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.EXTERNAL_PACKAGE_REF, full_element=external_package_ref)
+    context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.EXTERNAL_PACKAGE_REF,
+                                full_element=external_package_ref)
 
     if external_package_ref.category == ExternalPackageRefCategory.SECURITY:
         if external_package_ref.reference_type == "cpe22Type":
             if not re.match(CPE22TYPE_REGEX, external_package_ref.locator):
                 validation_messages.append(
-                    ValidationMessage(f'externalPackageRef locator of type "cpe22Type" must conform with the regex {CPE22TYPE_REGEX}, but is: {external_package_ref.locator}', context)
+                    ValidationMessage(
+                        f'externalPackageRef locator of type "cpe22Type" must conform with the regex {CPE22TYPE_REGEX}, but is: {external_package_ref.locator}',
+                        context)
                 )
         elif external_package_ref.reference_type == "cpe23Type":
             if not re.match(CPE23TYPE_REGEX, external_package_ref.locator):
@@ -54,17 +58,22 @@ def validate_external_package_ref(external_package_ref: ExternalPackageRef, pare
         elif external_package_ref.reference_type in ["advisory", "fix", "url"]:
             for message in validate_url(external_package_ref.locator):
                 validation_messages.append(
-                    ValidationMessage(f'externalPackageRef locator of type "{external_package_ref.reference_type}" {message}', context)
+                    ValidationMessage(
+                        f'externalPackageRef locator of type "{external_package_ref.reference_type}" {message}',
+                        context)
                 )
         elif external_package_ref.reference_type == "swid":
             for message in validate_uri(external_package_ref.locator):
                 validation_messages.append(
-                    ValidationMessage(f'externalPackageRef locator of type "{external_package_ref.reference_type}" {message}',
-                                      context)
+                    ValidationMessage(
+                        f'externalPackageRef locator of type "{external_package_ref.reference_type}" {message}',
+                        context)
                 )
         else:
             validation_messages.append(
-                ValidationMessage(f"externalPackageRef type in category SECURITY must be one of [cpe22Type, cpe23Type, advisory, fix, url, swid], but is: {external_package_ref.reference_type}", context)
+                ValidationMessage(
+                    f"externalPackageRef type in category SECURITY must be one of [cpe22Type, cpe23Type, advisory, fix, url, swid], but is: {external_package_ref.reference_type}",
+                    context)
             )
 
     elif external_package_ref.category == ExternalPackageRefCategory.PACKAGE_MANAGER:
@@ -97,11 +106,17 @@ def validate_external_package_ref(external_package_ref: ExternalPackageRef, pare
                         context)
                 )
         elif external_package_ref.reference_type == "purl":
-            pass
+            if not re.match(PURL_REGEX, external_package_ref.locator):
+                validation_messages.append(
+                    ValidationMessage(
+                        f'externalPackageRef locator of type "purl" must conform with the regex {PURL_REGEX}, but is: {external_package_ref.locator}',
+                        context)
+                )
         else:
             validation_messages.append(
                 ValidationMessage(
-                    f"externalPackageRef type in category PACKAGE_MANAGER must be one of [maven-central, npm, nuget, bower, purl], but is: {external_package_ref.reference_type}", context)
+                    f"externalPackageRef type in category PACKAGE_MANAGER must be one of [maven-central, npm, nuget, bower, purl], but is: {external_package_ref.reference_type}",
+                    context)
             )
 
     elif external_package_ref.category == ExternalPackageRefCategory.PERSISTENT_ID:
@@ -128,8 +143,9 @@ def validate_external_package_ref(external_package_ref: ExternalPackageRef, pare
     elif external_package_ref.category == ExternalPackageRefCategory.OTHER:
         if " " in external_package_ref.locator:
             validation_messages.append(
-                ValidationMessage(f"externalPackageRef type in category OTHER must contain no spaces, but is: {external_package_ref.locator}", context)
+                ValidationMessage(
+                    f"externalPackageRef type in category OTHER must contain no spaces, but is: {external_package_ref.locator}",
+                    context)
             )
-
 
     return validation_messages
