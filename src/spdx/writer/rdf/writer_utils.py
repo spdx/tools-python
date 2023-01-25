@@ -16,7 +16,7 @@ from rdflib.term import Node
 spdx_namespace = Namespace("http://spdx.org/rdf/terms#")
 
 
-def add_literal_value_if_exists(graph: Graph, parent: Node, predicate: Node, value: Union[Any, list]):
+def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Union[Any, list]):
     if not value:
         return
     if not isinstance(value, list):

@@ -13,7 +13,7 @@ from rdflib import Graph, URIRef, Literal, RDF, RDFS
 
 from spdx.model.file import File
 from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
-from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value_if_exists
+from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value
 
 
 def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str):
@@ -27,13 +27,13 @@ def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str):
         add_checksum_information_to_graph(checksum, graph, file_resource)
 
     # as long as we don't have a proper handling of the licenses we simply write literals here
-    add_literal_value_if_exists(graph, file_resource, spdx_namespace.licenseConcluded, file.license_concluded)
-    add_literal_value_if_exists(graph, file_resource, spdx_namespace.licenseInfoInFile, file.license_info_in_file)
+    add_literal_value(graph, file_resource, spdx_namespace.licenseConcluded, file.license_concluded)
+    add_literal_value(graph, file_resource, spdx_namespace.licenseInfoInFile, file.license_info_in_file)
 
-    add_literal_value_if_exists(graph, file_resource, spdx_namespace.licenseComments, file.license_comment)
-    add_literal_value_if_exists(graph, file_resource, spdx_namespace.copyrightText, file.copyright_text)
-    add_literal_value_if_exists(graph, file_resource, RDFS.comment, file.comment)
-    add_literal_value_if_exists(graph, file_resource, spdx_namespace.noticeText, file.notice)
+    add_literal_value(graph, file_resource, spdx_namespace.licenseComments, file.license_comment)
+    add_literal_value(graph, file_resource, spdx_namespace.copyrightText, file.copyright_text)
+    add_literal_value(graph, file_resource, RDFS.comment, file.comment)
+    add_literal_value(graph, file_resource, spdx_namespace.noticeText, file.notice)
     for contributor in file.contributors:
         graph.add((file_resource, spdx_namespace.fileContributor, Literal(contributor)))
     for attribution_text in file.attribution_texts:
