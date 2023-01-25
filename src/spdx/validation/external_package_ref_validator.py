@@ -9,9 +9,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import re
-from typing import List
+from typing import List, Dict
 
-from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
+from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
 from spdx.validation.uri_validators import validate_url, validate_uri
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
@@ -24,6 +24,18 @@ BOWER_REGEX = r'^[^#]+#[^#]+$'
 PURL_REGEX = r'^pkg:.+(\/.+)?\/.+(@.+)?(\?.+)?(#.+)?$'
 SWH_REGEX = r'^swh:1:(snp|rel|rev|dir|cnt):[0-9a-fA-F]{40}$'
 GITOID_REGEX = r'^gitoid:(blob|tree|commit|tag):(sha1:[0-9a-fA-F]{40}|sha256:[0-9a-fA-F]{64})$'
+
+TYPE_TO_REGEX: Dict[str, str] = {
+    "cpe22Type": CPE22TYPE_REGEX,
+    "cpe23Type": CPE23TYPE_REGEX,
+    "maven-central": MAVEN_CENTRAL_REGEX,
+    "npm": NPM_REGEX,
+    "nuget": NUGET_REGEX,
+    "bower": BOWER_REGEX,
+    "purl": PURL_REGEX,
+    "swh": SWH_REGEX,
+    "gitoid": GITOID_REGEX
+}
 
 
 def validate_external_package_refs(external_package_refs: List[ExternalPackageRef], parent_id: str) -> List[
@@ -43,69 +55,40 @@ def validate_external_package_ref(external_package_ref: ExternalPackageRef, pare
     locator = external_package_ref.locator
     reference_type = external_package_ref.reference_type
 
-    if category == ExternalPackageRefCategory.SECURITY:
-        if reference_type == "cpe22Type":
-            return validate_against_regex(locator, CPE22TYPE_REGEX, "cpe22Type", context)
-        if reference_type == "cpe23Type":
-            return validate_against_regex(locator, CPE23TYPE_REGEX, "cpe23Type", context)
-        if reference_type in ["advisory", "fix", "url"]:
-            if validate_url(locator):
-                return [ValidationMessage(
-                    f'externalPackageRef locator of type "{reference_type}" must be a valid URL, but is: {locator}',
-                    context)]
-            return []
-        if reference_type == "swid":
-            if validate_uri(locator) or not locator.startswith("swid"):
-                return [ValidationMessage(
-                    f'externalPackageRef locator of type "swid" must be a valid URI with scheme swid, but is: {locator}',
-                    context)]
-            return []
-
-        return [ValidationMessage(
-            f"externalPackageRef type in category SECURITY must be one of [cpe22Type, cpe23Type, advisory, fix, url, swid], but is: {reference_type}",
-            context)]
-
-    if category == ExternalPackageRefCategory.PACKAGE_MANAGER:
-        if reference_type == "maven-central":
-            return validate_against_regex(locator, MAVEN_CENTRAL_REGEX, "maven-central", context)
-        if reference_type == "npm":
-            return validate_against_regex(locator, NPM_REGEX, "npm", context)
-        if reference_type == "nuget":
-            return validate_against_regex(locator, NUGET_REGEX, "nuget", context)
-        if reference_type == "bower":
-            return validate_against_regex(locator, BOWER_REGEX, "bower", context)
-        if reference_type == "purl":
-            return validate_against_regex(locator, PURL_REGEX, "purl", context)
-
-        return [ValidationMessage(
-            f"externalPackageRef type in category PACKAGE_MANAGER must be one of [maven-central, npm, nuget, bower, purl], but is: {reference_type}",
-            context)]
-
-    if category == ExternalPackageRefCategory.PERSISTENT_ID:
-        if reference_type == "swh":
-            return validate_against_regex(locator, SWH_REGEX, "swh", context)
-        if reference_type == "gitoid":
-            return validate_against_regex(locator, GITOID_REGEX, "gitoid", context)
-
-        return [ValidationMessage(
-            f"externalPackageRef type in category PERSISTENT_ID must be one of [swh, gitoid], but is: {reference_type}",
-            context)]
-
     if category == ExternalPackageRefCategory.OTHER:
         if " " in locator:
             return [ValidationMessage(
-                f"externalPackageRef type in category OTHER must contain no spaces, but is: {locator}",
+                f"externalPackageRef locator in category OTHER must contain no spaces, but is: {locator}",
                 context)]
         return []
 
+    if reference_type not in CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES[category]:
+        return [ValidationMessage(
+            f"externalPackageRef type in category {category.name} must be one of {CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES[category]}, but is: {reference_type}",
+            context)]
+
+    if reference_type in ["advisory", "fix", "url"]:
+        if validate_url(locator):
+            return [ValidationMessage(
+                f'externalPackageRef locator of type "{reference_type}" must be a valid URL, but is: {locator}',
+                context)]
+        return []
+
+    if reference_type == "swid":
+        if validate_uri(locator) or not locator.startswith("swid"):
+            return [ValidationMessage(
+                f'externalPackageRef locator of type "swid" must be a valid URI with scheme swid, but is: {locator}',
+                context)]
+        return []
+
+    return validate_against_regex(locator, reference_type, context)
 
 
-def validate_against_regex(string_to_validate: str, regex: str, type_name: str, context: ValidationContext) -> List[
+def validate_against_regex(string_to_validate: str, reference_type: str, context: ValidationContext) -> List[
     ValidationMessage]:
+    regex = TYPE_TO_REGEX[reference_type]
     if not re.match(regex, string_to_validate):
         return [ValidationMessage(
-            f'externalPackageRef locator of type "{type_name}" must conform with the regex {regex}, but is: {string_to_validate}',
-            context)
-        ]
-
+            f'externalPackageRef locator of type "{reference_type}" must conform with the regex {regex}, but is: {string_to_validate}',
+            context)]
     return []

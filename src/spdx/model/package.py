@@ -11,7 +11,7 @@
 from dataclasses import field
 from datetime import datetime
 from enum import Enum, auto
-from typing import Optional, Union, List
+from typing import Optional, Union, List, Dict
 
 from spdx.model.actor import Actor
 from spdx.model.checksum import Checksum
@@ -52,6 +52,13 @@ class ExternalPackageRefCategory(Enum):
     PACKAGE_MANAGER = auto()
     PERSISTENT_ID = auto()
     OTHER = auto()
+
+
+CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES: Dict[ExternalPackageRefCategory, List[str]] = {
+    ExternalPackageRefCategory.SECURITY : ["cpe22Type", "cpe23Type", "advisory", "fix", "url", "swid"],
+    ExternalPackageRefCategory.PACKAGE_MANAGER : ["maven-central", "npm", "nuget", "bower", "purl"],
+    ExternalPackageRefCategory.PERSISTENT_ID : ["swh", "gitoid"]
+}
 
 
 @dataclass_with_properties
