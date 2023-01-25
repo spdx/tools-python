@@ -14,7 +14,8 @@ from typing import List
 import pytest
 
 from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
-from spdx.validation.external_package_ref_validator import validate_external_package_ref
+from spdx.validation.external_package_ref_validator import validate_external_package_ref, CPE22TYPE_REGEX, \
+    CPE23TYPE_REGEX, MAVEN_CENTRAL_REGEX, NPM_REGEX, NUGET_REGEX, BOWER_REGEX, PURL_REGEX, SWH_REGEX, GITOID_REGEX
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
@@ -102,17 +103,6 @@ def test_invalid_external_package_ref_types(category, reference_type, locator, e
                                                    full_element=external_package_ref))
 
     assert validation_messages == [expected]
-
-
-CPE22TYPE_REGEX = r'^c[pP][eE]:/[AHOaho]?(:[A-Za-z0-9._\-~%]*){0,6}$'
-CPE23TYPE_REGEX = r'^cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}$'
-MAVEN_CENTRAL_REGEX = r'^[^:]+:[^:]+(:[^:]+)?$'
-NPM_REGEX = r'^[^@]+@[^@]+$'
-NUGET_REGEX = r'^[^/]+/[^/]+$'
-BOWER_REGEX = r'^[^#]+#[^#]+$'
-PURL_REGEX = r'^pkg:.+(\/.+)?\/.+(@.+)?(\?.+)?(#.+)?$'
-SWH_REGEX = r'^swh:1:(snp|rel|rev|dir|cnt):[0-9a-fA-F]{40}$'
-GITOID_REGEX = r'^gitoid:(blob|tree|commit|tag):(sha1:[0-9a-fA-F]{40}|sha256:[0-9a-fA-F]{64})$'
 
 
 @pytest.mark.parametrize("category, reference_type, locator, expected_message",
