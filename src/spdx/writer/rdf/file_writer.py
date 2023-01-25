@@ -12,6 +12,7 @@
 from rdflib import Graph, URIRef, Literal, RDF, RDFS
 
 from spdx.model.file import File
+from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
 from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_literal_or_no_assertion_or_none
 
@@ -21,14 +22,16 @@ def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str):
     graph.add((file_resource, RDF.type, spdx_namespace.File))
     graph.add((file_resource, spdx_namespace.fileName, Literal(file.name)))
     for file_type in file.file_type:
-        graph.add((file_resource, spdx_namespace.fileType, spdx_namespace[f"fileType_{file_type.name.lower()}"]))
+        graph.add((file_resource, spdx_namespace.fileType,
+                   spdx_namespace[f"fileType_{snake_case_to_camel_case(file_type.name)}"]))
 
     for checksum in file.checksums:
         add_checksum_information_to_graph(checksum, graph, file_resource)
 
     # as long as we don't have a proper handling of the licenses we simply write literals here
     add_literal_or_no_assertion_or_none(graph, file_resource, spdx_namespace.licenseConcluded, file.license_concluded)
-    add_literal_or_no_assertion_or_none(graph, file_resource, spdx_namespace.licenseInfoInFile, file.license_info_in_file)
+    add_literal_or_no_assertion_or_none(graph, file_resource, spdx_namespace.licenseInfoInFile,
+                                        file.license_info_in_file)
 
     add_literal_value(graph, file_resource, spdx_namespace.licenseComments, file.license_comment)
     add_literal_value(graph, file_resource, spdx_namespace.copyrightText, file.copyright_text)
@@ -38,5 +41,3 @@ def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str):
         graph.add((file_resource, spdx_namespace.fileContributor, Literal(contributor)))
     for attribution_text in file.attribution_texts:
         graph.add((file_resource, spdx_namespace.attributionText, Literal(attribution_text)))
-
-
