@@ -19,8 +19,8 @@ from spdx.writer.rdf.writer_utils import spdx_namespace, add_namespace_to_spdx_i
 
 
 def add_annotation_info_to_graph(annotation: Annotation, graph: Graph, doc_namespace: str,
-                                 external_doc_namespaces: Dict[str, str]):
-    annotation_resource = URIRef(add_namespace_to_spdx_id(annotation.spdx_id, doc_namespace, external_doc_namespaces))
+                                 external_doc_ref_to_namespace: Dict[str, str]):
+    annotation_resource = URIRef(add_namespace_to_spdx_id(annotation.spdx_id, doc_namespace, external_doc_ref_to_namespace))
     annotation_node = BNode()
     graph.add((annotation_node, RDF.type, spdx_namespace.Annotation))
     graph.add((annotation_node, spdx_namespace.annotationType,

@@ -22,8 +22,8 @@ from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_
 
 
 def add_package_information_to_graph(package: Package, graph: Graph, doc_namespace: str,
-                                     external_doc_namespaces: Dict[str, str]):
-    package_resource = URIRef(add_namespace_to_spdx_id(package.spdx_id, doc_namespace, external_doc_namespaces))
+                                     external_doc_ref_to_namespace: Dict[str, str]):
+    package_resource = URIRef(add_namespace_to_spdx_id(package.spdx_id, doc_namespace, external_doc_ref_to_namespace))
     graph.add((package_resource, RDF.type, spdx_namespace.Package))
 
     graph.add((package_resource, spdx_namespace.name, Literal(package.name)))

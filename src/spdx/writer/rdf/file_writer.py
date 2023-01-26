@@ -20,8 +20,8 @@ from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_
 
 
 def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str,
-                                  external_doc_namespaces: Dict[str, str]):
-    file_resource = URIRef(add_namespace_to_spdx_id(file.spdx_id, doc_namespace, external_doc_namespaces))
+                                  external_doc_ref_to_namespace: Dict[str, str]):
+    file_resource = URIRef(add_namespace_to_spdx_id(file.spdx_id, doc_namespace, external_doc_ref_to_namespace))
     graph.add((file_resource, RDF.type, spdx_namespace.File))
     graph.add((file_resource, spdx_namespace.fileName, Literal(file.name)))
     for file_type in file.file_type:
