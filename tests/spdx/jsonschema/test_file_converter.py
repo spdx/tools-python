@@ -23,7 +23,7 @@ from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.document import Document
 from spdx.model.file import File, FileType
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression, Licensing
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
 from tests.spdx.fixtures import creation_info_fixture, file_fixture, annotation_fixture, document_fixture
@@ -73,8 +73,8 @@ def test_successful_conversion(converter: FileConverter):
     converter.annotation_converter.convert.return_value = "mock_converted_annotation"
     file = File(name="name", spdx_id="spdxId",
                 checksums=[Checksum(ChecksumAlgorithm.SHA224, "sha224"), Checksum(ChecksumAlgorithm.MD2, "md2")],
-                file_type=[FileType.SPDX, FileType.OTHER], license_concluded=LicenseExpression("licenseExpression1"),
-                license_info_in_file=[LicenseExpression("licenseExpression2"), LicenseExpression("licenseExpression3")],
+                file_type=[FileType.SPDX, FileType.OTHER], license_concluded=Licensing().parse("MIT and GPL-2.0"),
+                license_info_in_file=[Licensing().parse("MIT"), Licensing().parse("GPL-2.0")],
                 license_comment="licenseComment", copyright_text="copyrightText", comment="comment", notice="notice",
                 contributors=["contributor1", "contributor2"],
                 attribution_texts=["attributionText1", "attributionText2"])
@@ -96,8 +96,8 @@ def test_successful_conversion(converter: FileConverter):
         converter.json_property_name(FileProperty.FILE_NAME): "name",
         converter.json_property_name(FileProperty.FILE_TYPES): ["SPDX", "OTHER"],
         converter.json_property_name(FileProperty.LICENSE_COMMENTS): "licenseComment",
-        converter.json_property_name(FileProperty.LICENSE_CONCLUDED): "licenseExpression1",
-        converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES): ["licenseExpression2", "licenseExpression3"],
+        converter.json_property_name(FileProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0",
+        converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES): ["MIT", "GPL-2.0"],
         converter.json_property_name(FileProperty.NOTICE_TEXT): "notice"
     }
 

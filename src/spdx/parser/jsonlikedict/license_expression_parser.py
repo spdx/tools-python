@@ -10,23 +10,37 @@
 # limitations under the License.
 from typing import Union, List
 
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression, Licensing, ExpressionError
+
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.dict_parsing_functions import construct_or_raise_parsing_error, append_parsed_field_or_log_error, \
+from spdx.parser.jsonlikedict.dict_parsing_functions import append_parsed_field_or_log_error, \
     raise_parsing_error_if_logger_has_messages
 from spdx.parser.logger import Logger
 
 
 class LicenseExpressionParser:
     @staticmethod
-    def parse_license_expression(license_expression_str_or_list: str) -> LicenseExpression:
-        license_expression = construct_or_raise_parsing_error(LicenseExpression,
-                                                              dict(expression_string=license_expression_str_or_list))
+    def parse_license_expression(license_expression_str: str) -> Union[LicenseExpression, SpdxNone, SpdxNoAssertion]:
+        if isinstance(license_expression_str, str):
+            if license_expression_str.upper() == "NOASSERTION":
+                return SpdxNoAssertion()
+            if license_expression_str.upper() == "NONE":
+                return SpdxNone()
+
+        try:
+            license_expression = Licensing().parse(license_expression_str)
+        except ExpressionError as err:
+            raise SPDXParsingError([f"Error parsing LicenseExpression: {err.args[0]}: {license_expression_str}"])
+
         return license_expression
 
-    def parse_license_expressions(self, license_expression_str_or_list: Union[str, List[str]]) -> Union[LicenseExpression, List[LicenseExpression]]:
-        if isinstance(license_expression_str_or_list, str):
+    def parse_license_expressions(self, license_expression_str_or_list: Union[str, List[str]]) -> Union[
+        LicenseExpression, SpdxNone, SpdxNoAssertion, List[Union[LicenseExpression, SpdxNone, SpdxNoAssertion]]]:
+        if not isinstance(license_expression_str_or_list, List):
             return self.parse_license_expression(license_expression_str_or_list)
+
         license_expressions = []
         logger = Logger()
         for license_expression_str in license_expression_str_or_list:
@@ -34,7 +48,7 @@ class LicenseExpressionParser:
                 license_expressions = append_parsed_field_or_log_error(logger, license_expressions,
                                                                        license_expression_str,
                                                                        self.parse_license_expression)
-            except SPDXParsingError as err:
-                logger.append(err.get_messages())
+            except ExpressionError as err:
+                logger.append(err.args[0])
         raise_parsing_error_if_logger_has_messages(logger)
         return license_expressions

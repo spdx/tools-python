@@ -11,16 +11,18 @@
 from unittest import TestCase
 
 import pytest
+from license_expression import Licensing
 
-from spdx.model.license_expression import LicenseExpression
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 
 
 @pytest.mark.parametrize("invalid_license_expression,expected_message",
-                         [(56, ["Error while constructing LicenseExpression: ['SetterError LicenseExpression: "
-                                'type of argument "expression_string" must be str; got int instead: 56\']']
-                           ), ])
+                         [(56,
+                           ["Error parsing LicenseExpression: expression must be a string and not: <class 'int'>: 56"]),
+                          ])
 def test_parse_invalid_license_expression(invalid_license_expression, expected_message):
     license_expression_parser = LicenseExpressionParser()
 
@@ -32,22 +34,21 @@ def test_parse_invalid_license_expression(invalid_license_expression, expected_m
 
 def test_parse_license_expressions():
     license_expression_parser = LicenseExpressionParser()
-    license_expressions_list = ["First License", "Second License", "Third License"]
+    license_expressions_list = ["First License", "Second License", "NONE", "NOASSERTION"]
 
     license_expressions = license_expression_parser.parse_license_expressions(license_expressions_list)
 
-    assert len(license_expressions) == 3
+    assert len(license_expressions) == 4
     TestCase().assertCountEqual(license_expressions,
-                                [LicenseExpression("First License"), LicenseExpression("Second License"),
-                                 LicenseExpression("Third License")])
+                                [Licensing().parse("First License"), Licensing().parse("Second License"),
+                                 SpdxNone(), SpdxNoAssertion()])
 
 
-@pytest.mark.parametrize("invalid_license_expressions,expected_message", [(["First Expression", 4, 6],
-                                                                           [
-                                                                               "Error while constructing LicenseExpression: ['SetterError LicenseExpression: "
-                                                                               'type of argument "expression_string" must be str; got int instead: 4\']',
-                                                                               "Error while constructing LicenseExpression: ['SetterError LicenseExpression: "
-                                                                               'type of argument "expression_string" must be str; got int instead: 6\']'])])
+@pytest.mark.parametrize("invalid_license_expressions, expected_message",
+                         [(["First Expression", 4, 6],
+                           ["Error parsing LicenseExpression: expression must be a string and not: <class 'int'>: 4",
+                            "Error parsing LicenseExpression: expression must be a string and not: <class 'int'>: 6"])
+                          ])
 def test_parse_invalid_license_expressions(invalid_license_expressions, expected_message):
     license_expression_parser = LicenseExpressionParser()
 

@@ -11,9 +11,8 @@
 from typing import TextIO
 
 from spdx.model.file import File
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, \
-    write_license_expression
 from spdx.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value
 
 
 def write_file(file: File, text_output: TextIO):
@@ -28,8 +27,9 @@ def write_file(file: File, text_output: TextIO):
     for file_checksum in file.checksums:
         write_value("FileChecksum", write_checksum_to_tag_value(file_checksum), text_output)
 
-    write_license_expression("LicenseConcluded", file.license_concluded, text_output)
-    write_license_expression("LicenseInfoInFile", file.license_info_in_file, text_output)
+    write_value("LicenseConcluded", file.license_concluded, text_output)
+    for license_info in file.license_info_in_file:
+        write_value("LicenseInfoInFile", license_info, text_output)
     write_text_value("LicenseComments", file.license_comment, text_output)
     write_text_value("FileCopyrightText", file.copyright_text, text_output)
 

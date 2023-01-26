@@ -21,7 +21,7 @@ from spdx.jsonschema.snippet_properties import SnippetProperty
 from spdx.model.actor import Actor, ActorType
 from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.document import Document
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression, Licensing
 from spdx.model.snippet import Snippet
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
@@ -66,9 +66,9 @@ def test_successful_conversion(converter: SnippetConverter):
     converter.annotation_converter.convert.return_value = "mock_converted_annotation"
     file_spdx_id = "fileSpdxId"
     snippet = Snippet("spdxId", file_spdx_id=file_spdx_id, byte_range=(1, 2), line_range=(3, 4),
-                      license_concluded=LicenseExpression("licenseExpression1"),
-                      license_info_in_snippet=[LicenseExpression("licenseExpression2"),
-                                               LicenseExpression("licenseExpression3")],
+                      license_concluded=Licensing().parse("MIT and GPL-2.0"),
+                      license_info_in_snippet=[Licensing().parse("MIT"),
+                                               Licensing().parse("GPL-2.0")],
                       license_comment="licenseComment", copyright_text="copyrightText", comment="comment", name="name",
                       attribution_texts=["attributionText1", "attributionText2"])
 
@@ -84,9 +84,8 @@ def test_successful_conversion(converter: SnippetConverter):
         converter.json_property_name(SnippetProperty.COMMENT): "comment",
         converter.json_property_name(SnippetProperty.COPYRIGHT_TEXT): "copyrightText",
         converter.json_property_name(SnippetProperty.LICENSE_COMMENTS): "licenseComment",
-        converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED): "licenseExpression1",
-        converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS): ["licenseExpression2",
-                                                                                 "licenseExpression3"],
+        converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0",
+        converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS): ["MIT", "GPL-2.0"],
         converter.json_property_name(SnippetProperty.NAME): "name",
         converter.json_property_name(SnippetProperty.RANGES): [
             {"startPointer": {"reference": file_spdx_id, "offset": 1},

@@ -11,13 +11,13 @@
 
 from typing import List
 
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression, Licensing
 from spdx.validation.license_expression_validator import validate_license_expression
 from spdx.validation.validation_message import ValidationMessage
 
 
 def test_valid_license_expression():
-    license_expression = LicenseExpression("LicenseRef-1")
+    license_expression = Licensing().parse("something")
     validation_messages: List[ValidationMessage] = validate_license_expression(license_expression)
 
     assert validation_messages == []

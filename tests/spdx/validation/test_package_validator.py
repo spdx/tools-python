@@ -12,8 +12,8 @@
 from typing import List
 
 import pytest
+from license_expression import Licensing
 
-from spdx.model.license_expression import LicenseExpression
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.validation.package_validator import validate_package_within_document
@@ -39,9 +39,10 @@ def test_valid_package():
                                            verification_code=None),
                            'license_info_from_files must be None if files_analyzed is False, but is: NOASSERTION'),
                           (package_fixture(files_analyzed=False,
-                                           license_info_from_files=[LicenseExpression("some_license")],
+                                           license_info_from_files=[Licensing().parse("some_license")],
                                            verification_code=None),
-                           'license_info_from_files must be None if files_analyzed is False, but is: [LicenseExpression(expression_string=\'some_license\')]')
+                           "license_info_from_files must be None if files_analyzed is False, but is: [LicenseSymbol('some_license', "
+                                      "is_exception=False)]")
                           ])
 def test_invalid_package(package_input, expected_message):
     validation_messages: List[ValidationMessage] = validate_package_within_document(package_input,

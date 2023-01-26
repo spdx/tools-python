@@ -54,10 +54,8 @@
                 "TEXT"
             ],
             "licenseComments": "licenseComment",
-            "licenseConcluded": "licenseConcludedExpression",
-            "licenseInfoInFiles": [
-                "licenseInfoInFileExpression"
-            ],
+            "licenseConcluded": "MIT AND GPL-2.0",
+            "licenseInfoInFiles": ["MIT", "GPL-2.0"],
             "noticeText": "fileNotice"
         }
     ],
@@ -101,11 +99,9 @@
             "filesAnalyzed": true,
             "homepage": "https://homepage.com",
             "licenseComments": "packageLicenseComment",
-            "licenseConcluded": "packageLicenseConcluded",
-            "licenseDeclared": "packageLicenseDeclared",
-            "licenseInfoFromFiles": [
-                "licenseInfoFromFile"
-            ],
+            "licenseConcluded": "MIT AND GPL-2.0",
+            "licenseDeclared": "MIT AND GPL-2.0",
+            "licenseInfoFromFiles": ["MIT", "GPL-2.0"],
             "name": "packageName",
             "originator": "Person: originatorName (some@mail.com)",
             "packageFileName": "./packageFileName",
@@ -141,10 +137,8 @@
             "comment": "snippetComment",
             "copyrightText": "licenseCopyrightText",
             "licenseComments": "snippetLicenseComment",
-            "licenseConcluded": "snippetLicenseConcluded",
-            "licenseInfoInSnippets": [
-                "licenseInfoInSnippet"
-            ],
+            "licenseConcluded": "MIT AND GPL-2.0",
+            "licenseInfoInSnippets": ["MIT", "GPL-2.0"],
             "name": "snippetName",
             "ranges": [
                 {

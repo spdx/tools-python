@@ -12,7 +12,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Union
 
 from spdx.model.actor import Actor
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression
 from spdx.model.package import Package, ExternalPackageRef, PackageVerificationCode, PackagePurpose, \
     ExternalPackageRefCategory
 from spdx.model.spdx_no_assertion import SpdxNoAssertion

@@ -15,7 +15,7 @@ import pytest
 
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression, Licensing
 from spdx.model.package import PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
@@ -101,11 +101,11 @@ def test_parse_package():
                                                              "aaabd89c926ab525c242e6621f2f5fa73aa4afe3d9e24aed727faaadd6af38b620bdb623dd2b4788b1c8086984af8706")])
     assert package.homepage == "http://ftp.gnu.org/gnu/glibc"
     assert package.source_info == "uses glibc-2_11-branch from git://sourceware.org/git/glibc.git."
-    assert package.license_concluded == LicenseExpression("(LGPL-2.0-only OR LicenseRef-3)")
+    assert package.license_concluded == Licensing().parse("(LGPL-2.0-only OR LicenseRef-3)")
     TestCase().assertCountEqual(package.license_info_from_files,
-                                [LicenseExpression("GPL-2.0-only"), LicenseExpression("LicenseRef-2"),
-                                 LicenseExpression("LicenseRef-1")])
-    assert package.license_declared == LicenseExpression("(LGPL-2.0-only AND LicenseRef-3)")
+                                [Licensing().parse("GPL-2.0-only"), Licensing().parse("LicenseRef-2"),
+                                 Licensing().parse("LicenseRef-1")])
+    assert package.license_declared == Licensing().parse("(LGPL-2.0-only AND LicenseRef-3)")
     assert package.license_comment == "The license for this project changed with the release of version x.y.  The version of the project included here post-dates the license change."
     assert package.copyright_text == "Copyright 2008-2010 John Smith"
     assert package.summary == "GNU C library."
