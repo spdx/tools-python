@@ -16,6 +16,7 @@ from typing import List
 import click
 
 from spdx.model.document import Document
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.parse_anything import parse_file
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage
@@ -24,7 +25,7 @@ from spdx.writer.write_anything import write_file
 
 
 @click.command()
-@click.option("--infile", "-i", prompt="input file path", help="The file containing the document to be validated or converted.")
+@click.option("--infile", "-i", help="The file containing the document to be validated or converted.")
 @click.option("--outfile", "-o", help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion).")
 @click.option("--version", help='The SPDX version to be used during parsing and validation (format "SPDX-2.3"). Will be read from the document if not provided.', default=None)
 @click.option("--novalidation", is_flag=True, help="Don't validate the provided document.")
@@ -62,6 +63,12 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
               "a few features which will be added in time (refer to https://github.com/spdx/tools-python/issues "
               "for insights into the current status).\n"
               "In the meantime, please use the PyPI release version 0.7.0.", file=sys.stderr)
+        sys.exit(1)
+
+    except SPDXParsingError as err:
+        print("There have been issues while parsing the provided document:", file=sys.stderr)
+        for message in err.get_messages():
+            print(message, file=sys.stderr)
         sys.exit(1)
 
 
