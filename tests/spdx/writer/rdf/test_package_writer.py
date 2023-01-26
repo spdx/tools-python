@@ -73,6 +73,6 @@ def test_external_package_ref_to_graph():
 
     assert (None, None, spdx_namespace.ExternalRef) in graph
     assert (None, spdx_namespace.referenceCategory, spdx_namespace.referenceCategory_packageManager) in graph
-    assert (None, spdx_namespace.referenceType, Literal("maven-central")) in graph
+    assert (None, spdx_namespace.referenceType, URIRef("http://spdx.org/rdf/references/maven-central")) in graph
     assert (None, spdx_namespace.referenceLocator, Literal("org.apache.tomcat:tomcat:9.0.0.M4")) in graph
     assert (None, RDFS.comment, Literal("externalPackageRefComment")) in graph

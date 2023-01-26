@@ -10,12 +10,13 @@
 # limitations under the License.
 from typing import Dict
 
-from rdflib import Graph, URIRef, RDF, Literal, XSD, BNode, DOAP, RDFS, Namespace
+from rdflib import Graph, URIRef, RDF, Literal, XSD, BNode, DOAP, RDFS
 
 from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
 
-from spdx.model.package import Package, PackageVerificationCode, ExternalPackageRef
+from spdx.model.package import Package, PackageVerificationCode, ExternalPackageRef, \
+    CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
 from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_literal_or_no_assertion_or_none, \
     add_datetime_to_graph, add_namespace_to_spdx_id
 
@@ -84,10 +85,13 @@ def add_external_package_ref_to_graph(graph: Graph, external_package_ref: Extern
     graph.add((external_package_ref_node, RDF.type, spdx_namespace.ExternalRef))
     graph.add((external_package_ref_node, spdx_namespace.referenceCategory,
                spdx_namespace[f"referenceCategory_{snake_case_to_camel_case(external_package_ref.category.name)}"]))
-    # the referenceType should either be f"http://spdx.org/rdf/references/{location}" for listed locations
-    # or f"{doc_namespace}#type" for unlisted locations, as a first attempt we simply write a Literal
-    # TODO: open issue
-    graph.add((external_package_ref_node, spdx_namespace.referenceType, Literal(external_package_ref.reference_type)))
+
+    if external_package_ref.reference_type in CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES[external_package_ref.category]:
+        graph.add((external_package_ref_node, spdx_namespace.referenceType,
+                   URIRef(f"http://spdx.org/rdf/references/{external_package_ref.reference_type}")))
+    else:
+        graph.add((external_package_ref_node, spdx_namespace.referenceType,
+                   URIRef(f"{doc_namespace}#{external_package_ref.reference_type}")))
     graph.add((external_package_ref_node, spdx_namespace.referenceLocator, Literal(external_package_ref.locator)))
     if external_package_ref.comment:
         graph.add((external_package_ref_node, RDFS.comment, Literal(external_package_ref.comment)))
