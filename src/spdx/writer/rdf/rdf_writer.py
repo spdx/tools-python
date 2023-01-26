@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph
+from rdflib import Graph, DOAP
 from rdflib.compare import to_isomorphic
 
 from spdx.model.document import Document
@@ -49,4 +49,5 @@ def write_document_to_file(document: Document, file_name: str):
 
     graph = to_isomorphic(graph)
     graph.bind("spdx", spdx_namespace)
-    graph.serialize(file_name, "pretty-xml", encoding="UTF-8")
+    graph.bind("doap", DOAP)
+    graph.serialize(file_name, "pretty-xml", encoding="UTF-8", max_depth=100)
