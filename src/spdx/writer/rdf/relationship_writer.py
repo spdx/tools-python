@@ -20,7 +20,7 @@ from spdx.writer.rdf.writer_utils import spdx_namespace, add_namespace_to_spdx_i
 
 
 def add_relationship_info_to_graph(relationship: Relationship, graph: Graph, doc_namespace: str,
-                                   external_doc_namespaces: Dict[str, str]):
+                                   external_doc_ref_to_namespace: Dict[str, str]):
     relationship_node = BNode()
     graph.add((relationship_node, RDF.type, spdx_namespace.Relationship))
     graph.add((relationship_node, spdx_namespace.relationshipType,
@@ -32,8 +32,8 @@ def add_relationship_info_to_graph(relationship: Relationship, graph: Graph, doc
     else:
         graph.add((relationship_node, spdx_namespace.relatedSpdxElement,
                    URIRef(add_namespace_to_spdx_id(relationship.related_spdx_element_id, doc_namespace,
-                                                   external_doc_namespaces))))
+                                                   external_doc_ref_to_namespace))))
 
     relationship_resource = URIRef(
-        add_namespace_to_spdx_id(relationship.spdx_element_id, doc_namespace, external_doc_namespaces))
+        add_namespace_to_spdx_id(relationship.spdx_element_id, doc_namespace, external_doc_ref_to_namespace))
     graph.add((relationship_resource, spdx_namespace.relationship, relationship_node))
