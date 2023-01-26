@@ -57,7 +57,7 @@ def add_package_information_to_graph(package: Package, graph: Graph, doc_namespa
         add_literal_value(graph, package_resource, spdx_namespace.attributionText, attribution_text)
     if package.primary_package_purpose:
         graph.add((package_resource, spdx_namespace.primaryPackagePurpose,
-                   spdx_namespace[f"packagePurpose_{snake_case_to_camel_case(package.primary_package_purpose.name)}"]))
+                   spdx_namespace[f"purpose_{snake_case_to_camel_case(package.primary_package_purpose.name)}"]))
 
     add_datetime_to_graph(graph, package_resource, spdx_namespace.releaseDate, package.release_date)
     add_datetime_to_graph(graph, package_resource, spdx_namespace.builtDate, package.built_date)
@@ -91,7 +91,7 @@ def add_external_package_ref_to_graph(graph: Graph, external_package_ref: Extern
                    URIRef(f"http://spdx.org/rdf/references/{external_package_ref.reference_type}")))
     else:
         graph.add((external_package_ref_node, spdx_namespace.referenceType,
-                   URIRef(f"{doc_namespace}#{external_package_ref.reference_type}")))
+                   URIRef(external_package_ref.reference_type)))
     graph.add((external_package_ref_node, spdx_namespace.referenceLocator, Literal(external_package_ref.locator)))
     if external_package_ref.comment:
         graph.add((external_package_ref_node, RDFS.comment, Literal(external_package_ref.comment)))

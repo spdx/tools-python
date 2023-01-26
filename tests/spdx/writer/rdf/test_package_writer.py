@@ -46,8 +46,8 @@ def test_add_package_information_to_graph():
     assert (None, spdx_namespace.description, Literal("packageDescription")) in graph
     assert (None, RDFS.comment, Literal("packageComment")) in graph
     assert (URIRef("anyURI#SPDXRef-Package"), spdx_namespace.externalRef, None) in graph
-    assert (None, spdx_namespace.attributionText, Literal("packageAttributionText"))
-    assert (None, spdx_namespace.primaryPackagePurpose, spdx_namespace.primaryPackagePurpose_source)
+    assert (None, spdx_namespace.attributionText, Literal("packageAttributionText")) in graph
+    assert (None, spdx_namespace.primaryPackagePurpose, spdx_namespace.purpose_source) in graph
     assert (None, spdx_namespace.releaseDate, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
     assert (None, spdx_namespace.builtDate, Literal(datetime_to_iso_string(datetime(2022, 12, 2)))) in graph
     assert (None, spdx_namespace.validUntilDate, Literal(datetime_to_iso_string(datetime(2022, 12, 3)))) in graph

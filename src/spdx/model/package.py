@@ -57,7 +57,8 @@ class ExternalPackageRefCategory(Enum):
 CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES: Dict[ExternalPackageRefCategory, List[str]] = {
     ExternalPackageRefCategory.SECURITY : ["cpe22Type", "cpe23Type", "advisory", "fix", "url", "swid"],
     ExternalPackageRefCategory.PACKAGE_MANAGER : ["maven-central", "npm", "nuget", "bower", "purl"],
-    ExternalPackageRefCategory.PERSISTENT_ID : ["swh", "gitoid"]
+    ExternalPackageRefCategory.PERSISTENT_ID : ["swh", "gitoid"],
+    ExternalPackageRefCategory.OTHER: []
 }
 
 
