@@ -26,4 +26,4 @@ def temporary_file_path() -> str:
 def test_write_document_to_file(temporary_file_path: str):
     document: Document = document_fixture()
 
-    write_document_to_file(document, temporary_file_path)
+    write_document_to_file(document, temporary_file_path, False)

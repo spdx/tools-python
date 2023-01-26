@@ -8,10 +8,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import List
+
 from rdflib import Graph, DOAP
 from rdflib.compare import to_isomorphic
 
 from spdx.model.document import Document
+from spdx.validation.document_validator import validate_full_spdx_document
+from spdx.validation.validation_message import ValidationMessage
 from spdx.writer.rdf.annotation_writer import add_annotation_info_to_graph
 from spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
 from spdx.writer.rdf.extracted_licensing_info_writer import add_extracted_licensing_info_to_graph
@@ -22,7 +26,13 @@ from spdx.writer.rdf.snippet_writer import add_snippet_information_to_graph
 from spdx.writer.rdf.writer_utils import spdx_namespace
 
 
-def write_document_to_file(document: Document, file_name: str):
+def write_document_to_file(document: Document, file_name: str, validate: bool):
+    if validate:
+        validation_messages: List[ValidationMessage] = validate_full_spdx_document(document,
+                                                                                   document.creation_info.spdx_version)
+        if validation_messages:
+            raise ValueError(f"Document is not valid. The following errors were detected: {validation_messages}")
+
     graph = Graph()
     doc_namespace = document.creation_info.document_namespace
     external_doc_namespace_mapping = {external_doc_ref.document_ref_id: external_doc_ref.document_uri for
