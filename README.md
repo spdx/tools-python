@@ -75,11 +75,12 @@ instead of `bin`.
 
 # Dependencies
 
-* PLY: https://pypi.python.org/pypi/ply/ used for parsing.
-* rdflib: https://pypi.python.org/pypi/rdflib/ for handling RDF.
 * PyYAML: https://pypi.org/project/PyYAML/ for handling YAML.
 * xmltodict: https://pypi.org/project/xmltodict/ for handling XML.
 * click: https://pypi.org/project/click/ for creating the CLI interface.
+* rdflib: https://pypi.python.org/pypi/rdflib/ for handling RDF.
+* typeguard: https://pypi.org/project/typeguard/ for using typehints.
+* uritools: https://pypi.org/project/uritools/ for validation of URIs.
 
 # Support
 
