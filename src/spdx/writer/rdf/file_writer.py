@@ -8,17 +8,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Dict
 
 from rdflib import Graph, URIRef, Literal, RDF, RDFS
 
 from spdx.model.file import File
 from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
-from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_literal_or_no_assertion_or_none
+from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_literal_or_no_assertion_or_none, \
+    add_namespace_to_spdx_id
 
 
-def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str):
-    file_resource = URIRef(f"{doc_namespace}#{file.spdx_id}")
+def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str,
+                                  external_doc_namespaces: Dict[str, str]):
+    file_resource = URIRef(add_namespace_to_spdx_id(file.spdx_id, doc_namespace, external_doc_namespaces))
     graph.add((file_resource, RDF.type, spdx_namespace.File))
     graph.add((file_resource, spdx_namespace.fileName, Literal(file.name)))
     for file_type in file.file_type:

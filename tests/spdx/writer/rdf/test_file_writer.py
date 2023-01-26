@@ -19,7 +19,7 @@ def test_add_file_information_to_graph():
     graph = Graph()
     file = file_fixture()
 
-    add_file_information_to_graph(file, graph, "anyURI")
+    add_file_information_to_graph(file, graph, "anyURI", {})
 
     assert (URIRef("anyURI#SPDXRef-File"), RDF.type, spdx_namespace.File) in graph
     assert (None, spdx_namespace.fileName, Literal("./fileName.py")) in graph

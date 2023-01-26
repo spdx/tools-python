@@ -14,9 +14,10 @@ from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 
 
-def add_extracted_licensing_info_to_graph(extracted_licensing_info: ExtractedLicensingInfo, graph: Graph, doc_node):
+def add_extracted_licensing_info_to_graph(extracted_licensing_info: ExtractedLicensingInfo, graph: Graph, doc_node,
+                                          doc_namespace: str):
     if extracted_licensing_info.license_id:
-        extracted_licensing_info_resource = URIRef(extracted_licensing_info.license_id)
+        extracted_licensing_info_resource = URIRef(f"{doc_namespace}#{extracted_licensing_info.license_id}")
         graph.add((extracted_licensing_info_resource, RDF.type, spdx_namespace.ExtractedLicensingInfo))
     else:
         extracted_licensing_info_resource = BNode()

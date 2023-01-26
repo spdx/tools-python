@@ -19,7 +19,7 @@ def test_add_extracted_licensing_info_to_graph():
     graph = Graph()
     extracted_licensing_info = extracted_licensing_info_fixture()
 
-    add_extracted_licensing_info_to_graph(extracted_licensing_info, graph, doc_node=URIRef("anyURI"))
+    add_extracted_licensing_info_to_graph(extracted_licensing_info, graph, URIRef("anyURI"), "anyURI")
 
     assert (URIRef("anyURI"), spdx_namespace.hasExtractedLicensingInfo, None) in graph
     assert (None, None, spdx_namespace.ExtractedLicensingInfo) in graph

@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import List
+from typing import Dict
 
 from rdflib import Graph, URIRef, RDF, Literal, XSD, BNode, DOAP, RDFS, Namespace
 
@@ -17,11 +17,12 @@ from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
 
 from spdx.model.package import Package, PackageVerificationCode, ExternalPackageRef
 from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_literal_or_no_assertion_or_none, \
-    add_datetime_to_graph
+    add_datetime_to_graph, add_namespace_to_spdx_id
 
 
-def add_package_information_to_graph(package: Package, graph: Graph, doc_namespace: str):
-    package_resource = URIRef(f"{doc_namespace}#{package.spdx_id}")
+def add_package_information_to_graph(package: Package, graph: Graph, doc_namespace: str,
+                                     external_doc_namespaces: Dict[str, str]):
+    package_resource = URIRef(add_namespace_to_spdx_id(package.spdx_id, doc_namespace, external_doc_namespaces))
     graph.add((package_resource, RDF.type, spdx_namespace.Package))
 
     graph.add((package_resource, spdx_namespace.name, Literal(package.name)))

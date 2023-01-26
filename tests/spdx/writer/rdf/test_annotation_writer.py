@@ -22,7 +22,7 @@ def test_add_annotation_info_to_graph():
     graph = Graph()
     annotation = annotation_fixture()
 
-    add_annotation_info_to_graph(annotation, graph, "anyURI")
+    add_annotation_info_to_graph(annotation, graph, "anyURI", {})
 
     assert (None, None, spdx_namespace.Annotation) in graph
     assert (None, spdx_namespace.annotationType, spdx_namespace.annotationType_review) in graph
