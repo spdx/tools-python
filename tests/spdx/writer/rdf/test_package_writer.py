@@ -23,7 +23,7 @@ def test_add_package_information_to_graph():
     graph = Graph()
     package = package_fixture()
 
-    add_package_information_to_graph(package, graph, "anyURI")
+    add_package_information_to_graph(package, graph, "anyURI", {})
 
     assert (URIRef("anyURI#SPDXRef-Package"), RDF.type, spdx_namespace.Package) in graph
     assert (None, spdx_namespace.name, Literal("packageName")) in graph
@@ -52,6 +52,7 @@ def test_add_package_information_to_graph():
     assert (None, spdx_namespace.builtDate, Literal(datetime_to_iso_string(datetime(2022, 12, 2)))) in graph
     assert (None, spdx_namespace.validUntilDate, Literal(datetime_to_iso_string(datetime(2022, 12, 3)))) in graph
 
+
 def test_add_package_verification_code_to_graph():
     graph = Graph()
     verification_code = package_verification_code_fixture()
@@ -59,7 +60,8 @@ def test_add_package_verification_code_to_graph():
     add_package_verification_code_to_graph(verification_code, graph, URIRef("anyURI"))
 
     assert (None, None, spdx_namespace.PackageVerificationCode) in graph
-    assert (None, spdx_namespace.packageVerificationCodeValue, Literal("85ed0817af83a24ad8da68c2b5094de69833983c")) in graph
+    assert (None, spdx_namespace.packageVerificationCodeValue,
+            Literal("85ed0817af83a24ad8da68c2b5094de69833983c")) in graph
     assert (None, spdx_namespace.packageVerificationCodeExcludedFile, Literal("./exclude.py")) in graph
 
 
@@ -71,6 +73,6 @@ def test_external_package_ref_to_graph():
 
     assert (None, None, spdx_namespace.ExternalRef) in graph
     assert (None, spdx_namespace.referenceCategory, spdx_namespace.referenceCategory_packageManager) in graph
-    assert (None, spdx_namespace.referenceType, Literal("maven-central") ) in graph
+    assert (None, spdx_namespace.referenceType, Literal("maven-central")) in graph
     assert (None, spdx_namespace.referenceLocator, Literal("org.apache.tomcat:tomcat:9.0.0.M4")) in graph
     assert (None, RDFS.comment, Literal("externalPackageRefComment")) in graph

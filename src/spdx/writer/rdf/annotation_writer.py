@@ -8,16 +8,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Dict
+
 from rdflib import Graph, Literal, RDFS, URIRef, RDF, BNode
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.annotation import Annotation
 from spdx.writer.casing_tools import snake_case_to_camel_case
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import spdx_namespace, add_namespace_to_spdx_id
 
 
-def add_annotation_info_to_graph(annotation: Annotation, graph: Graph, doc_namespace: str):
-    annotation_resource = URIRef(f"{doc_namespace}#{annotation.spdx_id}")
+def add_annotation_info_to_graph(annotation: Annotation, graph: Graph, doc_namespace: str,
+                                 external_doc_namespaces: Dict[str, str]):
+    annotation_resource = URIRef(add_namespace_to_spdx_id(annotation.spdx_id, doc_namespace, external_doc_namespaces))
     annotation_node = BNode()
     graph.add((annotation_node, RDF.type, spdx_namespace.Annotation))
     graph.add((annotation_node, spdx_namespace.annotationType,

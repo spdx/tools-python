@@ -18,7 +18,7 @@ from tests.spdx.fixtures import relationship_fixture
 def test_add_relationship_info_to_graph():
     relationship = relationship_fixture()
     graph = Graph()
-    add_relationship_info_to_graph(relationship, graph, "anyURI")
+    add_relationship_info_to_graph(relationship, graph, "anyURI", {})
 
     assert (None, spdx_namespace.relationshipType, spdx_namespace.relationshipType_describes) in graph
     assert (None, spdx_namespace.relatedSpdxElement, None) in graph

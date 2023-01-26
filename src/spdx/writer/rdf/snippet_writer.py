@@ -8,19 +8,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Tuple, Optional
+from typing import Tuple, Optional, Dict
 
 from rdflib import Graph, URIRef, RDF, RDFS, Literal
-from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_or_no_assertion_or_none, add_literal_value
+from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_or_no_assertion_or_none, add_literal_value, \
+    add_namespace_to_spdx_id
 
 from spdx.model.snippet import Snippet
 
 
-def add_snippet_information_to_graph(snippet: Snippet, graph: Graph, doc_namespace: str):
-    snippet_resource = URIRef(f"{doc_namespace}#{snippet.spdx_id}")
+def add_snippet_information_to_graph(snippet: Snippet, graph: Graph, doc_namespace: str,
+                                     external_doc_namespaces: Dict[str, str]):
+    snippet_resource = URIRef(add_namespace_to_spdx_id(snippet.spdx_id, doc_namespace, external_doc_namespaces))
     graph.add((snippet_resource, RDF.type, spdx_namespace.Snippet))
 
-    graph.add((snippet_resource, spdx_namespace.snippetFromFile, URIRef(snippet.file_spdx_id)))
+    graph.add((snippet_resource, spdx_namespace.snippetFromFile,
+               URIRef(add_namespace_to_spdx_id(snippet.file_spdx_id, doc_namespace, external_doc_namespaces))))
     add_range_to_graph(graph, snippet_resource, snippet.byte_range, snippet.file_spdx_id)
     add_range_to_graph(graph, snippet_resource, snippet.line_range, snippet.file_spdx_id)
     add_literal_or_no_assertion_or_none(graph, snippet_resource, spdx_namespace.licenseConcluded,

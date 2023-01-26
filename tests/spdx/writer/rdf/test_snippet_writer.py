@@ -19,7 +19,7 @@ def test_add_snippet_information_to_graph():
     graph = Graph()
     snippet = snippet_fixture()
 
-    add_snippet_information_to_graph(snippet, graph, "anyURI")
+    add_snippet_information_to_graph(snippet, graph, "anyURI", {})
 
     assert (URIRef("anyURI#SPDXRef-Snippet"), RDF.type, spdx_namespace.Snippet) in graph
     assert (None, spdx_namespace.snippetFromFile, URIRef(snippet.file_spdx_id)) in graph
@@ -30,5 +30,3 @@ def test_add_snippet_information_to_graph():
     assert (None, spdx_namespace.name, Literal("snippetName")) in graph
     assert (None, spdx_namespace.attributionText, Literal("snippetAttributionText")) in graph
     assert (None, RDFS.comment, Literal("snippetComment")) in graph
-
-
