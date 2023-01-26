@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "spdx-tools"
-authors = [{name = "Ahmed H. Ismail", email = "ahm3d.hisham@gmail.com"}]
+authors = [{ name = "Ahmed H. Ismail", email = "ahm3d.hisham@gmail.com" }]
 maintainers = [
-    {name = "Philippe Ombredanne", email = "pombredanne@gmail.com"},
-    {name = "SPDX group at the Linux Foundation and others"},
+    { name = "Philippe Ombredanne", email = "pombredanne@gmail.com" },
+    { name = "SPDX group at the Linux Foundation and others" },
 ]
-license = {text = "Apache-2.0"}
+license = { text = "Apache-2.0" }
 description = "SPDX parser and tools."
 readme = "README.md"
 classifiers = [
@@ -22,9 +22,9 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-urls = {Homepage = "https://github.com/spdx/tools-python"}
+urls = { Homepage = "https://github.com/spdx/tools-python" }
 requires-python = ">=3.7"
-dependencies = ["ply", "rdflib", "click", "pyyaml", "xmltodict", "typeguard", "uritools", "license_expression"]
+dependencies = ["click", "pyyaml", "xmltodict", "rdflib", "typeguard", "uritools", "license_expression"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
@@ -41,7 +41,7 @@ include-package-data = true
 where = ["src"]
 
 [tool.setuptools_scm]
-git_describe_command = ["git", "describe", "--dirty", "--tags", "--long", "--match",  "v[0-9]*"]  # `python3.6` tag falsely matches to the default one, clrearly a bug in setuptools_scm
+git_describe_command = ["git", "describe", "--dirty", "--tags", "--long", "--match", "v[0-9]*"]  # `python3.6` tag falsely matches to the default one, clearly a bug in setuptools_scm
 
 [tool.aliases]
 release = "clean --all sdist --formats=gztar bdist_wheel"
