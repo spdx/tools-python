@@ -23,7 +23,7 @@ from spdx.writer.rdf.file_writer import add_file_information_to_graph
 from spdx.writer.rdf.package_writer import add_package_information_to_graph
 from spdx.writer.rdf.relationship_writer import add_relationship_info_to_graph
 from spdx.writer.rdf.snippet_writer import add_snippet_information_to_graph
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import spdx_namespace, pointer_namespace
 
 
 def write_document_to_file(document: Document, file_name: str, validate: bool):
@@ -59,4 +59,5 @@ def write_document_to_file(document: Document, file_name: str, validate: bool):
     graph = to_isomorphic(graph)
     graph.bind("spdx", spdx_namespace)
     graph.bind("doap", DOAP)
+    graph.bind("ptr", pointer_namespace)
     graph.serialize(file_name, "pretty-xml", encoding="UTF-8", max_depth=100)

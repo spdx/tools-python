@@ -20,6 +20,7 @@ from spdx.model.spdx_none import SpdxNone
 from spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
 
 spdx_namespace = Namespace("http://spdx.org/rdf/terms#")
+pointer_namespace = Namespace("http://www.w3.org/2009/pointers#")
 
 
 def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Any):
