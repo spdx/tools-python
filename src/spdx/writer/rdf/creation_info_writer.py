@@ -12,6 +12,7 @@ from rdflib import Graph, BNode, RDF, Literal, RDFS, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.document import CreationInfo
+from spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
 from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value
 
 
@@ -35,5 +36,8 @@ def add_creation_info_to_graph(creation_info: CreationInfo, graph: Graph):
     add_literal_value(graph, creation_info_node, RDFS.comment, creation_info.creator_comment)
 
     graph.add((doc_node, spdx_namespace.creationInfo, creation_info_node))
+
+    for external_document_ref in creation_info.external_document_refs:
+        add_external_document_ref_to_graph(external_document_ref, graph, doc_node, creation_info.document_namespace)
 
     return doc_node
