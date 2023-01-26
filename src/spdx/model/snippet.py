@@ -12,7 +12,7 @@ from dataclasses import field
 from typing import Tuple, Optional, List, Union
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from common.typing.type_checks import check_types_and_set_values

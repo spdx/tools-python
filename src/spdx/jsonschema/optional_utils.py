@@ -18,4 +18,4 @@ def apply_if_present(function: Callable[[T], S], optional_value: Optional[T]) ->
     """
     Apply the passed function to the optional value if it is not None. Else returns None.
     """
-    return function(optional_value) if optional_value else None
+    return function(optional_value) if optional_value is not None else None

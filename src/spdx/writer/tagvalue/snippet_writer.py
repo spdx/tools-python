@@ -11,8 +11,7 @@
 from typing import TextIO
 
 from spdx.model.snippet import Snippet
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, write_range, \
-    write_license_expression
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, write_range
 
 
 def write_snippet(snippet: Snippet, output_text: TextIO):
@@ -23,8 +22,9 @@ def write_snippet(snippet: Snippet, output_text: TextIO):
     write_range("SnippetByteRange", snippet.byte_range, output_text)
     write_range("SnippetLineRange", snippet.line_range, output_text)
 
-    write_license_expression("SnippetLicenseConcluded", snippet.license_concluded, output_text)
-    write_license_expression("LicenseInfoInSnippet", snippet.license_info_in_snippet, output_text)
+    write_value("SnippetLicenseConcluded", snippet.license_concluded, output_text)
+    for license_info in snippet.license_info_in_snippet:
+        write_value("LicenseInfoInSnippet", license_info, output_text)
     write_text_value("SnippetLicenseComments", snippet.license_comment, output_text)
     write_text_value("SnippetCopyrightText", snippet.copyright_text, output_text)
 

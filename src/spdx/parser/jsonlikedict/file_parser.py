@@ -12,7 +12,7 @@ from typing import Dict, List, Optional, Union
 
 from spdx.model.checksum import Checksum
 from spdx.model.file import File, FileType
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.jsonlikedict.checksum_parser import ChecksumParser

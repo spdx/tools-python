@@ -22,7 +22,7 @@ def test_valid_url(input_value):
 
 
 # TODO: more negative examples: https://github.com/spdx/tools-python/issues/377
-@pytest.mark.parametrize("input_value", [":::::", ])
+@pytest.mark.parametrize("input_value", [":::::", "http://testurl"])
 def test_invalid_url(input_value):
     assert validate_url(input_value) == [f"must be a valid URL, but is: {input_value}"]
 

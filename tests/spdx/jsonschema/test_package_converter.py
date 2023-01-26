@@ -22,7 +22,7 @@ from spdx.model.actor import Actor, ActorType
 from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.document import Document
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression, Licensing
 from spdx.model.package import Package, PackageVerificationCode, PackagePurpose
 from spdx.model.relationship import RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
@@ -100,10 +100,10 @@ def test_successful_conversion(converter: PackageConverter):
                       verification_code=PackageVerificationCode("value"),
                       checksums=[Checksum(ChecksumAlgorithm.SHA1, "sha1"),
                                  Checksum(ChecksumAlgorithm.BLAKE2B_256, "blake")], homepage="homepage",
-                      source_info="sourceInfo", license_concluded=LicenseExpression("licenseExpression1"),
-                      license_info_from_files=[LicenseExpression("licenseExpression2"),
-                                               LicenseExpression("licenseExpression3")],
-                      license_declared=LicenseExpression("licenseExpression4"), license_comment="licenseComment",
+                      source_info="sourceInfo", license_concluded=Licensing().parse("MIT and GPL-2.0"),
+                      license_info_from_files=[Licensing().parse("MIT"),
+                                               Licensing().parse("GPL-2.0")],
+                      license_declared=Licensing().parse("MIT or GPL-2.0 "), license_comment="licenseComment",
                       copyright_text="copyrightText", summary="summary", description="description", comment="comment",
                       external_references=[external_package_ref_fixture()],
                       attribution_texts=["attributionText1", "attributionText2"],
@@ -131,10 +131,9 @@ def test_successful_conversion(converter: PackageConverter):
         converter.json_property_name(PackageProperty.CHECKSUMS): ["mock_converted_checksum", "mock_converted_checksum"],
         converter.json_property_name(PackageProperty.HOMEPAGE): "homepage",
         converter.json_property_name(PackageProperty.SOURCE_INFO): "sourceInfo",
-        converter.json_property_name(PackageProperty.LICENSE_CONCLUDED): "licenseExpression1",
-        converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES): ["licenseExpression2",
-                                                                                "licenseExpression3"],
-        converter.json_property_name(PackageProperty.LICENSE_DECLARED): "licenseExpression4",
+        converter.json_property_name(PackageProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0",
+        converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES): ["MIT", "GPL-2.0"],
+        converter.json_property_name(PackageProperty.LICENSE_DECLARED): "MIT OR GPL-2.0",
         converter.json_property_name(PackageProperty.LICENSE_COMMENTS): "licenseComment",
         converter.json_property_name(PackageProperty.COPYRIGHT_TEXT): "copyrightText",
         converter.json_property_name(PackageProperty.SUMMARY): "summary",

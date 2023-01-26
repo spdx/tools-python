@@ -4,7 +4,7 @@ from unittest import mock
 import pytest
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression, Licensing
 from spdx.model.package import Package, PackagePurpose
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
@@ -16,7 +16,7 @@ from spdx.model.spdx_none import SpdxNone
 @mock.patch('spdx.model.actor.Actor', autospec=True)
 def test_correct_initialization(actor, verif_code, checksum, ext_ref):
     package = Package("id", "name", SpdxNoAssertion(), "version", "file_name", SpdxNoAssertion(), actor, True,
-                      verif_code, [checksum], "homepage", "source_info", None, [LicenseExpression("expression")],
+                      verif_code, [checksum], "homepage", "source_info", None, [Licensing().parse("license and expression")],
                       SpdxNone(), "comment on license", "copyright", "summary", "description", "comment",
                       [ext_ref, ext_ref], ["text"], PackagePurpose.OTHER, datetime(2022, 1, 1), None, None)
     assert package.spdx_id == "id"
@@ -32,7 +32,7 @@ def test_correct_initialization(actor, verif_code, checksum, ext_ref):
     assert package.homepage == "homepage"
     assert package.source_info == "source_info"
     assert package.license_concluded is None
-    assert package.license_info_from_files == [LicenseExpression("expression")]
+    assert package.license_info_from_files == [Licensing().parse("license and expression")]
     assert package.license_declared == SpdxNone()
     assert package.license_comment == "comment on license"
     assert package.copyright_text == "copyright"

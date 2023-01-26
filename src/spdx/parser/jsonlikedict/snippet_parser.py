@@ -11,7 +11,7 @@
 from enum import auto, Enum
 from typing import Dict, Tuple, List, Optional, Union
 
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression
 from spdx.model.snippet import Snippet
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone

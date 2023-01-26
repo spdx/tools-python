@@ -12,7 +12,7 @@ from typing import TextIO, Tuple, List, Dict, Any, Union, Callable, Optional
 
 from spdx.model.actor import Actor
 from spdx.model.file import File
-from spdx.model.license_expression import LicenseExpression
+from license_expression import LicenseExpression
 from spdx.model.package import Package
 from spdx.model.relationship import Relationship
 from spdx.model.snippet import Snippet
@@ -25,7 +25,7 @@ def write_separator(out: TextIO):
 
 
 def write_value(tag: str, value: Optional[Union[bool, str, SpdxNone, SpdxNoAssertion]], out: TextIO):
-    if value:
+    if value is not None:
         out.write(f"{tag}: {value}\n")
 
 
@@ -63,17 +63,6 @@ def write_actor(tag: str, element_to_write: Optional[Union[Actor, SpdxNoAssertio
         write_value(tag, element_to_write.to_serialized_string(), text_output)
     else:
         write_value(tag, element_to_write, text_output)
-
-
-def write_license_expression(tag: str, element_to_write: Optional[Union[
-    List[LicenseExpression], LicenseExpression, SpdxNoAssertion, SpdxNone]], text_output: TextIO):
-    if isinstance(element_to_write, (SpdxNone, SpdxNoAssertion, str)):
-        write_value(tag, element_to_write, text_output)
-    elif isinstance(element_to_write, LicenseExpression):
-        write_value(tag, element_to_write.expression_string, text_output)
-    elif isinstance(element_to_write, list):
-        for element in element_to_write:
-            write_value(tag, element.expression_string, text_output)
 
 
 def scan_relationships(relationships: List[Relationship], packages: List[Package], files: List[File]) \
