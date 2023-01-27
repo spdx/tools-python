@@ -37,9 +37,10 @@ def test_add_package_information_to_graph():
     assert (URIRef("anyURI#SPDXRef-Package"), spdx_namespace.checksum, None) in graph
     assert (None, DOAP.homepage, Literal("https://homepage.com")) in graph
     assert (None, spdx_namespace.sourceInfo, Literal("sourceInfo")) in graph
-    assert (None, spdx_namespace.licenseConcluded, Literal("packageLicenseConcluded")) in graph
-    assert (None, spdx_namespace.licenseInfoFromFiles, Literal("licenseInfoFromFile")) in graph
-    assert (None, spdx_namespace.licenseDeclared, Literal("packageLicenseDeclared")) in graph
+    assert (None, spdx_namespace.licenseConcluded, Literal("MIT AND GPL-2.0")) in graph
+    assert (None, spdx_namespace.licenseInfoFromFiles, Literal("MIT")) in graph
+    assert (None, spdx_namespace.licenseInfoFromFiles, Literal("GPL-2.0")) in graph
+    assert (None, spdx_namespace.licenseDeclared, Literal("MIT AND GPL-2.0")) in graph
     assert (None, spdx_namespace.licenseComments, Literal("packageLicenseComment")) in graph
     assert (None, spdx_namespace.copyrightText, Literal("packageCopyrightText")) in graph
     assert (None, spdx_namespace.summary, Literal("packageSummary")) in graph

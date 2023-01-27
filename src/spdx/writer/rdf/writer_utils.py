@@ -24,7 +24,7 @@ pointer_namespace = Namespace("http://www.w3.org/2009/pointers#")
 
 
 def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Any):
-    if not value:
+    if value is None:
         return
     if not isinstance(value, list):
         graph.add((parent, predicate, Literal(str(value))))
@@ -36,7 +36,7 @@ def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Any):
 
 
 def add_literal_or_no_assertion_or_none(graph: Graph, parent: Node, predicate: Node, value: Any):
-    if not value:
+    if value is None:
         return
     if isinstance(value, SpdxNone):
         graph.add((parent, predicate, spdx_namespace.none))
@@ -45,7 +45,7 @@ def add_literal_or_no_assertion_or_none(graph: Graph, parent: Node, predicate: N
 
 
 def add_literal_or_no_assertion(graph: Graph, parent: Node, predicate: Node, value: Any):
-    if not value:
+    if value is None:
         return
     if isinstance(value, SpdxNoAssertion):
         graph.add((parent, predicate, spdx_namespace.noassertion))
