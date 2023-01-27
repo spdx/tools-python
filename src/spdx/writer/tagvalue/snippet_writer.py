@@ -15,21 +15,21 @@ from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, w
     write_license_info_list
 
 
-def write_snippet(snippet: Snippet, output_text: TextIO):
-    output_text.write("## Snippet Information\n")
+def write_snippet(snippet: Snippet, text_output: TextIO):
+    text_output.write("## Snippet Information\n")
 
-    write_value("SnippetSPDXID", snippet.spdx_id, output_text)
-    write_value("SnippetFromFileSPDXID", snippet.file_spdx_id, output_text)
-    write_range("SnippetByteRange", snippet.byte_range, output_text)
-    write_range("SnippetLineRange", snippet.line_range, output_text)
+    write_value("SnippetSPDXID", snippet.spdx_id, text_output)
+    write_value("SnippetFromFileSPDXID", snippet.file_spdx_id, text_output)
+    write_range("SnippetByteRange", snippet.byte_range, text_output)
+    write_range("SnippetLineRange", snippet.line_range, text_output)
 
-    write_value("SnippetLicenseConcluded", snippet.license_concluded, output_text)
-    write_license_info_list("LicenseInfoInSnippet", snippet.license_info_in_snippet, output_text)
-    write_text_value("SnippetLicenseComments", snippet.license_comment, output_text)
-    write_text_value("SnippetCopyrightText", snippet.copyright_text, output_text)
+    write_value("SnippetLicenseConcluded", snippet.license_concluded, text_output)
+    write_license_info_list("LicenseInfoInSnippet", snippet.license_info_in_snippet, text_output)
+    write_text_value("SnippetLicenseComments", snippet.license_comment, text_output)
+    write_text_value("SnippetCopyrightText", snippet.copyright_text, text_output)
 
-    write_text_value("SnippetComment", snippet.comment, output_text)
-    write_value("SnippetName", snippet.name, output_text)
+    write_text_value("SnippetComment", snippet.comment, text_output)
+    write_value("SnippetName", snippet.name, text_output)
 
     for attribution_text in snippet.attribution_texts:
-        write_text_value("SnippetAttributionText", attribution_text, output_text)
+        write_text_value("SnippetAttributionText", attribution_text, text_output)
