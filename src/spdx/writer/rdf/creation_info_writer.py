@@ -20,7 +20,7 @@ def add_creation_info_to_graph(creation_info: CreationInfo, graph: Graph):
     doc_node = URIRef(f"{creation_info.document_namespace}#{creation_info.spdx_id}")
     graph.add((doc_node, RDF.type, spdx_namespace.SpdxDocument))
     graph.add((doc_node, spdx_namespace.specVersion, Literal(creation_info.spdx_version)))
-    graph.add((doc_node, spdx_namespace.dataLicense, Literal(creation_info.data_license)))
+    graph.add((doc_node, spdx_namespace.dataLicense, URIRef(f"http://spdx.org/licenses/{creation_info.data_license}")))
     graph.add((doc_node, spdx_namespace.name, Literal(creation_info.name)))
     add_literal_value(graph, doc_node, RDFS.comment, creation_info.document_comment)
 
