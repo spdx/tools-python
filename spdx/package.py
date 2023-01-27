@@ -12,14 +12,16 @@ import warnings
 from datetime import datetime
 from enum import Enum
 from functools import reduce
-from typing import Optional
+from typing import Optional, Union
 
 from spdx import creationinfo
 from spdx import license
 from spdx import utils
 from spdx.checksum import Checksum, ChecksumAlgorithm
+from spdx.creationinfo import Creator
 from spdx.parsers.builderexceptions import SPDXValueError
 from spdx.parsers.loggers import ErrorMessages
+from spdx.utils import NoAssert
 
 
 class PackagePurpose(Enum):
@@ -95,8 +97,8 @@ class Package(object):
         self.spdx_id = spdx_id
         self.version = version
         self.file_name = file_name
-        self.supplier = supplier
-        self.originator = originator
+        self.supplier: Optional[Union[Creator, NoAssert]] = supplier
+        self.originator: Optional[Union[Creator, NoAssert]] = originator
         self.download_location = download_location
         self.files_analyzed = None
         self.homepage = None

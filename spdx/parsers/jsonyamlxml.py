@@ -20,7 +20,7 @@ from spdx.parsers import rdf
 from spdx.parsers.builderexceptions import SPDXValueError, CardinalityError, OrderError
 from spdx.parsers.loggers import ErrorMessages
 from spdx.snippet import Snippet
-from spdx.utils import UnKnown
+from spdx.utils import UnKnown, NoAssert
 
 ERROR_MESSAGES = rdf.ERROR_MESSAGES
 
@@ -1243,6 +1243,8 @@ class PackageParser(BaseParser):
         - pkg_supplier: Python str/unicode
         """
         if isinstance(pkg_supplier, str):
+            if pkg_supplier == "NOASSERTION":
+                return self.builder.set_pkg_supplier(self.document, NoAssert())
             entity = self.builder.create_entity(self.document, pkg_supplier)
             try:
                 return self.builder.set_pkg_supplier(self.document, entity)
@@ -1261,6 +1263,8 @@ class PackageParser(BaseParser):
         - pkg_originator: Python str/unicode
         """
         if isinstance(pkg_originator, str):
+            if pkg_originator == "NOASSERTION":
+                return self.builder.set_pkg_originator(self.document, NoAssert())
             entity = self.builder.create_entity(self.document, pkg_originator)
             try:
                 return self.builder.set_pkg_originator(self.document, entity)
