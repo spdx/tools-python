@@ -14,7 +14,7 @@ from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.package import Package, PackageVerificationCode
 from spdx.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, \
-    transform_enum_name_to_tv, write_actor
+    transform_enum_name_to_tv, write_actor, write_license_info_list
 
 
 def write_package(package: Package, text_output: TextIO):
@@ -40,8 +40,7 @@ def write_package(package: Package, text_output: TextIO):
     write_text_value("PackageSourceInfo", package.source_info, text_output)
 
     write_value("PackageLicenseConcluded", package.license_concluded, text_output)
-    for license_info in package.license_info_from_files:
-        write_value("PackageLicenseInfoFromFiles", license_info, text_output)
+    write_license_info_list("PackageLicenseInfoFromFiles", package.license_info_from_files, text_output)
     write_value("PackageLicenseDeclared", package.license_declared, text_output)
     write_text_value("PackageLicenseComments", package.license_comment, text_output)
     write_text_value("PackageCopyrightText", package.copyright_text, text_output)

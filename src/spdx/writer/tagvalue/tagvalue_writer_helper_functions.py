@@ -24,7 +24,7 @@ def write_separator(out: TextIO):
     out.write("\n")
 
 
-def write_value(tag: str, value: Optional[Union[bool, str, SpdxNone, SpdxNoAssertion]], out: TextIO):
+def write_value(tag: str, value: Optional[Union[bool, str, SpdxNone, SpdxNoAssertion, LicenseExpression]], out: TextIO):
     if value is not None:
         out.write(f"{tag}: {value}\n")
 
@@ -56,6 +56,15 @@ def write_list_of_elements(list_of_elements: List[Any], write_method: Callable[[
         write_method(element, text_output)
         if with_separator:
             write_separator(text_output)
+
+
+def write_license_info_list(tag: str, license_infos: Union[SpdxNone, SpdxNoAssertion, List[LicenseExpression]], text_output: TextIO):
+    if isinstance(license_infos, (SpdxNone, SpdxNoAssertion)):
+        write_value(tag, license_infos, text_output)
+        return
+
+    for license_info in license_infos:
+        write_value(tag, license_info, text_output)
 
 
 def write_actor(tag: str, element_to_write: Optional[Union[Actor, SpdxNoAssertion]], text_output: TextIO):
