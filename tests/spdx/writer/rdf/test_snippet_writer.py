@@ -23,8 +23,9 @@ def test_add_snippet_information_to_graph():
 
     assert (URIRef("anyURI#SPDXRef-Snippet"), RDF.type, spdx_namespace.Snippet) in graph
     assert (None, spdx_namespace.snippetFromFile, URIRef(f"anyURI#{snippet.file_spdx_id}")) in graph
-    assert (None, spdx_namespace.licenseConcluded, Literal("snippetLicenseConcluded")) in graph
-    assert (None, spdx_namespace.licenseInfoInSnippet, Literal("licenseInfoInSnippet")) in graph
+    assert (None, spdx_namespace.licenseConcluded, Literal("MIT AND GPL-2.0")) in graph
+    assert (None, spdx_namespace.licenseInfoInSnippet, Literal("MIT")) in graph
+    assert (None, spdx_namespace.licenseInfoInSnippet, Literal("GPL-2.0")) in graph
     assert (None, spdx_namespace.licenseComments, Literal("snippetLicenseComment")) in graph
     assert (None, spdx_namespace.copyrightText, Literal("licenseCopyrightText")) in graph
     assert (None, spdx_namespace.name, Literal("snippetName")) in graph
