@@ -44,11 +44,8 @@ class LicenseExpressionParser:
         license_expressions = []
         logger = Logger()
         for license_expression_str in license_expression_str_or_list:
-            try:
-                license_expressions = append_parsed_field_or_log_error(logger, license_expressions,
-                                                                       license_expression_str,
-                                                                       self.parse_license_expression)
-            except ExpressionError as err:
-                logger.append(err.args[0])
+            license_expressions = append_parsed_field_or_log_error(logger, license_expressions,
+                                                                   license_expression_str,
+                                                                   self.parse_license_expression)
         raise_parsing_error_if_logger_has_messages(logger)
         return license_expressions
