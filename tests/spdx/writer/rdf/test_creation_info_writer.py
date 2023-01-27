@@ -26,9 +26,10 @@ def test_add_creation_info_to_graph():
 
     assert (None, None, spdx_namespace.SpdxDocument) in graph
     assert (URIRef(f"{creation_info.document_namespace}#{creation_info.spdx_id}"), None, None) in graph
-    assert (None, spdx_namespace.creationInfo, None) in graph
+    assert (None, spdx_namespace.dataLicense, URIRef("https://spdx.org/licenses/CC0-1.0"))
     assert (None, spdx_namespace.name, Literal("documentName")) in graph
     assert (None, spdx_namespace.specVersion, Literal("SPDX-2.3")) in graph
+    assert (None, spdx_namespace.creationInfo, None) in graph
 
     assert (None, None, spdx_namespace.CreationInfo) in graph
     assert (None, spdx_namespace.created, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
