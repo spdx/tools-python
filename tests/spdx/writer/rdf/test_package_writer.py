@@ -25,7 +25,6 @@ def test_add_package_information_to_graph():
 
     add_package_information_to_graph(package, graph, "anyURI", {})
 
-    graph.serialize("package.rdf.xml", "pretty-xml", max_depth =100)
     assert (URIRef("anyURI#SPDXRef-Package"), RDF.type, spdx_namespace.Package) in graph
     assert (None, spdx_namespace.name, Literal("packageName")) in graph
     assert (None, spdx_namespace.versionInfo, Literal("12.2")) in graph
