@@ -10,7 +10,7 @@
 # limitations under the License.
 from datetime import datetime
 
-from license_expression import Licensing
+from license_expression import get_spdx_licensing
 
 from spdx.model.actor import Actor, ActorType
 from spdx.model.annotation import Annotation, AnnotationType
@@ -56,13 +56,13 @@ def creation_info_fixture(spdx_version="SPDX-2.3", spdx_id="SPDXRef-DOCUMENT", n
 
 
 def file_fixture(name="./fileName.py", spdx_id="SPDXRef-File", checksums=None, file_type=None,
-                 license_concluded=Licensing().parse("MIT and GPL-2.0"), license_info_in_file=None,
+                 license_concluded=get_spdx_licensing().parse("MIT and GPL-2.0"), license_info_in_file=None,
                  license_comment="licenseComment", copyright_text="copyrightText", comment="fileComment",
                  notice="fileNotice", contributors=None, attribution_texts=None) -> File:
     checksums = [checksum_fixture()] if checksums is None else checksums
     file_type = [FileType.TEXT] if file_type is None else file_type
-    license_info_in_file = [Licensing().parse("MIT"),
-                            Licensing().parse("GPL-2.0")] if license_info_in_file is None else license_info_in_file
+    license_info_in_file = [get_spdx_licensing().parse("MIT"),
+                            get_spdx_licensing().parse("GPL-2.0")] if license_info_in_file is None else license_info_in_file
     contributors = ["fileContributor"] if contributors is None else contributors
     attribution_texts = ["fileAttributionText"] if attribution_texts is None else attribution_texts
     return File(name=name, spdx_id=spdx_id, checksums=checksums, file_type=file_type,
@@ -76,15 +76,15 @@ def package_fixture(spdx_id="SPDXRef-Package", name="packageName", download_loca
                     supplier=actor_fixture(name="supplierName"), originator=actor_fixture(name="originatorName"),
                     files_analyzed=True, verification_code=package_verification_code_fixture(), checksums=None,
                     homepage="https://homepage.com", source_info="sourceInfo",
-                    license_concluded=Licensing().parse("MIT and GPL-2.0"), license_info_from_files=None,
-                    license_declared=Licensing().parse("MIT and GPL-2.0"),
+                    license_concluded=get_spdx_licensing().parse("MIT and GPL-2.0"), license_info_from_files=None,
+                    license_declared=get_spdx_licensing().parse("MIT and GPL-2.0"),
                     license_comment="packageLicenseComment", copyright_text="packageCopyrightText",
                     summary="packageSummary", description="packageDescription", comment="packageComment",
                     external_references=None, attribution_texts=None, primary_package_purpose=PackagePurpose.SOURCE,
                     release_date=datetime(2022, 12, 1), built_date=datetime(2022, 12, 2),
                     valid_until_date=datetime(2022, 12, 3)) -> Package:
     checksums = [checksum_fixture()] if checksums is None else checksums
-    license_info_from_files = [Licensing().parse("MIT"), Licensing().parse(
+    license_info_from_files = [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse(
         "GPL-2.0")] if license_info_from_files is None else license_info_from_files
     external_references = [external_package_ref_fixture()] if external_references is None else external_references
     attribution_texts = ["packageAttributionText"] if attribution_texts is None else attribution_texts
@@ -111,11 +111,11 @@ def external_package_ref_fixture(category=ExternalPackageRefCategory.PACKAGE_MAN
 
 
 def snippet_fixture(spdx_id="SPDXRef-Snippet", file_spdx_id="SPDXRef-File", byte_range=(1, 2),
-                    line_range=(3, 4), license_concluded=Licensing().parse("MIT and GPL-2.0"),
+                    line_range=(3, 4), license_concluded=get_spdx_licensing().parse("MIT and GPL-2.0"),
                     license_info_in_snippet=None, license_comment="snippetLicenseComment",
                     copyright_text="licenseCopyrightText", comment="snippetComment", name="snippetName",
                     attribution_texts=None) -> Snippet:
-    license_info_in_snippet = [Licensing().parse("MIT"), Licensing().parse(
+    license_info_in_snippet = [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse(
         "GPL-2.0")] if license_info_in_snippet is None else license_info_in_snippet
     attribution_texts = ["snippetAttributionText"] if attribution_texts is None else attribution_texts
     return Snippet(spdx_id=spdx_id, file_spdx_id=file_spdx_id, byte_range=byte_range, line_range=line_range,

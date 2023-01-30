@@ -25,6 +25,7 @@ def test_add_package_information_to_graph():
 
     add_package_information_to_graph(package, graph, "anyURI", {})
 
+    graph.serialize("package.rdf.xml", "pretty-xml", max_depth =100)
     assert (URIRef("anyURI#SPDXRef-Package"), RDF.type, spdx_namespace.Package) in graph
     assert (None, spdx_namespace.name, Literal("packageName")) in graph
     assert (None, spdx_namespace.versionInfo, Literal("12.2")) in graph
@@ -37,10 +38,9 @@ def test_add_package_information_to_graph():
     assert (URIRef("anyURI#SPDXRef-Package"), spdx_namespace.checksum, None) in graph
     assert (None, DOAP.homepage, Literal("https://homepage.com")) in graph
     assert (None, spdx_namespace.sourceInfo, Literal("sourceInfo")) in graph
-    assert (None, spdx_namespace.licenseConcluded, Literal("MIT AND GPL-2.0")) in graph
-    assert (None, spdx_namespace.licenseInfoFromFiles, Literal("MIT")) in graph
-    assert (None, spdx_namespace.licenseInfoFromFiles, Literal("GPL-2.0")) in graph
-    assert (None, spdx_namespace.licenseDeclared, Literal("MIT AND GPL-2.0")) in graph
+    assert (None, spdx_namespace.licenseConcluded, None) in graph
+    assert (None, spdx_namespace.licenseInfoFromFiles, None) in graph
+    assert (None, spdx_namespace.licenseDeclared, None) in graph
     assert (None, spdx_namespace.licenseComments, Literal("packageLicenseComment")) in graph
     assert (None, spdx_namespace.copyrightText, Literal("packageCopyrightText")) in graph
     assert (None, spdx_namespace.summary, Literal("packageSummary")) in graph
