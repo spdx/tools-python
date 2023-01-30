@@ -14,7 +14,7 @@ import pytest
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.file import FileType
-from license_expression import LicenseExpression, Licensing
+from license_expression import Licensing
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
 from spdx.parser.jsonlikedict.file_parser import FileParser
@@ -126,4 +126,5 @@ def test_parse_invalid_file_types():
     with pytest.raises(SPDXParsingError) as err:
         file_parser.parse_file_types(file_types_list)
 
-    TestCase().assertCountEqual(err.value.get_messages(), ["Error while parsing FileType: ['Invalid FileType: APPLICAON']"])
+    TestCase().assertCountEqual(err.value.get_messages(),
+                                ["Error while parsing FileType: ['Invalid FileType: APPLICAON']"])

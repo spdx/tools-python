@@ -22,7 +22,7 @@ from spdx.model.actor import Actor, ActorType
 from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.document import Document
-from license_expression import LicenseExpression, Licensing
+from license_expression import Licensing
 from spdx.model.package import Package, PackageVerificationCode, PackagePurpose
 from spdx.model.relationship import RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING

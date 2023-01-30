@@ -12,7 +12,7 @@ from unittest import TestCase
 
 import pytest
 
-from license_expression import LicenseExpression, Licensing
+from license_expression import Licensing
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.snippet_parser import SnippetParser
 
