@@ -12,6 +12,7 @@
 import re
 
 import rdflib
+import uritools
 
 from spdx import creationinfo
 from spdx import license
@@ -151,11 +152,7 @@ def validate_doc_spdx_id(value, optional=False):
 def validate_doc_namespace(value, optional=False):
     if value is None:
         return optional
-    elif (
-        value.startswith("http://")
-        or value.startswith("https://")
-        or value.startswith("ftp://")
-    ) and ("#" not in value):
+    elif uritools.isabsuri(value) and ("#" not in value):
         return True
     else:
         return False
