@@ -11,7 +11,7 @@
 
 from typing import List
 
-from license_expression import LicenseExpression, Licensing
+from license_expression import Licensing
 from spdx.validation.license_expression_validator import validate_license_expression
 from spdx.validation.validation_message import ValidationMessage
 

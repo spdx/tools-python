@@ -21,7 +21,7 @@ from spdx.jsonschema.snippet_properties import SnippetProperty
 from spdx.model.actor import Actor, ActorType
 from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.document import Document
-from license_expression import LicenseExpression, Licensing
+from license_expression import Licensing
 from spdx.model.snippet import Snippet
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING

@@ -11,8 +11,7 @@
 from typing import Dict
 
 from rdflib import Graph, URIRef, RDF, Literal, XSD, BNode, DOAP, RDFS
-from spdx.writer.rdf.license_expression_writer import add_license_expression_to_graph, \
-    add_license_expression_or_none_or_no_assertion
+from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
 
 from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
@@ -46,7 +45,7 @@ def add_package_information_to_graph(package: Package, graph: Graph, doc_namespa
                                                    package.license_concluded,
                                                    doc_namespace)
     add_license_expression_or_none_or_no_assertion(graph, package_resource, spdx_namespace.licenseInfoFromFiles,
-                                        package.license_info_from_files, doc_namespace)
+                                                   package.license_info_from_files, doc_namespace)
     add_license_expression_or_none_or_no_assertion(graph, package_resource, spdx_namespace.licenseDeclared,
                                                    package.license_declared, doc_namespace)
     add_literal_value(graph, package_resource, spdx_namespace.licenseComments, package.license_comment)

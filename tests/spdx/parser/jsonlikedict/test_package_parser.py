@@ -15,7 +15,7 @@ import pytest
 
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from license_expression import LicenseExpression, Licensing
+from license_expression import Licensing
 from spdx.model.package import PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements

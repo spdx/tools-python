@@ -16,8 +16,7 @@ from spdx.model.file import File
 from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
 from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
-from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_literal_or_no_assertion_or_none, \
-    add_namespace_to_spdx_id
+from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_namespace_to_spdx_id
 
 
 def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str,
