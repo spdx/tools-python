@@ -34,10 +34,7 @@ def validate_is_free_form_text_or_str(value, optional=False) -> bool:
 def validate_tool_name(value, optional=False):
     striped_value = value.strip()
     if optional:
-        if len(striped_value) == 0:
-            return True
-        else:
-            return False
+        return len(striped_value) == 0
     else:
         return not (len(striped_value) == 0)
 
@@ -61,12 +58,9 @@ def validate_doc_name(value, optional=False):
 def validate_pkg_supplier(value, optional=False):
     if optional and value is None:
         return True
-    elif isinstance(
+    return isinstance(
         value, (utils.NoAssert, creationinfo.Person, creationinfo.Organization)
-    ):
-        return True
-    else:
-        return False
+    )
 
 
 def validate_pkg_originator(value, optional=False):
@@ -76,10 +70,8 @@ def validate_pkg_originator(value, optional=False):
 def validate_pkg_homepage(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (str, utils.NoAssert, utils.SPDXNone)):
-        return True
-    else:
-        return False
+
+    return isinstance(value, (str, utils.NoAssert, utils.SPDXNone))
 
 
 def validate_pkg_cr_text(value, optional=False):
@@ -119,17 +111,11 @@ def validate_snippet_attribution_text(value, optional=False):
 
 def validate_pkg_ext_ref_category(value, optional=False):
     # PACKAGE_MANAGER is used in the json schema for 2.2. For now, we simply allow both versions
-    if value.upper() in ["SECURITY", "OTHER", "PACKAGE-MANAGER", "PACKAGE_MANAGER"]:
-        return True
-    else:
-        return False
+    return value.upper() in ["SECURITY", "OTHER", "PACKAGE-MANAGER", "PACKAGE_MANAGER"]
 
 
 def validate_pkg_ext_ref_type(value, optional=False):
-    if re.match(r"^\S+$", value) is not None:
-        return True
-    else:
-        return False
+    return re.match(r"^\S+$", value) is not None
 
 
 def validate_pkg_ext_ref_comment(value, optional=False):
@@ -143,19 +129,15 @@ def validate_doc_comment(value, optional=False):
 def validate_doc_spdx_id(value, optional=False):
     if value is None:
         return optional
-    elif value.endswith("#SPDXRef-DOCUMENT"):
-        return True
-    else:
-        return False
+
+    return value.endswith("#SPDXRef-DOCUMENT")
 
 
 def validate_doc_namespace(value, optional=False):
     if value is None:
         return optional
-    elif uritools.isabsuri(value) and ("#" not in value):
-        return True
-    else:
-        return False
+
+    return uritools.isabsuri(value) and ("#" not in value)
 
 
 def validate_creator(value, optional=False):
@@ -187,10 +169,7 @@ def validate_annotation_comment(value, optional=False):
 
 def validate_annotation_type(value, optional=False):
     value = value.strip()
-    if value == "REVIEW" or value == "OTHER":
-        return True
-    else:
-        return False
+    return value == "REVIEW" or value == "OTHER"
 
 
 def validate_relationship_comment(value, optional=False):
@@ -241,19 +220,13 @@ def validate_file_lics_comment(value, optional=False):
 def validate_file_cpyright(value, optional=False):
     if isinstance(value, (utils.NoAssert, utils.SPDXNone)):
         return True
-    elif validate_is_free_form_text_or_str(value, optional):
-        return True
-    else:
-        return False
+    return validate_is_free_form_text_or_str(value, optional)
 
 
 def validate_lics_from_file(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (license.License, utils.SPDXNone, utils.NoAssert)):
-        return True
-    else:
-        return False
+    return isinstance(value, (license.License, utils.SPDXNone, utils.NoAssert))
 
 
 def validate_file_notice(value, optional=False):
@@ -263,19 +236,13 @@ def validate_file_notice(value, optional=False):
 def validate_lics_conc(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, license.License)):
-        return True
-    else:
-        return False
+    return isinstance(value, (utils.NoAssert, utils.SPDXNone, license.License))
 
 
 def validate_file_lics_in_file(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, license.License)):
-        return True
-    else:
-        return False
+    return isinstance(value, (utils.NoAssert, utils.SPDXNone, license.License))
 
 
 def validate_extracted_lic_id(value, optional=False):
@@ -296,10 +263,7 @@ def validate_snippet_spdx_id(value, optional=False):
     if value is None:
         return optional
     value = value.split("#")[-1]
-    if re.match(r"^SPDXRef[A-Za-z0-9.\-]+$", value) is not None:
-        return True
-    else:
-        return False
+    return re.match(r"^SPDXRef[A-Za-z0-9.\-]+$", value) is not None
 
 
 def validate_snip_comment(value, optional=False):
@@ -324,19 +288,13 @@ def validate_snip_lic_comment(value, optional=False):
 def validate_snip_file_spdxid(value, optional=False):
     if value is None:
         return optional
-    if (
+    return (
         re.match(r"(DocumentRef[A-Za-z0-9.\-]+:){0,1}SPDXRef[A-Za-z0-9.\-]+", value)
         is not None
-    ):
-        return True
-    else:
-        return False
+    )
 
 
 def validate_snip_lics_info(value, optional=False):
     if value is None:
         return optional
-    elif isinstance(value, (utils.NoAssert, utils.SPDXNone, license.License)):
-        return True
-    else:
-        return False
+    return isinstance(value, (utils.NoAssert, utils.SPDXNone, license.License))
