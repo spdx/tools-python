@@ -47,7 +47,7 @@ def test_checksum_from_wrong_rdf(rdf_algorithm):
     assert str(error.value).startswith("Invalid algorithm for checksum")
 
 
-CHECKSUM_VALUE = "123Abc"
+CHECKSUM_VALUE = "123abc"
 
 
 @pytest.mark.parametrize("checksum_string,expected",
@@ -60,6 +60,12 @@ CHECKSUM_VALUE = "123Abc"
 def test_checksum_from_string(checksum_string: str, expected: Checksum):
     checksum: Checksum = Checksum.checksum_from_string(checksum_string)
     assert checksum == expected
+
+
+@pytest.mark.parametrize("checksum_string", ["SHA1: ABC", "SHA1000: abc"])
+def test_wrong_checksum_from_string(checksum_string: str):
+    with pytest.raises(ValueError, match=f"Invalid checksum: {checksum_string}"):
+        Checksum.checksum_from_string(checksum_string)
 
 
 @pytest.mark.parametrize("checksum, expected",
