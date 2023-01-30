@@ -15,6 +15,7 @@ from rdflib import Graph, URIRef, Literal, RDF, RDFS
 from spdx.model.file import File
 from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
+from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
 from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_literal_or_no_assertion_or_none, \
     add_namespace_to_spdx_id
 
@@ -31,10 +32,10 @@ def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str,
     for checksum in file.checksums:
         add_checksum_information_to_graph(checksum, graph, file_resource)
 
-    # as long as we don't have a proper handling of the licenses we simply write literals here
-    add_literal_or_no_assertion_or_none(graph, file_resource, spdx_namespace.licenseConcluded, file.license_concluded)
-    add_literal_or_no_assertion_or_none(graph, file_resource, spdx_namespace.licenseInfoInFile,
-                                        file.license_info_in_file)
+    add_license_expression_or_none_or_no_assertion(graph, file_resource, spdx_namespace.licenseConcluded,
+                                                   file.license_concluded, doc_namespace)
+    add_license_expression_or_none_or_no_assertion(graph, file_resource, spdx_namespace.licenseInfoInFile,
+                                                   file.license_info_in_file, doc_namespace)
 
     add_literal_value(graph, file_resource, spdx_namespace.licenseComments, file.license_comment)
     add_literal_value(graph, file_resource, spdx_namespace.copyrightText, file.copyright_text)

@@ -25,9 +25,8 @@ def test_add_file_information_to_graph():
     assert (None, spdx_namespace.fileName, Literal("./fileName.py")) in graph
     assert (None, spdx_namespace.fileType, spdx_namespace.fileType_text) in graph
     assert (None, spdx_namespace.licenseComments, Literal("licenseComment")) in graph
-    assert (None, spdx_namespace.licenseConcluded, Literal("MIT AND GPL-2.0")) in graph
-    assert (None, spdx_namespace.licenseInfoInFile, Literal("MIT")) in graph
-    assert (None, spdx_namespace.licenseInfoInFile, Literal("GPL-2.0")) in graph
+    assert (None, spdx_namespace.licenseConcluded, None) in graph
+    assert (None, spdx_namespace.licenseInfoInFile, None) in graph
     assert (None, spdx_namespace.copyrightText, Literal("copyrightText")) in graph
     assert (None, RDFS.comment, Literal("fileComment")) in graph
     assert (None, spdx_namespace.noticeText, Literal("fileNotice")) in graph
