@@ -53,8 +53,6 @@ def test_license_exception_to_graph(license_with_exception, expected_triple):
     add_license_expression_to_graph(graph, URIRef("anyURI"), spdx_namespace.licenseConcluded, license_expression,
                                     "https://namespace")
 
-    graph.serialize("rdf_with_exception.rdf.xml", "pretty-xml", max_depth=100)
-
     assert (None, RDF.type, spdx_namespace.WithExceptionOperator) in graph
     assert (None, spdx_namespace.member, URIRef("http://spdx.org/licenses/MIT")) in graph
     assert (None, spdx_namespace.licenseException, None) in graph
