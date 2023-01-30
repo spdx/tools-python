@@ -24,7 +24,7 @@ classifiers = [
 ]
 urls = {Homepage = "https://github.com/spdx/tools-python"}
 requires-python = ">=3.7"
-dependencies = ["ply", "rdflib", "click", "pyyaml", "xmltodict"]
+dependencies = ["ply", "rdflib", "click", "pyyaml", "xmltodict", "uritools"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
