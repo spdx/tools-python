@@ -11,7 +11,7 @@
 from rdflib import Graph, URIRef
 
 from spdx.writer.rdf.relationship_writer import add_relationship_to_graph
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from tests.spdx.fixtures import relationship_fixture
 
 

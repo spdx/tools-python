@@ -10,7 +10,7 @@
 # limitations under the License.
 import pytest
 from rdflib import Graph, URIRef, RDF, Literal, RDFS
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, POINTER_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
 
 from spdx.writer.rdf.snippet_writer import add_snippet_to_graph, add_range_to_graph
 from tests.spdx.fixtures import snippet_fixture

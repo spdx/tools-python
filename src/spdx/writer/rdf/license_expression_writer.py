@@ -19,7 +19,7 @@ from rdflib.term import Node, Literal
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 def add_license_expression_or_none_or_no_assertion(value: Union[

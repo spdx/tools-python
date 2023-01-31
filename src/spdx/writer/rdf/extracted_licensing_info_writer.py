@@ -9,7 +9,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from rdflib import Graph, URIRef, RDF, BNode, RDFS, Literal
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_optional_literal, add_literal_or_no_assertion
+from spdx.writer.rdf.writer_utils import add_optional_literal, add_literal_or_no_assertion
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 

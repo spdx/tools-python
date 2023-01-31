@@ -14,7 +14,7 @@ from rdflib import Graph, Literal, RDFS, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.annotation_writer import add_annotation_to_graph
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from tests.spdx.fixtures import annotation_fixture
 
 

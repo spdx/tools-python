@@ -12,7 +12,7 @@ from rdflib import Graph, URIRef, RDF
 
 from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.writer.rdf.checksum_writer import add_checksum_to_graph
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 def add_external_document_ref_to_graph(external_document_ref: ExternalDocumentRef, graph: Graph, doc_node: URIRef,

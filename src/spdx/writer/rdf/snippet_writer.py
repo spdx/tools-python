@@ -13,7 +13,8 @@ from typing import Tuple, Optional, Dict
 from rdflib import Graph, URIRef, RDF, RDFS, Literal, BNode
 
 from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_optional_literal, add_namespace_to_spdx_id, POINTER_NAMESPACE
+from spdx.writer.rdf.writer_utils import add_optional_literal, add_namespace_to_spdx_id
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
 
 from spdx.model.snippet import Snippet
 
