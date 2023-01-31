@@ -10,16 +10,16 @@
 # limitations under the License.
 from rdflib import Graph, Literal, RDFS, RDF, URIRef
 
-from spdx.writer.rdf.file_writer import add_file_information_to_graph
+from spdx.writer.rdf.file_writer import add_file_to_graph
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 from tests.spdx.fixtures import file_fixture
 
 
-def test_add_file_information_to_graph():
+def test_add_file_to_graph():
     graph = Graph()
     file = file_fixture()
 
-    add_file_information_to_graph(file, graph, "docNamespace", {})
+    add_file_to_graph(file, graph, "docNamespace", {})
 
     assert (URIRef("docNamespace#SPDXRef-File"), RDF.type, SPDX_NAMESPACE.File) in graph
     assert (None, SPDX_NAMESPACE.fileName, Literal("./fileName.py")) in graph

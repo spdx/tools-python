@@ -13,16 +13,16 @@ from datetime import datetime
 from rdflib import Graph, Literal, RDFS, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
-from spdx.writer.rdf.annotation_writer import add_annotation_info_to_graph
+from spdx.writer.rdf.annotation_writer import add_annotation_to_graph
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 from tests.spdx.fixtures import annotation_fixture
 
 
-def test_add_annotation_info_to_graph():
+def test_add_annotation_to_graph():
     graph = Graph()
     annotation = annotation_fixture()
 
-    add_annotation_info_to_graph(annotation, graph, "docNamespace", {})
+    add_annotation_to_graph(annotation, graph, "docNamespace", {})
 
     assert (URIRef("docNamespace#SPDXRef-File"), SPDX_NAMESPACE.annotation, None) in graph
     assert (None, None, SPDX_NAMESPACE.Annotation) in graph

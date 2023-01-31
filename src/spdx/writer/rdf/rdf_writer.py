@@ -16,13 +16,13 @@ from rdflib.compare import to_isomorphic
 from spdx.model.document import Document
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage
-from spdx.writer.rdf.annotation_writer import add_annotation_info_to_graph
+from spdx.writer.rdf.annotation_writer import add_annotation_to_graph
 from spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
 from spdx.writer.rdf.extracted_licensing_info_writer import add_extracted_licensing_info_to_graph
-from spdx.writer.rdf.file_writer import add_file_information_to_graph
-from spdx.writer.rdf.package_writer import add_package_information_to_graph
-from spdx.writer.rdf.relationship_writer import add_relationship_info_to_graph
-from spdx.writer.rdf.snippet_writer import add_snippet_information_to_graph
+from spdx.writer.rdf.file_writer import add_file_to_graph
+from spdx.writer.rdf.package_writer import add_package_to_graph
+from spdx.writer.rdf.relationship_writer import add_relationship_to_graph
+from spdx.writer.rdf.snippet_writer import add_snippet_to_graph
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, POINTER_NAMESPACE
 
 
@@ -39,19 +39,19 @@ def write_document_to_file(document: Document, file_name: str, validate: bool):
                                                      external_doc_ref in document.creation_info.external_document_refs}
     doc_node = add_creation_info_to_graph(document.creation_info, graph)
     for annotation in document.annotations:
-        add_annotation_info_to_graph(annotation, graph, doc_namespace, external_doc_ref_to_namespace)
+        add_annotation_to_graph(annotation, graph, doc_namespace, external_doc_ref_to_namespace)
 
     for file in document.files:
-        add_file_information_to_graph(file, graph, doc_namespace, external_doc_ref_to_namespace)
+        add_file_to_graph(file, graph, doc_namespace, external_doc_ref_to_namespace)
 
     for package in document.packages:
-        add_package_information_to_graph(package, graph, doc_namespace, external_doc_ref_to_namespace)
+        add_package_to_graph(package, graph, doc_namespace, external_doc_ref_to_namespace)
 
     for relationship in document.relationships:
-        add_relationship_info_to_graph(relationship, graph, doc_namespace, external_doc_ref_to_namespace)
+        add_relationship_to_graph(relationship, graph, doc_namespace, external_doc_ref_to_namespace)
 
     for snippet in document.snippets:
-        add_snippet_information_to_graph(snippet, graph, doc_namespace, external_doc_ref_to_namespace)
+        add_snippet_to_graph(snippet, graph, doc_namespace, external_doc_ref_to_namespace)
 
     for extracted_licensing_info in document.extracted_licensing_info:
         add_extracted_licensing_info_to_graph(extracted_licensing_info, graph, doc_node, doc_namespace)

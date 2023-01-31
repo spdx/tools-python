@@ -12,16 +12,16 @@ import pytest
 from rdflib import Graph, URIRef, Literal
 
 from spdx.model.checksum import ChecksumAlgorithm
-from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph, algorithm_to_rdf_string
+from spdx.writer.rdf.checksum_writer import add_checksum_to_graph, algorithm_to_rdf_string
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 from tests.spdx.fixtures import checksum_fixture
 
 
-def test_add_checksum_information_to_graph():
+def test_add_checksum_to_graph():
     graph = Graph()
     checksum = checksum_fixture()
 
-    add_checksum_information_to_graph(checksum, graph, URIRef("parentNode"))
+    add_checksum_to_graph(checksum, graph, URIRef("parentNode"))
 
     assert (URIRef("parentNode"), SPDX_NAMESPACE.checksum, None) in graph
     assert (None, None, SPDX_NAMESPACE.Checksum) in graph

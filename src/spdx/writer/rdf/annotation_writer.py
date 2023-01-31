@@ -18,8 +18,8 @@ from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_namespace_to_spdx_id
 
 
-def add_annotation_info_to_graph(annotation: Annotation, graph: Graph, doc_namespace: str,
-                                 external_doc_ref_to_namespace: Dict[str, str]):
+def add_annotation_to_graph(annotation: Annotation, graph: Graph, doc_namespace: str,
+                            external_doc_ref_to_namespace: Dict[str, str]):
     annotation_resource = URIRef(add_namespace_to_spdx_id(annotation.spdx_id, doc_namespace, external_doc_ref_to_namespace))
     annotation_node = BNode()
     graph.add((annotation_node, RDF.type, SPDX_NAMESPACE.Annotation))
