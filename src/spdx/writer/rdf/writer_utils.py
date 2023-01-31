@@ -8,6 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import sys
 from datetime import datetime
 from typing import Any, Optional, Dict
 
@@ -60,6 +61,10 @@ def add_datetime_to_graph(graph: Graph, parent: Node, predicate: Node, value: Op
 def add_namespace_to_spdx_id(spdx_id: str, doc_namespace: str, external_doc_namespaces: Dict[str, str]) -> str:
     if ":" in spdx_id:
         external_doc_ref_id = spdx_id.split(":")[0]
+        if external_doc_ref_id not in external_doc_namespaces.keys():
+            print(f"No namespace for external document reference with id {external_doc_ref_id} provided.",
+                  file=sys.stderr)
+            return spdx_id
         return f"{external_doc_namespaces[external_doc_ref_id]}#{spdx_id.split(':')[1]}"
 
     if is_valid_internal_spdx_id(spdx_id):
