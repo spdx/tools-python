@@ -22,7 +22,7 @@ def test_add_extracted_licensing_info_to_graph():
     add_extracted_licensing_info_to_graph(extracted_licensing_info, graph, URIRef("anyURI"), "anyURI")
 
     assert (URIRef("anyURI"), SPDX_NAMESPACE.hasExtractedLicensingInfo, None) in graph
-    assert (None, None, SPDX_NAMESPACE.ExtractedLicensingInfo) in graph
+    assert (URIRef("anyURI#LicenseRef-1"), None, SPDX_NAMESPACE.ExtractedLicensingInfo) in graph
     assert (None, SPDX_NAMESPACE.licenseId, Literal("LicenseRef-1")) in graph
     assert (None, SPDX_NAMESPACE.extractedText, Literal("extractedText")) in graph
     assert (None, RDFS.seeAlso, Literal("https://see.also")) in graph

@@ -10,7 +10,7 @@
 # limitations under the License.
 from datetime import datetime
 
-from rdflib import Graph, Literal, RDFS
+from rdflib import Graph, Literal, RDFS, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.annotation_writer import add_annotation_info_to_graph
@@ -24,6 +24,7 @@ def test_add_annotation_info_to_graph():
 
     add_annotation_info_to_graph(annotation, graph, "anyURI", {})
 
+    assert (URIRef("anyURI#SPDXRef-File"), SPDX_NAMESPACE.annotation, None) in graph
     assert (None, None, SPDX_NAMESPACE.Annotation) in graph
     assert (None, SPDX_NAMESPACE.annotationType, SPDX_NAMESPACE.annotationType_review) in graph
     assert (None, SPDX_NAMESPACE.annotationDate, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph

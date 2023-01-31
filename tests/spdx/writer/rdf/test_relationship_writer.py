@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph
+from rdflib import Graph, URIRef
 
 from spdx.writer.rdf.relationship_writer import add_relationship_info_to_graph
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
@@ -20,5 +20,6 @@ def test_add_relationship_info_to_graph():
     graph = Graph()
     add_relationship_info_to_graph(relationship, graph, "anyURI", {})
 
+    assert(URIRef("anyURI#SPDXRef-DOCUMENT"), SPDX_NAMESPACE.relationship, None) in graph
     assert (None, SPDX_NAMESPACE.relationshipType, SPDX_NAMESPACE.relationshipType_describes) in graph
     assert (None, SPDX_NAMESPACE.relatedSpdxElement, None) in graph

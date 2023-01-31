@@ -23,6 +23,7 @@ def test_add_checksum_information_to_graph():
 
     add_checksum_information_to_graph(checksum, graph, URIRef("TestURI"))
 
+    assert (URIRef("TestURI"), SPDX_NAMESPACE.checksum, None) in graph
     assert (None, None, SPDX_NAMESPACE.Checksum) in graph
     assert (None, SPDX_NAMESPACE.algorithm, SPDX_NAMESPACE.checksumAlgorithm_sha1) in graph
     assert (None, SPDX_NAMESPACE.checksumValue, Literal("71c4025dd9897b364f3ebbb42c484ff43d00791c")) in graph
