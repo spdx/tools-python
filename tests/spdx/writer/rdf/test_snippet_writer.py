@@ -8,6 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pytest
 from rdflib import Graph, URIRef, RDF, Literal, RDFS
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, POINTER_NAMESPACE
 
@@ -32,15 +33,17 @@ def test_add_snippet_information_to_graph():
     assert (None, RDFS.comment, Literal("snippetComment")) in graph
 
 
-def test_add_ranges_to_graph():
+@pytest.mark.parametrize("range,pointer,predicate",
+                         [((5, 190), POINTER_NAMESPACE.ByteOffsetPointer, POINTER_NAMESPACE.offset),
+                          ((1, 3), POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)])
+def test_add_ranges_to_graph(range, pointer, predicate):
     graph = Graph()
-    byte_range = (5, 190)
-
-    add_range_to_graph(graph, URIRef("anyUR"), byte_range, URIRef("anyURI#SPDXRef-File"), POINTER_NAMESPACE.ByteOffsetPointer)
+    add_range_to_graph(graph, URIRef("anyUR"), range, URIRef("anyURI#SPDXRef-File"),
+                       pointer)
 
     assert (None, SPDX_NAMESPACE.range, None) in graph
     assert (None, POINTER_NAMESPACE.startPointer, None) in graph
     assert (None, POINTER_NAMESPACE.endPointer, None) in graph
     assert (None, POINTER_NAMESPACE.reference, URIRef("anyURI#SPDXRef-File")) in graph
-    assert (None, POINTER_NAMESPACE.offset, Literal(str(5))) in graph
-    assert (None, POINTER_NAMESPACE.offset, Literal(str(190))) in graph
+    assert (None, predicate, Literal(range[0])) in graph
+    assert (None, predicate, Literal(range[1])) in graph
