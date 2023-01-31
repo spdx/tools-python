@@ -13,7 +13,7 @@ from rdflib import Graph, BNode, RDF, Literal, RDFS, URIRef
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.document import CreationInfo
 from spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_literal_value
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_optional_literal
 
 
 def add_creation_info_to_graph(creation_info: CreationInfo, graph: Graph):
@@ -22,7 +22,7 @@ def add_creation_info_to_graph(creation_info: CreationInfo, graph: Graph):
     graph.add((doc_node, SPDX_NAMESPACE.specVersion, Literal(creation_info.spdx_version)))
     graph.add((doc_node, SPDX_NAMESPACE.dataLicense, URIRef(f"http://spdx.org/licenses/{creation_info.data_license}")))
     graph.add((doc_node, SPDX_NAMESPACE.name, Literal(creation_info.name)))
-    add_literal_value(graph, doc_node, RDFS.comment, creation_info.document_comment)
+    add_optional_literal(graph, doc_node, RDFS.comment, creation_info.document_comment)
 
     creation_info_node = BNode()
     graph.add((creation_info_node, RDF.type, SPDX_NAMESPACE.CreationInfo))
@@ -32,8 +32,8 @@ def add_creation_info_to_graph(creation_info: CreationInfo, graph: Graph):
     for creator in creation_info.creators:
         graph.add((creation_info_node, SPDX_NAMESPACE.creator, Literal(creator.to_serialized_string())))
 
-    add_literal_value(graph, creation_info_node, SPDX_NAMESPACE.licenseListVersion, creation_info.license_list_version)
-    add_literal_value(graph, creation_info_node, RDFS.comment, creation_info.creator_comment)
+    add_optional_literal(graph, creation_info_node, SPDX_NAMESPACE.licenseListVersion, creation_info.license_list_version)
+    add_optional_literal(graph, creation_info_node, RDFS.comment, creation_info.creator_comment)
 
     graph.add((doc_node, SPDX_NAMESPACE.creationInfo, creation_info_node))
 

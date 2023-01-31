@@ -13,7 +13,7 @@ from typing import Tuple, Optional, Dict
 from rdflib import Graph, URIRef, RDF, RDFS, Literal, BNode
 
 from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_literal_value, add_namespace_to_spdx_id, POINTER_NAMESPACE
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_optional_literal, add_namespace_to_spdx_id, POINTER_NAMESPACE
 
 from spdx.model.snippet import Snippet
 
@@ -35,10 +35,10 @@ def add_snippet_information_to_graph(snippet: Snippet, graph: Graph, doc_namespa
                                                    snippet.license_concluded, doc_namespace)
     add_license_expression_or_none_or_no_assertion(graph, snippet_resource, SPDX_NAMESPACE.licenseInfoInSnippet,
                                                    snippet.license_info_in_snippet, doc_namespace)
-    add_literal_value(graph, snippet_resource, SPDX_NAMESPACE.licenseComments, snippet.license_comment)
-    add_literal_value(graph, snippet_resource, SPDX_NAMESPACE.copyrightText, snippet.copyright_text)
-    add_literal_value(graph, snippet_resource, RDFS.comment, snippet.comment)
-    add_literal_value(graph, snippet_resource, SPDX_NAMESPACE.name, snippet.name)
+    add_optional_literal(graph, snippet_resource, SPDX_NAMESPACE.licenseComments, snippet.license_comment)
+    add_optional_literal(graph, snippet_resource, SPDX_NAMESPACE.copyrightText, snippet.copyright_text)
+    add_optional_literal(graph, snippet_resource, RDFS.comment, snippet.comment)
+    add_optional_literal(graph, snippet_resource, SPDX_NAMESPACE.name, snippet.name)
     for attribution_text in snippet.attribution_texts:
         graph.add((snippet_resource, SPDX_NAMESPACE.attributionText, Literal(attribution_text)))
 
