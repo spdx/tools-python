@@ -23,6 +23,7 @@ def test_add_conjunctive_license_set_to_graph():
     add_license_expression_to_graph(graph, URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, license_expression,
                                     "https://namespace")
 
+    assert (URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, RDF.type, SPDX_NAMESPACE.ConjunctiveLicenseSet) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/MIT")) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/GPL-2.0-only")) in graph
@@ -35,6 +36,7 @@ def test_add_disjunctive_license_set_to_graph():
     add_license_expression_to_graph(graph, URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, license_expression,
                                     "https://namespace")
 
+    assert (URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, RDF.type, SPDX_NAMESPACE.DisjunctiveLicenseSet) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/MIT")) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/GPL-2.0-only")) in graph
@@ -53,6 +55,7 @@ def test_license_exception_to_graph(license_with_exception, expected_triple):
     add_license_expression_to_graph(graph, URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, license_expression,
                                     "https://namespace")
 
+    assert (URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, RDF.type, SPDX_NAMESPACE.WithExceptionOperator) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/MIT")) in graph
     assert (None, SPDX_NAMESPACE.licenseException, None) in graph
