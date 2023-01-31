@@ -20,10 +20,10 @@ def test_add_conjunctive_license_set_to_graph():
     graph = Graph()
     license_expression = get_spdx_licensing().parse("MIT AND GPL-2.0")
 
-    add_license_expression_to_graph(graph, URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, license_expression,
+    add_license_expression_to_graph(graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, license_expression,
                                     "https://namespace")
 
-    assert (URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, None) in graph
+    assert (URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, RDF.type, SPDX_NAMESPACE.ConjunctiveLicenseSet) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/MIT")) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/GPL-2.0-only")) in graph
@@ -33,10 +33,10 @@ def test_add_disjunctive_license_set_to_graph():
     graph = Graph()
     license_expression = get_spdx_licensing().parse("MIT OR GPL-2.0")
 
-    add_license_expression_to_graph(graph, URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, license_expression,
+    add_license_expression_to_graph(graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, license_expression,
                                     "https://namespace")
 
-    assert (URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, None) in graph
+    assert (URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, RDF.type, SPDX_NAMESPACE.DisjunctiveLicenseSet) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/MIT")) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/GPL-2.0-only")) in graph
@@ -52,10 +52,10 @@ def test_license_exception_to_graph(license_with_exception, expected_triple):
     graph = Graph()
     license_expression = get_spdx_licensing().parse(license_with_exception)
 
-    add_license_expression_to_graph(graph, URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, license_expression,
+    add_license_expression_to_graph(graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, license_expression,
                                     "https://namespace")
 
-    assert (URIRef("anyURI"), SPDX_NAMESPACE.licenseConcluded, None) in graph
+    assert (URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, RDF.type, SPDX_NAMESPACE.WithExceptionOperator) in graph
     assert (None, SPDX_NAMESPACE.member, URIRef("http://spdx.org/licenses/MIT")) in graph
     assert (None, SPDX_NAMESPACE.licenseException, None) in graph

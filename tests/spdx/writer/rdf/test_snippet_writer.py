@@ -20,10 +20,10 @@ def test_add_snippet_information_to_graph():
     graph = Graph()
     snippet = snippet_fixture()
 
-    add_snippet_information_to_graph(snippet, graph, "anyURI", {})
+    add_snippet_information_to_graph(snippet, graph, "docNamespace", {})
 
-    assert (URIRef("anyURI#SPDXRef-Snippet"), RDF.type, SPDX_NAMESPACE.Snippet) in graph
-    assert (None, SPDX_NAMESPACE.snippetFromFile, URIRef(f"anyURI#{snippet.file_spdx_id}")) in graph
+    assert (URIRef("docNamespace#SPDXRef-Snippet"), RDF.type, SPDX_NAMESPACE.Snippet) in graph
+    assert (None, SPDX_NAMESPACE.snippetFromFile, URIRef(f"docNamespace#{snippet.file_spdx_id}")) in graph
     assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, SPDX_NAMESPACE.licenseInfoInSnippet, None) in graph
     assert (None, SPDX_NAMESPACE.licenseComments, Literal("snippetLicenseComment")) in graph
@@ -38,12 +38,12 @@ def test_add_snippet_information_to_graph():
                           ((1, 3), POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)])
 def test_add_ranges_to_graph(range, pointer, predicate):
     graph = Graph()
-    add_range_to_graph(graph, URIRef("anyUR"), range, URIRef("anyURI#SPDXRef-File"),
+    add_range_to_graph(graph, URIRef("anyUR"), range, URIRef("docNamespace#SPDXRef-File"),
                        pointer)
 
     assert (None, SPDX_NAMESPACE.range, None) in graph
     assert (None, POINTER_NAMESPACE.startPointer, None) in graph
     assert (None, POINTER_NAMESPACE.endPointer, None) in graph
-    assert (None, POINTER_NAMESPACE.reference, URIRef("anyURI#SPDXRef-File")) in graph
+    assert (None, POINTER_NAMESPACE.reference, URIRef("docNamespace#SPDXRef-File")) in graph
     assert (None, predicate, Literal(range[0])) in graph
     assert (None, predicate, Literal(range[1])) in graph

@@ -19,9 +19,9 @@ def test_add_file_information_to_graph():
     graph = Graph()
     file = file_fixture()
 
-    add_file_information_to_graph(file, graph, "anyURI", {})
+    add_file_information_to_graph(file, graph, "docNamespace", {})
 
-    assert (URIRef("anyURI#SPDXRef-File"), RDF.type, SPDX_NAMESPACE.File) in graph
+    assert (URIRef("docNamespace#SPDXRef-File"), RDF.type, SPDX_NAMESPACE.File) in graph
     assert (None, SPDX_NAMESPACE.fileName, Literal("./fileName.py")) in graph
     assert (None, SPDX_NAMESPACE.fileType, SPDX_NAMESPACE.fileType_text) in graph
     assert (None, SPDX_NAMESPACE.licenseComments, Literal("licenseComment")) in graph

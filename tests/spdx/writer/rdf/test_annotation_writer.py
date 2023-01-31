@@ -22,9 +22,9 @@ def test_add_annotation_info_to_graph():
     graph = Graph()
     annotation = annotation_fixture()
 
-    add_annotation_info_to_graph(annotation, graph, "anyURI", {})
+    add_annotation_info_to_graph(annotation, graph, "docNamespace", {})
 
-    assert (URIRef("anyURI#SPDXRef-File"), SPDX_NAMESPACE.annotation, None) in graph
+    assert (URIRef("docNamespace#SPDXRef-File"), SPDX_NAMESPACE.annotation, None) in graph
     assert (None, None, SPDX_NAMESPACE.Annotation) in graph
     assert (None, SPDX_NAMESPACE.annotationType, SPDX_NAMESPACE.annotationType_review) in graph
     assert (None, SPDX_NAMESPACE.annotationDate, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph

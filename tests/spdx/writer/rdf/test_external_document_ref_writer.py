@@ -19,9 +19,9 @@ def test_add_external_document_ref_to_graph():
     graph = Graph()
     external_document_ref = external_document_ref_fixture()
 
-    add_external_document_ref_to_graph(external_document_ref, graph, URIRef("anyURI"), "anyURI")
+    add_external_document_ref_to_graph(external_document_ref, graph, URIRef("docNode"), "docNamespace")
 
-    assert (URIRef("anyURI"), SPDX_NAMESPACE.externalDocumentRef, URIRef("anyURI#DocumentRef-external")) in graph
+    assert (URIRef("docNode"), SPDX_NAMESPACE.externalDocumentRef, URIRef("docNamespace#DocumentRef-external")) in graph
     assert (None, None, SPDX_NAMESPACE.ExternalDocumentRef) in graph
     assert (None, SPDX_NAMESPACE.checksum, None) in graph
     assert (None, None, SPDX_NAMESPACE.Checksum) in graph
