@@ -21,14 +21,14 @@ def add_extracted_licensing_info_to_graph(extracted_licensing_info: ExtractedLic
         graph.add((extracted_licensing_info_resource, RDF.type, SPDX_NAMESPACE.ExtractedLicensingInfo))
     else:
         extracted_licensing_info_resource = BNode()
-    add_optional_literal(graph, extracted_licensing_info_resource, SPDX_NAMESPACE.licenseId,
-                         extracted_licensing_info.license_id)
-    add_optional_literal(graph, extracted_licensing_info_resource, SPDX_NAMESPACE.extractedText,
-                         extracted_licensing_info.extracted_text)
-    add_literal_or_no_assertion(graph, extracted_licensing_info_resource, SPDX_NAMESPACE.name,
-                                extracted_licensing_info.license_name)
+    add_optional_literal(extracted_licensing_info.license_id, graph, extracted_licensing_info_resource,
+                         SPDX_NAMESPACE.licenseId)
+    add_optional_literal(extracted_licensing_info.extracted_text, graph, extracted_licensing_info_resource,
+                         SPDX_NAMESPACE.extractedText)
+    add_literal_or_no_assertion(extracted_licensing_info.license_name, graph, extracted_licensing_info_resource,
+                                SPDX_NAMESPACE.name)
     for cross_reference in extracted_licensing_info.cross_references:
         graph.add((extracted_licensing_info_resource, RDFS.seeAlso, Literal(cross_reference)))
-    add_optional_literal(graph, extracted_licensing_info_resource, RDFS.comment, extracted_licensing_info.comment)
+    add_optional_literal(extracted_licensing_info.comment, graph, extracted_licensing_info_resource, RDFS.comment)
 
     graph.add((doc_node, SPDX_NAMESPACE.hasExtractedLicensingInfo, extracted_licensing_info_resource))

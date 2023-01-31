@@ -31,15 +31,15 @@ def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str,
     for checksum in file.checksums:
         add_checksum_information_to_graph(checksum, graph, file_resource)
 
-    add_license_expression_or_none_or_no_assertion(graph, file_resource, SPDX_NAMESPACE.licenseConcluded,
-                                                   file.license_concluded, doc_namespace)
-    add_license_expression_or_none_or_no_assertion(graph, file_resource, SPDX_NAMESPACE.licenseInfoInFile,
-                                                   file.license_info_in_file, doc_namespace)
+    add_license_expression_or_none_or_no_assertion(file.license_concluded, graph, file_resource,
+                                                   SPDX_NAMESPACE.licenseConcluded, doc_namespace)
+    add_license_expression_or_none_or_no_assertion(file.license_info_in_file, graph, file_resource,
+                                                   SPDX_NAMESPACE.licenseInfoInFile, doc_namespace)
 
-    add_optional_literal(graph, file_resource, SPDX_NAMESPACE.licenseComments, file.license_comment)
-    add_optional_literal(graph, file_resource, SPDX_NAMESPACE.copyrightText, file.copyright_text)
-    add_optional_literal(graph, file_resource, RDFS.comment, file.comment)
-    add_optional_literal(graph, file_resource, SPDX_NAMESPACE.noticeText, file.notice)
+    add_optional_literal(file.license_comment, graph, file_resource, SPDX_NAMESPACE.licenseComments)
+    add_optional_literal(file.copyright_text, graph, file_resource, SPDX_NAMESPACE.copyrightText)
+    add_optional_literal(file.comment, graph, file_resource, RDFS.comment)
+    add_optional_literal(file.notice, graph, file_resource, SPDX_NAMESPACE.noticeText)
     for contributor in file.contributors:
         graph.add((file_resource, SPDX_NAMESPACE.fileContributor, Literal(contributor)))
     for attribution_text in file.attribution_texts:

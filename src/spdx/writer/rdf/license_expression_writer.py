@@ -22,8 +22,9 @@ from spdx.model.spdx_none import SpdxNone
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 
 
-def add_license_expression_or_none_or_no_assertion(graph: Graph, parent: Node, predicate: Node, value: Union[
-    List[LicenseExpression], LicenseExpression, SpdxNoAssertion, SpdxNone], doc_namespace: str):
+def add_license_expression_or_none_or_no_assertion(value: Union[
+    List[LicenseExpression], LicenseExpression, SpdxNoAssertion, SpdxNone], graph: Graph, parent: Node, predicate: Node,
+                                                   doc_namespace: str):
     if isinstance(value, SpdxNoAssertion):
         graph.add((parent, predicate, SPDX_NAMESPACE.noassertion))
         return
@@ -32,41 +33,41 @@ def add_license_expression_or_none_or_no_assertion(graph: Graph, parent: Node, p
         return
     if isinstance(value, list):
         for license_expression in value:
-            add_license_expression_to_graph(graph, parent, predicate, license_expression, doc_namespace)
+            add_license_expression_to_graph(license_expression, graph, parent, predicate, doc_namespace)
     if isinstance(value, LicenseExpression):
-        add_license_expression_to_graph(graph, parent, predicate, value, doc_namespace)
+        add_license_expression_to_graph(value, graph, parent, predicate, doc_namespace)
 
 
-def add_license_expression_to_graph(graph: Graph, subject: Node, predicate: Node,
-                                    license_expression: Expression, doc_namespace: str):
+def add_license_expression_to_graph(license_expression: Expression, graph: Graph, parent: Node, predicate: Node,
+                                    doc_namespace: str):
     if isinstance(license_expression, AND):
         member_node = BNode()
         graph.add((member_node, RDF.type, SPDX_NAMESPACE.ConjunctiveLicenseSet))
-        graph.add((subject, predicate, member_node))
+        graph.add((parent, predicate, member_node))
         for arg in license_expression.args:
-            add_license_expression_to_graph(graph, member_node, SPDX_NAMESPACE.member, arg, doc_namespace)
+            add_license_expression_to_graph(arg, graph, member_node, SPDX_NAMESPACE.member, doc_namespace)
     if isinstance(license_expression, OR):
         member_node = BNode()
         graph.add((member_node, RDF.type, SPDX_NAMESPACE.DisjunctiveLicenseSet))
-        graph.add((subject, predicate, member_node))
+        graph.add((parent, predicate, member_node))
         for arg in license_expression.args:
-            add_license_expression_to_graph(graph, member_node, SPDX_NAMESPACE.member, arg, doc_namespace)
+            add_license_expression_to_graph(arg, graph, member_node, SPDX_NAMESPACE.member, doc_namespace)
     if isinstance(license_expression, LicenseWithExceptionSymbol):
         member_node = BNode()
         graph.add((member_node, RDF.type, SPDX_NAMESPACE.WithExceptionOperator))
-        graph.add((subject, predicate, member_node))
+        graph.add((parent, predicate, member_node))
 
-        add_license_expression_to_graph(graph, member_node, SPDX_NAMESPACE.member, license_expression.license_symbol,
+        add_license_expression_to_graph(license_expression.license_symbol, graph, member_node, SPDX_NAMESPACE.member,
                                         doc_namespace)
-        add_license_exception_to_graph(graph, license_expression.exception_symbol, member_node)
+        add_license_exception_to_graph(license_expression.exception_symbol, graph, member_node)
 
     if isinstance(license_expression, LicenseSymbol):
         if license_or_exception_is_on_spdx_licensing_list(license_expression):
             graph.add(
-                (subject, predicate, URIRef(f"http://spdx.org/licenses/{license_expression}")))
+                (parent, predicate, URIRef(f"http://spdx.org/licenses/{license_expression}")))
         else:
             # assuming that the license expression is a LicenseRef to an instance of ExtractedLicensingInfo
-            graph.add((subject, predicate, URIRef(f"{doc_namespace}#{license_expression}")))
+            graph.add((parent, predicate, URIRef(f"{doc_namespace}#{license_expression}")))
 
 
 def license_or_exception_is_on_spdx_licensing_list(license_symbol: LicenseSymbol) -> bool:
@@ -74,13 +75,13 @@ def license_or_exception_is_on_spdx_licensing_list(license_symbol: LicenseSymbol
     return not symbol_info.errors
 
 
-def add_license_exception_to_graph(graph: Graph, license_exception: LicenseSymbol, member_node: Node):
+def add_license_exception_to_graph(license_exception: LicenseSymbol, graph: Graph, parent: Node):
     if license_or_exception_is_on_spdx_licensing_list(license_exception):
         exception_node = URIRef(f"http://spdx.org/licenses/{license_exception}")
-        graph.add((member_node, SPDX_NAMESPACE.licenseException, exception_node))
+        graph.add((parent, SPDX_NAMESPACE.licenseException, exception_node))
     else:
         exception_node = BNode()
         graph.add((exception_node, SPDX_NAMESPACE.licenseExceptionId, Literal(license_exception)))
-        graph.add((member_node, SPDX_NAMESPACE.licenseException, exception_node))
+        graph.add((parent, SPDX_NAMESPACE.licenseException, exception_node))
 
     graph.add((exception_node, RDF.type, SPDX_NAMESPACE.LicenseException))
