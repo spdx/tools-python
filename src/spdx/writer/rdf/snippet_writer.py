@@ -54,8 +54,8 @@ def add_range_to_graph(graph: Graph, snippet_resource: URIRef, range_information
         graph.add((start_end_pointer, predicate, pointer_node))
         graph.add((pointer_node, POINTER_NAMESPACE.reference, snippet_from_file_ref))
         if pointer_class == POINTER_NAMESPACE.ByteOffsetPointer:
-            graph.add((pointer_node, POINTER_NAMESPACE.offset, Literal(str(value))))
+            graph.add((pointer_node, POINTER_NAMESPACE.offset, Literal(value)))
         else:
-            graph.add((pointer_node, POINTER_NAMESPACE.lineNumber, Literal(str(value))))
+            graph.add((pointer_node, POINTER_NAMESPACE.lineNumber, Literal(value)))
 
     graph.add((snippet_resource, SPDX_NAMESPACE.range, start_end_pointer))
