@@ -24,7 +24,7 @@ SPDX_NAMESPACE = Namespace("http://spdx.org/rdf/terms#")
 POINTER_NAMESPACE = Namespace("http://www.w3.org/2009/pointers#")
 
 
-def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Any):
+def add_optional_literal(graph: Graph, parent: Node, predicate: Node, value: Any):
     if value is None:
         return
     if isinstance(value, list):
@@ -50,7 +50,7 @@ def add_literal_or_no_assertion(graph: Graph, parent: Node, predicate: Node, val
     if isinstance(value, SpdxNoAssertion):
         graph.add((parent, predicate, SPDX_NAMESPACE.noassertion))
         return
-    add_literal_value(graph, parent, predicate, value)
+    add_optional_literal(graph, parent, predicate, value)
 
 
 def add_datetime_to_graph(graph: Graph, parent: Node, predicate: Node, value: Optional[datetime]):

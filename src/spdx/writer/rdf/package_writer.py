@@ -18,7 +18,7 @@ from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
 
 from spdx.model.package import Package, PackageVerificationCode, ExternalPackageRef, \
     CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_literal_value, add_literal_or_no_assertion_or_none, \
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_optional_literal, add_literal_or_no_assertion_or_none, \
     add_datetime_to_graph, add_namespace_to_spdx_id
 
 
@@ -28,10 +28,10 @@ def add_package_information_to_graph(package: Package, graph: Graph, doc_namespa
     graph.add((package_resource, RDF.type, SPDX_NAMESPACE.Package))
 
     graph.add((package_resource, SPDX_NAMESPACE.name, Literal(package.name)))
-    add_literal_value(graph, package_resource, SPDX_NAMESPACE.versionInfo, package.version)
-    add_literal_value(graph, package_resource, SPDX_NAMESPACE.packageFileName, package.file_name)
-    add_literal_value(graph, package_resource, SPDX_NAMESPACE.supplier, package.supplier)
-    add_literal_value(graph, package_resource, SPDX_NAMESPACE.originator, package.originator)
+    add_optional_literal(graph, package_resource, SPDX_NAMESPACE.versionInfo, package.version)
+    add_optional_literal(graph, package_resource, SPDX_NAMESPACE.packageFileName, package.file_name)
+    add_optional_literal(graph, package_resource, SPDX_NAMESPACE.supplier, package.supplier)
+    add_optional_literal(graph, package_resource, SPDX_NAMESPACE.originator, package.originator)
     add_literal_or_no_assertion_or_none(graph, package_resource, SPDX_NAMESPACE.downloadLocation,
                                         package.download_location)
     graph.add((package_resource, SPDX_NAMESPACE.filesAnalyzed, Literal(package.files_analyzed, datatype=XSD.boolean)))
@@ -39,8 +39,8 @@ def add_package_information_to_graph(package: Package, graph: Graph, doc_namespa
     for checksum in package.checksums:
         add_checksum_information_to_graph(checksum, graph, package_resource)
 
-    add_literal_value(graph, package_resource, DOAP.homepage, package.homepage)
-    add_literal_value(graph, package_resource, SPDX_NAMESPACE.sourceInfo, package.source_info)
+    add_optional_literal(graph, package_resource, DOAP.homepage, package.homepage)
+    add_optional_literal(graph, package_resource, SPDX_NAMESPACE.sourceInfo, package.source_info)
     add_license_expression_or_none_or_no_assertion(graph, package_resource, SPDX_NAMESPACE.licenseConcluded,
                                                    package.license_concluded,
                                                    doc_namespace)
@@ -48,15 +48,15 @@ def add_package_information_to_graph(package: Package, graph: Graph, doc_namespa
                                                    package.license_info_from_files, doc_namespace)
     add_license_expression_or_none_or_no_assertion(graph, package_resource, SPDX_NAMESPACE.licenseDeclared,
                                                    package.license_declared, doc_namespace)
-    add_literal_value(graph, package_resource, SPDX_NAMESPACE.licenseComments, package.license_comment)
-    add_literal_value(graph, package_resource, SPDX_NAMESPACE.copyrightText, package.copyright_text)
-    add_literal_value(graph, package_resource, SPDX_NAMESPACE.summary, package.summary)
-    add_literal_value(graph, package_resource, SPDX_NAMESPACE.description, package.description)
-    add_literal_value(graph, package_resource, RDFS.comment, package.comment)
+    add_optional_literal(graph, package_resource, SPDX_NAMESPACE.licenseComments, package.license_comment)
+    add_optional_literal(graph, package_resource, SPDX_NAMESPACE.copyrightText, package.copyright_text)
+    add_optional_literal(graph, package_resource, SPDX_NAMESPACE.summary, package.summary)
+    add_optional_literal(graph, package_resource, SPDX_NAMESPACE.description, package.description)
+    add_optional_literal(graph, package_resource, RDFS.comment, package.comment)
     for external_reference in package.external_references:
         add_external_package_ref_to_graph(graph, external_reference, package_resource)
     for attribution_text in package.attribution_texts:
-        add_literal_value(graph, package_resource, SPDX_NAMESPACE.attributionText, attribution_text)
+        add_optional_literal(graph, package_resource, SPDX_NAMESPACE.attributionText, attribution_text)
     if package.primary_package_purpose:
         graph.add((package_resource, SPDX_NAMESPACE.primaryPackagePurpose,
                    SPDX_NAMESPACE[f"purpose_{snake_case_to_camel_case(package.primary_package_purpose.name)}"]))
