@@ -23,8 +23,8 @@ def test_add_extracted_licensing_info_to_graph():
 
     assert (URIRef("docNode"), SPDX_NAMESPACE.hasExtractedLicensingInfo, None) in graph
     assert (URIRef("docNamespace#LicenseRef-1"), None, SPDX_NAMESPACE.ExtractedLicensingInfo) in graph
-    assert (None, SPDX_NAMESPACE.licenseId, Literal("LicenseRef-1")) in graph
-    assert (None, SPDX_NAMESPACE.extractedText, Literal("extractedText")) in graph
-    assert (None, RDFS.seeAlso, Literal("https://see.also")) in graph
-    assert (None, SPDX_NAMESPACE.name, Literal("licenseName")) in graph
-    assert (None, RDFS.comment, Literal("licenseComment")) in graph
+    assert (None, SPDX_NAMESPACE.licenseId, Literal(extracted_licensing_info.license_id)) in graph
+    assert (None, SPDX_NAMESPACE.extractedText, Literal(extracted_licensing_info.extracted_text)) in graph
+    assert (None, RDFS.seeAlso, Literal(extracted_licensing_info.cross_references[0])) in graph
+    assert (None, SPDX_NAMESPACE.name, Literal(extracted_licensing_info.license_name)) in graph
+    assert (None, RDFS.comment, Literal(extracted_licensing_info.comment)) in graph
