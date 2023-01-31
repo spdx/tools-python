@@ -11,6 +11,8 @@
 import re
 from typing import List, Dict
 
+import uritools
+
 from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
 from spdx.validation.uri_validators import validate_url, validate_uri
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
@@ -75,7 +77,7 @@ def validate_external_package_ref(external_package_ref: ExternalPackageRef, pare
         return []
 
     if reference_type == "swid":
-        if validate_uri(locator) or not locator.startswith("swid"):
+        if not uritools.isuri(locator) or not locator.startswith("swid"):
             return [ValidationMessage(
                 f'externalPackageRef locator of type "swid" must be a valid URI with scheme swid, but is: {locator}',
                 context)]
