@@ -69,7 +69,7 @@ def test_external_package_ref_to_graph():
     graph = Graph()
     external_reference = external_package_ref_fixture()
 
-    add_external_package_ref_to_graph(graph, external_reference, URIRef("docNamespace"))
+    add_external_package_ref_to_graph(external_reference, graph, URIRef("docNamespace"))
 
     assert (None, None, SPDX_NAMESPACE.ExternalRef) in graph
     assert (None, SPDX_NAMESPACE.referenceCategory, SPDX_NAMESPACE.referenceCategory_packageManager) in graph

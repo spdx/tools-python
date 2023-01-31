@@ -27,23 +27,23 @@ def add_snippet_information_to_graph(snippet: Snippet, graph: Graph, doc_namespa
         add_namespace_to_spdx_id(snippet.file_spdx_id, doc_namespace, external_doc_ref_to_namespace))
     graph.add((snippet_resource, SPDX_NAMESPACE.snippetFromFile,
                snippet_from_file_ref))
-    add_range_to_graph(graph, snippet_resource, snippet.byte_range, snippet_from_file_ref,
+    add_range_to_graph(snippet.byte_range, graph, snippet_resource, snippet_from_file_ref,
                        POINTER_NAMESPACE.ByteOffsetPointer)
-    add_range_to_graph(graph, snippet_resource, snippet.line_range, snippet_from_file_ref,
+    add_range_to_graph(snippet.line_range, graph, snippet_resource, snippet_from_file_ref,
                        POINTER_NAMESPACE.LineCharPointer)
-    add_license_expression_or_none_or_no_assertion(graph, snippet_resource, SPDX_NAMESPACE.licenseConcluded,
-                                                   snippet.license_concluded, doc_namespace)
-    add_license_expression_or_none_or_no_assertion(graph, snippet_resource, SPDX_NAMESPACE.licenseInfoInSnippet,
-                                                   snippet.license_info_in_snippet, doc_namespace)
-    add_optional_literal(graph, snippet_resource, SPDX_NAMESPACE.licenseComments, snippet.license_comment)
-    add_optional_literal(graph, snippet_resource, SPDX_NAMESPACE.copyrightText, snippet.copyright_text)
-    add_optional_literal(graph, snippet_resource, RDFS.comment, snippet.comment)
-    add_optional_literal(graph, snippet_resource, SPDX_NAMESPACE.name, snippet.name)
+    add_license_expression_or_none_or_no_assertion(snippet.license_concluded, graph, snippet_resource,
+                                                   SPDX_NAMESPACE.licenseConcluded, doc_namespace)
+    add_license_expression_or_none_or_no_assertion(snippet.license_info_in_snippet, graph, snippet_resource,
+                                                   SPDX_NAMESPACE.licenseInfoInSnippet, doc_namespace)
+    add_optional_literal(snippet.license_comment, graph, snippet_resource, SPDX_NAMESPACE.licenseComments)
+    add_optional_literal(snippet.copyright_text, graph, snippet_resource, SPDX_NAMESPACE.copyrightText)
+    add_optional_literal(snippet.comment, graph, snippet_resource, RDFS.comment)
+    add_optional_literal(snippet.name, graph, snippet_resource, SPDX_NAMESPACE.name)
     for attribution_text in snippet.attribution_texts:
         graph.add((snippet_resource, SPDX_NAMESPACE.attributionText, Literal(attribution_text)))
 
 
-def add_range_to_graph(graph: Graph, snippet_resource: URIRef, range_information: Optional[Tuple[int, int]],
+def add_range_to_graph(range_information: Optional[Tuple[int, int]], graph: Graph, snippet_node: URIRef,
                        snippet_from_file_ref: URIRef, pointer_class: URIRef):
     start_end_pointer = BNode()
     graph.add((start_end_pointer, RDF.type, POINTER_NAMESPACE.StartEndPointer))
@@ -58,4 +58,4 @@ def add_range_to_graph(graph: Graph, snippet_resource: URIRef, range_information
         else:
             graph.add((pointer_node, POINTER_NAMESPACE.lineNumber, Literal(value)))
 
-    graph.add((snippet_resource, SPDX_NAMESPACE.range, start_end_pointer))
+    graph.add((snippet_node, SPDX_NAMESPACE.range, start_end_pointer))

@@ -38,8 +38,7 @@ def test_add_snippet_information_to_graph():
                           ((1, 3), POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)])
 def test_add_ranges_to_graph(range, pointer, predicate):
     graph = Graph()
-    add_range_to_graph(graph, URIRef("anyUR"), range, URIRef("docNamespace#SPDXRef-File"),
-                       pointer)
+    add_range_to_graph(range, graph, URIRef("anyUR"), URIRef("docNamespace#SPDXRef-File"), pointer)
 
     assert (None, SPDX_NAMESPACE.range, None) in graph
     assert (None, POINTER_NAMESPACE.startPointer, None) in graph

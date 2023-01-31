@@ -20,7 +20,7 @@ def test_add_conjunctive_license_set_to_graph():
     graph = Graph()
     license_expression = get_spdx_licensing().parse("MIT AND GPL-2.0")
 
-    add_license_expression_to_graph(graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, license_expression,
+    add_license_expression_to_graph(license_expression, graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded,
                                     "https://namespace")
 
     assert (URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, None) in graph
@@ -33,7 +33,7 @@ def test_add_disjunctive_license_set_to_graph():
     graph = Graph()
     license_expression = get_spdx_licensing().parse("MIT OR GPL-2.0")
 
-    add_license_expression_to_graph(graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, license_expression,
+    add_license_expression_to_graph(license_expression, graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded,
                                     "https://namespace")
 
     assert (URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, None) in graph
@@ -52,7 +52,7 @@ def test_license_exception_to_graph(license_with_exception, expected_triple):
     graph = Graph()
     license_expression = get_spdx_licensing().parse(license_with_exception)
 
-    add_license_expression_to_graph(graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, license_expression,
+    add_license_expression_to_graph(license_expression, graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded,
                                     "https://namespace")
 
     assert (URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, None) in graph
