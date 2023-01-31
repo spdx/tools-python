@@ -11,7 +11,7 @@
 from rdflib import Graph, Literal, RDFS, RDF, URIRef
 
 from spdx.writer.rdf.file_writer import add_file_information_to_graph
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 from tests.spdx.fixtures import file_fixture
 
 
@@ -21,15 +21,15 @@ def test_add_file_information_to_graph():
 
     add_file_information_to_graph(file, graph, "anyURI", {})
 
-    assert (URIRef("anyURI#SPDXRef-File"), RDF.type, spdx_namespace.File) in graph
-    assert (None, spdx_namespace.fileName, Literal("./fileName.py")) in graph
-    assert (None, spdx_namespace.fileType, spdx_namespace.fileType_text) in graph
-    assert (None, spdx_namespace.licenseComments, Literal("licenseComment")) in graph
-    assert (None, spdx_namespace.licenseConcluded, None) in graph
-    assert (None, spdx_namespace.licenseInfoInFile, None) in graph
-    assert (None, spdx_namespace.copyrightText, Literal("copyrightText")) in graph
+    assert (URIRef("anyURI#SPDXRef-File"), RDF.type, SPDX_NAMESPACE.File) in graph
+    assert (None, SPDX_NAMESPACE.fileName, Literal("./fileName.py")) in graph
+    assert (None, SPDX_NAMESPACE.fileType, SPDX_NAMESPACE.fileType_text) in graph
+    assert (None, SPDX_NAMESPACE.licenseComments, Literal("licenseComment")) in graph
+    assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoInFile, None) in graph
+    assert (None, SPDX_NAMESPACE.copyrightText, Literal("copyrightText")) in graph
     assert (None, RDFS.comment, Literal("fileComment")) in graph
-    assert (None, spdx_namespace.noticeText, Literal("fileNotice")) in graph
-    assert (None, spdx_namespace.fileContributor, Literal("fileContributor")) in graph
-    assert (None, spdx_namespace.checksum, None) in graph
-    assert (None, spdx_namespace.attributionText, Literal("fileAttributionText")) in graph
+    assert (None, SPDX_NAMESPACE.noticeText, Literal("fileNotice")) in graph
+    assert (None, SPDX_NAMESPACE.fileContributor, Literal("fileContributor")) in graph
+    assert (None, SPDX_NAMESPACE.checksum, None) in graph
+    assert (None, SPDX_NAMESPACE.attributionText, Literal("fileAttributionText")) in graph

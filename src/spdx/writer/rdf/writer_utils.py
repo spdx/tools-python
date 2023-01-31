@@ -19,8 +19,8 @@ from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
 
-spdx_namespace = Namespace("http://spdx.org/rdf/terms#")
-pointer_namespace = Namespace("http://www.w3.org/2009/pointers#")
+SPDX_NAMESPACE = Namespace("http://spdx.org/rdf/terms#")
+POINTER_NAMESPACE = Namespace("http://www.w3.org/2009/pointers#")
 
 
 def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Any):
@@ -39,7 +39,7 @@ def add_literal_or_no_assertion_or_none(graph: Graph, parent: Node, predicate: N
     if value is None:
         return
     if isinstance(value, SpdxNone):
-        graph.add((parent, predicate, spdx_namespace.none))
+        graph.add((parent, predicate, SPDX_NAMESPACE.none))
         return
     add_literal_or_no_assertion(graph, parent, predicate, value)
 
@@ -48,7 +48,7 @@ def add_literal_or_no_assertion(graph: Graph, parent: Node, predicate: Node, val
     if value is None:
         return
     if isinstance(value, SpdxNoAssertion):
-        graph.add((parent, predicate, spdx_namespace.noassertion))
+        graph.add((parent, predicate, SPDX_NAMESPACE.noassertion))
         return
     add_literal_value(graph, parent, predicate, value)
 

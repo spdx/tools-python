@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from rdflib import Graph, URIRef, RDF, Literal, RDFS
-from spdx.writer.rdf.writer_utils import spdx_namespace, pointer_namespace
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, POINTER_NAMESPACE
 
 from spdx.writer.rdf.snippet_writer import add_snippet_information_to_graph, add_range_to_graph
 from tests.spdx.fixtures import snippet_fixture
@@ -21,14 +21,14 @@ def test_add_snippet_information_to_graph():
 
     add_snippet_information_to_graph(snippet, graph, "anyURI", {})
 
-    assert (URIRef("anyURI#SPDXRef-Snippet"), RDF.type, spdx_namespace.Snippet) in graph
-    assert (None, spdx_namespace.snippetFromFile, URIRef(f"anyURI#{snippet.file_spdx_id}")) in graph
-    assert (None, spdx_namespace.licenseConcluded, None) in graph
-    assert (None, spdx_namespace.licenseInfoInSnippet, None) in graph
-    assert (None, spdx_namespace.licenseComments, Literal("snippetLicenseComment")) in graph
-    assert (None, spdx_namespace.copyrightText, Literal("licenseCopyrightText")) in graph
-    assert (None, spdx_namespace.name, Literal("snippetName")) in graph
-    assert (None, spdx_namespace.attributionText, Literal("snippetAttributionText")) in graph
+    assert (URIRef("anyURI#SPDXRef-Snippet"), RDF.type, SPDX_NAMESPACE.Snippet) in graph
+    assert (None, SPDX_NAMESPACE.snippetFromFile, URIRef(f"anyURI#{snippet.file_spdx_id}")) in graph
+    assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoInSnippet, None) in graph
+    assert (None, SPDX_NAMESPACE.licenseComments, Literal("snippetLicenseComment")) in graph
+    assert (None, SPDX_NAMESPACE.copyrightText, Literal("licenseCopyrightText")) in graph
+    assert (None, SPDX_NAMESPACE.name, Literal("snippetName")) in graph
+    assert (None, SPDX_NAMESPACE.attributionText, Literal("snippetAttributionText")) in graph
     assert (None, RDFS.comment, Literal("snippetComment")) in graph
 
 
@@ -36,11 +36,11 @@ def test_add_ranges_to_graph():
     graph = Graph()
     byte_range = (5, 190)
 
-    add_range_to_graph(graph, URIRef("anyUR"), byte_range, URIRef("anyURI#SPDXRef-File"), pointer_namespace.ByteOffsetPointer)
+    add_range_to_graph(graph, URIRef("anyUR"), byte_range, URIRef("anyURI#SPDXRef-File"), POINTER_NAMESPACE.ByteOffsetPointer)
 
-    assert (None, spdx_namespace.range, None) in graph
-    assert (None, pointer_namespace.startPointer, None) in graph
-    assert (None, pointer_namespace.endPointer, None) in graph
-    assert (None, pointer_namespace.reference, URIRef("anyURI#SPDXRef-File")) in graph
-    assert (None, pointer_namespace.offset, Literal(str(5))) in graph
-    assert (None, pointer_namespace.offset, Literal(str(190))) in graph
+    assert (None, SPDX_NAMESPACE.range, None) in graph
+    assert (None, POINTER_NAMESPACE.startPointer, None) in graph
+    assert (None, POINTER_NAMESPACE.endPointer, None) in graph
+    assert (None, POINTER_NAMESPACE.reference, URIRef("anyURI#SPDXRef-File")) in graph
+    assert (None, POINTER_NAMESPACE.offset, Literal(str(5))) in graph
+    assert (None, POINTER_NAMESPACE.offset, Literal(str(190))) in graph

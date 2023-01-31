@@ -16,31 +16,31 @@ from spdx.model.file import File
 from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
 from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
-from spdx.writer.rdf.writer_utils import spdx_namespace, add_literal_value, add_namespace_to_spdx_id
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_literal_value, add_namespace_to_spdx_id
 
 
 def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str,
                                   external_doc_ref_to_namespace: Dict[str, str]):
     file_resource = URIRef(add_namespace_to_spdx_id(file.spdx_id, doc_namespace, external_doc_ref_to_namespace))
-    graph.add((file_resource, RDF.type, spdx_namespace.File))
-    graph.add((file_resource, spdx_namespace.fileName, Literal(file.name)))
+    graph.add((file_resource, RDF.type, SPDX_NAMESPACE.File))
+    graph.add((file_resource, SPDX_NAMESPACE.fileName, Literal(file.name)))
     for file_type in file.file_type:
-        graph.add((file_resource, spdx_namespace.fileType,
-                   spdx_namespace[f"fileType_{snake_case_to_camel_case(file_type.name)}"]))
+        graph.add((file_resource, SPDX_NAMESPACE.fileType,
+                   SPDX_NAMESPACE[f"fileType_{snake_case_to_camel_case(file_type.name)}"]))
 
     for checksum in file.checksums:
         add_checksum_information_to_graph(checksum, graph, file_resource)
 
-    add_license_expression_or_none_or_no_assertion(graph, file_resource, spdx_namespace.licenseConcluded,
+    add_license_expression_or_none_or_no_assertion(graph, file_resource, SPDX_NAMESPACE.licenseConcluded,
                                                    file.license_concluded, doc_namespace)
-    add_license_expression_or_none_or_no_assertion(graph, file_resource, spdx_namespace.licenseInfoInFile,
+    add_license_expression_or_none_or_no_assertion(graph, file_resource, SPDX_NAMESPACE.licenseInfoInFile,
                                                    file.license_info_in_file, doc_namespace)
 
-    add_literal_value(graph, file_resource, spdx_namespace.licenseComments, file.license_comment)
-    add_literal_value(graph, file_resource, spdx_namespace.copyrightText, file.copyright_text)
+    add_literal_value(graph, file_resource, SPDX_NAMESPACE.licenseComments, file.license_comment)
+    add_literal_value(graph, file_resource, SPDX_NAMESPACE.copyrightText, file.copyright_text)
     add_literal_value(graph, file_resource, RDFS.comment, file.comment)
-    add_literal_value(graph, file_resource, spdx_namespace.noticeText, file.notice)
+    add_literal_value(graph, file_resource, SPDX_NAMESPACE.noticeText, file.notice)
     for contributor in file.contributors:
-        graph.add((file_resource, spdx_namespace.fileContributor, Literal(contributor)))
+        graph.add((file_resource, SPDX_NAMESPACE.fileContributor, Literal(contributor)))
     for attribution_text in file.attribution_texts:
-        graph.add((file_resource, spdx_namespace.attributionText, Literal(attribution_text)))
+        graph.add((file_resource, SPDX_NAMESPACE.attributionText, Literal(attribution_text)))

@@ -14,7 +14,7 @@ from rdflib import Graph, Literal, RDFS
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.annotation_writer import add_annotation_info_to_graph
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 from tests.spdx.fixtures import annotation_fixture
 
 
@@ -24,8 +24,8 @@ def test_add_annotation_info_to_graph():
 
     add_annotation_info_to_graph(annotation, graph, "anyURI", {})
 
-    assert (None, None, spdx_namespace.Annotation) in graph
-    assert (None, spdx_namespace.annotationType, spdx_namespace.annotationType_review) in graph
-    assert (None, spdx_namespace.annotationDate, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
-    assert (None, spdx_namespace.annotator, Literal("Person: annotatorName (some@mail.com)")) in graph
+    assert (None, None, SPDX_NAMESPACE.Annotation) in graph
+    assert (None, SPDX_NAMESPACE.annotationType, SPDX_NAMESPACE.annotationType_review) in graph
+    assert (None, SPDX_NAMESPACE.annotationDate, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
+    assert (None, SPDX_NAMESPACE.annotator, Literal("Person: annotatorName (some@mail.com)")) in graph
     assert (None, RDFS.comment, Literal("annotationComment")) in graph

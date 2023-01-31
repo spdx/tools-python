@@ -14,7 +14,7 @@ from rdflib import Graph, Literal, RDFS, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 from tests.spdx.fixtures import creation_info_fixture
 
 
@@ -24,15 +24,15 @@ def test_add_creation_info_to_graph():
 
     add_creation_info_to_graph(creation_info, graph)
 
-    assert (None, None, spdx_namespace.SpdxDocument) in graph
+    assert (None, None, SPDX_NAMESPACE.SpdxDocument) in graph
     assert (URIRef(f"{creation_info.document_namespace}#{creation_info.spdx_id}"), None, None) in graph
-    assert (None, spdx_namespace.dataLicense, URIRef("https://spdx.org/licenses/CC0-1.0"))
-    assert (None, spdx_namespace.name, Literal("documentName")) in graph
-    assert (None, spdx_namespace.specVersion, Literal("SPDX-2.3")) in graph
-    assert (None, spdx_namespace.creationInfo, None) in graph
+    assert (None, SPDX_NAMESPACE.dataLicense, URIRef("https://spdx.org/licenses/CC0-1.0"))
+    assert (None, SPDX_NAMESPACE.name, Literal("documentName")) in graph
+    assert (None, SPDX_NAMESPACE.specVersion, Literal("SPDX-2.3")) in graph
+    assert (None, SPDX_NAMESPACE.creationInfo, None) in graph
 
-    assert (None, None, spdx_namespace.CreationInfo) in graph
-    assert (None, spdx_namespace.created, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
+    assert (None, None, SPDX_NAMESPACE.CreationInfo) in graph
+    assert (None, SPDX_NAMESPACE.created, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
     assert (None, RDFS.comment, Literal("creatorComment")) in graph
-    assert (None, spdx_namespace.licenseListVersion, Literal("3.19")) in graph
-    assert (None, spdx_namespace.creator, Literal("Person: creatorName (some@mail.com)")) in graph
+    assert (None, SPDX_NAMESPACE.licenseListVersion, Literal("3.19")) in graph
+    assert (None, SPDX_NAMESPACE.creator, Literal("Person: creatorName (some@mail.com)")) in graph
