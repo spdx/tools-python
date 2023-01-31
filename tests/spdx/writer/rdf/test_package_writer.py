@@ -13,7 +13,7 @@ from rdflib import Graph, URIRef, RDF, Literal, XSD, RDFS, DOAP
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.package_writer import add_package_to_graph, add_external_package_ref_to_graph, \
     add_package_verification_code_to_graph
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from tests.spdx.fixtures import package_fixture, external_package_ref_fixture, package_verification_code_fixture
 
 

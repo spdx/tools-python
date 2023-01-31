@@ -11,7 +11,7 @@
 from rdflib import Graph, URIRef, BNode, RDF, Literal
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 def add_checksum_to_graph(checksum: Checksum, graph: Graph, parent: URIRef):

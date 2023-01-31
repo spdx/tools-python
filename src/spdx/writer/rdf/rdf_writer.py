@@ -23,7 +23,7 @@ from spdx.writer.rdf.file_writer import add_file_to_graph
 from spdx.writer.rdf.package_writer import add_package_to_graph
 from spdx.writer.rdf.relationship_writer import add_relationship_to_graph
 from spdx.writer.rdf.snippet_writer import add_snippet_to_graph
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, POINTER_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
 
 
 def write_document_to_file(document: Document, file_name: str, validate: bool):

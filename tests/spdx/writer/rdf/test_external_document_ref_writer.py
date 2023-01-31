@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from rdflib import Graph, URIRef
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 from spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
 from tests.spdx.fixtures import external_document_ref_fixture

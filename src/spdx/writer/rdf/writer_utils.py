@@ -12,16 +12,14 @@ import sys
 from datetime import datetime
 from typing import Any, Optional, Dict
 
-from rdflib import Namespace, Graph, Literal
+from rdflib import Graph, Literal
 from rdflib.term import Node
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
-
-SPDX_NAMESPACE = Namespace("http://spdx.org/rdf/terms#")
-POINTER_NAMESPACE = Namespace("http://www.w3.org/2009/pointers#")
 
 
 def add_optional_literal(value: Any, graph: Graph, parent: Node, predicate: Node):

@@ -11,7 +11,7 @@
 from rdflib import Graph, Literal, RDFS, RDF, URIRef
 
 from spdx.writer.rdf.file_writer import add_file_to_graph
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from tests.spdx.fixtures import file_fixture
 
 

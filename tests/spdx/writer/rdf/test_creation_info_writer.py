@@ -12,7 +12,7 @@ from rdflib import Graph, Literal, RDFS, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from tests.spdx.fixtures import creation_info_fixture
 
 

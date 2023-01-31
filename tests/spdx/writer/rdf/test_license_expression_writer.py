@@ -11,7 +11,7 @@
 import pytest
 from license_expression import get_spdx_licensing
 from rdflib import Graph, URIRef, RDF, Literal
-from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 from spdx.writer.rdf.license_expression_writer import add_license_expression_to_graph
 
