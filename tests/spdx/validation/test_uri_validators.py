@@ -99,7 +99,7 @@ def test_valid_uri(input_value):
 def test_invalid_uri(input_value):
     message = validate_uri(input_value)
 
-    assert message == [f"must be a valid URI specified in RFC-3986, but is: {input_value}"]
+    assert message == [f"must be a valid URI specified in RFC-3986 and must contain no fragment (#), but is: {input_value}"]
 
 
 @pytest.mark.parametrize("input_value", ["://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82..."])

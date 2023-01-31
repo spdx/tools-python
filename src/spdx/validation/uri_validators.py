@@ -38,7 +38,7 @@ def validate_download_location(location: str) -> List[str]:
 
 def validate_uri(uri: str) -> List[str]:
     if not isabsuri(uri):
-        return [f"must be a valid URI specified in RFC-3986, but is: {uri}"]
+        return [f"must be a valid URI specified in RFC-3986 and must contain no fragment (#), but is: {uri}"]
     else:
         split = urisplit(uri)
         if split.scheme is None:

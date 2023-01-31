@@ -32,7 +32,7 @@ def test_valid_creation_info():
           (creation_info_fixture(data_license="MIT"), "SPDXRef-DOCUMENT",
            'data_license must be "CC0-1.0", but is: MIT'),
           (creation_info_fixture(document_namespace="some_namespace"), "SPDXRef-DOCUMENT",
-           "document_namespace must be a valid URI specified in RFC-3986, but is: some_namespace"),
+           "document_namespace must be a valid URI specified in RFC-3986 and must contain no fragment (#), but is: some_namespace"),
           ])
 def test_invalid_creation_info(creation_info_input, expected_message, spdx_id):
     validation_messages: List[ValidationMessage] = validate_creation_info(creation_info_input)
