@@ -26,13 +26,12 @@ POINTER_NAMESPACE = Namespace("http://www.w3.org/2009/pointers#")
 def add_literal_value(graph: Graph, parent: Node, predicate: Node, value: Any):
     if value is None:
         return
-    if not isinstance(value, list):
-        graph.add((parent, predicate, Literal(str(value))))
-        return
-
-    for element in value:
-        element_triple = (parent, predicate, Literal(str(element)))
-        graph.add(element_triple)
+    if isinstance(value, list):
+        for element in value:
+            element_triple = (parent, predicate, Literal(str(element)))
+            graph.add(element_triple)
+    graph.add((parent, predicate, Literal(str(value))))
+    return
 
 
 def add_literal_or_no_assertion_or_none(graph: Graph, parent: Node, predicate: Node, value: Any):
@@ -54,9 +53,8 @@ def add_literal_or_no_assertion(graph: Graph, parent: Node, predicate: Node, val
 
 
 def add_datetime_to_graph(graph: Graph, parent: Node, predicate: Node, value: Optional[datetime]):
-    if not value:
-        return
-    graph.add((parent, predicate, Literal(datetime_to_iso_string(value))))
+    if value:
+        graph.add((parent, predicate, Literal(datetime_to_iso_string(value))))
 
 
 def add_namespace_to_spdx_id(spdx_id: str, doc_namespace: str, external_doc_namespaces: Dict[str, str]) -> str:

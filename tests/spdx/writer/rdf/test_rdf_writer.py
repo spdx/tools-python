@@ -23,6 +23,8 @@ def temporary_file_path() -> str:
     temporary_file_path = "temp_test_rdf_writer_output.rdf.xml"
     yield temporary_file_path
     os.remove(temporary_file_path)
+
+
 def test_write_document_to_file(temporary_file_path: str):
     document: Document = document_fixture()
 
