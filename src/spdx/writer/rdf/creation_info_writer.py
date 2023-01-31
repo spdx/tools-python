@@ -14,14 +14,14 @@ from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.document import CreationInfo
 from spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
 from spdx.writer.rdf.writer_utils import add_optional_literal
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 
 
 def add_creation_info_to_graph(creation_info: CreationInfo, graph: Graph):
     doc_node = URIRef(f"{creation_info.document_namespace}#{creation_info.spdx_id}")
     graph.add((doc_node, RDF.type, SPDX_NAMESPACE.SpdxDocument))
     graph.add((doc_node, SPDX_NAMESPACE.specVersion, Literal(creation_info.spdx_version)))
-    graph.add((doc_node, SPDX_NAMESPACE.dataLicense, URIRef(f"http://spdx.org/licenses/{creation_info.data_license}")))
+    graph.add((doc_node, SPDX_NAMESPACE.dataLicense, LICENSE_NAMESPACE[creation_info.data_license]))
     graph.add((doc_node, SPDX_NAMESPACE.name, Literal(creation_info.name)))
     add_optional_literal(creation_info.document_comment, graph, doc_node, RDFS.comment)
 

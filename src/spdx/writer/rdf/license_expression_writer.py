@@ -19,7 +19,7 @@ from rdflib.term import Node, Literal
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 
 
 def add_license_expression_or_none_or_no_assertion(value: Union[
@@ -64,7 +64,7 @@ def add_license_expression_to_graph(license_expression: Expression, graph: Graph
     if isinstance(license_expression, LicenseSymbol):
         if license_or_exception_is_on_spdx_licensing_list(license_expression):
             graph.add(
-                (parent, predicate, URIRef(f"http://spdx.org/licenses/{license_expression}")))
+                (parent, predicate, LICENSE_NAMESPACE[str(license_expression)]))
         else:
             # assuming that the license expression is a LicenseRef to an instance of ExtractedLicensingInfo
             graph.add((parent, predicate, URIRef(f"{doc_namespace}#{license_expression}")))
@@ -77,7 +77,7 @@ def license_or_exception_is_on_spdx_licensing_list(license_symbol: LicenseSymbol
 
 def add_license_exception_to_graph(license_exception: LicenseSymbol, graph: Graph, parent: Node):
     if license_or_exception_is_on_spdx_licensing_list(license_exception):
-        exception_node = URIRef(f"http://spdx.org/licenses/{license_exception}")
+        exception_node = LICENSE_NAMESPACE[str(license_exception)]
         graph.add((parent, SPDX_NAMESPACE.licenseException, exception_node))
     else:
         exception_node = BNode()
