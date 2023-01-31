@@ -20,7 +20,7 @@ from spdx.model.package import Package, PackageVerificationCode, ExternalPackage
     CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
 from spdx.writer.rdf.writer_utils import add_optional_literal, add_literal_or_no_assertion_or_none, \
     add_datetime_to_graph, add_namespace_to_spdx_id
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
 
 
 def add_package_to_graph(package: Package, graph: Graph, doc_namespace: str,
@@ -89,7 +89,7 @@ def add_external_package_ref_to_graph(external_package_ref: ExternalPackageRef, 
 
     if external_package_ref.reference_type in CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES[external_package_ref.category]:
         graph.add((external_package_ref_node, SPDX_NAMESPACE.referenceType,
-                   URIRef(f"http://spdx.org/rdf/references/{external_package_ref.reference_type}")))
+                   REFERENCE_NAMESPACE[external_package_ref.reference_type]))
     else:
         graph.add((external_package_ref_node, SPDX_NAMESPACE.referenceType,
                    URIRef(external_package_ref.reference_type)))
