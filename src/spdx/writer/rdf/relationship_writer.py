@@ -19,8 +19,8 @@ from spdx.writer.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_namespace_to_spdx_id
 
 
-def add_relationship_info_to_graph(relationship: Relationship, graph: Graph, doc_namespace: str,
-                                   external_doc_ref_to_namespace: Dict[str, str]):
+def add_relationship_to_graph(relationship: Relationship, graph: Graph, doc_namespace: str,
+                              external_doc_ref_to_namespace: Dict[str, str]):
     relationship_node = BNode()
     graph.add((relationship_node, RDF.type, SPDX_NAMESPACE.Relationship))
     graph.add((relationship_node, SPDX_NAMESPACE.relationshipType,

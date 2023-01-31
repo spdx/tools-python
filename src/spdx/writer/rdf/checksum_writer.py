@@ -14,7 +14,7 @@ from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 
 
-def add_checksum_information_to_graph(checksum: Checksum, graph: Graph, parent: URIRef):
+def add_checksum_to_graph(checksum: Checksum, graph: Graph, parent: URIRef):
     checksum_node = BNode()
     graph.add((checksum_node, RDF.type, SPDX_NAMESPACE.Checksum))
     graph.add((checksum_node, SPDX_NAMESPACE.algorithm, algorithm_to_rdf_string(checksum.algorithm)))

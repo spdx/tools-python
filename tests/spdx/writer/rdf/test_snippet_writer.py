@@ -12,15 +12,15 @@ import pytest
 from rdflib import Graph, URIRef, RDF, Literal, RDFS
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, POINTER_NAMESPACE
 
-from spdx.writer.rdf.snippet_writer import add_snippet_information_to_graph, add_range_to_graph
+from spdx.writer.rdf.snippet_writer import add_snippet_to_graph, add_range_to_graph
 from tests.spdx.fixtures import snippet_fixture
 
 
-def test_add_snippet_information_to_graph():
+def test_add_snippet_to_graph():
     graph = Graph()
     snippet = snippet_fixture()
 
-    add_snippet_information_to_graph(snippet, graph, "docNamespace", {})
+    add_snippet_to_graph(snippet, graph, "docNamespace", {})
 
     assert (URIRef("docNamespace#SPDXRef-Snippet"), RDF.type, SPDX_NAMESPACE.Snippet) in graph
     assert (None, SPDX_NAMESPACE.snippetFromFile, URIRef(f"docNamespace#{snippet.file_spdx_id}")) in graph

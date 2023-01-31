@@ -14,7 +14,7 @@ from rdflib import Graph, URIRef, RDF, Literal, XSD, BNode, DOAP, RDFS
 from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
 
 from spdx.writer.casing_tools import snake_case_to_camel_case
-from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
+from spdx.writer.rdf.checksum_writer import add_checksum_to_graph
 
 from spdx.model.package import Package, PackageVerificationCode, ExternalPackageRef, \
     CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
@@ -22,8 +22,8 @@ from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_optional_literal, a
     add_datetime_to_graph, add_namespace_to_spdx_id
 
 
-def add_package_information_to_graph(package: Package, graph: Graph, doc_namespace: str,
-                                     external_doc_ref_to_namespace: Dict[str, str]):
+def add_package_to_graph(package: Package, graph: Graph, doc_namespace: str,
+                         external_doc_ref_to_namespace: Dict[str, str]):
     package_resource = URIRef(add_namespace_to_spdx_id(package.spdx_id, doc_namespace, external_doc_ref_to_namespace))
     graph.add((package_resource, RDF.type, SPDX_NAMESPACE.Package))
 
@@ -37,7 +37,7 @@ def add_package_information_to_graph(package: Package, graph: Graph, doc_namespa
     graph.add((package_resource, SPDX_NAMESPACE.filesAnalyzed, Literal(package.files_analyzed, datatype=XSD.boolean)))
     add_package_verification_code_to_graph(package.verification_code, graph, package_resource)
     for checksum in package.checksums:
-        add_checksum_information_to_graph(checksum, graph, package_resource)
+        add_checksum_to_graph(checksum, graph, package_resource)
 
     add_optional_literal(package.homepage, graph, package_resource, DOAP.homepage)
     add_optional_literal(package.source_info, graph, package_resource, SPDX_NAMESPACE.sourceInfo)

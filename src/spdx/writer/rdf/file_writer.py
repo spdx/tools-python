@@ -14,13 +14,13 @@ from rdflib import Graph, URIRef, Literal, RDF, RDFS
 
 from spdx.model.file import File
 from spdx.writer.casing_tools import snake_case_to_camel_case
-from spdx.writer.rdf.checksum_writer import add_checksum_information_to_graph
+from spdx.writer.rdf.checksum_writer import add_checksum_to_graph
 from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_optional_literal, add_namespace_to_spdx_id
 
 
-def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str,
-                                  external_doc_ref_to_namespace: Dict[str, str]):
+def add_file_to_graph(file: File, graph: Graph, doc_namespace: str,
+                      external_doc_ref_to_namespace: Dict[str, str]):
     file_resource = URIRef(add_namespace_to_spdx_id(file.spdx_id, doc_namespace, external_doc_ref_to_namespace))
     graph.add((file_resource, RDF.type, SPDX_NAMESPACE.File))
     graph.add((file_resource, SPDX_NAMESPACE.fileName, Literal(file.name)))
@@ -29,7 +29,7 @@ def add_file_information_to_graph(file: File, graph: Graph, doc_namespace: str,
                    SPDX_NAMESPACE[f"fileType_{snake_case_to_camel_case(file_type.name)}"]))
 
     for checksum in file.checksums:
-        add_checksum_information_to_graph(checksum, graph, file_resource)
+        add_checksum_to_graph(checksum, graph, file_resource)
 
     add_license_expression_or_none_or_no_assertion(file.license_concluded, graph, file_resource,
                                                    SPDX_NAMESPACE.licenseConcluded, doc_namespace)

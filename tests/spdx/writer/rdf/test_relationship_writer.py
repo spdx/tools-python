@@ -10,15 +10,15 @@
 # limitations under the License.
 from rdflib import Graph, URIRef
 
-from spdx.writer.rdf.relationship_writer import add_relationship_info_to_graph
+from spdx.writer.rdf.relationship_writer import add_relationship_to_graph
 from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 from tests.spdx.fixtures import relationship_fixture
 
 
-def test_add_relationship_info_to_graph():
+def test_add_relationship_to_graph():
     relationship = relationship_fixture()
     graph = Graph()
-    add_relationship_info_to_graph(relationship, graph, "docNamespace", {})
+    add_relationship_to_graph(relationship, graph, "docNamespace", {})
 
     assert(URIRef("docNamespace#SPDXRef-DOCUMENT"), SPDX_NAMESPACE.relationship, None) in graph
     assert (None, SPDX_NAMESPACE.relationshipType, SPDX_NAMESPACE.relationshipType_describes) in graph

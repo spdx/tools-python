@@ -18,8 +18,8 @@ from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE, add_optional_literal, a
 from spdx.model.snippet import Snippet
 
 
-def add_snippet_information_to_graph(snippet: Snippet, graph: Graph, doc_namespace: str,
-                                     external_doc_ref_to_namespace: Dict[str, str]):
+def add_snippet_to_graph(snippet: Snippet, graph: Graph, doc_namespace: str,
+                         external_doc_ref_to_namespace: Dict[str, str]):
     snippet_resource = URIRef(add_namespace_to_spdx_id(snippet.spdx_id, doc_namespace, external_doc_ref_to_namespace))
     graph.add((snippet_resource, RDF.type, SPDX_NAMESPACE.Snippet))
 
