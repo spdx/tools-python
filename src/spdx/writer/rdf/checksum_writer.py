@@ -11,16 +11,16 @@
 from rdflib import Graph, URIRef, BNode, RDF, Literal
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 
 
 def add_checksum_information_to_graph(checksum: Checksum, graph: Graph, parent_node: URIRef):
     checksum_node = BNode()
-    graph.add((checksum_node, RDF.type, spdx_namespace.Checksum))
-    graph.add((checksum_node, spdx_namespace.algorithm, algorithm_to_rdf_string(checksum.algorithm)))
-    graph.add((checksum_node, spdx_namespace.checksumValue, Literal(checksum.value)))
+    graph.add((checksum_node, RDF.type, SPDX_NAMESPACE.Checksum))
+    graph.add((checksum_node, SPDX_NAMESPACE.algorithm, algorithm_to_rdf_string(checksum.algorithm)))
+    graph.add((checksum_node, SPDX_NAMESPACE.checksumValue, Literal(checksum.value)))
 
-    graph.add((parent_node, spdx_namespace.checksum, checksum_node))
+    graph.add((parent_node, SPDX_NAMESPACE.checksum, checksum_node))
 
 def algorithm_to_rdf_string(algorithm: ChecksumAlgorithm) -> URIRef:
     if "BLAKE2B" in algorithm.name:
@@ -28,4 +28,4 @@ def algorithm_to_rdf_string(algorithm: ChecksumAlgorithm) -> URIRef:
     else:
         algorithm_rdf_string = algorithm.name.lower()
 
-    return spdx_namespace[f"checksumAlgorithm_{algorithm_rdf_string}"]
+    return SPDX_NAMESPACE[f"checksumAlgorithm_{algorithm_rdf_string}"]

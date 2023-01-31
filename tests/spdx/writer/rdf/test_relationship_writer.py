@@ -11,7 +11,7 @@
 from rdflib import Graph
 
 from spdx.writer.rdf.relationship_writer import add_relationship_info_to_graph
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 from tests.spdx.fixtures import relationship_fixture
 
 
@@ -20,5 +20,5 @@ def test_add_relationship_info_to_graph():
     graph = Graph()
     add_relationship_info_to_graph(relationship, graph, "anyURI", {})
 
-    assert (None, spdx_namespace.relationshipType, spdx_namespace.relationshipType_describes) in graph
-    assert (None, spdx_namespace.relatedSpdxElement, None) in graph
+    assert (None, SPDX_NAMESPACE.relationshipType, SPDX_NAMESPACE.relationshipType_describes) in graph
+    assert (None, SPDX_NAMESPACE.relatedSpdxElement, None) in graph

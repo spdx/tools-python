@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from rdflib import Graph, Literal, RDFS, URIRef
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 
 from spdx.writer.rdf.extracted_licensing_info_writer import add_extracted_licensing_info_to_graph
 from tests.spdx.fixtures import extracted_licensing_info_fixture
@@ -21,10 +21,10 @@ def test_add_extracted_licensing_info_to_graph():
 
     add_extracted_licensing_info_to_graph(extracted_licensing_info, graph, URIRef("anyURI"), "anyURI")
 
-    assert (URIRef("anyURI"), spdx_namespace.hasExtractedLicensingInfo, None) in graph
-    assert (None, None, spdx_namespace.ExtractedLicensingInfo) in graph
-    assert (None, spdx_namespace.licenseId, Literal("LicenseRef-1")) in graph
-    assert (None, spdx_namespace.extractedText, Literal("extractedText")) in graph
+    assert (URIRef("anyURI"), SPDX_NAMESPACE.hasExtractedLicensingInfo, None) in graph
+    assert (None, None, SPDX_NAMESPACE.ExtractedLicensingInfo) in graph
+    assert (None, SPDX_NAMESPACE.licenseId, Literal("LicenseRef-1")) in graph
+    assert (None, SPDX_NAMESPACE.extractedText, Literal("extractedText")) in graph
     assert (None, RDFS.seeAlso, Literal("https://see.also")) in graph
-    assert (None, spdx_namespace.name, Literal("licenseName")) in graph
+    assert (None, SPDX_NAMESPACE.name, Literal("licenseName")) in graph
     assert (None, RDFS.comment, Literal("licenseComment")) in graph

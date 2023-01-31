@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from rdflib import Graph, URIRef
-from spdx.writer.rdf.writer_utils import spdx_namespace
+from spdx.writer.rdf.writer_utils import SPDX_NAMESPACE
 
 from spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
 from tests.spdx.fixtures import external_document_ref_fixture
@@ -21,11 +21,11 @@ def test_add_external_document_ref_to_graph():
 
     add_external_document_ref_to_graph(external_document_ref, graph, URIRef("anyURI"), "anyURI")
 
-    assert (None, spdx_namespace.externalDocumentRef, URIRef("anyURI#DocumentRef-external")) in graph
-    assert (None, None, spdx_namespace.ExternalDocumentRef) in graph
-    assert (None, spdx_namespace.checksum, None) in graph
-    assert (None, None, spdx_namespace.Checksum) in graph
-    assert (None, spdx_namespace.spdxDocument, URIRef("https://namespace.com")) in graph
+    assert (None, SPDX_NAMESPACE.externalDocumentRef, URIRef("anyURI#DocumentRef-external")) in graph
+    assert (None, None, SPDX_NAMESPACE.ExternalDocumentRef) in graph
+    assert (None, SPDX_NAMESPACE.checksum, None) in graph
+    assert (None, None, SPDX_NAMESPACE.Checksum) in graph
+    assert (None, SPDX_NAMESPACE.spdxDocument, URIRef("https://namespace.com")) in graph
 
 
 
