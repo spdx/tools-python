@@ -8,8 +8,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from datetime import datetime
-
 from rdflib import Graph, URIRef, RDF, Literal, XSD, RDFS, DOAP
 
 from spdx.datetime_conversions import datetime_to_iso_string
@@ -26,31 +24,31 @@ def test_add_package_to_graph():
     add_package_to_graph(package, graph, "docNamespace", {})
 
     assert (URIRef("docNamespace#SPDXRef-Package"), RDF.type, SPDX_NAMESPACE.Package) in graph
-    assert (None, SPDX_NAMESPACE.name, Literal("packageName")) in graph
-    assert (None, SPDX_NAMESPACE.versionInfo, Literal("12.2")) in graph
-    assert (None, SPDX_NAMESPACE.packageFileName, Literal("./packageFileName")) in graph
-    assert (None, SPDX_NAMESPACE.supplier, Literal("Person: supplierName (some@mail.com)")) in graph
-    assert (None, SPDX_NAMESPACE.originator, Literal("Person: originatorName (some@mail.com)")) in graph
-    assert (None, SPDX_NAMESPACE.downloadLocation, Literal("https://download.com")) in graph
-    assert (None, SPDX_NAMESPACE.filesAnalyzed, Literal("true", datatype=XSD.boolean)) in graph
+    assert (None, SPDX_NAMESPACE.name, Literal(package.name)) in graph
+    assert (None, SPDX_NAMESPACE.versionInfo, Literal(package.version)) in graph
+    assert (None, SPDX_NAMESPACE.packageFileName, Literal(package.file_name)) in graph
+    assert (None, SPDX_NAMESPACE.supplier, Literal(package.supplier.to_serialized_string())) in graph
+    assert (None, SPDX_NAMESPACE.originator, Literal(package.originator.to_serialized_string())) in graph
+    assert (None, SPDX_NAMESPACE.downloadLocation, Literal(package.download_location)) in graph
+    assert (None, SPDX_NAMESPACE.filesAnalyzed, Literal(package.files_analyzed, datatype=XSD.boolean)) in graph
     assert (URIRef("docNamespace#SPDXRef-Package"), SPDX_NAMESPACE.packageVerificationCode, None) in graph
     assert (URIRef("docNamespace#SPDXRef-Package"), SPDX_NAMESPACE.checksum, None) in graph
-    assert (None, DOAP.homepage, Literal("https://homepage.com")) in graph
-    assert (None, SPDX_NAMESPACE.sourceInfo, Literal("sourceInfo")) in graph
+    assert (None, DOAP.homepage, Literal(package.homepage)) in graph
+    assert (None, SPDX_NAMESPACE.sourceInfo, Literal(package.source_info)) in graph
     assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, SPDX_NAMESPACE.licenseInfoFromFiles, None) in graph
     assert (None, SPDX_NAMESPACE.licenseDeclared, None) in graph
-    assert (None, SPDX_NAMESPACE.licenseComments, Literal("packageLicenseComment")) in graph
-    assert (None, SPDX_NAMESPACE.copyrightText, Literal("packageCopyrightText")) in graph
-    assert (None, SPDX_NAMESPACE.summary, Literal("packageSummary")) in graph
-    assert (None, SPDX_NAMESPACE.description, Literal("packageDescription")) in graph
-    assert (None, RDFS.comment, Literal("packageComment")) in graph
+    assert (None, SPDX_NAMESPACE.licenseComments, Literal(package.license_comment)) in graph
+    assert (None, SPDX_NAMESPACE.copyrightText, Literal(package.copyright_text)) in graph
+    assert (None, SPDX_NAMESPACE.summary, Literal(package.summary)) in graph
+    assert (None, SPDX_NAMESPACE.description, Literal(package.description)) in graph
+    assert (None, RDFS.comment, Literal(package.comment)) in graph
     assert (URIRef("docNamespace#SPDXRef-Package"), SPDX_NAMESPACE.externalRef, None) in graph
-    assert (None, SPDX_NAMESPACE.attributionText, Literal("packageAttributionText")) in graph
+    assert (None, SPDX_NAMESPACE.attributionText, Literal(package.attribution_texts[0])) in graph
     assert (None, SPDX_NAMESPACE.primaryPackagePurpose, SPDX_NAMESPACE.purpose_source) in graph
-    assert (None, SPDX_NAMESPACE.releaseDate, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
-    assert (None, SPDX_NAMESPACE.builtDate, Literal(datetime_to_iso_string(datetime(2022, 12, 2)))) in graph
-    assert (None, SPDX_NAMESPACE.validUntilDate, Literal(datetime_to_iso_string(datetime(2022, 12, 3)))) in graph
+    assert (None, SPDX_NAMESPACE.releaseDate, Literal(datetime_to_iso_string(package.release_date))) in graph
+    assert (None, SPDX_NAMESPACE.builtDate, Literal(datetime_to_iso_string(package.built_date))) in graph
+    assert (None, SPDX_NAMESPACE.validUntilDate, Literal(datetime_to_iso_string(package.valid_until_date))) in graph
 
 
 def test_add_package_verification_code_to_graph():

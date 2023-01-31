@@ -22,4 +22,4 @@ def test_add_relationship_to_graph():
 
     assert(URIRef("docNamespace#SPDXRef-DOCUMENT"), SPDX_NAMESPACE.relationship, None) in graph
     assert (None, SPDX_NAMESPACE.relationshipType, SPDX_NAMESPACE.relationshipType_describes) in graph
-    assert (None, SPDX_NAMESPACE.relatedSpdxElement, None) in graph
+    assert (None, SPDX_NAMESPACE.relatedSpdxElement, URIRef("docNamespace#SPDXRef-File")) in graph

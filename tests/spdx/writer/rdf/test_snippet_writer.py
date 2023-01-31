@@ -26,11 +26,11 @@ def test_add_snippet_to_graph():
     assert (None, SPDX_NAMESPACE.snippetFromFile, URIRef(f"docNamespace#{snippet.file_spdx_id}")) in graph
     assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, SPDX_NAMESPACE.licenseInfoInSnippet, None) in graph
-    assert (None, SPDX_NAMESPACE.licenseComments, Literal("snippetLicenseComment")) in graph
-    assert (None, SPDX_NAMESPACE.copyrightText, Literal("licenseCopyrightText")) in graph
-    assert (None, SPDX_NAMESPACE.name, Literal("snippetName")) in graph
-    assert (None, SPDX_NAMESPACE.attributionText, Literal("snippetAttributionText")) in graph
-    assert (None, RDFS.comment, Literal("snippetComment")) in graph
+    assert (None, SPDX_NAMESPACE.licenseComments, Literal(snippet.license_comment)) in graph
+    assert (None, SPDX_NAMESPACE.copyrightText, Literal(snippet.copyright_text)) in graph
+    assert (None, SPDX_NAMESPACE.name, Literal(snippet.name)) in graph
+    assert (None, SPDX_NAMESPACE.attributionText, Literal(snippet.attribution_texts[0])) in graph
+    assert (None, RDFS.comment, Literal(snippet.comment)) in graph
 
 
 @pytest.mark.parametrize("range,pointer,predicate",
@@ -38,9 +38,9 @@ def test_add_snippet_to_graph():
                           ((1, 3), POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)])
 def test_add_ranges_to_graph(range, pointer, predicate):
     graph = Graph()
-    add_range_to_graph(range, graph, URIRef("anyUR"), URIRef("docNamespace#SPDXRef-File"), pointer)
+    add_range_to_graph(range, graph, URIRef("snippetNode"), URIRef("docNamespace#SPDXRef-File"), pointer)
 
-    assert (None, SPDX_NAMESPACE.range, None) in graph
+    assert (URIRef("snippetNode"), SPDX_NAMESPACE.range, None) in graph
     assert (None, POINTER_NAMESPACE.startPointer, None) in graph
     assert (None, POINTER_NAMESPACE.endPointer, None) in graph
     assert (None, POINTER_NAMESPACE.reference, URIRef("docNamespace#SPDXRef-File")) in graph

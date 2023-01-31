@@ -22,14 +22,14 @@ def test_add_file_to_graph():
     add_file_to_graph(file, graph, "docNamespace", {})
 
     assert (URIRef("docNamespace#SPDXRef-File"), RDF.type, SPDX_NAMESPACE.File) in graph
-    assert (None, SPDX_NAMESPACE.fileName, Literal("./fileName.py")) in graph
+    assert (None, SPDX_NAMESPACE.fileName, Literal(file.name)) in graph
     assert (None, SPDX_NAMESPACE.fileType, SPDX_NAMESPACE.fileType_text) in graph
-    assert (None, SPDX_NAMESPACE.licenseComments, Literal("licenseComment")) in graph
+    assert (None, SPDX_NAMESPACE.licenseComments, Literal(file.license_comment)) in graph
     assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
     assert (None, SPDX_NAMESPACE.licenseInfoInFile, None) in graph
-    assert (None, SPDX_NAMESPACE.copyrightText, Literal("copyrightText")) in graph
-    assert (None, RDFS.comment, Literal("fileComment")) in graph
-    assert (None, SPDX_NAMESPACE.noticeText, Literal("fileNotice")) in graph
-    assert (None, SPDX_NAMESPACE.fileContributor, Literal("fileContributor")) in graph
+    assert (None, SPDX_NAMESPACE.copyrightText, Literal(file.copyright_text)) in graph
+    assert (None, RDFS.comment, Literal(file.comment)) in graph
+    assert (None, SPDX_NAMESPACE.noticeText, Literal(file.notice)) in graph
+    assert (None, SPDX_NAMESPACE.fileContributor, Literal(file.contributors[0])) in graph
     assert (None, SPDX_NAMESPACE.checksum, None) in graph
-    assert (None, SPDX_NAMESPACE.attributionText, Literal("fileAttributionText")) in graph
+    assert (None, SPDX_NAMESPACE.attributionText, Literal(file.attribution_texts[0])) in graph

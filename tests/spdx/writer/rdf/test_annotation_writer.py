@@ -27,6 +27,6 @@ def test_add_annotation_to_graph():
     assert (URIRef("docNamespace#SPDXRef-File"), SPDX_NAMESPACE.annotation, None) in graph
     assert (None, None, SPDX_NAMESPACE.Annotation) in graph
     assert (None, SPDX_NAMESPACE.annotationType, SPDX_NAMESPACE.annotationType_review) in graph
-    assert (None, SPDX_NAMESPACE.annotationDate, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
-    assert (None, SPDX_NAMESPACE.annotator, Literal("Person: annotatorName (some@mail.com)")) in graph
-    assert (None, RDFS.comment, Literal("annotationComment")) in graph
+    assert (None, SPDX_NAMESPACE.annotationDate, Literal(datetime_to_iso_string(annotation.annotation_date))) in graph
+    assert (None, SPDX_NAMESPACE.annotator, Literal(annotation.annotator.to_serialized_string())) in graph
+    assert (None, RDFS.comment, Literal(annotation.annotation_comment)) in graph

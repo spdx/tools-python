@@ -8,8 +8,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from datetime import datetime
-
 from rdflib import Graph, Literal, RDFS, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
@@ -26,13 +24,13 @@ def test_add_creation_info_to_graph():
 
     assert (None, None, SPDX_NAMESPACE.SpdxDocument) in graph
     assert (URIRef(f"{creation_info.document_namespace}#{creation_info.spdx_id}"), None, None) in graph
-    assert (None, SPDX_NAMESPACE.dataLicense, URIRef("https://spdx.org/licenses/CC0-1.0"))
-    assert (None, SPDX_NAMESPACE.name, Literal("documentName")) in graph
-    assert (None, SPDX_NAMESPACE.specVersion, Literal("SPDX-2.3")) in graph
+    assert (None, SPDX_NAMESPACE.dataLicense, URIRef(f"https://spdx.org/licenses/{creation_info.data_license}"))
+    assert (None, SPDX_NAMESPACE.name, Literal(creation_info.name)) in graph
+    assert (None, SPDX_NAMESPACE.specVersion, Literal(creation_info.spdx_version)) in graph
     assert (None, SPDX_NAMESPACE.creationInfo, None) in graph
 
     assert (None, None, SPDX_NAMESPACE.CreationInfo) in graph
-    assert (None, SPDX_NAMESPACE.created, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
-    assert (None, RDFS.comment, Literal("creatorComment")) in graph
-    assert (None, SPDX_NAMESPACE.licenseListVersion, Literal("3.19")) in graph
-    assert (None, SPDX_NAMESPACE.creator, Literal("Person: creatorName (some@mail.com)")) in graph
+    assert (None, SPDX_NAMESPACE.created, Literal(datetime_to_iso_string(creation_info.created))) in graph
+    assert (None, RDFS.comment, Literal(creation_info.creator_comment)) in graph
+    assert (None, SPDX_NAMESPACE.licenseListVersion, Literal(creation_info.license_list_version)) in graph
+    assert (None, SPDX_NAMESPACE.creator, Literal(creation_info.creators[0].to_serialized_string())) in graph

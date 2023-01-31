@@ -25,7 +25,7 @@ def test_add_external_document_ref_to_graph():
     assert (None, None, SPDX_NAMESPACE.ExternalDocumentRef) in graph
     assert (None, SPDX_NAMESPACE.checksum, None) in graph
     assert (None, None, SPDX_NAMESPACE.Checksum) in graph
-    assert (None, SPDX_NAMESPACE.spdxDocument, URIRef("https://namespace.com")) in graph
+    assert (None, SPDX_NAMESPACE.spdxDocument, URIRef(external_document_ref.document_uri)) in graph
 
 
 

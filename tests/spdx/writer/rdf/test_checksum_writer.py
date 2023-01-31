@@ -26,7 +26,7 @@ def test_add_checksum_to_graph():
     assert (URIRef("parentNode"), SPDX_NAMESPACE.checksum, None) in graph
     assert (None, None, SPDX_NAMESPACE.Checksum) in graph
     assert (None, SPDX_NAMESPACE.algorithm, SPDX_NAMESPACE.checksumAlgorithm_sha1) in graph
-    assert (None, SPDX_NAMESPACE.checksumValue, Literal("71c4025dd9897b364f3ebbb42c484ff43d00791c")) in graph
+    assert (None, SPDX_NAMESPACE.checksumValue, Literal(checksum.value)) in graph
 
 
 @pytest.mark.parametrize("algorithm,expected", [(ChecksumAlgorithm.SHA1, SPDX_NAMESPACE.checksumAlgorithm_sha1),
