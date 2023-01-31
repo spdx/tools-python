@@ -23,9 +23,9 @@ def test_add_package_information_to_graph():
     graph = Graph()
     package = package_fixture()
 
-    add_package_information_to_graph(package, graph, "anyURI", {})
+    add_package_information_to_graph(package, graph, "docNamespace", {})
 
-    assert (URIRef("anyURI#SPDXRef-Package"), RDF.type, SPDX_NAMESPACE.Package) in graph
+    assert (URIRef("docNamespace#SPDXRef-Package"), RDF.type, SPDX_NAMESPACE.Package) in graph
     assert (None, SPDX_NAMESPACE.name, Literal("packageName")) in graph
     assert (None, SPDX_NAMESPACE.versionInfo, Literal("12.2")) in graph
     assert (None, SPDX_NAMESPACE.packageFileName, Literal("./packageFileName")) in graph
@@ -33,8 +33,8 @@ def test_add_package_information_to_graph():
     assert (None, SPDX_NAMESPACE.originator, Literal("Person: originatorName (some@mail.com)")) in graph
     assert (None, SPDX_NAMESPACE.downloadLocation, Literal("https://download.com")) in graph
     assert (None, SPDX_NAMESPACE.filesAnalyzed, Literal("true", datatype=XSD.boolean)) in graph
-    assert (URIRef("anyURI#SPDXRef-Package"), SPDX_NAMESPACE.packageVerificationCode, None) in graph
-    assert (URIRef("anyURI#SPDXRef-Package"), SPDX_NAMESPACE.checksum, None) in graph
+    assert (URIRef("docNamespace#SPDXRef-Package"), SPDX_NAMESPACE.packageVerificationCode, None) in graph
+    assert (URIRef("docNamespace#SPDXRef-Package"), SPDX_NAMESPACE.checksum, None) in graph
     assert (None, DOAP.homepage, Literal("https://homepage.com")) in graph
     assert (None, SPDX_NAMESPACE.sourceInfo, Literal("sourceInfo")) in graph
     assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
@@ -45,7 +45,7 @@ def test_add_package_information_to_graph():
     assert (None, SPDX_NAMESPACE.summary, Literal("packageSummary")) in graph
     assert (None, SPDX_NAMESPACE.description, Literal("packageDescription")) in graph
     assert (None, RDFS.comment, Literal("packageComment")) in graph
-    assert (URIRef("anyURI#SPDXRef-Package"), SPDX_NAMESPACE.externalRef, None) in graph
+    assert (URIRef("docNamespace#SPDXRef-Package"), SPDX_NAMESPACE.externalRef, None) in graph
     assert (None, SPDX_NAMESPACE.attributionText, Literal("packageAttributionText")) in graph
     assert (None, SPDX_NAMESPACE.primaryPackagePurpose, SPDX_NAMESPACE.purpose_source) in graph
     assert (None, SPDX_NAMESPACE.releaseDate, Literal(datetime_to_iso_string(datetime(2022, 12, 1)))) in graph
@@ -57,7 +57,7 @@ def test_add_package_verification_code_to_graph():
     graph = Graph()
     verification_code = package_verification_code_fixture()
 
-    add_package_verification_code_to_graph(verification_code, graph, URIRef("anyURI"))
+    add_package_verification_code_to_graph(verification_code, graph, URIRef("docNamespace"))
 
     assert (None, None, SPDX_NAMESPACE.PackageVerificationCode) in graph
     assert (None, SPDX_NAMESPACE.packageVerificationCodeValue,
@@ -69,7 +69,7 @@ def test_external_package_ref_to_graph():
     graph = Graph()
     external_reference = external_package_ref_fixture()
 
-    add_external_package_ref_to_graph(graph, external_reference, URIRef("anyURI"))
+    add_external_package_ref_to_graph(graph, external_reference, URIRef("docNamespace"))
 
     assert (None, None, SPDX_NAMESPACE.ExternalRef) in graph
     assert (None, SPDX_NAMESPACE.referenceCategory, SPDX_NAMESPACE.referenceCategory_packageManager) in graph

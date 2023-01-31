@@ -18,8 +18,8 @@ from tests.spdx.fixtures import relationship_fixture
 def test_add_relationship_info_to_graph():
     relationship = relationship_fixture()
     graph = Graph()
-    add_relationship_info_to_graph(relationship, graph, "anyURI", {})
+    add_relationship_info_to_graph(relationship, graph, "docNamespace", {})
 
-    assert(URIRef("anyURI#SPDXRef-DOCUMENT"), SPDX_NAMESPACE.relationship, None) in graph
+    assert(URIRef("docNamespace#SPDXRef-DOCUMENT"), SPDX_NAMESPACE.relationship, None) in graph
     assert (None, SPDX_NAMESPACE.relationshipType, SPDX_NAMESPACE.relationshipType_describes) in graph
     assert (None, SPDX_NAMESPACE.relatedSpdxElement, None) in graph

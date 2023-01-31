@@ -19,10 +19,10 @@ def test_add_extracted_licensing_info_to_graph():
     graph = Graph()
     extracted_licensing_info = extracted_licensing_info_fixture()
 
-    add_extracted_licensing_info_to_graph(extracted_licensing_info, graph, URIRef("anyURI"), "anyURI")
+    add_extracted_licensing_info_to_graph(extracted_licensing_info, graph, URIRef("docNode"), "docNamespace")
 
-    assert (URIRef("anyURI"), SPDX_NAMESPACE.hasExtractedLicensingInfo, None) in graph
-    assert (URIRef("anyURI#LicenseRef-1"), None, SPDX_NAMESPACE.ExtractedLicensingInfo) in graph
+    assert (URIRef("docNode"), SPDX_NAMESPACE.hasExtractedLicensingInfo, None) in graph
+    assert (URIRef("docNamespace#LicenseRef-1"), None, SPDX_NAMESPACE.ExtractedLicensingInfo) in graph
     assert (None, SPDX_NAMESPACE.licenseId, Literal("LicenseRef-1")) in graph
     assert (None, SPDX_NAMESPACE.extractedText, Literal("extractedText")) in graph
     assert (None, RDFS.seeAlso, Literal("https://see.also")) in graph
