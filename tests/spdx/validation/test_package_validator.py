@@ -14,11 +14,12 @@ from typing import List
 import pytest
 from license_expression import Licensing
 
+from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.validation.package_validator import validate_package_within_document
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.spdx.fixtures import package_fixture, package_verification_code_fixture, document_fixture
+from tests.spdx.fixtures import package_fixture, package_verification_code_fixture, document_fixture, file_fixture
 
 
 def test_valid_package():
@@ -42,7 +43,7 @@ def test_valid_package():
                                            license_info_from_files=[Licensing().parse("some_license")],
                                            verification_code=None),
                            "license_info_from_files must be None if files_analyzed is False, but is: [LicenseSymbol('some_license', "
-                                      "is_exception=False)]")
+                           "is_exception=False)]")
                           ])
 def test_invalid_package(package_input, expected_message):
     validation_messages: List[ValidationMessage] = validate_package_within_document(package_input,
@@ -54,3 +55,25 @@ def test_invalid_package(package_input, expected_message):
                                                    full_element=package_input))
 
     assert validation_messages == [expected]
+
+
+@pytest.mark.parametrize("relationships",
+                         [[Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "SPDXRef-File1")],
+                          [Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "DocumentRef-external:SPDXRef-File")],
+                          [Relationship("SPDXRef-File2", RelationshipType.CONTAINED_BY, "SPDXRef-Package")],
+                          [Relationship("DocumentRef-external:SPDXRef-File", RelationshipType.CONTAINED_BY, "SPDXRef-Package")],
+                          [Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "SPDXRef-File2"),
+                           Relationship("SPDXRef-File1", RelationshipType.CONTAINED_BY, "SPDXRef-Package")]])
+def test_invalid_package_with_contains(relationships):
+    document = document_fixture(relationships=relationships,
+                                files=[file_fixture(spdx_id="SPDXRef-File1"), file_fixture(spdx_id="SPDXRef-File2")])
+    package = package_fixture(files_analyzed=False, verification_code=None, license_info_from_files=[])
+    context = ValidationContext(spdx_id=package.spdx_id, parent_id=document.creation_info.spdx_id,
+                                element_type=SpdxElementType.PACKAGE,
+                                full_element=package)
+
+    validation_messages: List[ValidationMessage] = validate_package_within_document(package, document)
+
+    assert validation_messages == [
+        ValidationMessage(f"package must contain no elements if files_analyzed is False, but found {relationships}",
+                          context)]
