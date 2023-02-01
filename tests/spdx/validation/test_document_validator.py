@@ -14,6 +14,7 @@ from typing import List, Optional
 import pytest
 
 from spdx.model.document import Document, CreationInfo
+from spdx.model.relationship import Relationship, RelationshipType
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.spdx.fixtures import document_fixture, creation_info_fixture, file_fixture, package_fixture, snippet_fixture
@@ -55,7 +56,25 @@ def test_spdx_version_handling(creation_info: CreationInfo, version_input: str, 
 
     assert validation_messages == expected
 
-    # TODO: https://github.com/spdx/tools-python/issues/375
+
+@pytest.mark.parametrize("relationships",
+                         [[Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-File")],
+                          [Relationship("SPDXRef-File", RelationshipType.DESCRIBED_BY, "SPDXRef-DOCUMENT")]])
+def test_document_describes_at_least_one_element(relationships):
+    document = document_fixture(relationships=relationships)
+    validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
+
+    assert validation_messages == []
+
+
+def test_document_does_not_describe_an_element():
+    document = document_fixture(relationships=[Relationship("SPDXRef-Package", RelationshipType.DESCRIBES, "SPDXRef-File")])
+    validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
+
+    assert validation_messages == [ValidationMessage(
+        'there must be at least one relationship "SPDXRef-DOCUMENT DESCRIBES ..." or "... DESCRIBED_BY SPDXRef-DOCUMENT"',
+        ValidationContext(spdx_id="SPDXRef-DOCUMENT", element_type=SpdxElementType.DOCUMENT)
+    )]
 
 
 def test_duplicated_spdx_ids():
