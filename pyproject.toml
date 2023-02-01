@@ -28,8 +28,7 @@ dependencies = ["click", "pyyaml", "xmltodict", "rdflib", "typeguard", "uritools
 dynamic = ["version"]
 
 [project.optional-dependencies]
-test = ["pytest", "rdflib"]
-rdf = ["rdflib"]
+test = ["pytest"]
 
 [project.scripts]
 pyspdxtools = "spdx.clitools.pyspdxtools:main"
