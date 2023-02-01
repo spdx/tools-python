@@ -27,3 +27,4 @@ def test_rdf_parser_with_2_3_example():
         os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXRdfExample-v2.3.spdx.rdf.xml"))
 
     assert type(doc) == Document
+    assert len(doc.snippets) ==  1
