@@ -57,7 +57,7 @@ def test_add_package_verification_code_to_graph():
 
     add_package_verification_code_to_graph(verification_code, graph, URIRef("docNamespace"))
 
-    assert (None, None, SPDX_NAMESPACE.PackageVerificationCode) in graph
+    assert (None, RDF.type, SPDX_NAMESPACE.PackageVerificationCode) in graph
     assert (None, SPDX_NAMESPACE.packageVerificationCodeValue,
             Literal("85ed0817af83a24ad8da68c2b5094de69833983c")) in graph
     assert (None, SPDX_NAMESPACE.packageVerificationCodeExcludedFile, Literal("./exclude.py")) in graph
@@ -69,7 +69,7 @@ def test_external_package_ref_to_graph():
 
     add_external_package_ref_to_graph(external_reference, graph, URIRef("docNamespace"))
 
-    assert (None, None, SPDX_NAMESPACE.ExternalRef) in graph
+    assert (None, RDF.type, SPDX_NAMESPACE.ExternalRef) in graph
     assert (None, SPDX_NAMESPACE.referenceCategory, SPDX_NAMESPACE.referenceCategory_packageManager) in graph
     assert (None, SPDX_NAMESPACE.referenceType, URIRef("http://spdx.org/rdf/references/maven-central")) in graph
     assert (None, SPDX_NAMESPACE.referenceLocator, Literal("org.apache.tomcat:tomcat:9.0.0.M4")) in graph

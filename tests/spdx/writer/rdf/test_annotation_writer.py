@@ -8,9 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from datetime import datetime
-
-from rdflib import Graph, Literal, RDFS, URIRef
+from rdflib import Graph, Literal, RDFS, URIRef, RDF
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.annotation_writer import add_annotation_to_graph
@@ -25,7 +23,7 @@ def test_add_annotation_to_graph():
     add_annotation_to_graph(annotation, graph, "docNamespace", {})
 
     assert (URIRef("docNamespace#SPDXRef-File"), SPDX_NAMESPACE.annotation, None) in graph
-    assert (None, None, SPDX_NAMESPACE.Annotation) in graph
+    assert (None, RDF.type, SPDX_NAMESPACE.Annotation) in graph
     assert (None, SPDX_NAMESPACE.annotationType, SPDX_NAMESPACE.annotationType_review) in graph
     assert (None, SPDX_NAMESPACE.annotationDate, Literal(datetime_to_iso_string(annotation.annotation_date))) in graph
     assert (None, SPDX_NAMESPACE.annotator, Literal(annotation.annotator.to_serialized_string())) in graph

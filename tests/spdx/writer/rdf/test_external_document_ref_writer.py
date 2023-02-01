@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, URIRef
+from rdflib import Graph, URIRef, RDF
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 from spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
@@ -22,9 +22,9 @@ def test_add_external_document_ref_to_graph():
     add_external_document_ref_to_graph(external_document_ref, graph, URIRef("docNode"), "docNamespace")
 
     assert (URIRef("docNode"), SPDX_NAMESPACE.externalDocumentRef, URIRef("docNamespace#DocumentRef-external")) in graph
-    assert (None, None, SPDX_NAMESPACE.ExternalDocumentRef) in graph
+    assert (None, RDF.type, SPDX_NAMESPACE.ExternalDocumentRef) in graph
     assert (None, SPDX_NAMESPACE.checksum, None) in graph
-    assert (None, None, SPDX_NAMESPACE.Checksum) in graph
+    assert (None, RDF.type, SPDX_NAMESPACE.Checksum) in graph
     assert (None, SPDX_NAMESPACE.spdxDocument, URIRef(external_document_ref.document_uri)) in graph
 
 
