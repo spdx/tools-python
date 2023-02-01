@@ -16,24 +16,23 @@ from spdx.model.package import PackageVerificationCode
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-# TODO: make test for this (https://github.com/spdx/tools-python/issues/386)
 def validate_verification_code(verification_code: PackageVerificationCode, parent_id: str) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.PACKAGE_VERIFICATION_CODE,
                                 full_element=verification_code)
 
     for file in verification_code.excluded_files:
-        if not file.startswith("./"):
+        if file.startswith("/"):
             validation_messages.append(
                 ValidationMessage(
-                    f'file name must be a relative path to the file, starting with "./", but is: {file}', context)
+                    f'file name must not be an absolute path starting with "/", but is: {file}', context)
             )
 
     value: str = verification_code.value
     if not re.match("^[0-9a-f]{40}$", value):
         validation_messages.append(
             ValidationMessage(
-                f"value of verification_code must consist of 40 hexadecimal digits, but is: {value} (length: {len(value)} digits)",
+                f"value of verification_code must consist of 40 lowercase hexadecimal digits, but is: {value} (length: {len(value)} digits)",
                 context)
         )
 
