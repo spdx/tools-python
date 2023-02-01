@@ -15,6 +15,7 @@ from typing import Optional, Any
 
 
 class SpdxElementType(Enum):
+    LICENSE_EXPRESSION = auto()
     PACKAGE_VERIFICATION_CODE = auto()
     EXTERNAL_DOCUMENT_REF = auto()
     CHECKSUM = auto()
