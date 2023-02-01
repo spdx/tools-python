@@ -21,6 +21,7 @@ from spdx.validation.file_validator import validate_files
 from spdx.validation.package_validator import validate_packages
 from spdx.validation.relationship_validator import validate_relationships
 from spdx.validation.snippet_validator import validate_snippets
+from spdx.validation.spdx_id_validators import get_list_of_all_spdx_ids
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
@@ -73,5 +74,17 @@ def validate_full_spdx_document(document: Document, spdx_version: str = None) ->
                 f'{document_id}"',
                 ValidationContext(spdx_id=document_id,
                                   element_type=SpdxElementType.DOCUMENT)))
+
+    all_spdx_ids: List[str] = get_list_of_all_spdx_ids(document)
+    auxiliary_set = set()
+    duplicated_spdx_ids = set(
+        spdx_id for spdx_id in all_spdx_ids if spdx_id in auxiliary_set or auxiliary_set.add(spdx_id))
+
+    if duplicated_spdx_ids:
+        validation_messages.append(
+            ValidationMessage(
+                f"every spdx_id must be unique within the document, but found the following duplicates: {sorted(duplicated_spdx_ids)}",
+                context)
+        )
 
     return validation_messages
