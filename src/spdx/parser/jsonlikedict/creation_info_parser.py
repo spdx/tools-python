@@ -17,7 +17,7 @@ from spdx.model.document import CreationInfo
 from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.model.version import Version
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.actor_parser import ActorParser
+from spdx.parser.actor_parser import ActorParser
 from spdx.parser.jsonlikedict.checksum_parser import ChecksumParser
 from spdx.parser.jsonlikedict.dict_parsing_functions import append_parsed_field_or_log_error, \
     parse_field_or_log_error, \
