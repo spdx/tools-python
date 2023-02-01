@@ -13,7 +13,8 @@ from typing import List, Optional
 
 from spdx.model.document import Document
 from spdx.model.package import Package
-from spdx.model.relationship import RelationshipType
+from spdx.model.relationship import RelationshipType, Relationship
+from spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target
 from spdx.validation.checksum_validator import validate_checksums
 from spdx.validation.external_package_ref_validator import validate_external_package_refs
 from spdx.validation.license_expression_validator import validate_license_expression, validate_license_expressions
@@ -43,23 +44,18 @@ def validate_package_within_document(package: Package, document: Document) -> Li
     for message in validate_spdx_id(package.spdx_id, document):
         validation_messages.append(ValidationMessage(message, context))
 
-    # TODO: make test for this (https://github.com/spdx/tools-python/issues/386)
     if not package.files_analyzed:
-        package_contains_relationships = [relationship for relationship in document.relationships if
-                                          relationship.relationship_type == RelationshipType.CONTAINS and relationship.spdx_element_id == package.spdx_id]
-        if package_contains_relationships:
-            validation_messages.append(
-                ValidationMessage(
-                    f"package must contain no elements if files_analyzed is False, but found {package_contains_relationships}",
-                    context)
-            )
+        package_contains_relationships = filter_by_type_and_origin(document.relationships, RelationshipType.CONTAINS,
+                                                                   package.spdx_id)
+        contained_in_package_relationships = filter_by_type_and_target(document.relationships,
+                                                                       RelationshipType.CONTAINED_BY, package.spdx_id)
 
-        contained_in_package_relationships = [relationship for relationship in document.relationships if
-                                              relationship.relationship_type == RelationshipType.CONTAINED_BY and relationship.related_spdx_element_id == package.spdx_id]
-        if contained_in_package_relationships:
+        combined_relationships: List[Relationship] = package_contains_relationships + contained_in_package_relationships
+
+        if combined_relationships:
             validation_messages.append(
                 ValidationMessage(
-                    f"package must contain no elements if files_analyzed is False, but found {contained_in_package_relationships}",
+                    f"package must contain no elements if files_analyzed is False, but found {combined_relationships}",
                     context)
             )
 
@@ -83,7 +79,6 @@ def validate_package(package: Package, context: Optional[ValidationContext] = No
         for message in validate_url(homepage):
             validation_messages.append(ValidationMessage("homepage " + message, context))
 
-    # TODO: is verification_code required if files_analyzed=True? (https://github.com/spdx/tools-python/issues/386)
     verification_code = package.verification_code
     if verification_code:
         if not package.files_analyzed:
