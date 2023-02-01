@@ -16,7 +16,7 @@ import pytest
 from spdx.model.document import Document, CreationInfo
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.spdx.fixtures import document_fixture, creation_info_fixture
+from tests.spdx.fixtures import document_fixture, creation_info_fixture, file_fixture, package_fixture, snippet_fixture
 
 
 def test_valid_document():
@@ -56,3 +56,18 @@ def test_spdx_version_handling(creation_info: CreationInfo, version_input: str, 
     assert validation_messages == expected
 
     # TODO: https://github.com/spdx/tools-python/issues/375
+
+
+def test_duplicated_spdx_ids():
+    document = document_fixture(
+        files=[file_fixture(spdx_id="SPDXRef-File"), file_fixture(spdx_id="SPDXRef-2"), file_fixture(spdx_id="SPDXRef-3")],
+        packages=[package_fixture(spdx_id="SPDXRef-2"), package_fixture(spdx_id="SPDXRef-DOCUMENT")],
+        snippets=[snippet_fixture(spdx_id="SPDXRef-2"), snippet_fixture(spdx_id="SPDXRef-3")])
+
+    context = ValidationContext(spdx_id=document.creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
+
+    validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
+
+    assert validation_messages == [ValidationMessage(
+        "every spdx_id must be unique within the document, but found the following duplicates: ['SPDXRef-2', 'SPDXRef-3', 'SPDXRef-DOCUMENT']",
+        context)]
