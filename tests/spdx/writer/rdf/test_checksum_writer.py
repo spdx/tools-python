@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import pytest
-from rdflib import Graph, URIRef, Literal
+from rdflib import Graph, URIRef, Literal, RDF
 
 from spdx.model.checksum import ChecksumAlgorithm
 from spdx.writer.rdf.checksum_writer import add_checksum_to_graph, algorithm_to_rdf_string
@@ -24,7 +24,7 @@ def test_add_checksum_to_graph():
     add_checksum_to_graph(checksum, graph, URIRef("parentNode"))
 
     assert (URIRef("parentNode"), SPDX_NAMESPACE.checksum, None) in graph
-    assert (None, None, SPDX_NAMESPACE.Checksum) in graph
+    assert (None, RDF.type, SPDX_NAMESPACE.Checksum) in graph
     assert (None, SPDX_NAMESPACE.algorithm, SPDX_NAMESPACE.checksumAlgorithm_sha1) in graph
     assert (None, SPDX_NAMESPACE.checksumValue, Literal(checksum.value)) in graph
 

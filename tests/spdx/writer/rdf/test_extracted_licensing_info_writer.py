@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, Literal, RDFS, URIRef
+from rdflib import Graph, Literal, RDFS, URIRef, RDF
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 from spdx.writer.rdf.extracted_licensing_info_writer import add_extracted_licensing_info_to_graph
@@ -22,7 +22,7 @@ def test_add_extracted_licensing_info_to_graph():
     add_extracted_licensing_info_to_graph(extracted_licensing_info, graph, URIRef("docNode"), "docNamespace")
 
     assert (URIRef("docNode"), SPDX_NAMESPACE.hasExtractedLicensingInfo, None) in graph
-    assert (URIRef("docNamespace#LicenseRef-1"), None, SPDX_NAMESPACE.ExtractedLicensingInfo) in graph
+    assert (URIRef("docNamespace#LicenseRef-1"), RDF.type, SPDX_NAMESPACE.ExtractedLicensingInfo) in graph
     assert (None, SPDX_NAMESPACE.licenseId, Literal(extracted_licensing_info.license_id)) in graph
     assert (None, SPDX_NAMESPACE.extractedText, Literal(extracted_licensing_info.extracted_text)) in graph
     assert (None, RDFS.seeAlso, Literal(extracted_licensing_info.cross_references[0])) in graph
