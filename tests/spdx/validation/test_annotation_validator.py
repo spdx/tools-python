@@ -28,7 +28,7 @@ def test_valid_annotation():
 
 @pytest.mark.parametrize("annotation_id, file_id, expected_message",
                          [("SPDXRef-File", "SPDXRef-hiddenFile",
-                           "did not find the referenced spdx_id SPDXRef-File in the SPDX document")
+                           'did not find the referenced spdx_id "SPDXRef-File" in the SPDX document')
                           ])
 def test_invalid_annotation(annotation_id, file_id, expected_message):
     annotation: Annotation = annotation_fixture(spdx_id=annotation_id)

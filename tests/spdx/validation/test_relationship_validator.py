@@ -33,9 +33,9 @@ def test_valid_relationship(related_spdx_element):
 
 @pytest.mark.parametrize("spdx_element_id, related_spdx_element_id, expected_message",
                          [("SPDXRef-unknownFile", "SPDXRef-File",
-                           'did not find the referenced spdx_id SPDXRef-unknownFile in the SPDX document'),
+                           'did not find the referenced spdx_id "SPDXRef-unknownFile" in the SPDX document'),
                           ("SPDXRef-File", "SPDXRef-unknownFile",
-                           'did not find the referenced spdx_id SPDXRef-unknownFile in the SPDX document'),
+                           'did not find the referenced spdx_id "SPDXRef-unknownFile" in the SPDX document'),
                           ])
 def test_unknown_spdx_id(spdx_element_id, related_spdx_element_id, expected_message):
     relationship: Relationship = relationship_fixture(spdx_element_id=spdx_element_id,
