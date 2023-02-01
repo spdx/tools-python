@@ -18,7 +18,7 @@ from spdx.model.package import Package, ExternalPackageRef, PackageVerificationC
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.actor_parser import ActorParser
+from spdx.parser.actor_parser import ActorParser
 from spdx.parser.jsonlikedict.checksum_parser import ChecksumParser
 from spdx.parser.jsonlikedict.dict_parsing_functions import append_parsed_field_or_log_error, \
     json_str_to_enum_name, parse_field_or_log_error, parse_field_or_no_assertion_or_none, parse_field_or_no_assertion
