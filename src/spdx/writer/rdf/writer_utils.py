@@ -27,10 +27,9 @@ def add_optional_literal(value: Any, graph: Graph, parent: Node, predicate: Node
         return
     if isinstance(value, list):
         for element in value:
-            element_triple = (parent, predicate, Literal(str(element)))
-            graph.add(element_triple)
+            graph.add((parent, predicate, Literal(str(element))))
+        return
     graph.add((parent, predicate, Literal(str(value))))
-    return
 
 
 def add_literal_or_no_assertion_or_none(value: Any, graph: Graph, parent: Node, predicate: Node):
