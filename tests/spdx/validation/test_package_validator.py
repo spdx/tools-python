@@ -90,3 +90,18 @@ def test_v2_3only_fields():
     expected = [ValidationMessage(f"{field} is not supported in SPDX-2.2", context) for field in unsupported_fields]
 
     TestCase().assertCountEqual(validation_messages, expected)
+
+
+def test_v2_2mandatory_fields():
+    package = package_fixture(license_concluded=None, license_declared=None, copyright_text=None,
+                              primary_package_purpose=None, built_date=None, release_date=None, valid_until_date=None)
+
+    assert validate_package(package, "SPDX-2.3") == []
+
+    validation_messages: List[ValidationMessage] = validate_package(package, "SPDX-2.2")
+
+    context = ValidationContext(spdx_id=package.spdx_id, element_type=SpdxElementType.PACKAGE, full_element=package)
+    mandatory_fields = ["license_concluded", "license_declared", "copyright_text"]
+    expected = [ValidationMessage(f"{field} is mandatory in SPDX-2.2", context) for field in mandatory_fields]
+
+    TestCase().assertCountEqual(validation_messages, expected)
