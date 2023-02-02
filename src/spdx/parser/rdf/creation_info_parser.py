@@ -19,7 +19,8 @@ from rdflib.term import URIRef
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
-from spdx.parser.rdf.graph_parsing_functions import parse_literal
+from spdx.parser.rdf.checksum_parser import parse_checksum
+from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 
 from spdx.datetime_conversions import datetime_from_str
@@ -51,8 +52,8 @@ def parse_creation_info(graph: Graph) -> Tuple[CreationInfo, URIRef]:
     for (_, _, creator_literal) in graph.triples((creation_info_node, SPDX_NAMESPACE.creator, None)):
         creators.append(ActorParser.parse_actor(creator_literal))
     external_document_refs = []
-    for (_, _, external_document_node) in graph.triples((parent_node, SPDX_NAMESPACE.externalDocumentRef, None)):
-        external_document_refs.append(parse_external_document_refs(external_document_node))
+    for (_, _, external_document_node) in graph.triples((doc_node, SPDX_NAMESPACE.externalDocumentRef, None)):
+        external_document_refs.append(parse_external_document_refs(external_document_node, graph, namespace))
 
     raise_parsing_error_if_logger_has_messages(logger, "CreationInfo")
     creation_info = construct_or_raise_parsing_error(CreationInfo, dict(spdx_id=spdx_id, document_namespace=namespace,
@@ -61,8 +62,9 @@ def parse_creation_info(graph: Graph) -> Tuple[CreationInfo, URIRef]:
                                                                         document_comment=comment, created=created,
                                                                         license_list_version=license_list_version,
                                                                         creator_comment=creator_comment,
-                                                                        creators=creators))
-    return creation_info
+                                                                        creators=creators,
+                                                                        external_document_refs=external_document_refs))
+    return creation_info, doc_node
 
 
 def parse_namespace_and_spdx_id(graph: Graph) -> (str, str):
@@ -89,5 +91,16 @@ def parse_namespace_and_spdx_id(graph: Graph) -> (str, str):
     return namespace, spdx_id, subject
 
 
-def parse_external_document_refs(external_document_node: Node) -> ExternalDocumentRef:
-    pass
+def parse_external_document_refs(external_document_node: URIRef, graph: Graph,
+                                 doc_namespace: str) -> ExternalDocumentRef:
+    logger = Logger()
+    document_ref_id = parse_spdx_id(external_document_node, doc_namespace)
+    document_uri = parse_literal(logger, graph, external_document_node, SPDX_NAMESPACE.spdxDocument)
+    checksum = None
+    for (_, _, checksum_node) in graph.triples((external_document_node, SPDX_NAMESPACE.checksum, None)):
+        checksum = parse_checksum(checksum_node, graph)
+    external_document_ref = construct_or_raise_parsing_error(ExternalDocumentRef, dict(document_ref_id=document_ref_id,
+                                                                                       document_uri=document_uri,
+                                                                                       checksum=checksum))
+
+    return external_document_ref
