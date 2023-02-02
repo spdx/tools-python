@@ -17,6 +17,7 @@ from spdx.parser.parsing_functions import construct_or_raise_parsing_error, rais
 from spdx.parser.rdf.annotation_parser import parse_annotation
 from spdx.parser.rdf.creation_info_parser import parse_creation_info
 from spdx.parser.rdf.file_parser import parse_file
+from spdx.parser.rdf.package_parser import parse_package
 from spdx.parser.rdf.snippet_parser import parse_snippet
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
@@ -37,6 +38,13 @@ def translate_graph_to_document(graph: Graph) -> Document:
     except SPDXParsingError as err:
         logger.extend(err.get_messages())
         creation_info = None
+
+    packages = []
+    for (package_node, _, _) in graph.triples((None, RDF.type, SPDX_NAMESPACE.Package)):
+        try:
+            packages.append(parse_package(package_node, graph, creation_info.document_namespace))
+        except SPDXParsingError as err:
+            logger.extend(err.get_messages())
 
     files = []
     for (file_node, _, _) in graph.triples((None, RDF.type, SPDX_NAMESPACE.File)):
@@ -59,5 +67,5 @@ def translate_graph_to_document(graph: Graph) -> Document:
     raise_parsing_error_if_logger_has_messages(logger)
     document = construct_or_raise_parsing_error(Document,
                                                 dict(creation_info=creation_info, snippets=snippets, files=files,
-                                                     annotations=annotations))
+                                                     annotations=annotations, packages=packages))
     return document
