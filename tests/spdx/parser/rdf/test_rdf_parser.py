@@ -29,3 +29,4 @@ def test_rdf_parser_with_2_3_example():
     assert type(doc) == Document
     assert len(doc.snippets) ==  1
     assert len(doc.files) == 5
+    assert len(doc.annotations) == 5

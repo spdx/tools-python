@@ -14,6 +14,7 @@ from spdx.model.document import Document
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
+from spdx.parser.rdf.annotation_parser import parse_annotation
 from spdx.parser.rdf.creation_info_parser import parse_creation_info
 from spdx.parser.rdf.file_parser import parse_file
 from spdx.parser.rdf.snippet_parser import parse_snippet
@@ -51,7 +52,12 @@ def translate_graph_to_document(graph: Graph) -> Document:
         except SPDXParsingError as err:
             logger.extend(err.get_messages())
 
+    annotations = []
+    for (parent_node, _, annotation_node) in graph.triples((None, SPDX_NAMESPACE.annotation, None)):
+        annotations.append(parse_annotation(annotation_node, graph, parent_node, creation_info.document_namespace))
+
     raise_parsing_error_if_logger_has_messages(logger)
     document = construct_or_raise_parsing_error(Document,
-                                                dict(creation_info=creation_info, snippets=snippets, files=files))
+                                                dict(creation_info=creation_info, snippets=snippets, files=files,
+                                                     annotations=annotations))
     return document
