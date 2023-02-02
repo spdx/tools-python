@@ -10,18 +10,19 @@
 # limitations under the License.
 
 from typing import List
+from unittest import TestCase
 
 import pytest
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.validation.file_validator import validate_file_within_document
+from spdx.validation.file_validator import validate_file_within_document, validate_file
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.spdx.fixtures import file_fixture, document_fixture
 
 
 def test_valid_file():
     file = file_fixture()
-    validation_messages: List[ValidationMessage] = validate_file_within_document(file, document_fixture())
+    validation_messages: List[ValidationMessage] = validate_file_within_document(file, "SPDX-2.3", document_fixture())
 
     assert validation_messages == []
 
@@ -35,7 +36,7 @@ def test_valid_file():
                           f'checksums must contain a SHA1 algorithm checksum, but only contains: [<ChecksumAlgorithm.MD2: 13>]')
                           ])
 def test_invalid_file(file_input, spdx_id, expected_message):
-    validation_messages: List[ValidationMessage] = validate_file_within_document(file_input, document_fixture())
+    validation_messages: List[ValidationMessage] = validate_file_within_document(file_input, "SPDX-2.3", document_fixture())
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(spdx_id=spdx_id,
@@ -44,3 +45,18 @@ def test_invalid_file(file_input, spdx_id, expected_message):
                                                    full_element=file_input))
 
     assert validation_messages == [expected]
+
+
+def test_v2_2mandatory_fields():
+    file = file_fixture(license_concluded=None, license_info_in_file=[], copyright_text=None)
+
+    assert validate_file(file, "SPDX-2.3") == []
+
+    validation_messages: List[ValidationMessage] = validate_file(file, "SPDX-2.2")
+
+    context = ValidationContext(spdx_id=file.spdx_id, element_type=SpdxElementType.FILE, full_element=file)
+    mandatory_fields = ["license_concluded", "license_info_in_file", "copyright_text"]
+    expected = [ValidationMessage(f"{field} is mandatory in SPDX-2.2", context) for field in mandatory_fields]
+
+    TestCase().assertCountEqual(validation_messages, expected)
+
