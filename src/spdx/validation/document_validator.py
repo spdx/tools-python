@@ -54,11 +54,11 @@ def validate_full_spdx_document(document: Document, spdx_version: str = None) ->
         return validation_messages
 
     validation_messages.extend(validate_creation_info(document.creation_info))
-    validation_messages.extend(validate_packages(document.packages, document))
-    validation_messages.extend(validate_files(document.files, document))
-    validation_messages.extend(validate_snippets(document.snippets, document))
+    validation_messages.extend(validate_packages(document.packages, spdx_version, document))
+    validation_messages.extend(validate_files(document.files, spdx_version, document))
+    validation_messages.extend(validate_snippets(document.snippets, spdx_version, document))
     validation_messages.extend(validate_annotations(document.annotations, document))
-    validation_messages.extend(validate_relationships(document.relationships, document, spdx_version))
+    validation_messages.extend(validate_relationships(document.relationships, spdx_version, document))
     validation_messages.extend(validate_extracted_licensing_infos(document.extracted_licensing_info))
 
     document_id = document.creation_info.spdx_id
