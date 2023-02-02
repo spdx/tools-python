@@ -10,6 +10,7 @@
 # limitations under the License.
 
 from typing import List
+from unittest import TestCase
 
 import pytest
 from license_expression import Licensing
@@ -17,14 +18,15 @@ from license_expression import Licensing
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from spdx.validation.package_validator import validate_package_within_document
+from spdx.validation.package_validator import validate_package_within_document, validate_package
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 from tests.spdx.fixtures import package_fixture, package_verification_code_fixture, document_fixture, file_fixture
 
 
 def test_valid_package():
     package = package_fixture()
-    validation_messages: List[ValidationMessage] = validate_package_within_document(package, document_fixture())
+    validation_messages: List[ValidationMessage] = validate_package_within_document(package, "SPDX-2.3",
+                                                                                    document_fixture())
 
     assert validation_messages == []
 
@@ -46,7 +48,7 @@ def test_valid_package():
                            "is_exception=False)]")
                           ])
 def test_invalid_package(package_input, expected_message):
-    validation_messages: List[ValidationMessage] = validate_package_within_document(package_input,
+    validation_messages: List[ValidationMessage] = validate_package_within_document(package_input, "SPDX-2.3",
                                                                                     document_fixture(relationships=[]))
 
     expected = ValidationMessage(expected_message,
@@ -72,8 +74,19 @@ def test_invalid_package_with_contains(relationships):
                                 element_type=SpdxElementType.PACKAGE,
                                 full_element=package)
 
-    validation_messages: List[ValidationMessage] = validate_package_within_document(package, document)
+    validation_messages: List[ValidationMessage] = validate_package_within_document(package, "SPDX-2.3", document)
 
     assert validation_messages == [
         ValidationMessage(f"package must contain no elements if files_analyzed is False, but found {relationships}",
                           context)]
+
+
+def test_v2_3only_fields():
+    package = package_fixture()
+    validation_messages: List[ValidationMessage] = validate_package(package, "SPDX-2.2")
+
+    context = ValidationContext(spdx_id=package.spdx_id, element_type=SpdxElementType.PACKAGE, full_element=package)
+    unsupported_fields = ["primary_package_purpose", "built_date", "release_date", "valid_until_date"]
+    expected = [ValidationMessage(f"{field} is not supported in SPDX-2.2", context) for field in unsupported_fields]
+
+    TestCase().assertCountEqual(validation_messages, expected)
