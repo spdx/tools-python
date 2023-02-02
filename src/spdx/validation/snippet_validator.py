@@ -19,19 +19,19 @@ from spdx.validation.spdx_id_validators import validate_spdx_id
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_snippets(snippets: List[Snippet], document: Optional[Document] = None) -> List[ValidationMessage]:
+def validate_snippets(snippets: List[Snippet], version: str, document: Optional[Document] = None) -> List[ValidationMessage]:
     validation_messages = []
     if document:
         for snippet in snippets:
-            validation_messages.extend(validate_snippet_within_document(snippet, document))
+            validation_messages.extend(validate_snippet_within_document(snippet, version, document))
     else:
         for snippet in snippets:
-            validation_messages.extend(validate_snippet(snippet))
+            validation_messages.extend(validate_snippet(snippet, version))
 
     return validation_messages
 
 
-def validate_snippet_within_document(snippet: Snippet, document: Document) -> List[ValidationMessage]:
+def validate_snippet_within_document(snippet: Snippet, version: str, document: Document) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(spdx_id=snippet.spdx_id, parent_id=document.creation_info.spdx_id,
                                 element_type=SpdxElementType.SNIPPET, full_element=snippet)
@@ -44,12 +44,12 @@ def validate_snippet_within_document(snippet: Snippet, document: Document) -> Li
     for message in messages:
         validation_messages.append(ValidationMessage(message, context))
 
-    validation_messages.extend(validate_snippet(snippet, context))
+    validation_messages.extend(validate_snippet(snippet, version, context))
 
     return validation_messages
 
 
-def validate_snippet(snippet: Snippet, context: Optional[ValidationContext] = None) -> List[ValidationMessage]:
+def validate_snippet(snippet: Snippet, version: str, context: Optional[ValidationContext] = None) -> List[ValidationMessage]:
     validation_messages = []
     if not context:
         context = ValidationContext(spdx_id=snippet.spdx_id, element_type=SpdxElementType.SNIPPET, full_element=snippet)
@@ -86,5 +86,13 @@ def validate_snippet(snippet: Snippet, context: Optional[ValidationContext] = No
     validation_messages.extend(validate_license_expression(snippet.license_concluded))
 
     validation_messages.extend(validate_license_expressions(snippet.license_info_in_snippet))
+
+    if version == "SPDX-2.2":
+        if snippet.license_concluded is None:
+            validation_messages.append(
+                ValidationMessage(f"license_concluded is mandatory in SPDX-2.2", context))
+        if snippet.copyright_text is None:
+            validation_messages.append(
+                ValidationMessage(f"copyright_text is mandatory in SPDX-2.2", context))
 
     return validation_messages
