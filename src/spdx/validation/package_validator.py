@@ -124,4 +124,14 @@ def validate_package(package: Package, version: str, context: Optional[Validatio
             validation_messages.append(
                 ValidationMessage(f"valid_until_date is not supported in SPDX-2.2", context))
 
+        if package.license_concluded is None:
+            validation_messages.append(
+                ValidationMessage(f"license_concluded is mandatory in SPDX-2.2", context))
+        if package.license_declared is None:
+            validation_messages.append(
+                ValidationMessage(f"license_declared is mandatory in SPDX-2.2", context))
+        if package.copyright_text is None:
+            validation_messages.append(
+                ValidationMessage(f"copyright_text is mandatory in SPDX-2.2", context))
+
     return validation_messages
