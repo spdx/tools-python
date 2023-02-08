@@ -40,6 +40,7 @@ def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node, 
             return default
     return default
 
+
 def parse_enum_value(enum_str: str, enum_class: Type[Enum]) -> Enum:
     try:
         return enum_class[camel_case_to_snake_case(enum_str).upper()]
@@ -56,10 +57,24 @@ def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject:
         return
     if not value:
         return default
+    if value == SPDX_NAMESPACE.noassertion or value.toPython() == SPDX_NO_ASSERTION_STRING:
+        return SpdxNoAssertion()
+    if value == SPDX_NAMESPACE.none or value.toPython() == SPDX_NONE_STRING:
+        return SpdxNone()
+    return method_to_apply(value)
+
+
+def parse_literal_or_no_assertion(logger: Logger, graph: Graph, subject: Node, predicate: Node,
+                                  default: Any = None, method_to_apply: Callable = lambda x: x):
+    try:
+        value = graph.value(subject=subject, predicate=predicate, default=default, any=False)
+    except UniquenessError:
+        logger.append(f"Multiple values for unique value {predicate} found.")
+        return
+    if not value:
+        return default
     if value == SPDX_NAMESPACE.noassertion:
         return SpdxNoAssertion()
-    if value == SPDX_NAMESPACE.none:
-        return SpdxNone()
     return method_to_apply(value)
 
 
