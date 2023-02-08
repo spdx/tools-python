@@ -24,7 +24,7 @@ from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
 from spdx.parser.rdf.checksum_parser import parse_checksum
 from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, parse_literal, str_to_no_assertion_or_none, \
-    parse_enum_value
+    parse_enum_value, parse_literal_or_no_assertion_or_none
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
 
 
@@ -32,7 +32,8 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     logger = Logger()
     spdx_id = parse_spdx_id(package_node, doc_namespace, graph)
     name = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.name)
-    download_location = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.downloadLocation)
+    download_location = parse_literal_or_no_assertion_or_none(logger, graph, package_node, SPDX_NAMESPACE.downloadLocation,
+                                                              method_to_apply=str)
     checksums = []
     for (_, _, checksum_node) in graph.triples((package_node, SPDX_NAMESPACE.checksum, None)):
         checksums.append(parse_checksum(checksum_node, graph))
