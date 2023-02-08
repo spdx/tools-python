@@ -15,7 +15,7 @@ from spdx.model.annotation import Annotation, AnnotationType
 from spdx.parser.jsonlikedict.actor_parser import ActorParser
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id
+from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_enum_value
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
@@ -24,13 +24,9 @@ def parse_annotation(annotation_node: URIRef, graph: Graph, parent_ref: URIRef, 
     spdx_id = parse_spdx_id(parent_ref, doc_namespace)
     annotator = parse_literal(logger, graph, annotation_node, SPDX_NAMESPACE.annotator,
                               method_to_apply=ActorParser.parse_actor)
-    annotation_type = graph.value(annotation_node, SPDX_NAMESPACE.annotationType)
-    if annotation_type:
-        annotation_type = annotation_type.removeprefix(SPDX_NAMESPACE).replace("annotationType_", "").upper()
-    try:
-        annotation_type = AnnotationType[annotation_type]
-    except KeyError:
-        logger.append(f"Invalid AnnotationType: {annotation_type}")
+    annotation_type = parse_literal(logger, graph, annotation_node, SPDX_NAMESPACE.annotationType,
+                                    prefix=SPDX_NAMESPACE.annotationType_,
+                                    method_to_apply=lambda x: parse_enum_value(x, AnnotationType))
     annotation_date = parse_literal(logger, graph, annotation_node, SPDX_NAMESPACE.annotationDate,
                                     method_to_apply=datetime_from_str)
     annotation_comment = parse_literal(logger, graph, annotation_node, RDFS.comment)
