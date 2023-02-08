@@ -27,6 +27,7 @@ from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, parse_literal
     parse_enum_value
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
 
+
 def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Package:
     logger = Logger()
     spdx_id = parse_spdx_id(package_node, doc_namespace)
@@ -64,11 +65,9 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     copyright_text = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.copyrightText,
                                    method_to_apply=str_to_no_assertion_or_none)
     source_info = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.sourceInfo)
-    try:
-        primary_package_purpose = parse_primary_package_purpose(package_node, graph)
-    except KeyError:
-        logger.append(f"Invalid PackagePurpose: {graph.value(package_node, SPDX_NAMESPACE.primaryPackagePurpose)}")
-        primary_package_purpose = None
+    primary_package_purpose = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.primaryPackagePurpose,
+                                            prefix=SPDX_NAMESPACE.purpose_,
+                                            method_to_apply=lambda x: parse_enum_value(x, PackagePurpose))
     homepage = parse_literal(logger, graph, package_node, DOAP.homepage)
     attribution_texts = []
     for (_, _, attribution_text_literal) in graph.triples((package_node, SPDX_NAMESPACE.attributionText, None)):
@@ -116,13 +115,6 @@ def parse_actor_or_no_assertion(logger, graph, parent_node, predicate) -> Option
     if value == "NOASSERTION":
         return SpdxNoAssertion()
     return ActorParser.parse_actor(value)
-
-
-def parse_primary_package_purpose(package_node: URIRef, graph: Graph) -> Optional[PackagePurpose]:
-    primary_package_purpose_ref = graph.value(package_node, SPDX_NAMESPACE.primaryPackagePurpose)
-    if not primary_package_purpose_ref:
-        return None
-    return PackagePurpose[primary_package_purpose_ref.fragment.replace("purpose_", "").upper()]
 
 
 def parse_package_verification_code(package_node: URIRef, graph: Graph) -> Optional[PackageVerificationCode]:
