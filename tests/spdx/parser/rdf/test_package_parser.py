@@ -14,8 +14,8 @@ from rdflib import RDF, Graph
 
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import ChecksumAlgorithm, Checksum
-from spdx.model.package import PackagePurpose, PackageVerificationCode
-from spdx.parser.rdf.package_parser import parse_package
+from spdx.model.package import PackagePurpose, PackageVerificationCode, ExternalPackageRefCategory
+from spdx.parser.rdf.package_parser import parse_package, parse_external_package_ref
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
@@ -39,6 +39,7 @@ def test_package_parser():
     assert package.copyright_text == "packageCopyrightText"
     assert package.verification_code == PackageVerificationCode(value="85ed0817af83a24ad8da68c2b5094de69833983c",
                                                                 excluded_files=["./exclude.py"])
+    assert len(package.external_references) == 1
     assert package.summary == "packageSummary"
     assert package.description == "packageDescription"
     assert package.comment == "packageComment"
@@ -46,3 +47,17 @@ def test_package_parser():
     assert package.primary_package_purpose == PackagePurpose.SOURCE
     assert package.supplier == Actor(ActorType.PERSON, "supplierName", "some@mail.com")
     assert package.originator == Actor(ActorType.PERSON, "originatorName", "some@mail.com")
+
+
+def test_external_package_ref_parser():
+
+    graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
+    package_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.Package)
+    external_package_ref_node =  graph.value(package_node, SPDX_NAMESPACE.externalRef)
+
+    external_package_ref = parse_external_package_ref(external_package_ref_node, graph)
+
+    assert external_package_ref.category == ExternalPackageRefCategory.PACKAGE_MANAGER
+    assert external_package_ref.locator == "org.apache.tomcat:tomcat:9.0.0.M4"
+    assert external_package_ref.reference_type == "maven-central"
+    assert external_package_ref.comment == "externalPackageRefComment"

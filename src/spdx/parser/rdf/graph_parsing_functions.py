@@ -8,7 +8,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Any, Callable, Union, Optional
+from enum import Enum
+from typing import Any, Callable, Union, Optional, Type
 
 from rdflib import Graph, URIRef
 from rdflib.exceptions import UniquenessError
@@ -16,8 +17,10 @@ from rdflib.term import Node
 
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
 from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.casing_tools import camel_case_to_snake_case
 
 
 def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node, default: Any = None,
@@ -29,9 +32,18 @@ def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node, 
         return
 
     if value:
-        return method_to_apply(value.removeprefix(prefix))
-
+        try:
+            return method_to_apply(value.removeprefix(prefix))
+        except SPDXParsingError as err:
+            logger.extend(err.get_messages())
+            return default
     return default
+
+def parse_enum_value(enum_str: str, enum_class: Type[Enum]) -> Enum:
+    try:
+        return enum_class[camel_case_to_snake_case(enum_str).upper()]
+    except KeyError:
+        raise SPDXParsingError([f"Invalid value for {enum_class}: {enum_str}"])
 
 
 def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject: Node, predicate: Node,
