@@ -15,7 +15,7 @@ from rdflib.exceptions import UniquenessError
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.actor import Actor
-from spdx.model.package import Package, PackagePurpose
+from spdx.model.package import Package, PackagePurpose, ExternalPackageRef, PackageVerificationCode
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.actor_parser import ActorParser
@@ -47,7 +47,11 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     except SPDXParsingError as err:
         logger.extend(err.get_messages())
         originator = None
-
+    try:
+        verification_code = parse_package_verification_code(package_node, graph)
+    except SPDXParsingError as err:
+        logger.append(err.get_messages())
+        verification_code = None
     files_analyzed = bool(graph.value(package_node, SPDX_NAMESPACE.filesAnalyzed, default=True))
     license_comment = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.licenseComments)
     comment = parse_literal(logger, graph, package_node, RDFS.comment)
@@ -79,7 +83,7 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
                                                     version=version_info, file_name=package_file_name,
                                                     supplier=supplier, originator=originator,
                                                     files_analyzed=files_analyzed,
-                                                    verification_code=None,
+                                                    verification_code=verification_code,
                                                     checksums=checksums, homepage=homepage,
                                                     source_info=source_info,
                                                     license_concluded=None,
@@ -115,3 +119,27 @@ def parse_primary_package_purpose(package_node: URIRef, graph: Graph) -> Optiona
     if not primary_package_purpose_ref:
         return None
     return PackagePurpose[primary_package_purpose_ref.fragment.replace("purpose_", "").upper()]
+
+
+def parse_package_verification_code(package_node: URIRef, graph: Graph) -> Optional[PackageVerificationCode]:
+    try:
+        package_node = graph.value(package_node, SPDX_NAMESPACE.packageVerificationCode, any=False)
+    except UniquenessError:
+        raise SPDXParsingError([f"Multiple values for unique value {SPDX_NAMESPACE.packageVerificationCode} found."])
+    if not package_node:
+        return None
+    logger = Logger()
+    value = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.packageVerificationCodeValue)
+    excluded_files = []
+    for (_, _, excluded_file_literal) in graph.triples(
+        (package_node, SPDX_NAMESPACE.packageVerificationCodeExcludedFile, None)):
+        excluded_files.append(excluded_file_literal.toPython())
+
+    raise_parsing_error_if_logger_has_messages(logger, "PackageVerificationCode")
+    package_verification_code = construct_or_raise_parsing_error(PackageVerificationCode, dict(value=value,
+                                                                                               excluded_files=excluded_files))
+    return package_verification_code
+
+
+def parse_external_package_ref() -> ExternalPackageRef:
+    pass
