@@ -14,7 +14,7 @@ from rdflib import RDF, Graph
 
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import ChecksumAlgorithm, Checksum
-from spdx.model.package import PackagePurpose
+from spdx.model.package import PackagePurpose, PackageVerificationCode
 from spdx.parser.rdf.package_parser import parse_package
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
@@ -37,6 +37,8 @@ def test_package_parser():
     assert package.source_info == "sourceInfo"
     assert package.license_comment == "packageLicenseComment"
     assert package.copyright_text == "packageCopyrightText"
+    assert package.verification_code == PackageVerificationCode(value="85ed0817af83a24ad8da68c2b5094de69833983c",
+                                                                excluded_files=["./exclude.py"])
     assert package.summary == "packageSummary"
     assert package.description == "packageDescription"
     assert package.comment == "packageComment"
