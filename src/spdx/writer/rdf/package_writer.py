@@ -13,7 +13,7 @@ from typing import Dict
 from rdflib import Graph, URIRef, RDF, Literal, XSD, BNode, DOAP, RDFS
 from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
 
-from spdx.writer.casing_tools import snake_case_to_camel_case
+from spdx.casing_tools import snake_case_to_camel_case
 from spdx.writer.rdf.checksum_writer import add_checksum_to_graph
 
 from spdx.model.package import Package, PackageVerificationCode, ExternalPackageRef, \
