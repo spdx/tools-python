@@ -15,16 +15,17 @@ from rdflib.exceptions import UniquenessError
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.actor import Actor
-from spdx.model.package import Package, PackagePurpose, ExternalPackageRef, PackageVerificationCode
+from spdx.model.package import Package, PackagePurpose, ExternalPackageRef, PackageVerificationCode, \
+    ExternalPackageRefCategory
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.actor_parser import ActorParser
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
 from spdx.parser.rdf.checksum_parser import parse_checksum
-from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, parse_literal, str_to_no_assertion_or_none
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
-
+from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, parse_literal, str_to_no_assertion_or_none, \
+    parse_enum_value
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
 
 def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Package:
     logger = Logger()
@@ -52,6 +53,9 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     except SPDXParsingError as err:
         logger.append(err.get_messages())
         verification_code = None
+    external_package_refs = []
+    for (_, _, external_package_ref_node) in graph.triples((package_node, SPDX_NAMESPACE.externalRef, None)):
+        external_package_refs.append(parse_external_package_ref(external_package_ref_node, graph))
     files_analyzed = bool(graph.value(package_node, SPDX_NAMESPACE.filesAnalyzed, default=True))
     license_comment = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.licenseComments)
     comment = parse_literal(logger, graph, package_node, RDFS.comment)
@@ -92,7 +96,7 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
                                                     license_comment=license_comment,
                                                     copyright_text=copyright_text, summary=summary,
                                                     description=description, comment=comment,
-                                                    external_references=None,
+                                                    external_references=external_package_refs,
                                                     attribution_texts=attribution_texts,
                                                     primary_package_purpose=primary_package_purpose,
                                                     release_date=release_date, built_date=built_date,
@@ -141,5 +145,18 @@ def parse_package_verification_code(package_node: URIRef, graph: Graph) -> Optio
     return package_verification_code
 
 
-def parse_external_package_ref() -> ExternalPackageRef:
-    pass
+def parse_external_package_ref(external_package_ref_node: URIRef, graph: Graph) -> ExternalPackageRef:
+    logger = Logger()
+    ref_locator = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceLocator)
+    ref_category = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceCategory,
+                                 prefix=SPDX_NAMESPACE.referenceCategory_,
+                                 method_to_apply=lambda x: parse_enum_value(x, ExternalPackageRefCategory))
+    ref_type = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceType,
+                             prefix=REFERENCE_NAMESPACE)
+    comment = parse_literal(logger, graph, external_package_ref_node, RDFS.comment)
+
+    raise_parsing_error_if_logger_has_messages(logger, "ExternalPackageRef")
+    external_package_ref = construct_or_raise_parsing_error(ExternalPackageRef,
+                                                            dict(category=ref_category, reference_type=ref_type,
+                                                                 locator=ref_locator, comment=comment))
+    return external_package_ref
