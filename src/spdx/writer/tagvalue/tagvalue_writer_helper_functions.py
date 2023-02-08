@@ -14,7 +14,7 @@ from spdx.model.actor import Actor
 from spdx.model.file import File
 from license_expression import LicenseExpression
 from spdx.model.package import Package
-from spdx.model.relationship import Relationship
+from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.snippet import Snippet
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
@@ -81,19 +81,19 @@ def scan_relationships(relationships: List[Relationship], packages: List[Package
     files_by_spdx_id = {file.spdx_id: file for file in files}
     packages_spdx_ids = [package.spdx_id for package in packages]
     for relationship in relationships:
-        if relationship.relationship_type == "CONTAINS" and \
+        if relationship.relationship_type == RelationshipType.CONTAINS and \
             relationship.spdx_element_id in packages_spdx_ids and \
-            relationship.related_spdx_element in files_by_spdx_id.keys():
+            relationship.related_spdx_element_id in files_by_spdx_id.keys():
             contained_files_by_package_id.setdefault(relationship.spdx_element_id, []).append(
-                files_by_spdx_id[relationship.related_spdx_element])
-            if relationship.has_comment:
+                files_by_spdx_id[relationship.related_spdx_element_id])
+            if relationship.comment:
                 relationships_to_write.append(relationship)
-        elif relationship.relationship_type == "CONTAINED_BY" and \
-            relationship.related_spdx_element in packages_spdx_ids and \
+        elif relationship.relationship_type == RelationshipType.CONTAINED_BY and \
+            relationship.related_spdx_element_id in packages_spdx_ids and \
             relationship.spdx_element_id in files_by_spdx_id:
-            contained_files_by_package_id.setdefault(relationship.related_spdx_element, []).append(
+            contained_files_by_package_id.setdefault(relationship.related_spdx_element_id, []).append(
                 files_by_spdx_id[relationship.spdx_element_id])
-            if relationship.has_comment:
+            if relationship.comment:
                 relationships_to_write.append(relationship)
         else:
             relationships_to_write.append(relationship)
