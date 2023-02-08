@@ -59,7 +59,7 @@ def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject:
         return SpdxNoAssertion()
     if value == SPDX_NAMESPACE.none:
         return SpdxNone()
-    return method_to_apply(value.toPython())
+    return method_to_apply(value)
 
 
 def str_to_no_assertion_or_none(value: str) -> Union[str, SpdxNone, SpdxNoAssertion]:
