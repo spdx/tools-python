@@ -13,7 +13,7 @@ from typing import Any, Type, Dict, TypeVar, Generic
 
 from spdx.jsonschema.json_property import JsonProperty
 from spdx.model.document import Document
-from spdx.writer.casing_tools import snake_case_to_camel_case
+from spdx.casing_tools import snake_case_to_camel_case
 
 MISSING_IMPLEMENTATION_MESSAGE = "Must be implemented"
 
