@@ -10,7 +10,7 @@
 # limitations under the License.
 from typing import Dict
 
-from rdflib import Graph, BNode, RDF, URIRef
+from rdflib import Graph, BNode, RDF, URIRef, RDFS, Literal
 
 from spdx.model.relationship import Relationship
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
@@ -34,7 +34,7 @@ def add_relationship_to_graph(relationship: Relationship, graph: Graph, doc_name
         graph.add((relationship_node, SPDX_NAMESPACE.relatedSpdxElement,
                    URIRef(add_namespace_to_spdx_id(relationship.related_spdx_element_id, doc_namespace,
                                                    external_doc_ref_to_namespace))))
-
+    graph.add((relationship_node, RDFS.comment, Literal(relationship.comment)))
     relationship_resource = URIRef(
         add_namespace_to_spdx_id(relationship.spdx_element_id, doc_namespace, external_doc_ref_to_namespace))
     graph.add((relationship_resource, SPDX_NAMESPACE.relationship, relationship_node))
