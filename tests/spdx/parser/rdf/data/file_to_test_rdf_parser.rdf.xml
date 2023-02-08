@@ -171,6 +171,7 @@
       <spdx:Relationship rdf:nodeID="N4b84b0d498e644b09f402b40b50916ef">
         <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>
         <spdx:relatedSpdxElement rdf:resource="https://some.namespace#SPDXRef-File"/>
+        <rdfs:comment>relationshipComment</rdfs:comment>
       </spdx:Relationship>
     </spdx:relationship>
     <spdx:creationInfo>
