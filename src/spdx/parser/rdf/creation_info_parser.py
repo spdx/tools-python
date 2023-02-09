@@ -12,7 +12,7 @@ import sys
 from typing import Tuple
 from urllib.parse import urldefrag
 
-from rdflib import Graph, RDFS, RDF
+from rdflib import Graph, RDFS, RDF, Namespace
 from rdflib.exceptions import UniquenessError
 from rdflib.term import URIRef
 
@@ -102,5 +102,6 @@ def parse_external_document_refs(external_document_node: URIRef, graph: Graph,
     external_document_ref = construct_or_raise_parsing_error(ExternalDocumentRef, dict(document_ref_id=document_ref_id,
                                                                                        document_uri=document_uri,
                                                                                        checksum=checksum))
+    graph.bind(external_document_ref.document_ref_id, Namespace(external_document_ref.document_uri + "#"))
 
     return external_document_ref
