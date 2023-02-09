@@ -26,11 +26,17 @@ Here's the process to make changes to the codebase:
 2. Review [open pull requests](https://github.com/spdx/tools-python/pulls) before committing time to a substantial
    revision. Work along similar lines may already be in progress.
 
-3. Create a new branch:
+3. Fork the repository as described [here](https://docs.github.com/en/get-started/quickstart/fork-a-repo#forking-a-repository)
+   and optionally follow the further steps described to sync your fork and the original repository.
+
+4. Create a new branch in your fork and set up environment:
    ```sh
    git checkout -b fix-or-improve-something
+   python -m venv ./venv
+   ./venv/bin/activate
+   pip install -e .
    ```
-4. Make some changes and commit them to the branch:
+5. Make some changes and commit them to the branch:
    ```sh
    git commit --signoff -m 'description of my changes'
    ```
@@ -42,22 +48,22 @@ Here's the process to make changes to the codebase:
    commits: `git commit -s` or `--signoff` signs a current commit, and `git rebase --signoff <revision-range>`
    retroactively signs a range of past commits.
 
-5. Test your changes:
+6. Test your changes:
    ```sh
    python setup.py test # in the repo root
    ```
    You may use other test runners, such as `pytest` or `nose` at your preference.
-6. Push the branch to your fork on GitHub:
+7. Push the branch to your fork on GitHub:
    ```sh
    git push origin fix-or-improve-something
    ```
-7. Make a pull request on GitHub.
-8. Continue making more changes and commits on the branch, with `git commit --signoff` and `git push`.
-9. When done, write a comment on the PR asking for a code review.
-10. Some other developer will review your changes and accept your PR. The merge should be done with `rebase`, if
+8. Make a pull request on GitHub.
+9. Continue making more changes and commits on the branch, with `git commit --signoff` and `git push`.
+10. When done, write a comment on the PR asking for a code review.
+11. Some other developer will review your changes and accept your PR. The merge should be done with `rebase`, if
     possible, or with `squash`.
-11. The temporary branch on GitHub should be deleted (there is a button for deleting it).
-12. Delete the local branch as well:
+12. The temporary branch on GitHub should be deleted (there is a button for deleting it).
+13. Delete the local branch as well:
     ```sh
     git checkout master
     git pull -p
