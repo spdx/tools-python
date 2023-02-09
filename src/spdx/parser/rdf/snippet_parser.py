@@ -17,6 +17,7 @@ from spdx.model.snippet import Snippet
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_literal_or_no_assertion_or_none
+from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
 
 
@@ -27,7 +28,10 @@ def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Sni
     file_spdx_id = parse_spdx_id(file_spdx_id_uri, doc_namespace, graph)
     byte_range = parse_ranges(snippet_node, graph, POINTER_NAMESPACE.ByteOffsetPointer, POINTER_NAMESPACE.offset)
     line_range = parse_ranges(snippet_node, graph, POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)
-
+    license_concluded = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node,
+                                                              SPDX_NAMESPACE.licenseConcluded,
+                                                              method_to_apply=lambda x: parse_license_expression(x,
+                                                                                                                 graph))
     license_comment = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.licenseComments)
     copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node, SPDX_NAMESPACE.copyrightText,
                                                            method_to_apply=str)
@@ -40,7 +44,7 @@ def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Sni
     raise_parsing_error_if_logger_has_messages(logger, "Snippet")
     snippet = construct_or_raise_parsing_error(Snippet,
                                                dict(spdx_id=spdx_id, file_spdx_id=file_spdx_id, byte_range=byte_range,
-                                                    line_range=line_range, license_concluded=None,
+                                                    line_range=line_range, license_concluded=license_concluded,
                                                     license_info_in_snippet=None, license_comment=license_comment,
                                                     copyright_text=copyright_text, comment=comment, name=name,
                                                     attribution_texts=attribution_texts))
