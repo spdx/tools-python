@@ -11,7 +11,7 @@
 import os
 
 import pytest
-from rdflib import Graph, RDF, URIRef
+from rdflib import Graph, URIRef
 from spdx.parser.error import SPDXParsingError
 
 from spdx.model.checksum import ChecksumAlgorithm

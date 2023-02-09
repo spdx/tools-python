@@ -68,9 +68,9 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, package_node, SPDX_NAMESPACE.copyrightText,
                                                            parsing_method=str)
     source_info = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.sourceInfo)
-    primary_package_purpose = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.primaryPackagePurpose,
-                                            parsing_method=lambda x: parse_enum_value(x, PackagePurpose,
-                                                                                      SPDX_NAMESPACE.purpose_))
+    primary_package_purpose = parse_literal(
+        logger, graph, package_node, SPDX_NAMESPACE.primaryPackagePurpose,
+        parsing_method=lambda x: parse_enum_value(x, PackagePurpose, SPDX_NAMESPACE.purpose_))
     homepage = parse_literal(logger, graph, package_node, DOAP.homepage)
     attribution_texts = []
     for (_, _, attribution_text_literal) in graph.triples((package_node, SPDX_NAMESPACE.attributionText, None)):
@@ -124,9 +124,9 @@ def parse_package_verification_code(package_verification_code_node: URIRef, grap
 def parse_external_package_ref(external_package_ref_node: URIRef, graph: Graph) -> ExternalPackageRef:
     logger = Logger()
     ref_locator = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceLocator)
-    ref_category = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceCategory,
-                                 parsing_method=lambda x: parse_enum_value(x, ExternalPackageRefCategory,
-                                                                           SPDX_NAMESPACE.referenceCategory_, ))
+    ref_category = parse_literal(
+        logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceCategory,
+        parsing_method=lambda x: parse_enum_value(x, ExternalPackageRefCategory, SPDX_NAMESPACE.referenceCategory_, ))
     ref_type = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceType,
                              parsing_method=lambda x: x.removeprefix(REFERENCE_NAMESPACE))
     comment = parse_literal(logger, graph, external_package_ref_node, RDFS.comment)

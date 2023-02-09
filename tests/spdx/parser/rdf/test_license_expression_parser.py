@@ -12,13 +12,11 @@ import os
 from unittest import TestCase
 
 from license_expression import get_spdx_licensing
-from rdflib import Graph, RDF, URIRef
+from rdflib import Graph, RDF
 from spdx.parser.rdf import rdf_parser
 
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
-from spdx.writer.rdf.license_expression_writer import add_license_expression_to_graph
-
 
 def test_license_expression_parser():
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))

@@ -97,12 +97,14 @@ def parse_external_document_refs(external_document_node: URIRef, graph: Graph,
     logger = Logger()
     document_ref_id = parse_spdx_id(external_document_node, doc_namespace, graph)
     document_uri = parse_literal(logger, graph, external_document_node, SPDX_NAMESPACE.spdxDocument)
-    checksum = None
-    for (_, _, checksum_node) in graph.triples((external_document_node, SPDX_NAMESPACE.checksum, None)):
-        checksum = parse_checksum(checksum_node, graph)
+    checksum = parse_literal(logger, graph, external_document_node, SPDX_NAMESPACE.checksum,
+                             parsing_method=lambda x: parse_checksum(x, graph))
     external_document_ref = construct_or_raise_parsing_error(ExternalDocumentRef, dict(document_ref_id=document_ref_id,
                                                                                        document_uri=document_uri,
                                                                                        checksum=checksum))
+
+    # To replace the external doc namespaces by the ref id in spdx ids later (e.g. in a relationship), we need to bind
+    # the namespace to the graph.
     graph.bind(external_document_ref.document_ref_id, Namespace(external_document_ref.document_uri + "#"))
 
     return external_document_ref
