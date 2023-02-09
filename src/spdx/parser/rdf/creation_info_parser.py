@@ -94,7 +94,7 @@ def parse_namespace_and_spdx_id(graph: Graph) -> (str, str):
 def parse_external_document_refs(external_document_node: URIRef, graph: Graph,
                                  doc_namespace: str) -> ExternalDocumentRef:
     logger = Logger()
-    document_ref_id = parse_spdx_id(external_document_node, doc_namespace)
+    document_ref_id = parse_spdx_id(external_document_node, doc_namespace, graph)
     document_uri = parse_literal(logger, graph, external_document_node, SPDX_NAMESPACE.spdxDocument)
     checksum = None
     for (_, _, checksum_node) in graph.triples((external_document_node, SPDX_NAMESPACE.checksum, None)):

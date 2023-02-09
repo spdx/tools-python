@@ -21,7 +21,7 @@ from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 def parse_annotation(annotation_node: URIRef, graph: Graph, parent_ref: URIRef, doc_namespace) -> Annotation:
     logger = Logger()
-    spdx_id = parse_spdx_id(parent_ref, doc_namespace)
+    spdx_id = parse_spdx_id(parent_ref, doc_namespace, graph)
     annotator = parse_literal(logger, graph, annotation_node, SPDX_NAMESPACE.annotator,
                               method_to_apply=ActorParser.parse_actor)
     annotation_type = parse_literal(logger, graph, annotation_node, SPDX_NAMESPACE.annotationType,

@@ -27,9 +27,9 @@ def test_rdf_parser_with_2_3_example():
         os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXRdfExample-v2.3.spdx.rdf.xml"))
 
     assert type(doc) == Document
-    assert len(doc.snippets) ==  1
+    assert len(doc.snippets) == 1
     assert len(doc.files) == 5
     assert len(doc.annotations) == 5
     assert len(doc.packages) == 4
     assert len(doc.relationships) == 13
-
+    assert len(doc.extracted_licensing_info) == 5

@@ -22,9 +22,9 @@ from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
 
 def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Snippet:
     logger = Logger()
-    spdx_id = parse_spdx_id(snippet_node, doc_namespace)
+    spdx_id = parse_spdx_id(snippet_node, doc_namespace, graph)
     file_spdx_id_uri = graph.value(subject=snippet_node, predicate=SPDX_NAMESPACE.snippetFromFile)
-    file_spdx_id = parse_spdx_id(file_spdx_id_uri, doc_namespace)
+    file_spdx_id = parse_spdx_id(file_spdx_id_uri, doc_namespace, graph)
     byte_range = parse_ranges(snippet_node, graph, POINTER_NAMESPACE.ByteOffsetPointer, POINTER_NAMESPACE.offset)
     line_range = parse_ranges(snippet_node, graph, POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)
 

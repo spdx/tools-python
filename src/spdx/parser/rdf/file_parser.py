@@ -20,7 +20,7 @@ from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
     logger = Logger()
-    spdx_id = parse_spdx_id(file_node, doc_namespace)
+    spdx_id = parse_spdx_id(file_node, doc_namespace, graph)
     name = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.fileName)
     checksums = []
     for (_,_,checksum_node) in graph.triples((file_node, SPDX_NAMESPACE.checksum, None)):
