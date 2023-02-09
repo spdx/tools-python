@@ -14,7 +14,8 @@ from spdx.model.file import File, FileType
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.checksum_parser import parse_checksum
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_literal_or_no_assertion_or_none
+from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_literal_or_no_assertion_or_none, \
+    get_correct_typed_value
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
@@ -36,6 +37,10 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
     license_concluded = parse_literal_or_no_assertion_or_none(logger, graph, file_node, SPDX_NAMESPACE.licenseConcluded,
                                                               parsing_method=lambda x: parse_license_expression(x,
                                                                                                                 graph))
+    license_info_in_file = []
+    for (_, _, license_info_from_files_node) in graph.triples((file_node, SPDX_NAMESPACE.licenseInfoInFile, None)):
+        license_info_in_file.append(
+            get_correct_typed_value(logger, license_info_from_files_node, lambda x: parse_license_expression(x, graph)))
     license_comment = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.licenseComments)
     copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, file_node, SPDX_NAMESPACE.copyrightText,
                                                            parsing_method=str)
@@ -55,7 +60,7 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
                                                        contributors=file_contributors,
                                                        license_comment=license_comment,
                                                        license_concluded=license_concluded,
-                                                       license_info_in_file=None,
+                                                       license_info_in_file=license_info_in_file,
                                                        notice=notice_text))
     return file
 
