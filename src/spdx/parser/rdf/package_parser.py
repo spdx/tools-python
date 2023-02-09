@@ -30,7 +30,7 @@ from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
 
 def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Package:
     logger = Logger()
-    spdx_id = parse_spdx_id(package_node, doc_namespace)
+    spdx_id = parse_spdx_id(package_node, doc_namespace, graph)
     name = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.name)
     download_location = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.downloadLocation)
     checksums = []
