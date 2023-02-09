@@ -13,6 +13,7 @@ from typing import Any, Callable, Union, Optional, Type
 
 from rdflib import Graph, URIRef
 from rdflib.exceptions import UniquenessError
+from rdflib.namespace import NamespaceManager
 from rdflib.term import Node
 
 from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
@@ -70,11 +71,12 @@ def str_to_no_assertion_or_none(value: str) -> Union[str, SpdxNone, SpdxNoAssert
     return value
 
 
-def parse_spdx_id(resource: URIRef, doc_namespace: str) -> Optional[str]:
+def parse_spdx_id(resource: URIRef, doc_namespace: str, graph: Graph) -> Optional[str]:
     if not resource:
         return None
     if resource.startswith(f"{doc_namespace}#"):
-        spdx_id = resource.fragment
-    else:
-        spdx_id = resource.toPython()
-    return spdx_id or None
+        return resource.fragment
+    if "#" in resource:
+        namespace_manager = NamespaceManager(graph)
+        return namespace_manager.normalizeUri(resource)
+    return resource.toPython() or None

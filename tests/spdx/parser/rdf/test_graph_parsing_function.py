@@ -9,26 +9,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import pytest
-from rdflib import URIRef
+from rdflib import URIRef, Graph, Namespace
 
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.rdf.graph_parsing_functions import str_to_no_assertion_or_none, parse_spdx_id
 
 
-@pytest.mark.parametrize("value,expected",[("NOASSERTION", SpdxNoAssertion()), ("NONE", SpdxNone()), ("test", "test"),
-                                           ("Noassertion", "Noassertion")])
+@pytest.mark.parametrize("value,expected", [("NOASSERTION", SpdxNoAssertion()), ("NONE", SpdxNone()), ("test", "test"),
+                                            ("Noassertion", "Noassertion")])
 def test_str_to_no_assertion_or_none(value, expected):
     result = str_to_no_assertion_or_none(value)
 
     assert result == expected
 
-@pytest.mark.parametrize("resource,doc_namespace,"
-                         "expected", [(URIRef("docNamespace#SPDXRef-Test"), "docNamespace", "SPDXRef-Test"),
-                                      (URIRef("docNamespaceSPDXRef-Test"), "docNamespace", "docNamespaceSPDXRef-Test"),
-                                      (URIRef("differentNamespace#SPDXRef-Test"), "docNamespace", "differentNamespace#SPDXRef-Test"),
-                                      (None, "", None),])
-def test_parse_spdx_id(resource, doc_namespace, expected):
-    spdx_id = parse_spdx_id(resource, doc_namespace)
+
+@pytest.mark.parametrize("resource,doc_namespace,ext_namespace_mapping,expected",
+                         [(URIRef("docNamespace#SPDXRef-Test"), "docNamespace", ("", Namespace("")), "SPDXRef-Test"),
+                          (URIRef("docNamespaceSPDXRef-Test"), "docNamespace", ("", Namespace("")),
+                           "docNamespaceSPDXRef-Test"),
+                          (URIRef("differentNamespace#SPDXRef-Test"), "docNamespace",
+                           ("extDoc", Namespace("differentNamespace#")), "extDoc:SPDXRef-Test"),
+                          (None, "", ("", Namespace("")), None)])
+def test_parse_spdx_id(resource, doc_namespace, ext_namespace_mapping, expected):
+    graph = Graph()
+    graph.bind(*ext_namespace_mapping)
+    spdx_id = parse_spdx_id(resource, doc_namespace, graph)
 
     assert spdx_id == expected
