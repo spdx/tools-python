@@ -13,7 +13,7 @@ from typing import Pattern, Match, Optional
 
 from spdx.model.actor import Actor, ActorType
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.dict_parsing_functions import construct_or_raise_parsing_error
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error
 
 
 class ActorParser:

@@ -20,8 +20,9 @@ from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.actor_parser import ActorParser
 from spdx.parser.jsonlikedict.checksum_parser import ChecksumParser
 from spdx.parser.jsonlikedict.dict_parsing_functions import append_parsed_field_or_log_error, \
-    raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error, parse_field_or_log_error, \
+    parse_field_or_log_error, \
     parse_field_or_no_assertion
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.datetime_conversions import datetime_from_str
 from spdx.parser.logger import Logger
 
