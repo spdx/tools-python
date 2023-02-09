@@ -10,6 +10,7 @@
 # limitations under the License.
 from spdx.formats import file_name_to_format, FileFormat
 from spdx.parser.json import json_parser
+from spdx.parser.rdf import rdf_parser
 from spdx.parser.xml import xml_parser
 from spdx.parser.yaml import yaml_parser
 
@@ -17,7 +18,7 @@ from spdx.parser.yaml import yaml_parser
 def parse_file(file_name: str):
     input_format = file_name_to_format(file_name)
     if input_format == FileFormat.RDF_XML:
-        raise NotImplementedError("Currently, the rdf parser is not implemented")
+        return rdf_parser.parse_from_file(file_name)
     elif input_format == FileFormat.TAG_VALUE:
         raise NotImplementedError("Currently, the tag-value parser is not implemented")
     elif input_format == FileFormat.JSON:
