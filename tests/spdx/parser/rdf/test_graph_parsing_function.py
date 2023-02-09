@@ -11,7 +11,7 @@
 import pytest
 from rdflib import URIRef, Graph, Namespace
 
-from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id
+from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, remove_prefix
 
 
 @pytest.mark.parametrize("resource,doc_namespace,ext_namespace_mapping,expected",
@@ -27,3 +27,11 @@ def test_parse_spdx_id(resource, doc_namespace, ext_namespace_mapping, expected)
     spdx_id = parse_spdx_id(resource, doc_namespace, graph)
 
     assert spdx_id == expected
+
+
+@pytest.mark.parametrize("string,prefix,expected", [("prefixString", "prefix", "String"),
+                                                    ("prefixString", "refix", "prefixString")])
+def test_remove_prefix(string, prefix, expected):
+    shorten_string = remove_prefix(string, prefix)
+
+    assert expected == shorten_string

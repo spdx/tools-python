@@ -20,7 +20,7 @@ from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
 from spdx.parser.rdf.checksum_parser import parse_checksum
 from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, parse_literal, parse_enum_value, \
-    parse_literal_or_no_assertion_or_none, get_correct_typed_value, parse_literal_or_no_assertion
+    parse_literal_or_no_assertion_or_none, get_correct_typed_value, parse_literal_or_no_assertion, remove_prefix
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
 
@@ -128,7 +128,7 @@ def parse_external_package_ref(external_package_ref_node: URIRef, graph: Graph) 
         logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceCategory,
         parsing_method=lambda x: parse_enum_value(x, ExternalPackageRefCategory, SPDX_NAMESPACE.referenceCategory_, ))
     ref_type = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceType,
-                             parsing_method=lambda x: x.removeprefix(REFERENCE_NAMESPACE))
+                             parsing_method=lambda x: remove_prefix(x, REFERENCE_NAMESPACE))
     comment = parse_literal(logger, graph, external_package_ref_node, RDFS.comment)
 
     raise_parsing_error_if_logger_has_messages(logger, "ExternalPackageRef")
