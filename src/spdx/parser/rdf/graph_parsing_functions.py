@@ -24,20 +24,24 @@ from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx.casing_tools import camel_case_to_snake_case
 
 
-def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node, default: Any = None,
-                  method_to_apply: Callable = lambda x: x, prefix: str = ""):
+def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node, parsing_method: Callable = str,
+                  default: Any = None):
     value = get_unique_value(logger, graph, subject, predicate, default)
     if not value:
         return default
+    return apply_parsing_method_or_log_error(logger, value, parsing_method, default)
+
+
+def apply_parsing_method_or_log_error(logger: Logger, value: Any, parsing_method: Callable = str, default: Any = None):
     try:
-        return method_to_apply(value.removeprefix(prefix))
+        return parsing_method(value)
     except SPDXParsingError as err:
         logger.extend(err.get_messages())
         return default
 
 
 def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject: Node, predicate: Node,
-                                          default: Any = None, method_to_apply: Callable = lambda x: x):
+                                          parsing_method: Callable = str, default: Any = None):
     value = get_unique_value(logger, graph, subject, predicate, default)
     if not value:
         return default
@@ -45,25 +49,17 @@ def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject:
         return SpdxNoAssertion()
     if value == SPDX_NAMESPACE.none or value.toPython() == SPDX_NONE_STRING:
         return SpdxNone()
-    try:
-        return method_to_apply(value)
-    except SPDXParsingError as err:
-        logger.extend(err.get_messages())
-        return default
+    return apply_parsing_method_or_log_error(logger, value, parsing_method, default)
 
 
 def parse_literal_or_no_assertion(logger: Logger, graph: Graph, subject: Node, predicate: Node,
-                                  default: Any = None, method_to_apply: Callable = lambda x: x):
+                                  parsing_method: Callable = str, default: Any = None):
     value = get_unique_value(logger, graph, subject, predicate, default)
     if not value:
         return default
     if value == SPDX_NAMESPACE.noassertion or value.toPython() == SPDX_NO_ASSERTION_STRING:
         return SpdxNoAssertion()
-    try:
-        return method_to_apply(value)
-    except SPDXParsingError as err:
-        logger.extend(err.get_messages())
-        return default
+    return apply_parsing_method_or_log_error(logger, value, parsing_method, default)
 
 
 def get_unique_value(logger: Logger, graph: Graph, subject: Node, predicate: Node, default: Any) -> Any:
@@ -75,9 +71,11 @@ def get_unique_value(logger: Logger, graph: Graph, subject: Node, predicate: Nod
         return default
 
 
-def parse_enum_value(enum_str: str, enum_class: Type[Enum]) -> Enum:
+def parse_enum_value(enum_str: str, enum_class: Type[Enum], prefix: str) -> Enum:
     try:
-        return enum_class[camel_case_to_snake_case(enum_str).upper()]
+        enum_without_rdf_prefix = enum_str.removeprefix(prefix)
+        value = camel_case_to_snake_case(enum_without_rdf_prefix).upper()
+        return enum_class[value]
     except KeyError:
         raise SPDXParsingError([f"Invalid value for {enum_class}: {enum_str}"])
 

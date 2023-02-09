@@ -34,8 +34,7 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     spdx_id = parse_spdx_id(package_node, doc_namespace, graph)
     name = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.name)
     download_location = parse_literal_or_no_assertion_or_none(logger, graph, package_node,
-                                                              SPDX_NAMESPACE.downloadLocation,
-                                                              method_to_apply=str)
+                                                              SPDX_NAMESPACE.downloadLocation, parsing_method=str)
     checksums = []
     for (_, _, checksum_node) in graph.triples((package_node, SPDX_NAMESPACE.checksum, None)):
         checksums.append(parse_checksum(checksum_node, graph))
@@ -63,33 +62,32 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     files_analyzed = bool(graph.value(package_node, SPDX_NAMESPACE.filesAnalyzed, default=True))
     license_concluded = parse_literal_or_no_assertion_or_none(logger, graph, package_node,
                                                               SPDX_NAMESPACE.licenseConcluded,
-                                                              method_to_apply=lambda x: parse_license_expression(x,
-                                                                                                                 graph))
+                                                              parsing_method=lambda x: parse_license_expression(x,
+                                                                                                                graph))
     license_declared = parse_literal_or_no_assertion_or_none(logger, graph, package_node,
                                                              SPDX_NAMESPACE.licenseDeclared,
-                                                             method_to_apply=lambda x: parse_license_expression(x,
-                                                                                                                graph))
+                                                             parsing_method=lambda x: parse_license_expression(x,
+                                                                                                               graph))
     license_comment = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.licenseComments)
     comment = parse_literal(logger, graph, package_node, RDFS.comment)
     summary = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.summary)
     description = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.description)
     copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, package_node, SPDX_NAMESPACE.copyrightText,
-                                                           method_to_apply=str)
+                                                           parsing_method=str)
     source_info = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.sourceInfo)
     primary_package_purpose = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.primaryPackagePurpose,
-                                            prefix=SPDX_NAMESPACE.purpose_,
-                                            method_to_apply=lambda x: parse_enum_value(x, PackagePurpose))
+                                            parsing_method=lambda x: parse_enum_value(x, PackagePurpose,
+                                                                                      SPDX_NAMESPACE.purpose_))
     homepage = parse_literal(logger, graph, package_node, DOAP.homepage)
     attribution_texts = []
     for (_, _, attribution_text_literal) in graph.triples((package_node, SPDX_NAMESPACE.attributionText, None)):
         attribution_texts.append(attribution_text_literal.toPython())
 
     release_date = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.releaseDate,
-                                 method_to_apply=datetime_from_str)
-    built_date = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.builtDate,
-                               method_to_apply=datetime_from_str)
+                                 parsing_method=datetime_from_str)
+    built_date = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.builtDate, parsing_method=datetime_from_str)
     valid_until_date = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.validUntilDate,
-                                     method_to_apply=datetime_from_str)
+                                     parsing_method=datetime_from_str)
 
     raise_parsing_error_if_logger_has_messages(logger, "Package")
     package = construct_or_raise_parsing_error(Package,
@@ -152,10 +150,10 @@ def parse_external_package_ref(external_package_ref_node: URIRef, graph: Graph) 
     logger = Logger()
     ref_locator = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceLocator)
     ref_category = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceCategory,
-                                 prefix=SPDX_NAMESPACE.referenceCategory_,
-                                 method_to_apply=lambda x: parse_enum_value(x, ExternalPackageRefCategory))
+                                 parsing_method=lambda x: parse_enum_value(x, ExternalPackageRefCategory,
+                                                                           SPDX_NAMESPACE.referenceCategory_, ))
     ref_type = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceType,
-                             prefix=REFERENCE_NAMESPACE)
+                             parsing_method=lambda x: x.removeprefix(REFERENCE_NAMESPACE))
     comment = parse_literal(logger, graph, external_package_ref_node, RDFS.comment)
 
     raise_parsing_error_if_logger_has_messages(logger, "ExternalPackageRef")

@@ -23,12 +23,12 @@ def parse_annotation(annotation_node: URIRef, graph: Graph, parent_ref: URIRef, 
     logger = Logger()
     spdx_id = parse_spdx_id(parent_ref, doc_namespace, graph)
     annotator = parse_literal(logger, graph, annotation_node, SPDX_NAMESPACE.annotator,
-                              method_to_apply=ActorParser.parse_actor)
+                              parsing_method=ActorParser.parse_actor)
     annotation_type = parse_literal(logger, graph, annotation_node, SPDX_NAMESPACE.annotationType,
-                                    prefix=SPDX_NAMESPACE.annotationType_,
-                                    method_to_apply=lambda x: parse_enum_value(x, AnnotationType))
+                                    parsing_method=lambda x: parse_enum_value(x, AnnotationType,
+                                                                              SPDX_NAMESPACE.annotationType_))
     annotation_date = parse_literal(logger, graph, annotation_node, SPDX_NAMESPACE.annotationDate,
-                                    method_to_apply=datetime_from_str)
+                                    parsing_method=datetime_from_str)
     annotation_comment = parse_literal(logger, graph, annotation_node, RDFS.comment)
 
     raise_parsing_error_if_logger_has_messages(logger, "Annotation")

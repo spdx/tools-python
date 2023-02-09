@@ -24,13 +24,13 @@ def parse_relationship(relationship_node: URIRef, graph: Graph, parent_node: URI
     spdx_element_id = parse_spdx_id(parent_node, doc_namespace, graph)
 
     relationship_type = parse_literal(logger, graph, relationship_node, SPDX_NAMESPACE.relationshipType,
-                                      prefix=SPDX_NAMESPACE.relationshipType_,
-                                      method_to_apply=lambda x: parse_enum_value(x, RelationshipType))
+                                      parsing_method=lambda x: parse_enum_value(x, RelationshipType,
+                                                                                SPDX_NAMESPACE.relationshipType_))
     related_spdx_element = parse_literal_or_no_assertion_or_none(logger, graph, relationship_node,
                                                                  SPDX_NAMESPACE.relatedSpdxElement,
-                                                                 method_to_apply=lambda x: parse_spdx_id(x,
-                                                                                                         doc_namespace,
-                                                                                                         graph))
+                                                                 parsing_method=lambda x: parse_spdx_id(x,
+                                                                                                        doc_namespace,
+                                                                                                        graph))
 
     comment = parse_literal(logger, graph, relationship_node, RDFS.comment)
     raise_parsing_error_if_logger_has_messages(logger, "Relationship")
