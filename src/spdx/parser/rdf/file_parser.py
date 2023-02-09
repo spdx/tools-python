@@ -33,13 +33,12 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
             file_types.append(convert_uri_ref_to_file_type(file_type_ref))
         except KeyError:
             logger.append(f"Invalid FileType: {file_type_ref}")
-    license_concluded = parse_literal_or_no_assertion_or_none(logger, graph, file_node,
-                                                              SPDX_NAMESPACE.licenseConcluded,
-                                                              method_to_apply=lambda x: parse_license_expression(x,
-                                                                                                                 graph))
+    license_concluded = parse_literal_or_no_assertion_or_none(logger, graph, file_node, SPDX_NAMESPACE.licenseConcluded,
+                                                              parsing_method=lambda x: parse_license_expression(x,
+                                                                                                                graph))
     license_comment = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.licenseComments)
     copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, file_node, SPDX_NAMESPACE.copyrightText,
-                                                           method_to_apply=str)
+                                                           parsing_method=str)
     file_contributors = []
     for (_, _, file_contributor) in graph.triples((file_node, SPDX_NAMESPACE.fileContributor, None)):
         file_contributors.append(file_contributor.toPython())

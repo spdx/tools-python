@@ -34,7 +34,8 @@ def parse_creation_info(graph: Graph) -> Tuple[CreationInfo, URIRef]:
     logger = Logger()
     namespace, spdx_id, doc_node = parse_namespace_and_spdx_id(graph)
     spec_version = parse_literal(logger, graph, doc_node, SPDX_NAMESPACE.specVersion)
-    data_license = parse_literal(logger, graph, doc_node, SPDX_NAMESPACE.dataLicense, prefix=LICENSE_NAMESPACE)
+    data_license = parse_literal(logger, graph, doc_node, SPDX_NAMESPACE.dataLicense,
+                                 parsing_method=lambda x: x.removeprefix(LICENSE_NAMESPACE))
     comment = parse_literal(logger, graph, doc_node, RDFS.comment)
     name = parse_literal(logger, graph, doc_node, SPDX_NAMESPACE.name)
 
@@ -44,9 +45,9 @@ def parse_creation_info(graph: Graph) -> Tuple[CreationInfo, URIRef]:
         raise SPDXParsingError([f"Error while parsing document {name}: {logger.get_messages()}"])
 
     created = parse_literal(logger, graph, creation_info_node, SPDX_NAMESPACE.created,
-                            method_to_apply=datetime_from_str)
+                            parsing_method=datetime_from_str)
     license_list_version = parse_literal(logger, graph, creation_info_node, SPDX_NAMESPACE.licenseListVersion,
-                                         method_to_apply=Version.from_string)
+                                         parsing_method=Version.from_string)
     creator_comment = parse_literal(logger, graph, creation_info_node, RDFS.comment)
     creators = []
     for (_, _, creator_literal) in graph.triples((creation_info_node, SPDX_NAMESPACE.creator, None)):

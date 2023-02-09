@@ -30,11 +30,11 @@ def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Sni
     line_range = parse_ranges(snippet_node, graph, POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)
     license_concluded = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node,
                                                               SPDX_NAMESPACE.licenseConcluded,
-                                                              method_to_apply=lambda x: parse_license_expression(x,
-                                                                                                                 graph))
+                                                              parsing_method=lambda x: parse_license_expression(x,
+                                                                                                                graph))
     license_comment = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.licenseComments)
     copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node, SPDX_NAMESPACE.copyrightText,
-                                                           method_to_apply=str)
+                                                           parsing_method=str)
     comment = parse_literal(logger, graph, snippet_node, RDFS.comment)
     name = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.name)
     attribution_texts = []
