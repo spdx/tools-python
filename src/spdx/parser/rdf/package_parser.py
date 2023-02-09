@@ -11,20 +11,16 @@
 from typing import Optional, Union
 
 from rdflib import URIRef, Graph, RDFS, DOAP
-from rdflib.exceptions import UniquenessError
 
 from spdx.datetime_conversions import datetime_from_str
-from spdx.model.actor import Actor
 from spdx.model.package import Package, PackagePurpose, ExternalPackageRef, PackageVerificationCode, \
     ExternalPackageRefCategory
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.actor_parser import ActorParser
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
 from spdx.parser.rdf.checksum_parser import parse_checksum
 from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, parse_literal, parse_enum_value, \
-    parse_literal_or_no_assertion_or_none, get_correct_typed_value
+    parse_literal_or_no_assertion_or_none, get_correct_typed_value, parse_literal_or_no_assertion
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
 
@@ -41,21 +37,14 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
 
     version_info = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.versionInfo)
     package_file_name = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.packageFileName)
-    try:
-        supplier = parse_actor_or_no_assertion(logger, graph, package_node, SPDX_NAMESPACE.supplier)
-    except SPDXParsingError as err:
-        logger.extend(err.get_messages())
-        supplier = None
-    try:
-        originator = parse_actor_or_no_assertion(logger, graph, package_node, SPDX_NAMESPACE.originator)
-    except SPDXParsingError as err:
-        logger.extend(err.get_messages())
-        originator = None
-    try:
-        verification_code = parse_package_verification_code(package_node, graph)
-    except SPDXParsingError as err:
-        logger.append(err.get_messages())
-        verification_code = None
+
+    supplier = parse_literal_or_no_assertion(logger, graph, package_node, SPDX_NAMESPACE.supplier,
+                                             parsing_method=ActorParser.parse_actor)
+    originator = parse_literal_or_no_assertion(logger, graph, package_node, SPDX_NAMESPACE.originator,
+                                               parsing_method=ActorParser.parse_actor)
+    verification_code = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.packageVerificationCode,
+                                      parsing_method=lambda x: parse_package_verification_code(x, graph))
+
     external_package_refs = []
     for (_, _, external_package_ref_node) in graph.triples((package_node, SPDX_NAMESPACE.externalRef, None)):
         external_package_refs.append(parse_external_package_ref(external_package_ref_node, graph))
@@ -117,31 +106,13 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     return package
 
 
-def parse_actor_or_no_assertion(logger, graph, parent_node, predicate) -> Optional[Union[SpdxNoAssertion, Actor]]:
-    try:
-        value = graph.value(parent_node, predicate, any=False)
-    except UniquenessError:
-        logger.append(f"Multiple values for unique value {predicate} found.")
-        return
-    if not value:
-        return None
-    if value == "NOASSERTION":
-        return SpdxNoAssertion()
-    return ActorParser.parse_actor(value)
-
-
-def parse_package_verification_code(package_node: URIRef, graph: Graph) -> Optional[PackageVerificationCode]:
-    try:
-        package_node = graph.value(package_node, SPDX_NAMESPACE.packageVerificationCode, any=False)
-    except UniquenessError:
-        raise SPDXParsingError([f"Multiple values for unique value {SPDX_NAMESPACE.packageVerificationCode} found."])
-    if not package_node:
-        return None
+def parse_package_verification_code(package_verification_code_node: URIRef, graph: Graph) -> Optional[
+    PackageVerificationCode]:
     logger = Logger()
-    value = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.packageVerificationCodeValue)
+    value = parse_literal(logger, graph, package_verification_code_node, SPDX_NAMESPACE.packageVerificationCodeValue)
     excluded_files = []
     for (_, _, excluded_file_literal) in graph.triples(
-        (package_node, SPDX_NAMESPACE.packageVerificationCodeExcludedFile, None)):
+        (package_verification_code_node, SPDX_NAMESPACE.packageVerificationCodeExcludedFile, None)):
         excluded_files.append(excluded_file_literal.toPython())
 
     raise_parsing_error_if_logger_has_messages(logger, "PackageVerificationCode")
