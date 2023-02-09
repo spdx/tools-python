@@ -19,7 +19,7 @@ from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
-def parse_annotation(annotation_node: URIRef, graph: Graph, parent_node: URIRef, doc_namespace) -> Annotation:
+def parse_annotation(annotation_node: URIRef, graph: Graph, parent_node: URIRef, doc_namespace: str) -> Annotation:
     logger = Logger()
     spdx_id = parse_spdx_id(parent_node, doc_namespace, graph)
     annotator = parse_literal(logger, graph, annotation_node, SPDX_NAMESPACE.annotator,

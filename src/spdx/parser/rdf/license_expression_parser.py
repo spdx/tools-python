@@ -8,15 +8,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Union
+
 from rdflib import Graph, RDF
 from license_expression import LicenseExpression, get_spdx_licensing
-from rdflib.term import Node
+from rdflib.term import Identifier, URIRef, BNode, Node
 from spdx.parser.error import SPDXParsingError
 
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 
 
-def parse_license_expression(license_expression_node: Node, graph: Graph, doc_namespace: str) -> LicenseExpression:
+def parse_license_expression(license_expression_node: Union[URIRef, BNode, Node], graph: Graph, doc_namespace: str) -> LicenseExpression:
     spdx_licensing = get_spdx_licensing()
     expression = ""
     if license_expression_node.startswith(LICENSE_NAMESPACE):
@@ -53,7 +55,7 @@ def parse_license_expression(license_expression_node: Node, graph: Graph, doc_na
     return spdx_licensing.parse(expression)
 
 
-def parse_license_exception(exception_node: Node, graph: Graph) -> str:
+def parse_license_exception(exception_node: Identifier, graph: Graph) -> str:
     if exception_node.startswith(LICENSE_NAMESPACE):
         exception = exception_node.removeprefix(LICENSE_NAMESPACE)
     else:

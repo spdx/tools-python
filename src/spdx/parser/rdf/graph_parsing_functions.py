@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from enum import Enum
-from typing import Any, Callable, Union, Optional, Type
+from typing import Any, Callable, Optional, Type
 
 from rdflib import Graph, URIRef
 from rdflib.exceptions import UniquenessError
@@ -37,8 +37,9 @@ def apply_parsing_method_or_log_error(logger: Logger, value: Any, parsing_method
         return parsing_method(value)
     except SPDXParsingError as err:
         logger.extend(err.get_messages())
-        return default
-
+    except (TypeError, ValueError) as err:
+        logger.extend(err.args[0])
+    return default
 
 def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject: Node, predicate: Node,
                                           parsing_method: Callable = str, default: Any = None):

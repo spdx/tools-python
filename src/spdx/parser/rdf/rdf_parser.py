@@ -34,6 +34,7 @@ def parse_from_file(file_name: str) -> Document:
 
 
 def translate_graph_to_document(graph: Graph) -> Document:
+    parsed_fields = dict()
     logger = Logger()
     try:
         creation_info, doc_node = parse_creation_info(graph)
@@ -41,43 +42,39 @@ def translate_graph_to_document(graph: Graph) -> Document:
         logger.extend(err.get_messages())
         creation_info = None
 
-    packages = []
-    for (package_node, _, _) in graph.triples((None, RDF.type, SPDX_NAMESPACE.Package)):
-        try:
-            packages.append(parse_package(package_node, graph, creation_info.document_namespace))
-        except SPDXParsingError as err:
-            logger.extend(err.get_messages())
+    parsed_fields["creation_info"] = creation_info
 
-    files = []
-    for (file_node, _, _) in graph.triples((None, RDF.type, SPDX_NAMESPACE.File)):
-        try:
-            files.append(parse_file(file_node, graph, creation_info.document_namespace))
-        except SPDXParsingError as err:
-            logger.extend(err.get_messages())
+    for element, triple, parsing_method in [("packages", (None, RDF.type, SPDX_NAMESPACE.Package), parse_package),
+                                            ("files", (None, RDF.type, SPDX_NAMESPACE.File), parse_file),
+                                            ("snippets", (None, RDF.type, SPDX_NAMESPACE.Snippet), parse_snippet)]:
+        elements = []
+        for (element_node, _, _) in graph.triples(triple):
+            try:
+                elements.append(parsing_method(element_node, graph, creation_info.document_namespace))
+            except SPDXParsingError as err:
+                logger.extend(err.get_messages())
+        parsed_fields[element] = elements
 
-    snippets = []
-    for (snippet_node, _, _) in graph.triples((None, RDF.type, SPDX_NAMESPACE.Snippet)):
-        try:
-            snippets.append(parse_snippet(snippet_node, graph, creation_info.document_namespace))
-        except SPDXParsingError as err:
-            logger.extend(err.get_messages())
-
-    annotations = []
-    for (parent_node, _, annotation_node) in graph.triples((None, SPDX_NAMESPACE.annotation, None)):
-        annotations.append(parse_annotation(annotation_node, graph, parent_node, creation_info.document_namespace))
-
-    relationships = []
-    for (parent_node, _, relationship_node) in graph.triples((None, SPDX_NAMESPACE.relationship, None)):
-        relationships.append(
-            parse_relationship(relationship_node, graph, parent_node, creation_info.document_namespace))
+    for element, triple, parsing_method in [("annotations", (None, SPDX_NAMESPACE.annotation, None), parse_annotation),
+                                            ("relationships", (None, SPDX_NAMESPACE.relationship, None),
+                                             parse_relationship)]:
+        elements = []
+        for (parent_node, _, element_node) in graph.triples(triple):
+            try:
+                elements.append(parsing_method(element_node, graph, parent_node, creation_info.document_namespace))
+            except SPDXParsingError as err:
+                logger.extend(err.get_messages())
+        parsed_fields[element] = elements
 
     extracted_licensing_infos = []
     for (_, _, extracted_licensing_info_node) in graph.triples((None, SPDX_NAMESPACE.hasExtractedLicensingInfo, None)):
-        extracted_licensing_infos.append(parse_extracted_licensing_info(extracted_licensing_info_node, graph))
+        try:
+            extracted_licensing_infos.append(parse_extracted_licensing_info(extracted_licensing_info_node, graph))
+        except SPDXParsingError as err:
+            logger.extend(err.get_messages())
+    parsed_fields["extracted_licensing_info"] = extracted_licensing_infos
+
     raise_parsing_error_if_logger_has_messages(logger)
-    document = construct_or_raise_parsing_error(Document,
-                                                dict(creation_info=creation_info, snippets=snippets, files=files,
-                                                     annotations=annotations, packages=packages,
-                                                     relationships=relationships,
-                                                     extracted_licensing_info=extracted_licensing_infos))
+    document = construct_or_raise_parsing_error(Document, parsed_fields)
+
     return document
