@@ -14,15 +14,17 @@ from rdflib import Graph, RDF
 from license_expression import LicenseExpression, get_spdx_licensing
 from rdflib.term import Identifier, URIRef, BNode, Node
 from spdx.parser.error import SPDXParsingError
+from spdx.parser.rdf.graph_parsing_functions import remove_prefix
 
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 
 
-def parse_license_expression(license_expression_node: Union[URIRef, BNode, Node], graph: Graph, doc_namespace: str) -> LicenseExpression:
+def parse_license_expression(license_expression_node: Union[URIRef, BNode, Node], graph: Graph,
+                             doc_namespace: str) -> LicenseExpression:
     spdx_licensing = get_spdx_licensing()
     expression = ""
     if license_expression_node.startswith(LICENSE_NAMESPACE):
-        expression = license_expression_node.removeprefix(LICENSE_NAMESPACE)
+        expression = remove_prefix(license_expression_node, LICENSE_NAMESPACE)
         return spdx_licensing.parse(expression)
     if license_expression_node.startswith(doc_namespace):
         expression = license_expression_node.fragment
@@ -57,7 +59,7 @@ def parse_license_expression(license_expression_node: Union[URIRef, BNode, Node]
 
 def parse_license_exception(exception_node: Identifier, graph: Graph) -> str:
     if exception_node.startswith(LICENSE_NAMESPACE):
-        exception = exception_node.removeprefix(LICENSE_NAMESPACE)
+        exception = remove_prefix(exception_node, LICENSE_NAMESPACE)
     else:
         exception = graph.value(exception_node, SPDX_NAMESPACE.licenseExceptionId).toPython()
     return exception

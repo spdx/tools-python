@@ -20,7 +20,7 @@ from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.checksum_parser import parse_checksum
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id
+from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, remove_prefix
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 
 from spdx.datetime_conversions import datetime_from_str
@@ -35,7 +35,7 @@ def parse_creation_info(graph: Graph) -> Tuple[CreationInfo, URIRef]:
     namespace, spdx_id, doc_node = parse_namespace_and_spdx_id(graph)
     spec_version = parse_literal(logger, graph, doc_node, SPDX_NAMESPACE.specVersion)
     data_license = parse_literal(logger, graph, doc_node, SPDX_NAMESPACE.dataLicense,
-                                 parsing_method=lambda x: x.removeprefix(LICENSE_NAMESPACE))
+                                 parsing_method=lambda x: remove_prefix(x, LICENSE_NAMESPACE))
     comment = parse_literal(logger, graph, doc_node, RDFS.comment)
     name = parse_literal(logger, graph, doc_node, SPDX_NAMESPACE.name)
 

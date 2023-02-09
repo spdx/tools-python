@@ -41,6 +41,7 @@ def apply_parsing_method_or_log_error(logger: Logger, value: Any, parsing_method
         logger.extend(err.args[0])
     return default
 
+
 def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject: Node, predicate: Node,
                                           parsing_method: Callable = str, default: Any = None):
     value = get_unique_value(logger, graph, subject, predicate, default)
@@ -84,7 +85,7 @@ def get_unique_value(logger: Logger, graph: Graph, subject: Node, predicate: Nod
 
 def parse_enum_value(enum_str: str, enum_class: Type[Enum], prefix: str) -> Enum:
     try:
-        enum_without_rdf_prefix = enum_str.removeprefix(prefix)
+        enum_without_rdf_prefix = remove_prefix(enum_str, prefix)
         value = camel_case_to_snake_case(enum_without_rdf_prefix).upper()
         return enum_class[value]
     except KeyError:
@@ -100,3 +101,11 @@ def parse_spdx_id(resource: URIRef, doc_namespace: str, graph: Graph) -> Optiona
         namespace_manager = NamespaceManager(graph)
         return namespace_manager.normalizeUri(resource)
     return resource.toPython() or None
+
+
+# Python 3.9 introduced the method removeprefix() for strings, but as we are also supporting Python 3.7 and 3.8 we need
+# to write our own helper method to delete prefixes.
+def remove_prefix(string: str, prefix: str) -> str:
+    if string.startswith(prefix):
+        return string[len(prefix):]
+    return string
