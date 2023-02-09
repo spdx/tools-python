@@ -26,19 +26,53 @@ from spdx.casing_tools import camel_case_to_snake_case
 
 def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node, default: Any = None,
                   method_to_apply: Callable = lambda x: x, prefix: str = ""):
+    value = get_unique_value(logger, graph, subject, predicate, default)
+    if not value:
+        return default
+    try:
+        return method_to_apply(value.removeprefix(prefix))
+    except SPDXParsingError as err:
+        logger.extend(err.get_messages())
+        return default
+
+
+def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject: Node, predicate: Node,
+                                          default: Any = None, method_to_apply: Callable = lambda x: x):
+    value = get_unique_value(logger, graph, subject, predicate, default)
+    if not value:
+        return default
+    if value == SPDX_NAMESPACE.noassertion or value.toPython() == SPDX_NO_ASSERTION_STRING:
+        return SpdxNoAssertion()
+    if value == SPDX_NAMESPACE.none or value.toPython() == SPDX_NONE_STRING:
+        return SpdxNone()
+    try:
+        return method_to_apply(value)
+    except SPDXParsingError as err:
+        logger.extend(err.get_messages())
+        return default
+
+
+def parse_literal_or_no_assertion(logger: Logger, graph: Graph, subject: Node, predicate: Node,
+                                  default: Any = None, method_to_apply: Callable = lambda x: x):
+    value = get_unique_value(logger, graph, subject, predicate, default)
+    if not value:
+        return default
+    if value == SPDX_NAMESPACE.noassertion or value.toPython() == SPDX_NO_ASSERTION_STRING:
+        return SpdxNoAssertion()
+    try:
+        return method_to_apply(value)
+    except SPDXParsingError as err:
+        logger.extend(err.get_messages())
+        return default
+
+
+def get_unique_value(logger: Logger, graph: Graph, subject: Node, predicate: Node, default: Any) -> Any:
     try:
         value = graph.value(subject=subject, predicate=predicate, default=default, any=False)
+        return value
     except UniquenessError:
         logger.append(f"Multiple values for unique value {predicate} found.")
-        return
-
-    if value:
-        try:
-            return method_to_apply(value.removeprefix(prefix))
-        except SPDXParsingError as err:
-            logger.extend(err.get_messages())
-            return default
-    return default
+        return default
 
 
 def parse_enum_value(enum_str: str, enum_class: Type[Enum]) -> Enum:
@@ -46,36 +80,6 @@ def parse_enum_value(enum_str: str, enum_class: Type[Enum]) -> Enum:
         return enum_class[camel_case_to_snake_case(enum_str).upper()]
     except KeyError:
         raise SPDXParsingError([f"Invalid value for {enum_class}: {enum_str}"])
-
-
-def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject: Node, predicate: Node,
-                                          default: Any = None, method_to_apply: Callable = lambda x: x):
-    try:
-        value = graph.value(subject=subject, predicate=predicate, default=default, any=False)
-    except UniquenessError:
-        logger.append(f"Multiple values for unique value {predicate} found.")
-        return
-    if not value:
-        return default
-    if value == SPDX_NAMESPACE.noassertion or value.toPython() == SPDX_NO_ASSERTION_STRING:
-        return SpdxNoAssertion()
-    if value == SPDX_NAMESPACE.none or value.toPython() == SPDX_NONE_STRING:
-        return SpdxNone()
-    return method_to_apply(value)
-
-
-def parse_literal_or_no_assertion(logger: Logger, graph: Graph, subject: Node, predicate: Node,
-                                  default: Any = None, method_to_apply: Callable = lambda x: x):
-    try:
-        value = graph.value(subject=subject, predicate=predicate, default=default, any=False)
-    except UniquenessError:
-        logger.append(f"Multiple values for unique value {predicate} found.")
-        return
-    if not value:
-        return default
-    if value == SPDX_NAMESPACE.noassertion:
-        return SpdxNoAssertion()
-    return method_to_apply(value)
 
 
 def str_to_no_assertion_or_none(value: str) -> Union[str, SpdxNone, SpdxNoAssertion]:
