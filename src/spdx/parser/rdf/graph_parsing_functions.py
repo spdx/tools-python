@@ -82,14 +82,6 @@ def parse_enum_value(enum_str: str, enum_class: Type[Enum]) -> Enum:
         raise SPDXParsingError([f"Invalid value for {enum_class}: {enum_str}"])
 
 
-def str_to_no_assertion_or_none(value: str) -> Union[str, SpdxNone, SpdxNoAssertion]:
-    if value == SPDX_NO_ASSERTION_STRING:
-        return SpdxNoAssertion()
-    if value == SPDX_NONE_STRING:
-        return SpdxNone()
-    return value
-
-
 def parse_spdx_id(resource: URIRef, doc_namespace: str, graph: Graph) -> Optional[str]:
     if not resource:
         return None
