@@ -16,7 +16,7 @@ from rdflib.term import URIRef, Node
 from spdx.model.snippet import Snippet
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, str_to_no_assertion_or_none, parse_spdx_id
+from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_literal_or_no_assertion_or_none
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
 
 
@@ -29,8 +29,8 @@ def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Sni
     line_range = parse_ranges(snippet_node, graph, POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)
 
     license_comment = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.licenseComments)
-    copyright_text = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.copyrightText,
-                                   method_to_apply=str_to_no_assertion_or_none)
+    copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node, SPDX_NAMESPACE.copyrightText,
+                                                           method_to_apply=str)
     comment = parse_literal(logger, graph, snippet_node, RDFS.comment)
     name = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.name)
     attribution_texts = []
@@ -65,5 +65,3 @@ def parse_range_value(graph: Graph, pointer_node: Node, predicate: Node) -> Opti
     if value:
         value = int(value)
     return value
-
-

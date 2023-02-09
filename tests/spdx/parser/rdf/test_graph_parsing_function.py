@@ -11,17 +11,7 @@
 import pytest
 from rdflib import URIRef, Graph, Namespace
 
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.model.spdx_none import SpdxNone
-from spdx.parser.rdf.graph_parsing_functions import str_to_no_assertion_or_none, parse_spdx_id
-
-
-@pytest.mark.parametrize("value,expected", [("NOASSERTION", SpdxNoAssertion()), ("NONE", SpdxNone()), ("test", "test"),
-                                            ("Noassertion", "Noassertion")])
-def test_str_to_no_assertion_or_none(value, expected):
-    result = str_to_no_assertion_or_none(value)
-
-    assert result == expected
+from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id
 
 
 @pytest.mark.parametrize("resource,doc_namespace,ext_namespace_mapping,expected",

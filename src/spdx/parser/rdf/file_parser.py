@@ -14,7 +14,7 @@ from spdx.model.file import File, FileType
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.checksum_parser import parse_checksum
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, str_to_no_assertion_or_none
+from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_literal_or_no_assertion_or_none
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
@@ -23,20 +23,20 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
     spdx_id = parse_spdx_id(file_node, doc_namespace, graph)
     name = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.fileName)
     checksums = []
-    for (_,_,checksum_node) in graph.triples((file_node, SPDX_NAMESPACE.checksum, None)):
+    for (_, _, checksum_node) in graph.triples((file_node, SPDX_NAMESPACE.checksum, None)):
         checksums.append(parse_checksum(checksum_node, graph))
 
     file_types = []
-    for (_,_,file_type_ref) in graph.triples((file_node, SPDX_NAMESPACE.fileType, None)):
+    for (_, _, file_type_ref) in graph.triples((file_node, SPDX_NAMESPACE.fileType, None)):
         try:
             file_types.append(convert_uri_ref_to_file_type(file_type_ref))
         except KeyError:
             logger.append(f"Invalid FileType: {file_type_ref}")
     license_comment = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.licenseComments)
-    copyright_text = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.copyrightText,
-                                       method_to_apply=str_to_no_assertion_or_none)
+    copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, file_node, SPDX_NAMESPACE.copyrightText,
+                                                           method_to_apply=str)
     file_contributors = []
-    for (_,_,file_contributor) in graph.triples((file_node, SPDX_NAMESPACE.fileContributor,None)):
+    for (_, _, file_contributor) in graph.triples((file_node, SPDX_NAMESPACE.fileContributor, None)):
         file_contributors.append(file_contributor.toPython())
 
     notice_text = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.noticeText)
