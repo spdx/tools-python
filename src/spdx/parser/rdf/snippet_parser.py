@@ -29,15 +29,15 @@ def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Sni
     file_spdx_id = parse_spdx_id(file_spdx_id_uri, doc_namespace, graph)
     byte_range = parse_ranges(snippet_node, graph, POINTER_NAMESPACE.ByteOffsetPointer, POINTER_NAMESPACE.offset)
     line_range = parse_ranges(snippet_node, graph, POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)
-    license_concluded = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node,
-                                                              SPDX_NAMESPACE.licenseConcluded,
-                                                              parsing_method=lambda x: parse_license_expression(x,
-                                                                                                                graph))
+    license_concluded = parse_literal_or_no_assertion_or_none(
+        logger, graph, snippet_node, SPDX_NAMESPACE.licenseConcluded,
+        parsing_method=lambda x: parse_license_expression(x, graph, doc_namespace))
     license_info_in_snippet = []
     for (_, _, license_info_in_snippet_node) in graph.triples(
         (snippet_node, SPDX_NAMESPACE.licenseInfoInSnippet, None)):
         license_info_in_snippet.append(
-            get_correct_typed_value(logger, license_info_in_snippet_node, lambda x: parse_license_expression(x, graph)))
+            get_correct_typed_value(logger, license_info_in_snippet_node,
+                                    lambda x: parse_license_expression(x, graph, doc_namespace)))
     license_comment = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.licenseComments)
     copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node, SPDX_NAMESPACE.copyrightText,
                                                            parsing_method=str)

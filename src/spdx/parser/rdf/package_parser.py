@@ -60,19 +60,18 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     for (_, _, external_package_ref_node) in graph.triples((package_node, SPDX_NAMESPACE.externalRef, None)):
         external_package_refs.append(parse_external_package_ref(external_package_ref_node, graph))
     files_analyzed = bool(graph.value(package_node, SPDX_NAMESPACE.filesAnalyzed, default=True))
-    license_concluded = parse_literal_or_no_assertion_or_none(logger, graph, package_node,
-                                                              SPDX_NAMESPACE.licenseConcluded,
-                                                              parsing_method=lambda x: parse_license_expression(x,
-                                                                                                                graph))
-    license_declared = parse_literal_or_no_assertion_or_none(logger, graph, package_node,
-                                                             SPDX_NAMESPACE.licenseDeclared,
-                                                             parsing_method=lambda x: parse_license_expression(x,
-                                                                                                               graph))
+    license_concluded = parse_literal_or_no_assertion_or_none(
+        logger, graph, package_node, SPDX_NAMESPACE.licenseConcluded,
+        parsing_method=lambda x: parse_license_expression(x, graph, doc_namespace))
+    license_declared = parse_literal_or_no_assertion_or_none(
+        logger, graph, package_node, SPDX_NAMESPACE.licenseDeclared,
+        parsing_method=lambda x: parse_license_expression(x, graph, doc_namespace))
     license_info_from_files = []
     for (_, _, license_info_from_files_node) in graph.triples(
         (package_node, SPDX_NAMESPACE.licenseInfoFromFiles, None)):
         license_info_from_files.append(
-            get_correct_typed_value(logger, license_info_from_files_node, lambda x: parse_license_expression(x, graph)))
+            get_correct_typed_value(logger, license_info_from_files_node,
+                                    lambda x: parse_license_expression(x, graph, doc_namespace)))
     license_comment = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.licenseComments)
     comment = parse_literal(logger, graph, package_node, RDFS.comment)
     summary = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.summary)
