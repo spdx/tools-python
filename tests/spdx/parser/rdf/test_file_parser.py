@@ -11,6 +11,7 @@
 import os
 
 import pytest
+from license_expression import get_spdx_licensing
 from rdflib import Graph, RDF
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 
@@ -33,6 +34,7 @@ def test_parse_file():
     assert file.comment == "fileComment"
     assert file.copyright_text == "copyrightText"
     assert file.contributors == ["fileContributor"]
+    assert file.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
     assert file.license_comment == "licenseComment"
     assert file.notice == "fileNotice"
     assert file.attribution_texts == ["fileAttributionText"]

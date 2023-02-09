@@ -10,6 +10,7 @@
 # limitations under the License.
 import os
 
+from license_expression import get_spdx_licensing
 from rdflib import Graph, RDF
 
 from spdx.parser.rdf.snippet_parser import parse_snippet
@@ -27,7 +28,7 @@ def test_parse_snippet():
     assert snippet.file_spdx_id == "SPDXRef-File"
     assert snippet.byte_range == (1, 2)
     assert snippet.line_range == (3, 4)
-    assert snippet.license_concluded == None
+    assert snippet.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
     assert snippet.license_info_in_snippet == None
     assert snippet.license_comment == "snippetLicenseComment"
     assert snippet.copyright_text == "licenseCopyrightText"

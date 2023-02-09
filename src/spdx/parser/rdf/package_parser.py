@@ -25,6 +25,7 @@ from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_mess
 from spdx.parser.rdf.checksum_parser import parse_checksum
 from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, parse_literal, parse_enum_value, \
     parse_literal_or_no_assertion_or_none
+from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
 
 
@@ -60,6 +61,14 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     for (_, _, external_package_ref_node) in graph.triples((package_node, SPDX_NAMESPACE.externalRef, None)):
         external_package_refs.append(parse_external_package_ref(external_package_ref_node, graph))
     files_analyzed = bool(graph.value(package_node, SPDX_NAMESPACE.filesAnalyzed, default=True))
+    license_concluded = parse_literal_or_no_assertion_or_none(logger, graph, package_node,
+                                                              SPDX_NAMESPACE.licenseConcluded,
+                                                              method_to_apply=lambda x: parse_license_expression(x,
+                                                                                                                 graph))
+    license_declared = parse_literal_or_no_assertion_or_none(logger, graph, package_node,
+                                                             SPDX_NAMESPACE.licenseDeclared,
+                                                             method_to_apply=lambda x: parse_license_expression(x,
+                                                                                                                graph))
     license_comment = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.licenseComments)
     comment = parse_literal(logger, graph, package_node, RDFS.comment)
     summary = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.summary)
@@ -91,9 +100,9 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
                                                     verification_code=verification_code,
                                                     checksums=checksums, homepage=homepage,
                                                     source_info=source_info,
-                                                    license_concluded=None,
+                                                    license_concluded=license_concluded,
                                                     license_info_from_files=None,
-                                                    license_declared=None,
+                                                    license_declared=license_declared,
                                                     license_comment=license_comment,
                                                     copyright_text=copyright_text, summary=summary,
                                                     description=description, comment=comment,
