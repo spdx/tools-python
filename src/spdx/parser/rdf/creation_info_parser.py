@@ -27,7 +27,7 @@ from spdx.datetime_conversions import datetime_from_str
 from spdx.model.document import CreationInfo
 from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.model.version import Version
-from spdx.parser.jsonlikedict.actor_parser import ActorParser
+from spdx.parser.actor_parser import ActorParser
 
 
 def parse_creation_info(graph: Graph) -> Tuple[CreationInfo, URIRef]:

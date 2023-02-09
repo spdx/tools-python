@@ -8,14 +8,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Optional, Union
+from typing import Optional
 
 from rdflib import URIRef, Graph, RDFS, DOAP
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.package import Package, PackagePurpose, ExternalPackageRef, PackageVerificationCode, \
     ExternalPackageRefCategory
-from spdx.parser.jsonlikedict.actor_parser import ActorParser
+from spdx.parser.actor_parser import ActorParser
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
 from spdx.parser.rdf.checksum_parser import parse_checksum

@@ -12,7 +12,7 @@ from rdflib import URIRef, Graph, RDFS
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.annotation import Annotation, AnnotationType
-from spdx.parser.jsonlikedict.actor_parser import ActorParser
+from spdx.parser.actor_parser import ActorParser
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
 from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_enum_value
