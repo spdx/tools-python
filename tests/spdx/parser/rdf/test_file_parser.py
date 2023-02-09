@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+from unittest import TestCase
 
 import pytest
 from license_expression import get_spdx_licensing
@@ -35,9 +36,12 @@ def test_parse_file():
     assert file.copyright_text == "copyrightText"
     assert file.contributors == ["fileContributor"]
     assert file.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
+    TestCase().assertCountEqual(file.license_info_in_file,
+                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0")])
     assert file.license_comment == "licenseComment"
     assert file.notice == "fileNotice"
     assert file.attribution_texts == ["fileAttributionText"]
+
 
 @pytest.mark.parametrize("uri_ref,expected", [(SPDX_NAMESPACE.fileType_source, FileType.SOURCE),
                                               (SPDX_NAMESPACE.fileType_binary, FileType.BINARY),
@@ -54,6 +58,7 @@ def test_convert_uri_ref_to_file_type(uri_ref, expected):
     file_type = convert_uri_ref_to_file_type(uri_ref)
 
     assert file_type == expected
+
 
 def test_convert_uri_ref_to_file_type_error():
     with pytest.raises(KeyError):

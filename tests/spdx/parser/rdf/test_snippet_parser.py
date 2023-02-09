@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+from unittest import TestCase
 
 from license_expression import get_spdx_licensing
 from rdflib import Graph, RDF
@@ -29,7 +30,8 @@ def test_parse_snippet():
     assert snippet.byte_range == (1, 2)
     assert snippet.line_range == (3, 4)
     assert snippet.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
-    assert snippet.license_info_in_snippet == None
+    TestCase().assertCountEqual(snippet.license_info_in_snippet,
+                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0")])
     assert snippet.license_comment == "snippetLicenseComment"
     assert snippet.copyright_text == "licenseCopyrightText"
     assert snippet.comment == "snippetComment"

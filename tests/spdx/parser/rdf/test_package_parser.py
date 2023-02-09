@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+from unittest import TestCase
 
 from license_expression import get_spdx_licensing
 from rdflib import RDF, Graph
@@ -38,6 +39,8 @@ def test_package_parser():
     assert package.source_info == "sourceInfo"
     assert package.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
     assert package.license_declared == get_spdx_licensing().parse("MIT AND GPL-2.0")
+    TestCase().assertCountEqual(package.license_info_from_files,
+                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0")])
     assert package.license_comment == "packageLicenseComment"
     assert package.copyright_text == "packageCopyrightText"
     assert package.verification_code == PackageVerificationCode(value="85ed0817af83a24ad8da68c2b5094de69833983c",
@@ -53,10 +56,9 @@ def test_package_parser():
 
 
 def test_external_package_ref_parser():
-
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
     package_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.Package)
-    external_package_ref_node =  graph.value(package_node, SPDX_NAMESPACE.externalRef)
+    external_package_ref_node = graph.value(package_node, SPDX_NAMESPACE.externalRef)
 
     external_package_ref = parse_external_package_ref(external_package_ref_node, graph)
 
