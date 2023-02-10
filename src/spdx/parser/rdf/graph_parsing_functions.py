@@ -24,15 +24,16 @@ from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx.casing_tools import camel_case_to_snake_case
 
 
-def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node, parsing_method: Callable = str,
-                  default: Any = None):
+def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node,
+                  parsing_method: Callable = lambda x: x.strip(), default: Any = None):
     value = get_unique_value(logger, graph, subject, predicate, default)
     if not value:
         return default
     return apply_parsing_method_or_log_error(logger, value, parsing_method, default)
 
 
-def apply_parsing_method_or_log_error(logger: Logger, value: Any, parsing_method: Callable = str, default: Any = None):
+def apply_parsing_method_or_log_error(logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(),
+                                      default: Any = None):
     try:
         return parsing_method(value)
     except SPDXParsingError as err:
@@ -43,7 +44,7 @@ def apply_parsing_method_or_log_error(logger: Logger, value: Any, parsing_method
 
 
 def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject: Node, predicate: Node,
-                                          parsing_method: Callable = str, default: Any = None):
+                                          parsing_method: Callable = lambda x: x.strip(), default: Any = None):
     value = get_unique_value(logger, graph, subject, predicate, default)
     if not value:
         return default
@@ -54,7 +55,8 @@ def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject:
     return apply_parsing_method_or_log_error(logger, value, parsing_method, default)
 
 
-def get_correct_typed_value(logger: Logger, value: Any, parsing_method: Callable = str, default: Any = None):
+def get_correct_typed_value(logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(),
+                            default: Any = None):
     if not value:
         return default
     if value == SPDX_NAMESPACE.noassertion or value.toPython() == SPDX_NO_ASSERTION_STRING:
@@ -65,7 +67,7 @@ def get_correct_typed_value(logger: Logger, value: Any, parsing_method: Callable
 
 
 def parse_literal_or_no_assertion(logger: Logger, graph: Graph, subject: Node, predicate: Node,
-                                  parsing_method: Callable = str, default: Any = None):
+                                  parsing_method: Callable = lambda x: x.strip(), default: Any = None):
     value = get_unique_value(logger, graph, subject, predicate, default)
     if not value:
         return default
