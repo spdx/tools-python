@@ -14,6 +14,7 @@ from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_optional
 from spdx3.model.element import Element
 from spdx3.writer.console.console import write_value
 from spdx3.writer.console.creation_information_writer import write_creation_info
+from spdx3.writer.console.external_identifier_writer import write_external_identifier
 from spdx3.writer.console.external_reference_writer import write_external_reference
 from spdx3.writer.console.hash_writer import write_hash
 
@@ -33,6 +34,9 @@ def write_element_properties(element: Element, text_output: TextIO):
     write_optional_heading(element.external_references, "External References", text_output)
     for external_reference in element.external_references:
         write_external_reference(external_reference, text_output)
+    write_optional_heading(element.external_identifier, "External Identifier", text_output)
+    for external_identifier in element.external_identifier:
+        write_external_identifier(external_identifier, text_output)
 
 
 
