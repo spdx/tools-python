@@ -13,7 +13,6 @@ from typing import Union
 from rdflib import Graph, RDF
 from license_expression import LicenseExpression, get_spdx_licensing
 from rdflib.term import Identifier, URIRef, BNode, Node
-from spdx.parser.error import SPDXParsingError
 from spdx.parser.rdf.graph_parsing_functions import remove_prefix
 
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
@@ -32,21 +31,15 @@ def parse_license_expression(license_expression_node: Union[URIRef, BNode, Node]
 
     node_type = graph.value(license_expression_node, RDF.type)
     if node_type == SPDX_NAMESPACE.ConjunctiveLicenseSet:
-        members = dict()
-        for index, (_, _, member_node) in enumerate(
-            graph.triples((license_expression_node, SPDX_NAMESPACE.member, None))):
-            members[index] = parse_license_expression(member_node, graph, doc_namespace)
-        if len(members) > 2:
-            raise SPDXParsingError([f"A ConjunctiveLicenseSet can only have two members."])
-        expression = f"{members[0]} AND {members[1]}"
+        members = []
+        for (_, _, member_node) in graph.triples((license_expression_node, SPDX_NAMESPACE.member, None)):
+            members.append(parse_license_expression(member_node, graph, doc_namespace))
+        expression = " AND ".join([str(member) for member in members])
     if node_type == SPDX_NAMESPACE.DisjunctiveLicenseSet:
-        members = dict()
-        for index, (_, _, member_node) in enumerate(
-            graph.triples((license_expression_node, SPDX_NAMESPACE.member, None))):
-            members[index] = parse_license_expression(member_node, graph, doc_namespace)
-        if len(members) > 2:
-            raise SPDXParsingError([f"A DisjunctiveLicenseSet can only have two members."])
-        expression = f"{members[0]} OR {members[1]}"
+        members = []
+        for (_, _, member_node) in graph.triples((license_expression_node, SPDX_NAMESPACE.member, None)):
+            members.append(parse_license_expression(member_node, graph, doc_namespace))
+        expression = " OR ".join([str(member) for member in members])
     if node_type == SPDX_NAMESPACE.WithExceptionOperator:
         license_expression = parse_license_expression(graph.value(license_expression_node, SPDX_NAMESPACE.member),
                                                       graph, doc_namespace)
