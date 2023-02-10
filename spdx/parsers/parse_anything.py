@@ -22,11 +22,9 @@ from spdx.parsers.builderexceptions import FileTypeError
 
 
 def parse_file(fn, encoding="utf-8"):
-    in_mode = "r"
     builder_module = jsonyamlxmlbuilders
     read_data = False
     if fn.endswith(".rdf") or fn.endswith(".rdf.xml"):
-        in_mode = "rb"
         encoding = None
         parsing_module = rdf
         builder_module = rdfbuilders
@@ -46,7 +44,7 @@ def parse_file(fn, encoding="utf-8"):
     p = parsing_module.Parser(builder_module.Builder(), StandardLogger())
     if hasattr(p, "build"):
         p.build()
-    with open(fn, in_mode, encoding=encoding) as f:
+    with open(fn, "r", encoding=encoding) as f:
         if read_data:
             data = f.read()
             return p.parse(data)
