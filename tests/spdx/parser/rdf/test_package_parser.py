@@ -11,8 +11,9 @@
 import os
 from unittest import TestCase
 
+import pytest
 from license_expression import get_spdx_licensing
-from rdflib import RDF, Graph
+from rdflib import RDF, Graph, Literal
 
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import ChecksumAlgorithm, Checksum
@@ -55,14 +56,22 @@ def test_package_parser():
     assert package.originator == Actor(ActorType.PERSON, "originatorName", "some@mail.com")
 
 
-def test_external_package_ref_parser():
+@pytest.mark.parametrize("download_location,category,locator,type,comment",
+                         [("https://download.com", ExternalPackageRefCategory.PACKAGE_MANAGER,
+                           "org.apache.tomcat:tomcat:9.0.0.M4", "maven-central", "externalPackageRefComment"),
+                          ("http://differentdownload.com", ExternalPackageRefCategory.OTHER,
+                           "acmecorp/acmenator/4.1.3-alpha", "LocationRef-acmeforge","This is the external ref for Acme")])
+def test_external_package_ref_parser(download_location, category, locator, type, comment):
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
-    package_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.Package)
+    doc_namespace = "https://some.namespace"
+    # we use the download location to identify the package node
+    # in the test file we have two different external package refs depending on the package
+    package_node = graph.value(predicate=SPDX_NAMESPACE.downloadLocation, object=Literal(download_location))
     external_package_ref_node = graph.value(package_node, SPDX_NAMESPACE.externalRef)
 
-    external_package_ref = parse_external_package_ref(external_package_ref_node, graph)
+    external_package_ref = parse_external_package_ref(external_package_ref_node, graph, doc_namespace)
 
-    assert external_package_ref.category == ExternalPackageRefCategory.PACKAGE_MANAGER
-    assert external_package_ref.locator == "org.apache.tomcat:tomcat:9.0.0.M4"
-    assert external_package_ref.reference_type == "maven-central"
-    assert external_package_ref.comment == "externalPackageRefComment"
+    assert external_package_ref.category == category
+    assert external_package_ref.locator == locator
+    assert external_package_ref.reference_type == type
+    assert external_package_ref.comment == comment

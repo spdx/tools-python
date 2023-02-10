@@ -9,8 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from typing import Optional
-
-from rdflib import URIRef, Graph, RDFS, DOAP
+from rdflib import URIRef, Graph, RDFS, DOAP, Literal
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.package import Package, PackagePurpose, ExternalPackageRef, PackageVerificationCode, \
@@ -47,7 +46,7 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
 
     external_package_refs = []
     for (_, _, external_package_ref_node) in graph.triples((package_node, SPDX_NAMESPACE.externalRef, None)):
-        external_package_refs.append(parse_external_package_ref(external_package_ref_node, graph))
+        external_package_refs.append(parse_external_package_ref(external_package_ref_node, graph, doc_namespace))
     files_analyzed = bool(graph.value(package_node, SPDX_NAMESPACE.filesAnalyzed, default=True))
     license_concluded = parse_literal_or_no_assertion_or_none(
         logger, graph, package_node, SPDX_NAMESPACE.licenseConcluded,
@@ -121,14 +120,14 @@ def parse_package_verification_code(package_verification_code_node: URIRef, grap
     return package_verification_code
 
 
-def parse_external_package_ref(external_package_ref_node: URIRef, graph: Graph) -> ExternalPackageRef:
+def parse_external_package_ref(external_package_ref_node: URIRef, graph: Graph, doc_namespace) -> ExternalPackageRef:
     logger = Logger()
     ref_locator = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceLocator)
     ref_category = parse_literal(
         logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceCategory,
         parsing_method=lambda x: parse_enum_value(x, ExternalPackageRefCategory, SPDX_NAMESPACE.referenceCategory_, ))
     ref_type = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceType,
-                             parsing_method=lambda x: remove_prefix(x, REFERENCE_NAMESPACE))
+                             parsing_method=lambda x: parse_external_package_ref_type(x, doc_namespace))
     comment = parse_literal(logger, graph, external_package_ref_node, RDFS.comment)
 
     raise_parsing_error_if_logger_has_messages(logger, "ExternalPackageRef")
@@ -136,3 +135,11 @@ def parse_external_package_ref(external_package_ref_node: URIRef, graph: Graph) 
                                                             dict(category=ref_category, reference_type=ref_type,
                                                                  locator=ref_locator, comment=comment))
     return external_package_ref
+
+
+def parse_external_package_ref_type(external_package_ref_type_resource: URIRef, doc_namespace: str) -> str:
+    if external_package_ref_type_resource.startswith(doc_namespace):
+        return external_package_ref_type_resource.fragment
+    if external_package_ref_type_resource.startswith(REFERENCE_NAMESPACE):
+        return external_package_ref_type_resource.replace(REFERENCE_NAMESPACE, "")
+    return external_package_ref_type_resource.toPython()
