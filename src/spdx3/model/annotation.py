@@ -12,6 +12,7 @@ from dataclasses import field
 from enum import Enum, auto
 from typing import Optional, List
 
+from spdx3.model.external_identifier import ExternalIdentifier
 from spdx3.model.external_reference import ExternalReference
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
@@ -40,8 +41,10 @@ class Annotation(Element):
                  subject: str, name: Optional[str] = None, summary: Optional[str] = None,
                  description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: Optional[List[IntegrityMethod]] = None,
-                 external_references: Optional[List[ExternalReference]] = None, external_identifier: None = None,
-                 extension: None = None, content_type: Optional[str] = None, statement: Optional[str] = None):
+                 external_references: Optional[List[ExternalReference]] = None,
+                 external_identifier: Optional[List[ExternalIdentifier]] = None, extension: None = None,
+                 content_type: Optional[str] = None, statement: Optional[str] = None):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
+        external_identifier = [] if external_identifier is None else external_identifier
         check_types_and_set_values(self, locals())

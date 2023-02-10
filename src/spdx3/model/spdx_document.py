@@ -10,6 +10,7 @@
 # limitations under the License.
 from typing import Optional, List
 
+from spdx3.model.external_identifier import ExternalIdentifier
 from spdx3.model.external_reference import ExternalReference
 
 from common.typing.type_checks import check_types_and_set_values
@@ -31,11 +32,13 @@ class SpdxDocument(Bundle):
     def __init__(self, spdx_id: str, creation_info: CreationInformation, name: str, elements: List[str],
                  root_elements: List[str], summary: Optional[str] = None, description: Optional[str] = None,
                  comment: Optional[str] = None, verified_using: Optional[List[IntegrityMethod]] = None,
-                 external_references: Optional[List[ExternalReference]] = None, external_identifier: None = None, extension: None = None,
+                 external_references: Optional[List[ExternalReference]] = None,
+                 external_identifier: Optional[List[ExternalIdentifier]] = None, extension: None = None,
                  namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
                  context: Optional[str] = None):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
+        external_identifier = [] if external_identifier is None else external_identifier
         namespaces = [] if namespaces is None else namespaces
         imports = [] if imports is None else imports
         check_types_and_set_values(self, locals())

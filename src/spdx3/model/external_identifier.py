@@ -9,6 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from enum import Enum, auto
+from typing import Optional
+
+from common.typing.type_checks import check_types_and_set_values
+
+from common.typing.dataclass_with_properties import dataclass_with_properties
 
 
 class ExternalIdentifierType(Enum):
@@ -19,3 +24,14 @@ class ExternalIdentifierType(Enum):
     PKG_URL = auto()
     SWHID = auto()
     SWID = auto()
+
+
+@dataclass_with_properties
+class ExternalIdentifier:
+    external_identifier_type: ExternalIdentifierType
+    identifier: str
+    comment: Optional[str] = None
+
+    def __init__(self, external_identifier_type: ExternalIdentifierType, identifier: str,
+                 comment: Optional[str] = None):
+        check_types_and_set_values(self, locals())
