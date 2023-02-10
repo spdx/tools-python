@@ -8,7 +8,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import pytest
 from rdflib import Graph, URIRef, RDF, Literal, XSD, RDFS, DOAP
+from spdx.model.package import ExternalPackageRefCategory
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.package_writer import add_package_to_graph, add_external_package_ref_to_graph, \
@@ -63,14 +65,22 @@ def test_add_package_verification_code_to_graph():
     assert (None, SPDX_NAMESPACE.packageVerificationCodeExcludedFile, Literal("./exclude.py")) in graph
 
 
-def test_external_package_ref_to_graph():
+@pytest.mark.parametrize("external_reference,ref_type,category",
+                         [(external_package_ref_fixture(), URIRef("http://spdx.org/rdf/references/maven-central"),
+                           SPDX_NAMESPACE.referenceCategory_packageManager),
+                          (external_package_ref_fixture(locator="acmecorp/acmenator/4.1.3-alpha",
+                                                        category=ExternalPackageRefCategory.OTHER,
+                                                        reference_type="LocationRef-acmeforge",
+                                                        comment="This is the external ref for Acme"),
+                           URIRef("https://some.namespace#LocationRef-acmeforge"),
+                           SPDX_NAMESPACE.referenceCategory_other)])
+def test_external_package_ref_to_graph(external_reference, ref_type, category):
     graph = Graph()
-    external_reference = external_package_ref_fixture()
-
-    add_external_package_ref_to_graph(external_reference, graph, URIRef("docNamespace"))
+    doc_namespace = "https://some.namespace"
+    add_external_package_ref_to_graph(external_reference, graph, URIRef("docNamespace"), doc_namespace)
 
     assert (None, RDF.type, SPDX_NAMESPACE.ExternalRef) in graph
-    assert (None, SPDX_NAMESPACE.referenceCategory, SPDX_NAMESPACE.referenceCategory_packageManager) in graph
-    assert (None, SPDX_NAMESPACE.referenceType, URIRef("http://spdx.org/rdf/references/maven-central")) in graph
-    assert (None, SPDX_NAMESPACE.referenceLocator, Literal("org.apache.tomcat:tomcat:9.0.0.M4")) in graph
-    assert (None, RDFS.comment, Literal("externalPackageRefComment")) in graph
+    assert (None, SPDX_NAMESPACE.referenceCategory, category) in graph
+    assert (None, SPDX_NAMESPACE.referenceType, ref_type) in graph
+    assert (None, SPDX_NAMESPACE.referenceLocator, Literal(external_reference.locator)) in graph
+    assert (None, RDFS.comment, Literal(external_reference.comment)) in graph

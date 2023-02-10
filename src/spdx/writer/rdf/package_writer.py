@@ -54,7 +54,7 @@ def add_package_to_graph(package: Package, graph: Graph, doc_namespace: str,
     add_optional_literal(package.description, graph, package_resource, SPDX_NAMESPACE.description)
     add_optional_literal(package.comment, graph, package_resource, RDFS.comment)
     for external_reference in package.external_references:
-        add_external_package_ref_to_graph(external_reference, graph, package_resource)
+        add_external_package_ref_to_graph(external_reference, graph, package_resource, doc_namespace)
     for attribution_text in package.attribution_texts:
         add_optional_literal(attribution_text, graph, package_resource, SPDX_NAMESPACE.attributionText)
     if package.primary_package_purpose:
@@ -81,7 +81,8 @@ def add_package_verification_code_to_graph(package_verification_code: PackageVer
     graph.add((package_node, SPDX_NAMESPACE.packageVerificationCode, package_verification_code_node))
 
 
-def add_external_package_ref_to_graph(external_package_ref: ExternalPackageRef, graph: Graph, package_node: URIRef):
+def add_external_package_ref_to_graph(external_package_ref: ExternalPackageRef, graph: Graph, package_node: URIRef,
+                                      doc_namespace: str):
     external_package_ref_node = BNode()
     graph.add((external_package_ref_node, RDF.type, SPDX_NAMESPACE.ExternalRef))
     graph.add((external_package_ref_node, SPDX_NAMESPACE.referenceCategory,
@@ -92,7 +93,7 @@ def add_external_package_ref_to_graph(external_package_ref: ExternalPackageRef, 
                    REFERENCE_NAMESPACE[external_package_ref.reference_type]))
     else:
         graph.add((external_package_ref_node, SPDX_NAMESPACE.referenceType,
-                   URIRef(external_package_ref.reference_type)))
+                   URIRef(f"{doc_namespace}#{external_package_ref.reference_type}")))
     graph.add((external_package_ref_node, SPDX_NAMESPACE.referenceLocator, Literal(external_package_ref.locator)))
     if external_package_ref.comment:
         graph.add((external_package_ref_node, RDFS.comment, Literal(external_package_ref.comment)))
