@@ -23,6 +23,7 @@ def write_file(doc, fn, validate=True, encoding="utf-8"):
     if fn.endswith(".rdf") or fn.endswith(".rdf.xml"):
         writer_module = rdf
         out_mode = "wb"
+        encoding = None
     elif fn.endswith(".tag") or fn.endswith(".spdx"):
         writer_module = tagvalue
     elif fn.endswith(".json"):

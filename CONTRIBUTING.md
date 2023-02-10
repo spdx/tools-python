@@ -26,9 +26,12 @@ Here's the process to make changes to the codebase:
 2. Review [open pull requests](https://github.com/spdx/tools-python/pulls) before committing time to a substantial
    revision. Work along similar lines may already be in progress.
 
-3. Create a new branch:
+3. Create a new branch and set up environment:
    ```sh
    git checkout -b fix-or-improve-something
+   python -m venv ./venv
+   ./venv/bin/activate
+   pip install -r requirements.txt
    ```
 4. Make some changes and commit them to the branch:
    ```sh
