@@ -1,7 +1,0 @@
-click
-ply
-pytest
-pyyaml
-rdflib
-uritools
-xmltodict

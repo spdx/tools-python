@@ -31,7 +31,7 @@ Here's the process to make changes to the codebase:
    git checkout -b fix-or-improve-something
    python -m venv ./venv
    ./venv/bin/activate
-   pip install -r requirements.txt
+   pip install -e .
    ```
 4. Make some changes and commit them to the branch:
    ```sh
