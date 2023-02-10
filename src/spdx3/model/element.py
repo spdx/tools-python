@@ -12,6 +12,7 @@ from abc import ABC, abstractmethod
 from dataclasses import field
 from typing import Optional, List
 
+from spdx3.model.external_identifier import ExternalIdentifier
 from spdx3.model.external_reference import ExternalReference
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
@@ -30,7 +31,7 @@ class Element(ABC):
     comment: Optional[str] = None
     verified_using: Optional[List[IntegrityMethod]] = field(default_factory=list)
     external_references: Optional[List[ExternalReference]] = field(default_factory=list)
-    external_identifier: None = None  # placeholder for ExternalIdentifier
+    external_identifier: Optional[List[ExternalIdentifier]] = field(default_factory=list)
     extension: None = None  # placeholder for extension
 
     @abstractmethod
