@@ -32,12 +32,12 @@ class AnnotationType(Enum):
 @dataclass_with_properties
 class Annotation(Element):
     annotation_type: AnnotationType = None
-    subject: List[str] = field(default_factory=list)
+    subject: str = None
     content_type: Optional[str] = None  # placeholder for MediaType
     statement: Optional[str] = None
 
     def __init__(self, spdx_id: str, creation_info: CreationInformation, annotation_type: AnnotationType,
-                 subject: List[str], name: Optional[str] = None, summary: Optional[str] = None,
+                 subject: str, name: Optional[str] = None, summary: Optional[str] = None,
                  description: Optional[str] = None, comment: Optional[str] = None,
                  verified_using: Optional[List[IntegrityMethod]] = None,
                  external_references: Optional[List[ExternalReference]] = None, external_identifier: None = None,
