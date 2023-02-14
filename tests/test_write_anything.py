@@ -35,7 +35,10 @@ UNSTABLE_CONVERSIONS = {
     "SPDXXMLExample-v2.2.spdx.xml-tag",
     "SPDXYAMLExample-2.3.spdx.yaml-tag",
     "SPDXJSONExample-v2.3.spdx.json-tag",
-    "SPDXXMLExample-v2.3.spdx.xml-tag"
+    "SPDXXMLExample-v2.3.spdx.xml-tag",
+    "SPDXJsonExampleEmptyArrays.json-json",
+    "SPDXJsonExampleEmptyArrays.json-xml",
+    "SPDXJsonExampleEmptyArrays.json-yaml"
 }
 
 

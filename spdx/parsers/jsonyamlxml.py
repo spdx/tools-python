@@ -1440,9 +1440,9 @@ class PackageParser(BaseParser):
         - license_info_from_files: Python list of licenses information from files (str/unicode)
         """
         if not self.package.are_files_analyzed:
-            if license_info_from_files is not None:
-                self.value_error("PKG_LIC_FRM_FILES", license_info_from_files)
-            return
+            if not license_info_from_files:
+                return
+            self.value_error("PKG_LIC_FRM_FILES", license_info_from_files)
         if isinstance(license_info_from_files, list):
             for license_info_from_file in license_info_from_files:
                 if isinstance(license_info_from_file, str):
@@ -1591,9 +1591,9 @@ class PackageParser(BaseParser):
         - pkg_has_files: Python list of spdx_ids
         """
         if not self.package.are_files_analyzed:
-            if pkg_has_files is not None:
-                self.value_error("PKG_FILES", pkg_has_files)
-            return
+            if not pkg_has_files:
+                return
+            self.value_error("PKG_FILES", pkg_has_files)
 
         if isinstance(pkg_has_files, list):
             for pkg_file_spdx_id in pkg_has_files:
