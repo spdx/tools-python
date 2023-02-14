@@ -16,7 +16,6 @@ from spdx import file
 from spdx import license
 from spdx import package
 from spdx import version
-from spdx import utils
 from spdx.checksum import Checksum, ChecksumAlgorithm
 from spdx.document import Document
 from spdx.parsers.builderexceptions import CardinalityError
@@ -163,9 +162,7 @@ class EntityBuilder(tagvaluebuilders.EntityBuilder):
         elif self.person_re.match(value):
             return self.build_person(doc, value)
         elif self.org_re.match(value):
-            return self.build_org(doc, value)
-        elif value == "NOASSERTION":            # Supplier name could be NOASSERTION SPDX 2.3
-            return  utils.NoAssert()   
+            return self.build_org(doc, value)      
         else:
             raise SPDXValueError("Entity")
 

@@ -1244,8 +1244,9 @@ class PackageParser(BaseParser):
         """
         if isinstance(pkg_supplier, str):
             if pkg_supplier == "NOASSERTION":
-                return self.builder.set_pkg_supplier(self.document, NoAssert())
-            entity = self.builder.create_entity(self.document, pkg_supplier)
+                return self.builder.set_pkg_supplier(self.document,utils.NoAssert())
+            else:
+                entity = self.builder.create_entity(self.document, pkg_supplier)
             try:
                 return self.builder.set_pkg_supplier(self.document, entity)
             except SPDXValueError:
@@ -1264,8 +1265,9 @@ class PackageParser(BaseParser):
         """
         if isinstance(pkg_originator, str):
             if pkg_originator == "NOASSERTION":
-                return self.builder.set_pkg_originator(self.document, NoAssert())
-            entity = self.builder.create_entity(self.document, pkg_originator)
+                return self.builder.set_pkg_originator(self.document,utils.NoAssert())
+            else:
+                entity = self.builder.create_entity(self.document, pkg_originator)
             try:
                 return self.builder.set_pkg_originator(self.document, entity)
             except SPDXValueError:
