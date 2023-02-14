@@ -8,6 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import re
 
 from ply import lex
 
@@ -170,10 +171,6 @@ class Lexer(object):
         t.value = t.value[1:].strip()
         return t
 
-    def t_RANGE(self, t):
-        r":\s*\d+:\d+"
-        t.value = t.value[1:].strip()
-        return t
 
     def t_DOC_REF_ID(self, t):
         r":\s*DocumentRef-([A-Za-z0-9\+\.\-]+)"
@@ -221,6 +218,10 @@ class Lexer(object):
         t.value = t.value[1:].strip()
         if t.value in self.reserved.keys():
             t.type = self.reserved[t.value]
+            return t
+        range_pattern = re.compile("\d+:\d(?!\D)")
+        if range_pattern.match(t.value):
+            t.type = "RANGE"
         else:
             t.type = "LINE"
         return t
