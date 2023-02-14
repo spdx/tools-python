@@ -50,7 +50,7 @@ review_str = '\n'.join([
 package_str = '\n'.join([
     'PackageName: Test',
     'SPDXID: SPDXRef-Package',
-    'PackageVersion: Version 0.9.2',
+    'PackageVersion: 1:2.36.1-8+deb11u1',
     'PackageDownloadLocation: http://example.com/test',
     'FilesAnalyzed: True',
     'PackageSummary: <text>Test package</text>',
@@ -104,7 +104,7 @@ snippet_str = '\n'.join([
     'SnippetLicenseConcluded: Apache-2.0',
     'LicenseInfoInSnippet: Apache-2.0',
     'SnippetByteRange: 310:420',
-    'SnippetLineRange: 5:23',
+    'SnippetLineRange: 5:7',
 ])
 
 annotation_str = '\n'.join([
@@ -195,7 +195,7 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'SPDX_ID', 'SPDXID', 2)
         self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-Package', 2)
         self.token_assert_helper(self.l.token(), 'PKG_VERSION', 'PackageVersion', 3)
-        self.token_assert_helper(self.l.token(), 'LINE', 'Version 0.9.2', 3)
+        self.token_assert_helper(self.l.token(), 'LINE', '1:2.36.1-8+deb11u1', 3)
         self.token_assert_helper(self.l.token(), 'PKG_DOWN', 'PackageDownloadLocation', 4)
         self.token_assert_helper(self.l.token(), 'LINE', 'http://example.com/test', 4)
         self.token_assert_helper(self.l.token(), 'PKG_FILES_ANALYZED', 'FilesAnalyzed', 5)
@@ -275,7 +275,7 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'SNIPPET_BYTE_RANGE', 'SnippetByteRange', 9)
         self.token_assert_helper(self.l.token(), 'RANGE', '310:420', 9)
         self.token_assert_helper(self.l.token(), 'SNIPPET_LINE_RANGE', 'SnippetLineRange', 10)
-        self.token_assert_helper(self.l.token(), 'RANGE', '5:23', 10)
+        self.token_assert_helper(self.l.token(), 'RANGE', '5:7', 10)
 
     def test_annotation(self):
         data = annotation_str
@@ -337,7 +337,7 @@ class TestParser(TestCase):
         assert not error
         assert document.package.name == 'Test'
         assert document.package.spdx_id == 'SPDXRef-Package'
-        assert document.package.version == 'Version 0.9.2'
+        assert document.package.version == '1:2.36.1-8+deb11u1'
         assert len(document.package.licenses_from_files) == 2
         assert (document.package.conc_lics.identifier == 'LicenseRef-2.0 AND Apache-2.0')
         assert document.package.files_analyzed is True
@@ -408,4 +408,4 @@ class TestParser(TestCase):
         assert document.snippet[-1].byte_range[0] == 310
         assert document.snippet[-1].byte_range[1] == 420
         assert document.snippet[-1].line_range[0] == 5
-        assert document.snippet[-1].line_range[1] == 23
+        assert document.snippet[-1].line_range[1] == 7
