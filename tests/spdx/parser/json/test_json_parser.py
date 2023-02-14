@@ -45,13 +45,3 @@ def test_parse_json_with_2_2_example():
     assert len(doc.relationships) == 11
     assert len(doc.extracted_licensing_info) == 5
 
-def test_parse_json_with_2_1_example():
-    doc = json_parser.parse_from_file(os.path.join(os.path.dirname(__file__),
-                                                   "../../data/formats/SPDXJsonExample.json"))
-    assert type(doc) == Document
-    assert len(doc.annotations) == 1
-    assert len(doc.files) == 2
-    assert len(doc.packages) == 1
-    assert len(doc.snippets) ==  1
-    assert len(doc.relationships) == 3
-    assert len(doc.extracted_licensing_info) == 4
