@@ -235,7 +235,7 @@ class Lexer(object):
         t.lexer.lineno += len(t.value)
 
     def t_whitespace(self, t):
-        r"\s"
+        r"[ \t]+"
         pass
 
     def build(self, **kwargs):
