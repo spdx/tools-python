@@ -115,6 +115,9 @@ annotation_str = '\n'.join([
     'SPDXREF: SPDXRef-DOCUMENT'
 ])
 
+document_str_with_empty_line = "\n".join(
+    ['SPDXVersion: SPDX-2.1', '  ', 'DataLicense: CC0-1.0'])
+
 
 class TestLexer(TestCase):
     maxDiff = None
@@ -290,6 +293,14 @@ class TestLexer(TestCase):
         self.token_assert_helper(self.l.token(), 'OTHER', 'OTHER', 4)
         self.token_assert_helper(self.l.token(), 'ANNOTATION_SPDX_ID', 'SPDXREF', 5)
         self.token_assert_helper(self.l.token(), 'LINE', 'SPDXRef-DOCUMENT', 5)
+
+    def test_correct_line_number_with_empty_line_between(self):
+        data = document_str_with_empty_line
+        self.l.input(data)
+        self.token_assert_helper(self.l.token(), 'DOC_VERSION', 'SPDXVersion', 1)
+        self.token_assert_helper(self.l.token(), 'LINE', 'SPDX-2.1', 1)
+        self.token_assert_helper(self.l.token(), 'DOC_LICENSE', 'DataLicense', 3)
+        self.token_assert_helper(self.l.token(), 'LINE', 'CC0-1.0', 3)
 
     def token_assert_helper(self, token, ttype, value, line):
         assert token.type == ttype
