@@ -1,6 +1,6 @@
 import glob
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import List
 
 import pytest
@@ -69,9 +69,9 @@ def test_primary_package_purpose(temporary_file_path: str, out_format: str):
 def test_release_built_valid_until_date(temporary_file_path: str, out_format: str):
     document: Document = minimal_document_with_package()
     package: Package = document.packages[0]
-    package.release_date = datetime(2021, 1, 1, 12, 0, 0)
-    package.built_date = datetime(2021, 1, 1, 12, 0, 0)
-    package.valid_until_date = datetime(2022, 1, 1, 12, 0, 0)
+    package.release_date = datetime(2021, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
+    package.built_date = datetime(2021, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
+    package.valid_until_date = datetime(2022, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
 
     file_path_with_ending = temporary_file_path + "." + out_format
     write_anything.write_file(document, file_path_with_ending, validate=False)

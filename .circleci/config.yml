@@ -83,6 +83,17 @@ jobs:
     - update_packaging_tools
     - install_run_tests
 
+  mac_python_3_11:
+    shell: /bin/bash --login
+    macos:
+      xcode: '13.0.0'
+    steps:
+    - checkout
+    - mac_install_python:
+        python_version: "3.11.2"
+    - update_packaging_tools
+    - install_run_tests
+
   linux_python_3_7:
     docker:
       - image: python:3.7
@@ -115,6 +126,15 @@ jobs:
     - update_packaging_tools
     - install_run_tests
 
+  linux_python_3_11:
+    docker:
+      - image: python:3.11
+    steps:
+    - checkout
+    - update_packaging_tools
+    - install_run_tests
+
+
 workflows:
   version: 2
   python_matrix_build:
@@ -123,7 +143,9 @@ workflows:
       - mac_python_3_8
       - mac_python_3_9
       - mac_python_3_10
+      - mac_python_3_11
       - linux_python_3_7
       - linux_python_3_8
       - linux_python_3_9
       - linux_python_3_10
+      - linux_python_3_11

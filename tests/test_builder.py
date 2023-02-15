@@ -244,7 +244,7 @@ class TestCreationInfoBuilder(TestCase):
 
     @testing_utils.raises(builders.SPDXValueError)
     def test_created_value(self):
-        created_str = "2010-02-03T00:00:00"
+        created_str = "INVALID"
         self.builder.set_created_date(self.document, created_str)
 
     def test_license_list_vers(self):

@@ -9,9 +9,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import datetime
 import hashlib
 import re
+from datetime import datetime
 from typing import Dict, List, TYPE_CHECKING
 
 from ply import lex
@@ -30,21 +30,12 @@ def datetime_iso_format(date):
     """
     Return an ISO-8601 representation of a datetime object.
     """
-    return date.isoformat() + "Z"
-
+    return date.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 # Matches an iso 8601 date representation
 DATE_ISO_REGEX = re.compile(
-    r"(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z", re.UNICODE
+    r"(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})Z", re.UNICODE
 )
-
-# Groups for retrieving values from DATE_ISO_REGEX matches.
-DATE_ISO_YEAR_GRP = 1
-DATE_ISO_MONTH_GRP = 2
-DATE_ISO_DAY_GRP = 3
-DATE_ISO_HOUR_GRP = 4
-DATE_ISO_MIN_GRP = 5
-DATE_ISO_SEC_GRP = 6
 
 
 def datetime_from_iso_format(string):
@@ -53,18 +44,12 @@ def datetime_from_iso_format(string):
     Return None if string is non conforming.
     """
     match = DATE_ISO_REGEX.match(string)
-    if match:
-        date = datetime.datetime(
-            year=int(match.group(DATE_ISO_YEAR_GRP)),
-            month=int(match.group(DATE_ISO_MONTH_GRP)),
-            day=int(match.group(DATE_ISO_DAY_GRP)),
-            hour=int(match.group(DATE_ISO_HOUR_GRP)),
-            second=int(match.group(DATE_ISO_SEC_GRP)),
-            minute=int(match.group(DATE_ISO_MIN_GRP)),
-        )
-        return date
-    else:
+    if not match:
         return None
+
+    if string.endswith("Z"):
+        string = string[:-len("Z")] + "+00:00"
+    return datetime.fromisoformat(string)
 
 
 class NoAssert(object):

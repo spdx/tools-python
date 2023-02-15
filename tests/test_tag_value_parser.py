@@ -10,7 +10,7 @@
 # limitations under the License.
 
 import sys
-from datetime import datetime
+from datetime import datetime, timezone
 from unittest import TestCase
 
 import spdx
@@ -347,9 +347,9 @@ class TestParser(TestCase):
         assert document.package.pkg_ext_refs[-1].locator == 'cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:'
         assert document.package.pkg_ext_refs[-1].comment == 'Some comment about the package.'
         assert document.package.primary_package_purpose == PackagePurpose.OPERATING_SYSTEM
-        assert document.package.built_date == datetime(2020, 1, 1, 12, 0, 0)
-        assert document.package.release_date == datetime(2021, 1, 1, 12, 0, 0)
-        assert document.package.valid_until_date == datetime(2022, 1, 1, 12, 0, 0)
+        assert document.package.built_date == datetime(2020, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
+        assert document.package.release_date == datetime(2021, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
+        assert document.package.valid_until_date == datetime(2022, 1, 1, 12, 0, 0, tzinfo=timezone.utc)
 
     def test_file(self):
         document, error = self.p.parse(self.complete_str)
