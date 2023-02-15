@@ -43,7 +43,7 @@ def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callabl
     except SPDXParsingError as err:
         logger.extend(err.get_messages())
     except (TypeError, ValueError) as err:
-        logger.extend(err.args[0])
+        logger.append(err.args[0])
     return default
 
 
