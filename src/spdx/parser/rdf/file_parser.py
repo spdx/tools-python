@@ -15,7 +15,7 @@ from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.checksum_parser import parse_checksum
 from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_literal_or_no_assertion_or_none, \
-    get_correct_typed_value, remove_prefix
+    get_correct_typed_value, apply_parsing_method_or_log_error, parse_enum_value
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
@@ -30,10 +30,10 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
 
     file_types = []
     for (_, _, file_type_ref) in graph.triples((file_node, SPDX_NAMESPACE.fileType, None)):
-        try:
-            file_types.append(convert_uri_ref_to_file_type(file_type_ref))
-        except KeyError:
-            logger.append(f"Invalid FileType: {file_type_ref}")
+        file_types.append(
+            apply_parsing_method_or_log_error(logger, file_type_ref,
+                                              parsing_method=lambda x: parse_enum_value(x, FileType,
+                                                                                        SPDX_NAMESPACE.fileType_)))
     license_concluded = parse_literal_or_no_assertion_or_none(
         logger, graph, file_node, SPDX_NAMESPACE.licenseConcluded,
         parsing_method=lambda x: parse_license_expression(x, graph, doc_namespace))
@@ -64,8 +64,3 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
                                                        license_info_in_file=license_info_in_file,
                                                        notice=notice_text))
     return file
-
-
-def convert_uri_ref_to_file_type(file_type_ref: URIRef) -> FileType:
-    file_type = remove_prefix(file_type_ref, SPDX_NAMESPACE.fileType_).upper()
-    return FileType[file_type]

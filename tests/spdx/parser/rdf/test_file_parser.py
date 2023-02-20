@@ -11,13 +11,12 @@
 import os
 from unittest import TestCase
 
-import pytest
 from license_expression import get_spdx_licensing
 from rdflib import Graph, RDF
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 
 from spdx.model.file import FileType
-from spdx.parser.rdf.file_parser import convert_uri_ref_to_file_type, parse_file
+from spdx.parser.rdf.file_parser import parse_file
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
@@ -41,25 +40,3 @@ def test_parse_file():
     assert file.license_comment == "licenseComment"
     assert file.notice == "fileNotice"
     assert file.attribution_texts == ["fileAttributionText"]
-
-
-@pytest.mark.parametrize("uri_ref,expected", [(SPDX_NAMESPACE.fileType_source, FileType.SOURCE),
-                                              (SPDX_NAMESPACE.fileType_binary, FileType.BINARY),
-                                              (SPDX_NAMESPACE.fileType_archive, FileType.ARCHIVE),
-                                              (SPDX_NAMESPACE.fileType_application, FileType.APPLICATION),
-                                              (SPDX_NAMESPACE.fileType_audio, FileType.AUDIO),
-                                              (SPDX_NAMESPACE.fileType_image, FileType.IMAGE),
-                                              (SPDX_NAMESPACE.fileType_text, FileType.TEXT),
-                                              (SPDX_NAMESPACE.fileType_video, FileType.VIDEO),
-                                              (SPDX_NAMESPACE.fileType_documentation, FileType.DOCUMENTATION),
-                                              (SPDX_NAMESPACE.fileType_spdx, FileType.SPDX),
-                                              (SPDX_NAMESPACE.fileType_other, FileType.OTHER)])
-def test_convert_uri_ref_to_file_type(uri_ref, expected):
-    file_type = convert_uri_ref_to_file_type(uri_ref)
-
-    assert file_type == expected
-
-
-def test_convert_uri_ref_to_file_type_error():
-    with pytest.raises(KeyError):
-        convert_uri_ref_to_file_type(SPDX_NAMESPACE.filetype_SPDX)
