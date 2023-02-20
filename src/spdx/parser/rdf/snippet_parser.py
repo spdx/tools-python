@@ -19,7 +19,7 @@ from spdx.model.snippet import Snippet
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_literal_or_no_assertion_or_none, \
-    get_correct_typed_value, apply_parsing_method_or_log_error
+    get_correctly_typed_value, apply_parsing_method_or_log_error
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
 
@@ -43,8 +43,8 @@ def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Sni
     for (_, _, license_info_in_snippet_node) in graph.triples(
         (snippet_node, SPDX_NAMESPACE.licenseInfoInSnippet, None)):
         license_info_in_snippet.append(
-            get_correct_typed_value(logger, license_info_in_snippet_node,
-                                    lambda x: parse_license_expression(x, graph, doc_namespace)))
+            get_correctly_typed_value(logger, license_info_in_snippet_node,
+                                      lambda x: parse_license_expression(x, graph, doc_namespace)))
     license_comment = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.licenseComments)
     copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node, SPDX_NAMESPACE.copyrightText)
     comment = parse_literal(logger, graph, snippet_node, RDFS.comment)

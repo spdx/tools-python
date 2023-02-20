@@ -19,7 +19,7 @@ from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
 from spdx.parser.rdf.checksum_parser import parse_checksum
 from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, parse_literal, parse_enum_value, \
-    parse_literal_or_no_assertion_or_none, get_correct_typed_value, parse_literal_or_no_assertion_or_none, remove_prefix
+    parse_literal_or_no_assertion_or_none, get_correctly_typed_value, parse_literal_or_no_assertion_or_none, remove_prefix
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
 
@@ -58,8 +58,8 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     for (_, _, license_info_from_files_node) in graph.triples(
         (package_node, SPDX_NAMESPACE.licenseInfoFromFiles, None)):
         license_info_from_files.append(
-            get_correct_typed_value(logger, license_info_from_files_node,
-                                    lambda x: parse_license_expression(x, graph, doc_namespace)))
+            get_correctly_typed_value(logger, license_info_from_files_node,
+                                      lambda x: parse_license_expression(x, graph, doc_namespace)))
     license_comment = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.licenseComments)
     comment = parse_literal(logger, graph, package_node, RDFS.comment)
     summary = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.summary)
