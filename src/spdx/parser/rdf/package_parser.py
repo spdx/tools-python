@@ -29,7 +29,7 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     spdx_id = parse_spdx_id(package_node, doc_namespace, graph)
     name = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.name)
     download_location = parse_literal_or_no_assertion_or_none(logger, graph, package_node,
-                                                              SPDX_NAMESPACE.downloadLocation, parsing_method=str)
+                                                              SPDX_NAMESPACE.downloadLocation)
     checksums = []
     for (_, _, checksum_node) in graph.triples((package_node, SPDX_NAMESPACE.checksum, None)):
         checksums.append(parse_checksum(checksum_node, graph))
@@ -64,8 +64,7 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     comment = parse_literal(logger, graph, package_node, RDFS.comment)
     summary = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.summary)
     description = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.description)
-    copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, package_node, SPDX_NAMESPACE.copyrightText,
-                                                           parsing_method=str)
+    copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, package_node, SPDX_NAMESPACE.copyrightText)
     source_info = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.sourceInfo)
     primary_package_purpose = parse_literal(
         logger, graph, package_node, SPDX_NAMESPACE.primaryPackagePurpose,
@@ -125,7 +124,7 @@ def parse_external_package_ref(external_package_ref_node: URIRef, graph: Graph, 
     ref_locator = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceLocator)
     ref_category = parse_literal(
         logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceCategory,
-        parsing_method=lambda x: parse_enum_value(x, ExternalPackageRefCategory, SPDX_NAMESPACE.referenceCategory_, ))
+        parsing_method=lambda x: parse_enum_value(x, ExternalPackageRefCategory, SPDX_NAMESPACE.referenceCategory_))
     ref_type = parse_literal(logger, graph, external_package_ref_node, SPDX_NAMESPACE.referenceType,
                              parsing_method=lambda x: parse_external_package_ref_type(x, doc_namespace))
     comment = parse_literal(logger, graph, external_package_ref_node, RDFS.comment)

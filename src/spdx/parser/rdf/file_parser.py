@@ -43,8 +43,7 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
             get_correct_typed_value(logger, license_info_from_files_node,
                                     lambda x: parse_license_expression(x, graph, doc_namespace)))
     license_comment = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.licenseComments)
-    copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, file_node, SPDX_NAMESPACE.copyrightText,
-                                                           parsing_method=str)
+    copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, file_node, SPDX_NAMESPACE.copyrightText)
     file_contributors = []
     for (_, _, file_contributor) in graph.triples((file_node, SPDX_NAMESPACE.fileContributor, None)):
         file_contributors.append(file_contributor.toPython())
