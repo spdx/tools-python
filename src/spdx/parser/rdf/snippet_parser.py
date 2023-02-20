@@ -39,8 +39,7 @@ def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Sni
             get_correct_typed_value(logger, license_info_in_snippet_node,
                                     lambda x: parse_license_expression(x, graph, doc_namespace)))
     license_comment = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.licenseComments)
-    copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node, SPDX_NAMESPACE.copyrightText,
-                                                           parsing_method=str)
+    copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, snippet_node, SPDX_NAMESPACE.copyrightText)
     comment = parse_literal(logger, graph, snippet_node, RDFS.comment)
     name = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.name)
     attribution_texts = []
