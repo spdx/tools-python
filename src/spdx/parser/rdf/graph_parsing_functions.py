@@ -46,17 +46,11 @@ def apply_parsing_method_or_log_error(logger: Logger, value: Any, parsing_method
 def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject: Node, predicate: Node,
                                           parsing_method: Callable = lambda x: x.strip(), default: Any = None):
     value = get_unique_value(logger, graph, subject, predicate, default)
-    if not value:
-        return default
-    if value == SPDX_NAMESPACE.noassertion or value.toPython() == SPDX_NO_ASSERTION_STRING:
-        return SpdxNoAssertion()
-    if value == SPDX_NAMESPACE.none or value.toPython() == SPDX_NONE_STRING:
-        return SpdxNone()
-    return apply_parsing_method_or_log_error(logger, value, parsing_method, default)
+    return get_correctly_typed_value(logger, value, parsing_method, default)
 
 
-def get_correct_typed_value(logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(),
-                            default: Any = None):
+def get_correctly_typed_value(logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(),
+                              default: Any = None):
     if not value:
         return default
     if value == SPDX_NAMESPACE.noassertion or value.toPython() == SPDX_NO_ASSERTION_STRING:
