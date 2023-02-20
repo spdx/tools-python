@@ -12,7 +12,7 @@ from rdflib import Graph, Literal, RDFS, URIRef, RDF
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 from tests.spdx.fixtures import creation_info_fixture
 
 
@@ -24,7 +24,7 @@ def test_add_creation_info_to_graph():
 
     assert (None, RDF.type, SPDX_NAMESPACE.SpdxDocument) in graph
     assert (URIRef(f"{creation_info.document_namespace}#{creation_info.spdx_id}"), None, None) in graph
-    assert (None, SPDX_NAMESPACE.dataLicense, URIRef(f"https://spdx.org/licenses/{creation_info.data_license}"))
+    assert (None, SPDX_NAMESPACE.dataLicense, LICENSE_NAMESPACE[creation_info.data_license]) in graph
     assert (None, SPDX_NAMESPACE.name, Literal(creation_info.name)) in graph
     assert (None, SPDX_NAMESPACE.specVersion, Literal(creation_info.spdx_version)) in graph
     assert (None, SPDX_NAMESPACE.creationInfo, None) in graph
