@@ -91,7 +91,7 @@ def validate_package(package: Package, version: str, context: Optional[Validatio
         else:
             validation_messages.extend(validate_verification_code(verification_code, package.spdx_id))
 
-    validation_messages.extend(validate_checksums(package.checksums, package.spdx_id))
+    validation_messages.extend(validate_checksums(package.checksums, package.spdx_id, version))
 
     validation_messages.extend(validate_license_expression(package.license_concluded))
 

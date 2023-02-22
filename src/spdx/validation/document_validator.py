@@ -53,7 +53,7 @@ def validate_full_spdx_document(document: Document, spdx_version: str = None) ->
                                                      "the validation process has been cancelled.", context))
         return validation_messages
 
-    validation_messages.extend(validate_creation_info(document.creation_info))
+    validation_messages.extend(validate_creation_info(document.creation_info, spdx_version))
     validation_messages.extend(validate_packages(document.packages, spdx_version, document))
     validation_messages.extend(validate_files(document.files, spdx_version, document))
     validation_messages.extend(validate_snippets(document.snippets, spdx_version, document))

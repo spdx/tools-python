@@ -18,7 +18,7 @@ from spdx.validation.uri_validators import validate_uri
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_creation_info(creation_info: CreationInfo) -> List[ValidationMessage]:
+def validate_creation_info(creation_info: CreationInfo, spdx_version: str) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
 
     context = ValidationContext(spdx_id=creation_info.spdx_id, element_type=SpdxElementType.DOCUMENT)
@@ -48,6 +48,6 @@ def validate_creation_info(creation_info: CreationInfo) -> List[ValidationMessag
 
     validation_messages.extend(validate_actors(creation_info.creators, creation_info.spdx_id))
 
-    validation_messages.extend(validate_external_document_refs(creation_info.external_document_refs, creation_info.spdx_id))
+    validation_messages.extend(validate_external_document_refs(creation_info.external_document_refs, creation_info.spdx_id, spdx_version))
 
     return validation_messages

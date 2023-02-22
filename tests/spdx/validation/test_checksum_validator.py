@@ -51,7 +51,7 @@ from tests.spdx.fixtures import checksum_fixture
                                    "af1eec2a1b18886c3f3cc244349d91d8d4c41ce30a517d6ce9d79c8c17bb4b660d7f61beb7018b3924c6b8f96549fa39"),
                           Checksum(ChecksumAlgorithm.ADLER32, "02ec0130")])
 def test_valid_checksum(checksum):
-    validation_messages: List[ValidationMessage] = validate_checksum(checksum, "parent_id")
+    validation_messages: List[ValidationMessage] = validate_checksum(checksum, "parent_id", "SPDX-2.3")
 
     assert validation_messages == []
 
@@ -97,10 +97,37 @@ def test_valid_checksum(checksum):
                           ])
 def test_invalid_checksum(checksum, expected_message):
     parent_id = "parent_id"
-    validation_messages: List[ValidationMessage] = validate_checksum(checksum, parent_id)
+    validation_messages: List[ValidationMessage] = validate_checksum(checksum, parent_id, "SPDX-2.3")
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(parent_id=parent_id, element_type=SpdxElementType.CHECKSUM,
                                                    full_element=checksum))
+
+    assert validation_messages == [expected]
+
+
+@pytest.mark.parametrize("checksum",
+                         [Checksum(ChecksumAlgorithm.SHA3_256,
+                                   "1e772489c042f49aeaae32b00fc5ef170a25afa741cffaafadde597d4d1727ce"),
+                          Checksum(ChecksumAlgorithm.SHA3_384,
+                                   "dd9e30747551865b483bd76bd967384dce0e5670d1b1c3f701cffac7f49b1c46791253493835136b3aa5f679e364c166"),
+                          Checksum(ChecksumAlgorithm.SHA3_512,
+                                   "906bca5580be8c95ae44f775363fb69968ad568898dfb03e0ff96cd9445a0b75f817b68e5c1e80ad624031f851cfddd3a101e1d111310266a5d46e2bc1ffbb36"),
+                          Checksum(ChecksumAlgorithm.BLAKE2B_256,
+                                   "a0eb3ddfa5807780a562b9c313b2537f1e8dc621e9a524f8c1ffcf07a79e35c7"),
+                          Checksum(ChecksumAlgorithm.BLAKE2B_384,
+                                   "902511afc8939c0193d87857f45a19eddfd7e0413b0f8701a3baaf1b025f882b45a8fbf623fa0ad79b64850ac7a4d0b2"),
+                          Checksum(ChecksumAlgorithm.BLAKE2B_512,
+                                   "72c23b0160e1af3cb159f0cc96210c5e9aecc5a65d4618566776fa6117bf84929dcef56c7f8b087691c23000c945470842d90b5e8c4af74dce531ca8ebd8824c"),
+                          Checksum(ChecksumAlgorithm.BLAKE3,
+                                   "a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafed"),
+                          Checksum(ChecksumAlgorithm.ADLER32, "02ec0130")
+                          ])
+def test_v2_3only_checksums(checksum):
+    parent_id = "parent_id"
+    validation_messages: List[ValidationMessage] = validate_checksum(checksum, parent_id, "SPDX-2.2")
+
+    context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.CHECKSUM, full_element=checksum)
+    expected = ValidationMessage(f"{checksum.algorithm.name} is not supported in SPDX-2.2", context)
 
     assert validation_messages == [expected]
