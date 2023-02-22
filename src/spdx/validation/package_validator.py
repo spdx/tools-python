@@ -108,7 +108,7 @@ def validate_package(package: Package, spdx_version: str, context: Optional[Vali
 
     validation_messages.extend(validate_license_expression(package.license_declared))
 
-    validation_messages.extend(validate_external_package_refs(package.external_references, package.spdx_id))
+    validation_messages.extend(validate_external_package_refs(package.external_references, package.spdx_id, spdx_version))
 
     if spdx_version == "SPDX-2.2":
         if package.primary_package_purpose is not None:

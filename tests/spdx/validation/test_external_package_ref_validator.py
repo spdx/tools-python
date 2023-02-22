@@ -76,7 +76,7 @@ from spdx.validation.validation_message import ValidationMessage, ValidationCont
                           ])
 def test_valid_external_package_ref(category, reference_type, locator):
     external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
-    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, "parent_id")
+    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, "parent_id", "SPDX-2.3")
 
     assert validation_messages == []
 
@@ -95,7 +95,7 @@ def test_valid_external_package_ref(category, reference_type, locator):
 def test_invalid_external_package_ref_types(category, reference_type, locator, expected_message):
     external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
     parent_id = "SPDXRef-Package"
-    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id)
+    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id, "SPDX-2.3")
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(parent_id=parent_id,
@@ -145,9 +145,31 @@ def test_invalid_external_package_ref_types(category, reference_type, locator, e
 def test_invalid_external_package_ref_locators(category, reference_type, locator, expected_message):
     external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
     parent_id = "SPDXRef-Package"
-    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id)
+    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id, "SPDX-2.3")
 
     expected = ValidationMessage(expected_message,
+                                 ValidationContext(parent_id=parent_id,
+                                                   element_type=SpdxElementType.EXTERNAL_PACKAGE_REF,
+                                                   full_element=external_package_ref))
+
+    assert validation_messages == [expected]
+
+
+@pytest.mark.parametrize("category, reference_type, locator",
+                         [(ExternalPackageRefCategory.SECURITY, "advisory",
+                           "https://nvd.nist.gov/vuln/detail/CVE-2020-28498"),
+                          (ExternalPackageRefCategory.SECURITY, "fix",
+                           "https://github.com/indutny/elliptic/commit/441b7428"),
+                          (ExternalPackageRefCategory.SECURITY, "url",
+                           "https://github.com/christianlundkvist/blog/blob/master/2020_05_26_secp256k1_twist_attacks/secp256k1_twist_attacks.md"),
+                          (ExternalPackageRefCategory.SECURITY, "swid", "swid:2df9de35-0aff-4a86-ace6-f7dddd1ade4c")
+                          ])
+def test_v2_3only_external_package_ref_types(category, reference_type, locator):
+    external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
+    parent_id = "SPDXRef-Package"
+    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id, "SPDX-2.2")
+
+    expected = ValidationMessage(f'externalPackageRef type "{reference_type}" is not supported in SPDX-2.2',
                                  ValidationContext(parent_id=parent_id,
                                                    element_type=SpdxElementType.EXTERNAL_PACKAGE_REF,
                                                    full_element=external_package_ref))
