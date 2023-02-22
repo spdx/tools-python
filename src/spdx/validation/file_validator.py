@@ -20,19 +20,19 @@ from spdx.validation.spdx_id_validators import validate_spdx_id
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_files(files: List[File], version: str, document: Optional[Document] = None) -> List[ValidationMessage]:
+def validate_files(files: List[File], spdx_version: str, document: Optional[Document] = None) -> List[ValidationMessage]:
     validation_messages = []
     if document:
         for file in files:
-            validation_messages.extend(validate_file_within_document(file, version, document))
+            validation_messages.extend(validate_file_within_document(file, spdx_version, document))
     else:
         for file in files:
-            validation_messages.extend(validate_file(file, version))
+            validation_messages.extend(validate_file(file, spdx_version))
 
     return validation_messages
 
 
-def validate_file_within_document(file: File, version: str, document: Document) -> List[ValidationMessage]:
+def validate_file_within_document(file: File, spdx_version: str, document: Document) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(spdx_id=file.spdx_id, parent_id=document.creation_info.spdx_id,
                                 element_type=SpdxElementType.FILE, full_element=file)
@@ -40,12 +40,12 @@ def validate_file_within_document(file: File, version: str, document: Document) 
     for message in validate_spdx_id(file.spdx_id, document):
         validation_messages.append(ValidationMessage(message, context))
 
-    validation_messages.extend(validate_file(file, version, context))
+    validation_messages.extend(validate_file(file, spdx_version, context))
 
     return validation_messages
 
 
-def validate_file(file: File, version: str, context: Optional[ValidationContext] = None) -> List[ValidationMessage]:
+def validate_file(file: File, spdx_version: str, context: Optional[ValidationContext] = None) -> List[ValidationMessage]:
     validation_messages = []
     if not context:
         context = ValidationContext(spdx_id=file.spdx_id, element_type=SpdxElementType.FILE, full_element=file)
@@ -63,13 +63,13 @@ def validate_file(file: File, version: str, context: Optional[ValidationContext]
                 context)
         )
 
-    validation_messages.extend(validate_checksums(file.checksums, file.spdx_id, version))
+    validation_messages.extend(validate_checksums(file.checksums, file.spdx_id, spdx_version))
 
     validation_messages.extend(validate_license_expression(file.license_concluded))
 
     validation_messages.extend(validate_license_expressions(file.license_info_in_file))
 
-    if version == "SPDX-2.2":
+    if spdx_version == "SPDX-2.2":
         if file.license_concluded is None:
             validation_messages.append(
                 ValidationMessage(f"license_concluded is mandatory in SPDX-2.2", context))
