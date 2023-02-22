@@ -30,13 +30,14 @@ def test_valid_file():
 @pytest.mark.parametrize("file_input, spdx_id, expected_message",
                          [(file_fixture(name="/invalid/file/name"), file_fixture().spdx_id,
                            f'file name must not be an absolute path starting with "/", but is: /invalid/file/name'),
-                         (
+                          (
                           file_fixture(checksums=[Checksum(ChecksumAlgorithm.MD2, "d4c41ce30a517d6ce9d79c8c17bb4b66")]),
                           file_fixture().spdx_id,
                           f'checksums must contain a SHA1 algorithm checksum, but only contains: [<ChecksumAlgorithm.MD2: 13>]')
                           ])
 def test_invalid_file(file_input, spdx_id, expected_message):
-    validation_messages: List[ValidationMessage] = validate_file_within_document(file_input, "SPDX-2.3", document_fixture())
+    validation_messages: List[ValidationMessage] = validate_file_within_document(file_input, "SPDX-2.3",
+                                                                                 document_fixture())
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(spdx_id=spdx_id,
@@ -59,4 +60,3 @@ def test_v2_2mandatory_fields():
     expected = [ValidationMessage(f"{field} is mandatory in SPDX-2.2", context) for field in mandatory_fields]
 
     TestCase().assertCountEqual(validation_messages, expected)
-

@@ -47,7 +47,7 @@ def validate_creation_info(creation_info: CreationInfo, spdx_version: str) -> Li
         )
 
     validation_messages.extend(validate_actors(creation_info.creators, creation_info.spdx_id))
-
-    validation_messages.extend(validate_external_document_refs(creation_info.external_document_refs, creation_info.spdx_id, spdx_version))
+    validation_messages.extend(
+        validate_external_document_refs(creation_info.external_document_refs, creation_info.spdx_id, spdx_version))
 
     return validation_messages

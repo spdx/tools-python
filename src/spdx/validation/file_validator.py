@@ -20,7 +20,8 @@ from spdx.validation.spdx_id_validators import validate_spdx_id
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_files(files: List[File], spdx_version: str, document: Optional[Document] = None) -> List[ValidationMessage]:
+def validate_files(files: List[File], spdx_version: str, document: Optional[Document] = None) -> List[
+    ValidationMessage]:
     validation_messages = []
     if document:
         for file in files:
@@ -45,7 +46,8 @@ def validate_file_within_document(file: File, spdx_version: str, document: Docum
     return validation_messages
 
 
-def validate_file(file: File, spdx_version: str, context: Optional[ValidationContext] = None) -> List[ValidationMessage]:
+def validate_file(file: File, spdx_version: str, context: Optional[ValidationContext] = None) -> List[
+    ValidationMessage]:
     validation_messages = []
     if not context:
         context = ValidationContext(spdx_id=file.spdx_id, element_type=SpdxElementType.FILE, full_element=file)

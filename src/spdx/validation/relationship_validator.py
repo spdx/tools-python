@@ -19,7 +19,8 @@ from spdx.validation.spdx_id_validators import validate_spdx_id
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_relationships(relationships: List[Relationship], spdx_version: str, document: Document) -> List[ValidationMessage]:
+def validate_relationships(relationships: List[Relationship], spdx_version: str, document: Document) -> List[
+    ValidationMessage]:
     validation_messages = []
     for relationship in relationships:
         validation_messages.extend(validate_relationship(relationship, spdx_version, document))

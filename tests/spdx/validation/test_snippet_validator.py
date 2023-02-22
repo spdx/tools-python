@@ -21,7 +21,8 @@ from tests.spdx.fixtures import document_fixture, snippet_fixture
 
 def test_valid_snippet():
     snippet = snippet_fixture()
-    validation_messages: List[ValidationMessage] = validate_snippet_within_document(snippet, "SPDX-2.3", document_fixture())
+    validation_messages: List[ValidationMessage] = validate_snippet_within_document(snippet, "SPDX-2.3",
+                                                                                    document_fixture())
 
     assert validation_messages == []
 
@@ -37,7 +38,8 @@ def test_valid_snippet():
                            "the first value of line_range must be less than or equal to the second, but is: (45, 23)")
                           ])
 def test_invalid_ranges(snippet_input, expected_message):
-    validation_messages: List[ValidationMessage] = validate_snippet_within_document(snippet_input, "SPDX-2.3", document_fixture())
+    validation_messages: List[ValidationMessage] = validate_snippet_within_document(snippet_input, "SPDX-2.3",
+                                                                                    document_fixture())
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(spdx_id=snippet_input.spdx_id,

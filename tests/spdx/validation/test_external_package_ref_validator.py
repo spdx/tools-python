@@ -76,26 +76,29 @@ from spdx.validation.validation_message import ValidationMessage, ValidationCont
                           ])
 def test_valid_external_package_ref(category, reference_type, locator):
     external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
-    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, "parent_id", "SPDX-2.3")
+    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, "parent_id",
+                                                                                 "SPDX-2.3")
 
     assert validation_messages == []
 
 
 @pytest.mark.parametrize("category, reference_type, locator, expected_message",
                          [(
-                          ExternalPackageRefCategory.SECURITY, "cpe22Typo", "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-                          "externalPackageRef type in category SECURITY must be one of ['cpe22Type', 'cpe23Type', 'advisory', 'fix', 'url', 'swid'], but is: cpe22Typo"),
-                          (ExternalPackageRefCategory.PACKAGE_MANAGER, "nugat",
-                           "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-                           "externalPackageRef type in category PACKAGE_MANAGER must be one of ['maven-central', 'npm', 'nuget', 'bower', 'purl'], but is: nugat"),
-                          (ExternalPackageRefCategory.PERSISTENT_ID, "git-oid",
-                           "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-                           "externalPackageRef type in category PERSISTENT_ID must be one of ['swh', 'gitoid'], but is: git-oid")
-                          ])
+                             ExternalPackageRefCategory.SECURITY, "cpe22Typo",
+                             "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
+                             "externalPackageRef type in category SECURITY must be one of ['cpe22Type', 'cpe23Type', 'advisory', 'fix', 'url', 'swid'], but is: cpe22Typo"),
+                             (ExternalPackageRefCategory.PACKAGE_MANAGER, "nugat",
+                              "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
+                              "externalPackageRef type in category PACKAGE_MANAGER must be one of ['maven-central', 'npm', 'nuget', 'bower', 'purl'], but is: nugat"),
+                             (ExternalPackageRefCategory.PERSISTENT_ID, "git-oid",
+                              "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
+                              "externalPackageRef type in category PERSISTENT_ID must be one of ['swh', 'gitoid'], but is: git-oid")
+                         ])
 def test_invalid_external_package_ref_types(category, reference_type, locator, expected_message):
     external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
     parent_id = "SPDXRef-Package"
-    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id, "SPDX-2.3")
+    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id,
+                                                                                 "SPDX-2.3")
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(parent_id=parent_id,
@@ -145,7 +148,8 @@ def test_invalid_external_package_ref_types(category, reference_type, locator, e
 def test_invalid_external_package_ref_locators(category, reference_type, locator, expected_message):
     external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
     parent_id = "SPDXRef-Package"
-    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id, "SPDX-2.3")
+    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id,
+                                                                                 "SPDX-2.3")
 
     expected = ValidationMessage(expected_message,
                                  ValidationContext(parent_id=parent_id,
@@ -167,7 +171,8 @@ def test_invalid_external_package_ref_locators(category, reference_type, locator
 def test_v2_3only_external_package_ref_types(category, reference_type, locator):
     external_package_ref = ExternalPackageRef(category, reference_type, locator, "externalPackageRef comment")
     parent_id = "SPDXRef-Package"
-    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id, "SPDX-2.2")
+    validation_messages: List[ValidationMessage] = validate_external_package_ref(external_package_ref, parent_id,
+                                                                                 "SPDX-2.2")
 
     expected = ValidationMessage(f'externalPackageRef type "{reference_type}" is not supported in SPDX-2.2',
                                  ValidationContext(parent_id=parent_id,

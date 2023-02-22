@@ -37,7 +37,8 @@ def validate_packages(packages: List[Package], spdx_version: str, document: Opti
     return validation_messages
 
 
-def validate_package_within_document(package: Package, spdx_version: str, document: Document) -> List[ValidationMessage]:
+def validate_package_within_document(package: Package, spdx_version: str, document: Document) -> List[
+    ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(spdx_id=package.spdx_id, parent_id=document.creation_info.spdx_id,
                                 element_type=SpdxElementType.PACKAGE, full_element=package)
@@ -108,7 +109,8 @@ def validate_package(package: Package, spdx_version: str, context: Optional[Vali
 
     validation_messages.extend(validate_license_expression(package.license_declared))
 
-    validation_messages.extend(validate_external_package_refs(package.external_references, package.spdx_id, spdx_version))
+    validation_messages.extend(
+        validate_external_package_refs(package.external_references, package.spdx_id, spdx_version))
 
     if spdx_version == "SPDX-2.2":
         if package.primary_package_purpose is not None:
