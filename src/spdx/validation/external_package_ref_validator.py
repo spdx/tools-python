@@ -14,7 +14,7 @@ from typing import List, Dict
 import uritools
 
 from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
-from spdx.validation.uri_validators import validate_url, validate_uri
+from spdx.validation.uri_validators import validate_url
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 CPE22TYPE_REGEX = r'^c[pP][eE]:/[AHOaho]?(:[A-Za-z0-9._\-~%]*){0,6}$'
@@ -40,8 +40,8 @@ TYPE_TO_REGEX: Dict[str, str] = {
 }
 
 
-def validate_external_package_refs(external_package_refs: List[ExternalPackageRef], parent_id: str, spdx_version: str) -> List[
-    ValidationMessage]:
+def validate_external_package_refs(external_package_refs: List[ExternalPackageRef], parent_id: str,
+                                   spdx_version: str) -> List[ValidationMessage]:
     validation_messages = []
     for external_package_ref in external_package_refs:
         validation_messages.extend(validate_external_package_ref(external_package_ref, parent_id, spdx_version))
@@ -49,7 +49,8 @@ def validate_external_package_refs(external_package_refs: List[ExternalPackageRe
     return validation_messages
 
 
-def validate_external_package_ref(external_package_ref: ExternalPackageRef, parent_id: str, spdx_version: str) -> List[ValidationMessage]:
+def validate_external_package_ref(external_package_ref: ExternalPackageRef, parent_id: str, spdx_version: str) -> List[
+    ValidationMessage]:
     validation_messages = []
     context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.EXTERNAL_PACKAGE_REF,
                                 full_element=external_package_ref)

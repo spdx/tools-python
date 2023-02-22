@@ -70,7 +70,8 @@ def test_document_describes_at_least_one_element(relationships):
 
 
 def test_document_does_not_describe_an_element():
-    document = document_fixture(relationships=[Relationship("SPDXRef-Package", RelationshipType.DESCRIBES, "SPDXRef-File")])
+    document = document_fixture(
+        relationships=[Relationship("SPDXRef-Package", RelationshipType.DESCRIBES, "SPDXRef-File")])
     validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
 
     assert validation_messages == [ValidationMessage(
@@ -81,7 +82,8 @@ def test_document_does_not_describe_an_element():
 
 def test_duplicated_spdx_ids():
     document = document_fixture(
-        files=[file_fixture(spdx_id="SPDXRef-File"), file_fixture(spdx_id="SPDXRef-2"), file_fixture(spdx_id="SPDXRef-3")],
+        files=[file_fixture(spdx_id="SPDXRef-File"), file_fixture(spdx_id="SPDXRef-2"),
+               file_fixture(spdx_id="SPDXRef-3")],
         packages=[package_fixture(spdx_id="SPDXRef-2"), package_fixture(spdx_id="SPDXRef-DOCUMENT")],
         snippets=[snippet_fixture(spdx_id="SPDXRef-2"), snippet_fixture(spdx_id="SPDXRef-3")])
 

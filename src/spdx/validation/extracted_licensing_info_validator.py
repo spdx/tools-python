@@ -17,7 +17,8 @@ from spdx.validation.uri_validators import validate_url
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_extracted_licensing_infos(extracted_licensing_infos: Optional[List[ExtractedLicensingInfo]]) -> List[ValidationMessage]:
+def validate_extracted_licensing_infos(extracted_licensing_infos: Optional[List[ExtractedLicensingInfo]]) -> List[
+    ValidationMessage]:
     validation_messages = []
     for extracted_licensing_info in extracted_licensing_infos:
         validation_messages.extend(validate_extracted_licensing_info(extracted_licensing_info))

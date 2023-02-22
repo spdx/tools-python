@@ -19,7 +19,8 @@ from spdx.validation.spdx_id_validators import validate_spdx_id
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_snippets(snippets: List[Snippet], spdx_version: str, document: Optional[Document] = None) -> List[ValidationMessage]:
+def validate_snippets(snippets: List[Snippet], spdx_version: str, document: Optional[Document] = None) -> List[
+    ValidationMessage]:
     validation_messages = []
     if document:
         for snippet in snippets:
@@ -31,7 +32,8 @@ def validate_snippets(snippets: List[Snippet], spdx_version: str, document: Opti
     return validation_messages
 
 
-def validate_snippet_within_document(snippet: Snippet, spdx_version: str, document: Document) -> List[ValidationMessage]:
+def validate_snippet_within_document(snippet: Snippet, spdx_version: str, document: Document) -> List[
+    ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(spdx_id=snippet.spdx_id, parent_id=document.creation_info.spdx_id,
                                 element_type=SpdxElementType.SNIPPET, full_element=snippet)
@@ -49,7 +51,8 @@ def validate_snippet_within_document(snippet: Snippet, spdx_version: str, docume
     return validation_messages
 
 
-def validate_snippet(snippet: Snippet, spdx_version: str, context: Optional[ValidationContext] = None) -> List[ValidationMessage]:
+def validate_snippet(snippet: Snippet, spdx_version: str, context: Optional[ValidationContext] = None) -> List[
+    ValidationMessage]:
     validation_messages = []
     if not context:
         context = ValidationContext(spdx_id=snippet.spdx_id, element_type=SpdxElementType.SNIPPET, full_element=snippet)

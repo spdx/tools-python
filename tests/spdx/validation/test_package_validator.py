@@ -61,9 +61,11 @@ def test_invalid_package(package_input, expected_message):
 
 @pytest.mark.parametrize("relationships",
                          [[Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "SPDXRef-File1")],
-                          [Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "DocumentRef-external:SPDXRef-File")],
+                          [Relationship("SPDXRef-Package", RelationshipType.CONTAINS,
+                                        "DocumentRef-external:SPDXRef-File")],
                           [Relationship("SPDXRef-File2", RelationshipType.CONTAINED_BY, "SPDXRef-Package")],
-                          [Relationship("DocumentRef-external:SPDXRef-File", RelationshipType.CONTAINED_BY, "SPDXRef-Package")],
+                          [Relationship("DocumentRef-external:SPDXRef-File", RelationshipType.CONTAINED_BY,
+                                        "SPDXRef-Package")],
                           [Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "SPDXRef-File2"),
                            Relationship("SPDXRef-File1", RelationshipType.CONTAINED_BY, "SPDXRef-Package")]])
 def test_invalid_package_with_contains(relationships):
