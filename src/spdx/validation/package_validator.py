@@ -24,20 +24,20 @@ from spdx.validation.uri_validators import validate_url, validate_download_locat
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_packages(packages: List[Package], version: str, document: Optional[Document] = None) -> List[
+def validate_packages(packages: List[Package], spdx_version: str, document: Optional[Document] = None) -> List[
     ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     if document:
         for package in packages:
-            validation_messages.extend(validate_package_within_document(package, version, document))
+            validation_messages.extend(validate_package_within_document(package, spdx_version, document))
     else:
         for package in packages:
-            validation_messages.extend(validate_package(package, version))
+            validation_messages.extend(validate_package(package, spdx_version))
 
     return validation_messages
 
 
-def validate_package_within_document(package: Package, version: str, document: Document) -> List[ValidationMessage]:
+def validate_package_within_document(package: Package, spdx_version: str, document: Document) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(spdx_id=package.spdx_id, parent_id=document.creation_info.spdx_id,
                                 element_type=SpdxElementType.PACKAGE, full_element=package)
@@ -60,12 +60,12 @@ def validate_package_within_document(package: Package, version: str, document: D
                     context)
             )
 
-    validation_messages.extend(validate_package(package, version, context))
+    validation_messages.extend(validate_package(package, spdx_version, context))
 
     return validation_messages
 
 
-def validate_package(package: Package, version: str, context: Optional[ValidationContext] = None) -> List[
+def validate_package(package: Package, spdx_version: str, context: Optional[ValidationContext] = None) -> List[
     ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     if not context:
@@ -91,7 +91,7 @@ def validate_package(package: Package, version: str, context: Optional[Validatio
         else:
             validation_messages.extend(validate_verification_code(verification_code, package.spdx_id))
 
-    validation_messages.extend(validate_checksums(package.checksums, package.spdx_id, version))
+    validation_messages.extend(validate_checksums(package.checksums, package.spdx_id, spdx_version))
 
     validation_messages.extend(validate_license_expression(package.license_concluded))
 
@@ -110,7 +110,7 @@ def validate_package(package: Package, version: str, context: Optional[Validatio
 
     validation_messages.extend(validate_external_package_refs(package.external_references, package.spdx_id))
 
-    if version == "SPDX-2.2":
+    if spdx_version == "SPDX-2.2":
         if package.primary_package_purpose is not None:
             validation_messages.append(
                 ValidationMessage(f"primary_package_purpose is not supported in SPDX-2.2", context))
