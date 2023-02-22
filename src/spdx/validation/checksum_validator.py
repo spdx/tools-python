@@ -59,10 +59,7 @@ def validate_checksum(checksum: Checksum, parent_id: str, spdx_version: str) -> 
                                                     ChecksumAlgorithm.BLAKE2B_384,
                                                     ChecksumAlgorithm.BLAKE2B_256,
                                                     ChecksumAlgorithm.ADLER32]:
-        validation_messages.append(
-            ValidationMessage(
-                f"{checksum.algorithm.name} is not supported in SPDX-2.2", context)
-        )
+        return [ValidationMessage(f"{checksum.algorithm.name} is not supported in SPDX-2.2", context)]
 
     if not re.match("^[0-9a-f]{" + algorithm_length[algorithm] + "}$", checksum.value):
         if algorithm == ChecksumAlgorithm.BLAKE3:

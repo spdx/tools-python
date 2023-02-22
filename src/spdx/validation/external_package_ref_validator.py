@@ -64,6 +64,9 @@ def validate_external_package_ref(external_package_ref: ExternalPackageRef, pare
                 f"externalPackageRef locator in category OTHER must contain no spaces, but is: {locator}",
                 context))
 
+    elif spdx_version == "SPDX-2.2" and reference_type in ["advisory", "fix", "url", "swid"]:
+        return [ValidationMessage(f'externalPackageRef type "{reference_type}" is not supported in SPDX-2.2', context)]
+
     elif reference_type not in CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES[category]:
         validation_messages.append(ValidationMessage(
             f"externalPackageRef type in category {category.name} must be one of {CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES[category]}, but is: {reference_type}",
@@ -83,11 +86,6 @@ def validate_external_package_ref(external_package_ref: ExternalPackageRef, pare
 
     else:
         validation_messages.extend(validate_against_regex(locator, reference_type, context))
-
-    if spdx_version == "SPDX-2.2" and reference_type in ["advisory", "fix", "url", "swid"]:
-        validation_messages.append(
-            ValidationMessage(f'externalPackageRef type "{reference_type}" is not supported in SPDX-2.2', context)
-        )
 
     return validation_messages
 
