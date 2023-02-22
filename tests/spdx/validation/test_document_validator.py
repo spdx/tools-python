@@ -40,6 +40,8 @@ def test_valid_document():
                            'only SPDX versions "SPDX-2.2" and "SPDX-2.3" are supported, but the document\'s spdx_version is: SPDX2.3'),
                           (creation_info_fixture(spdx_version="SPDX2.3"), "SPDX2.3",
                            'only SPDX versions "SPDX-2.2" and "SPDX-2.3" are supported, but the document\'s spdx_version is: SPDX2.3'),
+                          (creation_info_fixture(spdx_version="SPDX-2.1"), "SPDX-2.1",
+                           'only SPDX versions "SPDX-2.2" and "SPDX-2.3" are supported, but the document\'s spdx_version is: SPDX-2.1'),
                           ])
 def test_spdx_version_handling(creation_info: CreationInfo, version_input: str, expected_message: Optional[str]):
     document: Document = document_fixture(creation_info=creation_info)
