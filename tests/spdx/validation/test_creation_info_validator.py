@@ -20,7 +20,7 @@ from tests.spdx.fixtures import creation_info_fixture
 
 def test_valid_creation_info():
     creation_info = creation_info_fixture()
-    validation_messages: List[ValidationMessage] = validate_creation_info(creation_info)
+    validation_messages: List[ValidationMessage] = validate_creation_info(creation_info, "SPDX-2.3")
 
     assert validation_messages == []
 
@@ -35,7 +35,7 @@ def test_valid_creation_info():
            "document_namespace must be a valid URI specified in RFC-3986 and must contain no fragment (#), but is: some_namespace"),
           ])
 def test_invalid_creation_info(creation_info_input, expected_message, spdx_id):
-    validation_messages: List[ValidationMessage] = validate_creation_info(creation_info_input)
+    validation_messages: List[ValidationMessage] = validate_creation_info(creation_info_input, "SPDX-2.3")
 
     expected = ValidationMessage(expected_message, ValidationContext(spdx_id, None, SpdxElementType.DOCUMENT))
 

@@ -18,16 +18,16 @@ from spdx.validation.uri_validators import validate_uri
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_external_document_refs(external_document_refs: List[ExternalDocumentRef], parent_id: str) -> List[
+def validate_external_document_refs(external_document_refs: List[ExternalDocumentRef], parent_id: str, spdx_version: str) -> List[
     ValidationMessage]:
     validation_messages = []
     for external_document_ref in external_document_refs:
-        validation_messages.extend(validate_external_document_ref(external_document_ref, parent_id))
+        validation_messages.extend(validate_external_document_ref(external_document_ref, parent_id, spdx_version))
 
     return validation_messages
 
 
-def validate_external_document_ref(external_document_ref: ExternalDocumentRef, parent_id: str) -> List[ValidationMessage]:
+def validate_external_document_ref(external_document_ref: ExternalDocumentRef, parent_id: str, spdx_version: str) -> List[ValidationMessage]:
     validation_messages = []
     context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.EXTERNAL_DOCUMENT_REF,
                                 full_element=external_document_ref)
@@ -47,6 +47,6 @@ def validate_external_document_ref(external_document_ref: ExternalDocumentRef, p
             )
         )
 
-    validation_messages.extend(validate_checksum(external_document_ref.checksum, parent_id))
+    validation_messages.extend(validate_checksum(external_document_ref.checksum, parent_id, spdx_version))
 
     return validation_messages
