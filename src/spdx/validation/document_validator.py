@@ -34,10 +34,10 @@ def validate_full_spdx_document(document: Document, spdx_version: str = None) ->
     if not spdx_version:
         spdx_version = document_version
 
-    if not re.match(r"^SPDX-\d+.\d+$", document_version):
+    if document_version not in ["SPDX-2.2", "SPDX-2.3"]:
         validation_messages.append(
             ValidationMessage(
-                f'the document\'s spdx_version must be of the form "SPDX-[major].[minor]" but is: {document_version}',
+                f'only SPDX versions "SPDX-2.2" and "SPDX-2.3" are supported, but the document\'s spdx_version is: {document_version}',
                 context
             )
         )
