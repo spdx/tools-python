@@ -27,7 +27,7 @@ from spdx.writer.write_anything import write_file
 @click.command()
 @click.option("--infile", "-i", help="The file containing the document to be validated or converted.")
 @click.option("--outfile", "-o", help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion).")
-@click.option("--version", help='The SPDX version to be used during parsing and validation (format "SPDX-2.3"). Will be read from the document if not provided.', default=None)
+@click.option("--version", help='The SPDX version to be used during parsing and validation ("SPDX-2.2" or "SPDX-2.3"). Will be read from the document if not provided.', default=None)
 @click.option("--novalidation", is_flag=True, help="Don't validate the provided document.")
 def main(infile: str, outfile: str, version: str, novalidation: bool):
     """
@@ -44,6 +44,11 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
         if not novalidation:
             if not version:
                 version = document.creation_info.spdx_version
+
+            if not version in ["SPDX-2.2", "SPDX-2.3"]:
+                print(f"This tool only supports SPDX versions SPDX-2.2 and SPDX-2.3, but got: {version}",
+                      file=sys.stderr)
+                sys.exit(1)
 
             validation_messages: List[ValidationMessage] = validate_full_spdx_document(document, version)
             if validation_messages:
