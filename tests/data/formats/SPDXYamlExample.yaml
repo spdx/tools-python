@@ -13,7 +13,7 @@ Document:
       - 'Tool: SourceAuditor-V1.2'
       - 'Organization: Source Auditor Inc.'
       - 'Person: Gary O''Neall'
-    licenseListVersion: '3.6'
+    licenseListVersion: '3.20'
   dataLicense: CC0-1.0
   documentDescribes:
     - SPDXRef-Package
