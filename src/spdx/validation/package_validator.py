@@ -61,6 +61,21 @@ def validate_package_within_document(package: Package, spdx_version: str, docume
                     context)
             )
 
+    validation_messages.extend(validate_license_expression(package.license_concluded, document, package.spdx_id))
+
+    license_info_from_files = package.license_info_from_files
+    if license_info_from_files:
+        if not package.files_analyzed:
+            validation_messages.append(
+                ValidationMessage(
+                    f"license_info_from_files must be None if files_analyzed is False, but is: {license_info_from_files}",
+                    context)
+            )
+        else:
+            validation_messages.extend(validate_license_expressions(license_info_from_files, document, package.spdx_id))
+
+    validation_messages.extend(validate_license_expression(package.license_declared, document, package.spdx_id))
+
     validation_messages.extend(validate_package(package, spdx_version, context))
 
     return validation_messages
@@ -93,21 +108,6 @@ def validate_package(package: Package, spdx_version: str, context: Optional[Vali
             validation_messages.extend(validate_verification_code(verification_code, package.spdx_id))
 
     validation_messages.extend(validate_checksums(package.checksums, package.spdx_id, spdx_version))
-
-    validation_messages.extend(validate_license_expression(package.license_concluded))
-
-    license_info_from_files = package.license_info_from_files
-    if license_info_from_files:
-        if not package.files_analyzed:
-            validation_messages.append(
-                ValidationMessage(
-                    f"license_info_from_files must be None if files_analyzed is False, but is: {license_info_from_files}",
-                    context)
-            )
-        else:
-            validation_messages.extend(validate_license_expressions(license_info_from_files))
-
-    validation_messages.extend(validate_license_expression(package.license_declared))
 
     validation_messages.extend(
         validate_external_package_refs(package.external_references, package.spdx_id, spdx_version))

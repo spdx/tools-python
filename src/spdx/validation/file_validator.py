@@ -41,6 +41,10 @@ def validate_file_within_document(file: File, spdx_version: str, document: Docum
     for message in validate_spdx_id(file.spdx_id, document):
         validation_messages.append(ValidationMessage(message, context))
 
+    validation_messages.extend(validate_license_expression(file.license_concluded, document, file.spdx_id))
+
+    validation_messages.extend(validate_license_expressions(file.license_info_in_file, document, file.spdx_id))
+
     validation_messages.extend(validate_file(file, spdx_version, context))
 
     return validation_messages
@@ -66,10 +70,6 @@ def validate_file(file: File, spdx_version: str, context: Optional[ValidationCon
         )
 
     validation_messages.extend(validate_checksums(file.checksums, file.spdx_id, spdx_version))
-
-    validation_messages.extend(validate_license_expression(file.license_concluded))
-
-    validation_messages.extend(validate_license_expressions(file.license_info_in_file))
 
     if spdx_version == "SPDX-2.2":
         if file.license_concluded is None:
