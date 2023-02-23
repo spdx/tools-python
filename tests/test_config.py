@@ -21,7 +21,7 @@ class TestLicenseList(TestCase):
 
     def test_load_license_list(self):
         version, licenses_map = config.load_license_list(config._licenses)
-        assert version == ('3', '6')
+        assert version == ('3', '20')
         # Test some instances in licenses_map
         assert licenses_map['MIT License'] == 'MIT'
         assert licenses_map['MIT'] == 'MIT License'
@@ -31,11 +31,11 @@ class TestLicenseList(TestCase):
         assert licenses_map['GPL-3.0-only'] == 'GNU General Public License v3.0 only'
 
     def test_config_license_list_version_constant(self):
-        assert config.LICENSE_LIST_VERSION == Version(major=3, minor=6)
+        assert config.LICENSE_LIST_VERSION == Version(major=3, minor=20)
 
     def test_load_exception_list(self):
         version, exception_map = config.load_exception_list(config._exceptions)
-        assert version == ('3', '6')
+        assert version == ('3', '20')
         # Test some instances in exception_map
         assert exception_map['Bison exception 2.2'] == 'Bison-exception-2.2'
         assert exception_map['Bison-exception-2.2'] == 'Bison exception 2.2'
