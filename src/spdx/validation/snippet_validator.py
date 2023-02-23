@@ -46,6 +46,10 @@ def validate_snippet_within_document(snippet: Snippet, spdx_version: str, docume
     for message in messages:
         validation_messages.append(ValidationMessage(message, context))
 
+    validation_messages.extend(validate_license_expression(snippet.license_concluded, document, snippet.spdx_id))
+
+    validation_messages.extend(validate_license_expressions(snippet.license_info_in_snippet, document, snippet.spdx_id))
+
     validation_messages.extend(validate_snippet(snippet, spdx_version, context))
 
     return validation_messages
@@ -85,10 +89,6 @@ def validate_snippet(snippet: Snippet, spdx_version: str, context: Optional[Vali
                     f"the first value of line_range must be less than or equal to the second, but is: {snippet.line_range}",
                     context)
             )
-
-    validation_messages.extend(validate_license_expression(snippet.license_concluded))
-
-    validation_messages.extend(validate_license_expressions(snippet.license_info_in_snippet))
 
     if spdx_version == "SPDX-2.2":
         if snippet.license_concluded is None:
