@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import sys
+import logging
 from datetime import datetime
 from typing import Any, Optional, Dict
 
@@ -59,8 +59,7 @@ def add_namespace_to_spdx_id(spdx_id: str, doc_namespace: str, external_doc_name
     if ":" in spdx_id:
         external_doc_ref_id = spdx_id.split(":")[0]
         if external_doc_ref_id not in external_doc_namespaces.keys():
-            print(f"No namespace for external document reference with id {external_doc_ref_id} provided.",
-                  file=sys.stderr)
+            logging.warning(f"No namespace for external document reference with id {external_doc_ref_id} provided.")
             return spdx_id
         return f"{external_doc_namespaces[external_doc_ref_id]}#{spdx_id.split(':')[1]}"
 
