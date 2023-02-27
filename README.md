@@ -7,11 +7,13 @@ CI status (Linux, macOS and Windows): [![Install and Test][1]][2]
 [2]: https://github.com/spdx/tools-python/actions/workflows/install_and_test.yml
 
 
-# CURRENT STATE
+# Current state
 
-A major refactoring of large parts of the codebase is currently in progress. It is expected that functionality on `main`
-is limited during this process. Please check out
-the [latest release](https://github.com/spdx/tools-python/releases/tag/v0.7.0) if you are looking for a working version.
+This repository was subject to a major refactoring recently to get ready for the upcoming SPDX v3.0 release.
+Therefore, we'd like to encourage you to post any and all issues you find at https://github.com/spdx/tools-python/issues.  
+If you prefer a version that has been longer in use, please check out
+the [latest release](https://github.com/spdx/tools-python/releases/tag/v0.7.0).
+Note, though, that this will only receive bug fixes but no new features.
 
 # Information
 
@@ -34,7 +36,7 @@ This library implements SPDX parsers, convertors, validators and handlers in Pyt
 
 # Planned features
 
-* up-to-date support of SPDX v3.0 as soon as it releases
+* up-to-date support of SPDX v3.0 as soon as it is released
 
 # Installation
 
@@ -45,7 +47,7 @@ instead of `bin`.
 
 # How to use
 
-## Command-line usage:
+## Command-line usage
 
 1. **PARSING/VALIDATING** (for parsing any format):
 
@@ -68,12 +70,12 @@ instead of `bin`.
   
 * For help use `pyspdxtools --help`
 
-## Library usage:
+## Library usage
 1. **DATA MODEL**
   * The `src.spdx.model` package constitutes the internal SPDX v2.3 data model (v2.2 is a simply a subset of this).
   * SPDX objects are implemented via `@dataclass_with_properties`, a custom extension of `@dataclass`.
     * Each class starts with a list of its properties and their possible types. When no default value is provided, the property is mandatory and must be set during initialization.
-    * Type checking is enforced from the type hints when initializing a new instance or setting/getting a property on an instance
+    * Using the type hints, type checking is enforced when initializing a new instance or setting/getting a property on an instance
       (wrong types will raise `ConstructorTypeError` or `TypeError`, respectively). This makes it easy to catch invalid properties early and only construct valid documents.
     * Note: in-place manipulations like `list.append(item)` will circumvent the type checking (a `TypeError` will still be raised when reading `list` again). We recommend using `list = list + [item]` instead.
   * The main entry point of an SPDX document is the `Document` class, which links to all other classes.
@@ -121,7 +123,7 @@ for validation_message in validation_messages:
 
 # if there are no validation messages, the document is valid and we can safely serialize it without validating again
 if not validation_messages:
-    write_file(document, "new_spdx_document.rdf")
+    write_file(document, "new_spdx_document.rdf", validate=False)
 ```
 
 # Dependencies
@@ -132,6 +134,7 @@ if not validation_messages:
 * click: https://pypi.org/project/click/ for creating the CLI interface.
 * typeguard: https://pypi.org/project/typeguard/ for type checking.
 * uritools: https://pypi.org/project/uritools/ for validation of URIs.
+* license-expression: https://pypi.org/project/license-expression/ for handling SPDX license expressions.
 
 # Support
 
