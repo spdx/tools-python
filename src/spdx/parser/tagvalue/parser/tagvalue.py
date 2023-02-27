@@ -26,13 +26,13 @@ from spdx.model.package import Package, PackageVerificationCode, PackagePurpose,
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.snippet import Snippet
 from spdx.model.version import Version
-from spdx.parser.jsonlikedict.actor_parser import ActorParser
+from spdx.parser.actor_parser import ActorParser
 
 from spdx.model.document import Document, CreationInfo
 from spdx.model.file import File, FileType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from spdx.parser.jsonlikedict.dict_parsing_functions import construct_or_raise_parsing_error
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.logger import Logger
 from spdx.parser.tagvalue.lexer.tagvalue import SPDXLexer
 from spdx.parser.tagvalue.parser.helper_methods import grammar_rule, str_from_text
@@ -891,9 +891,12 @@ class Parser(object):
     def parse(self, text):
         self.yacc.parse(text, lexer=self.lex)
         self.construct_current_element()
-        document = Document(creation_info=CreationInfo(**self.creation_info), **self.elements_build)
+        raise_parsing_error_if_logger_has_messages(self.logger)
+        creation_info = construct_or_raise_parsing_error(CreationInfo, self.creation_info)
+        self.elements_build["creation_info"] = creation_info
+        document = construct_or_raise_parsing_error(Document, self.elements_build)
         print(self.logger.get_messages())
-        return document, self.logger.get_messages()
+        return document
 
     def construct_current_element(self):
         if "class" in self.current_element:
