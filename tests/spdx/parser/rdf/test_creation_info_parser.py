@@ -60,13 +60,15 @@ def test_parse_namespace_and_spdx_id():
                           ([(URIRef("docNamespace1"), RDF.type, SPDX_NAMESPACE.SpdxDocument),
                             (URIRef("docNamespace2"), RDF.type, SPDX_NAMESPACE.SpdxDocument)],
                            "Multiple SpdxDocuments found")])
-def test_parse_namespace_and_spdx_id_with_system_exit(triples: List[Tuple[Node, Node, Node]], error_message: str):
+def test_parse_namespace_and_spdx_id_with_system_exit(triples: List[Tuple[Node, Node, Node]], error_message: str, caplog):
     graph = Graph()
     for triple in triples:
         graph = graph.add(triple)
 
-    with pytest.raises(SystemExit, match=error_message):
+    with pytest.raises(SystemExit):
         parse_namespace_and_spdx_id(graph)
+
+    assert error_message in caplog.text
 
 
 def test_parse_external_document_refs():
