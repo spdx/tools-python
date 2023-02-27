@@ -8,6 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import logging
 import sys
 from typing import Tuple
 from urllib.parse import urldefrag
@@ -72,19 +73,23 @@ def parse_namespace_and_spdx_id(graph: Graph) -> (str, str):
     try:
         subject = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.SpdxDocument, any=False)
     except UniquenessError:
-        sys.exit("Multiple SpdxDocuments found, can't parse rdf file.")
+        logging.error("Multiple SpdxDocuments found, can't parse rdf file.")
+        sys.exit(1)
 
     if not subject:
-        sys.exit("No SpdxDocument found, can't parse rdf file.")
+        logging.error("No SpdxDocument found, can't parse rdf file.")
+        sys.exit(1)
     if not "#" in subject:
-        sys.exit("No '#' found in the URI of SpdxDocument, "
-                 "the URI for the SpdxDocument should be the namespace appended by '#SPDXRef-DOCUMENT.")
+        logging.error("No '#' found in the URI of SpdxDocument, "
+                      "the URI for the SpdxDocument should be the namespace appended by '#SPDXRef-DOCUMENT.")
+        sys.exit(1)
 
     namespace, spdx_id = urldefrag(subject)
 
     if not namespace:
-        sys.exit(
+        logging.error(
             "No namespace found, the URI for the SpdxDocument should be the namespace appended by '#SPDXRef-DOCUMENT.")
+        sys.exit(1)
 
     if not spdx_id:
         spdx_id = None
