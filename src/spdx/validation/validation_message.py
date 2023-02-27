@@ -26,7 +26,6 @@ class SpdxElementType(Enum):
     PACKAGE = auto()
     FILE = auto()
     SNIPPET = auto()
-    LICENSE = auto()
     ANNOTATION = auto()
     RELATIONSHIP = auto()
     EXTRACTED_LICENSING_INFO = auto()

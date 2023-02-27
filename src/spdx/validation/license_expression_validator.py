@@ -38,7 +38,7 @@ def validate_license_expression(license_expression: Optional[
     if license_expression in [SpdxNoAssertion(), SpdxNone(), None]:
         return []
 
-    if context is None:
+    if not context:
         context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION, full_element=license_expression)
 
     validation_messages = []
@@ -55,14 +55,16 @@ def validate_license_expression(license_expression: Optional[
     try:
         get_spdx_licensing().parse(str(license_expression), validate=True, strict=True)
     except ExpressionParseError as err:
+        # This error is raised when an exception symbol is used as a license symbol and vice versa.
+        # So far, it only catches the first such error in the provided string.
         validation_messages.append(
             ValidationMessage(
                 f"{err}. for license_expression: {license_expression}",
                 context)
         )
     except ExpressionError:
-        # This happens for invalid symbols but the error provides only a string of these. On the other hand,
-        # get_spdx_licensing().validate() gives an actual list of invalid symbols, so this is handled above.
+        # This error is raised for invalid symbols within the license_expression, but it provides only a string of these.
+        # On the other hand, get_spdx_licensing().validate() gives an actual list of invalid symbols, so this is handled above.
         pass
 
     return validation_messages
