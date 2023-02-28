@@ -114,11 +114,11 @@ class BaseParser(object):
         NONE, NOASSERTION or UNKNOWN if so returns proper model.
         else returns value
         """
-        if value == self.spdx_namespace.none:
+        if value == self.spdx_namespace.none or str(value) == "NONE":
             return utils.SPDXNone()
-        elif value == self.spdx_namespace.noassertion:
+        elif value == self.spdx_namespace.noassertion or str(value) == "NOASSERTION":
             return utils.NoAssert()
-        elif value == self.spdx_namespace.unknown:
+        elif value == self.spdx_namespace.unknown or str(value) == "UNKNOWN":
             return utils.UnKnown()
         else:
             return str(value)
@@ -561,10 +561,11 @@ class PackageParser(LicenseParser):
     def p_pkg_originator(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):
             try:
-                if o == "NOASSERTION":
-                    self.builder.set_pkg_originator(self.doc, utils.NoAssert())
+                originator = self.to_special_value(o)
+                if isinstance(originator, (utils.NoAssert, utils.SPDXNone, utils.UnKnown)):
+                    self.builder.set_pkg_originator(self.doc, originator)
                 else:
-                    ent = self.builder.create_entity(self.doc, str(o))
+                    ent = self.builder.create_entity(self.doc, originator)
                     self.builder.set_pkg_originator(self.doc, ent)
             except CardinalityError:
                 self.more_than_one_error("Package originator")
@@ -575,10 +576,11 @@ class PackageParser(LicenseParser):
     def p_pkg_suppl(self, p_term, predicate):
         for _s, _p, o in self.graph.triples((p_term, predicate, None)):
             try:
-                if o == "NOASSERTION":
-                    self.builder.set_pkg_supplier(self.doc, utils.NoAssert())
+                supplier = self.to_special_value(o)
+                if isinstance(supplier, (utils.NoAssert, utils.SPDXNone, utils.UnKnown)):
+                    self.builder.set_pkg_supplier(self.doc, supplier)
                 else:
-                    ent = self.builder.create_entity(self.doc, str(o))
+                    ent = self.builder.create_entity(self.doc, supplier)
                     self.builder.set_pkg_supplier(self.doc, ent)
             except CardinalityError:
                 self.more_than_one_error("Package supplier")

@@ -313,6 +313,8 @@ class TestParserUtils(object):
         """
         if entity is None:
             return None
+        if isinstance(entity, utils.NoAssert):
+            return entity.to_value()
         entity_dict = OrderedDict(name=entity.name)
 
         if isinstance(entity, spdx.creationinfo.Tool):
