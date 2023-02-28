@@ -47,11 +47,17 @@ def test_relationship(parser, relationship_str, expected_relationship):
 
 
 @pytest.mark.parametrize("relationship_str, expected_message",
-                         [("Relationship: spdx_id DESCRIBES", "Relationship couldn't be split"),
-                          ("Relationship: spdx_id IS spdx_id", "Invalid RelationshipType IS. Line: 1"),
+                         [("Relationship: spdx_id DESCRIBES",
+                           [['Error while parsing Relationship: ["Relationship couldn\'t be split in spdx_element_id, '
+                             'relationship_type and related_spdx_element. Line: 1"]']]),
+                          ("Relationship: spdx_id IS spdx_id",
+                           [["Error while parsing Relationship: ['Invalid RelationshipType IS. Line: 1']"]]),
                           ("Relationship: spdx_id IS spdx_id\nRelationshipComment: SOURCE",
-                           "Error while parsing Relationship: Token did not match specified grammar rule. Line: 1")
+                           [["Error while parsing Relationship: ['Error while parsing Relationship: Token "
+                             "did not match specified grammar rule. Line: 1']"]])
                           ])
 def test_falsy_relationship(parser, relationship_str, expected_message):
-    with pytest.raises(SPDXParsingError, match=expected_message):
+    with pytest.raises(SPDXParsingError) as err:
         parser.parse(relationship_str)
+
+    assert err.value.get_messages() == expected_message

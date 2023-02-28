@@ -11,6 +11,7 @@
 # limitations under the License.
 
 import re
+from typing import Any
 
 from license_expression import get_spdx_licensing
 from ply import yacc
@@ -239,12 +240,12 @@ class Parser(object):
 
     @grammar_rule("extr_lic_id : LICS_ID LINE")
     def p_extr_lic_id_1(self, p):
-        self.construct_current_element()
-        self.current_element["class"] = ExtractedLicensingInfo
+        self.initialize_new_current_element(ExtractedLicensingInfo)
         self.current_element["license_id"] = p[2]
 
     @grammar_rule("extr_lic_id : LICS_ID error")
     def p_extr_lic_id_2(self, p):
+        self.initialize_new_current_element(ExtractedLicensingInfo)
         self.current_element["logger"].append(
             f"Error while parsing LicenseID: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
@@ -290,13 +291,12 @@ class Parser(object):
 
     @grammar_rule("file_name : FILE_NAME LINE")
     def p_file_name_1(self, p):
-        self.construct_current_element()
-        self.element_stack.append(p[2])
+        self.initialize_new_current_element(File)
         self.current_element["name"] = p[2]
-        self.current_element["class"] = File
 
     @grammar_rule("file_name : FILE_NAME error")
     def p_file_name_2(self, p):
+        self.initialize_new_current_element(File)
         self.current_element["logger"].append(
             f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
@@ -320,7 +320,6 @@ class Parser(object):
 
     @grammar_rule("file_cr_text : FILE_CR_TEXT line_or_no_assertion_or_none")
     def p_file_cr_text_1(self, p):
-
         self.current_element["copyright_text"] = p[2]
 
     @grammar_rule("file_cr_text : FILE_CR_TEXT error")
@@ -410,13 +409,14 @@ class Parser(object):
 
     @grammar_rule("package_name : PKG_NAME LINE")
     def p_package_name(self, p):
-        self.construct_current_element()
-        self.element_stack.push("package")
-        self.current_element["class"] = Package
+        self.initialize_new_current_element(Package)
         self.current_element["name"] = p[2]
 
     @grammar_rule("package_name : PKG_NAME error")
     def p_package_name_1(self, p):
+        self.initialize_new_current_element(Package)
+        self.construct_current_element()
+        self.current_element["class"] = Package
         self.current_element["logger"].append(
             f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
@@ -688,12 +688,12 @@ class Parser(object):
     # parsing methods for snippet
     @grammar_rule("snip_spdx_id : SNIPPET_SPDX_ID LINE")
     def p_snip_spdx_id(self, p):
-        self.construct_current_element()
-        self.current_element["class"] = Snippet
+        self.initialize_new_current_element(Snippet)
         self.current_element["spdx_id"] = p[2]
 
     @grammar_rule("snip_spdx_id : SNIPPET_SPDX_ID error")
     def p_snip_spdx_id_1(self, p):
+        self.initialize_new_current_element(Snippet)
         self.current_element["logger"].append(
             f"Error while parsing SnippetSPDXID: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
@@ -813,12 +813,15 @@ class Parser(object):
     # parsing methods for annotation
     def p_annotator_1(self, p):
         """annotator : ANNOTATOR PERSON_VALUE\n| TOOL_VALUE\n| ORG_VALUE"""
-        self.construct_current_element()
-        self.current_element["annotator"] = ActorParser.parse_actor(p[2])
-        self.current_element["class"] = Annotation
+        self.initialize_new_current_element(Annotation)
+        try:
+            self.current_element["annotator"] = ActorParser.parse_actor(p[2])
+        except SPDXParsingError as err:
+            self.current_element["logger"].append(err.get_messages())
 
     @grammar_rule("annotator : ANNOTATOR error")
     def p_annotator_2(self, p):
+        self.initialize_new_current_element(Annotation)
         self.current_element["logger"].append(
             f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
@@ -867,7 +870,7 @@ class Parser(object):
     @grammar_rule("relationship : RELATIONSHIP relationship_value RELATIONSHIP_COMMENT text_or_line\n "
                   "| RELATIONSHIP relationship_value")
     def p_relationship_1(self, p):
-        self.construct_current_element()
+        self.initialize_new_current_element(Relationship)
         try:
             spdx_element_id, relationship_type, related_spdx_element_id = p[2].split(" ")
         except ValueError:
@@ -875,7 +878,6 @@ class Parser(object):
                 f"Relationship couldn't be split in spdx_element_id, relationship_type and "
                 f"related_spdx_element. Line: {p.lineno(1)}")
             return
-        self.current_element["class"] = Relationship
         try:
             self.current_element["relationship_type"] = RelationshipType[relationship_type]
         except KeyError:
@@ -891,6 +893,7 @@ class Parser(object):
 
     @grammar_rule("relationship : RELATIONSHIP error")
     def p_relationship_2(self, p):
+        self.initialize_new_current_element(Relationship)
         self.current_element["logger"].append(
             f"Error while parsing Relationship: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
@@ -947,6 +950,12 @@ class Parser(object):
         if expected_class != self.current_element["class"]:
             raise SPDXParsingError(["Unexpected current element for value"])
         # what to do now? exit parsing
+
+    def initialize_new_current_element(self, class_name: Any):
+        if "class" in self.current_element and "spdx_id" in self.current_element:
+            self.element_stack.append({self.current_element["class"]: self.current_element["spdx_id"]})
+        self.construct_current_element()
+        self.current_element["class"] = class_name
 
 
 CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relationships", Snippet="snippets",
