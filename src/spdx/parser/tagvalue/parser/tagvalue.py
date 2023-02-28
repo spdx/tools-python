@@ -144,6 +144,7 @@ class Parser(object):
             self.creation_info["license_list_version"] = Version.from_string(p[2])
         except ValueError as err:
             self.creation_info["logger"].append(err.args[0])
+
     @grammar_rule("lics_list_ver : LIC_LIST_VER error")
     def p_lics_list_ver_2(self, p):
         self.creation_info["logger"].append(
@@ -398,7 +399,6 @@ class Parser(object):
         "file_type_value : SOURCE\n| BINARY\n| ARCHIVE\n | APPLICATION\n | AUDIO\n | IMAGE\n | FILETYPE_TEXT\n| VIDEO\n"
         " | DOCUMENTATION\n| SPDX \n| OTHER ")
     def p_file_type_value(self, p):
-
         p[0] = p[1]
 
     # parsing methods for package
@@ -947,6 +947,8 @@ class Parser(object):
         try:
             self.elements_build.setdefault(CLASS_MAPPING[class_name.__name__], []).append(
                 construct_or_raise_parsing_error(class_name, self.current_element))
+            if class_name == File:
+                self.check_for_preceding_package_and_build_contains_relationship()
         except SPDXParsingError as err:
             self.logger.append(err.get_messages())
         self.current_element = {"logger": Logger()}
@@ -961,6 +963,15 @@ class Parser(object):
             self.element_stack.append({self.current_element["class"]: self.current_element["spdx_id"]})
         self.construct_current_element()
         self.current_element["class"] = class_name
+
+    def check_for_preceding_package_and_build_contains_relationship(self):
+        file_spdx_id = self.current_element["spdx_id"]
+        if "packages" not in self.elements_build:
+            return
+        package_spdx_id = self.elements_build["packages"][-1].spdx_id
+        relationship = Relationship(package_spdx_id, RelationshipType.CONTAINS, file_spdx_id)
+        if relationship not in self.elements_build["relationships"]:
+            self.elements_build.setdefault("relationships", []).append(relationship)
 
 
 CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relationships", Snippet="snippets",
