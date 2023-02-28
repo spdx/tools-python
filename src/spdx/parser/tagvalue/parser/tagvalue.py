@@ -140,8 +140,10 @@ class Parser(object):
 
     @grammar_rule("lics_list_ver : LIC_LIST_VER LINE")
     def p_lics_list_ver_1(self, p):
-        self.creation_info["license_list_version"] = Version.from_string(p[2])
-
+        try:
+            self.creation_info["license_list_version"] = Version.from_string(p[2])
+        except ValueError as err:
+            self.creation_info["logger"].append(err.args[0])
     @grammar_rule("lics_list_ver : LIC_LIST_VER error")
     def p_lics_list_ver_2(self, p):
         self.creation_info["logger"].append(
@@ -185,7 +187,6 @@ class Parser(object):
 
     @grammar_rule("ext_doc_ref : EXT_DOC_REF DOC_REF_ID DOC_URI EXT_DOC_REF_CHECKSUM")
     def p_ext_doc_refs_1(self, p):
-
         document_ref_id = p[2]
         document_uri = p[3]
         checksum = parse_checksum(self.current_element["logger"], p[4])
