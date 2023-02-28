@@ -45,8 +45,8 @@ class Parser(object):
         self.tokens = SPDXLexer.tokens
         self.logger = Logger()
         self.element_stack = []
-        self.current_element = dict()
-        self.creation_info = dict()
+        self.current_element = {"logger": Logger()}
+        self.creation_info = {"logger": Logger()}
         self.elements_build = dict()
 
     @grammar_rule("start : start attrib ")
@@ -144,7 +144,7 @@ class Parser(object):
 
     @grammar_rule("lics_list_ver : LIC_LIST_VER error")
     def p_lics_list_ver_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing LicenseListVersion: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("doc_comment : DOC_COMMENT text_or_line")
@@ -153,7 +153,7 @@ class Parser(object):
 
     @grammar_rule("doc_comment : DOC_COMMENT error")
     def p_doc_comment_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing DocumentComment: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("doc_namespace : DOC_NAMESPACE LINE")
@@ -162,7 +162,7 @@ class Parser(object):
 
     @grammar_rule("doc_namespace : DOC_NAMESPACE error")
     def p_doc_namespace_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing DocumentNamespace: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("data_lics : DOC_LICENSE LINE")
@@ -171,7 +171,7 @@ class Parser(object):
 
     @grammar_rule("data_lics : DOC_LICENSE error")
     def p_data_license_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing DataLicense: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("doc_name : DOC_NAME LINE")
@@ -180,7 +180,7 @@ class Parser(object):
 
     @grammar_rule("doc_name : DOC_NAME error")
     def p_doc_name_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing DocumentName: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("ext_doc_ref : EXT_DOC_REF DOC_REF_ID DOC_URI EXT_DOC_REF_CHECKSUM")
@@ -196,7 +196,7 @@ class Parser(object):
 
     @grammar_rule("ext_doc_ref : EXT_DOC_REF error")
     def p_ext_doc_refs_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing ExternalDocumentRef: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("spdx_version : DOC_VERSION LINE")
@@ -205,7 +205,7 @@ class Parser(object):
 
     @grammar_rule("spdx_version : DOC_VERSION error")
     def p_spdx_version_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing SPDXVersion: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("creator_comment : CREATOR_COMMENT text_or_line")
@@ -214,7 +214,7 @@ class Parser(object):
 
     @grammar_rule("creator_comment : CREATOR_COMMENT error")
     def p_creator_comment_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing CreatorComment: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     def p_creator_1(self, p):
@@ -223,7 +223,7 @@ class Parser(object):
 
     @grammar_rule("creator : CREATOR error")
     def p_creator_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing Creator: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("created : CREATED DATE")
@@ -232,7 +232,7 @@ class Parser(object):
 
     @grammar_rule("created : CREATED error")
     def p_created_2(self, p):
-        self.logger.append(
+        self.creation_info["logger"].append(
             f"Error while parsing Created: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     # parsing methods for extracted licensing info
@@ -245,7 +245,7 @@ class Parser(object):
 
     @grammar_rule("extr_lic_id : LICS_ID error")
     def p_extr_lic_id_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing LicenseID: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("lic_xref : LICS_CRS_REF LINE")
@@ -255,8 +255,9 @@ class Parser(object):
 
     @grammar_rule("lic_xref : LICS_CRS_REF error")
     def p_lic_xref_2(self, p):
-        self.logger.append(f"Error while parsing LicenseCrossReference: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing LicenseCrossReference: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("lic_comment : LICS_COMMENT text_or_line")
     def p_lic_comment_1(self, p):
@@ -264,7 +265,7 @@ class Parser(object):
 
     @grammar_rule("lic_comment : LICS_COMMENT error")
     def p_lic_comment_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing LicenseComment: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("extr_lic_name : LICS_NAME line_or_no_assertion")
@@ -273,7 +274,7 @@ class Parser(object):
 
     @grammar_rule("extr_lic_name : LICS_NAME error")
     def p_extr_lic_name_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing LicenseName: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("extr_lic_text : LICS_TEXT text_or_line")
@@ -282,7 +283,7 @@ class Parser(object):
 
     @grammar_rule("extr_lic_text : LICS_TEXT error")
     def p_extr_lic_text_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing ExtractedText: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     # parsing methods for file
@@ -291,14 +292,13 @@ class Parser(object):
     def p_file_name_1(self, p):
         self.construct_current_element()
         self.element_stack.append(p[2])
-        self.current_element = dict()
         self.current_element["name"] = p[2]
         self.current_element["class"] = File
 
     @grammar_rule("file_name : FILE_NAME error")
     def p_file_name_2(self, p):
-        self.logger.append(
-            f"Error while parsing FileName: Token did not match specified grammar rule. Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("file_contrib : FILE_CONTRIB LINE")
     def p_file_contrib_1(self, p):
@@ -306,7 +306,7 @@ class Parser(object):
 
     @grammar_rule("file_contrib : FILE_CONTRIB error")
     def p_file_contrib_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing FileContributor: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("file_notice : FILE_NOTICE text_or_line")
@@ -315,7 +315,7 @@ class Parser(object):
 
     @grammar_rule("file_notice : FILE_NOTICE error")
     def p_file_notice_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing FileNotice: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("file_cr_text : FILE_CR_TEXT line_or_no_assertion_or_none")
@@ -325,7 +325,7 @@ class Parser(object):
 
     @grammar_rule("file_cr_text : FILE_CR_TEXT error")
     def p_file_cr_text_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing FileCopyrightText: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("file_lics_comment : FILE_LICS_COMMENT text_or_line")
@@ -334,8 +334,9 @@ class Parser(object):
 
     @grammar_rule("file_lics_comment : FILE_LICS_COMMENT error")
     def p_file_lics_comment_2(self, p):
-        self.logger.append(f"Error while parsing LicenseComments in file: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing LicenseComments in file: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("file_attribution_text : FILE_ATTRIBUTION_TEXT text_or_line")
     def p_file_attribution_text_1(self, p):
@@ -343,7 +344,7 @@ class Parser(object):
 
     @grammar_rule("file_attribution_text : FILE_ATTRIBUTION_TEXT error")
     def p_file_attribution_text_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing FileAttributionText: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("file_lics_info : FILE_LICS_INFO license_or_no_assertion_or_none")
@@ -355,7 +356,7 @@ class Parser(object):
 
     @grammar_rule("file_lics_info : FILE_LICS_INFO error")
     def p_file_lics_info_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing LicenseInfoInFile: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("file_comment : FILE_COMMENT text_or_line")
@@ -364,7 +365,7 @@ class Parser(object):
 
     @grammar_rule("file_comment : FILE_COMMENT error")
     def p_file_comment_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing FileComment: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("file_type : FILE_TYPE file_type_value")
@@ -373,7 +374,7 @@ class Parser(object):
 
     @grammar_rule("file_type : FILE_TYPE error")
     def p_file_type_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing FileType: Token did not match any of the valid values. Line: {p.lineno(1)}")
 
     @grammar_rule("file_checksum : FILE_CHECKSUM CHECKSUM")
@@ -385,7 +386,7 @@ class Parser(object):
 
     @grammar_rule("file_checksum : FILE_CHECKSUM error")
     def p_file_checksum_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing Checksum in file: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("file_conc : FILE_LICS_CONC license_or_no_assertion_or_none")
@@ -394,8 +395,9 @@ class Parser(object):
 
     @grammar_rule("file_conc : FILE_LICS_CONC error")
     def p_file_conc_2(self, p):
-        self.logger.append(f"Error while parsing LicenseConcluded in file: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing LicenseConcluded in file: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule(
         "file_type_value : SOURCE\n| BINARY\n| ARCHIVE\n | APPLICATION\n | AUDIO\n | IMAGE\n | FILETYPE_TEXT\n| VIDEO\n"
@@ -409,13 +411,14 @@ class Parser(object):
     @grammar_rule("package_name : PKG_NAME LINE")
     def p_package_name(self, p):
         self.construct_current_element()
+        self.element_stack.push("package")
         self.current_element["class"] = Package
         self.current_element["name"] = p[2]
 
     @grammar_rule("package_name : PKG_NAME error")
     def p_package_name_1(self, p):
-        self.logger.append(
-            f"Error while parsing PackageName: Token did not match specified grammar rule. Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_desc : PKG_DESC text_or_line")
     def p_pkg_desc_1(self, p):
@@ -423,7 +426,7 @@ class Parser(object):
 
     @grammar_rule("pkg_desc : PKG_DESC error")
     def p_pkg_desc_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageDescription: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_comment : PKG_COMMENT text_or_line")
@@ -432,7 +435,7 @@ class Parser(object):
 
     @grammar_rule("pkg_comment : PKG_COMMENT error")
     def p_pkg_comment_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageComment: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_attribution_text : PKG_ATTRIBUTION_TEXT text_or_line")
@@ -441,8 +444,9 @@ class Parser(object):
 
     @grammar_rule("pkg_attribution_text : PKG_ATTRIBUTION_TEXT error")
     def p_pkg_attribution_text_2(self, p):
-        self.logger.append(f"Error while parsing PackageAttributionText: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing PackageAttributionText: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_summary : PKG_SUM text_or_line")
     def p_pkg_summary_1(self, p):
@@ -450,7 +454,7 @@ class Parser(object):
 
     @grammar_rule("pkg_summary : PKG_SUM error")
     def p_pkg_summary_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageSummary: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_cr_text : PKG_CPY_TEXT line_or_no_assertion_or_none")
@@ -459,8 +463,9 @@ class Parser(object):
 
     @grammar_rule("pkg_cr_text : PKG_CPY_TEXT error")
     def p_pkg_cr_text_2(self, p):
-        self.logger.append(f"Error while parsing PackageCopyrightText: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing PackageCopyrightText: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_ext_ref : PKG_EXT_REF LINE PKG_EXT_REF_COMMENT text_or_line\n | PKG_EXT_REF LINE")
     def p_pkg_ext_refs_1(self, p):
@@ -474,7 +479,7 @@ class Parser(object):
 
     @grammar_rule("pkg_ext_ref : PKG_EXT_REF error")
     def p_pkg_ext_refs_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing ExternalRef in package: Token did not match specified grammar rule. "
             f"Line: {p.lineno(1)}")
 
@@ -484,8 +489,9 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_comment : PKG_LICS_COMMENT error")
     def p_pkg_lic_comment_2(self, p):
-        self.logger.append(f"Error while parsing PackageLicenseComments: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing PackageLicenseComments: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_lic_decl : PKG_LICS_DECL license_or_no_assertion_or_none")
     def p_pkg_lic_decl_1(self, p):
@@ -493,7 +499,7 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_decl : PKG_LICS_DECL error")
     def p_pkg_lic_decl_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing LicenseDeclared in package: Token did not match specified grammar rule. "
             f"Line: {p.lineno(1)}")
 
@@ -506,7 +512,7 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_ff : PKG_LICS_FFILE error")
     def p_pkg_lic_ff_error(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing LicenseInfoFromFiles in package: Token did not match specified grammar rule. "
             f"Line: {p.lineno(1)}")
 
@@ -516,7 +522,7 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_conc : PKG_LICS_CONC error")
     def p_pkg_lic_conc_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing LicenseConcluded in package: Token did not match specified grammar rule. "
             f"Line: {p.lineno(1)}")
 
@@ -526,7 +532,7 @@ class Parser(object):
 
     @grammar_rule("pkg_src_info : PKG_SRC_INFO error")
     def p_pkg_src_info_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageSourceInfo: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_checksum : PKG_CHECKSUM CHECKSUM")
@@ -539,7 +545,7 @@ class Parser(object):
 
     @grammar_rule("pkg_checksum : PKG_CHECKSUM error")
     def p_pkg_checksum_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageChecksum: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_verif : PKG_VERF_CODE LINE")
@@ -556,8 +562,9 @@ class Parser(object):
 
     @grammar_rule("pkg_verif : PKG_VERF_CODE error")
     def p_pkg_verif_2(self, p):
-        self.logger.append(f"Error while parsing PackageVerificationCode: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing PackageVerificationCode: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_home : PKG_HOME line_or_no_assertion_or_none")
     def p_pkg_home_1(self, p):
@@ -565,7 +572,7 @@ class Parser(object):
 
     @grammar_rule("pkg_home : PKG_HOME error")
     def p_pkg_home_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageHomePage: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_down_location : PKG_DOWN line_or_no_assertion_or_none")
@@ -574,8 +581,9 @@ class Parser(object):
 
     @grammar_rule("pkg_down_location : PKG_DOWN error")
     def p_pkg_down_location_2(self, p):
-        self.logger.append(f"Error while parsing PackageDownloadLocation: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing PackageDownloadLocation: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_files_analyzed : PKG_FILES_ANALYZED LINE")
     def p_pkg_files_analyzed_1(self, p):
@@ -586,8 +594,9 @@ class Parser(object):
 
     @grammar_rule("pkg_files_analyzed : PKG_FILES_ANALYZED error")
     def p_pkg_files_analyzed_2(self, p):
-        self.logger.append(f"Error while parsing FilesAnalyzed in package: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing FilesAnalyzed in package: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_orig : PKG_ORIG pkg_supplier_values")
     def p_pkg_orig_1(self, p):
@@ -595,7 +604,7 @@ class Parser(object):
 
     @grammar_rule("pkg_orig : PKG_ORIG error")
     def p_pkg_orig_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageOriginator: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_supplier : PKG_SUPPL pkg_supplier_values")
@@ -604,7 +613,7 @@ class Parser(object):
 
     @grammar_rule("pkg_supplier : PKG_SUPPL error")
     def p_pkg_supplier_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageSupplier: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("pkg_supplier_values : NO_ASSERTION")
@@ -621,7 +630,7 @@ class Parser(object):
 
     @grammar_rule("pkg_file_name : PKG_FILE_NAME error")
     def p_pkg_file_name_1(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageFileName: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("package_version : PKG_VERSION LINE")
@@ -630,7 +639,7 @@ class Parser(object):
 
     @grammar_rule("package_version : PKG_VERSION error")
     def p_package_version_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing PackageVersion: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("primary_package_purpose : PRIMARY_PACKAGE_PURPOSE primary_package_purpose_value")
@@ -640,8 +649,9 @@ class Parser(object):
 
     @grammar_rule("primary_package_purpose : PRIMARY_PACKAGE_PURPOSE error")
     def p_primary_package_purpose_2(self, p):
-        self.logger.append(f"Error while parsing PrimaryPackagePurpose: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing PrimaryPackagePurpose: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("primary_package_purpose_value : APPLICATION\n | FRAMEWORK\n | LIBRARY\n | CONTAINER\n "
                   "| OPERATING_SYSTEM \n | DEVICE \n| FIRMWARE\n | SOURCE\n | ARCHIVE\n | FILE\n | INSTALL\n | OTHER")
@@ -654,7 +664,7 @@ class Parser(object):
 
     @grammar_rule("built_date : BUILT_DATE error")
     def p_built_date_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing BuiltDate: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("release_date : RELEASE_DATE DATE")
@@ -663,7 +673,7 @@ class Parser(object):
 
     @grammar_rule("release_date : RELEASE_DATE error")
     def p_release_date_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing ReleaseDate: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("valid_until_date : VALID_UNTIL_DATE DATE")
@@ -672,7 +682,7 @@ class Parser(object):
 
     @grammar_rule("valid_until_date : VALID_UNTIL_DATE error")
     def p_valid_until_date_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing ValidUntilDate: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     # parsing methods for snippet
@@ -684,7 +694,7 @@ class Parser(object):
 
     @grammar_rule("snip_spdx_id : SNIPPET_SPDX_ID error")
     def p_snip_spdx_id_1(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing SnippetSPDXID: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("snip_name : SNIPPET_NAME LINE")
@@ -693,7 +703,7 @@ class Parser(object):
 
     @grammar_rule("snip_name : SNIPPET_NAME error")
     def p_snippet_name_1(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing SnippetName: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("snip_comment : SNIPPET_COMMENT text_or_line")
@@ -702,7 +712,7 @@ class Parser(object):
 
     @grammar_rule("snip_comment : SNIPPET_COMMENT error")
     def p_snippet_comment_1(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing SnippetComment: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT text_or_line")
@@ -711,8 +721,9 @@ class Parser(object):
 
     @grammar_rule("snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT error")
     def p_snippet_attribution_text_2(self, p):
-        self.logger.append(f"Error while parsing SnippetAttributionText: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing SnippetAttributionText: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("snip_cr_text : SNIPPET_CR_TEXT line_or_no_assertion_or_none")
     def p_snippet_cr_text(self, p):
@@ -720,8 +731,9 @@ class Parser(object):
 
     @grammar_rule("snip_cr_text : SNIPPET_CR_TEXT error")
     def p_snippet_cr_text_1(self, p):
-        self.logger.append(f"Error while parsing SnippetCopyrightText: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing SnippetCopyrightText: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("snip_lic_comment : SNIPPET_LICS_COMMENT text_or_line")
     def p_snippet_lic_comment(self, p):
@@ -729,8 +741,9 @@ class Parser(object):
 
     @grammar_rule("snip_lic_comment : SNIPPET_LICS_COMMENT error")
     def p_snippet_lic_comment_1(self, p):
-        self.logger.append(f"Error while parsing SnippetLicenseComments: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing SnippetLicenseComments: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("snip_file_spdx_id : SNIPPET_FILE_SPDXID LINE")
     def p_snip_from_file_spdxid(self, p):
@@ -738,8 +751,9 @@ class Parser(object):
 
     @grammar_rule("snip_file_spdx_id : SNIPPET_FILE_SPDXID error")
     def p_snip_from_file_spdxid_1(self, p):
-        self.logger.append(f"Error while parsing SnippetFromFileSPDXID: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing SnippetFromFileSPDXID: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("snip_lics_conc : SNIPPET_LICS_CONC license_or_no_assertion_or_none")
     def p_snippet_concluded_license(self, p):
@@ -747,8 +761,9 @@ class Parser(object):
 
     @grammar_rule("snip_lics_conc : SNIPPET_LICS_CONC error")
     def p_snippet_concluded_license_1(self, p):
-        self.logger.append(f"Error while parsing SnippetLicenseConcluded: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing SnippetLicenseConcluded: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("snip_lics_info : SNIPPET_LICS_INFO license_or_no_assertion_or_none")
     def p_snippet_lics_info(self, p):
@@ -760,8 +775,9 @@ class Parser(object):
     @grammar_rule("snip_lics_info : SNIPPET_LICS_INFO error")
     def p_snippet_lics_info_1(self, p):
 
-        self.logger.append(f"Error while parsing LicenseInfoInSnippet: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing LicenseInfoInSnippet: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     @grammar_rule("snip_byte_range : SNIPPET_BYTE_RANGE LINE")
     def p_snippet_byte_range(self, p):
@@ -776,7 +792,7 @@ class Parser(object):
     @grammar_rule("snip_byte_range : SNIPPET_BYTE_RANGE error")
     def p_snippet_byte_range_1(self, p):
 
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing SnippetByteRange: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("snip_line_range : SNIPPET_LINE_RANGE LINE")
@@ -791,7 +807,7 @@ class Parser(object):
 
     @grammar_rule("snip_line_range : SNIPPET_LINE_RANGE error")
     def p_snippet_line_range_1(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing SnippetLineRange: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     # parsing methods for annotation
@@ -803,8 +819,8 @@ class Parser(object):
 
     @grammar_rule("annotator : ANNOTATOR error")
     def p_annotator_2(self, p):
-        self.logger.append(
-            f"Error while parsing Annotator: Token did not match specified grammar rule. Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("annotation_date : ANNOTATION_DATE DATE")
     def p_annotation_date_1(self, p):
@@ -812,7 +828,7 @@ class Parser(object):
 
     @grammar_rule("annotation_date : ANNOTATION_DATE error")
     def p_annotation_date_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing AnnotationDate: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("annotation_comment : ANNOTATION_COMMENT text_or_line")
@@ -821,7 +837,7 @@ class Parser(object):
 
     @grammar_rule("annotation_comment : ANNOTATION_COMMENT error")
     def p_annotation_comment_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing AnnotationComment: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("annotation_type : ANNOTATION_TYPE annotation_type_value")
@@ -830,7 +846,7 @@ class Parser(object):
 
     @grammar_rule("annotation_type : ANNOTATION_TYPE error")
     def p_annotation_type_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing AnnotationType: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("annotation_type_value : OTHER\n| REVIEW")
@@ -843,8 +859,9 @@ class Parser(object):
 
     @grammar_rule("annotation_spdx_id : ANNOTATION_SPDX_ID error")
     def p_annotation_spdx_id_2(self, p):
-        self.logger.append(f"Error while parsing SPDXREF in annotation: Token did not match specified grammar rule. "
-                           f"Line: {p.lineno(1)}")
+        self.current_element["logger"].append(
+            f"Error while parsing SPDXREF in annotation: Token did not match specified grammar rule. "
+            f"Line: {p.lineno(1)}")
 
     # parsing methods for relationship
     @grammar_rule("relationship : RELATIONSHIP relationship_value RELATIONSHIP_COMMENT text_or_line\n "
@@ -854,14 +871,15 @@ class Parser(object):
         try:
             spdx_element_id, relationship_type, related_spdx_element_id = p[2].split(" ")
         except ValueError:
-            self.logger.append(f"Relationship couldn't be split in spdx_element_id, relationship_type and "
-                               f"related_spdx_element. Line: {p.lineno(1)}")
+            self.current_element["logger"].append(
+                f"Relationship couldn't be split in spdx_element_id, relationship_type and "
+                f"related_spdx_element. Line: {p.lineno(1)}")
             return
         self.current_element["class"] = Relationship
         try:
             self.current_element["relationship_type"] = RelationshipType[relationship_type]
         except KeyError:
-            self.logger.append(f"Invalid RelationshipType {relationship_type}. Line: {p.lineno(1)}")
+            self.current_element["logger"].append(f"Invalid RelationshipType {relationship_type}. Line: {p.lineno(1)}")
         if related_spdx_element_id == "NONE":
             related_spdx_element_id = SpdxNone()
         if related_spdx_element_id == "NOASSERTION":
@@ -873,7 +891,7 @@ class Parser(object):
 
     @grammar_rule("relationship : RELATIONSHIP error")
     def p_relationship_2(self, p):
-        self.logger.append(
+        self.current_element["logger"].append(
             f"Error while parsing Relationship: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("relationship_value : DOC_REF_ID LINE")
@@ -897,6 +915,10 @@ class Parser(object):
     def parse(self, text):
         self.yacc.parse(text, lexer=self.lex)
         self.construct_current_element()
+        try:
+            raise_parsing_error_if_logger_has_messages(self.creation_info.pop("logger"), "CreationInfo")
+        except SPDXParsingError as err:
+            self.logger.append(err.get_messages())
         raise_parsing_error_if_logger_has_messages(self.logger)
         creation_info = construct_or_raise_parsing_error(CreationInfo, self.creation_info)
         self.elements_build["creation_info"] = creation_info
@@ -905,14 +927,21 @@ class Parser(object):
 
     def construct_current_element(self):
         if "class" not in self.current_element:
+            self.current_element = {"logger": Logger()}
             return
         class_name = self.current_element.pop("class")
+        try:
+            raise_parsing_error_if_logger_has_messages(self.current_element.pop("logger"), class_name.__name__)
+        except SPDXParsingError as err:
+            self.logger.append(err.get_messages())
+            self.current_element = {"logger": Logger()}
+            return
         try:
             self.elements_build.setdefault(CLASS_MAPPING[class_name.__name__], []).append(
                 construct_or_raise_parsing_error(class_name, self.current_element))
         except SPDXParsingError as err:
             self.logger.append(err.get_messages())
-        self.current_element = dict()
+        self.current_element = {"logger": Logger()}
 
     def check_that_current_element_matches_class_for_value(self, expected_class):
         if expected_class != self.current_element["class"]:
@@ -922,3 +951,4 @@ class Parser(object):
 
 CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relationships", Snippet="snippets",
                      Package="packages", ExtractedLicensingInfo="extracted_licensing_info")
+
