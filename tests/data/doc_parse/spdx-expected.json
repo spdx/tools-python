@@ -128,11 +128,7 @@
                 "email": null,
                 "type": "Organization"
             },
-            "supplier": {
-                "name": "Linux Foundation",
-                "email": null,
-                "type": "Organization"
-            },
+            "supplier": "NOASSERTION",
             "licenseConcluded": {
                 "type": "Conjunction",
                 "identifier": [
