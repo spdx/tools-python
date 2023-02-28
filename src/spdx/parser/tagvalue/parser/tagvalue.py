@@ -11,7 +11,6 @@
 # limitations under the License.
 
 import re
-from typing import Optional
 
 from license_expression import get_spdx_licensing
 from ply import yacc
@@ -32,6 +31,7 @@ from spdx.model.document import Document, CreationInfo
 from spdx.model.file import File, FileType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.logger import Logger
 from spdx.parser.tagvalue.lexer.tagvalue import SPDXLexer
@@ -250,6 +250,7 @@ class Parser(object):
 
     @grammar_rule("lic_xref : LICS_CRS_REF LINE")
     def p_lic_xref_1(self, p):
+        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo)
         self.current_element.setdefault("cross_references", []).append(p[2])
 
     @grammar_rule("lic_xref : LICS_CRS_REF error")
@@ -848,13 +849,20 @@ class Parser(object):
     # parsing methods for relationship
     @grammar_rule("relationship : RELATIONSHIP relationship_value")
     def p_relationship_1(self, p):
-        splitted_relationship = p[2].split(" ")
-
+        try:
+            spdx_element_id, relationship_type, related_spdx_element_id = p[2].split(" ")
+        except ValueError:
+            self.logger.append(f"Relationship couldn't be split in spdx_element_id, relationship_type and "
+                               f"related_spdx_element. Line: {p.lineno(1)}")
+            return
         self.construct_current_element()
         self.current_element["class"] = Relationship
-        self.current_element["relationship_type"] = RelationshipType[splitted_relationship[1]]
-        self.current_element["related_spdx_element_id"] = splitted_relationship[2]
-        self.current_element["spdx_element_id"] = splitted_relationship[0]
+        try:
+            self.current_element["relationship_type"] = RelationshipType[relationship_type]
+        except KeyError:
+            self.logger.append(f"Invalid RelationshipType {relationship_type}. Line: {p.lineno(1)}")
+        self.current_element["related_spdx_element_id"] = related_spdx_element_id
+        self.current_element["spdx_element_id"] = spdx_element_id
 
     @grammar_rule("relationship : RELATIONSHIP error")
     def p_relationship_2(self, p):
@@ -895,15 +903,23 @@ class Parser(object):
         creation_info = construct_or_raise_parsing_error(CreationInfo, self.creation_info)
         self.elements_build["creation_info"] = creation_info
         document = construct_or_raise_parsing_error(Document, self.elements_build)
-        print(self.logger.get_messages())
         return document
 
     def construct_current_element(self):
-        if "class" in self.current_element:
-            class_name = self.current_element.pop("class")
+        if "class" not in self.current_element:
+            return
+        class_name = self.current_element.pop("class")
+        try:
             self.elements_build.setdefault(CLASS_MAPPING[class_name.__name__], []).append(
                 construct_or_raise_parsing_error(class_name, self.current_element))
-            self.current_element = dict()
+        except SPDXParsingError as err:
+            self.logger.append(err.get_messages())
+        self.current_element = dict()
+
+    def check_that_current_element_matches_class_for_value(self, expected_class):
+        if expected_class != self.current_element["class"]:
+            raise SPDXParsingError(["Unexpected current element for value"])
+        # what to do now? exit parsing
 
 
 CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relationships", Snippet="snippets",
