@@ -20,6 +20,8 @@ def construct_or_raise_parsing_error(object_to_construct: Any, args_for_construc
         constructed_object = object_to_construct(**args_for_construction)
     except ConstructorTypeErrors as err:
         raise SPDXParsingError([f"Error while constructing {object_to_construct.__name__}: {err.get_messages()}"])
+    except TypeError as err:
+        raise SPDXParsingError([f"Error while constructing {object_to_construct.__name__}: {err.args[0]}"])
     return constructed_object
 
 
