@@ -10,7 +10,9 @@
 # limitations under the License.
 import pytest
 
-from spdx.model.relationship import RelationshipType
+from spdx.model.relationship import RelationshipType, Relationship
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
@@ -23,23 +25,33 @@ def parser():
     return spdx_parser
 
 
-def test_relationship(parser):
-    relationship_str = '\n'.join([
-        'Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File',
-        'RelationshipComment: This is a comment.'])
-
+@pytest.mark.parametrize("relationship_str, expected_relationship",
+                         [('\n'.join(['Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File',
+                                      'RelationshipComment: This is a comment.']),
+                           Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES,
+                                        "SPDXRef-File", "This is a comment.")),
+                          ('Relationship: SPDXRef-DOCUMENT PATCH_FOR NOASSERTION',
+                           Relationship("SPDXRef-DOCUMENT", RelationshipType.PATCH_FOR,
+                                        SpdxNoAssertion())),
+                          ('Relationship: SPDXRef-CarolCompression DEPENDS_ON NONE',
+                           Relationship("SPDXRef-CarolCompression", RelationshipType.DEPENDS_ON, SpdxNone())),
+                          ('Relationship: DocumentRef-ExternalDocument: SPDXRef-Test DEPENDS_ON DocumentRef:AnotherRef',
+                           Relationship("DocumentRef-ExternalDocument:SPDXRef-Test", RelationshipType.DEPENDS_ON,
+                                        "DocumentRef:AnotherRef"))
+                          ])
+def test_relationship(parser, relationship_str, expected_relationship):
     document = parser.parse("\n".join([DOCUMENT_STR, relationship_str]))
     assert document is not None
     relationship = document.relationships[0]
-    assert relationship.relationship_type == RelationshipType.DESCRIBES
-    assert relationship.related_spdx_element_id == "SPDXRef-File"
-    assert relationship.spdx_element_id == "SPDXRef-DOCUMENT"
-    assert relationship.comment == "This is a comment."
+    assert relationship == expected_relationship
 
 
 @pytest.mark.parametrize("relationship_str, expected_message",
                          [("Relationship: spdx_id DESCRIBES", "Relationship couldn't be split"),
-                          ("Relationship: spdx_id IS spdx_id", "Invalid RelationshipType IS. Line: 1")])
+                          ("Relationship: spdx_id IS spdx_id", "Invalid RelationshipType IS. Line: 1"),
+                          ("Relationship: spdx_id IS spdx_id\nRelationshipComment: SOURCE",
+                           "Error while parsing Relationship: Token did not match specified grammar rule. Line: 1")
+                          ])
 def test_falsy_relationship(parser, relationship_str, expected_message):
     with pytest.raises(SPDXParsingError, match=expected_message):
         parser.parse(relationship_str)

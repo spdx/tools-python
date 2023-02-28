@@ -65,7 +65,7 @@ class Parser(object):
                   # attributes for annotation
                   "| annotator\n| annotation_date\n| annotation_comment\n| annotation_type\n| annotation_spdx_id\n"
                   # attributes for relationship
-                  "| relationship\n| relationship_comment\n"
+                  "| relationship\n"
                   # attributes for snippet
                   "| snip_spdx_id\n| snip_name\n| snip_comment\n| snippet_attribution_text\n| snip_cr_text\n"
                   "| snip_lic_comment\n| snip_file_spdx_id\n| snip_lics_conc\n| snip_lics_info\n| snip_byte_range\n"
@@ -847,22 +847,29 @@ class Parser(object):
                            f"Line: {p.lineno(1)}")
 
     # parsing methods for relationship
-    @grammar_rule("relationship : RELATIONSHIP relationship_value")
+    @grammar_rule("relationship : RELATIONSHIP relationship_value RELATIONSHIP_COMMENT text_or_line\n "
+                  "| RELATIONSHIP relationship_value")
     def p_relationship_1(self, p):
+        self.construct_current_element()
         try:
             spdx_element_id, relationship_type, related_spdx_element_id = p[2].split(" ")
         except ValueError:
             self.logger.append(f"Relationship couldn't be split in spdx_element_id, relationship_type and "
                                f"related_spdx_element. Line: {p.lineno(1)}")
             return
-        self.construct_current_element()
         self.current_element["class"] = Relationship
         try:
             self.current_element["relationship_type"] = RelationshipType[relationship_type]
         except KeyError:
             self.logger.append(f"Invalid RelationshipType {relationship_type}. Line: {p.lineno(1)}")
+        if related_spdx_element_id == "NONE":
+            related_spdx_element_id = SpdxNone()
+        if related_spdx_element_id == "NOASSERTION":
+            related_spdx_element_id = SpdxNoAssertion()
         self.current_element["related_spdx_element_id"] = related_spdx_element_id
         self.current_element["spdx_element_id"] = spdx_element_id
+        if len(p) == 5:
+            self.current_element["comment"] = p[4]
 
     @grammar_rule("relationship : RELATIONSHIP error")
     def p_relationship_2(self, p):
@@ -878,15 +885,6 @@ class Parser(object):
     def p_relationship_value_without_doc_ref(self, p):
 
         p[0] = p[1]
-
-    @grammar_rule("relationship_comment : RELATIONSHIP_COMMENT text_or_line")
-    def p_relationship_comment_1(self, p):
-        self.current_element["comment"] = p[2]
-
-    @grammar_rule("relationship_comment : RELATIONSHIP_COMMENT error")
-    def p_relationship_comment_2(self, p):
-        self.logger.append(
-            f"Error while parsing RelationshipComment: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     def p_error(self, p):
         pass
