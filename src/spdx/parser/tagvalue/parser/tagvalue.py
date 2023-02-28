@@ -374,7 +374,7 @@ class Parser(object):
     @grammar_rule("file_type : FILE_TYPE error")
     def p_file_type_2(self, p):
         self.logger.append(
-            f"Error while parsing FileType: Token did not match specified grammar rule. Line: {p.lineno(1)}")
+            f"Error while parsing FileType: Token did not match any of the valid values. Line: {p.lineno(1)}")
 
     @grammar_rule("file_checksum : FILE_CHECKSUM CHECKSUM")
     def p_file_checksum_1(self, p):
