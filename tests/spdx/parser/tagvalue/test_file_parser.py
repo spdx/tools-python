@@ -11,6 +11,7 @@
 import pytest
 from license_expression import get_spdx_licensing
 
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
@@ -49,3 +50,26 @@ def test_file(parser):
         'Acknowledgements that might be required to be communicated in some contexts.']
     assert spdx_file.license_info_in_file == [get_spdx_licensing().parse("Apache-2.0")]
     assert spdx_file.license_concluded == get_spdx_licensing().parse("Apache-2.0")
+
+
+def test_invalid_file(parser):
+    file_str = '\n'.join([
+        'FileName: testfile.java',
+        'SPDXID: SPDXRef-File',
+        'FileType: SOUCE',
+        'FileType: TEXT',
+        'FileChecksum: SHA3: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12',
+        'LicenseConcluded: Apache-2.0',
+        'LicenseInfoInFile: Apache-2.0',
+        'FileCopyrightText: <text>Copyright 2014 Acme Inc.</text>',
+        'FileComment: <text>Very long file</text>',
+        'FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts.</text>'
+    ])
+
+    with pytest.raises(SPDXParsingError) as err:
+        parser.parse(file_str)
+
+    assert err.value.get_messages() == ['Error while parsing FileType: Token did not match specified grammar rule. '
+                                        'Line: 3',
+                                        'Error while parsing Checksum in file: Token did not match specified grammar '
+                                        'rule. Line: 5']
