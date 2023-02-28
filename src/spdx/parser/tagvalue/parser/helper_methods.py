@@ -11,6 +11,11 @@
 import re
 from typing import Optional
 
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.parser.error import SPDXParsingError
+from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error
+
 
 def grammar_rule(doc):
     # this is a helper method to use decorators for the parsing methods instead of docstrings
@@ -29,3 +34,20 @@ def str_from_text(text: Optional[str]) -> Optional[str]:
         return text
     else:
         return None
+
+
+def parse_checksum(logger: Logger, checksum_str: str) -> Optional[Checksum]:
+    try:
+        algorithm, value = checksum_str.split(":")
+    except ValueError:
+        logger.append(
+            f"Couldn't split value for checksum in algorithm and value.")
+        return None
+    algorithm = ChecksumAlgorithm[algorithm.upper().replace("-", "_")]
+    value = value.strip()
+    try:
+        checksum = construct_or_raise_parsing_error(Checksum, {"algorithm": algorithm, "value": value})
+    except SPDXParsingError as err:
+        logger.append(err.get_messages())
+        checksum = None
+    return checksum

@@ -18,7 +18,6 @@ from ply import yacc
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.annotation import AnnotationType, Annotation
-from spdx.model.checksum import ChecksumAlgorithm, Checksum
 from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx.model.package import Package, PackageVerificationCode, PackagePurpose, ExternalPackageRef, \
@@ -36,7 +35,7 @@ from spdx.parser.error import SPDXParsingError
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.logger import Logger
 from spdx.parser.tagvalue.lexer.tagvalue import SPDXLexer
-from spdx.parser.tagvalue.parser.helper_methods import grammar_rule, str_from_text
+from spdx.parser.tagvalue.parser.helper_methods import grammar_rule, str_from_text, parse_checksum
 
 
 class Parser(object):
@@ -189,10 +188,8 @@ class Parser(object):
 
         document_ref_id = p[2]
         document_uri = p[3]
-        splitted_checksum = p[4].split(":")
-        algorithm = ChecksumAlgorithm[splitted_checksum[0]]
-        value = splitted_checksum[1].strip()
-        external_document_ref = ExternalDocumentRef(document_ref_id, document_uri, Checksum(algorithm, value))
+        checksum = parse_checksum(self.current_element["logger"], p[4])
+        external_document_ref = ExternalDocumentRef(document_ref_id, document_uri, checksum)
         self.creation_info.setdefault("external_document_refs", []).append(external_document_ref)
 
     @grammar_rule("ext_doc_ref : EXT_DOC_REF error")
@@ -378,10 +375,8 @@ class Parser(object):
 
     @grammar_rule("file_checksum : FILE_CHECKSUM CHECKSUM")
     def p_file_checksum_1(self, p):
-        splitted_checksum = p[2].split(":")
-        algorithm = ChecksumAlgorithm[splitted_checksum[0]]
-        value = splitted_checksum[1]
-        self.current_element.setdefault("checksums", []).append(Checksum(algorithm, value))
+        checksum = parse_checksum(self.current_element["logger"], p[2])
+        self.current_element.setdefault("checksums", []).append(checksum)
 
     @grammar_rule("file_checksum : FILE_CHECKSUM error")
     def p_file_checksum_2(self, p):
@@ -473,8 +468,20 @@ class Parser(object):
         comment = None
         if len(p) == 5:
             comment = p[4]
-        external_package_ref = ExternalPackageRef(ExternalPackageRefCategory[category], reference_type, locator,
-                                                  comment)
+        try:
+            category = ExternalPackageRefCategory[category.replace("-", "_")]
+        except KeyError:
+            self.current_element["logger"].append(f"Invalid ExternalPackageRefCategory: {category}")
+            return
+        try:
+            external_package_ref = construct_or_raise_parsing_error(ExternalPackageRef,
+                                                                    {"category": category,
+                                                                     "reference_type": reference_type,
+                                                                     "locator": locator,
+                                                                     "comment": comment})
+        except SPDXParsingError as err:
+            self.current_element["logger"].append(err.get_messages())
+            return
         self.current_element.setdefault("external_references", []).append(external_package_ref)
 
     @grammar_rule("pkg_ext_ref : PKG_EXT_REF error")
@@ -537,10 +544,7 @@ class Parser(object):
 
     @grammar_rule("pkg_checksum : PKG_CHECKSUM CHECKSUM")
     def p_pkg_checksum_1(self, p):
-        split_checksum = p[2].split(":")
-        algorithm = ChecksumAlgorithm[split_checksum[0]]
-        value = split_checksum[1].strip()
-        checksum = Checksum(algorithm, value)
+        checksum = parse_checksum(self.current_element["logger"], p[2])
         self.current_element.setdefault("checksums", []).append(checksum)
 
     @grammar_rule("pkg_checksum : PKG_CHECKSUM error")
@@ -960,4 +964,3 @@ class Parser(object):
 
 CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relationships", Snippet="snippets",
                      Package="packages", ExtractedLicensingInfo="extracted_licensing_info")
-
