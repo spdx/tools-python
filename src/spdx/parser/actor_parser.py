@@ -29,14 +29,20 @@ class ActorParser:
 
         if tool_match:
             name: str = tool_match.group(1).strip()
+            if not name:
+                raise SPDXParsingError([f"No name for Tool provided: {actor}."])
             creator = construct_or_raise_parsing_error(Actor, dict(actor_type=ActorType.TOOL, name=name))
 
         elif person_match:
             name: str = person_match.group(1).strip()
+            if not name:
+                raise SPDXParsingError([f"No name for Person provided: {actor}."])
             email: Optional[str] = ActorParser.get_email_or_none(person_match)
             creator = construct_or_raise_parsing_error(Actor, dict(actor_type=ActorType.PERSON, name=name, email=email))
         elif org_match:
             name: str = org_match.group(1).strip()
+            if not name:
+                raise SPDXParsingError([f"No name for Organization provided: {actor}."])
             email: Optional[str] = ActorParser.get_email_or_none(org_match)
             creator = construct_or_raise_parsing_error(Actor,
                                                        dict(actor_type=ActorType.ORGANIZATION, name=name, email=email))
