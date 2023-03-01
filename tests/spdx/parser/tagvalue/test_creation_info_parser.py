@@ -81,7 +81,10 @@ def test_creation_info():
                                   'SPDXID: SPDXRef-DOCUMENT']),
                               ['Error while constructing CreationInfo: CreationInfo.__init__() missing 3 '
                                "required positional arguments: 'document_namespace', 'creators', and "
-                               "'created'"])]))
+                               "'created'"]),
+                             ('LicenseListVersion: 3.5\nLicenseListVersion: 3.7',
+                              [["Error while parsing CreationInfo: ['Multiple values for LicenseListVersion "
+                                "found. Line: 2']"]])]))
 def test_invalid_creation_info(document_str, expected_message):
     parser = Parser()
     with pytest.raises(SPDXParsingError) as err:

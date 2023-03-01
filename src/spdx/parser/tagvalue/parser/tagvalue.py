@@ -11,7 +11,7 @@
 # limitations under the License.
 
 import re
-from typing import Any, List, Dict
+from typing import Any, List, Dict, Optional, Callable
 
 from license_expression import get_spdx_licensing
 from ply import yacc
@@ -72,28 +72,29 @@ class Parser(object):
     def p_start_attrib(self, p):
         pass
 
-    @grammar_rule("attrib : spdx_version\n| spdx_id\n| data_lics\n| doc_name\n| doc_comment\n| doc_namespace\n| "
-                  "creator\n| created\n| creator_comment\n| lics_list_ver\n| ext_doc_ref\n"
-                  # attributes for file 
-                  "| file_name\n| file_type\n| file_checksum\n| file_conc\n| file_lics_info\n| file_cr_text\n"
-                  "| file_lics_comment\n| file_attribution_text\n| file_notice\n| file_comment\n| file_contrib\n"
-                  # attributes for annotation
-                  "| annotator\n| annotation_date\n| annotation_comment\n| annotation_type\n| annotation_spdx_id\n"
-                  # attributes for relationship
-                  "| relationship\n"
-                  # attributes for snippet
-                  "| snip_spdx_id\n| snip_name\n| snip_comment\n| snippet_attribution_text\n| snip_cr_text\n"
-                  "| snip_lic_comment\n| snip_file_spdx_id\n| snip_lics_conc\n| snip_lics_info\n| snip_byte_range\n"
-                  "| snip_line_range\n"
-                  # attributes for package
-                  "| package_name\n| package_version\n| pkg_down_location\n| pkg_files_analyzed\n| pkg_home\n"
-                  "| pkg_summary\n| pkg_src_info\n| pkg_file_name\n| pkg_supplier\n| pkg_orig\n| pkg_checksum\n"
-                  "| pkg_verif\n| pkg_desc\n| pkg_comment\n| pkg_attribution_text\n| pkg_lic_decl\n| pkg_lic_conc\n"
-                  "| pkg_lic_ff\n| pkg_lic_comment\n| pkg_cr_text\n| pkg_ext_ref\n| primary_package_purpose\n"
-                  "| built_date\n| release_date\n| valid_until_date\n"
-                  # attributes for extracted licensing info
-                  "| extr_lic_id\n| extr_lic_text\n| extr_lic_name\n| lic_xref\n| lic_comment\n"
-                  "| unknown_tag ")
+    @grammar_rule(
+        "attrib : spdx_version\n| spdx_id\n| data_license\n| doc_name\n| document_comment\n| document_namespace\n| "
+        "creator\n| created\n| creator_comment\n| license_list_version\n| ext_doc_ref\n"
+        # attributes for file 
+        "| file_name\n| file_type\n| file_checksum\n| file_conc\n| file_lics_info\n| file_cr_text\n"
+        "| file_lics_comment\n| file_attribution_text\n| file_notice\n| file_comment\n| file_contrib\n"
+        # attributes for annotation
+        "| annotator\n| annotation_date\n| annotation_comment\n| annotation_type\n| annotation_spdx_id\n"
+        # attributes for relationship
+        "| relationship\n"
+        # attributes for snippet
+        "| snip_spdx_id\n| snip_name\n| snip_comment\n| snippet_attribution_text\n| snip_cr_text\n"
+        "| snip_lic_comment\n| snip_file_spdx_id\n| snip_lics_conc\n| snip_lics_info\n| snip_byte_range\n"
+        "| snip_line_range\n"
+        # attributes for package
+        "| package_name\n| package_version\n| pkg_down_location\n| pkg_files_analyzed\n| pkg_home\n"
+        "| pkg_summary\n| pkg_src_info\n| pkg_file_name\n| pkg_supplier\n| pkg_orig\n| pkg_checksum\n"
+        "| pkg_verif\n| pkg_desc\n| pkg_comment\n| pkg_attribution_text\n| pkg_lic_decl\n| pkg_lic_conc\n"
+        "| pkg_lic_ff\n| pkg_lic_comment\n| pkg_cr_text\n| pkg_ext_ref\n| primary_package_purpose\n"
+        "| built_date\n| release_date\n| valid_until_date\n"
+        # attributes for extracted licensing info
+        "| extr_lic_id\n| extr_lic_text\n| extr_lic_name\n| lic_xref\n| lic_comment\n"
+        "| unknown_tag ")
     def p_attrib(self, p):
         pass
 
@@ -137,49 +138,61 @@ class Parser(object):
             self.creation_info["spdx_id"] = p[2]
 
     # parsing methods for creation info / document level
+    def set_creation_info_value(self, parsed_value: Any, argument_name: Optional[str] = None,
+                                method_to_apply: Callable = lambda x: x):
+        if not argument_name:
+            argument_name = str(parsed_value.slice[0])
+        if argument_name in self.creation_info:
+            self.creation_info["logger"].append(
+                f"Multiple values for {parsed_value[1]} found. Line: {parsed_value.lineno(1)}")
+            return
+        self.creation_info[argument_name] = method_to_apply(parsed_value[2])
 
-    @grammar_rule("lics_list_ver : LIC_LIST_VER LINE")
+    @grammar_rule("license_list_version : LIC_LIST_VER LINE")
     def p_license_list_version(self, p):
         try:
-            self.creation_info["license_list_version"] = Version.from_string(p[2])
+            if str(p.slice[0]) in self.creation_info:
+                self.creation_info["logger"].append(f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
+                return
+            self.creation_info[str(p.slice[0])] = Version.from_string(p[2])
         except ValueError as err:
             self.creation_info["logger"].append(err.args[0])
 
-    @grammar_rule("lics_list_ver : LIC_LIST_VER error")
+    @grammar_rule("license_list_version : LIC_LIST_VER error")
     def p_license_list_version_error(self, p):
         self.creation_info["logger"].append(
             f"Error while parsing LicenseListVersion: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
-    @grammar_rule("doc_comment : DOC_COMMENT text_or_line")
+    @grammar_rule("document_comment : DOC_COMMENT text_or_line")
     def p_doc_comment(self, p):
-        self.creation_info["document_comment"] = p[2]
+        self.set_creation_info_value(p)
 
-    @grammar_rule("doc_comment : DOC_COMMENT error")
+    @grammar_rule("document_comment : DOC_COMMENT error")
     def p_doc_comment_error(self, p):
         self.creation_info["logger"].append(
             f"Error while parsing DocumentComment: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
-    @grammar_rule("doc_namespace : DOC_NAMESPACE LINE")
+    @grammar_rule("document_namespace : DOC_NAMESPACE LINE")
     def p_doc_namespace(self, p):
-        self.creation_info["document_namespace"] = p[2]
+        self.set_creation_info_value(p)
 
-    @grammar_rule("doc_namespace : DOC_NAMESPACE error")
+    @grammar_rule("document_namespace : DOC_NAMESPACE error")
     def p_doc_namespace_error(self, p):
         self.creation_info["logger"].append(
             f"Error while parsing DocumentNamespace: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
-    @grammar_rule("data_lics : DOC_LICENSE LINE")
+    @grammar_rule("data_license : DOC_LICENSE LINE")
     def p_data_license(self, p):
-        self.creation_info["data_license"] = p[2]
+        self.set_creation_info_value(p)
 
-    @grammar_rule("data_lics : DOC_LICENSE error")
+    @grammar_rule("data_license : DOC_LICENSE error")
     def p_data_license_error(self, p):
         self.creation_info["logger"].append(
             f"Error while parsing DataLicense: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
     @grammar_rule("doc_name : DOC_NAME LINE")
     def p_doc_name(self, p):
-        self.creation_info["name"] = p[2]
+        self.set_creation_info_value(p, "name")
 
     @grammar_rule("doc_name : DOC_NAME error")
     def p_doc_name_error(self, p):
@@ -201,7 +214,7 @@ class Parser(object):
 
     @grammar_rule("spdx_version : DOC_VERSION LINE")
     def p_spdx_version(self, p):
-        self.creation_info["spdx_version"] = p[2]
+        self.set_creation_info_value(p)
 
     @grammar_rule("spdx_version : DOC_VERSION error")
     def p_spdx_version_error(self, p):
@@ -210,7 +223,7 @@ class Parser(object):
 
     @grammar_rule("creator_comment : CREATOR_COMMENT text_or_line")
     def p_creator_comment(self, p):
-        self.creation_info["creator_comment"] = p[2]
+        self.set_creation_info_value(p)
 
     @grammar_rule("creator_comment : CREATOR_COMMENT error")
     def p_creator_comment_error(self, p):
@@ -228,7 +241,7 @@ class Parser(object):
 
     @grammar_rule("created : CREATED DATE")
     def p_created(self, p):
-        self.creation_info["created"] = datetime_from_str(p[2])
+        self.set_creation_info_value(p, method_to_apply=datetime_from_str)
 
     @grammar_rule("created : CREATED error")
     def p_created_error(self, p):
