@@ -37,6 +37,11 @@ from spdx.parser.parsing_functions import construct_or_raise_parsing_error, rais
 from spdx.parser.tagvalue.lexer.tagvalue import SPDXLexer
 from spdx.parser.tagvalue.parser.helper_methods import grammar_rule, str_from_text, parse_checksum
 
+CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relationships", Snippet="snippets",
+                     Package="packages", ExtractedLicensingInfo="extracted_licensing_info")
+ELEMENT_EXPECTED_START_TAG = dict(File="FileName", Annotation="Annotator", Relationship="Relationship",
+                                  Snippet="SnippetSPDXID", Package="PackageName", ExtractedLicensingInfo="LicenseID")
+
 
 class Parser(object):
     tokens: List[str]
@@ -254,7 +259,6 @@ class Parser(object):
 
     @grammar_rule("extr_lic_id : LICS_ID error")
     def p_extr_lic_id_2(self, p):
-        self.initialize_new_current_element(ExtractedLicensingInfo)
         self.current_element["logger"].append(
             f"Error while parsing LicenseID: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
@@ -271,6 +275,7 @@ class Parser(object):
 
     @grammar_rule("lic_comment : LICS_COMMENT text_or_line")
     def p_lic_comment_1(self, p):
+        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo)
         self.current_element["comment"] = p[2]
 
     @grammar_rule("lic_comment : LICS_COMMENT error")
@@ -280,6 +285,7 @@ class Parser(object):
 
     @grammar_rule("extr_lic_name : LICS_NAME line_or_no_assertion")
     def p_extr_lic_name_1(self, p):
+        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo)
         self.current_element["license_name"] = p[2]
 
     @grammar_rule("extr_lic_name : LICS_NAME error")
@@ -289,6 +295,7 @@ class Parser(object):
 
     @grammar_rule("extr_lic_text : LICS_TEXT text_or_line")
     def p_extr_lic_text_1(self, p):
+        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo)
         self.current_element["extracted_text"] = p[2]
 
     @grammar_rule("extr_lic_text : LICS_TEXT error")
@@ -311,6 +318,7 @@ class Parser(object):
 
     @grammar_rule("file_contrib : FILE_CONTRIB LINE")
     def p_file_contrib_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         self.current_element.setdefault("contributors", []).append(p[2])
 
     @grammar_rule("file_contrib : FILE_CONTRIB error")
@@ -320,6 +328,7 @@ class Parser(object):
 
     @grammar_rule("file_notice : FILE_NOTICE text_or_line")
     def p_file_notice_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         self.current_element["notice"] = p[2]
 
     @grammar_rule("file_notice : FILE_NOTICE error")
@@ -329,6 +338,7 @@ class Parser(object):
 
     @grammar_rule("file_cr_text : FILE_CR_TEXT line_or_no_assertion_or_none")
     def p_file_cr_text_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         self.current_element["copyright_text"] = p[2]
 
     @grammar_rule("file_cr_text : FILE_CR_TEXT error")
@@ -338,6 +348,7 @@ class Parser(object):
 
     @grammar_rule("file_lics_comment : FILE_LICS_COMMENT text_or_line")
     def p_file_lics_comment_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         self.current_element["license_comment"] = p[2]
 
     @grammar_rule("file_lics_comment : FILE_LICS_COMMENT error")
@@ -348,6 +359,7 @@ class Parser(object):
 
     @grammar_rule("file_attribution_text : FILE_ATTRIBUTION_TEXT text_or_line")
     def p_file_attribution_text_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         self.current_element.setdefault("attribution_texts", []).append(p[2])
 
     @grammar_rule("file_attribution_text : FILE_ATTRIBUTION_TEXT error")
@@ -357,6 +369,7 @@ class Parser(object):
 
     @grammar_rule("file_lics_info : FILE_LICS_INFO license_or_no_assertion_or_none")
     def p_file_lics_info_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         if p[2] == SpdxNone() or p[2] == SpdxNoAssertion():
             self.current_element["license_info_in_file"] = p[2]
             return
@@ -369,6 +382,7 @@ class Parser(object):
 
     @grammar_rule("file_comment : FILE_COMMENT text_or_line")
     def p_file_comment_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         self.current_element["comment"] = p[2]
 
     @grammar_rule("file_comment : FILE_COMMENT error")
@@ -378,6 +392,7 @@ class Parser(object):
 
     @grammar_rule("file_type : FILE_TYPE file_type_value")
     def p_file_type_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         self.current_element.setdefault("file_type", []).append(FileType[p[2]])
 
     @grammar_rule("file_type : FILE_TYPE error")
@@ -385,8 +400,15 @@ class Parser(object):
         self.current_element["logger"].append(
             f"Error while parsing FileType: Token did not match any of the valid values. Line: {p.lineno(1)}")
 
+    @grammar_rule(
+        "file_type_value : SOURCE\n| BINARY\n| ARCHIVE\n | APPLICATION\n | AUDIO\n | IMAGE\n | FILETYPE_TEXT\n| VIDEO\n"
+        " | DOCUMENTATION\n| SPDX \n| OTHER ")
+    def p_file_type_value(self, p):
+        p[0] = p[1]
+
     @grammar_rule("file_checksum : FILE_CHECKSUM CHECKSUM")
     def p_file_checksum_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         checksum = parse_checksum(self.current_element["logger"], p[2])
         self.current_element.setdefault("checksums", []).append(checksum)
 
@@ -397,6 +419,7 @@ class Parser(object):
 
     @grammar_rule("file_conc : FILE_LICS_CONC license_or_no_assertion_or_none")
     def p_file_conc_1(self, p):
+        self.check_that_current_element_matches_class_for_value(File)
         self.current_element["license_concluded"] = p[2]
 
     @grammar_rule("file_conc : FILE_LICS_CONC error")
@@ -404,12 +427,6 @@ class Parser(object):
         self.current_element["logger"].append(
             f"Error while parsing LicenseConcluded in file: Token did not match specified grammar rule. "
             f"Line: {p.lineno(1)}")
-
-    @grammar_rule(
-        "file_type_value : SOURCE\n| BINARY\n| ARCHIVE\n | APPLICATION\n | AUDIO\n | IMAGE\n | FILETYPE_TEXT\n| VIDEO\n"
-        " | DOCUMENTATION\n| SPDX \n| OTHER ")
-    def p_file_type_value(self, p):
-        p[0] = p[1]
 
     # parsing methods for package
 
@@ -428,6 +445,7 @@ class Parser(object):
 
     @grammar_rule("pkg_desc : PKG_DESC text_or_line")
     def p_pkg_desc_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["description"] = p[2]
 
     @grammar_rule("pkg_desc : PKG_DESC error")
@@ -437,6 +455,7 @@ class Parser(object):
 
     @grammar_rule("pkg_comment : PKG_COMMENT text_or_line")
     def p_pkg_comment_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["comment"] = p[2]
 
     @grammar_rule("pkg_comment : PKG_COMMENT error")
@@ -446,6 +465,7 @@ class Parser(object):
 
     @grammar_rule("pkg_attribution_text : PKG_ATTRIBUTION_TEXT text_or_line")
     def p_pkg_attribution_text_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element.setdefault("attribution_texts", []).append(p[2])
 
     @grammar_rule("pkg_attribution_text : PKG_ATTRIBUTION_TEXT error")
@@ -456,6 +476,7 @@ class Parser(object):
 
     @grammar_rule("pkg_summary : PKG_SUM text_or_line")
     def p_pkg_summary_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["summary"] = p[2]
 
     @grammar_rule("pkg_summary : PKG_SUM error")
@@ -465,6 +486,7 @@ class Parser(object):
 
     @grammar_rule("pkg_cr_text : PKG_CPY_TEXT line_or_no_assertion_or_none")
     def p_pkg_cr_text_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["copyright_text"] = p[2]
 
     @grammar_rule("pkg_cr_text : PKG_CPY_TEXT error")
@@ -475,6 +497,7 @@ class Parser(object):
 
     @grammar_rule("pkg_ext_ref : PKG_EXT_REF LINE PKG_EXT_REF_COMMENT text_or_line\n | PKG_EXT_REF LINE")
     def p_pkg_ext_refs_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         category, reference_type, locator = p[2].split(" ")
         comment = None
         if len(p) == 5:
@@ -503,6 +526,7 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_comment : PKG_LICS_COMMENT text_or_line")
     def p_pkg_lic_comment_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["license_comment"] = p[2]
 
     @grammar_rule("pkg_lic_comment : PKG_LICS_COMMENT error")
@@ -513,6 +537,7 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_decl : PKG_LICS_DECL license_or_no_assertion_or_none")
     def p_pkg_lic_decl_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["license_declared"] = p[2]
 
     @grammar_rule("pkg_lic_decl : PKG_LICS_DECL error")
@@ -523,6 +548,7 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_ff : PKG_LICS_FFILE license_or_no_assertion_or_none")
     def p_pkg_lic_ff_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         if p[2] == SpdxNone() or p[2] == SpdxNoAssertion():
             self.current_element["license_info_from_files"] = p[2]
         else:
@@ -536,6 +562,7 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_conc : PKG_LICS_CONC license_or_no_assertion_or_none")
     def p_pkg_lic_conc_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["license_concluded"] = p[2]
 
     @grammar_rule("pkg_lic_conc : PKG_LICS_CONC error")
@@ -546,6 +573,7 @@ class Parser(object):
 
     @grammar_rule("pkg_src_info : PKG_SRC_INFO text_or_line")
     def p_pkg_src_info_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["source_info"] = p[2]
 
     @grammar_rule("pkg_src_info : PKG_SRC_INFO error")
@@ -555,6 +583,7 @@ class Parser(object):
 
     @grammar_rule("pkg_checksum : PKG_CHECKSUM CHECKSUM")
     def p_pkg_checksum_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         checksum = parse_checksum(self.current_element["logger"], p[2])
         self.current_element.setdefault("checksums", []).append(checksum)
 
@@ -565,6 +594,7 @@ class Parser(object):
 
     @grammar_rule("pkg_verif : PKG_VERF_CODE LINE")
     def p_pkg_verif_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         verif_code_regex = re.compile(r"([0-9a-f]+)\s*(\(excludes:\s*(.+)\))?", re.UNICODE)
         verif_code_code_grp = 1
         verif_code_exc_files_grp = 3
@@ -583,6 +613,7 @@ class Parser(object):
 
     @grammar_rule("pkg_home : PKG_HOME line_or_no_assertion_or_none")
     def p_pkg_home_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["homepage"] = p[2]
 
     @grammar_rule("pkg_home : PKG_HOME error")
@@ -592,6 +623,7 @@ class Parser(object):
 
     @grammar_rule("pkg_down_location : PKG_DOWN line_or_no_assertion_or_none")
     def p_pkg_down_location_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["download_location"] = p[2]
 
     @grammar_rule("pkg_down_location : PKG_DOWN error")
@@ -602,6 +634,7 @@ class Parser(object):
 
     @grammar_rule("pkg_files_analyzed : PKG_FILES_ANALYZED LINE")
     def p_pkg_files_analyzed_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         if p[2] in ['false', 'False']:
             self.current_element["files_analyzed"] = False
         if p[2] in ['true', 'True']:
@@ -615,6 +648,7 @@ class Parser(object):
 
     @grammar_rule("pkg_orig : PKG_ORIG pkg_supplier_values")
     def p_pkg_orig_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["originator"] = p[2]
 
     @grammar_rule("pkg_orig : PKG_ORIG error")
@@ -624,6 +658,7 @@ class Parser(object):
 
     @grammar_rule("pkg_supplier : PKG_SUPPL pkg_supplier_values")
     def p_pkg_supplier_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["supplier"] = p[2]
 
     @grammar_rule("pkg_supplier : PKG_SUPPL error")
@@ -641,6 +676,7 @@ class Parser(object):
 
     @grammar_rule("pkg_file_name : PKG_FILE_NAME LINE")
     def p_pkg_file_name(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["file_name"] = p[2]
 
     @grammar_rule("pkg_file_name : PKG_FILE_NAME error")
@@ -650,6 +686,7 @@ class Parser(object):
 
     @grammar_rule("package_version : PKG_VERSION LINE")
     def p_package_version_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["version"] = p[2]
 
     @grammar_rule("package_version : PKG_VERSION error")
@@ -659,7 +696,7 @@ class Parser(object):
 
     @grammar_rule("primary_package_purpose : PRIMARY_PACKAGE_PURPOSE primary_package_purpose_value")
     def p_primary_package_purpose_1(self, p):
-
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["primary_package_purpose"] = PackagePurpose[p[2].replace("-", "_")]
 
     @grammar_rule("primary_package_purpose : PRIMARY_PACKAGE_PURPOSE error")
@@ -675,6 +712,7 @@ class Parser(object):
 
     @grammar_rule("built_date : BUILT_DATE DATE")
     def p_built_date_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["built_date"] = datetime_from_str(p[2])
 
     @grammar_rule("built_date : BUILT_DATE error")
@@ -684,6 +722,7 @@ class Parser(object):
 
     @grammar_rule("release_date : RELEASE_DATE DATE")
     def p_release_date_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["release_date"] = datetime_from_str(p[2])
 
     @grammar_rule("release_date : RELEASE_DATE error")
@@ -693,6 +732,7 @@ class Parser(object):
 
     @grammar_rule("valid_until_date : VALID_UNTIL_DATE DATE")
     def p_valid_until_date_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["valid_until_date"] = datetime_from_str(p[2])
 
     @grammar_rule("valid_until_date : VALID_UNTIL_DATE error")
@@ -714,6 +754,7 @@ class Parser(object):
 
     @grammar_rule("snip_name : SNIPPET_NAME LINE")
     def p_snippet_name(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         self.current_element["name"] = p[2]
 
     @grammar_rule("snip_name : SNIPPET_NAME error")
@@ -723,6 +764,7 @@ class Parser(object):
 
     @grammar_rule("snip_comment : SNIPPET_COMMENT text_or_line")
     def p_snippet_comment(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         self.current_element["comment"] = p[2]
 
     @grammar_rule("snip_comment : SNIPPET_COMMENT error")
@@ -732,6 +774,7 @@ class Parser(object):
 
     @grammar_rule("snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT text_or_line")
     def p_snippet_attribution_text_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         self.current_element.setdefault("attribution_texts", []).append(p[2])
 
     @grammar_rule("snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT error")
@@ -742,6 +785,7 @@ class Parser(object):
 
     @grammar_rule("snip_cr_text : SNIPPET_CR_TEXT line_or_no_assertion_or_none")
     def p_snippet_cr_text(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         self.current_element["copyright_text"] = p[2]
 
     @grammar_rule("snip_cr_text : SNIPPET_CR_TEXT error")
@@ -752,6 +796,7 @@ class Parser(object):
 
     @grammar_rule("snip_lic_comment : SNIPPET_LICS_COMMENT text_or_line")
     def p_snippet_lic_comment(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         self.current_element["license_comment"] = p[2]
 
     @grammar_rule("snip_lic_comment : SNIPPET_LICS_COMMENT error")
@@ -762,6 +807,7 @@ class Parser(object):
 
     @grammar_rule("snip_file_spdx_id : SNIPPET_FILE_SPDXID LINE")
     def p_snip_from_file_spdxid(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         self.current_element["file_spdx_id"] = p[2]
 
     @grammar_rule("snip_file_spdx_id : SNIPPET_FILE_SPDXID error")
@@ -772,6 +818,7 @@ class Parser(object):
 
     @grammar_rule("snip_lics_conc : SNIPPET_LICS_CONC license_or_no_assertion_or_none")
     def p_snippet_concluded_license(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         self.current_element["license_concluded"] = p[2]
 
     @grammar_rule("snip_lics_conc : SNIPPET_LICS_CONC error")
@@ -782,6 +829,7 @@ class Parser(object):
 
     @grammar_rule("snip_lics_info : SNIPPET_LICS_INFO license_or_no_assertion_or_none")
     def p_snippet_lics_info(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         if p[2] == SpdxNone() or p[2] == SpdxNoAssertion():
             self.current_element["license_info_in_snippet"] = p[2]
         else:
@@ -796,6 +844,7 @@ class Parser(object):
 
     @grammar_rule("snip_byte_range : SNIPPET_BYTE_RANGE LINE")
     def p_snippet_byte_range(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
         if not range_re.match(p[2].strip()):
             self.current_element["logger"].append("Value for SnippetByteRange doesn't match valid range pattern.")
@@ -812,6 +861,7 @@ class Parser(object):
 
     @grammar_rule("snip_line_range : SNIPPET_LINE_RANGE LINE")
     def p_snippet_line_range(self, p):
+        self.check_that_current_element_matches_class_for_value(Snippet)
         range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
         if not range_re.match(p[2].strip()):
             self.current_element["logger"].append("Value for SnippetLineRange doesn't match valid range pattern.")
@@ -842,6 +892,7 @@ class Parser(object):
 
     @grammar_rule("annotation_date : ANNOTATION_DATE DATE")
     def p_annotation_date_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Annotation)
         self.current_element["annotation_date"] = datetime_from_str(p[2])
 
     @grammar_rule("annotation_date : ANNOTATION_DATE error")
@@ -851,6 +902,7 @@ class Parser(object):
 
     @grammar_rule("annotation_comment : ANNOTATION_COMMENT text_or_line")
     def p_annotation_comment_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Annotation)
         self.current_element["annotation_comment"] = p[2]
 
     @grammar_rule("annotation_comment : ANNOTATION_COMMENT error")
@@ -860,6 +912,7 @@ class Parser(object):
 
     @grammar_rule("annotation_type : ANNOTATION_TYPE annotation_type_value")
     def p_annotation_type_1(self, p):
+        self.check_that_current_element_matches_class_for_value(Annotation)
         self.current_element["annotation_type"] = AnnotationType[p[2]]
 
     @grammar_rule("annotation_type : ANNOTATION_TYPE error")
@@ -959,9 +1012,14 @@ class Parser(object):
         self.current_element = {"logger": Logger()}
 
     def check_that_current_element_matches_class_for_value(self, expected_class):
-        if expected_class != self.current_element["class"]:
-            raise SPDXParsingError(["Unexpected current element for value"])
-        # what to do now? exit parsing
+        if "class" not in self.current_element:
+            self.logger.append(
+                f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
+                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing.")
+        elif expected_class != self.current_element["class"]:
+            self.logger.append(
+                f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
+                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing.")
 
     def initialize_new_current_element(self, class_name: Any):
         if "class" in self.current_element and "spdx_id" in self.current_element:
@@ -977,7 +1035,3 @@ class Parser(object):
         relationship = Relationship(package_spdx_id, RelationshipType.CONTAINS, file_spdx_id)
         if relationship not in self.elements_build["relationships"]:
             self.elements_build.setdefault("relationships", []).append(relationship)
-
-
-CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relationships", Snippet="snippets",
-                     Package="packages", ExtractedLicensingInfo="extracted_licensing_info")
