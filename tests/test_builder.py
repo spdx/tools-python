@@ -823,6 +823,11 @@ class TestSnippetBuilder(TestCase):
         self.builder.create_snippet(self.document, "SPDXRef-Snippet")
         self.builder.set_snippet_byte_range(self.document, "310:30")
 
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_snippet_byte_range_value_wrong_format(self):
+        self.builder.create_snippet(self.document, "SPDXRef-Snippet")
+        self.builder.set_snippet_byte_range(self.document, "30")
+
     def test_snippet_line_range(self):
         self.builder.create_snippet(self.document, "SPDXRef-Snippet")
         self.builder.set_snippet_line_range(self.document, "5:23")
@@ -835,3 +840,8 @@ class TestSnippetBuilder(TestCase):
     def test_snippet_line_range_value(self):
         self.builder.create_snippet(self.document, "SPDXRef-Snippet")
         self.builder.set_snippet_line_range(self.document, "23:5")
+
+    @testing_utils.raises(builders.SPDXValueError)
+    def test_snippet_line_range_value_wrong_format(self):
+        self.builder.create_snippet(self.document, "SPDXRef-Snippet")
+        self.builder.set_snippet_line_range(self.document, "5:23d")
