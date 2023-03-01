@@ -103,44 +103,29 @@ class Parser(object):
         self.logger.append(f"Unknown tag provided in line {p.lineno(1)}")
 
     @grammar_rule("text_or_line : TEXT")
-    def p_text_or_line_value(self, p):
+    def p_text(self, p):
         p[0] = str_from_text(p[1])
 
-    @grammar_rule("text_or_line : LINE")
-    def p_text_or_line_value_error(self, p):
-        p[0] = p[1]
-
-    @grammar_rule("license_or_no_assertion_or_none : NO_ASSERTION")
-    def p_license_or_no_assertion_or_none(self, p):
-        p[0] = SpdxNoAssertion()
-
-    @grammar_rule("license_or_no_assertion_or_none : NONE")
-    def p_license_or_no_assertion_or_none_error(self, p):
-        p[0] = SpdxNone()
-
-    @grammar_rule("license_or_no_assertion_or_none : LINE")
-    def p_license_or_no_assertion_or_none_3(self, p):
-        p[0] = get_spdx_licensing().parse(p[1])
-
-    @grammar_rule("line_or_no_assertion : LINE")
-    def p_line_or_no_assertion(self, p):
-        p[0] = p[1]
-
-    @grammar_rule("line_or_no_assertion : NO_ASSERTION")
-    def p_line_or_no_assertion_error(self, p):
-        p[0] = SpdxNoAssertion()
-
-    @grammar_rule("line_or_no_assertion_or_none : text_or_line")
+    @grammar_rule("text_or_line : LINE\n line_or_no_assertion : LINE\nline_or_no_assertion_or_none : text_or_line")
     def p_line(self, p):
         p[0] = p[1]
 
-    @grammar_rule("line_or_no_assertion_or_none : NO_ASSERTION")
-    def p_no_assertion_error(self, p):
+    @grammar_rule("license_or_no_assertion_or_none : NO_ASSERTION\n actor_or_no_assertion : NO_ASSERTION\n"
+                  "line_or_no_assertion : NO_ASSERTION\n line_or_no_assertion_or_none : NO_ASSERTION")
+    def p_no_assertion(self, p):
         p[0] = SpdxNoAssertion()
 
-    @grammar_rule("line_or_no_assertion_or_none : NONE")
-    def p_none_error(self, p):
-        p[0] = SpdxNoAssertion()
+    @grammar_rule("license_or_no_assertion_or_none : NONE\n line_or_no_assertion_or_none : NONE")
+    def p_none(self, p):
+        p[0] = SpdxNone()
+
+    @grammar_rule("license_or_no_assertion_or_none : LINE")
+    def p_license(self, p):
+        p[0] = get_spdx_licensing().parse(p[1])
+
+    @grammar_rule("actor_or_no_assertion : PERSON_VALUE\n | ORG_VALUE")
+    def p_actor_values(self, p):
+        p[0] = ActorParser.parse_actor(p[1])
 
     @grammar_rule("spdx_id : SPDX_ID LINE")
     def p_spdx_id(self, p):
@@ -438,8 +423,6 @@ class Parser(object):
     @grammar_rule("package_name : PKG_NAME error")
     def p_package_name_error(self, p):
         self.initialize_new_current_element(Package)
-        self.construct_current_element()
-        self.current_element["class"] = Package
         self.current_element["logger"].append(
             f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
@@ -646,7 +629,7 @@ class Parser(object):
             f"Error while parsing FilesAnalyzed in package: Token did not match specified grammar rule. "
             f"Line: {p.lineno(1)}")
 
-    @grammar_rule("pkg_orig : PKG_ORIG pkg_supplier_values")
+    @grammar_rule("pkg_orig : PKG_ORIG actor_or_no_assertion")
     def p_pkg_originator(self, p):
         self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["originator"] = p[2]
@@ -656,7 +639,7 @@ class Parser(object):
         self.current_element["logger"].append(
             f"Error while parsing PackageOriginator: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
-    @grammar_rule("pkg_supplier : PKG_SUPPL pkg_supplier_values")
+    @grammar_rule("pkg_supplier : PKG_SUPPL actor_or_no_assertion")
     def p_pkg_supplier(self, p):
         self.check_that_current_element_matches_class_for_value(Package)
         self.current_element["supplier"] = p[2]
@@ -665,14 +648,6 @@ class Parser(object):
     def p_pkg_supplier_error(self, p):
         self.current_element["logger"].append(
             f"Error while parsing PackageSupplier: Token did not match specified grammar rule. Line: {p.lineno(1)}")
-
-    @grammar_rule("pkg_supplier_values : NO_ASSERTION")
-    def p_pkg_supplier_values_1(self, p):
-        p[0] = SpdxNoAssertion()
-
-    @grammar_rule("pkg_supplier_values : PERSON_VALUE\n | ORG_VALUE\n | TOOL_VALUE")
-    def p_pkg_supplier_values_2(self, p):
-        p[0] = ActorParser.parse_actor(p[1])
 
     @grammar_rule("pkg_file_name : PKG_FILE_NAME LINE")
     def p_pkg_file_name(self, p):
