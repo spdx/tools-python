@@ -10,12 +10,15 @@
 # limitations under the License.
 from datetime import datetime
 
+import pytest
+
 from spdx.model.annotation import AnnotationType
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 
-def test_annotation():
+def test_parse_annotation():
     parser = Parser()
     annotation_str = '\n'.join([
         'Annotator: Person: Jane Doe()',
@@ -33,3 +36,27 @@ def test_annotation():
     assert annotation.annotation_comment == 'Document level annotation'
     assert annotation.annotation_type == AnnotationType.OTHER
     assert annotation.spdx_id == 'SPDXRef-DOCUMENT'
+
+
+@pytest.mark.parametrize("annotation_str, expected_message", [
+    ('Annotator: Person: Jane Doe()', [['Error while constructing Annotation: Annotation.__init__() missing 4 '
+                                        "required positional arguments: 'spdx_id', 'annotation_type', "
+                                        "'annotation_date', and 'annotation_comment'"]]),
+    ('Annotator: Person: Jane Doe()\nAnnotationType: SOURCE\nAnnotationDate: 201001-2912:23',
+     [["Error while parsing Annotation: ['Error while parsing AnnotationType: Token "
+       "did not match specified grammar rule. Line: 2', 'Error while parsing "
+       "AnnotationDate: Token did not match specified grammar rule. Line: 3']"]]),
+    ('Annotator: Jane Doe()\nAnnotationDate: 201001-29T18:30:22Z\n'
+     'AnnotationComment: <text>Document level annotation</text>\nAnnotationType: OTHER\nSPDXREF: SPDXRef-DOCUMENT',
+     [["Error while parsing Annotation: ['Error while parsing Annotator: Token did "
+       "not match specified grammar rule. Line: 1', 'Error while parsing "
+       "AnnotationDate: Token did not match specified grammar rule. Line: 2']"]]),
+    ('Annotator: Person: ()', [["Error while parsing Annotation: [['No name for Person provided: Person: ().']]"]]),
+    ('AnnotationType: REVIEW', ['Element Annotation is not the current element in scope, probably the '
+                                'expected tag to start the element (Annotator) is missing.'])])
+def test_parse_invalid_annotation(annotation_str, expected_message):
+    parser = Parser()
+    with pytest.raises(SPDXParsingError) as err:
+        parser.parse(annotation_str)
+
+    assert err.value.get_messages() == expected_message
