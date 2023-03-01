@@ -688,7 +688,8 @@ class Parser(object):
     def p_primary_package_purpose_value(self, p):
         p[0] = p[1]
 
-    @grammar_rule("built_date : BUILT_DATE DATE")
+    @grammar_rule("built_date : BUILT_DATE DATE\n release_date : RELEASE_DATE DATE\n "
+                  "valid_until_date : VALID_UNTIL_DATE DATE")
     def p_built_date(self, p):
         self.check_that_current_element_matches_class_for_value(Package)
         set_value(p, self.current_element, method_to_apply=datetime_from_str)
@@ -698,20 +699,10 @@ class Parser(object):
         self.current_element["logger"].append(
             f"Error while parsing BuiltDate: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
-    @grammar_rule("release_date : RELEASE_DATE DATE")
-    def p_release_date(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
-        set_value(p, self.current_element, method_to_apply=datetime_from_str)
-
     @grammar_rule("release_date : RELEASE_DATE error")
     def p_release_date_error(self, p):
         self.current_element["logger"].append(
             f"Error while parsing ReleaseDate: Token did not match specified grammar rule. Line: {p.lineno(1)}")
-
-    @grammar_rule("valid_until_date : VALID_UNTIL_DATE DATE")
-    def p_valid_until_date(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
-        set_value(p, self.current_element, method_to_apply=datetime_from_str)
 
     @grammar_rule("valid_until_date : VALID_UNTIL_DATE error")
     def p_valid_until_date_error(self, p):
