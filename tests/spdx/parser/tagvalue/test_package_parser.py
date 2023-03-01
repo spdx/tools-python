@@ -11,7 +11,6 @@
 from datetime import datetime
 from unittest import TestCase
 
-import pytest
 from license_expression import get_spdx_licensing
 
 from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
@@ -19,14 +18,8 @@ from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 
-@pytest.fixture
-def parser():
-    spdx_parser = Parser()
-    spdx_parser.build()
-    return spdx_parser
-
-
-def test_package(parser):
+def test_package():
+    parser = Parser()
     package_str = '\n'.join([
         'PackageName: Test',
         'SPDXID: SPDXRef-Package',

@@ -8,21 +8,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import pytest
 from license_expression import get_spdx_licensing
 
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 
-@pytest.fixture
-def parser():
-    spdx_parser = Parser()
-    spdx_parser.build()
-    return spdx_parser
-
-
-def test_snippet(parser):
+def test_snippet():
+    parser = Parser()
     snippet_str = '\n'.join([
         'SnippetSPDXID: SPDXRef-Snippet',
         'SnippetLicenseComments: <text>Some lic comment.</text>',

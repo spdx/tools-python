@@ -8,20 +8,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import pytest
-
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 
-@pytest.fixture
-def parser():
-    spdx_parser = Parser()
-    spdx_parser.build()
-    return spdx_parser
-
-
-def test_extracted_licensing_info(parser):
+def test_extracted_licensing_info():
+    parser = Parser()
     extracted_licensing_info_str = '\n'.join([
         'LicenseID: LicenseRef-Beerware-4.2',
         'ExtractedText: <text>"THE BEER-WARE LICENSE" (Revision 42): phk@FreeBSD.ORG wrote this file. As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp</text>'

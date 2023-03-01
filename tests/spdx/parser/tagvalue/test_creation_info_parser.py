@@ -36,14 +36,8 @@ DOCUMENT_STR = '\n'.join([
 ])
 
 
-@pytest.fixture
-def parser():
-    spdx_parser = Parser()
-    spdx_parser.build()
-    return spdx_parser
-
-
-def test_creation_info(parser):
+def test_creation_info():
+    parser = Parser()
     document = parser.parse(DOCUMENT_STR)
     assert document is not None
     creation_info = document.creation_info
@@ -88,7 +82,8 @@ def test_creation_info(parser):
                               ['Error while constructing CreationInfo: CreationInfo.__init__() missing 3 '
                                "required positional arguments: 'document_namespace', 'creators', and "
                                "'created'"])]))
-def test_invalid_creation_info(parser, document_str, expected_message):
+def test_invalid_creation_info(document_str, expected_message):
+    parser = Parser()
     with pytest.raises(SPDXParsingError) as err:
         parser.parse(document_str)
     assert err.value.get_messages() == expected_message

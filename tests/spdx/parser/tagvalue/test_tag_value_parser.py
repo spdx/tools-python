@@ -18,21 +18,16 @@ from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 
 
-@pytest.fixture
-def parser():
-    spdx_parser = Parser()
-    spdx_parser.build()
-    return spdx_parser
-
-
-def test_unknown_str(parser):
+def test_unknown_str():
+    parser = Parser()
     unknown_tag_str = 'UnknownTag: This is an example for an unknown tag.'
 
     with pytest.raises(SPDXParsingError, match="Unknown tag"):
         parser.parse(unknown_tag_str)
 
 
-def test_parse_file(parser):
+def test_parse_file():
+    parser = Parser()
     fn = os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXTagExample-v2.3.spdx")
 
     with open(fn) as f:
