@@ -11,43 +11,53 @@
 # limitations under the License.
 
 import re
-from typing import Any
+from typing import Any, List, Dict
 
 from license_expression import get_spdx_licensing
 from ply import yacc
+from ply.yacc import LRParser
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.annotation import AnnotationType, Annotation
+from spdx.model.document import Document, CreationInfo
 from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx.model.file import File, FileType
 from spdx.model.package import Package, PackageVerificationCode, PackagePurpose, ExternalPackageRef, \
     ExternalPackageRefCategory
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.snippet import Snippet
-from spdx.model.version import Version
-from spdx.parser.actor_parser import ActorParser
-
-from spdx.model.document import Document, CreationInfo
-from spdx.model.file import File, FileType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
+from spdx.model.version import Version
+from spdx.parser.actor_parser import ActorParser
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.tagvalue.lexer.tagvalue import SPDXLexer
 from spdx.parser.tagvalue.parser.helper_methods import grammar_rule, str_from_text, parse_checksum
 
 
 class Parser(object):
-    def __init__(self):
-        self.lex = None
-        self.yacc = None
+    tokens: List[str]
+    logger: Logger
+    element_stack: List[Dict[str, str]]
+    current_element: Dict[str, Any]
+    creation_info: Dict[str, Any]
+    elements_build: Dict[str, Any]
+    lex: SPDXLexer
+    yacc: LRParser
+
+    def __init__(self, **kwargs):
         self.tokens = SPDXLexer.tokens
         self.logger = Logger()
         self.element_stack = []
         self.current_element = {"logger": Logger()}
         self.creation_info = {"logger": Logger()}
         self.elements_build = dict()
+        self.lex = SPDXLexer()
+        self.lex.build(reflags=re.UNICODE)
+        self.yacc = yacc.yacc(module=self, **kwargs)
 
     @grammar_rule("start : start attrib ")
     def p_start_1(self, p):
@@ -914,11 +924,6 @@ class Parser(object):
 
     def p_error(self, p):
         pass
-
-    def build(self, **kwargs):
-        self.lex = SPDXLexer()
-        self.lex.build(reflags=re.UNICODE)
-        self.yacc = yacc.yacc(module=self, **kwargs)
 
     def parse(self, text):
         self.yacc.parse(text, lexer=self.lex)

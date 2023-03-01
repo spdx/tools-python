@@ -10,22 +10,13 @@
 # limitations under the License.
 from datetime import datetime
 
-import pytest
-
+from spdx.model.annotation import AnnotationType
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
-from spdx.model.annotation import AnnotationType
 
-
-@pytest.fixture
-def parser():
-    spdx_parser = Parser()
-    spdx_parser.build()
-    return spdx_parser
-
-
-def test_annotation(parser):
+def test_annotation():
+    parser = Parser()
     annotation_str = '\n'.join([
         'Annotator: Person: Jane Doe()',
         'AnnotationDate: 2010-01-29T18:30:22Z',

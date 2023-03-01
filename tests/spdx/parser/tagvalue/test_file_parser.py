@@ -11,21 +11,14 @@
 import pytest
 from license_expression import get_spdx_licensing
 
+from spdx.model.file import FileType
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
-from spdx.model.file import FileType
 
-
-@pytest.fixture
-def parser():
-    spdx_parser = Parser()
-    spdx_parser.build()
-    return spdx_parser
-
-
-def test_file(parser):
+def test_file():
+    parser = Parser()
     file_str = '\n'.join([
         'FileName: testfile.java',
         'SPDXID: SPDXRef-File',
@@ -52,7 +45,8 @@ def test_file(parser):
     assert spdx_file.license_concluded == get_spdx_licensing().parse("Apache-2.0")
 
 
-def test_invalid_file(parser):
+def test_invalid_file():
+    parser = Parser()
     file_str = '\n'.join([
         'FileName: testfile.java',
         'SPDXID: SPDXRef-File',
