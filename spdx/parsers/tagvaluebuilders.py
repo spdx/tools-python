@@ -1614,8 +1614,11 @@ class SnippetBuilder(object):
         Raise SPDXValueError if the data is malformed.
         """
         self.assert_snippet_exists()
-        startpoint = int(parsed.split(":")[0])
-        endpoint = int(parsed.split(":")[-1])
+        range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
+        if not range_re.match(parsed):
+            raise SPDXValueError("Snippet:ByteRange")
+        startpoint = int(range_re.match(parsed).group(1))
+        endpoint = int(range_re.match(parsed).group(2))
         if startpoint <= endpoint:
             doc.snippet[-1].byte_range = (startpoint, endpoint)
         else:
@@ -1627,8 +1630,11 @@ class SnippetBuilder(object):
         Raise SPDXValueError if the data is malformed.
         """
         self.assert_snippet_exists()
-        startpoint = int(parsed.split(":")[0])
-        endpoint = int(parsed.split(":")[-1])
+        range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
+        if not range_re.match(parsed):
+            raise SPDXValueError("Snippet:LineRange")
+        startpoint = int(range_re.match(parsed).group(1))
+        endpoint = int(range_re.match(parsed).group(2))
         if startpoint <= endpoint:
             doc.snippet[-1].line_range = (startpoint, endpoint)
         else:

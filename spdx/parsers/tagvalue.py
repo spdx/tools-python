@@ -1393,9 +1393,9 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_snippet_byte_range(self, p):
-        """snip_byte_range : SNIPPET_BYTE_RANGE RANGE"""
+        """snip_byte_range : SNIPPET_BYTE_RANGE LINE"""
         try:
-            self.builder.set_snippet_byte_range(self.document, p[2])
+            self.builder.set_snippet_byte_range(self.document, p[2].strip())
         except OrderError:
             self.order_error("SnippetByteRange", "SnippetSPDXID", p.lineno(1))
         except SPDXValueError:
@@ -1411,9 +1411,9 @@ class Parser(object):
         self.logger.log(msg)
 
     def p_snippet_line_range(self, p):
-        """snip_line_range : SNIPPET_LINE_RANGE RANGE"""
+        """snip_line_range : SNIPPET_LINE_RANGE LINE"""
         try:
-            self.builder.set_snippet_line_range(self.document, p[2])
+            self.builder.set_snippet_line_range(self.document, p[2].strip())
         except OrderError:
             self.order_error("SnippetLineRange", "SnippetSPDXID", p.lineno(1))
         except SPDXValueError:
