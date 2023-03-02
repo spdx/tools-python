@@ -545,6 +545,7 @@ class Parser(object):
         self.current_element["line_range"] = startpoint, endpoint
 
     # parsing methods for annotation
+
     @grammar_rule("annotation_date : ANNOTATION_DATE error\n annotation_comment : ANNOTATION_COMMENT error\n "
                   "annotation_type : ANNOTATION_TYPE error\n annotation_spdx_id : ANNOTATION_SPDX_ID error")
     def p_annotation_value_error(self, p):
@@ -586,6 +587,7 @@ class Parser(object):
         set_value(p, self.current_element, argument_name="spdx_id")
 
     # parsing methods for relationship
+
     @grammar_rule("relationship : RELATIONSHIP relationship_value RELATIONSHIP_COMMENT text_or_line\n "
                   "| RELATIONSHIP relationship_value")
     def p_relationship(self, p):
@@ -642,6 +644,22 @@ class Parser(object):
         document = construct_or_raise_parsing_error(Document, self.elements_build)
         return document
 
+    def initialize_new_current_element(self, class_name: Any):
+        if "class" in self.current_element and "spdx_id" in self.current_element:
+            self.element_stack.append({self.current_element["class"]: self.current_element["spdx_id"]})
+        self.construct_current_element()
+        self.current_element["class"] = class_name
+
+    def check_that_current_element_matches_class_for_value(self, expected_class):
+        if "class" not in self.current_element:
+            self.logger.append(
+                f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
+                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing.")
+        elif expected_class != self.current_element["class"]:
+            self.logger.append(
+                f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
+                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing.")
+
     def construct_current_element(self):
         if "class" not in self.current_element:
             self.current_element = {"logger": Logger()}
@@ -661,22 +679,6 @@ class Parser(object):
         except SPDXParsingError as err:
             self.logger.append(err.get_messages())
         self.current_element = {"logger": Logger()}
-
-    def check_that_current_element_matches_class_for_value(self, expected_class):
-        if "class" not in self.current_element:
-            self.logger.append(
-                f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
-                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing.")
-        elif expected_class != self.current_element["class"]:
-            self.logger.append(
-                f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
-                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing.")
-
-    def initialize_new_current_element(self, class_name: Any):
-        if "class" in self.current_element and "spdx_id" in self.current_element:
-            self.element_stack.append({self.current_element["class"]: self.current_element["spdx_id"]})
-        self.construct_current_element()
-        self.current_element["class"] = class_name
 
     def check_for_preceding_package_and_build_contains_relationship(self):
         file_spdx_id = self.current_element["spdx_id"]
