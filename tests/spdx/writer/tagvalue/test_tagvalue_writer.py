@@ -13,6 +13,7 @@ import os
 
 import pytest
 
+from spdx.parser.tagvalue.parser import tagvalue_parser
 from tests.spdx.fixtures import document_fixture
 from spdx.writer.tagvalue.tagvalue_writer import write_document_to_file
 
@@ -29,5 +30,6 @@ def test_write_tag_value(temporary_file_path: str):
 
     write_document_to_file(document, temporary_file_path)
 
-    # without a tag-value parser we can only test that no errors occur while writing
-    # as soon as the tag-value parser is implemented (https://github.com/spdx/tools-python/issues/382) we can test for equality between the temporary file and the expected file in ./expected_results
+    parsed_document = tagvalue_parser.parse_from_file(temporary_file_path)
+
+    assert parsed_document == document
