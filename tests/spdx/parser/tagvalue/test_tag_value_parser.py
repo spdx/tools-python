@@ -18,7 +18,7 @@ from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 
 
-def test_unknown_str():
+def test_parse_unknown_tag():
     parser = Parser()
     unknown_tag_str = 'UnknownTag: This is an example for an unknown tag.'
 
@@ -26,7 +26,7 @@ def test_unknown_str():
         parser.parse(unknown_tag_str)
 
 
-def test_parse_file():
+def test_tag_value_parser():
     parser = Parser()
     fn = os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXTagExample-v2.3.spdx")
 

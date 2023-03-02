@@ -32,7 +32,7 @@ from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
                            Relationship("DocumentRef-ExternalDocument:SPDXRef-Test", RelationshipType.DEPENDS_ON,
                                         "DocumentRef:AnotherRef"))
                           ])
-def test_relationship(relationship_str, expected_relationship):
+def test_parse_relationship(relationship_str, expected_relationship):
     parser = Parser()
     document = parser.parse("\n".join([DOCUMENT_STR, relationship_str]))
     assert document is not None
@@ -50,7 +50,7 @@ def test_relationship(relationship_str, expected_relationship):
                            [["Error while parsing Relationship: ['Error while parsing Relationship: Token "
                              "did not match specified grammar rule. Line: 1']"]])
                           ])
-def test_falsy_relationship(relationship_str, expected_message):
+def test_parse_invalid_relationship(relationship_str, expected_message):
     parser = Parser()
     with pytest.raises(SPDXParsingError) as err:
         parser.parse(relationship_str)

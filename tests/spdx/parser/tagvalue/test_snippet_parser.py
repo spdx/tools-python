@@ -14,7 +14,7 @@ from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 
-def test_snippet():
+def test_parse_snippet():
     parser = Parser()
     snippet_str = '\n'.join([
         'SnippetSPDXID: SPDXRef-Snippet',
