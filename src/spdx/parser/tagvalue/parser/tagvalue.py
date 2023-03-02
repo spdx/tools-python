@@ -99,7 +99,8 @@ class Parser(object):
         pass
 
     # general parsing methods
-    @grammar_rule("unknown_tag : UNKNOWN_TAG text_or_line\n | UNKNOWN_TAG DATE\n | UNKNOWN_TAG PERSON_VALUE")
+    @grammar_rule("unknown_tag : UNKNOWN_TAG text_or_line\n | UNKNOWN_TAG DATE\n | UNKNOWN_TAG PERSON_VALUE \n"
+                  "| UNKNOWN_TAG")
     def p_unknown_tag(self, p):
         self.logger.append(f"Unknown tag provided in line {p.lineno(1)}")
 
@@ -681,7 +682,11 @@ class Parser(object):
         file_spdx_id = self.current_element["spdx_id"]
         if "packages" not in self.elements_build:
             return
+        # We assume that all files that are not contained in a package precede any package information. Any file
+        # information that follows any package information is assigned to the last parsed package by creating a
+        # corresponding contains relationship.
+        # (see https://spdx.github.io/spdx-spec/v2.3/composition-of-an-SPDX-document/#5.2.2)
         package_spdx_id = self.elements_build["packages"][-1].spdx_id
         relationship = Relationship(package_spdx_id, RelationshipType.CONTAINS, file_spdx_id)
-        if relationship not in self.elements_build["relationships"]:
+        if relationship not in self.elements_build.setdefault("relationships",[]):
             self.elements_build.setdefault("relationships", []).append(relationship)
