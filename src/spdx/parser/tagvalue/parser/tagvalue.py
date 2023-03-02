@@ -637,7 +637,7 @@ class Parser(object):
         try:
             raise_parsing_error_if_logger_has_messages(self.creation_info.pop("logger"), "CreationInfo")
         except SPDXParsingError as err:
-            self.logger.append(err.get_messages())
+            self.logger.extend(err.get_messages())
         raise_parsing_error_if_logger_has_messages(self.logger)
         creation_info = construct_or_raise_parsing_error(CreationInfo, self.creation_info)
         self.elements_build["creation_info"] = creation_info
@@ -668,7 +668,7 @@ class Parser(object):
         try:
             raise_parsing_error_if_logger_has_messages(self.current_element.pop("logger"), class_name.__name__)
         except SPDXParsingError as err:
-            self.logger.append(err.get_messages())
+            self.logger.extend(err.get_messages())
             self.current_element = {"logger": Logger()}
             return
         try:
@@ -677,7 +677,7 @@ class Parser(object):
             if class_name == File:
                 self.check_for_preceding_package_and_build_contains_relationship()
         except SPDXParsingError as err:
-            self.logger.append(err.get_messages())
+            self.logger.extend(err.get_messages())
         self.current_element = {"logger": Logger()}
 
     def check_for_preceding_package_and_build_contains_relationship(self):

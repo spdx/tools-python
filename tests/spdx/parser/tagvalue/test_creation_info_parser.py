@@ -70,12 +70,12 @@ def test_parse_creation_info():
                               'Creator: Person Bob (bob@example.com)', 'Creator: Organization: Acme [email]',
                               'Created: 2010-02-03T00:00:0Z', 'CreatorComment: <text>Sample Comment</text>',
                               'LicenseListVersion: 7']),
-                            [["Error while parsing CreationInfo: "
-                              "['Error while parsing DocumentNamespace: Token did not match specified grammar rule. "
-                              "Line: 6', 'Error while parsing ExternalDocumentRef: "
-                              "Token did not match specified grammar rule. Line: 7', 'Error while parsing Creator: "
-                              "Token did not match specified grammar rule. Line: 8', 'Error while parsing Created: "
-                              "Token did not match specified grammar rule. Line: 10', '7 is not a valid version string']"]]),
+                            ["Error while parsing CreationInfo: "
+                             "['Error while parsing DocumentNamespace: Token did not match specified grammar rule. "
+                             "Line: 6', 'Error while parsing ExternalDocumentRef: "
+                             "Token did not match specified grammar rule. Line: 7', 'Error while parsing Creator: "
+                             "Token did not match specified grammar rule. Line: 8', 'Error while parsing Created: "
+                             "Token did not match specified grammar rule. Line: 10', '7 is not a valid version string']"]),
                              ('\n'.join(
                                  ['SPDXVersion: SPDX-2.3', 'DataLicense: CC0-1.0', 'DocumentName: Sample_Document-V2.3',
                                   'SPDXID: SPDXRef-DOCUMENT']),
@@ -83,8 +83,8 @@ def test_parse_creation_info():
                                "required positional arguments: 'document_namespace', 'creators', and "
                                "'created'"]),
                              ('LicenseListVersion: 3.5\nLicenseListVersion: 3.7',
-                              [["Error while parsing CreationInfo: ['Multiple values for LicenseListVersion "
-                                "found. Line: 2']"]])]))
+                              ["Error while parsing CreationInfo: ['Multiple values for LicenseListVersion "
+                               "found. Line: 2']"])]))
 def test_parse_invalid_creation_info(document_str, expected_message):
     parser = Parser()
     with pytest.raises(SPDXParsingError) as err:

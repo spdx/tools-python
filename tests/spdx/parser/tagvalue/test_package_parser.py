@@ -79,26 +79,26 @@ def test_parse_package():
                            ['Element Package is not the current element in scope, probably the expected '
                             'tag to start the element (PackageName) is missing.']),
                           ('PackageName: TestPackage',
-                           [['Error while constructing Package: Package.__init__() missing 2 required '
-                             "positional arguments: 'spdx_id' and 'download_location'"]]),
+                           ['Error while constructing Package: Package.__init__() missing 2 required '
+                            "positional arguments: 'spdx_id' and 'download_location'"]),
                           ('PackageName: TestPackage\nPackageCopyrightText:This is a copyright\n'
                            'PackageCopyrightText:MultipleCopyright',
-                           [["Error while parsing Package: ['Multiple values for PackageCopyrightText "
-                             "found. Line: 3']"]]),
+                           ["Error while parsing Package: ['Multiple values for PackageCopyrightText "
+                            "found. Line: 3']"]),
                           ('PackageName: TestPackage\nExternalRef: reference locator',
-                           [['Error while parsing Package: ["Couldn\'t split PackageExternalRef in '
-                             'category, reference_type and locator. Line: 2"]']]),
+                           ['Error while parsing Package: ["Couldn\'t split PackageExternalRef in '
+                            'category, reference_type and locator. Line: 2"]']),
                           ('PackageName: TestPackage\nExternalRef: category reference locator',
-                           [["Error while parsing Package: ['Invalid ExternalPackageRefCategory: "
-                             "category']"]]),
+                           ["Error while parsing Package: ['Invalid ExternalPackageRefCategory: "
+                            "category']"]),
                           ('SPDXID:SPDXRef-DOCUMENT\nPackageName: TestPackage\nSPDXID:SPDXRef-Package\n'
                            'PackageDownloadLocation: download.com\nPackageVerificationCode: category reference locator',
-                           [["Error while parsing Package: ['Error while parsing PackageVerificationCode: "
-                             "Value did not match expected format. Line: 5']"]]),
+                           ["Error while parsing Package: ['Error while parsing PackageVerificationCode: "
+                            "Value did not match expected format. Line: 5']"]),
                           ('PackageName: TestPackage\nBuiltDate: 2012\nValidUntilDate:202-11-02T00:00',
-                           [["Error while parsing Package: ['Error while parsing BuiltDate: Token did not "
-                             "match specified grammar rule. Line: 2', 'Error while parsing "
-                             "ValidUntilDate: Token did not match specified grammar rule. Line: 3']"]])
+                           ["Error while parsing Package: ['Error while parsing BuiltDate: Token did not "
+                            "match specified grammar rule. Line: 2', 'Error while parsing "
+                            "ValidUntilDate: Token did not match specified grammar rule. Line: 3']"])
                           ])
 def test_parse_invalid_package(package_str, expected_message):
     parser = Parser()
