@@ -806,7 +806,6 @@ class Parser(object):
 
     @grammar_rule("snip_lics_info : SNIPPET_LICS_INFO error")
     def p_snippet_license_info_error(self, p):
-
         self.current_element["logger"].append(
             f"Error while parsing LicenseInfoInSnippet: Token did not match specified grammar rule. "
             f"Line: {p.lineno(1)}")
@@ -814,6 +813,9 @@ class Parser(object):
     @grammar_rule("snip_byte_range : SNIPPET_BYTE_RANGE LINE")
     def p_snippet_byte_range(self, p):
         self.check_that_current_element_matches_class_for_value(Snippet)
+        if "byte_range" in self.current_element:
+            self.current_element["logger"].append(
+                f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
         range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
         if not range_re.match(p[2].strip()):
             self.current_element["logger"].append("Value for SnippetByteRange doesn't match valid range pattern.")
@@ -830,6 +832,10 @@ class Parser(object):
     @grammar_rule("snip_line_range : SNIPPET_LINE_RANGE LINE")
     def p_snippet_line_range(self, p):
         self.check_that_current_element_matches_class_for_value(Snippet)
+        if "line_range" in self.current_element:
+            self.current_element["logger"].append(
+                f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
+            return
         range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
         if not range_re.match(p[2].strip()):
             self.current_element["logger"].append("Value for SnippetLineRange doesn't match valid range pattern.")
