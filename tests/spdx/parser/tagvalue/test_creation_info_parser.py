@@ -36,7 +36,7 @@ DOCUMENT_STR = '\n'.join([
 ])
 
 
-def test_creation_info():
+def test_parse_creation_info():
     parser = Parser()
     document = parser.parse(DOCUMENT_STR)
     assert document is not None
@@ -85,7 +85,7 @@ def test_creation_info():
                              ('LicenseListVersion: 3.5\nLicenseListVersion: 3.7',
                               [["Error while parsing CreationInfo: ['Multiple values for LicenseListVersion "
                                 "found. Line: 2']"]])]))
-def test_invalid_creation_info(document_str, expected_message):
+def test_parse_invalid_creation_info(document_str, expected_message):
     parser = Parser()
     with pytest.raises(SPDXParsingError) as err:
         parser.parse(document_str)

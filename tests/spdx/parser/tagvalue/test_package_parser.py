@@ -18,7 +18,7 @@ from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 
-def test_package():
+def test_parse_package():
     parser = Parser()
     package_str = '\n'.join([
         'PackageName: Test',

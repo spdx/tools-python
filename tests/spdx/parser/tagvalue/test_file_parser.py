@@ -17,7 +17,7 @@ from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 
-def test_file():
+def test_parse_file():
     parser = Parser()
     file_str = '\n'.join([
         'FileName: testfile.java',
@@ -45,7 +45,7 @@ def test_file():
     assert spdx_file.license_concluded == get_spdx_licensing().parse("Apache-2.0")
 
 
-def test_invalid_file():
+def test_parse_invalid_file():
     parser = Parser()
     file_str = '\n'.join([
         'FileName: testfile.java',
