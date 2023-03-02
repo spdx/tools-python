@@ -8,8 +8,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from unittest import TestCase
+
+import pytest
 from license_expression import get_spdx_licensing
 
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
@@ -27,6 +31,8 @@ def test_parse_snippet():
         'LicenseInfoInSnippet: Apache-2.0',
         'SnippetByteRange: 310:420',
         'SnippetLineRange: 5:23',
+        'SnippetAttributionText: <text>This is a text\nthat spans multiple lines.</text>',
+        'SnippetAttributionText:   This text spans one line but has trailing and leading whitespaces.      '
     ])
 
     document = parser.parse("\n".join([DOCUMENT_STR, snippet_str]))
@@ -45,3 +51,27 @@ def test_parse_snippet():
     assert snippet.byte_range[1] == 420
     assert snippet.line_range[0] == 5
     assert snippet.line_range[1] == 23
+    TestCase().assertCountEqual(
+        snippet.attribution_texts, ["This is a text\nthat spans multiple lines.",
+                                    "This text spans one line but has trailing and leading whitespaces."])
+
+
+@pytest.mark.parametrize("snippet_str, expected_message", [
+    ('SnippetName: TestSnippet', ['Element Snippet is not the current element in scope, probably the expected '
+                                  'tag to start the element (SnippetSPDXID) is missing.']),
+    ('SnippetSPDXID: SPDXDRef-Snippet\nSnippetByteRange: 1,4',
+     [['Error while parsing Snippet: ["Value for SnippetByteRange doesn\'t match '
+       'valid range pattern."]']]),
+    ('SnippetSPDXID: SPDXDRef-Snippet\nSnippetByteRange: 1:4\nSnippetByteRange:10:23',
+     [["Error while parsing Snippet: ['Multiple values for SnippetByteRange found. "
+       "Line: 3']"]]),
+    ('SnippetSPDXID: SPDXRef-Snippet', [['Error while constructing Snippet: Snippet.__init__() missing 2 required '
+                                         "positional arguments: 'file_spdx_id' and 'byte_range'"]])
+])
+def test_parse_invalid_snippet(snippet_str, expected_message):
+    parser = Parser()
+
+    with pytest.raises(SPDXParsingError) as err:
+        parser.parse(snippet_str)
+
+    assert err.value.get_messages() == expected_message
