@@ -74,7 +74,7 @@ def test_successful_conversion(converter: FileConverter):
     file = File(name="name", spdx_id="spdxId",
                 checksums=[Checksum(ChecksumAlgorithm.SHA224, "sha224"), Checksum(ChecksumAlgorithm.MD2, "md2")],
                 file_types=[FileType.SPDX, FileType.OTHER], license_concluded=Licensing().parse("MIT and GPL-2.0"),
-                license_info_in_file=[Licensing().parse("MIT"), Licensing().parse("GPL-2.0")],
+                license_info_in_file=[Licensing().parse("MIT"), Licensing().parse("GPL-2.0"), SpdxNoAssertion()],
                 license_comment="licenseComment", copyright_text="copyrightText", comment="comment", notice="notice",
                 contributors=["contributor1", "contributor2"],
                 attribution_texts=["attributionText1", "attributionText2"])
@@ -97,7 +97,7 @@ def test_successful_conversion(converter: FileConverter):
         converter.json_property_name(FileProperty.FILE_TYPES): ["SPDX", "OTHER"],
         converter.json_property_name(FileProperty.LICENSE_COMMENTS): "licenseComment",
         converter.json_property_name(FileProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0",
-        converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES): ["MIT", "GPL-2.0"],
+        converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES): ["MIT", "GPL-2.0", "NOASSERTION"],
         converter.json_property_name(FileProperty.NOTICE_TEXT): "notice"
     }
 
@@ -123,7 +123,7 @@ def test_null_values(converter: FileConverter):
 
 
 def test_spdx_no_assertion(converter: FileConverter):
-    file = file_fixture(license_concluded=SpdxNoAssertion(), license_info_in_file=SpdxNoAssertion(),
+    file = file_fixture(license_concluded=SpdxNoAssertion(), license_info_in_file=[SpdxNoAssertion()],
                         copyright_text=SpdxNoAssertion())
     document = Document(creation_info_fixture(), files=[file])
 
@@ -132,11 +132,11 @@ def test_spdx_no_assertion(converter: FileConverter):
     assert converted_dict[
                converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == SPDX_NO_ASSERTION_STRING
     assert converted_dict[converter.json_property_name(FileProperty.LICENSE_CONCLUDED)] == SPDX_NO_ASSERTION_STRING
-    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == [SPDX_NO_ASSERTION_STRING]
 
 
 def test_spdx_none(converter: FileConverter):
-    file = file_fixture(license_concluded=SpdxNone(), license_info_in_file=SpdxNone(), copyright_text=SpdxNone())
+    file = file_fixture(license_concluded=SpdxNone(), license_info_in_file=[SpdxNone()], copyright_text=SpdxNone())
     document = Document(creation_info_fixture(), files=[file])
 
     converted_dict = converter.convert(file, document)
@@ -144,7 +144,7 @@ def test_spdx_none(converter: FileConverter):
     assert converted_dict[
                converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(FileProperty.LICENSE_CONCLUDED)] == SPDX_NONE_STRING
-    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == [SPDX_NONE_STRING]
 
 
 def test_file_annotations(converter: FileConverter):

@@ -36,6 +36,7 @@
                         <spdx:attributionText>fileAttributionText</spdx:attributionText>
                         <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
                         <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/MIT"/>
+                        <spdx:licenseInfoInFile rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
                         <spdx:licenseConcluded>
                             <spdx:ConjunctiveLicenseSet rdf:nodeID="N5e31606df67c474d91e1fed07961f561">
                                 <spdx:member rdf:resource="http://spdx.org/licenses/MIT"/>

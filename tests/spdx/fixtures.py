@@ -64,7 +64,8 @@ def file_fixture(name="./fileName.py", spdx_id="SPDXRef-File", checksums=None, f
     checksums = [checksum_fixture()] if checksums is None else checksums
     file_types = [FileType.TEXT] if file_types is None else file_types
     license_info_in_file = [get_spdx_licensing().parse("MIT"),
-                            get_spdx_licensing().parse("GPL-2.0")] if license_info_in_file is None else license_info_in_file
+                            get_spdx_licensing().parse("GPL-2.0"),
+                            SpdxNoAssertion()] if license_info_in_file is None else license_info_in_file
     contributors = ["fileContributor"] if contributors is None else contributors
     attribution_texts = ["fileAttributionText"] if attribution_texts is None else attribution_texts
     return File(name=name, spdx_id=spdx_id, checksums=checksums, file_types=file_types,

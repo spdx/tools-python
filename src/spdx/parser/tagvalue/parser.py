@@ -277,12 +277,8 @@ class Parser(object):
 
     @grammar_rule("file_license_info : FILE_LICENSE_INFO license_or_no_assertion_or_none")
     def p_file_license_info(self, p):
-        if not self.check_that_current_element_matches_class_for_value(File, p.lineno(1)):
-            return
-        if p[2] == SpdxNone() or p[2] == SpdxNoAssertion():
-            self.current_element["license_info_in_file"] = p[2]
-            return
-        self.current_element.setdefault("license_info_in_file", []).append(p[2])
+        if self.check_that_current_element_matches_class_for_value(File, p.lineno(1)):
+            self.current_element.setdefault("license_info_in_file", []).append(p[2])
 
     @grammar_rule("file_type : FILE_TYPE LINE")
     def p_file_type(self, p):

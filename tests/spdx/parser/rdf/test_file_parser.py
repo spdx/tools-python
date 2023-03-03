@@ -16,6 +16,7 @@ from rdflib import Graph, RDF
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 
 from spdx.model.file import FileType
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.rdf.file_parser import parse_file
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
@@ -36,7 +37,8 @@ def test_parse_file():
     assert file.contributors == ["fileContributor"]
     assert file.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
     TestCase().assertCountEqual(file.license_info_in_file,
-                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0")])
+                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"),
+                                 SpdxNoAssertion()])
     assert file.license_comment == "licenseComment"
     assert file.notice == "fileNotice"
     assert file.attribution_texts == ["fileAttributionText"]

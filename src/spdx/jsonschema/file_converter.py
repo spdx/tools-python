@@ -64,9 +64,7 @@ class FileConverter(TypedConverter[File]):
         elif file_property == FileProperty.LICENSE_CONCLUDED:
             return apply_if_present(str, file.license_concluded)
         elif file_property == FileProperty.LICENSE_INFO_IN_FILES:
-            if isinstance(file.license_info_in_file, list):
-                return [str(license_expression) for license_expression in file.license_info_in_file] or None
-            return apply_if_present(str, file.license_info_in_file)
+            return [str(license_expression) for license_expression in file.license_info_in_file] or None
         elif file_property == FileProperty.NOTICE_TEXT:
             return file.notice
 

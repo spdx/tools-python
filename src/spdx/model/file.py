@@ -41,8 +41,7 @@ class File:
     checksums: List[Checksum]
     file_types: List[FileType] = field(default_factory=list)
     license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
-    license_info_in_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = field(
-        default_factory=list)
+    license_info_in_file: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = field(default_factory=list)
     license_comment: Optional[str] = None
     copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None
     comment: Optional[str] = None
@@ -57,7 +56,7 @@ class File:
 
     def __init__(self, name: str, spdx_id: str, checksums: List[Checksum], file_types: List[FileType] = None,
                  license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
-                 license_info_in_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None,
+                 license_info_in_file: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
                  license_comment: Optional[str] = None,
                  copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
                  comment: str = None, notice: Optional[str] = None,

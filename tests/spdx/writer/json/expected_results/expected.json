@@ -55,7 +55,7 @@
             ],
             "licenseComments": "licenseComment",
             "licenseConcluded": "MIT AND GPL-2.0-only",
-            "licenseInfoInFiles": ["MIT", "GPL-2.0-only"],
+            "licenseInfoInFiles": ["MIT", "GPL-2.0-only", "NOASSERTION"],
             "noticeText": "fileNotice"
         }
     ],

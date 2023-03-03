@@ -15,6 +15,8 @@ import pytest
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.file import FileType
 from license_expression import Licensing
+
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
 from spdx.parser.jsonlikedict.file_parser import FileParser
@@ -40,7 +42,7 @@ def test_parse_file():
         "fileTypes": ["SOURCE"],
         "licenseComments": "The concluded license was taken from the package level that the file was included in.",
         "licenseConcluded": "(LGPL-2.0-only OR LicenseRef-2)",
-        "licenseInfoInFiles": ["GPL-2.0-only", "LicenseRef-2"],
+        "licenseInfoInFiles": ["GPL-2.0-only", "LicenseRef-2", "NOASSERTION"],
         "noticeText": "Copyright (c) 2001 Aaron Lehmann aaroni@vitelus.com\n\nPermission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: \nThe above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE."
     }
 
@@ -58,7 +60,8 @@ def test_parse_file():
                                                     "Modified by Paul Mundt lethal@linux-sh.org", "IBM Corporation"])
     assert file.license_concluded == Licensing().parse("(LGPL-2.0-only OR LicenseRef-2)")
     TestCase().assertCountEqual(file.license_info_in_file,
-                                [Licensing().parse("GPL-2.0-only"), Licensing().parse("LicenseRef-2")])
+                                [Licensing().parse("GPL-2.0-only"), Licensing().parse("LicenseRef-2"),
+                                 SpdxNoAssertion()])
     assert file.license_comment == "The concluded license was taken from the package level that the file was included in."
     assert file.attribution_texts == ["Some attribution text."]
 
