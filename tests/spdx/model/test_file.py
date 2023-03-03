@@ -10,14 +10,14 @@ from spdx.model.spdx_none import SpdxNone
 
 @mock.patch('spdx.model.checksum.Checksum', autospec=True)
 def test_correct_initialization(checksum):
-    file = File("name", "id", [checksum, checksum], [FileType.OTHER, FileType.SPDX], SpdxNone(), SpdxNoAssertion(),
+    file = File("name", "id", [checksum, checksum], [FileType.OTHER, FileType.SPDX], SpdxNone(), [SpdxNoAssertion()],
                 "comment on license", "copyright", "comment", "notice", ["contributor"], ["attribution"])
     assert file.name == "name"
     assert file.spdx_id == "id"
     assert file.checksums == [checksum, checksum]
     assert file.file_types == [FileType.OTHER, FileType.SPDX]
     assert file.license_concluded == SpdxNone()
-    assert file.license_info_in_file == SpdxNoAssertion()
+    assert file.license_info_in_file == [SpdxNoAssertion()]
     assert file.license_comment == "comment on license"
     assert file.copyright_text == "copyright"
     assert file.comment == "comment"

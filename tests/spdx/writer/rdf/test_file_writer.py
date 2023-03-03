@@ -11,7 +11,7 @@
 from rdflib import Graph, Literal, RDFS, RDF, URIRef
 
 from spdx.writer.rdf.file_writer import add_file_to_graph
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 from tests.spdx.fixtures import file_fixture
 
 
@@ -26,7 +26,9 @@ def test_add_file_to_graph():
     assert (None, SPDX_NAMESPACE.fileType, SPDX_NAMESPACE.fileType_text) in graph
     assert (None, SPDX_NAMESPACE.licenseComments, Literal(file.license_comment)) in graph
     assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
-    assert (None, SPDX_NAMESPACE.licenseInfoInFile, None) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoInFile, LICENSE_NAMESPACE.MIT) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoInFile, LICENSE_NAMESPACE["GPL-2.0-only"]) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoInFile, SPDX_NAMESPACE.noassertion) in graph
     assert (None, SPDX_NAMESPACE.copyrightText, Literal(file.copyright_text)) in graph
     assert (None, RDFS.comment, Literal(file.comment)) in graph
     assert (None, SPDX_NAMESPACE.noticeText, Literal(file.notice)) in graph
