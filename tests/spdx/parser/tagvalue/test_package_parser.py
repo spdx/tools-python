@@ -11,9 +11,11 @@
 from datetime import datetime
 from unittest import TestCase
 
+import pytest
 from license_expression import get_spdx_licensing
 
 from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser.tagvalue import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
@@ -70,3 +72,38 @@ def test_parse_package():
     assert package.built_date == datetime(2020, 1, 1, 12, 0, 0)
     assert package.release_date == datetime(2021, 1, 1, 12, 0, 0)
     assert package.valid_until_date == datetime(2022, 1, 1, 12, 0, 0)
+
+
+@pytest.mark.parametrize("package_str, expected_message",
+                         [('PackageDownloadLocation: SPDXRef-Package',
+                           ['Element Package is not the current element in scope, probably the expected '
+                            'tag to start the element (PackageName) is missing.']),
+                          ('PackageName: TestPackage',
+                           [['Error while constructing Package: Package.__init__() missing 2 required '
+                             "positional arguments: 'spdx_id' and 'download_location'"]]),
+                          ('PackageName: TestPackage\nPackageCopyrightText:This is a copyright\n'
+                           'PackageCopyrightText:MultipleCopyright',
+                           [["Error while parsing Package: ['Multiple values for PackageCopyrightText "
+                             "found. Line: 3']"]]),
+                          ('PackageName: TestPackage\nExternalRef: reference locator',
+                           [['Error while parsing Package: ["Couldn\'t split PackageExternalRef in '
+                             'category, reference_type and locator. Line: 2"]']]),
+                          ('PackageName: TestPackage\nExternalRef: category reference locator',
+                           [["Error while parsing Package: ['Invalid ExternalPackageRefCategory: "
+                             "category']"]]),
+                          ('SPDXID:SPDXRef-DOCUMENT\nPackageName: TestPackage\nSPDXID:SPDXRef-Package\n'
+                           'PackageDownloadLocation: download.com\nPackageVerificationCode: category reference locator',
+                           [["Error while parsing Package: ['Error while parsing PackageVerificationCode: "
+                             "Value did not match expected format. Line: 5']"]]),
+                          ('PackageName: TestPackage\nBuiltDate: 2012\nValidUntilDate:202-11-02T00:00',
+                           [["Error while parsing Package: ['Error while parsing BuiltDate: Token did not "
+                             "match specified grammar rule. Line: 2', 'Error while parsing "
+                             "ValidUntilDate: Token did not match specified grammar rule. Line: 3']"]])
+                          ])
+def test_parse_invalid_package(package_str, expected_message):
+    parser = Parser()
+
+    with pytest.raises(SPDXParsingError) as err:
+        parser.parse(package_str)
+
+    assert err.value.get_messages() == expected_message
