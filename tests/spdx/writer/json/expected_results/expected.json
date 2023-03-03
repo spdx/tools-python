@@ -101,7 +101,7 @@
             "licenseComments": "packageLicenseComment",
             "licenseConcluded": "MIT AND GPL-2.0-only",
             "licenseDeclared": "MIT AND GPL-2.0-only",
-            "licenseInfoFromFiles": ["MIT", "GPL-2.0-only"],
+            "licenseInfoFromFiles": ["MIT", "GPL-2.0-only", "NOASSERTION"],
             "name": "packageName",
             "originator": "Person: originatorName (some@mail.com)",
             "packageFileName": "./packageFileName",

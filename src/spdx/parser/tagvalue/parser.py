@@ -342,11 +342,7 @@ class Parser(object):
 
     @grammar_rule("pkg_license_info : PKG_LICENSE_INFO license_or_no_assertion_or_none")
     def p_pkg_license_info_from_file(self, p):
-        if not self.check_that_current_element_matches_class_for_value(Package, p.lineno(1)):
-            return
-        if p[2] == SpdxNone() or p[2] == SpdxNoAssertion():
-            self.current_element["license_info_from_files"] = p[2]
-        else:
+        if self.check_that_current_element_matches_class_for_value(Package, p.lineno(1)):
             self.current_element.setdefault("license_info_from_files", []).append(p[2])
 
     @grammar_rule("pkg_checksum : PKG_CHECKSUM CHECKSUM")

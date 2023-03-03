@@ -85,9 +85,7 @@ class PackageConverter(TypedConverter[Package]):
         elif package_property == PackageProperty.LICENSE_DECLARED:
             return apply_if_present(str, package.license_declared)
         elif package_property == PackageProperty.LICENSE_INFO_FROM_FILES:
-            if isinstance(package.license_info_from_files, list):
-                return [str(license_expression) for license_expression in package.license_info_from_files] or None
-            return apply_if_present(str, package.license_info_from_files)
+            return [str(license_expression) for license_expression in package.license_info_from_files] or None
         elif package_property == PackageProperty.NAME:
             return package.name
         elif package_property == PackageProperty.ORIGINATOR:

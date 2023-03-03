@@ -18,12 +18,14 @@ from rdflib import RDF, Graph, Literal
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import ChecksumAlgorithm, Checksum
 from spdx.model.package import PackagePurpose, PackageVerificationCode, ExternalPackageRefCategory
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.rdf.package_parser import parse_package, parse_external_package_ref
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 def test_package_parser():
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
+    # we have two packages in the test file, graph.value() will return the first package
     package_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.Package)
     doc_namespace = "https://some.namespace"
 
@@ -41,7 +43,8 @@ def test_package_parser():
     assert package.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
     assert package.license_declared == get_spdx_licensing().parse("MIT AND GPL-2.0")
     TestCase().assertCountEqual(package.license_info_from_files,
-                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0")])
+                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"),
+                                 SpdxNoAssertion()])
     assert package.license_comment == "packageLicenseComment"
     assert package.copyright_text == "packageCopyrightText"
     assert package.verification_code == PackageVerificationCode(value="85ed0817af83a24ad8da68c2b5094de69833983c",

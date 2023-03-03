@@ -87,7 +87,7 @@ def package_fixture(spdx_id="SPDXRef-Package", name="packageName", download_loca
                     valid_until_date=datetime(2022, 12, 3)) -> Package:
     checksums = [checksum_fixture()] if checksums is None else checksums
     license_info_from_files = [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse(
-        "GPL-2.0")] if license_info_from_files is None else license_info_from_files
+        "GPL-2.0"), SpdxNoAssertion()] if license_info_from_files is None else license_info_from_files
     external_references = [external_package_ref_fixture()] if external_references is None else external_references
     attribution_texts = ["packageAttributionText"] if attribution_texts is None else attribution_texts
     return Package(spdx_id=spdx_id, name=name, download_location=download_location, version=version,

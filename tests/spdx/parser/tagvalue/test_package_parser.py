@@ -15,6 +15,7 @@ import pytest
 from license_expression import get_spdx_licensing
 
 from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
+from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
@@ -42,6 +43,7 @@ def test_parse_package():
         "PackageLicenseConcluded: (LicenseRef-2.0 and Apache-2.0)",
         "PackageLicenseInfoFromFiles: Apache-1.0",
         "PackageLicenseInfoFromFiles: Apache-2.0",
+        "PackageLicenseInfoFromFiles: NONE",
         "PackageLicenseComments: <text>License Comments</text>",
         "ExternalRef: SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:",
         "ExternalRefComment: <text>Some comment about the package.</text>",
@@ -57,9 +59,10 @@ def test_parse_package():
     assert package.name == "Test"
     assert package.spdx_id == "SPDXRef-Package"
     assert package.version == "1:22.36.1-8+deb11u1"
-    assert len(package.license_info_from_files) == 2
+    assert len(package.license_info_from_files) == 3
     TestCase().assertCountEqual(package.license_info_from_files, [get_spdx_licensing().parse("Apache-1.0"),
-                                                                  get_spdx_licensing().parse("Apache-2.0")])
+                                                                  get_spdx_licensing().parse("Apache-2.0"),
+                                                                  SpdxNone()])
     assert package.license_concluded == get_spdx_licensing().parse("LicenseRef-2.0 AND Apache-2.0")
     assert package.files_analyzed is True
     assert package.comment == "Comment on the package."
