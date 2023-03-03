@@ -47,9 +47,10 @@ def test_none_and_no_assertion(expression):
 
 
 @pytest.mark.parametrize("expression_list",
-                         [SpdxNone(), SpdxNoAssertion(),
+                         [[SpdxNone()], [SpdxNoAssertion()],
                           [get_spdx_licensing().parse("MIT and GPL-3.0-only"),
-                           get_spdx_licensing().parse(FIXTURE_LICENSE_ID)]
+                           get_spdx_licensing().parse(FIXTURE_LICENSE_ID)],
+                          [SpdxNone(), get_spdx_licensing().parse("MIT"), SpdxNoAssertion()]
                           ])
 def test_valid_license_expressions(expression_list):
     document: Document = document_fixture()
