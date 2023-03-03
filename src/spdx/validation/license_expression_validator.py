@@ -19,12 +19,11 @@ from spdx.model.spdx_none import SpdxNone
 from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
 
 
-def validate_license_expressions(license_expressions: Optional[
-    Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]], document: Document, parent_id: str) -> List[ValidationMessage]:
-    if license_expressions in [SpdxNoAssertion(), SpdxNone(), None]:
-        return []
-
-    context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION, full_element=license_expressions)
+def validate_license_expressions(
+    license_expressions: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]],
+        document: Document, parent_id: str) -> List[ValidationMessage]:
+    context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION,
+                                full_element=license_expressions)
     validation_messages = []
 
     for license_expression in license_expressions:
@@ -33,13 +32,15 @@ def validate_license_expressions(license_expressions: Optional[
     return validation_messages
 
 
-def validate_license_expression(license_expression: Optional[
-    Union[LicenseExpression, SpdxNoAssertion, SpdxNone]], document: Document, parent_id: str, context: ValidationContext = None) -> List[ValidationMessage]:
+def validate_license_expression(
+    license_expression: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]], document: Document,
+        parent_id: str, context: ValidationContext = None) -> List[ValidationMessage]:
     if license_expression in [SpdxNoAssertion(), SpdxNone(), None]:
         return []
 
     if not context:
-        context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION, full_element=license_expression)
+        context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION,
+                                    full_element=license_expression)
 
     validation_messages = []
     license_ref_ids: List[str] = [license_ref.license_id for license_ref in document.extracted_licensing_info]
