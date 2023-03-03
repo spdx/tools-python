@@ -64,5 +64,5 @@ def test_parse_invalid_file():
         parser.parse(file_str)
 
     assert err.value.get_messages() == [["Error while parsing File: ['Error while parsing FileType: Token did not "
-                                         "match any of the valid values. Line: 3', 'Error while parsing Checksum in "
-                                         "file: Token did not match specified grammar rule. Line: 5']"]]
+                                         "match specified grammar rule. Line: 3', 'Error while parsing FileChecksum: "
+                                         "Token did not match specified grammar rule. Line: 5']"]]
