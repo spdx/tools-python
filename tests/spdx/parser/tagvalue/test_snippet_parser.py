@@ -13,6 +13,7 @@ from unittest import TestCase
 import pytest
 from license_expression import get_spdx_licensing
 
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
@@ -28,7 +29,7 @@ def test_parse_snippet():
         "SnippetName: from linux kernel",
         "SnippetFromFileSPDXID: SPDXRef-DoapSource",
         "SnippetLicenseConcluded: Apache-2.0",
-        "LicenseInfoInSnippet: Apache-2.0",
+        "LicenseInfoInSnippet: NOASSERTION",
         "SnippetByteRange: 310:420",
         "SnippetLineRange: 5:23",
         "SnippetAttributionText: <text>This is a text\nthat spans multiple lines.</text>",
@@ -46,7 +47,7 @@ def test_parse_snippet():
     assert snippet.license_comment == "Some lic comment."
     assert snippet.file_spdx_id == "SPDXRef-DoapSource"
     assert snippet.license_concluded == get_spdx_licensing().parse("Apache-2.0")
-    assert snippet.license_info_in_snippet == [get_spdx_licensing().parse("Apache-2.0")]
+    assert snippet.license_info_in_snippet == [SpdxNoAssertion()]
     assert snippet.byte_range[0] == 310
     assert snippet.byte_range[1] == 420
     assert snippet.line_range[0] == 5

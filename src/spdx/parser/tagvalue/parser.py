@@ -407,11 +407,7 @@ class Parser(object):
 
     @grammar_rule("snippet_license_info : SNIPPET_LICENSE_INFO license_or_no_assertion_or_none")
     def p_snippet_license_info(self, p):
-        if not self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1)):
-            return
-        if p[2] == SpdxNone() or p[2] == SpdxNoAssertion():
-            self.current_element["license_info_in_snippet"] = p[2]
-        else:
+        if self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1)):
             self.current_element.setdefault("license_info_in_snippet", []).append(p[2])
 
     @grammar_rule("snippet_byte_range : SNIPPET_BYTE_RANGE LINE\n snippet_line_range : SNIPPET_LINE_RANGE LINE")

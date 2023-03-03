@@ -15,6 +15,7 @@ import pytest
 from license_expression import get_spdx_licensing
 from rdflib import Graph, RDF, BNode, Literal
 
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.rdf.snippet_parser import parse_snippet, parse_ranges
 from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
@@ -33,7 +34,8 @@ def test_parse_snippet():
     assert snippet.line_range == (3, 4)
     assert snippet.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
     TestCase().assertCountEqual(snippet.license_info_in_snippet,
-                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0")])
+                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"),
+                                 SpdxNoAssertion()])
     assert snippet.license_comment == "snippetLicenseComment"
     assert snippet.copyright_text == "licenseCopyrightText"
     assert snippet.comment == "snippetComment"

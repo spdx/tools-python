@@ -114,25 +114,24 @@ def test_null_values(converter: SnippetConverter):
 
 
 def test_spdx_no_assertion(converter: SnippetConverter):
-    snippet = snippet_fixture(license_concluded=SpdxNoAssertion(), license_info_in_snippet=SpdxNoAssertion())
+    snippet = snippet_fixture(license_concluded=SpdxNoAssertion(), license_info_in_snippet=[SpdxNoAssertion()])
 
     document = Document(creation_info_fixture(), snippets=[snippet])
     converted_dict = converter.convert(snippet, document)
 
     assert converted_dict[converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED)] == SPDX_NO_ASSERTION_STRING
-    assert converted_dict[
-               converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS)] == [
+        SPDX_NO_ASSERTION_STRING]
 
 
 def test_spdx_none(converter: SnippetConverter):
-    snippet = snippet_fixture(license_concluded=SpdxNone(), license_info_in_snippet=SpdxNone())
+    snippet = snippet_fixture(license_concluded=SpdxNone(), license_info_in_snippet=[SpdxNone()])
 
     document = Document(creation_info_fixture(), snippets=[snippet])
     converted_dict = converter.convert(snippet, document)
 
     assert converted_dict[converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED)] == SPDX_NONE_STRING
-    assert converted_dict[
-               converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS)] == [SPDX_NONE_STRING]
 
 
 def test_snippet_annotations(converter: SnippetConverter):

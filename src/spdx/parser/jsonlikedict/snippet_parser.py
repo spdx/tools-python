@@ -42,7 +42,7 @@ class SnippetParser:
         spdx_id: Optional[str] = snippet_dict.get("SPDXID")
         file_spdx_id: Optional[str] = snippet_dict.get("snippetFromFile")
         name: Optional[str] = snippet_dict.get("name")
-        
+
         ranges: Dict = parse_field_or_log_error(logger, snippet_dict.get("ranges", []), self.parse_ranges, default={})
         byte_range: Optional[Tuple[Union[int, str], Union[int, str]]] = ranges.get(RangeType.BYTE)
         line_range: Optional[Tuple[Union[int, str], Union[int, str]]] = ranges.get(RangeType.LINE)
@@ -53,15 +53,12 @@ class SnippetParser:
         comment: Optional[str] = snippet_dict.get("comment")
         copyright_text: Optional[str] = snippet_dict.get("copyrightText")
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
-        license_concluded: Optional[Union[
-            LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
-            "licenseConcluded"), lambda x: parse_field_or_no_assertion_or_none(x,
-                                                                               self.license_expression_parser.parse_license_expression))
+        license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
+            logger, snippet_dict.get("licenseConcluded"), self.license_expression_parser.parse_license_expression)
 
-        license_info: Optional[Union[List[
-            LicenseExpression], SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(logger, snippet_dict.get(
-            "licenseInfoInSnippets"), lambda x: parse_field_or_no_assertion_or_none(x,
-                                                                                    self.license_expression_parser.parse_license_expressions))
+        license_info: List[Union[LicenseExpression], SpdxNoAssertion, SpdxNone] = parse_field_or_log_error(
+            logger, snippet_dict.get("licenseInfoInSnippets"), self.license_expression_parser.parse_license_expression,
+            field_is_list=True)
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing snippet: {logger.get_messages()}"])
 
@@ -121,7 +118,8 @@ class SnippetParser:
         return RangeType.BYTE if "offset" in pointer else RangeType.LINE
 
     @staticmethod
-    def convert_range_from_str(_range: Tuple[Union[int, str], Union[int, str]]) -> Tuple[Union[int, str], Union[int, str]]:
+    def convert_range_from_str(_range: Tuple[Union[int, str], Union[int, str]]) -> Tuple[
+        Union[int, str], Union[int, str]]:
         # XML does not support integers, so we have to convert from string (if possible)
         if not _range:
             return _range

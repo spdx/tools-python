@@ -23,7 +23,7 @@ from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 
 
 def add_license_expression_or_none_or_no_assertion(value: Union[
-    List[LicenseExpression], LicenseExpression, SpdxNoAssertion, SpdxNone], graph: Graph, parent: Node, predicate: Node,
+    List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]], LicenseExpression, SpdxNoAssertion, SpdxNone], graph: Graph, parent: Node, predicate: Node,
                                                    doc_namespace: str):
     if isinstance(value, SpdxNoAssertion):
         graph.add((parent, predicate, SPDX_NAMESPACE.noassertion))
@@ -33,7 +33,7 @@ def add_license_expression_or_none_or_no_assertion(value: Union[
         return
     if isinstance(value, list):
         for license_expression in value:
-            add_license_expression_to_graph(license_expression, graph, parent, predicate, doc_namespace)
+            add_license_expression_or_none_or_no_assertion(license_expression, graph, parent, predicate, doc_namespace)
     if isinstance(value, LicenseExpression):
         add_license_expression_to_graph(value, graph, parent, predicate, doc_namespace)
 

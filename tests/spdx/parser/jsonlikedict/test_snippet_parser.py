@@ -13,6 +13,8 @@ from unittest import TestCase
 import pytest
 
 from license_expression import Licensing
+
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.snippet_parser import SnippetParser
 
@@ -26,7 +28,7 @@ def test_parse_snippet():
         "copyrightText": "Copyright 2008-2010 John Smith",
         "licenseComments": "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.",
         "licenseConcluded": "GPL-2.0-only",
-        "licenseInfoInSnippets": ["GPL-2.0-only"],
+        "licenseInfoInSnippets": ["GPL-2.0-only", "NOASSERTION"],
         "name": "from linux kernel",
         "ranges": [{
             "endPointer": {
@@ -60,7 +62,7 @@ def test_parse_snippet():
     assert snippet.byte_range == (310, 420)
     assert snippet.line_range == (5, 23)
     assert snippet.file_spdx_id == "SPDXRef-DoapSource"
-    assert snippet.license_info_in_snippet == [Licensing().parse("GPL-2.0-only")]
+    assert snippet.license_info_in_snippet == [Licensing().parse("GPL-2.0-only"), SpdxNoAssertion()]
     assert snippet.license_concluded == Licensing().parse("GPL-2.0-only")
     assert snippet.attribution_texts == ["Some example attibution text."]
 
