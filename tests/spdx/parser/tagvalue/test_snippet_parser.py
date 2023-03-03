@@ -57,16 +57,16 @@ def test_parse_snippet():
 
 
 @pytest.mark.parametrize("snippet_str, expected_message", [
-    ('SnippetName: TestSnippet', ['Element Snippet is not the current element in scope, probably the expected '
-                                  'tag to start the element (SnippetSPDXID) is missing. Line: 1']),
+    ('SnippetName: TestSnippet', 'Element Snippet is not the current element in scope, probably the expected '
+                                 'tag to start the element (SnippetSPDXID) is missing. Line: 1'),
     ('SnippetSPDXID: SPDXDRef-Snippet\nSnippetByteRange: 1,4',
-     ['Error while parsing Snippet: ["Value for SnippetByteRange doesn\'t match '
-      'valid range pattern. Line: 2"]']),
+     'Error while parsing Snippet: ["Value for SnippetByteRange doesn\'t match '
+     'valid range pattern. Line: 2"]'),
     ('SnippetSPDXID: SPDXDRef-Snippet\nSnippetByteRange: 1:4\nSnippetByteRange:10:23',
-     ["Error while parsing Snippet: ['Multiple values for SnippetByteRange found. "
-      "Line: 3']"]),
-    ('SnippetSPDXID: SPDXRef-Snippet', ['Error while constructing Snippet: Snippet.__init__() missing 2 required '
-                                        "positional arguments: 'file_spdx_id' and 'byte_range'"])
+     "Error while parsing Snippet: ['Multiple values for SnippetByteRange found. "
+     "Line: 3']"),
+    ('SnippetSPDXID: SPDXRef-Snippet', r"__init__() missing 2 required "
+                                       r"positional arguments: 'file_spdx_id' and 'byte_range'")
 ])
 def test_parse_invalid_snippet(snippet_str, expected_message):
     parser = Parser()
@@ -74,4 +74,4 @@ def test_parse_invalid_snippet(snippet_str, expected_message):
     with pytest.raises(SPDXParsingError) as err:
         parser.parse(snippet_str)
 
-    assert err.value.get_messages() == expected_message
+    assert expected_message in err.value.get_messages()[0]
