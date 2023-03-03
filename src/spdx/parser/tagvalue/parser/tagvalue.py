@@ -46,7 +46,6 @@ ELEMENT_EXPECTED_START_TAG = dict(File="FileName", Annotation="Annotator", Relat
 class Parser(object):
     tokens: List[str]
     logger: Logger
-    element_stack: List[Dict[str, str]]
     current_element: Dict[str, Any]
     creation_info: Dict[str, Any]
     elements_build: Dict[str, Any]
@@ -56,7 +55,6 @@ class Parser(object):
     def __init__(self, **kwargs):
         self.tokens = SPDXLexer.tokens
         self.logger = Logger()
-        self.element_stack = []
         self.current_element = {"logger": Logger()}
         self.creation_info = {"logger": Logger()}
         self.elements_build = dict()
@@ -645,8 +643,6 @@ class Parser(object):
         return document
 
     def initialize_new_current_element(self, class_name: Any):
-        if "class" in self.current_element and "spdx_id" in self.current_element:
-            self.element_stack.append({self.current_element["class"]: self.current_element["spdx_id"]})
         self.construct_current_element()
         self.current_element["class"] = class_name
 
