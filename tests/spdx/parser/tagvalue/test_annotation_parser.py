@@ -53,7 +53,7 @@ def test_parse_annotation():
       "AnnotationDate: Token did not match specified grammar rule. Line: 2']"]),
     ('Annotator: Person: ()', ["Error while parsing Annotation: [['No name for Person provided: Person: ().']]"]),
     ('AnnotationType: REVIEW', ['Element Annotation is not the current element in scope, probably the '
-                                'expected tag to start the element (Annotator) is missing.'])])
+                                'expected tag to start the element (Annotator) is missing. Line: 1'])])
 def test_parse_invalid_annotation(annotation_str, expected_message):
     parser = Parser()
     with pytest.raises(SPDXParsingError) as err:

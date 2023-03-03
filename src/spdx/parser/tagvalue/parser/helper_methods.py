@@ -37,12 +37,12 @@ def str_from_text(text: Optional[str]) -> Optional[str]:
         return None
 
 
-def parse_checksum(logger: Logger, checksum_str: str) -> Optional[Checksum]:
+def parse_checksum(logger: Logger, checksum_str: str, line_number: int) -> Optional[Checksum]:
     try:
         algorithm, value = checksum_str.split(":")
     except ValueError:
         logger.append(
-            f"Couldn't split value for checksum in algorithm and value.")
+            f"Couldn't split value for checksum in algorithm and value. Line: {line_number}")
         return None
     algorithm = ChecksumAlgorithm[algorithm.upper().replace("-", "_")]
     value = value.strip()

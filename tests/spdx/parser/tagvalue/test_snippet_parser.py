@@ -58,10 +58,10 @@ def test_parse_snippet():
 
 @pytest.mark.parametrize("snippet_str, expected_message", [
     ('SnippetName: TestSnippet', ['Element Snippet is not the current element in scope, probably the expected '
-                                  'tag to start the element (SnippetSPDXID) is missing.']),
+                                  'tag to start the element (SnippetSPDXID) is missing. Line: 1']),
     ('SnippetSPDXID: SPDXDRef-Snippet\nSnippetByteRange: 1,4',
      ['Error while parsing Snippet: ["Value for SnippetByteRange doesn\'t match '
-      'valid range pattern."]']),
+      'valid range pattern. Line: 2"]']),
     ('SnippetSPDXID: SPDXDRef-Snippet\nSnippetByteRange: 1:4\nSnippetByteRange:10:23',
      ["Error while parsing Snippet: ['Multiple values for SnippetByteRange found. "
       "Line: 3']"]),

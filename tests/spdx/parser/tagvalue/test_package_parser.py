@@ -77,7 +77,7 @@ def test_parse_package():
 @pytest.mark.parametrize("package_str, expected_message",
                          [('PackageDownloadLocation: SPDXRef-Package',
                            ['Element Package is not the current element in scope, probably the expected '
-                            'tag to start the element (PackageName) is missing.']),
+                            'tag to start the element (PackageName) is missing. Line: 1']),
                           ('PackageName: TestPackage',
                            ['Error while constructing Package: Package.__init__() missing 2 required '
                             "positional arguments: 'spdx_id' and 'download_location'"]),
