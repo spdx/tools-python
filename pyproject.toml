@@ -4,9 +4,16 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "spdx-tools"
-authors = [{name = "Ahmed H. Ismail", email = "ahm3d.hisham@gmail.com"}]
+authors = [
+    {name = "Ahmed H. Ismail", email = "ahm3d.hisham@gmail.com"},
+    {name = "Armin Tänzer", email = "armin.taenzer@tngtech.com"},
+    {name = "Meret Behrens", email = "meret.behrens@tngtech.com"},
+    {name = "Maximilian Huber", email = "maximilian.huber@tngtech.com"}
+]
 maintainers = [
     {name = "Philippe Ombredanne", email = "pombredanne@gmail.com"},
+    {name = "Maximilian Huber", email = "maximilian.huber@tngtech.com"},
+    {name = "Jeff Licquia", email = "licquia@linuxfoundation.org"},
     {name = "SPDX group at the Linux Foundation and others"},
 ]
 license = {text = "Apache-2.0"}
