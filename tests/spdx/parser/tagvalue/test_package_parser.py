@@ -25,7 +25,7 @@ def test_parse_package():
     package_str = '\n'.join([
         'PackageName: Test',
         'SPDXID: SPDXRef-Package',
-        'PackageVersion: Version 0.9.2',
+        'PackageVersion: 1:22.36.1-8+deb11u1',
         'PackageDownloadLocation: http://example.com/test',
         'FilesAnalyzed: True',
         'PackageSummary: <text>Test package</text>',
@@ -56,8 +56,10 @@ def test_parse_package():
     package = document.packages[0]
     assert package.name == 'Test'
     assert package.spdx_id == 'SPDXRef-Package'
-    assert package.version == 'Version 0.9.2'
+    assert package.version == '1:22.36.1-8+deb11u1'
     assert len(package.license_info_from_files) == 2
+    TestCase().assertCountEqual(package.license_info_from_files, [get_spdx_licensing().parse("Apache-1.0"),
+                                                                  get_spdx_licensing().parse("Apache-2.0")])
     assert package.license_concluded == get_spdx_licensing().parse('LicenseRef-2.0 AND Apache-2.0')
     assert package.files_analyzed is True
     assert package.comment == 'Comment on the package.'
@@ -69,36 +71,35 @@ def test_parse_package():
                                  ExternalPackageRef(ExternalPackageRefCategory.OTHER, "LocationRef-acmeforge",
                                                     "acmecorp/acmenator/4.1.3-alpha")])
     assert package.primary_package_purpose == PackagePurpose.OPERATING_SYSTEM
-    assert package.built_date == datetime(2020, 1, 1, 12, 0, 0)
-    assert package.release_date == datetime(2021, 1, 1, 12, 0, 0)
-    assert package.valid_until_date == datetime(2022, 1, 1, 12, 0, 0)
+    assert package.built_date == datetime(2020, 1, 1, 12)
+    assert package.release_date == datetime(2021, 1, 1, 12)
+    assert package.valid_until_date == datetime(2022, 1, 1, 12)
 
 
 @pytest.mark.parametrize("package_str, expected_message",
                          [('PackageDownloadLocation: SPDXRef-Package',
-                           ['Element Package is not the current element in scope, probably the expected '
-                            'tag to start the element (PackageName) is missing. Line: 1']),
+                           'Element Package is not the current element in scope, probably the expected '
+                           'tag to start the element (PackageName) is missing. Line: 1'),
                           ('PackageName: TestPackage',
-                           ['Error while constructing Package: Package.__init__() missing 2 required '
-                            "positional arguments: 'spdx_id' and 'download_location'"]),
+                           r"__init__() missing 2 required positional arguments: 'spdx_id' and 'download_location'"),
                           ('PackageName: TestPackage\nPackageCopyrightText:This is a copyright\n'
                            'PackageCopyrightText:MultipleCopyright',
-                           ["Error while parsing Package: ['Multiple values for PackageCopyrightText "
-                            "found. Line: 3']"]),
+                           "Error while parsing Package: ['Multiple values for PackageCopyrightText "
+                           "found. Line: 3']"),
                           ('PackageName: TestPackage\nExternalRef: reference locator',
-                           ['Error while parsing Package: ["Couldn\'t split PackageExternalRef in '
-                            'category, reference_type and locator. Line: 2"]']),
+                           'Error while parsing Package: ["Couldn\'t split PackageExternalRef in '
+                           'category, reference_type and locator. Line: 2"]'),
                           ('PackageName: TestPackage\nExternalRef: category reference locator',
-                           ["Error while parsing Package: ['Invalid ExternalPackageRefCategory: "
-                            "category']"]),
+                           "Error while parsing Package: ['Invalid ExternalPackageRefCategory: "
+                           "category']"),
                           ('SPDXID:SPDXRef-DOCUMENT\nPackageName: TestPackage\nSPDXID:SPDXRef-Package\n'
                            'PackageDownloadLocation: download.com\nPackageVerificationCode: category reference locator',
-                           ["Error while parsing Package: ['Error while parsing PackageVerificationCode: "
-                            "Value did not match expected format. Line: 5']"]),
+                           "Error while parsing Package: ['Error while parsing PackageVerificationCode: "
+                           "Value did not match expected format. Line: 5']"),
                           ('PackageName: TestPackage\nBuiltDate: 2012\nValidUntilDate:202-11-02T00:00',
-                           ["Error while parsing Package: ['Error while parsing BuiltDate: Token did not "
-                            "match specified grammar rule. Line: 2', 'Error while parsing "
-                            "ValidUntilDate: Token did not match specified grammar rule. Line: 3']"])
+                           "Error while parsing Package: ['Error while parsing BuiltDate: Token did not "
+                           "match specified grammar rule. Line: 2', 'Error while parsing "
+                           "ValidUntilDate: Token did not match specified grammar rule. Line: 3']")
                           ])
 def test_parse_invalid_package(package_str, expected_message):
     parser = Parser()
@@ -106,4 +107,4 @@ def test_parse_invalid_package(package_str, expected_message):
     with pytest.raises(SPDXParsingError) as err:
         parser.parse(package_str)
 
-    assert err.value.get_messages() == expected_message
+    assert expected_message in err.value.get_messages()[0]

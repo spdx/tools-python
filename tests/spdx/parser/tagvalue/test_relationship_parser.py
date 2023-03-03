@@ -36,6 +36,7 @@ def test_parse_relationship(relationship_str, expected_relationship):
     parser = Parser()
     document = parser.parse("\n".join([DOCUMENT_STR, relationship_str]))
     assert document is not None
+    assert len(document.relationships) == 1
     relationship = document.relationships[0]
     assert relationship == expected_relationship
 

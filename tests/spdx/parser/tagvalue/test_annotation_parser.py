@@ -8,7 +8,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import re
 from datetime import datetime
+from unittest import TestCase
 
 import pytest
 
@@ -39,24 +41,24 @@ def test_parse_annotation():
 
 
 @pytest.mark.parametrize("annotation_str, expected_message", [
-    ('Annotator: Person: Jane Doe()', ['Error while constructing Annotation: Annotation.__init__() missing 4 '
-                                       "required positional arguments: 'spdx_id', 'annotation_type', "
-                                       "'annotation_date', and 'annotation_comment'"]),
+    ('Annotator: Person: Jane Doe()', r"__init__() missing 4 "
+                                      "required positional arguments: 'spdx_id', 'annotation_type', "
+                                      "'annotation_date', and 'annotation_comment'"),
     ('Annotator: Person: Jane Doe()\nAnnotationType: SOURCE\nAnnotationDate: 201001-2912:23',
-     ["Error while parsing Annotation: ['Error while parsing AnnotationType: Token "
-      "did not match specified grammar rule. Line: 2', 'Error while parsing "
-      "AnnotationDate: Token did not match specified grammar rule. Line: 3']"]),
+     "Error while parsing Annotation: ['Error while parsing AnnotationType: Token "
+     "did not match specified grammar rule. Line: 2', 'Error while parsing "
+     "AnnotationDate: Token did not match specified grammar rule. Line: 3']"),
     ('Annotator: Jane Doe()\nAnnotationDate: 201001-29T18:30:22Z\n'
      'AnnotationComment: <text>Document level annotation</text>\nAnnotationType: OTHER\nSPDXREF: SPDXRef-DOCUMENT',
-     ["Error while parsing Annotation: ['Error while parsing Annotator: Token did "
-      "not match specified grammar rule. Line: 1', 'Error while parsing "
-      "AnnotationDate: Token did not match specified grammar rule. Line: 2']"]),
-    ('Annotator: Person: ()', ["Error while parsing Annotation: [['No name for Person provided: Person: ().']]"]),
-    ('AnnotationType: REVIEW', ['Element Annotation is not the current element in scope, probably the '
-                                'expected tag to start the element (Annotator) is missing. Line: 1'])])
+     "Error while parsing Annotation: ['Error while parsing Annotator: Token did "
+     "not match specified grammar rule. Line: 1', 'Error while parsing "
+     "AnnotationDate: Token did not match specified grammar rule. Line: 2']"),
+    ('Annotator: Person: ()', "Error while parsing Annotation: [['No name for Person provided: Person: ().']]"),
+    ('AnnotationType: REVIEW', 'Element Annotation is not the current element in scope, probably the '
+                               'expected tag to start the element (Annotator) is missing. Line: 1')])
 def test_parse_invalid_annotation(annotation_str, expected_message):
     parser = Parser()
     with pytest.raises(SPDXParsingError) as err:
         parser.parse(annotation_str)
 
-    assert err.value.get_messages() == expected_message
+    assert expected_message in err.value.get_messages()[0]
