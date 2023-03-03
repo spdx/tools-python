@@ -164,7 +164,7 @@ class Parser(object):
     def p_external_document_ref(self, p):
         document_ref_id = p[2]
         document_uri = p[3]
-        checksum = parse_checksum(self.creation_info["logger"], p[4])
+        checksum = parse_checksum(self.creation_info["logger"], p[4], p.lineno(1))
         external_document_ref = ExternalDocumentRef(document_ref_id, document_uri, checksum)
         self.creation_info.setdefault("external_document_refs", []).append(external_document_ref)
 
@@ -186,7 +186,7 @@ class Parser(object):
 
     @grammar_rule("license_name : LICS_NAME line_or_no_assertion\n extracted_text : LICS_TEXT text_or_line")
     def p_generic_value_extracted_licensing_info(self, p):
-        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo)
+        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo, p.lineno(1))
         set_value(p, self.current_element)
 
     @grammar_rule("license_id : LICS_ID LINE")
@@ -196,12 +196,12 @@ class Parser(object):
 
     @grammar_rule("lic_xref : LICS_CRS_REF LINE")
     def p_extracted_cross_reference(self, p):
-        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo)
+        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo, p.lineno(1))
         self.current_element.setdefault("cross_references", []).append(p[2])
 
     @grammar_rule("lic_comment : LICS_COMMENT text_or_line")
     def p_license_comment(self, p):
-        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo)
+        self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo, p.lineno(1))
         set_value(p, self.current_element, argument_name="comment")
 
     # parsing methods for file
@@ -228,32 +228,32 @@ class Parser(object):
 
     @grammar_rule("file_contrib : FILE_CONTRIB LINE")
     def p_file_contributor(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
         self.current_element.setdefault("contributors", []).append(p[2])
 
     @grammar_rule("file_notice : FILE_NOTICE text_or_line")
     def p_file_notice(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
         set_value(p, self.current_element, argument_name="notice")
 
     @grammar_rule("file_cr_text : FILE_CR_TEXT line_or_no_assertion_or_none")
     def p_file_copyright_text(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
         set_value(p, self.current_element, argument_name="copyright_text")
 
     @grammar_rule("file_lics_comment : FILE_LICS_COMMENT text_or_line")
     def p_file_license_comment(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
         set_value(p, self.current_element, argument_name="license_comment")
 
     @grammar_rule("file_attribution_text : FILE_ATTRIBUTION_TEXT text_or_line")
     def p_file_attribution_text(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
         self.current_element.setdefault("attribution_texts", []).append(p[2])
 
     @grammar_rule("file_lics_info : FILE_LICS_INFO license_or_no_assertion_or_none")
     def p_file_license_info(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
         if p[2] == SpdxNone() or p[2] == SpdxNoAssertion():
             self.current_element["license_info_in_file"] = p[2]
             return
@@ -261,12 +261,12 @@ class Parser(object):
 
     @grammar_rule("file_comment : FILE_COMMENT text_or_line")
     def p_file_comment(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
         set_value(p, self.current_element, argument_name="comment")
 
     @grammar_rule("file_type : FILE_TYPE file_type_value")
     def p_file_type(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
         self.current_element.setdefault("file_type", []).append(FileType[p[2]])
 
     @grammar_rule(
@@ -277,13 +277,13 @@ class Parser(object):
 
     @grammar_rule("file_checksum : FILE_CHECKSUM CHECKSUM")
     def p_file_checksum(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
-        checksum = parse_checksum(self.current_element["logger"], p[2])
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
+        checksum = parse_checksum(self.current_element["logger"], p[2], p.lineno(1))
         self.current_element.setdefault("checksums", []).append(checksum)
 
     @grammar_rule("file_conc : FILE_LICS_CONC license_or_no_assertion_or_none")
     def p_file_license_concluded(self, p):
-        self.check_that_current_element_matches_class_for_value(File)
+        self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
         set_value(p, self.current_element, argument_name="license_concluded")
 
     # parsing methods for package
@@ -308,7 +308,7 @@ class Parser(object):
                   "download_location : PKG_DOWN line_or_no_assertion_or_none\n "
                   "originator : PKG_ORIG actor_or_no_assertion\n supplier : PKG_SUPPL actor_or_no_assertion")
     def p_generic_package_value(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element)
 
     @grammar_rule("package_name : PKG_NAME LINE")
@@ -324,22 +324,22 @@ class Parser(object):
 
     @grammar_rule("pkg_comment : PKG_COMMENT text_or_line")
     def p_pkg_comment(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element, argument_name="comment")
 
     @grammar_rule("pkg_attribution_text : PKG_ATTRIBUTION_TEXT text_or_line")
     def p_pkg_attribution_text(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         self.current_element.setdefault("attribution_texts", []).append(p[2])
 
     @grammar_rule("pkg_cr_text : PKG_CPY_TEXT line_or_no_assertion_or_none")
     def p_pkg_copyright_text(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element, argument_name="copyright_text")
 
     @grammar_rule("pkg_ext_ref : PKG_EXT_REF LINE PKG_EXT_REF_COMMENT text_or_line\n | PKG_EXT_REF LINE")
     def p_pkg_external_refs(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         try:
             category, reference_type, locator = p[2].split(" ")
         except ValueError:
@@ -367,17 +367,17 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_comment : PKG_LICS_COMMENT text_or_line")
     def p_pkg_license_comment(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element, argument_name="license_comment")
 
     @grammar_rule("pkg_lic_decl : PKG_LICS_DECL license_or_no_assertion_or_none")
     def p_pkg_license_declared(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element, argument_name="license_declared")
 
     @grammar_rule("pkg_lic_ff : PKG_LICS_FFILE license_or_no_assertion_or_none")
     def p_pkg_license_info_from_file(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         if p[2] == SpdxNone() or p[2] == SpdxNoAssertion():
             self.current_element["license_info_from_files"] = p[2]
         else:
@@ -385,18 +385,18 @@ class Parser(object):
 
     @grammar_rule("pkg_lic_conc : PKG_LICS_CONC license_or_no_assertion_or_none")
     def p_pkg_license_concluded(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element, argument_name="license_concluded")
 
     @grammar_rule("pkg_checksum : PKG_CHECKSUM CHECKSUM")
     def p_pkg_checksum(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
-        checksum = parse_checksum(self.current_element["logger"], p[2])
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
+        checksum = parse_checksum(self.current_element["logger"], p[2], p.lineno(1))
         self.current_element.setdefault("checksums", []).append(checksum)
 
     @grammar_rule("verification_code : PKG_VERF_CODE LINE")
     def p_pkg_verification_code(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         if str(p.slice[0]) in self.current_element:
             self.current_element["logger"].append(f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
             return
@@ -416,7 +416,7 @@ class Parser(object):
 
     @grammar_rule("files_analyzed : PKG_FILES_ANALYZED LINE")
     def p_pkg_files_analyzed(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         if str(p.slice[0]) in self.current_element:
             self.current_element["logger"].append(f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
             return
@@ -424,17 +424,17 @@ class Parser(object):
 
     @grammar_rule("pkg_file_name : PKG_FILE_NAME LINE")
     def p_pkg_file_name(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element, argument_name="file_name")
 
     @grammar_rule("package_version : PKG_VERSION LINE")
     def p_package_version(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element, argument_name="version")
 
     @grammar_rule("primary_package_purpose : PRIMARY_PACKAGE_PURPOSE primary_package_purpose_value")
     def p_primary_package_purpose(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element, method_to_apply=lambda x: PackagePurpose[x.replace("-", "_")])
 
     @grammar_rule("primary_package_purpose_value : APPLICATION\n | FRAMEWORK\n | LIBRARY\n | CONTAINER\n "
@@ -445,7 +445,7 @@ class Parser(object):
     @grammar_rule("built_date : BUILT_DATE DATE\n release_date : RELEASE_DATE DATE\n "
                   "valid_until_date : VALID_UNTIL_DATE DATE")
     def p_package_dates(self, p):
-        self.check_that_current_element_matches_class_for_value(Package)
+        self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         set_value(p, self.current_element, method_to_apply=datetime_from_str)
 
     # parsing methods for snippet
@@ -472,42 +472,42 @@ class Parser(object):
 
     @grammar_rule("snip_name : SNIPPET_NAME LINE")
     def p_snippet_name(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         set_value(p, self.current_element, argument_name="name")
 
     @grammar_rule("snip_comment : SNIPPET_COMMENT text_or_line")
     def p_snippet_comment(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         set_value(p, self.current_element, argument_name="comment")
 
     @grammar_rule("snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT text_or_line")
     def p_snippet_attribution_text(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         self.current_element.setdefault("attribution_texts", []).append(p[2])
 
     @grammar_rule("snip_cr_text : SNIPPET_CR_TEXT line_or_no_assertion_or_none")
     def p_snippet_copyright_text(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         set_value(p, self.current_element, argument_name="copyright_text")
 
     @grammar_rule("snip_lic_comment : SNIPPET_LICS_COMMENT text_or_line")
     def p_snippet_license_comment(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         set_value(p, self.current_element, argument_name="license_comment")
 
     @grammar_rule("file_spdx_id : SNIPPET_FILE_SPDXID LINE")
     def p_snippet_from_file_spdxid(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         set_value(p, self.current_element)
 
     @grammar_rule("snip_lics_conc : SNIPPET_LICS_CONC license_or_no_assertion_or_none")
     def p_snippet_concluded_license(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         set_value(p, self.current_element, argument_name="license_concluded")
 
     @grammar_rule("snip_lics_info : SNIPPET_LICS_INFO license_or_no_assertion_or_none")
     def p_snippet_license_info(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         if p[2] == SpdxNone() or p[2] == SpdxNoAssertion():
             self.current_element["license_info_in_snippet"] = p[2]
         else:
@@ -515,13 +515,14 @@ class Parser(object):
 
     @grammar_rule("snip_byte_range : SNIPPET_BYTE_RANGE LINE")
     def p_snippet_byte_range(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         if "byte_range" in self.current_element:
             self.current_element["logger"].append(
                 f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
         range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
         if not range_re.match(p[2].strip()):
-            self.current_element["logger"].append("Value for SnippetByteRange doesn't match valid range pattern.")
+            self.current_element["logger"].append(f"Value for SnippetByteRange doesn't match valid range pattern. "
+                                                  f"Line: {p.lineno(1)}")
             return
         startpoint = int(p[2].split(":")[0])
         endpoint = int(p[2].split(":")[-1])
@@ -529,14 +530,15 @@ class Parser(object):
 
     @grammar_rule("snip_line_range : SNIPPET_LINE_RANGE LINE")
     def p_snippet_line_range(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet)
+        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
         if "line_range" in self.current_element:
             self.current_element["logger"].append(
                 f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
             return
         range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
         if not range_re.match(p[2].strip()):
-            self.current_element["logger"].append("Value for SnippetLineRange doesn't match valid range pattern.")
+            self.current_element["logger"].append(f"Value for SnippetLineRange doesn't match valid range pattern. "
+                                                  f"Line: {p.lineno(1)}")
             return
         startpoint = int(p[2].split(":")[0])
         endpoint = int(p[2].split(":")[1])
@@ -563,17 +565,17 @@ class Parser(object):
 
     @grammar_rule("annotation_date : ANNOTATION_DATE DATE")
     def p_annotation_date(self, p):
-        self.check_that_current_element_matches_class_for_value(Annotation)
+        self.check_that_current_element_matches_class_for_value(Annotation, p.lineno(1))
         set_value(p, self.current_element, method_to_apply=datetime_from_str)
 
     @grammar_rule("annotation_comment : ANNOTATION_COMMENT text_or_line")
     def p_annotation_comment(self, p):
-        self.check_that_current_element_matches_class_for_value(Annotation)
+        self.check_that_current_element_matches_class_for_value(Annotation, p.lineno(1))
         set_value(p, self.current_element)
 
     @grammar_rule("annotation_type : ANNOTATION_TYPE annotation_type_value")
     def p_annotation_type(self, p):
-        self.check_that_current_element_matches_class_for_value(Annotation)
+        self.check_that_current_element_matches_class_for_value(Annotation, p.lineno(1))
         set_value(p, self.current_element, method_to_apply=lambda x: AnnotationType[x])
 
     @grammar_rule("annotation_type_value : OTHER\n| REVIEW")
@@ -646,15 +648,17 @@ class Parser(object):
         self.construct_current_element()
         self.current_element["class"] = class_name
 
-    def check_that_current_element_matches_class_for_value(self, expected_class):
+    def check_that_current_element_matches_class_for_value(self, expected_class, line_number):
         if "class" not in self.current_element:
             self.logger.append(
                 f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
-                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing.")
+                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing. "
+                f"Line: {line_number}")
         elif expected_class != self.current_element["class"]:
             self.logger.append(
                 f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
-                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing.")
+                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing. "
+                f"Line: {line_number}")
 
     def construct_current_element(self):
         if "class" not in self.current_element:
@@ -686,5 +690,5 @@ class Parser(object):
         # (see https://spdx.github.io/spdx-spec/v2.3/composition-of-an-SPDX-document/#5.2.2)
         package_spdx_id = self.elements_build["packages"][-1].spdx_id
         relationship = Relationship(package_spdx_id, RelationshipType.CONTAINS, file_spdx_id)
-        if relationship not in self.elements_build.setdefault("relationships",[]):
+        if relationship not in self.elements_build.setdefault("relationships", []):
             self.elements_build.setdefault("relationships", []).append(relationship)
