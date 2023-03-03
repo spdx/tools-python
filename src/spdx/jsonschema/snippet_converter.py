@@ -48,9 +48,7 @@ class SnippetConverter(TypedConverter[Snippet]):
         elif snippet_property == SnippetProperty.LICENSE_CONCLUDED:
             return apply_if_present(str, snippet.license_concluded)
         elif snippet_property == SnippetProperty.LICENSE_INFO_IN_SNIPPETS:
-            if isinstance(snippet.license_info_in_snippet, list):
-                return [str(license_expression) for license_expression in snippet.license_info_in_snippet] or None
-            return apply_if_present(str, snippet.license_info_in_snippet)
+            return [str(license_expression) for license_expression in snippet.license_info_in_snippet] or None
         elif snippet_property == SnippetProperty.NAME:
             return snippet.name
         elif snippet_property == SnippetProperty.RANGES:

@@ -23,6 +23,8 @@ from spdx.model.package import Package, PackageVerificationCode, PackagePurpose,
     ExternalPackageRefCategory
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.snippet import Snippet
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
 from spdx.model.version import Version
 
 """Utility methods to create data model instances. All properties have valid defaults, so they don't need to be 
@@ -116,7 +118,7 @@ def snippet_fixture(spdx_id="SPDXRef-Snippet", file_spdx_id="SPDXRef-File", byte
                     copyright_text="licenseCopyrightText", comment="snippetComment", name="snippetName",
                     attribution_texts=None) -> Snippet:
     license_info_in_snippet = [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse(
-        "GPL-2.0")] if license_info_in_snippet is None else license_info_in_snippet
+        "GPL-2.0"), SpdxNone()] if license_info_in_snippet is None else license_info_in_snippet
     attribution_texts = ["snippetAttributionText"] if attribution_texts is None else attribution_texts
     return Snippet(spdx_id=spdx_id, file_spdx_id=file_spdx_id, byte_range=byte_range, line_range=line_range,
                    license_concluded=license_concluded, license_info_in_snippet=license_info_in_snippet,

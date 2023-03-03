@@ -228,6 +228,7 @@
         <spdx:snippetFromFile rdf:resource="https://some.namespace#SPDXRef-File"/>
         <spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/licenses/MIT"/>
         <spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+        <spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
         <spdx:attributionText>snippetAttributionText</spdx:attributionText>
         <spdx:name>snippetName</spdx:name>
         <spdx:licenseComments>snippetLicenseComment</spdx:licenseComments>

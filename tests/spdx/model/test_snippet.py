@@ -6,14 +6,14 @@ from spdx.model.spdx_none import SpdxNone
 
 
 def test_correct_initialization():
-    snippet = Snippet("id", "file_id", (200, 400), (20, 40), SpdxNone(), SpdxNoAssertion(), "comment on license",
+    snippet = Snippet("id", "file_id", (200, 400), (20, 40), SpdxNone(), [SpdxNoAssertion()], "comment on license",
                       "copyright", "comment", "name", ["attribution"])
     assert snippet.spdx_id == "id"
     assert snippet.file_spdx_id == "file_id"
     assert snippet.byte_range == (200, 400)
     assert snippet.line_range == (20, 40)
     assert snippet.license_concluded == SpdxNone()
-    assert snippet.license_info_in_snippet == SpdxNoAssertion()
+    assert snippet.license_info_in_snippet == [SpdxNoAssertion()]
     assert snippet.license_comment == "comment on license"
     assert snippet.copyright_text == "copyright"
     assert snippet.comment == "comment"
@@ -28,7 +28,7 @@ def test_correct_initialization_with_default_values():
     assert snippet.byte_range == (200, 400)
     assert snippet.line_range is None
     assert snippet.license_concluded is None
-    assert snippet.license_info_in_snippet is None
+    assert snippet.license_info_in_snippet == []
     assert snippet.license_comment is None
     assert snippet.copyright_text is None
     assert snippet.comment is None
@@ -63,7 +63,7 @@ def test_wrong_type_in_license_concluded():
 
 def test_wrong_type_in_license_info_in_snippet():
     with pytest.raises(TypeError):
-        Snippet("id", "file_id", (200, 400), license_info_in_snippet=[SpdxNoAssertion()])
+        Snippet("id", "file_id", (200, 400), license_info_in_snippet=SpdxNoAssertion())
 
 
 def test_wrong_type_in_license_comment():

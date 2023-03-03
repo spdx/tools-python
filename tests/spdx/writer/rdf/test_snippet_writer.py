@@ -10,7 +10,7 @@
 # limitations under the License.
 import pytest
 from rdflib import Graph, URIRef, RDF, Literal, RDFS
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE, LICENSE_NAMESPACE
 
 from spdx.writer.rdf.snippet_writer import add_snippet_to_graph, add_range_to_graph
 from tests.spdx.fixtures import snippet_fixture
@@ -25,7 +25,9 @@ def test_add_snippet_to_graph():
     assert (URIRef("docNamespace#SPDXRef-Snippet"), RDF.type, SPDX_NAMESPACE.Snippet) in graph
     assert (None, SPDX_NAMESPACE.snippetFromFile, URIRef(f"docNamespace#{snippet.file_spdx_id}")) in graph
     assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
-    assert (None, SPDX_NAMESPACE.licenseInfoInSnippet, None) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoInSnippet, LICENSE_NAMESPACE.MIT) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoInSnippet, LICENSE_NAMESPACE["GPL-2.0-only"]) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoInSnippet, SPDX_NAMESPACE.none) in graph
     assert (None, SPDX_NAMESPACE.licenseComments, Literal(snippet.license_comment)) in graph
     assert (None, SPDX_NAMESPACE.copyrightText, Literal(snippet.copyright_text)) in graph
     assert (None, SPDX_NAMESPACE.name, Literal(snippet.name)) in graph
