@@ -17,6 +17,7 @@ from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from license_expression import Licensing
 from spdx.model.package import PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
 from spdx.parser.jsonlikedict.package_parser import PackageParser
@@ -62,7 +63,7 @@ def test_parse_package():
         "licenseComments": "The license for this project changed with the release of version x.y.  The version of the project included here post-dates the license change.",
         "licenseConcluded": "(LGPL-2.0-only OR LicenseRef-3)",
         "licenseDeclared": "(LGPL-2.0-only AND LicenseRef-3)",
-        "licenseInfoFromFiles": ["GPL-2.0-only", "LicenseRef-2", "LicenseRef-1"],
+        "licenseInfoFromFiles": ["GPL-2.0-only", "LicenseRef-2", "LicenseRef-1", "NOASSERTION"],
         "name": "glibc",
         "originator": "Organization: ExampleCodeInspect (contact@example.com)",
         "packageFileName": "glibc-2.11.1.tar.gz",
@@ -104,7 +105,7 @@ def test_parse_package():
     assert package.license_concluded == Licensing().parse("(LGPL-2.0-only OR LicenseRef-3)")
     TestCase().assertCountEqual(package.license_info_from_files,
                                 [Licensing().parse("GPL-2.0-only"), Licensing().parse("LicenseRef-2"),
-                                 Licensing().parse("LicenseRef-1")])
+                                 Licensing().parse("LicenseRef-1"), SpdxNoAssertion()])
     assert package.license_declared == Licensing().parse("(LGPL-2.0-only AND LicenseRef-3)")
     assert package.license_comment == "The license for this project changed with the release of version x.y.  The version of the project included here post-dates the license change."
     assert package.copyright_text == "Copyright 2008-2010 John Smith"

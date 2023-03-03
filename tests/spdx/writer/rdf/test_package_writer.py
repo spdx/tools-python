@@ -15,7 +15,7 @@ from spdx.model.package import ExternalPackageRefCategory
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.writer.rdf.package_writer import add_package_to_graph, add_external_package_ref_to_graph, \
     add_package_verification_code_to_graph
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 from tests.spdx.fixtures import package_fixture, external_package_ref_fixture, package_verification_code_fixture
 
 
@@ -38,7 +38,9 @@ def test_add_package_to_graph():
     assert (None, DOAP.homepage, Literal(package.homepage)) in graph
     assert (None, SPDX_NAMESPACE.sourceInfo, Literal(package.source_info)) in graph
     assert (None, SPDX_NAMESPACE.licenseConcluded, None) in graph
-    assert (None, SPDX_NAMESPACE.licenseInfoFromFiles, None) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoFromFiles, LICENSE_NAMESPACE.MIT) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoFromFiles, LICENSE_NAMESPACE["GPL-2.0-only"]) in graph
+    assert (None, SPDX_NAMESPACE.licenseInfoFromFiles, SPDX_NAMESPACE.noassertion) in graph
     assert (None, SPDX_NAMESPACE.licenseDeclared, None) in graph
     assert (None, SPDX_NAMESPACE.licenseComments, Literal(package.license_comment)) in graph
     assert (None, SPDX_NAMESPACE.copyrightText, Literal(package.copyright_text)) in graph

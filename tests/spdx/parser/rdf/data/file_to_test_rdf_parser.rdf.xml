@@ -93,6 +93,7 @@
         <spdx:downloadLocation>https://download.com</spdx:downloadLocation>
         <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
         <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/MIT"/>
+        <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
         <spdx:originator>Person: originatorName (some@mail.com)</spdx:originator>
         <spdx:licenseDeclared>
             <spdx:ConjunctiveLicenseSet rdf:nodeID="Nf293aa1ae6044fa4886ffb2d30f8408b">
@@ -138,48 +139,7 @@
     </spdx:Package>
     <spdx:Package rdf:about="https://some.namespace#SPDXRef-Package2">
         <spdx:name>packageName</spdx:name>
-        <spdx:releaseDate>2022-12-01T00:00:00Z</spdx:releaseDate>
-        <spdx:supplier>Person: supplierName (some@mail.com)</spdx:supplier>
-        <spdx:checksum>
-            <spdx:Checksum rdf:nodeID="Ncea50ab695654c5c836a1769f2ecc7da">
-                <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
-                <spdx:checksumValue>71c4025dd9897b364f3ebbb42c484ff43d00791c</spdx:checksumValue>
-            </spdx:Checksum>
-        </spdx:checksum>
-        <spdx:versionInfo>12.2</spdx:versionInfo>
-        <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
-        <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/MIT"/>
-        <spdx:validUntilDate>2022-12-03T00:00:00Z</spdx:validUntilDate>
-        <doap:homepage>https://homepage.com</doap:homepage>
-        <spdx:filesAnalyzed rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</spdx:filesAnalyzed>
-        <spdx:packageFileName>./packageFileName</spdx:packageFileName>
-        <spdx:licenseConcluded>
-            <spdx:ConjunctiveLicenseSet rdf:nodeID="Nb1961a379900444b9a3928372bc5c47e">
-                <spdx:member rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
-                <spdx:member rdf:resource="http://spdx.org/licenses/MIT"/>
-            </spdx:ConjunctiveLicenseSet>
-        </spdx:licenseConcluded>
-        <spdx:packageVerificationCode>
-            <spdx:PackageVerificationCode rdf:nodeID="N9af9c290416a4718966a16036f746049">
-                <spdx:packageVerificationCodeExcludedFile>./exclude.py</spdx:packageVerificationCodeExcludedFile>
-                <spdx:packageVerificationCodeValue>85ed0817af83a24ad8da68c2b5094de69833983c
-                </spdx:packageVerificationCodeValue>
-            </spdx:PackageVerificationCode>
-        </spdx:packageVerificationCode>
-        <spdx:copyrightText>packageCopyrightText</spdx:copyrightText>
         <spdx:downloadLocation>http://differentdownload.com</spdx:downloadLocation>
-        <spdx:sourceInfo>sourceInfo</spdx:sourceInfo>
-        <spdx:summary>packageSummary</spdx:summary>
-        <spdx:attributionText>packageAttributionText</spdx:attributionText>
-        <spdx:description>packageDescription</spdx:description>
-        <spdx:licenseDeclared>
-            <spdx:ConjunctiveLicenseSet rdf:nodeID="Nd9785e84b6a247a7b38c07b9151c007d">
-                <spdx:member rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
-                <spdx:member rdf:resource="http://spdx.org/licenses/MIT"/>
-            </spdx:ConjunctiveLicenseSet>
-        </spdx:licenseDeclared>
-        <spdx:originator>Person: originatorName (some@mail.com)</spdx:originator>
-        <spdx:primaryPackagePurpose rdf:resource="http://spdx.org/rdf/terms#purpose_source"/>
         <spdx:externalRef>
             <spdx:ExternalRef rdf:nodeID="Nda50d273cd134f45b1ca926a378b8db4">
                 <spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_other"/>
@@ -188,9 +148,6 @@
                 <spdx:referenceType rdf:resource="https://some.namespace#LocationRef-acmeforge"/>
             </spdx:ExternalRef>
         </spdx:externalRef>
-        <rdfs:comment>packageComment</rdfs:comment>
-        <spdx:builtDate>2022-12-02T00:00:00Z</spdx:builtDate>
-        <spdx:licenseComments>packageLicenseComment</spdx:licenseComments>
     </spdx:Package>
     <spdx:Snippet rdf:about="https://some.namespace#SPDXRef-Snippet">
         <spdx:range>

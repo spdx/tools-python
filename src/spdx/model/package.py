@@ -92,8 +92,7 @@ class Package:
     homepage: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None
     source_info: Optional[str] = None
     license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
-    license_info_from_files: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = field(
-        default_factory=list)
+    license_info_from_files: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = field(default_factory=list)
     license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
     license_comment: Optional[str] = None
     copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None
@@ -115,7 +114,7 @@ class Package:
                  checksums: List[Checksum] = None, homepage: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
                  source_info: Optional[str] = None,
                  license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
-                 license_info_from_files: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None,
+                 license_info_from_files: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
                  license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
                  license_comment: Optional[str] = None,
                  copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,

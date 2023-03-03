@@ -62,9 +62,9 @@ class PackageParser:
 
         files_analyzed: Optional[Union[bool, str]] = package_dict.get("filesAnalyzed")
 
-        if files_analyzed is None: # default value is True
+        if files_analyzed is None:  # default value is True
             files_analyzed = True
-        elif isinstance(files_analyzed, str): # XML does not support boolean typed values
+        elif isinstance(files_analyzed, str):  # XML does not support boolean typed values
             if files_analyzed.lower() == "true":
                 files_analyzed = True
             elif files_analyzed.lower() == "false":
@@ -73,19 +73,14 @@ class PackageParser:
         homepage: Optional[str] = package_dict.get("homepage")
         license_comments: Optional[str] = package_dict.get("licenseComments")
         license_concluded = parse_field_or_log_error(
-            logger, package_dict.get("licenseConcluded"),
-            lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression),
-            None)
+            logger, package_dict.get("licenseConcluded"), self.license_expression_parser.parse_license_expression)
 
         license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger, package_dict.get("licenseDeclared"),
-            lambda x: parse_field_or_no_assertion_or_none(x, self.license_expression_parser.parse_license_expression))
+            logger, package_dict.get("licenseDeclared"), self.license_expression_parser.parse_license_expression)
 
-        license_info_from_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = \
-            parse_field_or_log_error(
-                logger, package_dict.get("licenseInfoFromFiles"),
-                lambda x: parse_field_or_no_assertion_or_none(x,
-                                                              self.license_expression_parser.parse_license_expressions))
+        license_info_from_file: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
+            logger, package_dict.get("licenseInfoFromFiles"), self.license_expression_parser.parse_license_expression,
+            field_is_list=True)
         originator: Optional[Union[Actor, SpdxNoAssertion]] = parse_field_or_log_error(
             logger, package_dict.get("originator"),
             lambda x: parse_field_or_no_assertion(x, self.actor_parser.parse_actor))

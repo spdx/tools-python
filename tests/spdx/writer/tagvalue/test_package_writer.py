@@ -17,7 +17,7 @@ from spdx.writer.tagvalue.package_writer import write_package
 def test_package_writer():
     package = package_fixture()
 
-    mock: MagicMock = mock_open()    
+    mock: MagicMock = mock_open()
     with patch(f"{__name__}.open", mock, create=True):
         with open("foo", "w") as file:
             write_package(package, file)
@@ -41,6 +41,7 @@ def test_package_writer():
          call("PackageLicenseConcluded: MIT AND GPL-2.0-only\n"),
          call("PackageLicenseInfoFromFiles: MIT\n"),
          call("PackageLicenseInfoFromFiles: GPL-2.0-only\n"),
+         call('PackageLicenseInfoFromFiles: NOASSERTION\n'),
          call("PackageLicenseDeclared: MIT AND GPL-2.0-only\n"),
          call("PackageLicenseComments: packageLicenseComment\n"),
          call("PackageCopyrightText: packageCopyrightText\n"),

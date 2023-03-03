@@ -188,7 +188,7 @@ def test_null_values(converter: PackageConverter):
 def test_spdx_no_assertion(converter: PackageConverter):
     package = package_fixture(download_location=SpdxNoAssertion(), supplier=SpdxNoAssertion(),
                               originator=SpdxNoAssertion(), homepage=SpdxNoAssertion(),
-                              license_concluded=SpdxNoAssertion(), license_info_from_files=SpdxNoAssertion(),
+                              license_concluded=SpdxNoAssertion(), license_info_from_files=[SpdxNoAssertion()],
                               license_declared=SpdxNoAssertion(), copyright_text=SpdxNoAssertion())
 
     document = Document(creation_info_fixture(), packages=[package])
@@ -201,14 +201,14 @@ def test_spdx_no_assertion(converter: PackageConverter):
     assert converted_dict[converter.json_property_name(PackageProperty.HOMEPAGE)] == SPDX_NO_ASSERTION_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_CONCLUDED)] == SPDX_NO_ASSERTION_STRING
     assert converted_dict[
-               converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == SPDX_NO_ASSERTION_STRING
+               converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == [SPDX_NO_ASSERTION_STRING]
     assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_DECLARED)] == SPDX_NO_ASSERTION_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.COPYRIGHT_TEXT)] == SPDX_NO_ASSERTION_STRING
 
 
 def test_spdx_none(converter: PackageConverter):
     package = package_fixture(download_location=SpdxNone(), homepage=SpdxNone(),
-                              license_concluded=SpdxNone(), license_info_from_files=SpdxNone(),
+                              license_concluded=SpdxNone(), license_info_from_files=[SpdxNone()],
                               license_declared=SpdxNone(), copyright_text=SpdxNone())
 
     document = Document(creation_info_fixture(), packages=[package])
@@ -218,7 +218,7 @@ def test_spdx_none(converter: PackageConverter):
     assert converted_dict[converter.json_property_name(PackageProperty.DOWNLOAD_LOCATION)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.HOMEPAGE)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_CONCLUDED)] == SPDX_NONE_STRING
-    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == [SPDX_NONE_STRING]
     assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_DECLARED)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.COPYRIGHT_TEXT)] == SPDX_NONE_STRING
 
