@@ -135,8 +135,11 @@ def write_file(spdx_file, out):
         else:
             write_value("LicenseConcluded", spdx_file.conc_lics, out)
 
+    # remove duplicates
+    lics_in_file = []
+    [lics_in_file.append(x) for x in spdx_file.licenses_in_file if x not in lics_in_file]
     # write sorted list
-    for lics in sorted(spdx_file.licenses_in_file):
+    for lics in sorted(lics_in_file):
         write_value("LicenseInfoInFile", lics, out)
 
     if spdx_file.has_optional_field("copyright"):
