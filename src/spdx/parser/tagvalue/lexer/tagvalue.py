@@ -97,27 +97,7 @@ class SPDXLexer(object):
         "SnippetLineRange": "SNIPPET_LINE_RANGE",
         # Common fields
         "NOASSERTION": "NO_ASSERTION",
-        "NONE": "NONE",
-        "SOURCE": "SOURCE",
-        "BINARY": "BINARY",
-        "ARCHIVE": "ARCHIVE",
-        "APPLICATION": "APPLICATION",
-        "AUDIO": "AUDIO",
-        "IMAGE": "IMAGE",
-        "TEXT": "FILETYPE_TEXT",
-        "VIDEO": "VIDEO",
-        "DOCUMENTATION": "DOCUMENTATION",
-        "SPDX": "SPDX",
-        "OTHER": "OTHER",
-        "REVIEW": "REVIEW",
-        "FRAMEWORK": "FRAMEWORK",
-        "LIBRARY": "LIBRARY",
-        "CONTAINER": "CONTAINER",
-        "OPERATING-SYSTEM": "OPERATING_SYSTEM",
-        "DEVICE": "DEVICE",
-        "FIRMWARE": "FIRMWARE",
-        "FILE": "FILE",
-        "INSTALL": "INSTALL"
+        "NONE": "NONE"
     }
     states = (("text", "exclusive"),)
 

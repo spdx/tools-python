@@ -45,9 +45,9 @@ def test_parse_annotation():
                                       "required positional arguments: 'spdx_id', 'annotation_type', "
                                       "'annotation_date', and 'annotation_comment'"),
     ('Annotator: Person: Jane Doe()\nAnnotationType: SOURCE\nAnnotationDate: 201001-2912:23',
-     "Error while parsing Annotation: ['Error while parsing AnnotationType: Token "
-     "did not match specified grammar rule. Line: 2', 'Error while parsing "
-     "AnnotationDate: Token did not match specified grammar rule. Line: 3']"),
+     "Error while parsing Annotation: ['Invalid AnnotationType: SOURCE. Line: 2', "
+     "'Error while parsing AnnotationDate: Token did not match specified grammar "
+     "rule. Line: 3']"),
     ('Annotator: Jane Doe()\nAnnotationDate: 201001-29T18:30:22Z\n'
      'AnnotationComment: <text>Document level annotation</text>\nAnnotationType: OTHER\nSPDXREF: SPDXRef-DOCUMENT',
      "Error while parsing Annotation: ['Error while parsing Annotator: Token did "

@@ -63,6 +63,5 @@ def test_parse_invalid_file():
     with pytest.raises(SPDXParsingError) as err:
         parser.parse(file_str)
 
-    assert err.value.get_messages() == ["Error while parsing File: ['Error while parsing FileType: Token did not "
-                                        "match specified grammar rule. Line: 3', 'Error while parsing FileChecksum: "
-                                        "Token did not match specified grammar rule. Line: 5']"]
+    assert err.value.get_messages() == ["Error while parsing File: ['Invalid FileType: SOUCE. Line 3', 'Error while "
+                                        "parsing FileChecksum: Token did not match specified grammar rule. Line: 5']"]
