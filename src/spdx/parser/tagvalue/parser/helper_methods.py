@@ -13,7 +13,14 @@ from typing import Optional, Callable, Any, Dict
 
 from ply.yacc import YaccProduction
 
+from spdx.casing_tools import camel_case_to_snake_case
+from spdx.model.annotation import Annotation
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.document import CreationInfo
+from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx.model.file import File
+from spdx.model.package import Package
+from spdx.model.snippet import Snippet
 from spdx.parser.error import SPDXParsingError
 
 
@@ -49,12 +56,8 @@ def parse_checksum(checksum_str: str) -> Checksum:
 
 def set_value(parsed_value: YaccProduction, dict_to_fill: Dict[str, Any], argument_name: Optional[str] = None,
               method_to_apply: Callable = lambda x: x):
-    # Parsed_value.slice returns a List of the objects in the corresponding grammar_rule for the parsed value,
-    # e.g. for @grammar_rule("created : CREATED DATE") the return value is something like
-    # p.slice = ["created", LexToken(CREATED,..), LexToken(DATE,..)].
-    # So the first value is the name of the grammar_rule that we have named according to the field in the data model.
     if not argument_name:
-        argument_name = str(parsed_value.slice[0])
+        argument_name = get_property(parsed_value[1])
     if argument_name in dict_to_fill:
         dict_to_fill["logger"].append(
             f"Multiple values for {parsed_value[1]} found. Line: {parsed_value.lineno(1)}")
@@ -65,3 +68,44 @@ def set_value(parsed_value: YaccProduction, dict_to_fill: Dict[str, Any], argume
         dict_to_fill["logger"].append(err.get_messages())
     except ValueError as err:
         dict_to_fill["logger"].append(err.args[0])
+    except KeyError:
+        dict_to_fill["logger"].append(f"Invalid {parsed_value[1]}: {parsed_value[2]}. Line: {parsed_value.lineno(1)}")
+
+
+def get_property(tag: str):
+    if tag not in TAG_DATA_MODEL_FIELD.keys():
+        return camel_case_to_snake_case(tag)
+    return TAG_DATA_MODEL_FIELD[tag][1]
+
+
+# This dictionary serves as a mapping from a tag to the corresponding class and field in the internal data model.
+# This mapping is not complete as we only list the values which can be parsed by a generic method and don't need any
+# individual logic.
+TAG_DATA_MODEL_FIELD = {
+    "SPDXVersion": (CreationInfo, "spdx_version"), "DataLicense": (CreationInfo, "data_license"),
+    "DocumentName": (CreationInfo, "name"), "DocumentComment": (CreationInfo, "document_comment"),
+    "DocumentNamespace": (CreationInfo, "document_namespace"), "Creator": (CreationInfo, "creator"),
+    "Created": (CreationInfo, "created"), "CreatorComment": (CreationInfo, "creator_comment"),
+    "LicenseListVersion": (CreationInfo, "license_list_version"),
+    "ExternalDocumentRef": (CreationInfo, "external_document_refs"),
+    "FileName": (File, "name"), "FileType": (File, "file_type"), "FileChecksum": (File, "checksums"),
+    "FileNotice": (File, "notice"), "FileCopyrightText": (File, "copyright_text"),
+    "LicenseComments": (File, "license_comment"), "FileComment": (File, "comment"),
+    "LicenseConcluded": (File, "license_concluded"), "LicenseDeclared": (File, "license_declared"),
+    "PackageName": (Package, "name"), "PackageComment": (Package, "comment"),
+    "PackageCopyrightText": (Package, "copyright_text"), "PackageLicenseComments": (Package, "license_comment"),
+    "PackageLicenseDeclared": (Package, "license_declared"), "PackageLicenseConcluded": (Package, "license_concluded"),
+    "PackageFileName": (Package, "file_name"), "PackageVersion": (Package, "version"),
+    "PackageDownloadLocation": (Package, "download_location"), "PackageSummary": (Package, "summary"),
+    "PackageSourceInfo": (Package, "source_info"), "PackageSupplier": (Package, "supplier"),
+    "PackageOriginator": (Package, "originator"), "PackageDescription": (Package, "description"),
+    "PackageHomePage": (Package, "homepage"),
+    "SnippetSPDXID": (Snippet, "spdx_id"), "SnippetFromFileSPDXID": (Snippet, "file_spdx_id"),
+    "SnippetName": (Snippet, "name"),
+    "SnippetComment": (Snippet, "comment"), "SnippetCopyrightText": (Snippet, "copyright_text"),
+    "SnippetLicenseComments": (Snippet, "license_comment"), "SnippetLicenseConcluded": (Snippet, "license_concluded"),
+    "SnippetByteRange": (Snippet, "byte_range"), "SnippetLineRange": (Snippet, "line_range"),
+    "SPDXREF": (Annotation, "spdx_id"), "AnnotationComment": (Annotation, "annotation_comment"),
+    "LicenseID": (ExtractedLicensingInfo, "license_id"), "ExtractedText": (ExtractedLicensingInfo, "extracted_text"),
+    "LicenseComment": (ExtractedLicensingInfo, "comment"), "LicenseName": (ExtractedLicensingInfo, "license_name")
+}

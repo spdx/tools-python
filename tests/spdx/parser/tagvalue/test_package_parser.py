@@ -91,7 +91,7 @@ def test_parse_package():
                            'category, reference_type and locator. Line: 2"]'),
                           ('PackageName: TestPackage\nExternalRef: category reference locator',
                            "Error while parsing Package: ['Invalid ExternalPackageRefCategory: "
-                           "category']"),
+                           "category. Line: 2']"),
                           ('SPDXID:SPDXRef-DOCUMENT\nPackageName: TestPackage\nSPDXID:SPDXRef-Package\n'
                            'PackageDownloadLocation: download.com\nPackageVerificationCode: category reference locator',
                            "Error while parsing Package: ['Error while parsing PackageVerificationCode: "
