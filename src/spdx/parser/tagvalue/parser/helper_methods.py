@@ -11,10 +11,10 @@
 import re
 from typing import Optional, Callable, Any, Dict
 
+from ply.yacc import YaccProduction
+
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.logger import Logger
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error
 
 
 def grammar_rule(doc):
@@ -37,25 +37,22 @@ def str_from_text(text: Optional[str]) -> Optional[str]:
         return None
 
 
-def parse_checksum(logger: Logger, checksum_str: str, line_number: int) -> Optional[Checksum]:
-    try:
-        algorithm, value = checksum_str.split(":")
-    except ValueError:
-        logger.append(
-            f"Couldn't split value for checksum in algorithm and value. Line: {line_number}")
-        return None
+def parse_checksum(checksum_str: str) -> Checksum:
+    # The lexer and the corresponding regex for the token CHECKSUM and EXT_DOC_REF_CHECKSUM ensure that the passed
+    # checksum_str is formatted in the way that the following lines of code can't cause an error.
+    algorithm, value = checksum_str.split(":")
     algorithm = ChecksumAlgorithm[algorithm.upper().replace("-", "_")]
     value = value.strip()
-    try:
-        checksum = construct_or_raise_parsing_error(Checksum, {"algorithm": algorithm, "value": value})
-    except SPDXParsingError as err:
-        logger.append(err.get_messages())
-        checksum = None
+    checksum = Checksum(algorithm, value)
     return checksum
 
 
-def set_value(parsed_value: Any, dict_to_fill: Dict[str, Any], argument_name: Optional[str] = None,
+def set_value(parsed_value: YaccProduction, dict_to_fill: Dict[str, Any], argument_name: Optional[str] = None,
               method_to_apply: Callable = lambda x: x):
+    # Parsed_value.slice returns a List of the objects in the corresponding grammar_rule for the parsed value,
+    # e.g. for @grammar_rule("created : CREATED DATE") the return value is something like
+    # p.slice = ["created", LexToken(CREATED,..), LexToken(DATE,..)].
+    # So the first value is the name of the grammar_rule that we have named according to the field in the data model.
     if not argument_name:
         argument_name = str(parsed_value.slice[0])
     if argument_name in dict_to_fill:
