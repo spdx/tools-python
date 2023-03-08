@@ -164,7 +164,7 @@ class Parser(object):
     def p_external_document_ref(self, p):
         document_ref_id = p[2]
         document_uri = p[3]
-        checksum = parse_checksum(self.creation_info["logger"], p[4], p.lineno(1))
+        checksum = parse_checksum(p[4])
         external_document_ref = ExternalDocumentRef(document_ref_id, document_uri, checksum)
         self.creation_info.setdefault("external_document_refs", []).append(external_document_ref)
 
@@ -278,7 +278,7 @@ class Parser(object):
     @grammar_rule("file_checksum : FILE_CHECKSUM CHECKSUM")
     def p_file_checksum(self, p):
         self.check_that_current_element_matches_class_for_value(File, p.lineno(1))
-        checksum = parse_checksum(self.current_element["logger"], p[2], p.lineno(1))
+        checksum = parse_checksum(p[2])
         self.current_element.setdefault("checksums", []).append(checksum)
 
     @grammar_rule("file_conc : FILE_LICS_CONC license_or_no_assertion_or_none")
@@ -391,7 +391,7 @@ class Parser(object):
     @grammar_rule("pkg_checksum : PKG_CHECKSUM CHECKSUM")
     def p_pkg_checksum(self, p):
         self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
-        checksum = parse_checksum(self.current_element["logger"], p[2], p.lineno(1))
+        checksum = parse_checksum(p[2])
         self.current_element.setdefault("checksums", []).append(checksum)
 
     @grammar_rule("verification_code : PKG_VERF_CODE LINE")
