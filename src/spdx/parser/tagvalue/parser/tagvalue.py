@@ -48,7 +48,7 @@ class Parser(object):
     logger: Logger
     current_element: Dict[str, Any]
     creation_info: Dict[str, Any]
-    elements_build: Dict[str, Any]
+    elements_built: Dict[str, Any]
     lex: SPDXLexer
     yacc: LRParser
 
@@ -57,7 +57,7 @@ class Parser(object):
         self.logger = Logger()
         self.current_element = {"logger": Logger()}
         self.creation_info = {"logger": Logger()}
-        self.elements_build = dict()
+        self.elements_built = dict()
         self.lex = SPDXLexer()
         self.lex.build(reflags=re.UNICODE)
         self.yacc = yacc.yacc(module=self, **kwargs)
@@ -168,8 +168,8 @@ class Parser(object):
         external_document_ref = ExternalDocumentRef(document_ref_id, document_uri, checksum)
         self.creation_info.setdefault("external_document_refs", []).append(external_document_ref)
 
+    @grammar_rule("creator : CREATOR PERSON_VALUE\n| CREATOR TOOL_VALUE\n| CREATOR ORG_VALUE")
     def p_creator(self, p):
-        """creator : CREATOR PERSON_VALUE\n| CREATOR TOOL_VALUE\n| CREATOR ORG_VALUE"""
         self.creation_info.setdefault("creators", []).append(ActorParser.parse_actor(p[2]))
 
     @grammar_rule("created : CREATED DATE")
@@ -513,36 +513,26 @@ class Parser(object):
         else:
             self.current_element.setdefault("license_info_in_snippet", []).append(p[2])
 
-    @grammar_rule("snip_byte_range : SNIPPET_BYTE_RANGE LINE")
-    def p_snippet_byte_range(self, p):
+    @grammar_rule("snip_byte_range : SNIPPET_BYTE_RANGE LINE\n snip_line_range : SNIPPET_LINE_RANGE LINE")
+    def p_snippet_range(self, p):
+        if p[1] == "SnippetByteRange":
+            argument_name = "byte_range"
+        elif p[1] == "SnippetLineRange":
+            argument_name = "line_range"
+        else:
+            return
         self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
-        if "byte_range" in self.current_element:
+        if argument_name in self.current_element:
             self.current_element["logger"].append(
                 f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
         range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
         if not range_re.match(p[2].strip()):
-            self.current_element["logger"].append(f"Value for SnippetByteRange doesn't match valid range pattern. "
+            self.current_element["logger"].append(f"Value for {p[1]} doesn't match valid range pattern. "
                                                   f"Line: {p.lineno(1)}")
             return
         startpoint = int(p[2].split(":")[0])
         endpoint = int(p[2].split(":")[-1])
-        self.current_element["byte_range"] = startpoint, endpoint
-
-    @grammar_rule("snip_line_range : SNIPPET_LINE_RANGE LINE")
-    def p_snippet_line_range(self, p):
-        self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1))
-        if "line_range" in self.current_element:
-            self.current_element["logger"].append(
-                f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
-            return
-        range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
-        if not range_re.match(p[2].strip()):
-            self.current_element["logger"].append(f"Value for SnippetLineRange doesn't match valid range pattern. "
-                                                  f"Line: {p.lineno(1)}")
-            return
-        startpoint = int(p[2].split(":")[0])
-        endpoint = int(p[2].split(":")[1])
-        self.current_element["line_range"] = startpoint, endpoint
+        self.current_element[argument_name] = startpoint, endpoint
 
     # parsing methods for annotation
 
@@ -552,8 +542,8 @@ class Parser(object):
         self.current_element["logger"].append(
             f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
+    @grammar_rule("annotator : ANNOTATOR PERSON_VALUE\n| TOOL_VALUE\n| ORG_VALUE")
     def p_annotator(self, p):
-        """annotator : ANNOTATOR PERSON_VALUE\n| TOOL_VALUE\n| ORG_VALUE"""
         self.initialize_new_current_element(Annotation)
         set_value(p, self.current_element, method_to_apply=ActorParser.parse_actor)
 
@@ -632,29 +622,32 @@ class Parser(object):
         pass
 
     def parse(self, text):
+        # entry point for the tag-value parser
         self.yacc.parse(text, lexer=self.lex)
+        # this constructs the last remaining element; all other elements are constructed at the start of
+        # their subsequent element
         self.construct_current_element()
-        try:
-            raise_parsing_error_if_logger_has_messages(self.creation_info.pop("logger"), "CreationInfo")
-        except SPDXParsingError as err:
-            self.logger.extend(err.get_messages())
+
+        # To be able to parse creation info values if they appear in between other elements, e.g. packages, we use
+        # two different dictionaries to collect the creation info and all other elements. Therefore, we have a separate
+        # logger for the creation info whose messages we need to add to the main logger to than raise all collected
+        # messages at once.
+        creation_info_logger = self.creation_info.pop("logger")
+        if creation_info_logger.has_messages():
+            self.logger.extend([f"Error while parsing CreationInfo: {creation_info_logger.get_messages()}"])
+
         raise_parsing_error_if_logger_has_messages(self.logger)
         creation_info = construct_or_raise_parsing_error(CreationInfo, self.creation_info)
-        self.elements_build["creation_info"] = creation_info
-        document = construct_or_raise_parsing_error(Document, self.elements_build)
+        self.elements_built["creation_info"] = creation_info
+        document = construct_or_raise_parsing_error(Document, self.elements_built)
         return document
 
-    def initialize_new_current_element(self, class_name: Any):
+    def initialize_new_current_element(self, clazz: Any):
         self.construct_current_element()
-        self.current_element["class"] = class_name
+        self.current_element["class"] = clazz
 
     def check_that_current_element_matches_class_for_value(self, expected_class, line_number):
-        if "class" not in self.current_element:
-            self.logger.append(
-                f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
-                f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing. "
-                f"Line: {line_number}")
-        elif expected_class != self.current_element["class"]:
+        if "class" not in self.current_element or expected_class != self.current_element["class"]:
             self.logger.append(
                 f"Element {expected_class.__name__} is not the current element in scope, probably the expected tag to "
                 f"start the element ({ELEMENT_EXPECTED_START_TAG[expected_class.__name__]}) is missing. "
@@ -662,19 +655,17 @@ class Parser(object):
 
     def construct_current_element(self):
         if "class" not in self.current_element:
-            self.current_element = {"logger": Logger()}
+            # When the first element of the document is instantiated we don't have a current element in scope
+            # and the key "class" doesn't exist. Additionally, if the first element doesn't have the expected start
+            # value the key "class" wouldn't exist. To prevent a KeyError we use early return.
             return
-        class_name = self.current_element.pop("class")
+
+        clazz = self.current_element.pop("class")
         try:
-            raise_parsing_error_if_logger_has_messages(self.current_element.pop("logger"), class_name.__name__)
-        except SPDXParsingError as err:
-            self.logger.extend(err.get_messages())
-            self.current_element = {"logger": Logger()}
-            return
-        try:
-            self.elements_build.setdefault(CLASS_MAPPING[class_name.__name__], []).append(
-                construct_or_raise_parsing_error(class_name, self.current_element))
-            if class_name == File:
+            raise_parsing_error_if_logger_has_messages(self.current_element.pop("logger"), clazz.__name__)
+            self.elements_built.setdefault(CLASS_MAPPING[clazz.__name__], []).append(
+                construct_or_raise_parsing_error(clazz, self.current_element))
+            if clazz == File:
                 self.check_for_preceding_package_and_build_contains_relationship()
         except SPDXParsingError as err:
             self.logger.extend(err.get_messages())
@@ -682,13 +673,13 @@ class Parser(object):
 
     def check_for_preceding_package_and_build_contains_relationship(self):
         file_spdx_id = self.current_element["spdx_id"]
-        if "packages" not in self.elements_build:
+        if "packages" not in self.elements_built:
             return
         # We assume that all files that are not contained in a package precede any package information. Any file
         # information that follows any package information is assigned to the last parsed package by creating a
         # corresponding contains relationship.
         # (see https://spdx.github.io/spdx-spec/v2.3/composition-of-an-SPDX-document/#5.2.2)
-        package_spdx_id = self.elements_build["packages"][-1].spdx_id
+        package_spdx_id = self.elements_built["packages"][-1].spdx_id
         relationship = Relationship(package_spdx_id, RelationshipType.CONTAINS, file_spdx_id)
-        if relationship not in self.elements_build.setdefault("relationships", []):
-            self.elements_build.setdefault("relationships", []).append(relationship)
+        if relationship not in self.elements_built.setdefault("relationships", []):
+            self.elements_built["relationships"].append(relationship)
