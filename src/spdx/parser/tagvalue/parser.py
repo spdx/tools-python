@@ -34,8 +34,8 @@ from spdx.parser.actor_parser import ActorParser
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
-from spdx.parser.tagvalue.lexer.tagvalue import SPDXLexer
-from spdx.parser.tagvalue.parser.helper_methods import grammar_rule, str_from_text, parse_checksum, set_value, \
+from spdx.parser.tagvalue.lexer import SPDXLexer
+from spdx.parser.tagvalue.helper_methods import grammar_rule, str_from_text, parse_checksum, set_value, \
     TAG_DATA_MODEL_FIELD
 
 CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relationships", Snippet="snippets",
@@ -78,53 +78,59 @@ class Parser(object):
         "attrib : spdx_version\n| spdx_id\n| data_license\n| doc_name\n| document_comment\n| document_namespace\n| "
         "creator\n| created\n| creator_comment\n| license_list_version\n| ext_doc_ref\n"
         # attributes for file 
-        "| file_name\n| file_type\n| file_checksum\n| file_conc\n| file_lics_info\n| file_cr_text\n"
-        "| file_lics_comment\n| file_attribution_text\n| file_notice\n| file_comment\n| file_contrib\n"
+        "| file_name\n| file_type\n| file_checksum\n| file_license_concluded\n| file_license_info\n"
+        "| file_copyright_text\n| file_license_comment\n| file_attribution_text\n| file_notice\n| file_comment\n"
+        "| file_contributor\n"
         # attributes for annotation
         "| annotator\n| annotation_date\n| annotation_comment\n| annotation_type\n| annotation_spdx_id\n"
         # attributes for relationship
         "| relationship\n"
         # attributes for snippet
-        "| snip_spdx_id\n| snip_name\n| snip_comment\n| snippet_attribution_text\n| snip_cr_text\n"
-        "| snip_lic_comment\n| file_spdx_id\n| snip_lics_conc\n| snip_lics_info\n| snip_byte_range\n"
-        "| snip_line_range\n"
+        "| snippet_spdx_id\n| snippet_name\n| snippet_comment\n| snippet_attribution_text\n| snippet_copyright_text\n"
+        "| snippet_license_comment\n| file_spdx_id\n| snippet_license_concluded\n| snippet_license_info\n"
+        "| snippet_byte_range\n| snippet_line_range\n"
         # attributes for package
         "| package_name\n| package_version\n| download_location\n| files_analyzed\n| homepage\n"
         "| summary\n| source_info\n| pkg_file_name\n| supplier\n| originator\n| pkg_checksum\n"
-        "| verification_code\n| description\n| pkg_comment\n| pkg_attribution_text\n| pkg_lic_decl\n| pkg_lic_conc\n"
-        "| pkg_lic_ff\n| pkg_lic_comment\n| pkg_cr_text\n| pkg_ext_ref\n| primary_package_purpose\n"
-        "| built_date\n| release_date\n| valid_until_date\n"
+        "| verification_code\n| description\n| pkg_comment\n| pkg_attribution_text\n| pkg_license_declared\n"
+        "| pkg_license_concluded\n| pkg_license_info\n| pkg_license_comment\n| pkg_copyright_text\n"
+        "| pkg_external_ref\n| primary_package_purpose\n| built_date\n| release_date\n| valid_until_date\n"
         # attributes for extracted licensing info
-        "| license_id\n| extracted_text\n| license_name\n| lic_xref\n| lic_comment\n"
+        "| license_id\n| extracted_text\n| license_name\n| license_cross_ref\n| lic_comment\n"
         "| unknown_tag ")
     def p_attrib(self, p):
         pass
 
     # general parsing methods
-    @grammar_rule("license_id : LICS_ID error\n lic_xref : LICS_CRS_REF error\n lic_comment : LICS_COMMENT error\n "
-                  "license_name : LICS_NAME error\n extracted_text : LICS_TEXT error\n "
-                  "file_name : FILE_NAME error\n file_contrib : FILE_CONTRIB error\n file_notice : FILE_NOTICE error\n "
-                  "file_cr_text : FILE_CR_TEXT error\n file_lics_comment : FILE_LICS_COMMENT error\n "
-                  "file_attribution_text : FILE_ATTRIBUTION_TEXT error\n file_lics_info : FILE_LICS_INFO error\n "
-                  "file_comment : FILE_COMMENT error\n file_checksum : FILE_CHECKSUM error\n "
-                  "file_conc : FILE_LICS_CONC error\n file_type : FILE_TYPE error\n "
+    @grammar_rule("license_id : LICENSE_ID error\n license_cross_ref : LICENSE_CROSS_REF error\n "
+                  "lic_comment : LICENSE_COMMENT error\n license_name : LICENSE_NAME error\n "
+                  "extracted_text : LICENSE_TEXT error\n "
+                  "file_name : FILE_NAME error\n file_contributor : FILE_CONTRIBUTOR error\n "
+                  "file_notice : FILE_NOTICE error\n file_copyright_text : FILE_COPYRIGHT_TEXT error\n "
+                  "file_license_comment : FILE_LICENSE_COMMENT error\n "
+                  "file_license_info : FILE_LICENSE_INFO error\n file_comment : FILE_COMMENT error\n "
+                  "file_checksum : FILE_CHECKSUM error\n file_license_concluded : FILE_LICENSE_CONCLUDED error\n "
+                  "file_type : FILE_TYPE error\n file_attribution_text : FILE_ATTRIBUTION_TEXT error\n "
                   "package_name : PKG_NAME error\n pkg_attribution_text : PKG_ATTRIBUTION_TEXT error\n "
-                  "description : PKG_DESC error\n pkg_comment : PKG_COMMENT error\n summary : PKG_SUM error\n "
-                  "pkg_cr_text : PKG_CPY_TEXT error\n pkg_ext_ref : PKG_EXT_REF error\n "
-                  "pkg_lic_comment : PKG_LICS_COMMENT error\n pkg_lic_decl : PKG_LICS_DECL error\n "
-                  "pkg_lic_ff : PKG_LICS_FFILE error \n pkg_lic_conc : PKG_LICS_CONC error\n "
-                  "source_info : PKG_SRC_INFO error\n homepage : PKG_HOME error\n pkg_checksum : PKG_CHECKSUM error\n "
-                  "verification_code : PKG_VERF_CODE error\n download_location : PKG_DOWN error\n "
-                  "files_analyzed : PKG_FILES_ANALYZED error\n originator : PKG_ORIG error\n "
-                  "supplier : PKG_SUPPL error\n pkg_file_name : PKG_FILE_NAME error\n "
+                  "description : PKG_DESCRIPTION error\n pkg_comment : PKG_COMMENT error\n "
+                  "summary : PKG_SUMMARY error\n pkg_copyright_text : PKG_COPYRIGHT_TEXT error\n "
+                  "pkg_external_ref : PKG_EXTERNAL_REF error\n pkg_license_comment : PKG_LICENSE_COMMENT error\n "
+                  "pkg_license_declared : PKG_LICENSE_DECLARED error\n pkg_license_info : PKG_LICENSE_INFO error \n "
+                  "pkg_license_concluded : PKG_LICENSE_CONCLUDED error\n source_info : PKG_SOURCE_INFO error\n "
+                  "homepage : PKG_HOMEPAGE error\n pkg_checksum : PKG_CHECKSUM error\n "
+                  "verification_code : PKG_VERIFICATION_CODE error\n originator : PKG_ORIGINATOR error\n "
+                  "download_location : PKG_DOWWNLOAD_LOCATION error\n files_analyzed : PKG_FILES_ANALYZED error\n "
+                  "supplier : PKG_SUPPLIER error\n pkg_file_name : PKG_FILE_NAME error\n "
                   "package_version : PKG_VERSION error\n primary_package_purpose : PRIMARY_PACKAGE_PURPOSE error\n "
                   "built_date : BUILT_DATE error\n release_date : RELEASE_DATE error\n "
-                  "valid_until_date : VALID_UNTIL_DATE error\n snip_spdx_id : SNIPPET_SPDX_ID error\n "
-                  "snip_name : SNIPPET_NAME error\n snip_comment : SNIPPET_COMMENT error\n "
-                  "snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT error\n snip_cr_text : SNIPPET_CR_TEXT error\n "
-                  "snip_lic_comment : SNIPPET_LICS_COMMENT error\n file_spdx_id : SNIPPET_FILE_SPDXID error\n "
-                  "snip_lics_conc : SNIPPET_LICS_CONC error\n snip_lics_info : SNIPPET_LICS_INFO error\n "
-                  "snip_byte_range : SNIPPET_BYTE_RANGE error\n snip_line_range : SNIPPET_LINE_RANGE error\n "
+                  "valid_until_date : VALID_UNTIL_DATE error\n snippet_spdx_id : SNIPPET_SPDX_ID error\n "
+                  "snippet_name : SNIPPET_NAME error\n snippet_comment : SNIPPET_COMMENT error\n "
+                  "snippet_attribution_text : SNIPPET_ATTRIBUTION_TEXT error\n "
+                  "snippet_copyright_text : SNIPPET_COPYRIGHT_TEXT error\n "
+                  "snippet_license_comment : SNIPPET_LICENSE_COMMENT error\n file_spdx_id : SNIPPET_FILE_SPDXID error\n "
+                  "snippet_license_concluded : SNIPPET_LICENSE_CONCLUDED error\n "
+                  "snippet_license_info : SNIPPET_LICENSE_INFO error\n "
+                  "snippet_byte_range : SNIPPET_BYTE_RANGE error\n snippet_line_range : SNIPPET_LINE_RANGE error\n "
                   "annotator : ANNOTATOR error\n annotation_date : ANNOTATION_DATE error\n "
                   "annotation_comment : ANNOTATION_COMMENT error\n annotation_type : ANNOTATION_TYPE error\n "
                   "annotation_spdx_id : ANNOTATION_SPDX_ID error\n relationship : RELATIONSHIP error")
@@ -134,25 +140,30 @@ class Parser(object):
         self.current_element["logger"].append(
             f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
-    @grammar_rule("license_name : LICS_NAME line_or_no_assertion\n extracted_text : LICS_TEXT text_or_line\n "
-                  "lic_comment : LICS_COMMENT text_or_line\n license_id : LICS_ID LINE\n "
+    @grammar_rule("license_name : LICENSE_NAME line_or_no_assertion\n extracted_text : LICENSE_TEXT text_or_line\n "
+                  "lic_comment : LICENSE_COMMENT text_or_line\n license_id : LICENSE_ID LINE\n "
                   "file_name : FILE_NAME LINE \n file_notice : FILE_NOTICE text_or_line\n "
-                  "file_cr_text : FILE_CR_TEXT line_or_no_assertion_or_none\n "
-                  "file_lics_comment : FILE_LICS_COMMENT text_or_line\n file_comment : FILE_COMMENT text_or_line\n "
-                  "file_conc : FILE_LICS_CONC license_or_no_assertion_or_none\n "
-                  "package_name : PKG_NAME LINE\n description : PKG_DESC text_or_line\n summary : PKG_SUM text_or_line\n "
-                  "source_info : PKG_SRC_INFO text_or_line\n homepage : PKG_HOME line_or_no_assertion_or_none\n "
-                  "download_location : PKG_DOWN line_or_no_assertion_or_none\n originator : PKG_ORIG actor_or_no_assertion\n "
-                  "supplier : PKG_SUPPL actor_or_no_assertion\n pkg_comment : PKG_COMMENT text_or_line\n "
-                  "pkg_cr_text : PKG_CPY_TEXT line_or_no_assertion_or_none\n "
-                  "pkg_lic_decl : PKG_LICS_DECL license_or_no_assertion_or_none\n pkg_file_name : PKG_FILE_NAME LINE\n "
-                  "pkg_lic_conc : PKG_LICS_CONC license_or_no_assertion_or_none\n package_version : PKG_VERSION LINE\n "
-                  "pkg_lic_comment : PKG_LICS_COMMENT text_or_line\n "
-                  "snip_spdx_id : SNIPPET_SPDX_ID LINE\n snip_name : SNIPPET_NAME LINE\n "
-                  "snip_comment : SNIPPET_COMMENT text_or_line\n "
-                  "snip_cr_text : SNIPPET_CR_TEXT line_or_no_assertion_or_none\n "
-                  "snip_lic_comment : SNIPPET_LICS_COMMENT text_or_line\n file_spdx_id : SNIPPET_FILE_SPDXID LINE\n "
-                  "snip_lics_conc : SNIPPET_LICS_CONC license_or_no_assertion_or_none\n "
+                  "file_copyright_text : FILE_COPYRIGHT_TEXT line_or_no_assertion_or_none\n "
+                  "file_license_comment : FILE_LICENSE_COMMENT text_or_line\n "
+                  "file_comment : FILE_COMMENT text_or_line\n "
+                  "file_license_concluded : FILE_LICENSE_CONCLUDED license_or_no_assertion_or_none\n "
+                  "package_name : PKG_NAME LINE\n description : PKG_DESCRIPTION text_or_line\n "
+                  "summary : PKG_SUMMARY text_or_line\n source_info : PKG_SOURCE_INFO text_or_line\n "
+                  "homepage : PKG_HOMEPAGE line_or_no_assertion_or_none\n "
+                  "download_location : PKG_DOWWNLOAD_LOCATION line_or_no_assertion_or_none\n "
+                  "originator : PKG_ORIGINATOR actor_or_no_assertion\n supplier : PKG_SUPPLIER actor_or_no_assertion\n "
+                  "pkg_comment : PKG_COMMENT text_or_line\n "
+                  "pkg_copyright_text : PKG_COPYRIGHT_TEXT line_or_no_assertion_or_none\n "
+                  "pkg_license_declared : PKG_LICENSE_DECLARED license_or_no_assertion_or_none\n "
+                  "pkg_file_name : PKG_FILE_NAME LINE\n "
+                  "pkg_license_concluded : PKG_LICENSE_CONCLUDED license_or_no_assertion_or_none\n "
+                  "package_version : PKG_VERSION LINE\n pkg_license_comment : PKG_LICENSE_COMMENT text_or_line\n "
+                  "snippet_spdx_id : SNIPPET_SPDX_ID LINE\n snippet_name : SNIPPET_NAME LINE\n "
+                  "snippet_comment : SNIPPET_COMMENT text_or_line\n "
+                  "snippet_copyright_text : SNIPPET_COPYRIGHT_TEXT line_or_no_assertion_or_none\n "
+                  "snippet_license_comment : SNIPPET_LICENSE_COMMENT text_or_line\n "
+                  "file_spdx_id : SNIPPET_FILE_SPDXID LINE\n "
+                  "snippet_license_concluded : SNIPPET_LICENSE_CONCLUDED license_or_no_assertion_or_none\n "
                   "annotation_spdx_id : ANNOTATION_SPDX_ID LINE\n "
                   "annotation_comment : ANNOTATION_COMMENT text_or_line\n "
 
@@ -189,7 +200,7 @@ class Parser(object):
     def p_license(self, p):
         p[0] = get_spdx_licensing().parse(p[1])
 
-    @grammar_rule("actor_or_no_assertion : PERSON_VALUE\n | ORG_VALUE")
+    @grammar_rule("actor_or_no_assertion : PERSON_VALUE\n | ORGANIZATION_VALUE")
     def p_actor_values(self, p):
         p[0] = ActorParser.parse_actor(p[1])
 
@@ -204,7 +215,7 @@ class Parser(object):
 
     # parsing methods for creation info / document level
 
-    @grammar_rule("license_list_version : LIC_LIST_VER error\n document_comment : DOC_COMMENT error\n "
+    @grammar_rule("license_list_version : LICENSE_LIST_VERSION error\n document_comment : DOC_COMMENT error\n "
                   "document_namespace : DOC_NAMESPACE error\n data_license : DOC_LICENSE error\n "
                   "doc_name : DOC_NAME error\n ext_doc_ref : EXT_DOC_REF error\n spdx_version : DOC_VERSION error\n "
                   "creator_comment : CREATOR_COMMENT error\n creator : CREATOR error\n created : CREATED error")
@@ -218,11 +229,11 @@ class Parser(object):
     def p_generic_value_creation_info(self, p):
         set_value(p, self.creation_info)
 
-    @grammar_rule("license_list_version : LIC_LIST_VER LINE")
+    @grammar_rule("license_list_version : LICENSE_LIST_VERSION LINE")
     def p_license_list_version(self, p):
         set_value(p, self.creation_info, method_to_apply=Version.from_string)
 
-    @grammar_rule("ext_doc_ref : EXT_DOC_REF DOC_REF_ID DOC_URI EXT_DOC_REF_CHECKSUM")
+    @grammar_rule("ext_doc_ref : EXT_DOC_REF EXT_DOC_REF_ID EXT_DOC_URI EXT_DOC_REF_CHECKSUM")
     def p_external_document_ref(self, p):
         document_ref_id = p[2]
         document_uri = p[3]
@@ -230,7 +241,7 @@ class Parser(object):
         external_document_ref = ExternalDocumentRef(document_ref_id, document_uri, checksum)
         self.creation_info.setdefault("external_document_refs", []).append(external_document_ref)
 
-    @grammar_rule("creator : CREATOR PERSON_VALUE\n| CREATOR TOOL_VALUE\n| CREATOR ORG_VALUE")
+    @grammar_rule("creator : CREATOR PERSON_VALUE\n| CREATOR TOOL_VALUE\n| CREATOR ORGANIZATION_VALUE")
     def p_creator(self, p):
         self.creation_info.setdefault("creators", []).append(ActorParser.parse_actor(p[2]))
 
@@ -240,14 +251,14 @@ class Parser(object):
 
     # parsing methods for extracted licensing info
 
-    @grammar_rule("lic_xref : LICS_CRS_REF LINE")
+    @grammar_rule("license_cross_ref : LICENSE_CROSS_REF LINE")
     def p_extracted_cross_reference(self, p):
         if self.check_that_current_element_matches_class_for_value(ExtractedLicensingInfo, p.lineno(1)):
             self.current_element.setdefault("cross_references", []).append(p[2])
 
     # parsing methods for file
 
-    @grammar_rule("file_contrib : FILE_CONTRIB LINE")
+    @grammar_rule("file_contributor : FILE_CONTRIBUTOR LINE")
     def p_file_contributor(self, p):
         if self.check_that_current_element_matches_class_for_value(File, p.lineno(1)):
             self.current_element.setdefault("contributors", []).append(p[2])
@@ -257,7 +268,7 @@ class Parser(object):
         if self.check_that_current_element_matches_class_for_value(File, p.lineno(1)):
             self.current_element.setdefault("attribution_texts", []).append(p[2])
 
-    @grammar_rule("file_lics_info : FILE_LICS_INFO license_or_no_assertion_or_none")
+    @grammar_rule("file_license_info : FILE_LICENSE_INFO license_or_no_assertion_or_none")
     def p_file_license_info(self, p):
         if not self.check_that_current_element_matches_class_for_value(File, p.lineno(1)):
             return
@@ -291,7 +302,7 @@ class Parser(object):
         self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         self.current_element.setdefault("attribution_texts", []).append(p[2])
 
-    @grammar_rule("pkg_ext_ref : PKG_EXT_REF LINE PKG_EXT_REF_COMMENT text_or_line\n | PKG_EXT_REF LINE")
+    @grammar_rule("pkg_external_ref : PKG_EXTERNAL_REF LINE PKG_EXTERNAL_REF_COMMENT text_or_line\n | PKG_EXTERNAL_REF LINE")
     def p_pkg_external_refs(self, p):
         if not self.check_that_current_element_matches_class_for_value(Package, p.lineno(1)):
             return
@@ -321,7 +332,7 @@ class Parser(object):
             return
         self.current_element.setdefault("external_references", []).append(external_package_ref)
 
-    @grammar_rule("pkg_lic_ff : PKG_LICS_FFILE license_or_no_assertion_or_none")
+    @grammar_rule("pkg_license_info : PKG_LICENSE_INFO license_or_no_assertion_or_none")
     def p_pkg_license_info_from_file(self, p):
         if not self.check_that_current_element_matches_class_for_value(Package, p.lineno(1)):
             return
@@ -337,7 +348,7 @@ class Parser(object):
         checksum = parse_checksum(p[2])
         self.current_element.setdefault("checksums", []).append(checksum)
 
-    @grammar_rule("verification_code : PKG_VERF_CODE LINE")
+    @grammar_rule("verification_code : PKG_VERIFICATION_CODE LINE")
     def p_pkg_verification_code(self, p):
         if not self.check_that_current_element_matches_class_for_value(Package, p.lineno(1)):
             return
@@ -386,7 +397,7 @@ class Parser(object):
         if self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1)):
             self.current_element.setdefault("attribution_texts", []).append(p[2])
 
-    @grammar_rule("snip_lics_info : SNIPPET_LICS_INFO license_or_no_assertion_or_none")
+    @grammar_rule("snippet_license_info : SNIPPET_LICENSE_INFO license_or_no_assertion_or_none")
     def p_snippet_license_info(self, p):
         if not self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1)):
             return
@@ -395,7 +406,7 @@ class Parser(object):
         else:
             self.current_element.setdefault("license_info_in_snippet", []).append(p[2])
 
-    @grammar_rule("snip_byte_range : SNIPPET_BYTE_RANGE LINE\n snip_line_range : SNIPPET_LINE_RANGE LINE")
+    @grammar_rule("snippet_byte_range : SNIPPET_BYTE_RANGE LINE\n snippet_line_range : SNIPPET_LINE_RANGE LINE")
     def p_snippet_range(self, p):
         if not self.check_that_current_element_matches_class_for_value(Snippet, p.lineno(1)):
             return
@@ -415,7 +426,7 @@ class Parser(object):
 
     # parsing methods for annotation
 
-    @grammar_rule("annotator : ANNOTATOR PERSON_VALUE\n| TOOL_VALUE\n| ORG_VALUE")
+    @grammar_rule("annotator : ANNOTATOR PERSON_VALUE\n| TOOL_VALUE\n| ORGANIZATION_VALUE")
     def p_annotator(self, p):
         self.initialize_new_current_element(Annotation)
         set_value(p, self.current_element, method_to_apply=ActorParser.parse_actor)
@@ -456,7 +467,7 @@ class Parser(object):
         if len(p) == 5:
             self.current_element["comment"] = p[4]
 
-    @grammar_rule("relationship_value : DOC_REF_ID LINE")
+    @grammar_rule("relationship_value : EXT_DOC_REF_ID LINE")
     def p_relationship_value_with_doc_ref(self, p):
 
         p[0] = p[1] + ":" + p[2]

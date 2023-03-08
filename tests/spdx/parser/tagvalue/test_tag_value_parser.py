@@ -16,13 +16,13 @@ import pytest
 from spdx.model.document import Document
 from spdx.model.relationship import RelationshipType, Relationship
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.tagvalue.parser.tagvalue import Parser
+from spdx.parser.tagvalue.parser import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 
 def test_parse_unknown_tag():
     parser = Parser()
-    unknown_tag_str = 'UnknownTag: This is an example for an unknown tag.'
+    unknown_tag_str = "UnknownTag: This is an example for an unknown tag."
 
     with pytest.raises(SPDXParsingError, match="Unknown tag"):
         parser.parse(unknown_tag_str)

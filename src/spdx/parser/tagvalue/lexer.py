@@ -28,7 +28,7 @@ class SPDXLexer(object):
         "Creator": "CREATOR",
         "Created": "CREATED",
         "CreatorComment": "CREATOR_COMMENT",
-        "LicenseListVersion": "LIC_LIST_VER",
+        "LicenseListVersion": "LICENSE_LIST_VERSION",
         # Annotation fields
         "Annotator": "ANNOTATOR",
         "AnnotationDate": "ANNOTATION_DATE",
@@ -41,25 +41,25 @@ class SPDXLexer(object):
         # Package fields
         "PackageName": "PKG_NAME",
         "PackageVersion": "PKG_VERSION",
-        "PackageDownloadLocation": "PKG_DOWN",
+        "PackageDownloadLocation": "PKG_DOWWNLOAD_LOCATION",
         "FilesAnalyzed": "PKG_FILES_ANALYZED",
-        "PackageSummary": "PKG_SUM",
-        "PackageSourceInfo": "PKG_SRC_INFO",
+        "PackageSummary": "PKG_SUMMARY",
+        "PackageSourceInfo": "PKG_SOURCE_INFO",
         "PackageFileName": "PKG_FILE_NAME",
-        "PackageSupplier": "PKG_SUPPL",
-        "PackageOriginator": "PKG_ORIG",
+        "PackageSupplier": "PKG_SUPPLIER",
+        "PackageOriginator": "PKG_ORIGINATOR",
         "PackageChecksum": "PKG_CHECKSUM",
-        "PackageVerificationCode": "PKG_VERF_CODE",
-        "PackageDescription": "PKG_DESC",
+        "PackageVerificationCode": "PKG_VERIFICATION_CODE",
+        "PackageDescription": "PKG_DESCRIPTION",
         "PackageComment": "PKG_COMMENT",
-        "PackageLicenseDeclared": "PKG_LICS_DECL",
-        "PackageLicenseConcluded": "PKG_LICS_CONC",
-        "PackageLicenseInfoFromFiles": "PKG_LICS_FFILE",
-        "PackageLicenseComments": "PKG_LICS_COMMENT",
-        "PackageCopyrightText": "PKG_CPY_TEXT",
-        "PackageHomePage": "PKG_HOME",
-        "ExternalRef": "PKG_EXT_REF",
-        "ExternalRefComment": "PKG_EXT_REF_COMMENT",
+        "PackageLicenseDeclared": "PKG_LICENSE_DECLARED",
+        "PackageLicenseConcluded": "PKG_LICENSE_CONCLUDED",
+        "PackageLicenseInfoFromFiles": "PKG_LICENSE_INFO",
+        "PackageLicenseComments": "PKG_LICENSE_COMMENT",
+        "PackageCopyrightText": "PKG_COPYRIGHT_TEXT",
+        "PackageHomePage": "PKG_HOMEPAGE",
+        "ExternalRef": "PKG_EXTERNAL_REF",
+        "ExternalRefComment": "PKG_EXTERNAL_REF_COMMENT",
         "PackageAttributionText": "PKG_ATTRIBUTION_TEXT",
         "PrimaryPackagePurpose": "PRIMARY_PACKAGE_PURPOSE",
         "BuiltDate": "BUILT_DATE",
@@ -69,29 +69,29 @@ class SPDXLexer(object):
         "FileName": "FILE_NAME",
         "FileType": "FILE_TYPE",
         "FileChecksum": "FILE_CHECKSUM",
-        "LicenseConcluded": "FILE_LICS_CONC",
-        "LicenseInfoInFile": "FILE_LICS_INFO",
-        "FileCopyrightText": "FILE_CR_TEXT",
-        "LicenseComments": "FILE_LICS_COMMENT",
+        "LicenseConcluded": "FILE_LICENSE_CONCLUDED",
+        "LicenseInfoInFile": "FILE_LICENSE_INFO",
+        "FileCopyrightText": "FILE_COPYRIGHT_TEXT",
+        "LicenseComments": "FILE_LICENSE_COMMENT",
         "FileComment": "FILE_COMMENT",
         "FileNotice": "FILE_NOTICE",
-        "FileContributor": "FILE_CONTRIB",
+        "FileContributor": "FILE_CONTRIBUTOR",
         "FileAttributionText": "FILE_ATTRIBUTION_TEXT",
         # ExtractedLicensingInfo fields
-        "LicenseID": "LICS_ID",
-        "ExtractedText": "LICS_TEXT",
-        "LicenseName": "LICS_NAME",
-        "LicenseCrossReference": "LICS_CRS_REF",
-        "LicenseComment": "LICS_COMMENT",
+        "LicenseID": "LICENSE_ID",
+        "ExtractedText": "LICENSE_TEXT",
+        "LicenseName": "LICENSE_NAME",
+        "LicenseCrossReference": "LICENSE_CROSS_REF",
+        "LicenseComment": "LICENSE_COMMENT",
         # Snippet fields
         "SnippetSPDXID": "SNIPPET_SPDX_ID",
         "SnippetName": "SNIPPET_NAME",
         "SnippetComment": "SNIPPET_COMMENT",
-        "SnippetCopyrightText": "SNIPPET_CR_TEXT",
-        "SnippetLicenseComments": "SNIPPET_LICS_COMMENT",
+        "SnippetCopyrightText": "SNIPPET_COPYRIGHT_TEXT",
+        "SnippetLicenseComments": "SNIPPET_LICENSE_COMMENT",
         "SnippetFromFileSPDXID": "SNIPPET_FILE_SPDXID",
-        "SnippetLicenseConcluded": "SNIPPET_LICS_CONC",
-        "LicenseInfoInSnippet": "SNIPPET_LICS_INFO",
+        "SnippetLicenseConcluded": "SNIPPET_LICENSE_CONCLUDED",
+        "LicenseInfoInSnippet": "SNIPPET_LICENSE_INFO",
         "SnippetAttributionText": "SNIPPET_ATTRIBUTION_TEXT",
         "SnippetByteRange": "SNIPPET_BYTE_RANGE",
         "SnippetLineRange": "SNIPPET_LINE_RANGE",
@@ -105,13 +105,13 @@ class SPDXLexer(object):
                  "TEXT",
                  "TOOL_VALUE",
                  "UNKNOWN_TAG",
-                 "ORG_VALUE",
+                 "ORGANIZATION_VALUE",
                  "PERSON_VALUE",
                  "DATE",
                  "LINE",
                  "CHECKSUM",
-                 "DOC_REF_ID",
-                 "DOC_URI",
+                 "EXT_DOC_REF_ID",
+                 "EXT_DOC_URI",
                  "EXT_DOC_REF_CHECKSUM",
              ] + list(reserved.values())
 
@@ -146,12 +146,12 @@ class SPDXLexer(object):
         return t
 
     @TOKEN(r":\s*DocumentRef-([A-Za-z0-9\+\.\-]+)")
-    def t_DOC_REF_ID(self, t):
+    def t_EXT_DOC_REF_ID(self, t):
         t.value = t.value[1:].strip()
         return t
 
     @TOKEN(r"\s*((ht|f)tps?:\/\/\S*)")
-    def t_DOC_URI(self, t):
+    def t_EXT_DOC_URI(self, t):
         t.value = t.value.strip()
         return t
 
@@ -166,7 +166,7 @@ class SPDXLexer(object):
         return t
 
     @TOKEN(r":\s*Organization:.+")
-    def t_ORG_VALUE(self, t):
+    def t_ORGANIZATION_VALUE(self, t):
         t.value = t.value[1:].strip()
         return t
 

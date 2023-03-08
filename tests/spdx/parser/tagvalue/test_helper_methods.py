@@ -11,7 +11,7 @@
 import pytest
 
 from spdx.model.checksum import ChecksumAlgorithm
-from spdx.parser.tagvalue.parser.helper_methods import parse_checksum
+from spdx.parser.tagvalue.helper_methods import parse_checksum
 
 
 @pytest.mark.parametrize("checksum_str, algorithm, value",
