@@ -11,7 +11,7 @@
 from spdx.formats import file_name_to_format, FileFormat
 from spdx.parser.json import json_parser
 from spdx.parser.rdf import rdf_parser
-from spdx.parser.tagvalue.parser import tagvalue_parser
+from spdx.parser.tagvalue import tagvalue_parser
 from spdx.parser.xml import xml_parser
 from spdx.parser.yaml import yaml_parser
 

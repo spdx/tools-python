@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from spdx.model.document import Document
-from spdx.parser.tagvalue.parser.tagvalue import Parser
+from spdx.parser.tagvalue.parser import Parser
 
 
 def parse_from_file(file_name: str) -> Document:
