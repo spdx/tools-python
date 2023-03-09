@@ -41,7 +41,7 @@ class SPDXLexer(object):
         # Package fields
         "PackageName": "PKG_NAME",
         "PackageVersion": "PKG_VERSION",
-        "PackageDownloadLocation": "PKG_DOWWNLOAD_LOCATION",
+        "PackageDownloadLocation": "PKG_DOWNLOAD_LOCATION",
         "FilesAnalyzed": "PKG_FILES_ANALYZED",
         "PackageSummary": "PKG_SUMMARY",
         "PackageSourceInfo": "PKG_SOURCE_INFO",

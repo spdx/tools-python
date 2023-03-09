@@ -119,7 +119,7 @@ class Parser(object):
                   "pkg_license_concluded : PKG_LICENSE_CONCLUDED error\n source_info : PKG_SOURCE_INFO error\n "
                   "homepage : PKG_HOMEPAGE error\n pkg_checksum : PKG_CHECKSUM error\n "
                   "verification_code : PKG_VERIFICATION_CODE error\n originator : PKG_ORIGINATOR error\n "
-                  "download_location : PKG_DOWWNLOAD_LOCATION error\n files_analyzed : PKG_FILES_ANALYZED error\n "
+                  "download_location : PKG_DOWNLOAD_LOCATION error\n files_analyzed : PKG_FILES_ANALYZED error\n "
                   "supplier : PKG_SUPPLIER error\n pkg_file_name : PKG_FILE_NAME error\n "
                   "package_version : PKG_VERSION error\n primary_package_purpose : PRIMARY_PACKAGE_PURPOSE error\n "
                   "built_date : BUILT_DATE error\n release_date : RELEASE_DATE error\n "
@@ -150,7 +150,7 @@ class Parser(object):
                   "package_name : PKG_NAME LINE\n description : PKG_DESCRIPTION text_or_line\n "
                   "summary : PKG_SUMMARY text_or_line\n source_info : PKG_SOURCE_INFO text_or_line\n "
                   "homepage : PKG_HOMEPAGE line_or_no_assertion_or_none\n "
-                  "download_location : PKG_DOWWNLOAD_LOCATION line_or_no_assertion_or_none\n "
+                  "download_location : PKG_DOWNLOAD_LOCATION line_or_no_assertion_or_none\n "
                   "originator : PKG_ORIGINATOR actor_or_no_assertion\n supplier : PKG_SUPPLIER actor_or_no_assertion\n "
                   "pkg_comment : PKG_COMMENT text_or_line\n "
                   "pkg_copyright_text : PKG_COPYRIGHT_TEXT line_or_no_assertion_or_none\n "
@@ -165,9 +165,7 @@ class Parser(object):
                   "file_spdx_id : SNIPPET_FILE_SPDXID LINE\n "
                   "snippet_license_concluded : SNIPPET_LICENSE_CONCLUDED license_or_no_assertion_or_none\n "
                   "annotation_spdx_id : ANNOTATION_SPDX_ID LINE\n "
-                  "annotation_comment : ANNOTATION_COMMENT text_or_line\n "
-
-                  )
+                  "annotation_comment : ANNOTATION_COMMENT text_or_line")
     def p_generic_value(self, p):
         if p[1] in EXPECTED_START_TAG_ELEMENT.keys():
             self.initialize_new_current_element(EXPECTED_START_TAG_ELEMENT[p[1]])
@@ -206,8 +204,9 @@ class Parser(object):
 
     @grammar_rule("spdx_id : SPDX_ID LINE")
     def p_spdx_id(self, p):
-        # We assume that the documents spdx_id is defined first in the SPDXDocument, before any package or file
-        # information. If this is not the case the parser will behave unexpectedly as the spdx_ids are assigned falsy.
+        # As all SPDX Ids share the same tag, there is no knowing which spdx_id belongs to the document.
+        # We assume that to be the first spdx_id we encounter. As the specification does not explicitly require this,
+        # our approach might lead to unwanted behavior when the document's SPDX Id is defined later in the document.
         if "spdx_id" in self.creation_info:
             self.current_element["spdx_id"] = p[2]
         else:
@@ -302,7 +301,8 @@ class Parser(object):
         self.check_that_current_element_matches_class_for_value(Package, p.lineno(1))
         self.current_element.setdefault("attribution_texts", []).append(p[2])
 
-    @grammar_rule("pkg_external_ref : PKG_EXTERNAL_REF LINE PKG_EXTERNAL_REF_COMMENT text_or_line\n | PKG_EXTERNAL_REF LINE")
+    @grammar_rule(
+        "pkg_external_ref : PKG_EXTERNAL_REF LINE PKG_EXTERNAL_REF_COMMENT text_or_line\n | PKG_EXTERNAL_REF LINE")
     def p_pkg_external_refs(self, p):
         if not self.check_that_current_element_matches_class_for_value(Package, p.lineno(1)):
             return
@@ -516,9 +516,8 @@ class Parser(object):
 
     def construct_current_element(self):
         if "class" not in self.current_element:
-            # When the first element of the document is instantiated we don't have a current element in scope
-            # and the key "class" doesn't exist. Additionally, if the first element doesn't have the expected start
-            # value the key "class" wouldn't exist. To prevent a KeyError we use early return.
+            # This happens when the first element is initialized via initialize_new_current_element() or if the first
+            # element is missing its expected starting tag. In both cases we are unable to construct an element.
             return
 
         clazz = self.current_element.pop("class")
