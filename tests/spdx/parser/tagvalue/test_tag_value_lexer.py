@@ -159,7 +159,7 @@ def test_tokenization_of_package(lexer):
     token_assert_helper(lexer.token(), "LINE", "SPDXRef-Package", 2)
     token_assert_helper(lexer.token(), "PKG_VERSION", "PackageVersion", 3)
     token_assert_helper(lexer.token(), "LINE", "Version 0.9.2", 3)
-    token_assert_helper(lexer.token(), "PKG_DOWWNLOAD_LOCATION", "PackageDownloadLocation", 4)
+    token_assert_helper(lexer.token(), "PKG_DOWNLOAD_LOCATION", "PackageDownloadLocation", 4)
     token_assert_helper(lexer.token(), "LINE", "http://example.com/test", 4)
     token_assert_helper(lexer.token(), "PKG_FILES_ANALYZED", "FilesAnalyzed", 5)
     token_assert_helper(lexer.token(), "LINE", "True", 5)

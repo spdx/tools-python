@@ -57,7 +57,7 @@ def parse_checksum(checksum_str: str) -> Checksum:
 def set_value(parsed_value: YaccProduction, dict_to_fill: Dict[str, Any], argument_name: Optional[str] = None,
               method_to_apply: Callable = lambda x: x):
     if not argument_name:
-        argument_name = get_property(parsed_value[1])
+        argument_name = get_property_name(parsed_value[1])
     if argument_name in dict_to_fill:
         dict_to_fill["logger"].append(
             f"Multiple values for {parsed_value[1]} found. Line: {parsed_value.lineno(1)}")
@@ -72,7 +72,7 @@ def set_value(parsed_value: YaccProduction, dict_to_fill: Dict[str, Any], argume
         dict_to_fill["logger"].append(f"Invalid {parsed_value[1]}: {parsed_value[2]}. Line: {parsed_value.lineno(1)}")
 
 
-def get_property(tag: str):
+def get_property_name(tag: str):
     if tag not in TAG_DATA_MODEL_FIELD.keys():
         return camel_case_to_snake_case(tag)
     return TAG_DATA_MODEL_FIELD[tag][1]
