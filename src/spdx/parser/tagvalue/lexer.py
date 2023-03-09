@@ -109,10 +109,7 @@ class SPDXLexer(object):
                  "PERSON_VALUE",
                  "DATE",
                  "LINE",
-                 "CHECKSUM",
-                 "EXT_DOC_REF_ID",
-                 "EXT_DOC_URI",
-                 "EXT_DOC_REF_CHECKSUM",
+                 "CHECKSUM"
              ] + list(reserved.values())
 
     def __init__(self):
@@ -142,21 +139,6 @@ class SPDXLexer(object):
     @TOKEN(
         r":\s*(ADLER32|BLAKE2b-256|BLAKE2b-384|BLAKE2b-512|BLAKE3|MD2|MD4|MD5|MD6|SHA1|SHA224|SHA256|SHA384|SHA512|SHA3-256|SHA3-384|SHA3-512):\s*([a-f0-9]*)")
     def t_CHECKSUM(self, t):
-        t.value = t.value[1:].strip()
-        return t
-
-    @TOKEN(r":\s*DocumentRef-([A-Za-z0-9\+\.\-]+)")
-    def t_EXT_DOC_REF_ID(self, t):
-        t.value = t.value[1:].strip()
-        return t
-
-    @TOKEN(r"\s*((ht|f)tps?:\/\/\S*)")
-    def t_EXT_DOC_URI(self, t):
-        t.value = t.value.strip()
-        return t
-
-    @TOKEN(r"\s*SHA1:\s*[a-f0-9]{40}")
-    def t_EXT_DOC_REF_CHECKSUM(self, t):
         t.value = t.value[1:].strip()
         return t
 

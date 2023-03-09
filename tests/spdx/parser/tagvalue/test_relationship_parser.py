@@ -28,7 +28,7 @@ from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
                                         SpdxNoAssertion())),
                           ("Relationship: SPDXRef-CarolCompression DEPENDS_ON NONE",
                            Relationship("SPDXRef-CarolCompression", RelationshipType.DEPENDS_ON, SpdxNone())),
-                          ("Relationship: DocumentRef-ExternalDocument: SPDXRef-Test DEPENDS_ON DocumentRef:AnotherRef",
+                          ("Relationship: DocumentRef-ExternalDocument:SPDXRef-Test DEPENDS_ON DocumentRef:AnotherRef",
                            Relationship("DocumentRef-ExternalDocument:SPDXRef-Test", RelationshipType.DEPENDS_ON,
                                         "DocumentRef:AnotherRef"))
                           ])

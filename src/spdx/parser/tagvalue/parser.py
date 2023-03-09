@@ -42,9 +42,6 @@ CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relat
                      Package="packages", ExtractedLicensingInfo="extracted_licensing_info")
 ELEMENT_EXPECTED_START_TAG = dict(File="FileName", Annotation="Annotator", Relationship="Relationship",
                                   Snippet="SnippetSPDXID", Package="PackageName", ExtractedLicensingInfo="LicenseID")
-EXPECTED_START_TAG_ELEMENT = {"FileName": File, "PackageName": Package, "Annotator": Annotation,
-                              "Relationship": Relationship, "SnippetSPDXID": Snippet,
-                              "LicenseID": ExtractedLicensingInfo}
 
 
 class Parser(object):
@@ -135,8 +132,8 @@ class Parser(object):
                   "annotation_comment : ANNOTATION_COMMENT error\n annotation_type : ANNOTATION_TYPE error\n "
                   "annotation_spdx_id : ANNOTATION_SPDX_ID error\n relationship : RELATIONSHIP error")
     def p_current_element_error(self, p):
-        if p[1] in EXPECTED_START_TAG_ELEMENT.keys():
-            self.initialize_new_current_element(EXPECTED_START_TAG_ELEMENT[p[1]])
+        if p[1] in ELEMENT_EXPECTED_START_TAG.values():
+            self.initialize_new_current_element(TAG_DATA_MODEL_FIELD[p[1]][0])
         self.current_element["logger"].append(
             f"Error while parsing {p[1]}: Token did not match specified grammar rule. Line: {p.lineno(1)}")
 
@@ -167,8 +164,8 @@ class Parser(object):
                   "annotation_spdx_id : ANNOTATION_SPDX_ID LINE\n "
                   "annotation_comment : ANNOTATION_COMMENT text_or_line")
     def p_generic_value(self, p):
-        if p[1] in EXPECTED_START_TAG_ELEMENT.keys():
-            self.initialize_new_current_element(EXPECTED_START_TAG_ELEMENT[p[1]])
+        if p[1] in ELEMENT_EXPECTED_START_TAG.values():
+            self.initialize_new_current_element(TAG_DATA_MODEL_FIELD[p[1]][0])
         if self.check_that_current_element_matches_class_for_value(TAG_DATA_MODEL_FIELD[p[1]][0], p.lineno(1)):
             set_value(p, self.current_element)
 
@@ -232,11 +229,22 @@ class Parser(object):
     def p_license_list_version(self, p):
         set_value(p, self.creation_info, method_to_apply=Version.from_string)
 
-    @grammar_rule("ext_doc_ref : EXT_DOC_REF EXT_DOC_REF_ID EXT_DOC_URI EXT_DOC_REF_CHECKSUM")
+    @grammar_rule("ext_doc_ref : EXT_DOC_REF LINE")
     def p_external_document_ref(self, p):
-        document_ref_id = p[2]
-        document_uri = p[3]
-        checksum = parse_checksum(p[4])
+        external_doc_ref_regex = re.compile(r"(.*)(\s*SHA1:\s*[a-f0-9]{40})")
+        external_doc_ref_match = external_doc_ref_regex.match(p[2])
+        if not external_doc_ref_match:
+            self.creation_info["logger"].append(
+                f"Error while parsing ExternalDocumentRef: Couldn\'t match Checksum. Line: {p.lineno(1)}")
+            return
+        try:
+            document_ref_id, document_uri = external_doc_ref_match.group(1).strip().split(" ")
+        except ValueError:
+            self.creation_info["logger"].append(
+                f"Error while parsing ExternalDocumentRef: Couldn't split the first part of the value into "
+                f"document_ref_id and document_uri. Line: {p.lineno(1)}")
+            return
+        checksum = parse_checksum(external_doc_ref_match.group(2).strip())
         external_document_ref = ExternalDocumentRef(document_ref_id, document_uri, checksum)
         self.creation_info.setdefault("external_document_refs", []).append(external_document_ref)
 
@@ -415,6 +423,7 @@ class Parser(object):
         if argument_name in self.current_element:
             self.current_element["logger"].append(
                 f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
+            return
         range_re = re.compile(r"^(\d+):(\d+)$", re.UNICODE)
         if not range_re.match(p[2].strip()):
             self.current_element["logger"].append(f"Value for {p[1]} doesn't match valid range pattern. "
@@ -443,8 +452,8 @@ class Parser(object):
 
     # parsing methods for relationship
 
-    @grammar_rule("relationship : RELATIONSHIP relationship_value RELATIONSHIP_COMMENT text_or_line\n "
-                  "| RELATIONSHIP relationship_value")
+    @grammar_rule("relationship : RELATIONSHIP LINE RELATIONSHIP_COMMENT text_or_line\n "
+                  "| RELATIONSHIP LINE")
     def p_relationship(self, p):
         self.initialize_new_current_element(Relationship)
         try:
@@ -466,16 +475,6 @@ class Parser(object):
         self.current_element["spdx_element_id"] = spdx_element_id
         if len(p) == 5:
             self.current_element["comment"] = p[4]
-
-    @grammar_rule("relationship_value : EXT_DOC_REF_ID LINE")
-    def p_relationship_value_with_doc_ref(self, p):
-
-        p[0] = p[1] + ":" + p[2]
-
-    @grammar_rule("relationship_value : LINE")
-    def p_relationship_value_without_doc_ref(self, p):
-
-        p[0] = p[1]
 
     def p_error(self, p):
         pass
