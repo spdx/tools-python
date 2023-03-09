@@ -105,6 +105,7 @@ TAG_DATA_MODEL_FIELD = {
     "SnippetComment": (Snippet, "comment"), "SnippetCopyrightText": (Snippet, "copyright_text"),
     "SnippetLicenseComments": (Snippet, "license_comment"), "SnippetLicenseConcluded": (Snippet, "license_concluded"),
     "SnippetByteRange": (Snippet, "byte_range"), "SnippetLineRange": (Snippet, "line_range"),
+    "Annotator": (Annotation, "annotator"),
     "SPDXREF": (Annotation, "spdx_id"), "AnnotationComment": (Annotation, "annotation_comment"),
     "LicenseID": (ExtractedLicensingInfo, "license_id"), "ExtractedText": (ExtractedLicensingInfo, "extracted_text"),
     "LicenseComment": (ExtractedLicensingInfo, "comment"), "LicenseName": (ExtractedLicensingInfo, "license_name")
