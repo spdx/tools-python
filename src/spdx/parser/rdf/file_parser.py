@@ -56,7 +56,7 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
     raise_parsing_error_if_logger_has_messages(logger, "File")
     file = construct_or_raise_parsing_error(File, dict(name=name, spdx_id=spdx_id, checksums=checksums,
                                                        attribution_texts=attribution_texts, comment=comment,
-                                                       copyright_text=copyright_text, file_type=file_types,
+                                                       copyright_text=copyright_text, file_types=file_types,
                                                        contributors=file_contributors,
                                                        license_comment=license_comment,
                                                        license_concluded=license_concluded,

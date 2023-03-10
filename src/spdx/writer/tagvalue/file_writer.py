@@ -21,7 +21,7 @@ def write_file(file: File, text_output: TextIO):
     write_value("FileName", file.name, text_output)
     write_value("SPDXID", file.spdx_id, text_output)
 
-    for file_type in file.file_type:
+    for file_type in file.file_types:
         write_value("FileType", file_type.name, text_output)
 
     for file_checksum in file.checksums:

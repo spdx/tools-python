@@ -106,7 +106,7 @@ document.creation_info.name = "new document name"
 # define a file and a DESCRIBES relationship between the file and the document
 checksum = Checksum(ChecksumAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c")
 
-file = File(name="./fileName.py", spdx_id="SPDXRef-File", checksums=[checksum], file_type=FileType.TEXT,
+file = File(name="./fileName.py", spdx_id="SPDXRef-File", checksums=[checksum], file_types=[FileType.TEXT],
             license_concluded=get_spdx_licensing().parse("MIT and GPL-2.0"),
             license_comment="licenseComment", copyright_text="copyrightText")
 

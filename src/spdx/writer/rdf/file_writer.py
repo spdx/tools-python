@@ -25,7 +25,7 @@ def add_file_to_graph(file: File, graph: Graph, doc_namespace: str,
     file_resource = URIRef(add_namespace_to_spdx_id(file.spdx_id, doc_namespace, external_doc_ref_to_namespace))
     graph.add((file_resource, RDF.type, SPDX_NAMESPACE.File))
     graph.add((file_resource, SPDX_NAMESPACE.fileName, Literal(file.name)))
-    for file_type in file.file_type:
+    for file_type in file.file_types:
         graph.add((file_resource, SPDX_NAMESPACE.fileType,
                    SPDX_NAMESPACE[f"fileType_{snake_case_to_camel_case(file_type.name)}"]))
 

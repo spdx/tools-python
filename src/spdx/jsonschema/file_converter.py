@@ -58,7 +58,7 @@ class FileConverter(TypedConverter[File]):
         elif file_property == FileProperty.FILE_NAME:
             return file.name
         elif file_property == FileProperty.FILE_TYPES:
-            return [file_type.name for file_type in file.file_type] or None
+            return [file_type.name for file_type in file.file_types] or None
         elif file_property == FileProperty.LICENSE_COMMENTS:
             return file.license_comment
         elif file_property == FileProperty.LICENSE_CONCLUDED:

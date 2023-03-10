@@ -39,7 +39,7 @@ class File:
     name: str
     spdx_id: str
     checksums: List[Checksum]
-    file_type: List[FileType] = field(default_factory=list)
+    file_types: List[FileType] = field(default_factory=list)
     license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None
     license_info_in_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = field(
         default_factory=list)
@@ -55,14 +55,14 @@ class File:
     # - artifact of (3 properties): replace by an external package reference and a GENERATED_FROM relationship
     #   between the file and this package
 
-    def __init__(self, name: str, spdx_id: str, checksums: List[Checksum], file_type: List[FileType] = None,
+    def __init__(self, name: str, spdx_id: str, checksums: List[Checksum], file_types: List[FileType] = None,
                  license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
                  license_info_in_file: Optional[Union[List[LicenseExpression], SpdxNoAssertion, SpdxNone]] = None,
                  license_comment: Optional[str] = None,
                  copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
                  comment: str = None, notice: Optional[str] = None,
                  contributors: List[str] = None, attribution_texts: List[str] = None):
-        file_type = [] if file_type is None else file_type
+        file_types = [] if file_types is None else file_types
         license_info_in_file = [] if license_info_in_file is None else license_info_in_file
         contributors = [] if contributors is None else contributors
         attribution_texts = [] if attribution_texts is None else attribution_texts

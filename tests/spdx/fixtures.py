@@ -55,17 +55,17 @@ def creation_info_fixture(spdx_version="SPDX-2.3", spdx_id="SPDXRef-DOCUMENT", n
                         external_document_refs, license_list_version, document_comment)
 
 
-def file_fixture(name="./fileName.py", spdx_id="SPDXRef-File", checksums=None, file_type=None,
+def file_fixture(name="./fileName.py", spdx_id="SPDXRef-File", checksums=None, file_types=None,
                  license_concluded=get_spdx_licensing().parse("MIT and GPL-2.0"), license_info_in_file=None,
                  license_comment="licenseComment", copyright_text="copyrightText", comment="fileComment",
                  notice="fileNotice", contributors=None, attribution_texts=None) -> File:
     checksums = [checksum_fixture()] if checksums is None else checksums
-    file_type = [FileType.TEXT] if file_type is None else file_type
+    file_types = [FileType.TEXT] if file_types is None else file_types
     license_info_in_file = [get_spdx_licensing().parse("MIT"),
                             get_spdx_licensing().parse("GPL-2.0")] if license_info_in_file is None else license_info_in_file
     contributors = ["fileContributor"] if contributors is None else contributors
     attribution_texts = ["fileAttributionText"] if attribution_texts is None else attribution_texts
-    return File(name=name, spdx_id=spdx_id, checksums=checksums, file_type=file_type,
+    return File(name=name, spdx_id=spdx_id, checksums=checksums, file_types=file_types,
                 license_concluded=license_concluded, license_info_in_file=license_info_in_file,
                 license_comment=license_comment, copyright_text=copyright_text, comment=comment, notice=notice,
                 contributors=contributors, attribution_texts=attribution_texts)
