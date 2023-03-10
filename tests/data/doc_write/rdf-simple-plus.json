@@ -6,9 +6,6 @@
       "ns1:describesPackage": {
         "ns1:Package": {
           "@rdf:about": "http://www.spdx.org/tools#SPDXRef-Package",
-          "ns1:Package": {
-            "@rdf:resource": "SPDXRef-Package"
-          },
           "ns1:hasFile": {
             "@rdf:resource": "http://www.spdx.org/files#SPDXRef-File"
           },
