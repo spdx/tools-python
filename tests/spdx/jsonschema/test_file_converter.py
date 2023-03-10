@@ -73,7 +73,7 @@ def test_successful_conversion(converter: FileConverter):
     converter.annotation_converter.convert.return_value = "mock_converted_annotation"
     file = File(name="name", spdx_id="spdxId",
                 checksums=[Checksum(ChecksumAlgorithm.SHA224, "sha224"), Checksum(ChecksumAlgorithm.MD2, "md2")],
-                file_type=[FileType.SPDX, FileType.OTHER], license_concluded=Licensing().parse("MIT and GPL-2.0"),
+                file_types=[FileType.SPDX, FileType.OTHER], license_concluded=Licensing().parse("MIT and GPL-2.0"),
                 license_info_in_file=[Licensing().parse("MIT"), Licensing().parse("GPL-2.0")],
                 license_comment="licenseComment", copyright_text="copyrightText", comment="comment", notice="notice",
                 contributors=["contributor1", "contributor2"],
@@ -104,7 +104,7 @@ def test_successful_conversion(converter: FileConverter):
 
 def test_null_values(converter: FileConverter):
     file = file_fixture(copyright_text=None, license_concluded=None, license_comment=None, comment=None, notice=None,
-                        attribution_texts=[], checksums=[], contributors=[], file_type=[], license_info_in_file=[])
+                        attribution_texts=[], checksums=[], contributors=[], file_types=[], license_info_in_file=[])
     document = Document(creation_info_fixture(), files=[file])
 
     converted_dict = converter.convert(file, document)

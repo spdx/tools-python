@@ -37,7 +37,7 @@ def test_parse_file():
     spdx_file = document.files[0]
     assert spdx_file.name == "testfile.java"
     assert spdx_file.spdx_id == "SPDXRef-File"
-    assert spdx_file.file_type == [FileType.SOURCE, FileType.TEXT]
+    assert spdx_file.file_types == [FileType.SOURCE, FileType.TEXT]
     assert spdx_file.comment == "Very long file"
     assert spdx_file.attribution_texts == [
         "Acknowledgements that might be required to be communicated in some contexts."]

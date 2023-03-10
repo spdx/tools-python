@@ -53,7 +53,7 @@ def test_parse_file():
                                  Checksum(ChecksumAlgorithm.MD5, "624c1abb3664f4b35547e7c73864ad24")])
     assert file.comment == "The concluded license was taken from the package level that the file was included in.\nThis information was found in the COPYING.txt file in the xyz directory."
     assert file.copyright_text == "Copyright 2008-2010 John Smith"
-    assert file.file_type == [FileType.SOURCE]
+    assert file.file_types == [FileType.SOURCE]
     TestCase().assertCountEqual(file.contributors, ["The Regents of the University of California",
                                                     "Modified by Paul Mundt lethal@linux-sh.org", "IBM Corporation"])
     assert file.license_concluded == Licensing().parse("(LGPL-2.0-only OR LicenseRef-2)")

@@ -15,7 +15,7 @@ def test_correct_initialization(checksum):
     assert file.name == "name"
     assert file.spdx_id == "id"
     assert file.checksums == [checksum, checksum]
-    assert file.file_type == [FileType.OTHER, FileType.SPDX]
+    assert file.file_types == [FileType.OTHER, FileType.SPDX]
     assert file.license_concluded == SpdxNone()
     assert file.license_info_in_file == SpdxNoAssertion()
     assert file.license_comment == "comment on license"
@@ -32,7 +32,7 @@ def test_correct_initialization_with_default_values(checksum):
     assert file.name == "name"
     assert file.spdx_id == "id"
     assert file.checksums == [checksum, checksum]
-    assert file.file_type == []
+    assert file.file_types == []
     assert file.license_concluded is None
     assert file.license_info_in_file == []
     assert file.license_comment is None
@@ -64,7 +64,7 @@ def test_wrong_type_in_checksum():
 @mock.patch('spdx.model.checksum.Checksum', autospec=True)
 def test_wrong_type_in_file_type(checksum):
     with pytest.raises(TypeError):
-        File("name", "id", [checksum], file_type=FileType.OTHER)
+        File("name", "id", [checksum], file_types=FileType.OTHER)
 
 
 @mock.patch('spdx.model.checksum.Checksum', autospec=True)

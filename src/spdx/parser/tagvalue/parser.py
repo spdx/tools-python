@@ -293,7 +293,7 @@ class Parser(object):
         except KeyError:
             self.current_element["logger"].append(f"Invalid FileType: {p[2]}. Line {p.lineno(1)}")
             return
-        self.current_element.setdefault("file_type", []).append(file_type)
+        self.current_element.setdefault("file_types", []).append(file_type)
 
     @grammar_rule("file_checksum : FILE_CHECKSUM CHECKSUM")
     def p_file_checksum(self, p):

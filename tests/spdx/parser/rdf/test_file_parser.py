@@ -30,7 +30,7 @@ def test_parse_file():
     assert file.name == "./fileName.py"
     assert file.spdx_id == "SPDXRef-File"
     assert file.checksums == [Checksum(ChecksumAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c")]
-    assert file.file_type == [FileType.TEXT]
+    assert file.file_types == [FileType.TEXT]
     assert file.comment == "fileComment"
     assert file.copyright_text == "copyrightText"
     assert file.contributors == ["fileContributor"]
