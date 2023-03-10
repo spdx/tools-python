@@ -32,7 +32,7 @@ def write_creation_info(creation_info: CreationInfo, text_output: TextIO):
     write_separator(text_output)
 
     text_output.write("## Creation Information\n")
-    write_value("LicenseListVersion", str(creation_info.license_list_version), text_output)
+    write_value("LicenseListVersion", creation_info.license_list_version, text_output)
     for creator in creation_info.creators:
         write_value("Creator", creator.to_serialized_string(), text_output)
     write_value("Created", datetime_to_iso_string(creation_info.created), text_output)
