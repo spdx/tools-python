@@ -1,4 +1,6 @@
 import os
+from typing import Optional
+from unittest import TestCase
 
 import pytest
 from rdflib import URIRef
@@ -62,6 +64,35 @@ def test_external_package_references(temporary_file_path) -> None:
     assert second_ref.category in parsed_reference_categories
 
 
+# This test is really clunky since it's hard to isolate features of the rdf writer to test. Should be improved when
+# that part is refactored.
+def test_multiple_packages_in_one_document(temporary_file_path) -> None:
+    doc_node = URIRef("http://www.spdx.org/tools#SPDXRef-DOCUMENT")
+    document = Document()
+    document.creation_info.set_created_now()
+    package = Package()
+    package.spdx_id = "SPDXRef-Package"
+    package.version = "2.1"
+    document.add_package(package)
+    package2 = Package()
+    package2.spdx_id = "SPDXRef-Another-Package"
+    package2.version = "2.3"
+    document.add_package(package2)
+
+    with open(temporary_file_path, "wb") as out:
+        writer = Writer(document, out)
+        writer.write(doc_node)
+    parser = Parser(Builder(), StandardLogger())
+    with open(temporary_file_path, "r") as file:
+        parsed_document: Document = parser.parse(file)[0]
+
+    assert len(parsed_document.packages) == 2
+    first_package = get_package_by_spdx_id("SPDXRef-Package", document)
+    assert first_package.version == "2.1"
+    second_package = get_package_by_spdx_id("SPDXRef-Another-Package", document)
+    assert second_package.version == "2.3"
+
+
 def minimal_document_with_package() -> Document:
     document = Document(data_license=License.from_identifier('CC0-1.0'))
     document.creation_info.set_created_now()
@@ -72,7 +103,15 @@ def minimal_document_with_package() -> Document:
 
 def minimal_package() -> Package:
     package = Package()
+    package.spdx_id = "SPDXRef-Package"
     package.conc_lics = NoAssert()
     package.license_declared = NoAssert()
     package.add_lics_from_file(NoAssert())
     return package
+
+
+def get_package_by_spdx_id(package_spdx_id: str, document: Document) -> Optional[Package]:
+    for package in document.packages:
+        if package.spdx_id == package_spdx_id:
+            return package
+    return None
