@@ -40,6 +40,9 @@ include-package-data = true
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
+
 # the default git describe resolves to the tag `python3.6` because the current release tag is not on main
 # by adding "v" the command resolves to the alpha release of 0.7.0 which leads to the desired name spdx-tools-0.7.0
 [tool.setuptools_scm]
