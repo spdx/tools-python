@@ -11,9 +11,8 @@
 from enum import Enum, auto
 from typing import Optional
 
-from common.typing.type_checks import check_types_and_set_values
-
 from common.typing.dataclass_with_properties import dataclass_with_properties
+from common.typing.type_checks import check_types_and_set_values
 
 
 class ExternalIdentifierType(Enum):

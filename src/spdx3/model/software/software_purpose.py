@@ -28,6 +28,6 @@ class SoftwarePurpose(Enum):
     LIBRARY = auto()
     MODULE = auto()
     OPERATING_SYSTEM = auto()
-    OTHER= auto()
+    OTHER = auto()
     PATCH = auto()
     SOURCE = auto()
