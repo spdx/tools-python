@@ -8,6 +8,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
+from spdx.model.document import Document as Spdx2_Document
 from spdx3.bump_from_spdx2.annotation import bump_annotation
 from spdx3.bump_from_spdx2.creation_information import bump_creation_information
 from spdx3.bump_from_spdx2.file import bump_file
@@ -16,13 +17,13 @@ from spdx3.bump_from_spdx2.relationship import bump_relationship
 from spdx3.bump_from_spdx2.snippet import bump_snippet
 from spdx3.model.creation_information import CreationInformation
 from spdx3.model.spdx_document import SpdxDocument
-
-from spdx.model.document import Document as Spdx2_Document
 from spdx3.spdx_id_map import SpdxIdMap
 
 """ We want to implement a bump_from_spdx2 from the data model in src.spdx to the data model in src.spdx3.
     As there are many fundamental differences between these version we want each bump_from_spdx2 method to take
     the object from src.spdx and return all objects that the input is translated to."""
+
+
 def bump_spdx_document(document: Spdx2_Document) -> SpdxIdMap:
     spdx_id_map = SpdxIdMap()
     spdx_document: SpdxDocument = bump_creation_information(document.creation_info)
@@ -55,7 +56,4 @@ def bump_spdx_document(document: Spdx2_Document) -> SpdxIdMap:
         spdx_id_map.add_element(annotation)
         spdx_document.elements.append(annotation.spdx_id)
 
-
-
     return spdx_id_map
-
