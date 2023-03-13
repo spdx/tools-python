@@ -8,13 +8,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from spdx.model.file import File as Spdx2_File
 from spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx3.model.software.file import File
-
 from spdx3.model.creation_information import CreationInformation
-
-from spdx.model.file import File as Spdx2_File
+from spdx3.model.software.file import File
 
 
 def bump_file(spdx2_file: Spdx2_File, creation_information: CreationInformation) -> File:
