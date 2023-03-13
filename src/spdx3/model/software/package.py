@@ -10,6 +10,8 @@
 # limitations under the License.
 from typing import Optional, List
 
+from spdx3.model.agent import Agent
+
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from common.typing.type_checks import check_types_and_set_values
 from spdx3.model.artifact import Artifact
@@ -33,7 +35,7 @@ class Package(Artifact):
                  verified_using: Optional[List[IntegrityMethod]] = None,
                  external_references: Optional[List[ExternalReference]] = None,
                  external_identifier: Optional[List[ExternalIdentifier]] = None, extension: None = None,
-                 originated_by: None = None, content_identifier: Optional[str] = None,
+                 originated_by: Optional[str] = None, content_identifier: Optional[str] = None,
                  package_purpose: Optional[List[SoftwarePurpose]] = None, download_location: Optional[str] = None,
                  package_uri: Optional[str] = None, homepage: Optional[str] = None):
         verified_using = [] if verified_using is None else verified_using
