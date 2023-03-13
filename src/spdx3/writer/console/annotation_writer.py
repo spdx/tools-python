@@ -10,10 +10,9 @@
 # limitations under the License.
 from typing import TextIO
 
+from spdx3.model.annotation import Annotation
 from spdx3.writer.console.console import write_value
 from spdx3.writer.console.element_writer import write_element_properties
-
-from spdx3.model.annotation import Annotation
 
 
 def write_annotation(annotation: Annotation, text_output: TextIO):
