@@ -19,4 +19,3 @@ def write_external_reference(external_reference: ExternalReference, text_output:
     write_value("locator", ", ".join(external_reference.locator), text_output)
     write_value("content_type", external_reference.content_type, text_output)
     write_value("comment", external_reference.comment, text_output)
-
