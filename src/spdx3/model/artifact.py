@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from abc import abstractmethod
+from typing import Optional
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx3.model.element import Element
@@ -16,7 +17,7 @@ from spdx3.model.element import Element
 
 @dataclass_with_properties
 class Artifact(Element):
-    originated_by: None = None  # placeholder for Actor
+    originated_by: Optional[str] = None # SPDXID of the Agent/Tool
 
     @abstractmethod
     def __init__(self):
