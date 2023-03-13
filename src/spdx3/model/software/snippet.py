@@ -32,7 +32,7 @@ class Snippet(Artifact):
                  verified_using: Optional[List[IntegrityMethod]] = None,
                  external_references: Optional[List[ExternalReference]] = None,
                  external_identifier: Optional[List[ExternalIdentifier]] = None, extension: None = None,
-                 originated_by: None = None, content_identifier: Optional[str] = None,
+                 originated_by: Optional[str] = None, content_identifier: Optional[str] = None,
                  snippet_purpose: Optional[List[SoftwarePurpose]] = None, byte_range: Optional[Tuple[int, int]] = None,
                  line_range: Optional[Tuple[int, int]] = None):
         verified_using = [] if verified_using is None else verified_using
