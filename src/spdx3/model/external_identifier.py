@@ -18,11 +18,13 @@ from common.typing.type_checks import check_types_and_set_values
 class ExternalIdentifierType(Enum):
     CPE22 = auto()
     CPE23 = auto()
+    EMAIL = auto()
     GITOID = auto()
-    OTHER = auto()
-    PKG_URL = auto()
+    PURL = auto()
     SWHID = auto()
     SWID = auto()
+    URL_SCHEME = auto()
+    OTHER = auto()
 
 
 @dataclass_with_properties
