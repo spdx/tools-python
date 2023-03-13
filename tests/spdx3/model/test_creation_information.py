@@ -9,7 +9,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from datetime import datetime
-from unittest import mock
 
 import pytest
 from semantic_version import Version
@@ -18,19 +17,19 @@ from spdx3.model.creation_information import CreationInformation
 
 
 def test_correct_initialization():
-    creation_information = CreationInformation(Version("3.0.0"), datetime(2023, 1, 11, 16, 21), None, ["core", "software"],
-                                               "CC0")
+    creation_information = CreationInformation(Version("3.0.0"), datetime(2023, 1, 11, 16, 21), [],
+                                               ["core", "software"], "CC0")
 
     assert creation_information.spec_version == Version("3.0.0")
     assert creation_information.created == datetime(2023, 1, 11, 16, 21)
-    assert creation_information.created_by is None
+    assert creation_information.created_by == []
     assert creation_information.profile == ["core", "software"]
     assert creation_information.data_license == "CC0"
 
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        CreationInformation("2.3", "2012-01-01", None, "core", 3)
+        CreationInformation("2.3", "2012-01-01", [], "core", 3)
 
     assert err.value.args[0] == ['SetterError CreationInformation: type of argument "spec_version" must be '
                                  'semantic_version.base.Version; got str instead: 2.3',
