@@ -10,9 +10,9 @@
 # limitations under the License.
 from dataclasses import field
 from typing import Optional, List
-from common.typing.type_checks import check_types_and_set_values
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
+from common.typing.type_checks import check_types_and_set_values
 from spdx3.model.integrity_method import IntegrityMethod
 
 
@@ -22,6 +22,7 @@ class ExternalMap:
     verified_using: Optional[List[IntegrityMethod]] = field(default_factory=list)
     location_hint: Optional[str] = None  # anyURI
 
-    def __init__(self, external_id: str, verified_using: Optional[List[IntegrityMethod]]= None, location_hint: Optional[str] = None):
+    def __init__(self, external_id: str, verified_using: Optional[List[IntegrityMethod]] = None,
+                 location_hint: Optional[str] = None):
         verified_using = [] if verified_using is None else verified_using
         check_types_and_set_values(self, locals())
