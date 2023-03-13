@@ -10,9 +10,8 @@
 # limitations under the License.
 from typing import TextIO
 
-from spdx3.writer.console.console import write_value
-
 from spdx3.model.external_identifier import ExternalIdentifier
+from spdx3.writer.console.console import write_value
 
 
 def write_external_identifier(external_identifier: ExternalIdentifier, text_output: TextIO):

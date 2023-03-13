@@ -13,15 +13,13 @@ from typing import TextIO
 from spdx3.model.annotation import Annotation
 from spdx3.model.bom import Bom
 from spdx3.model.bundle import Bundle
-
+from spdx3.model.relationship import Relationship
 from spdx3.model.software.file import File
 from spdx3.model.software.package import Package
-from spdx3.model.relationship import Relationship
 from spdx3.model.software.sbom import Sbom
 from spdx3.model.software.snippet import Snippet
 from spdx3.model.spdx_document import SpdxDocument
 from spdx3.spdx_id_map import SpdxIdMap
-
 from spdx3.writer.console.annotation_writer import write_annotation
 from spdx3.writer.console.bom_writer import write_bom
 from spdx3.writer.console.bundle_writer import write_bundle
@@ -43,9 +41,10 @@ MAP_CLASS_TO_WRITE_METHOD = {
     Snippet: write_snippet,
     Sbom: write_sbom
 }
+
+
 def write_spdx_id_map(spdx_id_map: SpdxIdMap, text_output: TextIO):
     for element in spdx_id_map.get_full_map().values():
         write_method = MAP_CLASS_TO_WRITE_METHOD[type(element)]
         write_method(element, text_output)
         text_output.write("\n")
-

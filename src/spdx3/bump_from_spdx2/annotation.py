@@ -8,13 +8,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import List
-
-from spdx3.bump_from_spdx2.message import print_missing_conversion
-
-from spdx3.model.annotation import Annotation, AnnotationType
 
 from spdx.model.annotation import Annotation as Spdx2_Annotation
+from spdx3.bump_from_spdx2.message import print_missing_conversion
+from spdx3.model.annotation import Annotation, AnnotationType
 from spdx3.model.creation_information import CreationInformation
 
 
