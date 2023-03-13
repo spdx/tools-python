@@ -12,12 +12,10 @@ from abc import ABC, abstractmethod
 from dataclasses import field
 from typing import Optional, List
 
+from common.typing.dataclass_with_properties import dataclass_with_properties
+from spdx3.model.creation_information import CreationInformation
 from spdx3.model.external_identifier import ExternalIdentifier
 from spdx3.model.external_reference import ExternalReference
-
-from common.typing.dataclass_with_properties import dataclass_with_properties
-
-from spdx3.model.creation_information import CreationInformation
 from spdx3.model.integrity_method import IntegrityMethod
 
 

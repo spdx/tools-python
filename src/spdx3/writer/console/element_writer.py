@@ -37,7 +37,3 @@ def write_element_properties(element: Element, text_output: TextIO):
     write_optional_heading(element.external_identifier, "External Identifier", text_output)
     for external_identifier in element.external_identifier:
         write_external_identifier(external_identifier, text_output)
-
-
-
-
