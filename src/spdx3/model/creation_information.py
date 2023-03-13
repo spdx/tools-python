@@ -21,10 +21,10 @@ from common.typing.type_checks import check_types_and_set_values
 class CreationInformation:
     spec_version: Version
     created: datetime
-    created_by: None  # placeholder for Actor
+    created_by: List[str]  # SPDXID of Agents/Tools
     profile: List[str]  # or create an Enum for ProfileIdentifier?
     data_license: str
 
-    def __init__(self, spec_version: Version, created: datetime, created_by, profile: List[str],
+    def __init__(self, spec_version: Version, created: datetime, created_by: List[str], profile: List[str],
                  data_license: str = "CC0"):
         check_types_and_set_values(self, locals())

@@ -37,7 +37,7 @@ def test_invalid_initialization(creation_information):
 
     assert err.value.args[0] == ['SetterError Snippet: type of argument "spdx_id" must be str; got int '
                                  'instead: 2',
-                                 'SetterError Snippet: type of argument "originated_by" must be NoneType; got '
-                                 'int instead: 34',
+                                 'SetterError Snippet: type of argument "originated_by" must be one of (str, '
+                                 'NoneType); got int instead: 34',
                                  'SetterError Snippet: type of argument "byte_range" must be one of '
                                  '(Tuple[int, int], NoneType); got str instead: 34:45']
