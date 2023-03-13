@@ -10,17 +10,14 @@
 # limitations under the License.
 from typing import Optional, Tuple, List
 
+from common.typing.dataclass_with_properties import dataclass_with_properties
+from common.typing.type_checks import check_types_and_set_values
+from spdx3.model.artifact import Artifact
+from spdx3.model.creation_information import CreationInformation
 from spdx3.model.external_identifier import ExternalIdentifier
 from spdx3.model.external_reference import ExternalReference
-
-from common.typing.type_checks import check_types_and_set_values
-
-from spdx3.model.creation_information import CreationInformation
-
-from common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx3.model.integrity_method import IntegrityMethod
 from spdx3.model.software.software_purpose import SoftwarePurpose
-from spdx3.model.artifact import Artifact
 
 
 @dataclass_with_properties
