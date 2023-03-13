@@ -8,15 +8,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from spdx.model.package import Package as Spdx2_Package
 from spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx3.model.creation_information import CreationInformation
-
 from spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx3.model.software.software_purpose import SoftwarePurpose
-
-from spdx.model.package import Package as Spdx2_Package
+from spdx3.model.creation_information import CreationInformation
 from spdx3.model.software.package import Package
+from spdx3.model.software.software_purpose import SoftwarePurpose
 
 
 def bump_package(spdx2_package: Spdx2_Package, creation_information: CreationInformation) -> Package:
@@ -48,7 +46,7 @@ def bump_package(spdx2_package: Spdx2_Package, creation_information: CreationInf
     print_missing_conversion("package2.external_references", 1, "of ExternalReferences / ExternalIdentifiers")
     print_missing_conversion("package2.attribution_texts", 0)
     package_purpose = [SoftwarePurpose[
-        spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
+                           spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
     print_missing_conversion("package2.release_date, package2.built_date, package2.valid_until_date", 0)
 
     package = Package(spdx_id, creation_information, name, verified_using=integrity_methods,

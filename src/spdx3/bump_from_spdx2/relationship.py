@@ -10,23 +10,20 @@
 # limitations under the License.
 from typing import Tuple, Optional
 
-from spdx.model.spdx_none import SpdxNone
-
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-
-from spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx3.model.relationship import Relationship, RelationshipType, RelationshipCompleteness
-from spdx3.model.creation_information import CreationInformation
-
 from spdx.model.relationship import Relationship as Spdx2_Relationship
 from spdx.model.relationship import RelationshipType as Spdx2_RelationshipType
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx.model.spdx_none import SpdxNone
+from spdx3.model.creation_information import CreationInformation
+from spdx3.model.relationship import Relationship, RelationshipType, RelationshipCompleteness
 
 
 def bump_relationship(spdx2_relationship: Spdx2_Relationship,
                       creation_information: CreationInformation, counter: int) -> Relationship:
     relationship_type, swap_direction = bump_relationship_type(spdx2_relationship.relationship_type)
 
-    if isinstance(spdx2_relationship.related_spdx_element_id, SpdxNoAssertion): # how to translate none/ no assertion to element?
+    if isinstance(spdx2_relationship.related_spdx_element_id,
+                  SpdxNoAssertion):  # how to translate none/ no assertion to element?
         completeness = RelationshipCompleteness.UNKNOWN
     elif isinstance(spdx2_relationship.related_spdx_element_id, SpdxNone):
         completeness = RelationshipCompleteness.KNOWN
@@ -41,8 +38,8 @@ def bump_relationship(spdx2_relationship: Spdx2_Relationship,
         to = [spdx2_relationship.related_spdx_element_id]
     comment = spdx2_relationship.comment
 
-    relationship = Relationship(f"SPDXRef-Relationship-{counter}", creation_information, from_element, to, relationship_type,
-                                comment=comment, completeness=completeness)
+    relationship = Relationship(f"SPDXRef-Relationship-{counter}", creation_information, from_element, to,
+                                relationship_type, comment=comment, completeness=completeness)
 
     return relationship
 

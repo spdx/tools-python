@@ -10,9 +10,8 @@
 # limitations under the License.
 from typing import TextIO
 
-from spdx3.writer.console.element_writer import write_element_properties
-
 from spdx3.model.artifact import Artifact
+from spdx3.writer.console.element_writer import write_element_properties
 
 
 def write_artifact_properties(artifact: Artifact, text_output: TextIO):
