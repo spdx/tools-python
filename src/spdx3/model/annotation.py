@@ -8,21 +8,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from dataclasses import field
 from enum import Enum, auto
 from typing import Optional, List
 
-from spdx3.model.external_identifier import ExternalIdentifier
-from spdx3.model.external_reference import ExternalReference
-
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from common.typing.type_checks import check_types_and_set_values
-
-from spdx3.model.integrity_method import IntegrityMethod
-
 from spdx3.model.creation_information import CreationInformation
-
 from spdx3.model.element import Element
+from spdx3.model.external_identifier import ExternalIdentifier
+from spdx3.model.external_reference import ExternalReference
+from spdx3.model.integrity_method import IntegrityMethod
 
 
 class AnnotationType(Enum):
