@@ -1,5 +1,35 @@
 # Changelog
 
+## v0.7.1 (2023-03-14)
+
+### New features and changes
+
+* added GitHub Actions workflow
+* added requirements.txt
+* added uritools for URI validation
+* Python >= 3.7 is now required
+* json/yaml/xml: added support for empty arrays for hasFiles and licenseInfoFromFiles
+* rdf: fixed writing of multiple packages
+* tag-value: enhanced parsing of snippet ranges to not mix it up with package version
+* tag-value: fixed parsing of whitespaces
+* tag-value: duplicates in LicenseInfoInFile are now removed during writing
+* account for supplier and originator to be NOASSERTION
+* checksum validation now requires lowercase values
+* during writing of a file, the encoding can be set (default is utf-8)
+* license list updated to version 3.20
+
+### Contributors
+
+This release was made possible by the following contributors. Thank you very much!
+
+* Christian Decker @chrisdecker1201
+* Marc-Etienne Vargenau @vargenau
+* John Vandenberg @jayvdb
+* Nicolaus Weidner @nicoweidner
+* Meret Behrens @meretp
+* Armin Tänzer @armintaenzertng
+* Maximilian Huber @maxhbr
+
 
 ## v0.7.0 (2022-12-08)
 
