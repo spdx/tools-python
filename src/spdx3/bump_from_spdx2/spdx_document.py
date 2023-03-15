@@ -17,43 +17,35 @@ from spdx3.bump_from_spdx2.relationship import bump_relationship
 from spdx3.bump_from_spdx2.snippet import bump_snippet
 from spdx3.model.creation_information import CreationInformation
 from spdx3.model.spdx_document import SpdxDocument
-from spdx3.spdx_id_map import SpdxIdMap
+from spdx3.payload import Payload
 
 """ We want to implement a bump_from_spdx2 from the data model in src.spdx to the data model in src.spdx3.
     As there are many fundamental differences between these version we want each bump_from_spdx2 method to take
-    the object from src.spdx and return all objects that the input is translated to."""
+    the object from src.spdx and add all objects that the input is translated to into the payload."""
 
 
-def bump_spdx_document(document: Spdx2_Document) -> SpdxIdMap:
-    spdx_id_map = SpdxIdMap()
+def bump_spdx_document(document: Spdx2_Document) -> Payload:
+    payload = Payload()
     spdx_document: SpdxDocument = bump_creation_information(document.creation_info)
     creation_info: CreationInformation = spdx_document.creation_info
 
-    spdx_id_map.add_element(spdx_document)
+    payload.add_element(spdx_document)
 
     for spdx2_package in document.packages:
-        package = bump_package(spdx2_package, creation_info)
-        spdx_id_map.add_element(package)
-        spdx_document.elements.append(package.spdx_id)
+        bump_package(spdx2_package, payload, creation_info)
 
     for spdx2_file in document.files:
-        file = bump_file(spdx2_file, creation_info)
-        spdx_id_map.add_element(file)
-        spdx_document.elements.append(file.spdx_id)
+        bump_file(spdx2_file, payload, creation_info)
 
     for spdx2_snippet in document.snippets:
-        snippet = bump_snippet(spdx2_snippet, creation_info)
-        spdx_id_map.add_element(snippet)
-        spdx_document.elements.append(snippet.spdx_id)
+        bump_snippet(spdx2_snippet, payload, creation_info)
 
     for counter, spdx2_relationship in enumerate(document.relationships):
-        relationship = bump_relationship(spdx2_relationship, creation_info, counter)
-        spdx_id_map.add_element(relationship)
-        spdx_document.elements.append(relationship.spdx_id)
+        bump_relationship(spdx2_relationship, payload, creation_info, counter)
 
     for counter, spdx2_annotation in enumerate(document.annotations):
-        annotation = bump_annotation(spdx2_annotation, creation_info, counter)
-        spdx_id_map.add_element(annotation)
-        spdx_document.elements.append(annotation.spdx_id)
+        bump_annotation(spdx2_annotation, payload, creation_info, counter)
 
-    return spdx_id_map
+    spdx_document.elements = [spdx_id for spdx_id in payload.get_full_map() if spdx_id != spdx_document.spdx_id]
+
+    return payload
