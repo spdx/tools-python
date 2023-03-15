@@ -29,7 +29,7 @@
             "SPDXID": "SPDXRef-File",
             "annotations": [
                 {
-                    "annotationDate": "2022-12-01T00:00:00Z",
+                    "annotationDate": "2022-12-24T00:00:00Z",
                     "annotationType": "REVIEW",
                     "annotator": "Person: annotatorName (some@mail.com)",
                     "comment": "annotationComment"
