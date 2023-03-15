@@ -11,6 +11,7 @@
 from unittest import mock
 
 from spdx3.bump_from_spdx2.snippet import bump_snippet
+from spdx3.payload import Payload
 from tests.spdx.fixtures import snippet_fixture
 from spdx.model.snippet import Snippet as Spdx2_Snippet
 from spdx3.model.software.snippet import Snippet
@@ -20,6 +21,8 @@ from spdx3.model.software.snippet import Snippet
 def test_bump_snippet(creation_information):
     spdx2_snippet: Spdx2_Snippet = snippet_fixture()
 
-    snippet: Snippet = bump_snippet(spdx2_snippet, creation_information=creation_information)
-
+    payload = Payload()
+    bump_snippet(spdx2_snippet, payload, creation_information=creation_information)
+    snippet = payload.get_element(snippet_fixture().spdx_id)
+    assert isinstance(snippet, Snippet)
     assert snippet.spdx_id == "SPDXRef-Snippet"
