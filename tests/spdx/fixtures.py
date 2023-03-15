@@ -128,7 +128,7 @@ def snippet_fixture(spdx_id="SPDXRef-Snippet", file_spdx_id="SPDXRef-File", byte
 
 
 def annotation_fixture(spdx_id="SPDXRef-File", annotation_type=AnnotationType.REVIEW,
-                       annotator=actor_fixture(name="annotatorName"), annotation_date=datetime(2022, 12, 1),
+                       annotator=actor_fixture(name="annotatorName"), annotation_date=datetime(2022, 12, 24),
                        annotation_comment="annotationComment") -> Annotation:
     return Annotation(spdx_id=spdx_id, annotation_type=annotation_type, annotator=annotator,
                       annotation_date=annotation_date, annotation_comment=annotation_comment)
