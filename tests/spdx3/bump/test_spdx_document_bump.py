@@ -13,18 +13,17 @@ import sys
 from spdx.model.document import Document as Spdx2_Document
 
 from spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
-from spdx3.spdx_id_map import SpdxIdMap
-from spdx3.writer.console.spdx_id_map_writer import write_spdx_id_map
-from tests.spdx.fixtures import document_fixture
+from spdx3.payload import Payload
+from spdx3.writer.console.spdx_id_map_writer import write_payload
+from tests.spdx.fixtures import document_fixture, creation_info_fixture, annotation_fixture
 
 
 def test_bump_spdx_document():
     spdx2_document: Spdx2_Document = document_fixture()
 
-    spdx_id_map: SpdxIdMap = bump_spdx_document(spdx2_document)
+    payload: Payload = bump_spdx_document(spdx2_document)
 
-    write_spdx_id_map(spdx_id_map, sys.stdout)
+    write_payload(payload, sys.stdout)
 
-    assert "SPDXRef-Package" in list(spdx_id_map.get_full_map().keys())
-    assert len(
-        spdx_id_map.get_full_map().values()) == 6
+    assert "SPDXRef-Package" in payload.get_full_map()
+    assert len(payload.get_full_map()) == 6
