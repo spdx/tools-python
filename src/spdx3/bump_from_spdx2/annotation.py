@@ -8,6 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from copy import deepcopy
 
 from spdx.model.annotation import Annotation as Spdx2_Annotation
 from spdx3.bump_from_spdx2.message import print_missing_conversion
@@ -19,6 +20,7 @@ from spdx3.payload import Payload
 def bump_annotation(spdx2_annotation: Spdx2_Annotation, payload: Payload, creation_info: CreationInformation,
                     counter: int):
     spdx_id: str = f"SPDXRef-Annotation-{counter}"
+    creation_info = deepcopy(creation_info)
     creation_info.created = spdx2_annotation.annotation_date
     # creation_info.created_by = bump_actor(spdx2_annotation.annotator)   waiting for entity implementation
     print_missing_conversion("annotation.annotator", 1, "of Entity")
