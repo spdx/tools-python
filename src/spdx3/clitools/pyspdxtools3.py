@@ -18,8 +18,8 @@ from spdx.parser.parse_anything import parse_file
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage
 from spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
-from spdx3.spdx_id_map import SpdxIdMap
-from spdx3.writer.console.spdx_id_map_writer import write_spdx_id_map
+from spdx3.payload import Payload
+from spdx3.writer.console.spdx_id_map_writer import write_payload
 
 
 @click.command()
@@ -50,8 +50,8 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
                 print("The document is valid.", file=sys.stderr)
 
         if outfile == "-":
-            spdx_id_map: SpdxIdMap = bump_spdx_document(document)
-            write_spdx_id_map(spdx_id_map, sys.stdout)
+            payload: Payload = bump_spdx_document(document)
+            write_payload(payload, sys.stdout)
 
     except NotImplementedError as err:
         print(err.args[0])
