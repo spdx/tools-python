@@ -19,7 +19,7 @@ from spdx3.model.software.package import Package
 from spdx3.model.software.sbom import Sbom
 from spdx3.model.software.snippet import Snippet
 from spdx3.model.spdx_document import SpdxDocument
-from spdx3.spdx_id_map import SpdxIdMap
+from spdx3.payload import Payload
 from spdx3.writer.console.annotation_writer import write_annotation
 from spdx3.writer.console.bom_writer import write_bom
 from spdx3.writer.console.bundle_writer import write_bundle
@@ -43,8 +43,8 @@ MAP_CLASS_TO_WRITE_METHOD = {
 }
 
 
-def write_spdx_id_map(spdx_id_map: SpdxIdMap, text_output: TextIO):
-    for element in spdx_id_map.get_full_map().values():
+def write_payload(payload: Payload, text_output: TextIO):
+    for element in payload.get_full_map().values():
         write_method = MAP_CLASS_TO_WRITE_METHOD[type(element)]
         write_method(element, text_output)
         text_output.write("\n")
