@@ -27,3 +27,7 @@ def test_bump_spdx_document():
 
     assert "SPDXRef-Package" in payload.get_full_map()
     assert len(payload.get_full_map()) == 6
+
+    #this is more of a temporary test to make sure the dates don't get messed up again
+    assert payload.get_element("SPDXRef-DOCUMENT").creation_info.created == creation_info_fixture().created
+    assert payload.get_element("SPDXRef-Annotation-0").creation_info.created == annotation_fixture().annotation_date
