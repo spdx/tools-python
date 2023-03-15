@@ -13,7 +13,7 @@ from typing import Dict
 from spdx3.model.element import Element
 
 
-class SpdxIdMap:
+class Payload:
     _spdx_id_map: Dict[str, Element]
 
     def __init__(self, spdx_id_map: Dict[str, Element] = None):
