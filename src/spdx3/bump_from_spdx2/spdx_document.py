@@ -26,7 +26,7 @@ from spdx3.payload import Payload
 
 def bump_spdx_document(document: Spdx2_Document) -> Payload:
     payload = Payload()
-    spdx_document: SpdxDocument = bump_creation_information(document.creation_info)
+    spdx_document: SpdxDocument = bump_creation_information(document.creation_info, payload)
     creation_info: CreationInformation = spdx_document.creation_info
 
     payload.add_element(spdx_document)
