@@ -20,8 +20,8 @@ from spdx3.model.tool import Tool
 from spdx3.payload import Payload
 
 
-def bump_actor(spdx2_actor: Spdx2_Actor, payload: Payload, creation_info: CreationInformation, is_tool: bool) -> str:
-    """ is_tool: if true, an SPDX2 Tool will be converted to an SPDX3 Tool, else to a SoftwareAgent.
+def bump_actor(spdx2_actor: Spdx2_Actor, payload: Payload, creation_info: CreationInformation, is_agent: bool) -> str:
+    """ is_agent: if true, an SPDX2 Tool will be converted to a SoftwareAgent, else to an SPDX3 Tool.
         returns the SPDXID of the bumped Agent/Tool"""
     name: str = spdx2_actor.name
     email: str = spdx2_actor.email
@@ -43,15 +43,15 @@ def bump_actor(spdx2_actor: Spdx2_Actor, payload: Payload, creation_info: Creati
             spdx_id=spdx_id, creation_info=creation_info, name=name, external_identifier=external_identifiers)
 
     elif actor_type == ActorType.TOOL:
-        if is_tool:
-            agent_or_tool = Tool(
+        if is_agent:
+            agent_or_tool = SoftwareAgent(
                 spdx_id=spdx_id, creation_info=creation_info, name=name, external_identifier=external_identifiers)
         else:
-            agent_or_tool = SoftwareAgent(
+            agent_or_tool = Tool(
                 spdx_id=spdx_id, creation_info=creation_info, name=name, external_identifier=external_identifiers)
 
     else:
-        raise ValueError(f"actor_type must be one of PERSON, ORGANIZATION or TOOL, but is: {actor_type}")
+        raise ValueError(f"no conversion rule defined for ActorType {actor_type}")
 
     if spdx_id not in payload.get_full_map():
         payload.add_element(agent_or_tool)

@@ -50,7 +50,7 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     # we have to add them to the creation_information after initializing it
     creator_ids: List[str] = []
     for creator in spdx2_creation_info.creators:
-        creator_ids.append(bump_actor(creator, payload, creation_information, is_tool=False))
+        creator_ids.append(bump_actor(creator, payload, creation_information, is_agent=True))
     creation_information.created_by = creator_ids
 
     spdx_document = SpdxDocument(spdx_id=spdx_id, creation_info=creation_information, name=name,
