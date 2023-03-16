@@ -9,6 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from spdx.model.package import Package as Spdx2_Package
+from spdx3.bump_from_spdx2.actor import bump_actor
 from spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx3.bump_from_spdx2.message import print_missing_conversion
@@ -28,8 +29,7 @@ def bump_package(spdx2_package: Spdx2_Package, payload: Payload, creation_inform
     print_missing_conversion("package2.file_name", 0)
     # package.supplier -> Relationship, suppliedBy?
     print_missing_conversion("package2.supplier", 1, "of relationships")
-    # package.originator -> package.originated_by
-    print_missing_conversion("package2.originator", 1, "of actors")
+    originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information, is_tool=True)
     # package.files_analyzed  -> ?
     print_missing_conversion("package2.files_analyzed", 0)
     # package.verification_code -> package.verified_using
@@ -52,4 +52,5 @@ def bump_package(spdx2_package: Spdx2_Package, payload: Payload, creation_inform
 
     payload.add_element(Package(spdx_id, creation_information, name, verified_using=integrity_methods,
                                 download_location=download_location, homepage=homepage, summary=summary,
-                                description=description, comment=comment, package_purpose=package_purpose))
+                                description=description, comment=comment, originated_by=originated_by_spdx_id,
+                                package_purpose=package_purpose))
