@@ -10,8 +10,6 @@
 # limitations under the License.
 from typing import Optional, List
 
-from spdx3.model.agent import Agent
-
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from common.typing.type_checks import check_types_and_set_values
 from spdx3.model.artifact import Artifact
