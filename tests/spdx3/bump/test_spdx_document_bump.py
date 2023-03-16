@@ -26,7 +26,7 @@ def test_bump_spdx_document():
     write_payload(payload, sys.stdout)
 
     assert "SPDXRef-Package" in payload.get_full_map()
-    assert len(payload.get_full_map()) == 6
+    assert len(payload.get_full_map()) == 9
 
     #this is more of a temporary test to make sure the dates don't get messed up again
     assert payload.get_element("SPDXRef-DOCUMENT").creation_info.created == creation_info_fixture().created
