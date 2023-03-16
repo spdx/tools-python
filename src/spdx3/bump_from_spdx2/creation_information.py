@@ -46,8 +46,8 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     creation_information = CreationInformation(Version("3.0.0"), created, [], ["core", "software", "licensing"],
                                                data_license)
 
-    # due to the cyclic dependency of creators having creators themselves,
-    # we have to add them to the creation_information after initializing it
+    # due to creators having a creation_information themselves which inherits from the document's one,
+    # we have to add them after the creation_information has been initialized
     creator_ids: List[str] = []
     for creator in spdx2_creation_info.creators:
         creator_ids.append(bump_actor(creator, payload, creation_information, is_agent=True))
