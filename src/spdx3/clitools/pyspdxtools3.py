@@ -19,7 +19,7 @@ from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage
 from spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
 from spdx3.payload import Payload
-from spdx3.writer.console.spdx_id_map_writer import write_payload
+from spdx3.writer.console.payload_writer import write_payload
 
 
 @click.command()
