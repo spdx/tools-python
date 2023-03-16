@@ -34,6 +34,9 @@ def bump_actor(spdx2_actor: Spdx2_Actor, payload: Payload, creation_info: Creati
     else:
         spdx_id: str = f"SPDXRef-Actor-{name}"
 
+    if spdx_id in payload.get_full_map(): # the agent/tool already exists, so we don't need to create a new one
+        return spdx_id
+
     if actor_type == ActorType.PERSON:
         agent_or_tool = Person(
             spdx_id=spdx_id, creation_info=creation_info, name=name, external_identifier=external_identifiers)
@@ -53,7 +56,6 @@ def bump_actor(spdx2_actor: Spdx2_Actor, payload: Payload, creation_info: Creati
     else:
         raise ValueError(f"no conversion rule defined for ActorType {actor_type}")
 
-    if spdx_id not in payload.get_full_map():
-        payload.add_element(agent_or_tool)
+    payload.add_element(agent_or_tool)
 
     return spdx_id
