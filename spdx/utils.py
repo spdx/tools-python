@@ -36,7 +36,7 @@ def datetime_iso_format(date):
 
 # Matches an iso 8601 date representation
 DATE_ISO_REGEX = re.compile(
-    r"(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z", re.UNICODE
+    r"(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)(\.[\d]*)?Z", re.UNICODE
 )
 
 # Groups for retrieving values from DATE_ISO_REGEX matches.
@@ -60,8 +60,8 @@ def datetime_from_iso_format(string):
             month=int(match.group(DATE_ISO_MONTH_GRP)),
             day=int(match.group(DATE_ISO_DAY_GRP)),
             hour=int(match.group(DATE_ISO_HOUR_GRP)),
-            second=int(match.group(DATE_ISO_SEC_GRP)),
             minute=int(match.group(DATE_ISO_MIN_GRP)),
+            second=int(match.group(DATE_ISO_SEC_GRP)),
         )
         return date
     else:
