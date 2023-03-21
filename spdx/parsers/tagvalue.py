@@ -28,7 +28,7 @@ ERROR_MESSAGES = {
     "TOOL_VALUE": "Invalid tool value {0} at line: {1}",
     "ORG_VALUE": "Invalid organization value {0} at line: {1}",
     "PERSON_VALUE": "Invalid person value {0} at line: {1}",
-    "CREATED_VALUE_TYPE": "Created value must be date in ISO 8601 format, line: {0}",
+    "CREATED_VALUE_TYPE": "Created value must be in 'YYYY-MM-DDThh:mm:ssZ' format, line: {0}",
     "MORE_THAN_ONE": "Only one {0} allowed, extra at line: {1}",
     "CREATOR_COMMENT_VALUE_TYPE": "CreatorComment value must be free form text between <text></text> tags or"
                                   "single line of text, line:{0}",
@@ -50,11 +50,11 @@ ERROR_MESSAGES = {
                                 'and should not contain the "#" delimiter, line: {0}',
     "REVIEWER_VALUE_TYPE": "Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}",
     "CREATOR_VALUE_TYPE": "Invalid Reviewer value must be a Person, Organization or Tool. Line: {0}",
-    "REVIEW_DATE_VALUE_TYPE": "ReviewDate value must be date in ISO 8601 format, line: {0}",
+    "REVIEW_DATE_VALUE_TYPE": "ReviewDate value must be in 'YYYY-MM-DDThh:mm:ssZ' format, line: {0}",
     "REVIEW_COMMENT_VALUE_TYPE": "ReviewComment value must be free form text between <text></text> tags"
                                  "or single line of text, line:{0}",
     "ANNOTATOR_VALUE_TYPE": "Invalid Annotator value must be a Person, Organization or Tool. Line: {0}",
-    "ANNOTATION_DATE_VALUE_TYPE": "AnnotationDate value must be date in ISO 8601 format, line: {0}",
+    "ANNOTATION_DATE_VALUE_TYPE": "AnnotationDate value must be in 'YYYY-MM-DDThh:mm:ssZ' format, line: {0}",
     "ANNOTATION_COMMENT_VALUE_TYPE": "AnnotationComment value must be free form text between <text></text> tags"
                                      "or single line of text, line:{0}",
     "ANNOTATION_TYPE_VALUE": 'AnnotationType must be "REVIEW" or "OTHER". Line: {0}',
@@ -89,9 +89,9 @@ ERROR_MESSAGES = {
     "PKG_VERF_CODE_VALUE": "VerificationCode doesn't match verifcode form, line:{0}",
     "PRIMARY_PACKAGE_PURPOSE_VALUE": 'PrimaryPackagePurpose must be one of APPLICATION, FRAMEWORK, LIBRARY, CONTAINER, '
                                      'OPERATING-SYSTEM, DEVICE, FIRMWARE, SOURCE, ARCHIVE, FILE, INSTALL, OTHER',
-    "BUILT_DATE_VALUE_TYPE": "Built date value must be date in ISO 8601 format, line: {0}",
-    "RELEASE_DATE_VALUE_TYPE": "Release date value must be date in ISO 8601 format, line: {0}",
-    "VALID_UNTIL_DATE_VALUE_TYPE": "Valid until date value must be date in ISO 8601 format, line: {0}",
+    "BUILT_DATE_VALUE_TYPE": "Built date value must be in 'YYYY-MM-DDThh:mm:ssZ' format, line: {0}",
+    "RELEASE_DATE_VALUE_TYPE": "Release date value must be in 'YYYY-MM-DDThh:mm:ssZ' format, line: {0}",
+    "VALID_UNTIL_DATE_VALUE_TYPE": "Valid until date value must be in 'YYYY-MM-DDThh:mm:ssZ' format, line: {0}",
     "FILE_NAME_VALUE": "FileName must be a single line of text, line: {0}",
     "FILE_COMMENT_VALUE": "FileComment must be free form text or single line of text, line:{0}",
     "FILE_TYPE_VALUE": 'FileType must be one of SOURCE, BINARY, ARCHIVE, APPLICATION, AUDIO, IMAGE, TEXT, VIDEO, '

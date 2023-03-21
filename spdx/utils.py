@@ -34,7 +34,7 @@ def datetime_iso_format(date):
     return date.isoformat() + "Z"
 
 
-# Matches an iso 8601 date representation
+# Matches an ISO-8601 date representation without fractional seconds
 DATE_ISO_REGEX = re.compile(
     r"(\d\d\d\d)-(\d\d)-(\d\d)T(\d\d):(\d\d):(\d\d)Z", re.UNICODE
 )
