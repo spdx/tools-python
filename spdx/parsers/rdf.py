@@ -36,7 +36,7 @@ ERROR_MESSAGES = {
     "DOC_NAMESPACE_VALUE": 'Invalid DocumentNamespace value {0}, must contain a scheme (e.g. "https:") '
     'and should not contain the "#" delimiter.',
     "LL_VALUE": "Invalid licenseListVersion '{0}' must be of the format N.N where N is a number",
-    "CREATED_VALUE": "Invalid created value '{0}' must be date in ISO 8601 format.",
+    "CREATED_VALUE": "Invalid created value '{0}' is not in 'YYYY-MM-DDThh:mm:ssZ' format.",
     "CREATOR_VALUE": "Invalid creator value '{0}' must be Organization, Tool or Person.",
     "EXT_DOC_REF_VALUE": "Failed to extract {0} from ExternalDocumentRef.",
     "PKG_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string containing '
@@ -56,9 +56,9 @@ ERROR_MESSAGES = {
     "FILE_TYPE": "Unknown file type.",
     "FILE_SINGLE_LICS": "File concluded license must be a license url or spdx:noassertion or spdx:none.",
     "REVIEWER_VALUE": "Invalid reviewer value '{0}' must be Organization, Tool or Person.",
-    "REVIEW_DATE": "Invalid review date value '{0}' must be date in ISO 8601 format.",
+    "REVIEW_DATE": "Invalid review date value '{0}' is not in 'YYYY-MM-DDThh:mm:ssZ' format.",
     "ANNOTATOR_VALUE": "Invalid annotator value '{0}' must be Organization, Tool or Person.",
-    "ANNOTATION_DATE": "Invalid annotation date value '{0}' must be date in ISO 8601 format.",
+    "ANNOTATION_DATE": "Invalid annotation date value '{0}' is not in 'YYYY-MM-DDThh:mm:ssZ' format.",
     "SNIPPET_SPDX_ID_VALUE": 'SPDXID must be "SPDXRef-[idstring]" where [idstring] is a unique string '
     'containing letters, numbers, ".", "-".',
     "SNIPPET_SINGLE_LICS": "Snippet Concluded License must be a license url or spdx:noassertion or spdx:none.",
