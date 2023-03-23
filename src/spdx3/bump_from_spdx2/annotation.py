@@ -25,7 +25,7 @@ def bump_annotation(spdx2_annotation: Spdx2_Annotation, payload: Payload, creati
     creation_info.created = spdx2_annotation.annotation_date
     # caution: the annotator and the annotation will only share the same creation_info if the actor
     #          has not been previously defined
-    creator_id: str = bump_actor(spdx2_annotation.annotator, payload, creation_info, is_agent=False)
+    creator_id: str = bump_actor(spdx2_annotation.annotator, payload, creation_info)
     creation_info.created_by = [creator_id]
     print_missing_conversion("annotation.annotator", 1, "of Entity")
     annotation_type: AnnotationType = AnnotationType[spdx2_annotation.annotation_type.name]

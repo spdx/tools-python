@@ -29,7 +29,7 @@ def bump_package(spdx2_package: Spdx2_Package, payload: Payload, creation_inform
     print_missing_conversion("package2.file_name", 0)
     # package.supplier -> Relationship, suppliedBy?
     print_missing_conversion("package2.supplier", 1, "of relationships")
-    originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information, is_agent=False)
+    originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information)
     # package.files_analyzed  -> ?
     print_missing_conversion("package2.files_analyzed", 0)
     # package.verification_code -> package.verified_using
