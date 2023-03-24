@@ -14,7 +14,7 @@ from ply import lex
 from ply.lex import TOKEN
 
 
-class SPDXLexer(object):
+class SPDXLexer:
     reserved = {
         # Top level fields
         "SPDXVersion": "DOC_VERSION",
@@ -107,7 +107,7 @@ class SPDXLexer(object):
                  "UNKNOWN_TAG",
                  "ORGANIZATION_VALUE",
                  "PERSON_VALUE",
-                 "DATE",
+                 "ISO8601_DATE",
                  "LINE",
                  "CHECKSUM"
              ] + list(reserved.values())
@@ -158,7 +158,7 @@ class SPDXLexer(object):
         return t
 
     @TOKEN(r":\s*\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\dZ")
-    def t_DATE(self, t):
+    def t_ISO8601_DATE(self, t):
         t.value = t.value[1:].strip()
         return t
 
