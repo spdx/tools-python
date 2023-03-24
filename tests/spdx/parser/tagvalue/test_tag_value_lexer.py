@@ -120,7 +120,7 @@ def test_tokenization_of_creation_info(lexer):
     token_assert_helper(lexer.token(), "CREATOR", "Creator", 2)
     token_assert_helper(lexer.token(), "ORGANIZATION_VALUE", "Organization: Acme.", 2)
     token_assert_helper(lexer.token(), "CREATED", "Created", 3)
-    token_assert_helper(lexer.token(), "DATE", "2010-02-03T00:00:00Z", 3)
+    token_assert_helper(lexer.token(), "ISO8601_DATE", "2010-02-03T00:00:00Z", 3)
     token_assert_helper(lexer.token(), "CREATOR_COMMENT", "CreatorComment", 4)
     token_assert_helper(lexer.token(), "TEXT", "<text>Sample Comment</text>", 4)
 
@@ -205,11 +205,11 @@ def test_tokenization_of_package(lexer):
     token_assert_helper(lexer.token(), "PRIMARY_PACKAGE_PURPOSE", "PrimaryPackagePurpose", 23)
     token_assert_helper(lexer.token(), "LINE", "OPERATING-SYSTEM", 23)
     token_assert_helper(lexer.token(), "BUILT_DATE", "BuiltDate", 24)
-    token_assert_helper(lexer.token(), "DATE", "2020-01-01T12:00:00Z", 24)
+    token_assert_helper(lexer.token(), "ISO8601_DATE", "2020-01-01T12:00:00Z", 24)
     token_assert_helper(lexer.token(), "RELEASE_DATE", "ReleaseDate", 25)
-    token_assert_helper(lexer.token(), "DATE", "2021-01-01T12:00:00Z", 25)
+    token_assert_helper(lexer.token(), "ISO8601_DATE", "2021-01-01T12:00:00Z", 25)
     token_assert_helper(lexer.token(), "VALID_UNTIL_DATE", "ValidUntilDate", 26)
-    token_assert_helper(lexer.token(), "DATE", "2022-01-01T12:00:00Z", 26)
+    token_assert_helper(lexer.token(), "ISO8601_DATE", "2022-01-01T12:00:00Z", 26)
 
 
 def test_tokenization_of_unknown_tag(lexer):
@@ -269,7 +269,7 @@ def test_tokenization_of_annotation(lexer):
     token_assert_helper(lexer.token(), "ANNOTATOR", "Annotator", 1)
     token_assert_helper(lexer.token(), "PERSON_VALUE", "Person: Jane Doe()", 1)
     token_assert_helper(lexer.token(), "ANNOTATION_DATE", "AnnotationDate", 2)
-    token_assert_helper(lexer.token(), "DATE", "2010-01-29T18:30:22Z", 2)
+    token_assert_helper(lexer.token(), "ISO8601_DATE", "2010-01-29T18:30:22Z", 2)
     token_assert_helper(lexer.token(), "ANNOTATION_COMMENT", "AnnotationComment", 3)
     token_assert_helper(lexer.token(), "TEXT", "<text>Document level annotation</text>", 3)
     token_assert_helper(lexer.token(), "ANNOTATION_TYPE", "AnnotationType", 4)

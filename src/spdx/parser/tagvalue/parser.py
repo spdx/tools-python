@@ -44,7 +44,7 @@ ELEMENT_EXPECTED_START_TAG = dict(File="FileName", Annotation="Annotator", Relat
                                   Snippet="SnippetSPDXID", Package="PackageName", ExtractedLicensingInfo="LicenseID")
 
 
-class Parser(object):
+class Parser:
     tokens: List[str]
     logger: Logger
     current_element: Dict[str, Any]
@@ -169,7 +169,7 @@ class Parser(object):
         if self.check_that_current_element_matches_class_for_value(TAG_DATA_MODEL_FIELD[p[1]][0], p.lineno(1)):
             set_value(p, self.current_element)
 
-    @grammar_rule("unknown_tag : UNKNOWN_TAG text_or_line\n | UNKNOWN_TAG DATE\n | UNKNOWN_TAG PERSON_VALUE \n"
+    @grammar_rule("unknown_tag : UNKNOWN_TAG text_or_line\n | UNKNOWN_TAG ISO8601_DATE\n | UNKNOWN_TAG PERSON_VALUE \n"
                   "| UNKNOWN_TAG")
     def p_unknown_tag(self, p):
         self.logger.append(f"Unknown tag provided in line {p.lineno(1)}")
@@ -252,7 +252,7 @@ class Parser(object):
     def p_creator(self, p):
         self.creation_info.setdefault("creators", []).append(ActorParser.parse_actor(p[2]))
 
-    @grammar_rule("created : CREATED DATE")
+    @grammar_rule("created : CREATED ISO8601_DATE")
     def p_created(self, p):
         set_value(p, self.creation_info, method_to_apply=datetime_from_str)
 
@@ -384,8 +384,8 @@ class Parser(object):
         if self.check_that_current_element_matches_class_for_value(Package, p.lineno(1)):
             set_value(p, self.current_element, method_to_apply=lambda x: PackagePurpose[x.replace("-", "_")])
 
-    @grammar_rule("built_date : BUILT_DATE DATE\n release_date : RELEASE_DATE DATE\n "
-                  "valid_until_date : VALID_UNTIL_DATE DATE")
+    @grammar_rule("built_date : BUILT_DATE ISO8601_DATE\n release_date : RELEASE_DATE ISO8601_DATE\n "
+                  "valid_until_date : VALID_UNTIL_DATE ISO8601_DATE")
     def p_package_dates(self, p):
         if self.check_that_current_element_matches_class_for_value(Package, p.lineno(1)):
             set_value(p, self.current_element, method_to_apply=datetime_from_str)
@@ -428,7 +428,7 @@ class Parser(object):
         self.initialize_new_current_element(Annotation)
         set_value(p, self.current_element, method_to_apply=ActorParser.parse_actor)
 
-    @grammar_rule("annotation_date : ANNOTATION_DATE DATE")
+    @grammar_rule("annotation_date : ANNOTATION_DATE ISO8601_DATE")
     def p_annotation_date(self, p):
         if self.check_that_current_element_matches_class_for_value(Annotation, p.lineno(1)):
             set_value(p, self.current_element, method_to_apply=datetime_from_str)
