@@ -59,7 +59,7 @@ CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES: Dict[ExternalPackageRefCategory, List[st
     ExternalPackageRefCategory.SECURITY: ["cpe22Type", "cpe23Type", "advisory", "fix", "url", "swid"],
     ExternalPackageRefCategory.PACKAGE_MANAGER: ["maven-central", "npm", "nuget", "bower", "purl"],
     ExternalPackageRefCategory.PERSISTENT_ID: ["swh", "gitoid"],
-    ExternalPackageRefCategory.OTHER: []
+    ExternalPackageRefCategory.OTHER: [],
 }
 
 
@@ -73,8 +73,9 @@ class ExternalPackageRef:
     locator: str
     comment: Optional[str] = None
 
-    def __init__(self, category: ExternalPackageRefCategory, reference_type: str, locator: str,
-                 comment: Optional[str] = None):
+    def __init__(
+        self, category: ExternalPackageRefCategory, reference_type: str, locator: str, comment: Optional[str] = None
+    ):
         check_types_and_set_values(self, locals())
 
 
@@ -107,22 +108,35 @@ class Package:
     built_date: Optional[datetime] = None
     valid_until_date: Optional[datetime] = None
 
-    def __init__(self, spdx_id: str, name: str, download_location: Union[str, SpdxNoAssertion, SpdxNone],
-                 version: Optional[str] = None, file_name: Optional[str] = None,
-                 supplier: Optional[Union[Actor, SpdxNoAssertion]] = None,
-                 originator: Optional[Union[Actor, SpdxNoAssertion]] = None,
-                 files_analyzed: bool = True, verification_code: Optional[PackageVerificationCode] = None,
-                 checksums: List[Checksum] = None, homepage: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
-                 source_info: Optional[str] = None,
-                 license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
-                 license_info_from_files: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
-                 license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
-                 license_comment: Optional[str] = None,
-                 copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
-                 summary: Optional[str] = None, description: Optional[str] = None, comment: Optional[str] = None,
-                 external_references: List[ExternalPackageRef] = None, attribution_texts: List[str] = None,
-                 primary_package_purpose: Optional[PackagePurpose] = None, release_date: Optional[datetime] = None,
-                 built_date: Optional[datetime] = None, valid_until_date: Optional[datetime] = None):
+    def __init__(
+        self,
+        spdx_id: str,
+        name: str,
+        download_location: Union[str, SpdxNoAssertion, SpdxNone],
+        version: Optional[str] = None,
+        file_name: Optional[str] = None,
+        supplier: Optional[Union[Actor, SpdxNoAssertion]] = None,
+        originator: Optional[Union[Actor, SpdxNoAssertion]] = None,
+        files_analyzed: bool = True,
+        verification_code: Optional[PackageVerificationCode] = None,
+        checksums: List[Checksum] = None,
+        homepage: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
+        source_info: Optional[str] = None,
+        license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+        license_info_from_files: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+        license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+        license_comment: Optional[str] = None,
+        copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        comment: Optional[str] = None,
+        external_references: List[ExternalPackageRef] = None,
+        attribution_texts: List[str] = None,
+        primary_package_purpose: Optional[PackagePurpose] = None,
+        release_date: Optional[datetime] = None,
+        built_date: Optional[datetime] = None,
+        valid_until_date: Optional[datetime] = None,
+    ):
         checksums = [] if checksums is None else checksums
         license_info_from_files = [] if license_info_from_files is None else license_info_from_files
         external_references = [] if external_references is None else external_references

@@ -27,9 +27,13 @@ def test_datetime_from_str():
     assert date == datetime(2010, 3, 4, 5, 45, 11)
 
 
-@pytest.mark.parametrize("invalid_date_str, error_type, expected_message",
-                         [(5, TypeError, "Could not convert str to datetime, invalid type: int"),
-                          ("2010-02-03", ValueError, "time data '2010-02-03' does not match format '%Y-%m-%dT%H:%M:%SZ'")])
+@pytest.mark.parametrize(
+    "invalid_date_str, error_type, expected_message",
+    [
+        (5, TypeError, "Could not convert str to datetime, invalid type: int"),
+        ("2010-02-03", ValueError, "time data '2010-02-03' does not match format '%Y-%m-%dT%H:%M:%SZ'"),
+    ],
+)
 def test_datetime_from_str_error(invalid_date_str, error_type, expected_message):
     with pytest.raises(error_type, match=expected_message):
         datetime_from_str(invalid_date_str)

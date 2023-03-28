@@ -20,8 +20,9 @@ from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 def parse_checksum(parent_node: URIRef, graph: Graph) -> Checksum:
     logger = Logger()
-    algorithm = parse_literal(logger, graph, parent_node, SPDX_NAMESPACE.algorithm,
-                              parsing_method=convert_rdf_to_algorithm)
+    algorithm = parse_literal(
+        logger, graph, parent_node, SPDX_NAMESPACE.algorithm, parsing_method=convert_rdf_to_algorithm
+    )
     value = parse_literal(logger, graph, parent_node, SPDX_NAMESPACE.checksumValue)
 
     raise_parsing_error_if_logger_has_messages(logger, "Checksum")

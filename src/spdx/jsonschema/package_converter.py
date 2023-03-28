@@ -45,14 +45,18 @@ class PackageConverter(TypedConverter[Package]):
             return "SPDXID"
         return super().json_property_name(package_property)
 
-    def _get_property_value(self, package: Package, package_property: PackageProperty,
-                            document: Document = None) -> Any:
+    def _get_property_value(
+        self, package: Package, package_property: PackageProperty, document: Document = None
+    ) -> Any:
         if package_property == PackageProperty.SPDX_ID:
             return package.spdx_id
         elif package_property == PackageProperty.ANNOTATIONS:
-            package_annotations = filter(lambda annotation: annotation.spdx_id == package.spdx_id, document.annotations)
-            return [self.annotation_converter.convert(annotation, document) for annotation in
-                    package_annotations] or None
+            package_annotations = filter(
+                lambda annotation: annotation.spdx_id == package.spdx_id, document.annotations
+            )
+            return [
+                self.annotation_converter.convert(annotation, document) for annotation in package_annotations
+            ] or None
         elif package_property == PackageProperty.ATTRIBUTION_TEXTS:
             return package.attribution_texts or None
         elif package_property == PackageProperty.BUILT_DATE:
@@ -68,15 +72,21 @@ class PackageConverter(TypedConverter[Package]):
         elif package_property == PackageProperty.DOWNLOAD_LOCATION:
             return str(package.download_location)
         elif package_property == PackageProperty.EXTERNAL_REFS:
-            return [self.external_package_ref_converter.convert(external_ref) for external_ref in
-                    package.external_references] or None
+            return [
+                self.external_package_ref_converter.convert(external_ref)
+                for external_ref in package.external_references
+            ] or None
         elif package_property == PackageProperty.FILES_ANALYZED:
             return package.files_analyzed
         elif package_property == PackageProperty.HAS_FILES:
-            package_contains_file_ids = [relationship.related_spdx_element_id for relationship in
-                                         find_package_contains_file_relationships(document, package)]
-            file_contained_in_package_ids = [relationship.spdx_element_id for relationship in
-                                             find_file_contained_by_package_relationships(document, package)]
+            package_contains_file_ids = [
+                relationship.related_spdx_element_id
+                for relationship in find_package_contains_file_relationships(document, package)
+            ]
+            file_contained_in_package_ids = [
+                relationship.spdx_element_id
+                for relationship in find_file_contained_by_package_relationships(document, package)
+            ]
             return package_contains_file_ids + file_contained_in_package_ids or None
         elif package_property == PackageProperty.HOMEPAGE:
             return apply_if_present(str, package.homepage)

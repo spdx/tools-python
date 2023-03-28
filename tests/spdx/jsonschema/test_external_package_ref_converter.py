@@ -20,13 +20,18 @@ def converter() -> ExternalPackageRefConverter:
     return ExternalPackageRefConverter()
 
 
-@pytest.mark.parametrize("external_package_ref_property,expected",
-                         [(ExternalPackageRefProperty.COMMENT, "comment"),
-                          (ExternalPackageRefProperty.REFERENCE_CATEGORY, "referenceCategory"),
-                          (ExternalPackageRefProperty.REFERENCE_LOCATOR, "referenceLocator"),
-                          (ExternalPackageRefProperty.REFERENCE_TYPE, "referenceType")])
-def test_json_property_names(converter: ExternalPackageRefConverter,
-                             external_package_ref_property: ExternalPackageRefProperty, expected: str):
+@pytest.mark.parametrize(
+    "external_package_ref_property,expected",
+    [
+        (ExternalPackageRefProperty.COMMENT, "comment"),
+        (ExternalPackageRefProperty.REFERENCE_CATEGORY, "referenceCategory"),
+        (ExternalPackageRefProperty.REFERENCE_LOCATOR, "referenceLocator"),
+        (ExternalPackageRefProperty.REFERENCE_TYPE, "referenceType"),
+    ],
+)
+def test_json_property_names(
+    converter: ExternalPackageRefConverter, external_package_ref_property: ExternalPackageRefProperty, expected: str
+):
     assert converter.json_property_name(external_package_ref_property) == expected
 
 
@@ -47,5 +52,5 @@ def test_successful_conversion(converter: ExternalPackageRefConverter):
         converter.json_property_name(ExternalPackageRefProperty.COMMENT): "comment",
         converter.json_property_name(ExternalPackageRefProperty.REFERENCE_CATEGORY): "PACKAGE_MANAGER",
         converter.json_property_name(ExternalPackageRefProperty.REFERENCE_LOCATOR): "locator",
-        converter.json_property_name(ExternalPackageRefProperty.REFERENCE_TYPE): "type"
+        converter.json_property_name(ExternalPackageRefProperty.REFERENCE_TYPE): "type",
     }

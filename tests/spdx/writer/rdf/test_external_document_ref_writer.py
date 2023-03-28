@@ -21,11 +21,12 @@ def test_add_external_document_ref_to_graph():
 
     add_external_document_ref_to_graph(external_document_ref, graph, URIRef("docNode"), "docNamespace")
 
-    assert (URIRef("docNode"), SPDX_NAMESPACE.externalDocumentRef, URIRef("docNamespace#DocumentRef-external")) in graph
+    assert (
+        URIRef("docNode"),
+        SPDX_NAMESPACE.externalDocumentRef,
+        URIRef("docNamespace#DocumentRef-external"),
+    ) in graph
     assert (None, RDF.type, SPDX_NAMESPACE.ExternalDocumentRef) in graph
     assert (None, SPDX_NAMESPACE.checksum, None) in graph
     assert (None, RDF.type, SPDX_NAMESPACE.Checksum) in graph
     assert (None, SPDX_NAMESPACE.spdxDocument, URIRef(external_document_ref.document_uri)) in graph
-
-
-

@@ -27,11 +27,16 @@ from spdx.writer.write_anything import write_file
 
 @click.command()
 @click.option("--infile", "-i", help="The file containing the document to be validated or converted.")
-@click.option("--outfile", "-o",
-              help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion).")
-@click.option("--version",
-              help='The SPDX version to be used during parsing and validation ("SPDX-2.2" or "SPDX-2.3"). Will be read from the document if not provided.',
-              default=None)
+@click.option(
+    "--outfile",
+    "-o",
+    help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion).",
+)
+@click.option(
+    "--version",
+    help='The SPDX version to be used during parsing and validation ("SPDX-2.2" or "SPDX-2.3"). Will be read from the document if not provided.',
+    default=None,
+)
 @click.option("--novalidation", is_flag=True, help="Don't validate the provided document.")
 def main(infile: str, outfile: str, version: str, novalidation: bool):
     """
@@ -56,8 +61,9 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
             validation_messages: List[ValidationMessage] = validate_full_spdx_document(document, version)
             if validation_messages:
                 log_string = "\n".join(
-                    ["The document is invalid. The following issues have been found:"] +
-                    [message.validation_message for message in validation_messages])
+                    ["The document is invalid. The following issues have been found:"]
+                    + [message.validation_message for message in validation_messages]
+                )
                 logging.error(log_string)
                 sys.exit(1)
             else:
@@ -67,16 +73,20 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
             write_file(document, outfile, validate=False)
 
     except NotImplementedError as err:
-        logging.error(err.args[0] +
-                          "\nPlease note that this project is currently undergoing a major refactoring and therefore missing "
-                          "a few features which will be added in time (refer to https://github.com/spdx/tools-python/issues "
-                          "for insights into the current status).\n"
-                          "In the meantime, please use the current PyPI release version.")
+        logging.error(
+            err.args[0]
+            + "\nPlease note that this project is currently undergoing a major refactoring and therefore missing "
+            "a few features which will be added in time (refer to https://github.com/spdx/tools-python/issues "
+            "for insights into the current status).\n"
+            "In the meantime, please use the current PyPI release version."
+        )
         sys.exit(1)
 
     except SPDXParsingError as err:
-        log_string = "\n".join(["There have been issues while parsing the provided document:"] +
-                               [message for message in err.get_messages()])
+        log_string = "\n".join(
+            ["There have been issues while parsing the provided document:"]
+            + [message for message in err.get_messages()]
+        )
         logging.error(log_string)
         sys.exit(1)
 

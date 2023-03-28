@@ -24,9 +24,12 @@ class ExternalDocumentRefConverter(TypedConverter[ExternalDocumentRef]):
     def __init__(self):
         self.checksum_converter = ChecksumConverter()
 
-    def _get_property_value(self, external_document_ref: ExternalDocumentRef,
-                            external_document_ref_property: ExternalDocumentRefProperty,
-                            _document: Document = None) -> Any:
+    def _get_property_value(
+        self,
+        external_document_ref: ExternalDocumentRef,
+        external_document_ref_property: ExternalDocumentRefProperty,
+        _document: Document = None,
+    ) -> Any:
         if external_document_ref_property == ExternalDocumentRefProperty.EXTERNAL_DOCUMENT_ID:
             return external_document_ref.document_ref_id
         elif external_document_ref_property == ExternalDocumentRefProperty.SPDX_DOCUMENT:

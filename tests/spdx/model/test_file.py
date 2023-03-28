@@ -8,10 +8,22 @@ from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_correct_initialization(checksum):
-    file = File("name", "id", [checksum, checksum], [FileType.OTHER, FileType.SPDX], SpdxNone(), [SpdxNoAssertion()],
-                "comment on license", "copyright", "comment", "notice", ["contributor"], ["attribution"])
+    file = File(
+        "name",
+        "id",
+        [checksum, checksum],
+        [FileType.OTHER, FileType.SPDX],
+        SpdxNone(),
+        [SpdxNoAssertion()],
+        "comment on license",
+        "copyright",
+        "comment",
+        "notice",
+        ["contributor"],
+        ["attribution"],
+    )
     assert file.name == "name"
     assert file.spdx_id == "id"
     assert file.checksums == [checksum, checksum]
@@ -26,7 +38,7 @@ def test_correct_initialization(checksum):
     assert file.attribution_texts == ["attribution"]
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_correct_initialization_with_default_values(checksum):
     file = File("name", "id", [checksum, checksum])
     assert file.name == "name"
@@ -43,13 +55,13 @@ def test_correct_initialization_with_default_values(checksum):
     assert file.attribution_texts == []
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_name(checksum):
     with pytest.raises(TypeError):
         File(42, "id", [checksum])
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_spdx_id(checksum):
     with pytest.raises(TypeError):
         File("name", 42, [checksum])
@@ -61,55 +73,55 @@ def test_wrong_type_in_checksum():
         File("name", "id", checksum)
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_file_type(checksum):
     with pytest.raises(TypeError):
         File("name", "id", [checksum], file_types=FileType.OTHER)
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_license_concluded(checksum):
     with pytest.raises(TypeError):
         File("name", "id", [checksum], license_concluded="NONE")
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_license_info_in_file(checksum):
     with pytest.raises(TypeError):
         File("name", "id", [checksum], license_info_in_file=[SpdxNone])
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_license_comment(checksum):
     with pytest.raises(TypeError):
         File("name", "id", [checksum], license_comment=42)
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_copyright_text(checksum):
     with pytest.raises(TypeError):
         File("name", "id", [checksum], copyright_text=[SpdxNone()])
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_comment(checksum):
     with pytest.raises(TypeError):
         File("name", "id", [checksum], comment=42)
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_notice(checksum):
     with pytest.raises(TypeError):
         File("name", "id", [checksum], notice=["notice"])
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_contributors(checksum):
     with pytest.raises(TypeError):
         File("name", "id", [checksum], contributors="contributor")
 
 
-@mock.patch('spdx.model.checksum.Checksum', autospec=True)
+@mock.patch("spdx.model.checksum.Checksum", autospec=True)
 def test_wrong_type_in_attribution_texts(checksum):
     with pytest.raises(TypeError):
         File("name", "id", [checksum], attribution_texts=["attribution", 42])

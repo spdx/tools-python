@@ -18,13 +18,14 @@ from spdx.parser.rdf import rdf_parser
 
 def test_rdf_parser_file_not_found():
     with pytest.raises(FileNotFoundError, match="No such file or directory") as err:
-        wrong_file_path = os.path.join(os.path.dirname(__file__), 'hnjfkjsedhnflsiafg.json')
+        wrong_file_path = os.path.join(os.path.dirname(__file__), "hnjfkjsedhnflsiafg.json")
         rdf_parser.parse_from_file(wrong_file_path)
 
 
 def test_rdf_parser_with_2_3_example():
     doc = rdf_parser.parse_from_file(
-        os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXRdfExample-v2.3.spdx.rdf.xml"))
+        os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXRdfExample-v2.3.spdx.rdf.xml")
+    )
 
     assert type(doc) == Document
     assert len(doc.snippets) == 1

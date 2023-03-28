@@ -52,32 +52,42 @@ class CreationInfoParser:
             logger.append("CreationInfo does not exist.")
             raise SPDXParsingError([f"Error while parsing document {name}: {logger.get_messages()}"])
 
-        creators: List[Actor] = parse_field_or_log_error(logger, creation_info_dict.get("creators"),
-                                                         self.parse_creators)
+        creators: List[Actor] = parse_field_or_log_error(
+            logger, creation_info_dict.get("creators"), self.parse_creators
+        )
 
-        created: Optional[datetime] = parse_field_or_log_error(logger, creation_info_dict.get("created"),
-                                                               datetime_from_str)
+        created: Optional[datetime] = parse_field_or_log_error(
+            logger, creation_info_dict.get("created"), datetime_from_str
+        )
 
         creator_comment: Optional[str] = creation_info_dict.get("comment")
         data_license: Optional[str] = doc_dict.get("dataLicense")
 
-        external_document_refs: List[ExternalDocumentRef] = parse_field_or_log_error(logger, doc_dict.get(
-            "externalDocumentRefs"), self.parse_external_document_refs)
-        license_list_version: Optional[Version] = parse_field_or_log_error(logger,
-                                                                           creation_info_dict.get("licenseListVersion"),
-                                                                           self.parse_version)
+        external_document_refs: List[ExternalDocumentRef] = parse_field_or_log_error(
+            logger, doc_dict.get("externalDocumentRefs"), self.parse_external_document_refs
+        )
+        license_list_version: Optional[Version] = parse_field_or_log_error(
+            logger, creation_info_dict.get("licenseListVersion"), self.parse_version
+        )
         document_comment: Optional[str] = doc_dict.get("comment")
         raise_parsing_error_if_logger_has_messages(logger, "Document")
 
-        creation_info = construct_or_raise_parsing_error(CreationInfo,
-                                                         dict(spdx_version=spdx_version, spdx_id=spdx_id, name=name,
-                                                              document_namespace=document_namespace,
-                                                              creators=creators, created=created,
-                                                              license_list_version=license_list_version,
-                                                              document_comment=document_comment,
-                                                              creator_comment=creator_comment,
-                                                              data_license=data_license,
-                                                              external_document_refs=external_document_refs))
+        creation_info = construct_or_raise_parsing_error(
+            CreationInfo,
+            dict(
+                spdx_version=spdx_version,
+                spdx_id=spdx_id,
+                name=name,
+                document_namespace=document_namespace,
+                creators=creators,
+                created=created,
+                license_list_version=license_list_version,
+                document_comment=document_comment,
+                creator_comment=creator_comment,
+                data_license=data_license,
+                external_document_refs=external_document_refs,
+            ),
+        )
 
         return creation_info
 
@@ -85,7 +95,9 @@ class CreationInfoParser:
         logger = Logger()
         creators = []
         for creator_str in creators_list_from_dict:
-            creators = append_parsed_field_or_log_error(logger, creators, creator_str, lambda x: parse_field_or_no_assertion(x, self.actor_parser.parse_actor))
+            creators = append_parsed_field_or_log_error(
+                logger, creators, creator_str, lambda x: parse_field_or_no_assertion(x, self.actor_parser.parse_actor)
+            )
 
         raise_parsing_error_if_logger_has_messages(logger)
         return creators
@@ -101,8 +113,9 @@ class CreationInfoParser:
         logger = Logger()
         external_document_refs = []
         for external_document_ref_dict in external_document_ref_dicts:
-            external_document_ref: ExternalDocumentRef = parse_field_or_log_error(logger, external_document_ref_dict,
-                                                                                  self.parse_external_document_ref)
+            external_document_ref: ExternalDocumentRef = parse_field_or_log_error(
+                logger, external_document_ref_dict, self.parse_external_document_ref
+            )
 
             external_document_refs.append(external_document_ref)
 
@@ -111,16 +124,16 @@ class CreationInfoParser:
 
     def parse_external_document_ref(self, external_document_ref_dict: Dict) -> ExternalDocumentRef:
         logger = Logger()
-        checksum: Optional[Checksum] = parse_field_or_log_error(logger, external_document_ref_dict.get("checksum"),
-                                                                self.checksum_parser.parse_checksum)
+        checksum: Optional[Checksum] = parse_field_or_log_error(
+            logger, external_document_ref_dict.get("checksum"), self.checksum_parser.parse_checksum
+        )
 
         external_document_id: Optional[str] = external_document_ref_dict.get("externalDocumentId")
         document_uri: Optional[str] = external_document_ref_dict.get("spdxDocument")
         raise_parsing_error_if_logger_has_messages(logger, "ExternalDocumentRef")
-        external_document_ref: ExternalDocumentRef = construct_or_raise_parsing_error(ExternalDocumentRef,
-                                                                                 dict(
-                                                                                     document_ref_id=external_document_id,
-                                                                                     checksum=checksum,
-                                                                                     document_uri=document_uri))
+        external_document_ref: ExternalDocumentRef = construct_or_raise_parsing_error(
+            ExternalDocumentRef,
+            dict(document_ref_id=external_document_id, checksum=checksum, document_uri=document_uri),
+        )
 
         return external_document_ref

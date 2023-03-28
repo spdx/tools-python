@@ -52,16 +52,27 @@ def test_parse_namespace_and_spdx_id():
     assert spdx_id == "spdxID"
 
 
-@pytest.mark.parametrize("triples,error_message",
-                         [([(URIRef("docNamespace"), RDF.type, SPDX_NAMESPACE.SpdxDocument)],
-                           r"No '#' found in the URI of SpdxDocument"),
-                          ([(URIRef(""), RDF.type, URIRef(""))], r"No SpdxDocument found, can't parse rdf file."),
-                          ([(URIRef("#SPDXRef-DOCUMENT"), RDF.type, SPDX_NAMESPACE.SpdxDocument)],
-                           "No namespace found"),
-                          ([(URIRef("docNamespace1"), RDF.type, SPDX_NAMESPACE.SpdxDocument),
-                            (URIRef("docNamespace2"), RDF.type, SPDX_NAMESPACE.SpdxDocument)],
-                           "Multiple SpdxDocuments found")])
-def test_parse_namespace_and_spdx_id_with_system_exit(triples: List[Tuple[Node, Node, Node]], error_message: str, caplog):
+@pytest.mark.parametrize(
+    "triples,error_message",
+    [
+        (
+            [(URIRef("docNamespace"), RDF.type, SPDX_NAMESPACE.SpdxDocument)],
+            r"No '#' found in the URI of SpdxDocument",
+        ),
+        ([(URIRef(""), RDF.type, URIRef(""))], r"No SpdxDocument found, can't parse rdf file."),
+        ([(URIRef("#SPDXRef-DOCUMENT"), RDF.type, SPDX_NAMESPACE.SpdxDocument)], "No namespace found"),
+        (
+            [
+                (URIRef("docNamespace1"), RDF.type, SPDX_NAMESPACE.SpdxDocument),
+                (URIRef("docNamespace2"), RDF.type, SPDX_NAMESPACE.SpdxDocument),
+            ],
+            "Multiple SpdxDocuments found",
+        ),
+    ],
+)
+def test_parse_namespace_and_spdx_id_with_system_exit(
+    triples: List[Tuple[Node, Node, Node]], error_message: str, caplog
+):
     graph = Graph()
     for triple in triples:
         graph = graph.add(triple)
@@ -75,12 +86,14 @@ def test_parse_namespace_and_spdx_id_with_system_exit(triples: List[Tuple[Node, 
 def test_parse_external_document_refs():
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
     doc_namespace = "https://some.namespace"
-    external_doc_ref_node = graph.value(subject=URIRef(f"{doc_namespace}#SPDXRef-DOCUMENT"),
-                                        predicate=SPDX_NAMESPACE.externalDocumentRef)
+    external_doc_ref_node = graph.value(
+        subject=URIRef(f"{doc_namespace}#SPDXRef-DOCUMENT"), predicate=SPDX_NAMESPACE.externalDocumentRef
+    )
 
     external_document_ref = parse_external_document_refs(external_doc_ref_node, graph, doc_namespace)
 
     assert external_document_ref.document_ref_id == "DocumentRef-external"
-    assert external_document_ref.checksum == Checksum(ChecksumAlgorithm.SHA1,
-                                                      "71c4025dd9897b364f3ebbb42c484ff43d00791c")
+    assert external_document_ref.checksum == Checksum(
+        ChecksumAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c"
+    )
     assert external_document_ref.document_uri == "https://namespace.com"

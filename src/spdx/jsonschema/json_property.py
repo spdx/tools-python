@@ -17,4 +17,5 @@ class JsonProperty(Enum):
     type that can be used in type hints.
     In general, all the child enums list the properties of the corresponding objects from the json schema.
     """
+
     pass

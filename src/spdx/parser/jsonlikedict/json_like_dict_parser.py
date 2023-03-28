@@ -45,23 +45,39 @@ class JsonLikeDictParser:
         self.annotation_parser = AnnotationParser()
 
     def parse(self, json_like_dict: Dict) -> Document:
-
-        fields_to_parse = [("creation_info", json_like_dict, self.creation_info_parser.parse_creation_info, False),
-                           ("packages", json_like_dict.get("packages"), lambda x: parse_list_of_elements(x,
-                                                                                                         self.package_parser.parse_package,
-                                                                                                         self.package_parser.logger), True),
-                           ("files", json_like_dict.get("files"), lambda x: parse_list_of_elements(x,
-                                                                                                   self.file_parser.parse_file,
-                                                                                                   self.file_parser.logger), True),
-                           ("annotations", json_like_dict, self.annotation_parser.parse_all_annotations, True),
-                           ("snippets", json_like_dict.get("snippets"), lambda x: parse_list_of_elements(x,
-                                                                                                         self.snippet_parser.parse_snippet,
-                                                                                                         self.snippet_parser.logger), True),
-                           ("relationships", json_like_dict, self.relationship_parser.parse_all_relationships, True),
-                           ("extracted_licensing_info", json_like_dict.get("hasExtractedLicensingInfos"),
-                            lambda x: parse_list_of_elements(x,
-                                                             self.extracted_licensing_info_parser.parse_extracted_licensing_info,
-                                                             self.extracted_licensing_info_parser.logger), True)]
+        fields_to_parse = [
+            ("creation_info", json_like_dict, self.creation_info_parser.parse_creation_info, False),
+            (
+                "packages",
+                json_like_dict.get("packages"),
+                lambda x: parse_list_of_elements(x, self.package_parser.parse_package, self.package_parser.logger),
+                True,
+            ),
+            (
+                "files",
+                json_like_dict.get("files"),
+                lambda x: parse_list_of_elements(x, self.file_parser.parse_file, self.file_parser.logger),
+                True,
+            ),
+            ("annotations", json_like_dict, self.annotation_parser.parse_all_annotations, True),
+            (
+                "snippets",
+                json_like_dict.get("snippets"),
+                lambda x: parse_list_of_elements(x, self.snippet_parser.parse_snippet, self.snippet_parser.logger),
+                True,
+            ),
+            ("relationships", json_like_dict, self.relationship_parser.parse_all_relationships, True),
+            (
+                "extracted_licensing_info",
+                json_like_dict.get("hasExtractedLicensingInfos"),
+                lambda x: parse_list_of_elements(
+                    x,
+                    self.extracted_licensing_info_parser.parse_extracted_licensing_info,
+                    self.extracted_licensing_info_parser.logger,
+                ),
+                True,
+            ),
+        ]
 
         parsed_fields = {}
 

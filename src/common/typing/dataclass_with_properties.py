@@ -50,6 +50,7 @@ def make_getter(field_name, field_type):
             # As getters are created dynamically, their argument name is always "the return value". We replace it by the
             # actual name so the error message is more helpful.
             raise TypeError(
-                error_message.replace("the return value", field_name, 1) + f': {getattr(self, f"_{field_name}")}')
+                error_message.replace("the return value", field_name, 1) + f': {getattr(self, f"_{field_name}")}'
+            )
 
     return get_field_with_better_error_message

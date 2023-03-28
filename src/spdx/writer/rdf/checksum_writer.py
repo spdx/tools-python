@@ -22,9 +22,10 @@ def add_checksum_to_graph(checksum: Checksum, graph: Graph, parent: URIRef):
 
     graph.add((parent, SPDX_NAMESPACE.checksum, checksum_node))
 
+
 def algorithm_to_rdf_string(algorithm: ChecksumAlgorithm) -> URIRef:
     if "BLAKE2B" in algorithm.name:
-        algorithm_rdf_string = algorithm.name.replace("_","").lower()
+        algorithm_rdf_string = algorithm.name.replace("_", "").lower()
     else:
         algorithm_rdf_string = algorithm.name.lower()
 

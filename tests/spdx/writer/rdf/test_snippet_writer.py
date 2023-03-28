@@ -35,9 +35,13 @@ def test_add_snippet_to_graph():
     assert (None, RDFS.comment, Literal(snippet.comment)) in graph
 
 
-@pytest.mark.parametrize("range,pointer,predicate",
-                         [((5, 190), POINTER_NAMESPACE.ByteOffsetPointer, POINTER_NAMESPACE.offset),
-                          ((1, 3), POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber)])
+@pytest.mark.parametrize(
+    "range,pointer,predicate",
+    [
+        ((5, 190), POINTER_NAMESPACE.ByteOffsetPointer, POINTER_NAMESPACE.offset),
+        ((1, 3), POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber),
+    ],
+)
 def test_add_ranges_to_graph(range, pointer, predicate):
     graph = Graph()
     add_range_to_graph(range, graph, URIRef("snippetNode"), URIRef("docNamespace#SPDXRef-File"), pointer)

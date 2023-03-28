@@ -56,8 +56,11 @@ def write_package(package: Package, text_output: TextIO):
 
     for external_reference in package.external_references:
         external_reference_str = " ".join(
-            [transform_enum_name_to_tv(external_reference.category.name), external_reference.reference_type,
-             external_reference.locator]
+            [
+                transform_enum_name_to_tv(external_reference.category.name),
+                external_reference.reference_type,
+                external_reference.locator,
+            ]
         )
         write_value("ExternalRef", external_reference_str, text_output)
         if external_reference.comment:
@@ -67,8 +70,9 @@ def write_package(package: Package, text_output: TextIO):
         write_text_value("PackageAttributionText", attribution_text, text_output)
 
     if package.primary_package_purpose:
-        write_value("PrimaryPackagePurpose", transform_enum_name_to_tv(package.primary_package_purpose.name),
-                    text_output)
+        write_value(
+            "PrimaryPackagePurpose", transform_enum_name_to_tv(package.primary_package_purpose.name), text_output
+        )
 
     if package.release_date:
         write_value("ReleaseDate", datetime_to_iso_string(package.release_date), text_output)

@@ -24,16 +24,23 @@ from spdx.parser.logger import Logger
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
-def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node,
-                  parsing_method: Callable = lambda x: x.strip(), default: Any = None):
+def parse_literal(
+    logger: Logger,
+    graph: Graph,
+    subject: Node,
+    predicate: Node,
+    parsing_method: Callable = lambda x: x.strip(),
+    default: Any = None,
+):
     value = get_unique_value(logger, graph, subject, predicate, default)
     if not value:
         return default
     return apply_parsing_method_or_log_error(logger, value, parsing_method, default)
 
 
-def apply_parsing_method_or_log_error(logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(),
-                                      default: Any = None):
+def apply_parsing_method_or_log_error(
+    logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(), default: Any = None
+):
     try:
         return parsing_method(value)
     except SPDXParsingError as err:
@@ -43,14 +50,21 @@ def apply_parsing_method_or_log_error(logger: Logger, value: Any, parsing_method
     return default
 
 
-def parse_literal_or_no_assertion_or_none(logger: Logger, graph: Graph, subject: Node, predicate: Node,
-                                          parsing_method: Callable = lambda x: x.strip(), default: Any = None):
+def parse_literal_or_no_assertion_or_none(
+    logger: Logger,
+    graph: Graph,
+    subject: Node,
+    predicate: Node,
+    parsing_method: Callable = lambda x: x.strip(),
+    default: Any = None,
+):
     value = get_unique_value(logger, graph, subject, predicate, default)
     return get_correctly_typed_value(logger, value, parsing_method, default)
 
 
-def get_correctly_typed_value(logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(),
-                              default: Any = None):
+def get_correctly_typed_value(
+    logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(), default: Any = None
+):
     if not value:
         return default
     if value == SPDX_NAMESPACE.noassertion or value.toPython() == SPDX_NO_ASSERTION_STRING:
@@ -93,5 +107,5 @@ def parse_spdx_id(resource: URIRef, doc_namespace: str, graph: Graph) -> Optiona
 # to write our own helper method to delete prefixes.
 def remove_prefix(string: str, prefix: str) -> str:
     if string.startswith(prefix):
-        return string[len(prefix):]
+        return string[len(prefix) :]
     return string

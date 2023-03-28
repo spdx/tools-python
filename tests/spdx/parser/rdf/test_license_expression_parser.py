@@ -31,17 +31,25 @@ def test_license_expression_parser():
 
 def test_license_expression_parser_with_coupled_licenses():
     doc = rdf_parser.parse_from_file(
-        os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXRdfExample-v2.3.spdx.rdf.xml"))
+        os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXRdfExample-v2.3.spdx.rdf.xml")
+    )
 
     packages_by_spdx_id = {package.spdx_id: package for package in doc.packages}
     files_by_spdx_id = {file.spdx_id: file for file in doc.files}
 
     assert packages_by_spdx_id["SPDXRef-Package"].license_declared == get_spdx_licensing().parse(
-        "LGPL-2.0-only AND LicenseRef-3")
+        "LGPL-2.0-only AND LicenseRef-3"
+    )
     assert packages_by_spdx_id["SPDXRef-Package"].license_concluded == get_spdx_licensing().parse(
-        "LGPL-2.0-only OR LicenseRef-3")
-    TestCase().assertCountEqual(packages_by_spdx_id["SPDXRef-Package"].license_info_from_files,
-                                [get_spdx_licensing().parse("GPL-2.0"), get_spdx_licensing().parse("LicenseRef-1"),
-                                 get_spdx_licensing().parse("LicenseRef-2")])
+        "LGPL-2.0-only OR LicenseRef-3"
+    )
+    TestCase().assertCountEqual(
+        packages_by_spdx_id["SPDXRef-Package"].license_info_from_files,
+        [
+            get_spdx_licensing().parse("GPL-2.0"),
+            get_spdx_licensing().parse("LicenseRef-1"),
+            get_spdx_licensing().parse("LicenseRef-2"),
+        ],
+    )
 
     assert files_by_spdx_id["SPDXRef-JenaLib"].license_concluded == get_spdx_licensing().parse("LicenseRef-1")

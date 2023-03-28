@@ -19,11 +19,15 @@ from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 
 
-@pytest.mark.parametrize("license_expression_str, expected_license",
-                         [("First License", get_spdx_licensing().parse("First License")),
-                          ("Second License", get_spdx_licensing().parse("Second License")),
-                          ("NOASSERTION", SpdxNoAssertion()),
-                          ("NONE", SpdxNone())])
+@pytest.mark.parametrize(
+    "license_expression_str, expected_license",
+    [
+        ("First License", get_spdx_licensing().parse("First License")),
+        ("Second License", get_spdx_licensing().parse("Second License")),
+        ("NOASSERTION", SpdxNoAssertion()),
+        ("NONE", SpdxNone()),
+    ],
+)
 def test_parse_license_expression(license_expression_str, expected_license):
     license_expression_parser = LicenseExpressionParser()
     license_expression = license_expression_parser.parse_license_expression(license_expression_str)
@@ -31,10 +35,12 @@ def test_parse_license_expression(license_expression_str, expected_license):
     assert license_expression == expected_license
 
 
-@pytest.mark.parametrize("invalid_license_expression,expected_message",
-                         [(56,
-                           ["Error parsing LicenseExpression: expression must be a string and not: <class 'int'>: 56"]),
-                          ])
+@pytest.mark.parametrize(
+    "invalid_license_expression,expected_message",
+    [
+        (56, ["Error parsing LicenseExpression: expression must be a string and not: <class 'int'>: 56"]),
+    ],
+)
 def test_parse_invalid_license_expression(invalid_license_expression, expected_message):
     license_expression_parser = LicenseExpressionParser()
 

@@ -41,12 +41,16 @@ from tests.spdx.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
-@mock.patch('spdx.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
-@mock.patch('spdx.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
-@mock.patch('spdx.jsonschema.package_verification_code_converter.PackageVerificationCodeConverter', autospec=True)
-@mock.patch('spdx.jsonschema.external_package_ref_converter.ExternalPackageRefConverter', autospec=True)
-def converter(package_ref_converter_mock: MagicMock, verification_code_converter_mock: MagicMock,
-              annotation_converter_mock: MagicMock, checksum_converter_mock: MagicMock) -> PackageConverter:
+@mock.patch("spdx.jsonschema.checksum_converter.ChecksumConverter", autospec=True)
+@mock.patch("spdx.jsonschema.annotation_converter.AnnotationConverter", autospec=True)
+@mock.patch("spdx.jsonschema.package_verification_code_converter.PackageVerificationCodeConverter", autospec=True)
+@mock.patch("spdx.jsonschema.external_package_ref_converter.ExternalPackageRefConverter", autospec=True)
+def converter(
+    package_ref_converter_mock: MagicMock,
+    verification_code_converter_mock: MagicMock,
+    annotation_converter_mock: MagicMock,
+    checksum_converter_mock: MagicMock,
+) -> PackageConverter:
     converter = PackageConverter()
     converter.checksum_converter = checksum_converter_mock()
     converter.annotation_converter = annotation_converter_mock()
@@ -55,37 +59,42 @@ def converter(package_ref_converter_mock: MagicMock, verification_code_converter
     return converter
 
 
-@pytest.mark.parametrize("external_package_ref_property,expected",
-                         [(PackageProperty.SPDX_ID, "SPDXID"),
-                          (PackageProperty.ANNOTATIONS, "annotations"),
-                          (PackageProperty.ATTRIBUTION_TEXTS, "attributionTexts"),
-                          (PackageProperty.BUILT_DATE, "builtDate"),
-                          (PackageProperty.CHECKSUMS, "checksums"),
-                          (PackageProperty.COMMENT, "comment"),
-                          (PackageProperty.COPYRIGHT_TEXT, "copyrightText"),
-                          (PackageProperty.DESCRIPTION, "description"),
-                          (PackageProperty.DOWNLOAD_LOCATION, "downloadLocation"),
-                          (PackageProperty.EXTERNAL_REFS, "externalRefs"),
-                          (PackageProperty.FILES_ANALYZED, "filesAnalyzed"),
-                          (PackageProperty.HAS_FILES, "hasFiles"),
-                          (PackageProperty.HOMEPAGE, "homepage"),
-                          (PackageProperty.LICENSE_COMMENTS, "licenseComments"),
-                          (PackageProperty.LICENSE_CONCLUDED, "licenseConcluded"),
-                          (PackageProperty.LICENSE_DECLARED, "licenseDeclared"),
-                          (PackageProperty.LICENSE_INFO_FROM_FILES, "licenseInfoFromFiles"),
-                          (PackageProperty.NAME, "name"),
-                          (PackageProperty.ORIGINATOR, "originator"),
-                          (PackageProperty.PACKAGE_FILE_NAME, "packageFileName"),
-                          (PackageProperty.PACKAGE_VERIFICATION_CODE, "packageVerificationCode"),
-                          (PackageProperty.PRIMARY_PACKAGE_PURPOSE, "primaryPackagePurpose"),
-                          (PackageProperty.RELEASE_DATE, "releaseDate"),
-                          (PackageProperty.SOURCE_INFO, "sourceInfo"),
-                          (PackageProperty.SUMMARY, "summary"),
-                          (PackageProperty.SUPPLIER, "supplier"),
-                          (PackageProperty.VALID_UNTIL_DATE, "validUntilDate"),
-                          (PackageProperty.VERSION_INFO, "versionInfo")])
-def test_json_property_names(converter: PackageConverter,
-                             external_package_ref_property: PackageProperty, expected: str):
+@pytest.mark.parametrize(
+    "external_package_ref_property,expected",
+    [
+        (PackageProperty.SPDX_ID, "SPDXID"),
+        (PackageProperty.ANNOTATIONS, "annotations"),
+        (PackageProperty.ATTRIBUTION_TEXTS, "attributionTexts"),
+        (PackageProperty.BUILT_DATE, "builtDate"),
+        (PackageProperty.CHECKSUMS, "checksums"),
+        (PackageProperty.COMMENT, "comment"),
+        (PackageProperty.COPYRIGHT_TEXT, "copyrightText"),
+        (PackageProperty.DESCRIPTION, "description"),
+        (PackageProperty.DOWNLOAD_LOCATION, "downloadLocation"),
+        (PackageProperty.EXTERNAL_REFS, "externalRefs"),
+        (PackageProperty.FILES_ANALYZED, "filesAnalyzed"),
+        (PackageProperty.HAS_FILES, "hasFiles"),
+        (PackageProperty.HOMEPAGE, "homepage"),
+        (PackageProperty.LICENSE_COMMENTS, "licenseComments"),
+        (PackageProperty.LICENSE_CONCLUDED, "licenseConcluded"),
+        (PackageProperty.LICENSE_DECLARED, "licenseDeclared"),
+        (PackageProperty.LICENSE_INFO_FROM_FILES, "licenseInfoFromFiles"),
+        (PackageProperty.NAME, "name"),
+        (PackageProperty.ORIGINATOR, "originator"),
+        (PackageProperty.PACKAGE_FILE_NAME, "packageFileName"),
+        (PackageProperty.PACKAGE_VERIFICATION_CODE, "packageVerificationCode"),
+        (PackageProperty.PRIMARY_PACKAGE_PURPOSE, "primaryPackagePurpose"),
+        (PackageProperty.RELEASE_DATE, "releaseDate"),
+        (PackageProperty.SOURCE_INFO, "sourceInfo"),
+        (PackageProperty.SUMMARY, "summary"),
+        (PackageProperty.SUPPLIER, "supplier"),
+        (PackageProperty.VALID_UNTIL_DATE, "validUntilDate"),
+        (PackageProperty.VERSION_INFO, "versionInfo"),
+    ],
+)
+def test_json_property_names(
+    converter: PackageConverter, external_package_ref_property: PackageProperty, expected: str
+):
     assert converter.json_property_name(external_package_ref_property) == expected
 
 
@@ -102,24 +111,42 @@ def test_successful_conversion(converter: PackageConverter):
     converter.annotation_converter.convert.return_value = "mock_converted_annotation"
     converter.package_verification_code_converter.convert.return_value = "mock_converted_verification_code"
     converter.external_package_ref_converter.convert.return_value = "mock_package_ref"
-    package = Package(spdx_id="packageId", name="name", download_location="downloadLocation", version="version",
-                      file_name="fileName", supplier=Actor(ActorType.PERSON, "supplierName"),
-                      originator=Actor(ActorType.PERSON, "originatorName"), files_analyzed=True,
-                      verification_code=PackageVerificationCode("value"),
-                      checksums=[Checksum(ChecksumAlgorithm.SHA1, "sha1"),
-                                 Checksum(ChecksumAlgorithm.BLAKE2B_256, "blake")], homepage="homepage",
-                      source_info="sourceInfo", license_concluded=Licensing().parse("MIT and GPL-2.0"),
-                      license_info_from_files=[Licensing().parse("MIT"),
-                                               Licensing().parse("GPL-2.0")],
-                      license_declared=Licensing().parse("MIT or GPL-2.0 "), license_comment="licenseComment",
-                      copyright_text="copyrightText", summary="summary", description="description", comment="comment",
-                      external_references=[external_package_ref_fixture()],
-                      attribution_texts=["attributionText1", "attributionText2"],
-                      primary_package_purpose=PackagePurpose.APPLICATION, release_date=datetime(2022, 12, 1),
-                      built_date=datetime(2022, 12, 2), valid_until_date=datetime(2022, 12, 3))
+    package = Package(
+        spdx_id="packageId",
+        name="name",
+        download_location="downloadLocation",
+        version="version",
+        file_name="fileName",
+        supplier=Actor(ActorType.PERSON, "supplierName"),
+        originator=Actor(ActorType.PERSON, "originatorName"),
+        files_analyzed=True,
+        verification_code=PackageVerificationCode("value"),
+        checksums=[Checksum(ChecksumAlgorithm.SHA1, "sha1"), Checksum(ChecksumAlgorithm.BLAKE2B_256, "blake")],
+        homepage="homepage",
+        source_info="sourceInfo",
+        license_concluded=Licensing().parse("MIT and GPL-2.0"),
+        license_info_from_files=[Licensing().parse("MIT"), Licensing().parse("GPL-2.0")],
+        license_declared=Licensing().parse("MIT or GPL-2.0 "),
+        license_comment="licenseComment",
+        copyright_text="copyrightText",
+        summary="summary",
+        description="description",
+        comment="comment",
+        external_references=[external_package_ref_fixture()],
+        attribution_texts=["attributionText1", "attributionText2"],
+        primary_package_purpose=PackagePurpose.APPLICATION,
+        release_date=datetime(2022, 12, 1),
+        built_date=datetime(2022, 12, 2),
+        valid_until_date=datetime(2022, 12, 3),
+    )
 
-    annotation = Annotation(package.spdx_id, AnnotationType.REVIEW, Actor(ActorType.TOOL, "toolName"),
-                            datetime(2022, 12, 5), "review comment")
+    annotation = Annotation(
+        package.spdx_id,
+        AnnotationType.REVIEW,
+        Actor(ActorType.TOOL, "toolName"),
+        datetime(2022, 12, 5),
+        "review comment",
+    )
     document = Document(creation_info_fixture(), packages=[package], annotations=[annotation])
 
     converted_dict = converter.convert(package, document)
@@ -136,7 +163,10 @@ def test_successful_conversion(converter: PackageConverter):
         converter.json_property_name(PackageProperty.ORIGINATOR): "Person: originatorName",
         converter.json_property_name(PackageProperty.FILES_ANALYZED): True,
         converter.json_property_name(PackageProperty.PACKAGE_VERIFICATION_CODE): "mock_converted_verification_code",
-        converter.json_property_name(PackageProperty.CHECKSUMS): ["mock_converted_checksum", "mock_converted_checksum"],
+        converter.json_property_name(PackageProperty.CHECKSUMS): [
+            "mock_converted_checksum",
+            "mock_converted_checksum",
+        ],
         converter.json_property_name(PackageProperty.HOMEPAGE): "homepage",
         converter.json_property_name(PackageProperty.SOURCE_INFO): "sourceInfo",
         converter.json_property_name(PackageProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0",
@@ -151,17 +181,35 @@ def test_successful_conversion(converter: PackageConverter):
         converter.json_property_name(PackageProperty.PRIMARY_PACKAGE_PURPOSE): "APPLICATION",
         converter.json_property_name(PackageProperty.RELEASE_DATE): "2022-12-01T00:00:00Z",
         converter.json_property_name(PackageProperty.BUILT_DATE): "2022-12-02T00:00:00Z",
-        converter.json_property_name(PackageProperty.VALID_UNTIL_DATE): "2022-12-03T00:00:00Z"
+        converter.json_property_name(PackageProperty.VALID_UNTIL_DATE): "2022-12-03T00:00:00Z",
     }
 
 
 def test_null_values(converter: PackageConverter):
-    package = package_fixture(built_date=None, release_date=None, valid_until_date=None, homepage=None,
-                              license_concluded=None, license_declared=None, originator=None, verification_code=None,
-                              primary_package_purpose=None, supplier=None, version=None, file_name=None,
-                              source_info=None, license_comment=None, copyright_text=None, summary=None,
-                              description=None, comment=None, attribution_texts=[], checksums=[],
-                              external_references=[], license_info_from_files=[])
+    package = package_fixture(
+        built_date=None,
+        release_date=None,
+        valid_until_date=None,
+        homepage=None,
+        license_concluded=None,
+        license_declared=None,
+        originator=None,
+        verification_code=None,
+        primary_package_purpose=None,
+        supplier=None,
+        version=None,
+        file_name=None,
+        source_info=None,
+        license_comment=None,
+        copyright_text=None,
+        summary=None,
+        description=None,
+        comment=None,
+        attribution_texts=[],
+        checksums=[],
+        external_references=[],
+        license_info_from_files=[],
+    )
 
     document = Document(creation_info_fixture(), packages=[package])
 
@@ -194,10 +242,16 @@ def test_null_values(converter: PackageConverter):
 
 
 def test_spdx_no_assertion(converter: PackageConverter):
-    package = package_fixture(download_location=SpdxNoAssertion(), supplier=SpdxNoAssertion(),
-                              originator=SpdxNoAssertion(), homepage=SpdxNoAssertion(),
-                              license_concluded=SpdxNoAssertion(), license_info_from_files=[SpdxNoAssertion()],
-                              license_declared=SpdxNoAssertion(), copyright_text=SpdxNoAssertion())
+    package = package_fixture(
+        download_location=SpdxNoAssertion(),
+        supplier=SpdxNoAssertion(),
+        originator=SpdxNoAssertion(),
+        homepage=SpdxNoAssertion(),
+        license_concluded=SpdxNoAssertion(),
+        license_info_from_files=[SpdxNoAssertion()],
+        license_declared=SpdxNoAssertion(),
+        copyright_text=SpdxNoAssertion(),
+    )
 
     document = Document(creation_info_fixture(), packages=[package])
 
@@ -208,16 +262,22 @@ def test_spdx_no_assertion(converter: PackageConverter):
     assert converted_dict[converter.json_property_name(PackageProperty.ORIGINATOR)] == SPDX_NO_ASSERTION_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.HOMEPAGE)] == SPDX_NO_ASSERTION_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_CONCLUDED)] == SPDX_NO_ASSERTION_STRING
-    assert converted_dict[
-               converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == [SPDX_NO_ASSERTION_STRING]
+    assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES)] == [
+        SPDX_NO_ASSERTION_STRING
+    ]
     assert converted_dict[converter.json_property_name(PackageProperty.LICENSE_DECLARED)] == SPDX_NO_ASSERTION_STRING
     assert converted_dict[converter.json_property_name(PackageProperty.COPYRIGHT_TEXT)] == SPDX_NO_ASSERTION_STRING
 
 
 def test_spdx_none(converter: PackageConverter):
-    package = package_fixture(download_location=SpdxNone(), homepage=SpdxNone(),
-                              license_concluded=SpdxNone(), license_info_from_files=[SpdxNone()],
-                              license_declared=SpdxNone(), copyright_text=SpdxNone())
+    package = package_fixture(
+        download_location=SpdxNone(),
+        homepage=SpdxNone(),
+        license_concluded=SpdxNone(),
+        license_info_from_files=[SpdxNone()],
+        license_declared=SpdxNone(),
+        copyright_text=SpdxNone(),
+    )
 
     document = Document(creation_info_fixture(), packages=[package])
 
@@ -240,8 +300,14 @@ def test_package_annotations(converter: PackageConverter):
     file_annotation = annotation_fixture(spdx_id=document.files[0].spdx_id)
     snippet_annotation = annotation_fixture(spdx_id=document.snippets[0].spdx_id)
     other_annotation = annotation_fixture(spdx_id="otherId")
-    annotations = [first_package_annotation, second_package_annotation, document_annotation, file_annotation,
-                   snippet_annotation, other_annotation]
+    annotations = [
+        first_package_annotation,
+        second_package_annotation,
+        document_annotation,
+        file_annotation,
+        snippet_annotation,
+        other_annotation,
+    ]
     document.annotations = annotations
 
     # Weird type hint to make warnings about unresolved references from the mock class disappear
@@ -250,8 +316,9 @@ def test_package_annotations(converter: PackageConverter):
 
     converted_dict = converter.convert(package, document)
 
-    assert_mock_method_called_with_arguments(annotation_converter, "convert", first_package_annotation,
-                                             second_package_annotation)
+    assert_mock_method_called_with_arguments(
+        annotation_converter, "convert", first_package_annotation, second_package_annotation
+    )
     converted_file_annotations = converted_dict.get(converter.json_property_name(PackageProperty.ANNOTATIONS))
     assert converted_file_annotations == ["mock_converted_annotation", "mock_converted_annotation"]
 
@@ -262,23 +329,35 @@ def test_has_files(converter: PackageConverter):
     second_contained_file = file_fixture(spdx_id="secondFileId")
     non_contained_file = file_fixture(spdx_id="otherFileId")
     snippet = snippet_fixture()
-    document = document_fixture(packages=[package],
-                                files=[first_contained_file, second_contained_file, non_contained_file],
-                                snippets=[snippet])
-    package_contains_file_relationship = relationship_fixture(spdx_element_id=package.spdx_id,
-                                                              relationship_type=RelationshipType.CONTAINS,
-                                                              related_spdx_element_id=first_contained_file.spdx_id)
-    file_contained_in_package_relationship = relationship_fixture(spdx_element_id=second_contained_file.spdx_id,
-                                                                  relationship_type=RelationshipType.CONTAINED_BY,
-                                                                  related_spdx_element_id=package.spdx_id)
-    package_contains_snippet_relationship = relationship_fixture(spdx_element_id=package.spdx_id,
-                                                                 relationship_type=RelationshipType.CONTAINS,
-                                                                 related_spdx_element_id=snippet.spdx_id)
-    package_describes_file_relationship = relationship_fixture(spdx_element_id=package.spdx_id,
-                                                               relationship_type=RelationshipType.DESCRIBES,
-                                                               related_spdx_element_id=non_contained_file.spdx_id)
-    document.relationships = [package_contains_file_relationship, file_contained_in_package_relationship,
-                              package_contains_snippet_relationship, package_describes_file_relationship]
+    document = document_fixture(
+        packages=[package], files=[first_contained_file, second_contained_file, non_contained_file], snippets=[snippet]
+    )
+    package_contains_file_relationship = relationship_fixture(
+        spdx_element_id=package.spdx_id,
+        relationship_type=RelationshipType.CONTAINS,
+        related_spdx_element_id=first_contained_file.spdx_id,
+    )
+    file_contained_in_package_relationship = relationship_fixture(
+        spdx_element_id=second_contained_file.spdx_id,
+        relationship_type=RelationshipType.CONTAINED_BY,
+        related_spdx_element_id=package.spdx_id,
+    )
+    package_contains_snippet_relationship = relationship_fixture(
+        spdx_element_id=package.spdx_id,
+        relationship_type=RelationshipType.CONTAINS,
+        related_spdx_element_id=snippet.spdx_id,
+    )
+    package_describes_file_relationship = relationship_fixture(
+        spdx_element_id=package.spdx_id,
+        relationship_type=RelationshipType.DESCRIBES,
+        related_spdx_element_id=non_contained_file.spdx_id,
+    )
+    document.relationships = [
+        package_contains_file_relationship,
+        file_contained_in_package_relationship,
+        package_contains_snippet_relationship,
+        package_describes_file_relationship,
+    ]
 
     converted_dict = converter.convert(package, document)
 

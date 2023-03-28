@@ -25,7 +25,9 @@ def write_separator(out: TextIO):
     out.write("\n")
 
 
-def write_value(tag: str, value: Optional[Union[bool, str, SpdxNone, SpdxNoAssertion, LicenseExpression]], out: TextIO):
+def write_value(
+    tag: str, value: Optional[Union[bool, str, SpdxNone, SpdxNoAssertion, LicenseExpression]], out: TextIO
+):
     if value is not None:
         out.write(f"{tag}: {value}\n")
 
@@ -51,8 +53,12 @@ def write_optional_heading(optional_field: Any, heading: str, text_output: TextI
         text_output.write(heading)
 
 
-def write_list_of_elements(list_of_elements: List[Any], write_method: Callable[[Any, TextIO], None],
-                           text_output: TextIO, with_separator: bool = False):
+def write_list_of_elements(
+    list_of_elements: List[Any],
+    write_method: Callable[[Any, TextIO], None],
+    text_output: TextIO,
+    with_separator: bool = False,
+):
     for element in list_of_elements:
         write_method(element, text_output)
         if with_separator:
@@ -66,25 +72,32 @@ def write_actor(tag: str, element_to_write: Optional[Union[Actor, SpdxNoAssertio
         write_value(tag, element_to_write, text_output)
 
 
-def scan_relationships(relationships: List[Relationship], packages: List[Package], files: List[File]) \
-    -> Tuple[List, Dict]:
+def scan_relationships(
+    relationships: List[Relationship], packages: List[Package], files: List[File]
+) -> Tuple[List, Dict]:
     contained_files_by_package_id = dict()
     relationships_to_write = []
     files_by_spdx_id = {file.spdx_id: file for file in files}
     packages_spdx_ids = [package.spdx_id for package in packages]
     for relationship in relationships:
-        if relationship.relationship_type == RelationshipType.CONTAINS and \
-            relationship.spdx_element_id in packages_spdx_ids and \
-            relationship.related_spdx_element_id in files_by_spdx_id.keys():
+        if (
+            relationship.relationship_type == RelationshipType.CONTAINS
+            and relationship.spdx_element_id in packages_spdx_ids
+            and relationship.related_spdx_element_id in files_by_spdx_id.keys()
+        ):
             contained_files_by_package_id.setdefault(relationship.spdx_element_id, []).append(
-                files_by_spdx_id[relationship.related_spdx_element_id])
+                files_by_spdx_id[relationship.related_spdx_element_id]
+            )
             if relationship.comment:
                 relationships_to_write.append(relationship)
-        elif relationship.relationship_type == RelationshipType.CONTAINED_BY and \
-            relationship.related_spdx_element_id in packages_spdx_ids and \
-            relationship.spdx_element_id in files_by_spdx_id:
+        elif (
+            relationship.relationship_type == RelationshipType.CONTAINED_BY
+            and relationship.related_spdx_element_id in packages_spdx_ids
+            and relationship.spdx_element_id in files_by_spdx_id
+        ):
             contained_files_by_package_id.setdefault(relationship.related_spdx_element_id, []).append(
-                files_by_spdx_id[relationship.spdx_element_id])
+                files_by_spdx_id[relationship.spdx_element_id]
+            )
             if relationship.comment:
                 relationships_to_write.append(relationship)
         else:

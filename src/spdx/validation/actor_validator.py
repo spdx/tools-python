@@ -30,7 +30,7 @@ def validate_actor(actor: Actor, parent_id: str) -> List[ValidationMessage]:
         validation_messages.append(
             ValidationMessage(
                 f"email must be None if actor_type is TOOL, but is: {actor.email}",
-                ValidationContext(parent_id=parent_id, element_type=SpdxElementType.ACTOR, full_element=actor)
+                ValidationContext(parent_id=parent_id, element_type=SpdxElementType.ACTOR, full_element=actor),
             )
         )
 

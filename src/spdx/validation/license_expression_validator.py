@@ -20,10 +20,11 @@ from spdx.validation.validation_message import SpdxElementType, ValidationContex
 
 
 def validate_license_expressions(
-    license_expressions: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]],
-        document: Document, parent_id: str) -> List[ValidationMessage]:
-    context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION,
-                                full_element=license_expressions)
+    license_expressions: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]], document: Document, parent_id: str
+) -> List[ValidationMessage]:
+    context = ValidationContext(
+        parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION, full_element=license_expressions
+    )
     validation_messages = []
 
     for license_expression in license_expressions:
@@ -33,14 +34,18 @@ def validate_license_expressions(
 
 
 def validate_license_expression(
-    license_expression: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]], document: Document,
-        parent_id: str, context: ValidationContext = None) -> List[ValidationMessage]:
+    license_expression: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]],
+    document: Document,
+    parent_id: str,
+    context: ValidationContext = None,
+) -> List[ValidationMessage]:
     if license_expression in [SpdxNoAssertion(), SpdxNone(), None]:
         return []
 
     if not context:
-        context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION,
-                                    full_element=license_expression)
+        context = ValidationContext(
+            parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION, full_element=license_expression
+        )
 
     validation_messages = []
     license_ref_ids: List[str] = [license_ref.license_id for license_ref in document.extracted_licensing_info]
@@ -50,7 +55,8 @@ def validate_license_expression(
             validation_messages.append(
                 ValidationMessage(
                     f"Unrecognized license reference: {non_spdx_token}. license_expression must only use IDs from the license list or extracted licensing info, but is: {license_expression}",
-                    context)
+                    context,
+                )
             )
 
     try:
@@ -58,11 +64,7 @@ def validate_license_expression(
     except ExpressionParseError as err:
         # This error is raised when an exception symbol is used as a license symbol and vice versa.
         # So far, it only catches the first such error in the provided string.
-        validation_messages.append(
-            ValidationMessage(
-                f"{err}. for license_expression: {license_expression}",
-                context)
-        )
+        validation_messages.append(ValidationMessage(f"{err}. for license_expression: {license_expression}", context))
     except ExpressionError:
         # This error is raised for invalid symbols within the license_expression, but it provides only a string of these.
         # On the other hand, get_spdx_licensing().validate() gives an actual list of invalid symbols, so this is handled above.

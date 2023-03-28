@@ -48,17 +48,18 @@ def validate_checksums(checksums: List[Checksum], parent_id: str, spdx_version: 
 def validate_checksum(checksum: Checksum, parent_id: str, spdx_version: str) -> List[ValidationMessage]:
     validation_messages = []
     algorithm = checksum.algorithm
-    context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.CHECKSUM,
-                                full_element=checksum)
+    context = ValidationContext(parent_id=parent_id, element_type=SpdxElementType.CHECKSUM, full_element=checksum)
 
-    if spdx_version == "SPDX-2.2" and algorithm in [ChecksumAlgorithm.SHA3_512,
-                                                    ChecksumAlgorithm.SHA3_384,
-                                                    ChecksumAlgorithm.SHA3_256,
-                                                    ChecksumAlgorithm.BLAKE3,
-                                                    ChecksumAlgorithm.BLAKE2B_512,
-                                                    ChecksumAlgorithm.BLAKE2B_384,
-                                                    ChecksumAlgorithm.BLAKE2B_256,
-                                                    ChecksumAlgorithm.ADLER32]:
+    if spdx_version == "SPDX-2.2" and algorithm in [
+        ChecksumAlgorithm.SHA3_512,
+        ChecksumAlgorithm.SHA3_384,
+        ChecksumAlgorithm.SHA3_256,
+        ChecksumAlgorithm.BLAKE3,
+        ChecksumAlgorithm.BLAKE2B_512,
+        ChecksumAlgorithm.BLAKE2B_384,
+        ChecksumAlgorithm.BLAKE2B_256,
+        ChecksumAlgorithm.ADLER32,
+    ]:
         return [ValidationMessage(f"{checksum.algorithm.name} is not supported in SPDX-2.2", context)]
 
     if not re.match("^[0-9a-f]{" + algorithm_length[algorithm] + "}$", checksum.value):
@@ -71,7 +72,8 @@ def validate_checksum(checksum: Checksum, parent_id: str, spdx_version: str) -> 
         validation_messages.append(
             ValidationMessage(
                 f"value of {algorithm} must consist of {length} lowercase hexadecimal digits, but is: {checksum.value} (length: {len(checksum.value)} digits)",
-                context)
+                context,
+            )
         )
 
     return validation_messages

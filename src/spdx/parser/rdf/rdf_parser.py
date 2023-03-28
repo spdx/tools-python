@@ -44,22 +44,25 @@ def translate_graph_to_document(graph: Graph) -> Document:
 
     parsed_fields["creation_info"] = creation_info
 
-    for element, triple, parsing_method in [("packages", (None, RDF.type, SPDX_NAMESPACE.Package), parse_package),
-                                            ("files", (None, RDF.type, SPDX_NAMESPACE.File), parse_file),
-                                            ("snippets", (None, RDF.type, SPDX_NAMESPACE.Snippet), parse_snippet)]:
+    for element, triple, parsing_method in [
+        ("packages", (None, RDF.type, SPDX_NAMESPACE.Package), parse_package),
+        ("files", (None, RDF.type, SPDX_NAMESPACE.File), parse_file),
+        ("snippets", (None, RDF.type, SPDX_NAMESPACE.Snippet), parse_snippet),
+    ]:
         elements = []
-        for (element_node, _, _) in graph.triples(triple):
+        for element_node, _, _ in graph.triples(triple):
             try:
                 elements.append(parsing_method(element_node, graph, creation_info.document_namespace))
             except SPDXParsingError as err:
                 logger.extend(err.get_messages())
         parsed_fields[element] = elements
 
-    for element, triple, parsing_method in [("annotations", (None, SPDX_NAMESPACE.annotation, None), parse_annotation),
-                                            ("relationships", (None, SPDX_NAMESPACE.relationship, None),
-                                             parse_relationship)]:
+    for element, triple, parsing_method in [
+        ("annotations", (None, SPDX_NAMESPACE.annotation, None), parse_annotation),
+        ("relationships", (None, SPDX_NAMESPACE.relationship, None), parse_relationship),
+    ]:
         elements = []
-        for (parent_node, _, element_node) in graph.triples(triple):
+        for parent_node, _, element_node in graph.triples(triple):
             try:
                 elements.append(parsing_method(element_node, graph, parent_node, creation_info.document_namespace))
             except SPDXParsingError as err:
@@ -67,7 +70,7 @@ def translate_graph_to_document(graph: Graph) -> Document:
         parsed_fields[element] = elements
 
     extracted_licensing_infos = []
-    for (_, _, extracted_licensing_info_node) in graph.triples((None, SPDX_NAMESPACE.hasExtractedLicensingInfo, None)):
+    for _, _, extracted_licensing_info_node in graph.triples((None, SPDX_NAMESPACE.hasExtractedLicensingInfo, None)):
         try:
             extracted_licensing_infos.append(parse_extracted_licensing_info(extracted_licensing_info_node, graph))
         except SPDXParsingError as err:

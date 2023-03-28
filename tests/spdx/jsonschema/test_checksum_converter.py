@@ -20,8 +20,10 @@ def converter() -> ChecksumConverter:
     return ChecksumConverter()
 
 
-@pytest.mark.parametrize("checksum_property,expected", [(ChecksumProperty.ALGORITHM, "algorithm"),
-                                                        (ChecksumProperty.CHECKSUM_VALUE, "checksumValue")])
+@pytest.mark.parametrize(
+    "checksum_property,expected",
+    [(ChecksumProperty.ALGORITHM, "algorithm"), (ChecksumProperty.CHECKSUM_VALUE, "checksumValue")],
+)
 def test_json_property_names(converter: ChecksumConverter, checksum_property: ChecksumProperty, expected: str):
     assert converter.json_property_name(checksum_property) == expected
 
@@ -33,7 +35,7 @@ def test_successful_conversion(converter: ChecksumConverter):
 
     assert converted_dict == {
         converter.json_property_name(ChecksumProperty.ALGORITHM): "SHA1",
-        converter.json_property_name(ChecksumProperty.CHECKSUM_VALUE): "123"
+        converter.json_property_name(ChecksumProperty.CHECKSUM_VALUE): "123",
     }
 
 

@@ -34,8 +34,10 @@ def write_document_to_file(document: Document, file_name: str, validate: bool):
 
     graph = Graph()
     doc_namespace = document.creation_info.document_namespace
-    external_doc_ref_to_namespace: Dict[str, str] = {external_doc_ref.document_ref_id: external_doc_ref.document_uri for
-                                                     external_doc_ref in document.creation_info.external_document_refs}
+    external_doc_ref_to_namespace: Dict[str, str] = {
+        external_doc_ref.document_ref_id: external_doc_ref.document_uri
+        for external_doc_ref in document.creation_info.external_document_refs
+    }
     doc_node = add_creation_info_to_graph(document.creation_info, graph)
     for annotation in document.annotations:
         add_annotation_to_graph(annotation, graph, doc_namespace, external_doc_ref_to_namespace)

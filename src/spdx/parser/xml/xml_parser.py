@@ -40,8 +40,8 @@ LIST_LIKE_FIELDS = [
     "ranges",
     "licenseInfoInSnippets",
     "packageVerificationCodeExcludedFiles",
-    "attributionTexts"
-    ]
+    "attributionTexts",
+]
 
 
 def parse_from_file(file_name: str) -> Document:

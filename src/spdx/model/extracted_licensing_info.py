@@ -24,8 +24,13 @@ class ExtractedLicensingInfo:
     cross_references: List[str] = field(default_factory=list)
     comment: Optional[str] = None
 
-    def __init__(self, license_id: Optional[str] = None, extracted_text: Optional[str] = None,
-                 license_name: Optional[Union[str, SpdxNoAssertion]] = None, cross_references: List[str] = None,
-                 comment: Optional[str] = None):
+    def __init__(
+        self,
+        license_id: Optional[str] = None,
+        extracted_text: Optional[str] = None,
+        license_name: Optional[Union[str, SpdxNoAssertion]] = None,
+        cross_references: List[str] = None,
+        comment: Optional[str] = None,
+    ):
         cross_references = [] if cross_references is None else cross_references
         check_types_and_set_values(self, locals())

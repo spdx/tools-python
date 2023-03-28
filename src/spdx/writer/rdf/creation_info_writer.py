@@ -33,8 +33,9 @@ def add_creation_info_to_graph(creation_info: CreationInfo, graph: Graph):
     for creator in creation_info.creators:
         graph.add((creation_info_node, SPDX_NAMESPACE.creator, Literal(creator.to_serialized_string())))
 
-    add_optional_literal(creation_info.license_list_version, graph, creation_info_node,
-                         SPDX_NAMESPACE.licenseListVersion)
+    add_optional_literal(
+        creation_info.license_list_version, graph, creation_info_node, SPDX_NAMESPACE.licenseListVersion
+    )
     add_optional_literal(creation_info.creator_comment, graph, creation_info_node, RDFS.comment)
 
     graph.add((doc_node, SPDX_NAMESPACE.creationInfo, creation_info_node))

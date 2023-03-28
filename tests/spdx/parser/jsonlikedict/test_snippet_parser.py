@@ -29,35 +29,32 @@ def test_parse_snippet():
         "licenseConcluded": "GPL-2.0-only",
         "licenseInfoInSnippets": ["GPL-2.0-only", "NOASSERTION"],
         "name": "from linux kernel",
-        "ranges": [{
-            "endPointer": {
-                "offset": 420,
-                "reference": "SPDXRef-DoapSource"
+        "ranges": [
+            {
+                "endPointer": {"offset": 420, "reference": "SPDXRef-DoapSource"},
+                "startPointer": {"offset": 310, "reference": "SPDXRef-DoapSource"},
             },
-            "startPointer": {
-                "offset": 310,
-                "reference": "SPDXRef-DoapSource"
-            }
-        }, {
-            "endPointer": {
-                "lineNumber": 23,
-                "reference": "SPDXRef-DoapSource"
+            {
+                "endPointer": {"lineNumber": 23, "reference": "SPDXRef-DoapSource"},
+                "startPointer": {"lineNumber": 5, "reference": "SPDXRef-DoapSource"},
             },
-            "startPointer": {
-                "lineNumber": 5,
-                "reference": "SPDXRef-DoapSource"
-            }
-        }],
+        ],
         "snippetFromFile": "SPDXRef-DoapSource",
-        "attributionTexts": ["Some example attibution text."]
+        "attributionTexts": ["Some example attibution text."],
     }
     snippet = snippet_parser.parse_snippet(snippet_dict)
 
     assert snippet.spdx_id == "SPDXRef-Snippet"
     assert snippet.name == "from linux kernel"
-    assert snippet.comment == "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0."
+    assert (
+        snippet.comment
+        == "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0."
+    )
     assert snippet.copyright_text == "Copyright 2008-2010 John Smith"
-    assert snippet.license_comment == "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz."
+    assert (
+        snippet.license_comment
+        == "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz."
+    )
     assert snippet.byte_range == (310, 420)
     assert snippet.line_range == (5, 23)
     assert snippet.file_spdx_id == "SPDXRef-DoapSource"
@@ -68,17 +65,19 @@ def test_parse_snippet():
 
 def test_parse_incomplete_snippet():
     snippet_parser = SnippetParser()
-    incomplete_snippet_dict = {
-        "SPDXID": "SPDXRef-Snippet",
-        "file_spdx_id": "SPDXRef-File"
-    }
+    incomplete_snippet_dict = {"SPDXID": "SPDXRef-Snippet", "file_spdx_id": "SPDXRef-File"}
 
     with pytest.raises(SPDXParsingError) as err:
         snippet_parser.parse_snippet(incomplete_snippet_dict)
 
-    TestCase().assertCountEqual(err.value.get_messages(), [
-        "Error while constructing Snippet: ['SetterError Snippet: type of argument " '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError Snippet: type of argument "byte_range" must be a tuple; got NoneType '
-        "instead: None']"])
+    TestCase().assertCountEqual(
+        err.value.get_messages(),
+        [
+            "Error while constructing Snippet: ['SetterError Snippet: type of argument "
+            '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError Snippet: type of argument "byte_range" must be a tuple; got NoneType '
+            "instead: None']"
+        ],
+    )
 
 
 def test_parse_snippet_with_invalid_snippet_range():
@@ -88,25 +87,24 @@ def test_parse_snippet_with_invalid_snippet_range():
         "file_spdx_id": "SPDXRef-File",
         "ranges": [
             {
-                "endPointer": {
-                    "offset": 23,
-                    "reference": "SPDXRef-DoapSource"
-                },
-                "startPointer": {
-                    "offset": "310s",
-                    "reference": "SPDXRef-DoapSource"
-                }
-            }]
+                "endPointer": {"offset": 23, "reference": "SPDXRef-DoapSource"},
+                "startPointer": {"offset": "310s", "reference": "SPDXRef-DoapSource"},
+            }
+        ],
     }
 
     with pytest.raises(SPDXParsingError) as err:
         snippet_parser.parse_snippet(snippet_with_invalid_ranges_list)
 
-    TestCase().assertCountEqual(err.value.get_messages(),
-                                ["Error while constructing Snippet: ['SetterError Snippet: type of argument "
-                                 '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError '
-                                 'Snippet: type of argument "byte_range"[0] must be int; got str instead: '
-                                 "(\\'310s\\', 23)']"])
+    TestCase().assertCountEqual(
+        err.value.get_messages(),
+        [
+            "Error while constructing Snippet: ['SetterError Snippet: type of argument "
+            "\"file_spdx_id\" must be str; got NoneType instead: None', 'SetterError "
+            'Snippet: type of argument "byte_range"[0] must be int; got str instead: '
+            "(\\'310s\\', 23)']"
+        ],
+    )
 
 
 def test_parse_invalid_snippet_range():
@@ -114,29 +112,21 @@ def test_parse_invalid_snippet_range():
 
     ranges = [
         {
-            "endPointer": {
-                "lineNumber": 23,
-                "reference": "SPDXRef-DoapSource"
-            },
-            "startPointer": {
-                "offset": 310,
-                "reference": "SPDXRef-DoapSource"
-            }
-        }, {
-            "endPointer": {
-                "offset": 420,
-                "reference": "SPDXRef-DoapSource"
-            },
-            "startPointer": {
-                "lineNumber": 5,
-                "reference": "SPDXRef-DoapSource"
-            }
-        }
-
+            "endPointer": {"lineNumber": 23, "reference": "SPDXRef-DoapSource"},
+            "startPointer": {"offset": 310, "reference": "SPDXRef-DoapSource"},
+        },
+        {
+            "endPointer": {"offset": 420, "reference": "SPDXRef-DoapSource"},
+            "startPointer": {"lineNumber": 5, "reference": "SPDXRef-DoapSource"},
+        },
     ]
 
     with pytest.raises(SPDXParsingError) as err:
         snippet_parser.parse_ranges(ranges)
 
-    TestCase().assertCountEqual(err.value.get_messages(), [
-        "Error while parsing snippet ranges: ['Type of startpointer is not the same as type of endpointer.', 'Type of startpointer is not the same as type of endpointer.']"])
+    TestCase().assertCountEqual(
+        err.value.get_messages(),
+        [
+            "Error while parsing snippet ranges: ['Type of startpointer is not the same as type of endpointer.', 'Type of startpointer is not the same as type of endpointer.']"
+        ],
+    )

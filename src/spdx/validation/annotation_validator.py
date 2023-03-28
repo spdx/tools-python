@@ -28,8 +28,7 @@ def validate_annotations(annotations: List[Annotation], document: Document) -> L
 
 def validate_annotation(annotation: Annotation, document: Document) -> List[ValidationMessage]:
     validation_messages = []
-    context = ValidationContext(element_type=SpdxElementType.ANNOTATION,
-                                full_element=annotation)
+    context = ValidationContext(element_type=SpdxElementType.ANNOTATION, full_element=annotation)
 
     validation_messages.extend(validate_actor(annotation.annotator, "annotation"))
 
