@@ -19,10 +19,10 @@ from spdx3.model.tool import Tool
 
 def test_correct_initialization():
     agent = Tool("SPDXRef-Tool",
-                 CreationInformation(Version("3.0.0"), datetime(2023, 1, 1), ["SPDXRef-Agent"], ["core"], "CC0"))
+                 CreationInformation(Version("3.0.0"), datetime(2023, 1, 1), ["SPDXRef-Agent"], [], ["core"], "CC0"))
 
     assert agent.spdx_id == "SPDXRef-Tool"
-    assert agent.creation_info == CreationInformation(Version("3.0.0"), datetime(2023, 1, 1), ["SPDXRef-Agent"],
+    assert agent.creation_info == CreationInformation(Version("3.0.0"), datetime(2023, 1, 1), ["SPDXRef-Agent"], [],
                                                       ["core"], "CC0")
 
 
