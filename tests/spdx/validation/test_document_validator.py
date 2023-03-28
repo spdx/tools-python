@@ -60,7 +60,8 @@ def test_valid_document():
         (
             creation_info_fixture(spdx_version="SPDX-2.1"),
             "SPDX-2.1",
-            'only SPDX versions "SPDX-2.2" and "SPDX-2.3" are supported, but the document\'s spdx_version is: SPDX-2.1',
+            'only SPDX versions "SPDX-2.2" and "SPDX-2.3" are supported, but the document\'s '
+            "spdx_version is: SPDX-2.1",
         ),
     ],
 )
@@ -107,7 +108,8 @@ def test_document_does_not_describe_an_element():
 
     assert validation_messages == [
         ValidationMessage(
-            'there must be at least one relationship "SPDXRef-DOCUMENT DESCRIBES ..." or "... DESCRIBED_BY SPDXRef-DOCUMENT"',
+            'there must be at least one relationship "SPDXRef-DOCUMENT DESCRIBES ..." or "... DESCRIBED_BY '
+            'SPDXRef-DOCUMENT"',
             ValidationContext(spdx_id="SPDXRef-DOCUMENT", element_type=SpdxElementType.DOCUMENT),
         )
     ]
@@ -130,7 +132,8 @@ def test_duplicated_spdx_ids():
 
     assert validation_messages == [
         ValidationMessage(
-            "every spdx_id must be unique within the document, but found the following duplicates: ['SPDXRef-2', 'SPDXRef-3', 'SPDXRef-DOCUMENT']",
+            "every spdx_id must be unique within the document, but found the following duplicates: ['SPDXRef-2', "
+            "'SPDXRef-3', 'SPDXRef-DOCUMENT']",
             context,
         )
     ]

@@ -63,18 +63,21 @@ def validate_spdx_id(
     # # # invalid case # # #
     if len(split_id) > 2:
         return [
-            f"spdx_id must not contain more than one colon in order to separate the external document reference id from the internal SPDX id, but is: {spdx_id}"
+            f"spdx_id must not contain more than one colon in order to separate the external document reference id "
+            f"from the internal SPDX id, but is: {spdx_id}"
         ]
 
     # # # case with external document ref prefix # # #
     if len(split_id) == 2:
         if not is_valid_external_doc_ref_id(split_id[0]):
             validation_messages.append(
-                f'the external document reference part of spdx_id must only contain letters, numbers, ".", "-" and "+" and must begin with "DocumentRef-", but is: {split_id[0]}'
+                f'the external document reference part of spdx_id must only contain letters, numbers, ".", "-" and '
+                f'"+" and must begin with "DocumentRef-", but is: {split_id[0]}'
             )
         if not is_valid_internal_spdx_id(split_id[1]):
             validation_messages.append(
-                f'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: {split_id[1]}'
+                f'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin '
+                f'with "SPDXRef-", but is: {split_id[1]}'
             )
         if not is_external_doc_ref_present_in_document(split_id[0], document):
             validation_messages.append(
@@ -86,7 +89,8 @@ def validate_spdx_id(
     # # # "normal" case # # #
     if not is_valid_internal_spdx_id(spdx_id):
         validation_messages.append(
-            f'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: {spdx_id}'
+            f'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: '
+            f"{spdx_id}"
         )
 
     if check_document:

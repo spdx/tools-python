@@ -22,9 +22,9 @@ def test_parse_extracted_licensing_info():
     extracted_licensing_info_str = "\n".join(
         [
             "LicenseID: LicenseRef-Beerware-4.2",
-            'ExtractedText: <text>"THE BEER-WARE LICENSE" (Revision 42): phk@FreeBSD.ORG wrote this file. As long as you '
-            "retain this notice you can do whatever you want with this stuff. If we meet some day, and you think this "
-            "stuff is worth it, you can buy me a beer in return Poul-Henning Kamp</text>"
+            'ExtractedText: <text>"THE BEER-WARE LICENSE" (Revision 42): phk@FreeBSD.ORG wrote this file. As long as'
+            " you retain this notice you can do whatever you want with this stuff. If we meet some day, and you think "
+            "this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp</text>",
             "LicenseName: Beer-Ware License (Version 42)",
             "LicenseCrossReference:  http://people.freebsd.org/~phk/",
             "LicenseCrossReference:  http://another.cross.reference/",
@@ -55,8 +55,8 @@ def test_parse_invalid_extracted_licensing_info():
     extracted_licensing_info_str = "\n".join(
         [
             'ExtractedText: <text>"THE BEER-WARE LICENSE" (Revision 42): phk@FreeBSD.ORG wrote this file. '
-            "As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, and you "
-            "think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp</text>",
+            "As long as you retain this notice you can do whatever you want with this stuff. If we meet some day, "
+            "and you think this stuff is worth it, you can buy me a beer in return Poul-Henning Kamp</text>",
             "LicenseName: Beer-Ware License (Version 42)",
             "LicenseCrossReference:  http://people.freebsd.org/~phk/",
             "LicenseComment: The beerware license has a couple of other standard variants.",

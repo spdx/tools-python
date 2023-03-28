@@ -25,7 +25,8 @@ from tests.spdx.fixtures import actor_fixture, creation_info_fixture
                 call("DocumentComment: documentComment\n"),
                 call("\n## External Document References\n"),
                 call(
-                    "ExternalDocumentRef: DocumentRef-external https://namespace.com SHA1: 71c4025dd9897b364f3ebbb42c484ff43d00791c\n"
+                    "ExternalDocumentRef: DocumentRef-external https://namespace.com "
+                    "SHA1: 71c4025dd9897b364f3ebbb42c484ff43d00791c\n"
                 ),
                 call("\n"),
                 call("## Creation Information\n"),

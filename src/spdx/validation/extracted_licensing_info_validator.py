@@ -37,7 +37,8 @@ def validate_extracted_licensing_info(extracted_licensing_infos: ExtractedLicens
     if license_id and not re.match(r"^LicenseRef-[\da-zA-Z.-]+$", license_id):
         validation_messages.append(
             ValidationMessage(
-                f'license_id must only contain letters, numbers, "." and "-" and must begin with "LicenseRef-", but is: {license_id}',
+                f'license_id must only contain letters, numbers, "." and "-" and must begin with "LicenseRef-", '
+                f"but is: {license_id}",
                 context,
             )
         )

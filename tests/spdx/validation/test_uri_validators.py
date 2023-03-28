@@ -131,7 +131,8 @@ def test_invalid_uri(input_value):
 
 @pytest.mark.parametrize("input_value", ["://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82..."])
 @pytest.mark.skip(
-    "validate_uri() seems to invalidate URIs without scheme, so it does not run into this case. But I'm not sure yet if this covers all scheme-less examples."
+    "validate_uri() seems to invalidate URIs without scheme, so it does not run into this case. But I'm not sure yet "
+    "if this covers all scheme-less examples."
     "https://github.com/spdx/tools-python/issues/377"
 )
 def test_uri_without_scheme(input_value):

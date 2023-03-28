@@ -49,6 +49,7 @@ def test_parse_incomplete_checksum():
     TestCase().assertCountEqual(
         err.value.get_messages(),
         [
-            "Error while constructing Checksum: ['SetterError Checksum: type of argument \"value\" must be str; got NoneType instead: None']"
+            'Error while constructing Checksum: [\'SetterError Checksum: type of argument "value" must be str; '
+            "got NoneType instead: None']"
         ],
     )

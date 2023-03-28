@@ -57,7 +57,8 @@ def test_parse_annotation():
         ),
         (
             "Annotator: Jane Doe()\nAnnotationDate: 201001-29T18:30:22Z\n"
-            "AnnotationComment: <text>Document level annotation</text>\nAnnotationType: OTHER\nSPDXREF: SPDXRef-DOCUMENT",
+            "AnnotationComment: <text>Document level annotation</text>\nAnnotationType: OTHER\n"
+            "SPDXREF: SPDXRef-DOCUMENT",
             "Error while parsing Annotation: ['Error while parsing Annotator: Token did "
             "not match specified grammar rule. Line: 1', 'Error while parsing "
             "AnnotationDate: Token did not match specified grammar rule. Line: 2']",

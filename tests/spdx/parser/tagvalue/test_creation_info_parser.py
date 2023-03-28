@@ -28,7 +28,9 @@ DOCUMENT_STR = "\n".join(
         "SPDXID: SPDXRef-DOCUMENT",
         "DocumentComment: <text>Sample Comment</text>",
         "DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
-        "ExternalDocumentRef: DocumentRef-spdx-tool-1.2 http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+        "ExternalDocumentRef: DocumentRef-spdx-tool-1.2 "
+        "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 "
+        "SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
         "Creator: Person: Bob (bob@example.com)",
         "Creator: Organization: Acme.",
         "Created: 2010-02-03T00:00:00Z",
@@ -82,7 +84,8 @@ def test_parse_creation_info():
                         "SPDXID: SPDXRef-DOCUMENT",
                         "DocumentComment: <text>Sample Comment</text>",
                         "DocumentNamespace: <text>Sample Comment</text>",
-                        "ExternalDocumentRef: DocumentRef-spdx-tool-1.2:htp://spdx.org:SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+                        "ExternalDocumentRef: DocumentRef-spdx-tool-1.2:htp://spdx.org:SHA1: "
+                        "d6a770ba38583ed4bb4525bd96e50461655d2759",
                         "Creator: Person Bob (bob@example.com)",
                         "Creator: Organization: Acme [email]",
                         "Created: 2010-02-03T00:00:0Z",
@@ -117,7 +120,8 @@ def test_parse_creation_info():
             ),
             (
                 "ExternalDocumentRef: Document_ref document_uri SHA1: afded",
-                'Error while parsing CreationInfo: ["Error while parsing ExternalDocumentRef: Couldn\'t match Checksum. Line: 1"]',
+                "Error while parsing CreationInfo: [\"Error while parsing ExternalDocumentRef: Couldn't match "
+                'Checksum. Line: 1"]',
             ),
         ]
     ),

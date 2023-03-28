@@ -63,9 +63,10 @@ class RelationshipParser:
 
         file_dicts: List[Dict] = input_doc_dict.get("files", [])
 
-        # not implemented yet: deal with deprecated fields in file: https://github.com/spdx/tools-python/issues/294 & https://github.com/spdx/tools-python/issues/387
-        generated_relationships = self.parse_artifact_of(file_dicts=file_dicts)
-        dependency_relationships = self.parse_file_dependencies(file_dicts=file_dicts)
+        # not implemented yet: deal with deprecated fields in file:
+        # https://github.com/spdx/tools-python/issues/294 & https://github.com/spdx/tools-python/issues/387
+        _ = self.parse_artifact_of(file_dicts=file_dicts)
+        _ = self.parse_file_dependencies(file_dicts=file_dicts)
 
         raise_parsing_error_if_logger_has_messages(self.logger)
 
@@ -195,11 +196,13 @@ class RelationshipParser:
     @staticmethod
     def parse_file_dependencies(file_dicts: List[Dict]) -> List[Relationship]:
         dependency_relationships = []
-        # the field fileDependencies is deprecated and should be converted to a relationship (https://github.com/spdx/tools-python/issues/387)
+        # the field fileDependencies is deprecated and should be converted to a relationship
+        # https://github.com/spdx/tools-python/issues/387
         return dependency_relationships
 
     @staticmethod
     def parse_artifact_of(file_dicts: List[Dict]) -> List[Relationship]:
         generated_relationships = []
-        # artifactOfs is deprecated and should be converted to an external package and a generated from relationship (https://github.com/spdx/tools-python/issues/294)
+        # artifactOfs is deprecated and should be converted to an external package and a generated from relationship
+        # https://github.com/spdx/tools-python/issues/294
         return generated_relationships

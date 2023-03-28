@@ -107,34 +107,40 @@ def test_valid_spdx_id(spdx_id):
         (
             "DocumentRef-external:extern:SPDXRef-File",
             [
-                f"spdx_id must not contain more than one colon in order to separate the external document reference id from the internal SPDX id, but is: DocumentRef-external:extern:SPDXRef-File"
+                "spdx_id must not contain more than one colon in order to separate the external document reference id"
+                " from the internal SPDX id, but is: DocumentRef-external:extern:SPDXRef-File"
             ],
         ),
         (
             "DocumentRef external:SPDXRef-File",
             [
-                'the external document reference part of spdx_id must only contain letters, numbers, ".", "-" and "+" and must begin with "DocumentRef-", but is: DocumentRef external',
+                'the external document reference part of spdx_id must only contain letters, numbers, ".", "-" and "+" '
+                'and must begin with "DocumentRef-", but is: DocumentRef external',
                 'did not find the external document reference "DocumentRef external" in the SPDX document',
             ],
         ),
         (
             "DocRef-ext:SPDXRef-File_2",
             [
-                'the external document reference part of spdx_id must only contain letters, numbers, ".", "-" and "+" and must begin with "DocumentRef-", but is: DocRef-ext',
-                'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-File_2',
+                'the external document reference part of spdx_id must only contain letters, numbers, ".", "-" and "+" '
+                'and must begin with "DocumentRef-", but is: DocRef-ext',
+                'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin '
+                'with "SPDXRef-", but is: SPDXRef-File_2',
                 'did not find the external document reference "DocRef-ext" in the SPDX document',
             ],
         ),
         (
             "DocumentRef-external:SPDXRef-File_2",
             [
-                'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-File_2'
+                'the internal SPDX id part of spdx_id must only contain letters, numbers, "." and "-" and must begin '
+                'with "SPDXRef-", but is: SPDXRef-File_2'
             ],
         ),
         (
             "SPDXRef-42+",
             [
-                'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: SPDXRef-42+'
+                'spdx_id must only contain letters, numbers, "." and "-" and must begin with "SPDXRef-", but is: '
+                "SPDXRef-42+"
             ],
         ),
     ],

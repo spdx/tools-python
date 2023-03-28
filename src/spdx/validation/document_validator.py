@@ -36,7 +36,8 @@ def validate_full_spdx_document(document: Document, spdx_version: str = None) ->
     if document_version not in ["SPDX-2.2", "SPDX-2.3"]:
         validation_messages.append(
             ValidationMessage(
-                f'only SPDX versions "SPDX-2.2" and "SPDX-2.3" are supported, but the document\'s spdx_version is: {document_version}',
+                f'only SPDX versions "SPDX-2.2" and "SPDX-2.3" are supported, but the document\'s spdx_version is: '
+                f"{document_version}",
                 context,
             )
         )
@@ -94,7 +95,8 @@ def validate_full_spdx_document(document: Document, spdx_version: str = None) ->
     if duplicated_spdx_ids:
         validation_messages.append(
             ValidationMessage(
-                f"every spdx_id must be unique within the document, but found the following duplicates: {sorted(duplicated_spdx_ids)}",
+                f"every spdx_id must be unique within the document, but found the following duplicates: "
+                f"{sorted(duplicated_spdx_ids)}",
                 context,
             )
         )

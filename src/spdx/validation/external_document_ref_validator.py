@@ -39,7 +39,8 @@ def validate_external_document_ref(
     if not is_valid_external_doc_ref_id(external_document_ref.document_ref_id):
         validation_messages.append(
             ValidationMessage(
-                f'document_ref_id must only contain letters, numbers, ".", "-" and "+" and must begin with "DocumentRef-", but is: {external_document_ref.document_ref_id}',
+                f'document_ref_id must only contain letters, numbers, ".", "-" and "+" and must begin with '
+                f'"DocumentRef-", but is: {external_document_ref.document_ref_id}',
                 context,
             )
         )

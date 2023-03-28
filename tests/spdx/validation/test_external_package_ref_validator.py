@@ -39,7 +39,8 @@ from spdx.validation.validation_message import SpdxElementType, ValidationContex
         (
             ExternalPackageRefCategory.SECURITY,
             "url",
-            "https://github.com/christianlundkvist/blog/blob/master/2020_05_26_secp256k1_twist_attacks/secp256k1_twist_attacks.md",
+            "https://github.com/christianlundkvist/blog/blob/master/2020_05_26_secp256k1_twist_attacks/"
+            "secp256k1_twist_attacks.md",
         ),
         (ExternalPackageRefCategory.SECURITY, "swid", "swid:2df9de35-0aff-4a86-ace6-f7dddd1ade4c"),
         (ExternalPackageRefCategory.PACKAGE_MANAGER, "maven-central", "org.apache.tomcat:tomcat:9.0.0.M4"),
@@ -120,13 +121,15 @@ def test_valid_external_package_ref(category, reference_type, locator):
             ExternalPackageRefCategory.SECURITY,
             "cpe22Typo",
             "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-            "externalPackageRef type in category SECURITY must be one of ['cpe22Type', 'cpe23Type', 'advisory', 'fix', 'url', 'swid'], but is: cpe22Typo",
+            "externalPackageRef type in category SECURITY must be one of ['cpe22Type', 'cpe23Type', 'advisory', 'fix'"
+            ", 'url', 'swid'], but is: cpe22Typo",
         ),
         (
             ExternalPackageRefCategory.PACKAGE_MANAGER,
             "nugat",
             "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-            "externalPackageRef type in category PACKAGE_MANAGER must be one of ['maven-central', 'npm', 'nuget', 'bower', 'purl'], but is: nugat",
+            "externalPackageRef type in category PACKAGE_MANAGER must be one of ['maven-central', 'npm', 'nuget',"
+            " 'bower', 'purl'], but is: nugat",
         ),
         (
             ExternalPackageRefCategory.PERSISTENT_ID,
@@ -160,85 +163,96 @@ def test_invalid_external_package_ref_types(category, reference_type, locator, e
             ExternalPackageRefCategory.SECURITY,
             "cpe22Type",
             "cpe:o:canonical:ubuntu_linux:10.04:-:lts",
-            f'externalPackageRef locator of type "cpe22Type" must conform with the regex {CPE22TYPE_REGEX}, but is: cpe:o:canonical:ubuntu_linux:10.04:-:lts',
+            f'externalPackageRef locator of type "cpe22Type" must conform with the regex {CPE22TYPE_REGEX}, but is: '
+            f"cpe:o:canonical:ubuntu_linux:10.04:-:lts",
         ),
         (
             ExternalPackageRefCategory.SECURITY,
             "cpe23Type",
             "cpe:2.3:/o:canonical:ubuntu_linux:10.04:-:lts:*:*:*:*:*",
-            f'externalPackageRef locator of type "cpe23Type" must conform with the regex {CPE23TYPE_REGEX}, but is: cpe:2.3:/o:canonical:ubuntu_linux:10.04:-:lts:*:*:*:*:*',
+            f'externalPackageRef locator of type "cpe23Type" must conform with the regex {CPE23TYPE_REGEX}, but is: '
+            f"cpe:2.3:/o:canonical:ubuntu_linux:10.04:-:lts:*:*:*:*:*",
         ),
         (
             ExternalPackageRefCategory.SECURITY,
             "advisory",
             "http://locatorurl",
-            f'externalPackageRef locator of type "advisory" must be a valid URL, but is: http://locatorurl',
+            'externalPackageRef locator of type "advisory" must be a valid URL, but is: http://locatorurl',
         ),
         (
             ExternalPackageRefCategory.SECURITY,
             "fix",
             "http://fixurl",
-            f'externalPackageRef locator of type "fix" must be a valid URL, but is: http://fixurl',
+            'externalPackageRef locator of type "fix" must be a valid URL, but is: http://fixurl',
         ),
         (
             ExternalPackageRefCategory.SECURITY,
             "url",
             "http://url",
-            f'externalPackageRef locator of type "url" must be a valid URL, but is: http://url',
+            'externalPackageRef locator of type "url" must be a valid URL, but is: http://url',
         ),
         (
             ExternalPackageRefCategory.SECURITY,
             "swid",
             "2df9de35-0aff-4a86-ace6-f7dddd1ade4c",
-            f'externalPackageRef locator of type "swid" must be a valid URI with scheme swid, but is: 2df9de35-0aff-4a86-ace6-f7dddd1ade4c',
+            'externalPackageRef locator of type "swid" must be a valid URI with scheme swid, but is: '
+            "2df9de35-0aff-4a86-ace6-f7dddd1ade4c",
         ),
         (
             ExternalPackageRefCategory.PACKAGE_MANAGER,
             "maven-central",
             "org.apache.tomcat:tomcat:tomcat:9.0.0.M4",
-            f'externalPackageRef locator of type "maven-central" must conform with the regex {MAVEN_CENTRAL_REGEX}, but is: org.apache.tomcat:tomcat:tomcat:9.0.0.M4',
+            f'externalPackageRef locator of type "maven-central" must conform with the regex {MAVEN_CENTRAL_REGEX}, '
+            f"but is: org.apache.tomcat:tomcat:tomcat:9.0.0.M4",
         ),
         (
             ExternalPackageRefCategory.PACKAGE_MANAGER,
             "npm",
             "http-server:0.3.0",
-            f'externalPackageRef locator of type "npm" must conform with the regex {NPM_REGEX}, but is: http-server:0.3.0',
+            f'externalPackageRef locator of type "npm" must conform with the regex {NPM_REGEX}, '
+            f"but is: http-server:0.3.0",
         ),
         (
             ExternalPackageRefCategory.PACKAGE_MANAGER,
             "nuget",
             "Microsoft.AspNet.MVC@5.0.0",
-            f'externalPackageRef locator of type "nuget" must conform with the regex {NUGET_REGEX}, but is: Microsoft.AspNet.MVC@5.0.0',
+            f'externalPackageRef locator of type "nuget" must conform with the regex {NUGET_REGEX}, '
+            f"but is: Microsoft.AspNet.MVC@5.0.0",
         ),
         (
             ExternalPackageRefCategory.PACKAGE_MANAGER,
             "bower",
             "modernizr:2.6.2",
-            f'externalPackageRef locator of type "bower" must conform with the regex {BOWER_REGEX}, but is: modernizr:2.6.2',
+            f'externalPackageRef locator of type "bower" must conform with the regex {BOWER_REGEX}, '
+            f"but is: modernizr:2.6.2",
         ),
         (
             ExternalPackageRefCategory.PACKAGE_MANAGER,
             "purl",
             "pkg:npm@12.3.1",
-            f'externalPackageRef locator of type "purl" must conform with the regex {PURL_REGEX}, but is: pkg:npm@12.3.1',
+            f'externalPackageRef locator of type "purl" must conform with the regex {PURL_REGEX}, '
+            f"but is: pkg:npm@12.3.1",
         ),
         (
             ExternalPackageRefCategory.PERSISTENT_ID,
             "swh",
             "swh:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2",
-            f'externalPackageRef locator of type "swh" must conform with the regex {SWH_REGEX}, but is: swh:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2',
+            f'externalPackageRef locator of type "swh" must conform with the regex {SWH_REGEX}, '
+            f"but is: swh:cnt:94a9ed024d3859793618152ea559a168bbcbb5e2",
         ),
         (
             ExternalPackageRefCategory.PERSISTENT_ID,
             "gitoid",
             "gitoid:blob:sha1:3557f7eb43c621c71483743d4b37059bb80933e7f71277c0c3b3846159d1f61c",
-            f'externalPackageRef locator of type "gitoid" must conform with the regex {GITOID_REGEX}, but is: gitoid:blob:sha1:3557f7eb43c621c71483743d4b37059bb80933e7f71277c0c3b3846159d1f61c',
+            f'externalPackageRef locator of type "gitoid" must conform with the regex {GITOID_REGEX}, '
+            f"but is: gitoid:blob:sha1:3557f7eb43c621c71483743d4b37059bb80933e7f71277c0c3b3846159d1f61c",
         ),
         (
             ExternalPackageRefCategory.PERSISTENT_ID,
             "gitoid",
             "gitoid:blob:sha256:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
-            f'externalPackageRef locator of type "gitoid" must conform with the regex {GITOID_REGEX}, but is: gitoid:blob:sha256:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64',
+            f'externalPackageRef locator of type "gitoid" must conform with the regex {GITOID_REGEX},'
+            f" but is: gitoid:blob:sha256:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
         ),
         (
             ExternalPackageRefCategory.OTHER,
@@ -273,7 +287,8 @@ def test_invalid_external_package_ref_locators(category, reference_type, locator
         (
             ExternalPackageRefCategory.SECURITY,
             "url",
-            "https://github.com/christianlundkvist/blog/blob/master/2020_05_26_secp256k1_twist_attacks/secp256k1_twist_attacks.md",
+            "https://github.com/christianlundkvist/blog/blob/master/2020_05_26_secp256k1_twist_attacks/"
+            "secp256k1_twist_attacks.md",
         ),
         (ExternalPackageRefCategory.SECURITY, "swid", "swid:2df9de35-0aff-4a86-ace6-f7dddd1ade4c"),
     ],

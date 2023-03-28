@@ -34,7 +34,8 @@ from spdx.writer.write_anything import write_file
 )
 @click.option(
     "--version",
-    help='The SPDX version to be used during parsing and validation ("SPDX-2.2" or "SPDX-2.3"). Will be read from the document if not provided.',
+    help='The SPDX version to be used during parsing and validation ("SPDX-2.2" or "SPDX-2.3"). '
+    "Will be read from the document if not provided.",
     default=None,
 )
 @click.option("--novalidation", is_flag=True, help="Don't validate the provided document.")
@@ -54,7 +55,7 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
             if not version:
                 version = document.creation_info.spdx_version
 
-            if not version in ["SPDX-2.2", "SPDX-2.3"]:
+            if version not in ["SPDX-2.2", "SPDX-2.3"]:
                 logging.error(f"This tool only supports SPDX versions SPDX-2.2 and SPDX-2.3, but got: {version}")
                 sys.exit(1)
 

@@ -109,7 +109,7 @@ def parse_ranges(start_end_pointer: URIRef, graph: Graph) -> Dict[str, Tuple[int
     end_pointer_type, end_pointer_node = get_pointer_type(graph, POINTER_NAMESPACE.endPointer, start_end_pointer)
 
     if start_pointer_type != end_pointer_type:
-        raise SPDXParsingError([f"Types of startPointer and endPointer don't match"])
+        raise SPDXParsingError(["Types of startPointer and endPointer don't match"])
 
     range_values["startPointer"] = parse_range_value(graph, start_pointer_node, POINTER_MATCHING[start_pointer_type])
     range_values["endPointer"] = parse_range_value(graph, end_pointer_node, POINTER_MATCHING[end_pointer_type])

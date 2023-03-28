@@ -18,7 +18,11 @@ from spdx.validation.uri_validators import validate_url
 from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 CPE22TYPE_REGEX = r"^c[pP][eE]:/[AHOaho]?(:[A-Za-z0-9._\-~%]*){0,6}$"
-CPE23TYPE_REGEX = r'^cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}$'
+CPE23TYPE_REGEX = (
+    r'^cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^'
+    r"`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*"
+    r'|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}$'
+)
 MAVEN_CENTRAL_REGEX = r"^[^:]+:[^:]+(:[^:]+)?$"
 NPM_REGEX = r"^[^@]+@[^@]+$"
 NUGET_REGEX = r"^[^/]+/[^/]+$"
@@ -76,7 +80,8 @@ def validate_external_package_ref(
     elif reference_type not in CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES[category]:
         validation_messages.append(
             ValidationMessage(
-                f"externalPackageRef type in category {category.name} must be one of {CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES[category]}, but is: {reference_type}",
+                f"externalPackageRef type in category {category.name} must be one of "
+                f"{CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES[category]}, but is: {reference_type}",
                 context,
             )
         )
@@ -94,7 +99,8 @@ def validate_external_package_ref(
         if not uritools.isuri(locator) or not locator.startswith("swid"):
             validation_messages.append(
                 ValidationMessage(
-                    f'externalPackageRef locator of type "swid" must be a valid URI with scheme swid, but is: {locator}',
+                    f'externalPackageRef locator of type "swid" must be a valid URI with scheme swid, '
+                    f"but is: {locator}",
                     context,
                 )
             )
@@ -112,7 +118,8 @@ def validate_against_regex(
     if not re.match(regex, string_to_validate):
         return [
             ValidationMessage(
-                f'externalPackageRef locator of type "{reference_type}" must conform with the regex {regex}, but is: {string_to_validate}',
+                f'externalPackageRef locator of type "{reference_type}" must conform with the regex {regex}, '
+                f"but is: {string_to_validate}",
                 context,
             )
         ]

@@ -39,7 +39,8 @@ def test_valid_package():
             package_fixture(
                 files_analyzed=False, verification_code=package_verification_code_fixture(), license_info_from_files=[]
             ),
-            f"verification_code must be None if files_analyzed is False, but is: {package_verification_code_fixture()}",
+            f"verification_code must be None if files_analyzed is False, but is: "
+            f"{package_verification_code_fixture()}",
         ),
         (
             package_fixture(files_analyzed=False, license_info_from_files=[SpdxNone()], verification_code=None),

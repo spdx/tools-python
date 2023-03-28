@@ -87,7 +87,8 @@ def test_invalid_license_expression_with_unknown_symbols(expression_string, unkn
     validation_messages: List[ValidationMessage] = validate_license_expression(license_expression, document, parent_id)
     expected_messages = [
         ValidationMessage(
-            f"Unrecognized license reference: {symbol}. license_expression must only use IDs from the license list or extracted licensing info, but is: {license_expression}",
+            f"Unrecognized license reference: {symbol}. license_expression must only use IDs from the license list or "
+            f"extracted licensing info, but is: {license_expression}",
             context,
         )
         for symbol in unknown_symbols
@@ -101,23 +102,30 @@ def test_invalid_license_expression_with_unknown_symbols(expression_string, unkn
     [
         (
             "MIT with MIT",
-            'A plain license symbol cannot be used as an exception in a "WITH symbol" statement. for token: "MIT" at position: 9. for license_expression: MIT WITH MIT',
+            'A plain license symbol cannot be used as an exception in a "WITH symbol" statement. for token: "MIT" at '
+            "position: 9. for license_expression: MIT WITH MIT",
         ),
         (
             f"GPL-2.0-or-later and {FIXTURE_LICENSE_ID} with {FIXTURE_LICENSE_ID}",
-            f'A plain license symbol cannot be used as an exception in a "WITH symbol" statement. for token: "{FIXTURE_LICENSE_ID}" at position: 39. for license_expression: GPL-2.0-or-later AND {FIXTURE_LICENSE_ID} WITH {FIXTURE_LICENSE_ID}',
+            f'A plain license symbol cannot be used as an exception in a "WITH symbol" statement. for token: '
+            f'"{FIXTURE_LICENSE_ID}" at position: 39. for license_expression: GPL-2.0-or-later AND '
+            f"{FIXTURE_LICENSE_ID} WITH {FIXTURE_LICENSE_ID}",
         ),
         (
             f"GPL-2.0-or-later with MIT and {FIXTURE_LICENSE_ID} with GPL-2.0-or-later",
-            f'A plain license symbol cannot be used as an exception in a "WITH symbol" statement. for token: "MIT" at position: 22. for license_expression: GPL-2.0-or-later WITH MIT AND {FIXTURE_LICENSE_ID} WITH GPL-2.0-or-later',
+            f'A plain license symbol cannot be used as an exception in a "WITH symbol" statement. for token: "MIT" at '
+            f"position: 22. for license_expression: GPL-2.0-or-later WITH MIT AND {FIXTURE_LICENSE_ID} "
+            f"WITH GPL-2.0-or-later",
         ),
         (
             "389-exception with 389-exception",
-            'A license exception symbol can only be used as an exception in a "WITH exception" statement. for token: "389-exception". for license_expression: 389-exception WITH 389-exception',
+            'A license exception symbol can only be used as an exception in a "WITH exception" statement. for token: '
+            '"389-exception". for license_expression: 389-exception WITH 389-exception',
         ),
         (
             "389-exception with MIT",
-            'A license exception symbol can only be used as an exception in a "WITH exception" statement. for token: "389-exception". for license_expression: 389-exception WITH MIT',
+            'A license exception symbol can only be used as an exception in a "WITH exception" statement. for token: '
+            '"389-exception". for license_expression: 389-exception WITH MIT',
         ),
     ],
 )

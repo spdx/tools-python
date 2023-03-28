@@ -32,7 +32,8 @@ def validate_verification_code(verification_code: PackageVerificationCode, paren
     if not re.match("^[0-9a-f]{40}$", value):
         validation_messages.append(
             ValidationMessage(
-                f"value of verification_code must consist of 40 lowercase hexadecimal digits, but is: {value} (length: {len(value)} digits)",
+                f"value of verification_code must consist of 40 lowercase hexadecimal digits, but is: {value} "
+                f"(length: {len(value)} digits)",
                 context,
             )
         )

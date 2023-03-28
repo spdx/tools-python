@@ -32,7 +32,8 @@ from tests.spdx.fixtures import checksum_fixture
         ),
         Checksum(
             ChecksumAlgorithm.SHA512,
-            "c2aa8a5d297f5e888ce9a30d3745ccc5a628533449a9f98524de3d23695a268f394a67faf8ef370727c2946f1dbbec34aeb7ac10f15af43e7cb5547f1a464053",
+            "c2aa8a5d297f5e888ce9a30d3745ccc5a628533449a9f98524de3d23695a268f394a67faf8ef370727c2946f1dbbec34aeb7ac10f"
+            "15af43e7cb5547f1a464053",
         ),
         Checksum(ChecksumAlgorithm.SHA3_256, "1e772489c042f49aeaae32b00fc5ef170a25afa741cffaafadde597d4d1727ce"),
         Checksum(
@@ -41,7 +42,8 @@ from tests.spdx.fixtures import checksum_fixture
         ),
         Checksum(
             ChecksumAlgorithm.SHA3_512,
-            "906bca5580be8c95ae44f775363fb69968ad568898dfb03e0ff96cd9445a0b75f817b68e5c1e80ad624031f851cfddd3a101e1d111310266a5d46e2bc1ffbb36",
+            "906bca5580be8c95ae44f775363fb69968ad568898dfb03e0ff96cd9445a0b75f817b68e5c1e80ad624031f851cfddd3a101e1d11"
+            "1310266a5d46e2bc1ffbb36",
         ),
         Checksum(ChecksumAlgorithm.BLAKE2B_256, "a0eb3ddfa5807780a562b9c313b2537f1e8dc621e9a524f8c1ffcf07a79e35c7"),
         Checksum(
@@ -50,11 +52,14 @@ from tests.spdx.fixtures import checksum_fixture
         ),
         Checksum(
             ChecksumAlgorithm.BLAKE2B_512,
-            "72c23b0160e1af3cb159f0cc96210c5e9aecc5a65d4618566776fa6117bf84929dcef56c7f8b087691c23000c945470842d90b5e8c4af74dce531ca8ebd8824c",
+            "72c23b0160e1af3cb159f0cc96210c5e9aecc5a65d4618566776fa6117bf84929dcef56c7f8b087691c23000c945470842d90b5e8"
+            "c4af74dce531ca8ebd8824c",
         ),
         Checksum(
             ChecksumAlgorithm.BLAKE3,
-            "a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafed",
+            "a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874d"
+            "cec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006"
+            "857d3b9985174bf67239874dcec4cbbc9839496179feafed",
         ),
         Checksum(ChecksumAlgorithm.MD2, "af1eec2a1b18886c3f3cc244349d91d8"),
         Checksum(ChecksumAlgorithm.MD4, "d4c41ce30a517d6ce9d79c8c17bb4b66"),
@@ -77,78 +82,106 @@ def test_valid_checksum(checksum):
     [
         (
             Checksum(ChecksumAlgorithm.SHA1, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.SHA1 must consist of 40 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.SHA1 must consist of 40 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.SHA224, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.SHA224 must consist of 56 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.SHA224 must consist of 56 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.SHA256, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.SHA256 must consist of 64 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.SHA256 must consist of 64 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.SHA384, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.SHA384 must consist of 96 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.SHA384 must consist of 96 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.SHA512, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.SHA512 must consist of 128 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.SHA512 must consist of 128 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.SHA3_256, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.SHA3_256 must consist of 64 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.SHA3_256 must consist of 64 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.SHA3_384, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.SHA3_384 must consist of 96 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.SHA3_384 must consist of 96 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.SHA3_512, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.SHA3_512 must consist of 128 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.SHA3_512 must consist of 128 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.BLAKE2B_256, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.BLAKE2B_256 must consist of 64 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.BLAKE2B_256 must consist of 64 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.BLAKE2B_384, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.BLAKE2B_384 must consist of 96 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.BLAKE2B_384 must consist of 96 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.BLAKE2B_512, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.BLAKE2B_512 must consist of 128 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.BLAKE2B_512 must consist of 128 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.BLAKE3, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.BLAKE3 must consist of at least 256 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.BLAKE3 must consist of at least 256 lowercase hexadecimal digits, but is: af1e"
+            "ec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.MD2, "71c4025dd9897b364f3ebbb42c484ff43d00791c"),
-            "value of ChecksumAlgorithm.MD2 must consist of 32 lowercase hexadecimal digits, but is: 71c4025dd9897b364f3ebbb42c484ff43d00791c (length: 40 digits)",
+            "value of ChecksumAlgorithm.MD2 must consist of 32 lowercase hexadecimal digits, but is: 71c4025dd9897b364"
+            "f3ebbb42c484ff43d00791c (length: 40 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.MD4, "71c4025dd9897b364f3ebbb42c484ff43d00791c"),
-            "value of ChecksumAlgorithm.MD4 must consist of 32 lowercase hexadecimal digits, but is: 71c4025dd9897b364f3ebbb42c484ff43d00791c (length: 40 digits)",
+            "value of ChecksumAlgorithm.MD4 must consist of 32 lowercase hexadecimal digits, but is: 71c4025dd9897b364"
+            "f3ebbb42c484ff43d00791c (length: 40 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.MD5, "71c4025dd9897b364f3ebbb42c484ff43d00791c"),
-            "value of ChecksumAlgorithm.MD5 must consist of 32 lowercase hexadecimal digits, but is: 71c4025dd9897b364f3ebbb42c484ff43d00791c (length: 40 digits)",
+            "value of ChecksumAlgorithm.MD5 must consist of 32 lowercase hexadecimal digits, but is: 71c4025dd9897b364"
+            "f3ebbb42c484ff43d00791c (length: 40 digits)",
         ),
         (
             Checksum(
                 ChecksumAlgorithm.MD6,
-                "a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafed5",
+                "a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf672398"
+                "74dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967"
+                "a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582"
+                "b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b"
+                "5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc983949617"
+                "9feafed5",
             ),
-            "value of ChecksumAlgorithm.MD6 must consist of between 0 and 512 lowercase hexadecimal digits, but is: a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafed5 (length: 513 digits)",
+            "value of ChecksumAlgorithm.MD6 must consist of between 0 and 512 lowercase hexadecimal digits, but is: "
+            "a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dc"
+            "ec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a1300685"
+            "7d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6a"
+            "c3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341"
+            "bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafed5 "
+            "(length: 513 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.ADLER32, "af1eec2a1b18886c3f3cc244349d91d8"),
-            "value of ChecksumAlgorithm.ADLER32 must consist of 8 lowercase hexadecimal digits, but is: af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
+            "value of ChecksumAlgorithm.ADLER32 must consist of 8 lowercase hexadecimal digits, but is: "
+            "af1eec2a1b18886c3f3cc244349d91d8 (length: 32 digits)",
         ),
         (
             Checksum(ChecksumAlgorithm.SHA1, "CE9F343C4BA371746FD7EAD9B59031AE34D8AFC4"),
-            "value of ChecksumAlgorithm.SHA1 must consist of 40 lowercase hexadecimal digits, but is: CE9F343C4BA371746FD7EAD9B59031AE34D8AFC4 (length: 40 digits)",
+            "value of ChecksumAlgorithm.SHA1 must consist of 40 lowercase hexadecimal digits, but is: "
+            "CE9F343C4BA371746FD7EAD9B59031AE34D8AFC4 (length: 40 digits)",
         ),
     ],
 )
@@ -174,7 +207,8 @@ def test_invalid_checksum(checksum, expected_message):
         ),
         Checksum(
             ChecksumAlgorithm.SHA3_512,
-            "906bca5580be8c95ae44f775363fb69968ad568898dfb03e0ff96cd9445a0b75f817b68e5c1e80ad624031f851cfddd3a101e1d111310266a5d46e2bc1ffbb36",
+            "906bca5580be8c95ae44f775363fb69968ad568898dfb03e0ff96cd9445a0b75f817b68e5c1e80ad624031f851cfddd3a101e1d1"
+            "11310266a5d46e2bc1ffbb36",
         ),
         Checksum(ChecksumAlgorithm.BLAKE2B_256, "a0eb3ddfa5807780a562b9c313b2537f1e8dc621e9a524f8c1ffcf07a79e35c7"),
         Checksum(
@@ -183,11 +217,14 @@ def test_invalid_checksum(checksum, expected_message):
         ),
         Checksum(
             ChecksumAlgorithm.BLAKE2B_512,
-            "72c23b0160e1af3cb159f0cc96210c5e9aecc5a65d4618566776fa6117bf84929dcef56c7f8b087691c23000c945470842d90b5e8c4af74dce531ca8ebd8824c",
+            "72c23b0160e1af3cb159f0cc96210c5e9aecc5a65d4618566776fa6117bf84929dcef56c7f8b087691c23000c945470842d90b5e"
+            "8c4af74dce531ca8ebd8824c",
         ),
         Checksum(
             ChecksumAlgorithm.BLAKE3,
-            "a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874dcec4cbbc9839496179feafed",
+            "a872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006857d3b9985174bf67239874"
+            "dcec4cbbc9839496179feafeda872cac2efd29ed2ad8b5faa79b63f983341bea41183582b8863d952f6ac3e1cdfe0189967a13006"
+            "857d3b9985174bf67239874dcec4cbbc9839496179feafed",
         ),
         Checksum(ChecksumAlgorithm.ADLER32, "02ec0130"),
     ],

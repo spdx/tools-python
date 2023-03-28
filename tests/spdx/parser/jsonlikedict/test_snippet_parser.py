@@ -23,9 +23,13 @@ def test_parse_snippet():
 
     snippet_dict = {
         "SPDXID": "SPDXRef-Snippet",
-        "comment": "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0.",
+        "comment": "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a "
+        "commercial scanner identified it as being derived from file foo.c in package xyz which is licensed"
+        " under GPL-2.0.",
         "copyrightText": "Copyright 2008-2010 John Smith",
-        "licenseComments": "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz.",
+        "licenseComments": "The concluded license was taken from package xyz, from which the snippet was copied into "
+        "the current file. The concluded license information was found in the COPYING.txt file in "
+        "package xyz.",
         "licenseConcluded": "GPL-2.0-only",
         "licenseInfoInSnippets": ["GPL-2.0-only", "NOASSERTION"],
         "name": "from linux kernel",
@@ -48,12 +52,14 @@ def test_parse_snippet():
     assert snippet.name == "from linux kernel"
     assert (
         snippet.comment
-        == "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0."
+        == "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial "
+        "scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0."
     )
     assert snippet.copyright_text == "Copyright 2008-2010 John Smith"
     assert (
         snippet.license_comment
-        == "The concluded license was taken from package xyz, from which the snippet was copied into the current file. The concluded license information was found in the COPYING.txt file in package xyz."
+        == "The concluded license was taken from package xyz, from which the snippet was copied into the current file."
+        " The concluded license information was found in the COPYING.txt file in package xyz."
     )
     assert snippet.byte_range == (310, 420)
     assert snippet.line_range == (5, 23)
@@ -74,7 +80,8 @@ def test_parse_incomplete_snippet():
         err.value.get_messages(),
         [
             "Error while constructing Snippet: ['SetterError Snippet: type of argument "
-            '"file_spdx_id" must be str; got NoneType instead: None\', \'SetterError Snippet: type of argument "byte_range" must be a tuple; got NoneType '
+            "\"file_spdx_id\" must be str; got NoneType instead: None', 'SetterError Snippet: type of argument "
+            '"byte_range" must be a tuple; got NoneType '
             "instead: None']"
         ],
     )
@@ -127,6 +134,7 @@ def test_parse_invalid_snippet_range():
     TestCase().assertCountEqual(
         err.value.get_messages(),
         [
-            "Error while parsing snippet ranges: ['Type of startpointer is not the same as type of endpointer.', 'Type of startpointer is not the same as type of endpointer.']"
+            "Error while parsing snippet ranges: ['Type of startpointer is not the same as type of endpointer.', "
+            "'Type of startpointer is not the same as type of endpointer.']"
         ],
     )
