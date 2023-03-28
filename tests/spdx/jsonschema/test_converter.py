@@ -43,8 +43,9 @@ class TestConverter(TypedConverter):
         else:
             return "jsonSecondName"
 
-    def _get_property_value(self, instance: TestDataModelType, test_property: TestPropertyType,
-                            _document: Document = None) -> Any:
+    def _get_property_value(
+        self, instance: TestDataModelType, test_property: TestPropertyType, _document: Document = None
+    ) -> Any:
         if test_property == TestPropertyType.FIRST_NAME:
             return instance.first_property
         elif test_property == TestPropertyType.SECOND_NAME:
@@ -63,10 +64,7 @@ def test_conversion():
 
     converted_dict = converter.convert(test_instance)
 
-    assert converted_dict == {
-        "jsonFirstName": "firstPropertyValue",
-        "jsonSecondName": 3
-    }
+    assert converted_dict == {"jsonFirstName": "firstPropertyValue", "jsonSecondName": 3}
 
 
 def test_wrong_type():

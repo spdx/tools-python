@@ -23,13 +23,18 @@ def converter() -> RelationshipConverter:
     return RelationshipConverter()
 
 
-@pytest.mark.parametrize("relationship_property,expected",
-                         [(RelationshipProperty.SPDX_ELEMENT_ID, "spdxElementId"),
-                          (RelationshipProperty.COMMENT, "comment"),
-                          (RelationshipProperty.RELATED_SPDX_ELEMENT, "relatedSpdxElement"),
-                          (RelationshipProperty.RELATIONSHIP_TYPE, "relationshipType")])
-def test_json_property_names(converter: RelationshipConverter, relationship_property: RelationshipProperty,
-                             expected: str):
+@pytest.mark.parametrize(
+    "relationship_property,expected",
+    [
+        (RelationshipProperty.SPDX_ELEMENT_ID, "spdxElementId"),
+        (RelationshipProperty.COMMENT, "comment"),
+        (RelationshipProperty.RELATED_SPDX_ELEMENT, "relatedSpdxElement"),
+        (RelationshipProperty.RELATIONSHIP_TYPE, "relationshipType"),
+    ],
+)
+def test_json_property_names(
+    converter: RelationshipConverter, relationship_property: RelationshipProperty, expected: str
+):
     assert converter.json_property_name(relationship_property) == expected
 
 
@@ -50,7 +55,7 @@ def test_successful_conversion(converter: RelationshipConverter):
         converter.json_property_name(RelationshipProperty.SPDX_ELEMENT_ID): "spdxElementId",
         converter.json_property_name(RelationshipProperty.COMMENT): "comment",
         converter.json_property_name(RelationshipProperty.RELATED_SPDX_ELEMENT): "relatedElementId",
-        converter.json_property_name(RelationshipProperty.RELATIONSHIP_TYPE): "COPY_OF"
+        converter.json_property_name(RelationshipProperty.RELATIONSHIP_TYPE): "COPY_OF",
     }
 
 
@@ -59,8 +64,10 @@ def test_spdx_no_assertion(converter: RelationshipConverter):
 
     converted_dict = converter.convert(relationship)
 
-    assert converted_dict[
-               converter.json_property_name(RelationshipProperty.RELATED_SPDX_ELEMENT)] == SPDX_NO_ASSERTION_STRING
+    assert (
+        converted_dict[converter.json_property_name(RelationshipProperty.RELATED_SPDX_ELEMENT)]
+        == SPDX_NO_ASSERTION_STRING
+    )
 
 
 def test_spdx_none(converter: RelationshipConverter):

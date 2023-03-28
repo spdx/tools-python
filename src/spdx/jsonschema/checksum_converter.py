@@ -18,15 +18,15 @@ from spdx.model.document import Document
 
 
 class ChecksumConverter(TypedConverter[Checksum]):
-
     def get_data_model_type(self) -> Type[Checksum]:
         return Checksum
 
     def get_json_type(self) -> Type[JsonProperty]:
         return ChecksumProperty
 
-    def _get_property_value(self, checksum: Checksum, checksum_property: ChecksumProperty,
-                            _document: Document = None) -> str:
+    def _get_property_value(
+        self, checksum: Checksum, checksum_property: ChecksumProperty, _document: Document = None
+    ) -> str:
         if checksum_property == ChecksumProperty.ALGORITHM:
             return algorithm_to_json_string(checksum.algorithm)
         elif checksum_property == ChecksumProperty.CHECKSUM_VALUE:

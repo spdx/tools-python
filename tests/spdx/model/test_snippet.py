@@ -6,8 +6,19 @@ from spdx.model.spdx_none import SpdxNone
 
 
 def test_correct_initialization():
-    snippet = Snippet("id", "file_id", (200, 400), (20, 40), SpdxNone(), [SpdxNoAssertion()], "comment on license",
-                      "copyright", "comment", "name", ["attribution"])
+    snippet = Snippet(
+        "id",
+        "file_id",
+        (200, 400),
+        (20, 40),
+        SpdxNone(),
+        [SpdxNoAssertion()],
+        "comment on license",
+        "copyright",
+        "comment",
+        "name",
+        ["attribution"],
+    )
     assert snippet.spdx_id == "id"
     assert snippet.file_spdx_id == "file_id"
     assert snippet.byte_range == (200, 400)

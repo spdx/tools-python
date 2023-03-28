@@ -22,23 +22,37 @@ from spdx.parser.rdf.graph_parsing_functions import (
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
-def parse_relationship(relationship_node: URIRef, graph: Graph, parent_node: URIRef,
-                       doc_namespace: str) -> Relationship:
+def parse_relationship(
+    relationship_node: URIRef, graph: Graph, parent_node: URIRef, doc_namespace: str
+) -> Relationship:
     logger = Logger()
     spdx_element_id = parse_spdx_id(parent_node, doc_namespace, graph)
 
     relationship_type = parse_literal(
-        logger, graph, relationship_node, SPDX_NAMESPACE.relationshipType,
-        parsing_method=lambda x: parse_enum_value(x, RelationshipType, SPDX_NAMESPACE.relationshipType_))
+        logger,
+        graph,
+        relationship_node,
+        SPDX_NAMESPACE.relationshipType,
+        parsing_method=lambda x: parse_enum_value(x, RelationshipType, SPDX_NAMESPACE.relationshipType_),
+    )
     related_spdx_element = parse_literal_or_no_assertion_or_none(
-        logger, graph, relationship_node, SPDX_NAMESPACE.relatedSpdxElement,
-        parsing_method=lambda x: parse_spdx_id(x, doc_namespace, graph))
+        logger,
+        graph,
+        relationship_node,
+        SPDX_NAMESPACE.relatedSpdxElement,
+        parsing_method=lambda x: parse_spdx_id(x, doc_namespace, graph),
+    )
 
     comment = parse_literal(logger, graph, relationship_node, RDFS.comment)
     raise_parsing_error_if_logger_has_messages(logger, "Relationship")
-    relationship = construct_or_raise_parsing_error(Relationship,
-                                                    dict(spdx_element_id=spdx_element_id,
-                                                         relationship_type=relationship_type,
-                                                         related_spdx_element_id=related_spdx_element, comment=comment))
+    relationship = construct_or_raise_parsing_error(
+        Relationship,
+        dict(
+            spdx_element_id=spdx_element_id,
+            relationship_type=relationship_type,
+            related_spdx_element_id=related_spdx_element,
+            comment=comment,
+        ),
+    )
 
     return relationship

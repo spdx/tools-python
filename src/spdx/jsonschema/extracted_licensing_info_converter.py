@@ -19,9 +19,12 @@ from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 
 
 class ExtractedLicensingInfoConverter(TypedConverter[ExtractedLicensingInfo]):
-    def _get_property_value(self, extracted_licensing_info: ExtractedLicensingInfo,
-                            extracted_licensing_info_property: ExtractedLicensingInfoProperty,
-                            document: Document = None) -> Any:
+    def _get_property_value(
+        self,
+        extracted_licensing_info: ExtractedLicensingInfo,
+        extracted_licensing_info_property: ExtractedLicensingInfoProperty,
+        document: Document = None,
+    ) -> Any:
         if extracted_licensing_info_property == ExtractedLicensingInfoProperty.COMMENT:
             return extracted_licensing_info.comment
         elif extracted_licensing_info_property == ExtractedLicensingInfoProperty.EXTRACTED_TEXT:

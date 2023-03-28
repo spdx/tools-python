@@ -25,8 +25,9 @@ class CreationInfoConverter(TypedConverter[CreationInfo]):
     def get_json_type(self) -> Type[JsonProperty]:
         return CreationInfoProperty
 
-    def _get_property_value(self, creation_info: CreationInfo, creation_info_property: CreationInfoProperty,
-                            _document: Document = None) -> Any:
+    def _get_property_value(
+        self, creation_info: CreationInfo, creation_info_property: CreationInfoProperty, _document: Document = None
+    ) -> Any:
         if creation_info_property == CreationInfoProperty.CREATED:
             return datetime_to_iso_string(creation_info.created)
         elif creation_info_property == CreationInfoProperty.CREATORS:

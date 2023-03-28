@@ -23,8 +23,13 @@ def json_str_to_enum_name(json_str: str) -> str:
     return json_str.replace("-", "_").upper()
 
 
-def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callable = lambda x: x, default: Any = None,
-                             field_is_list: bool = False) -> Any:
+def parse_field_or_log_error(
+    logger: Logger,
+    field: Any,
+    parsing_method: Callable = lambda x: x,
+    default: Any = None,
+    field_is_list: bool = False,
+) -> Any:
     if not field:
         return default
     try:
@@ -39,8 +44,9 @@ def parse_field_or_log_error(logger: Logger, field: Any, parsing_method: Callabl
     return default
 
 
-def append_parsed_field_or_log_error(logger: Logger, list_to_append_to: List[Any], field: Any,
-                                     method_to_parse: Callable) -> List[Any]:
+def append_parsed_field_or_log_error(
+    logger: Logger, list_to_append_to: List[Any], field: Any, method_to_parse: Callable
+) -> List[Any]:
     try:
         parsed_element = method_to_parse(field)
         list_to_append_to.append(parsed_element)
@@ -72,8 +78,9 @@ def parse_list_of_elements(list_of_elements: List[Dict], method_to_parse_element
         logger = Logger()
     parsed_elements = []
     for element_dict in list_of_elements:
-        parsed_elements = append_parsed_field_or_log_error(logger, parsed_elements, element_dict,
-                                                           method_to_parse_element)
+        parsed_elements = append_parsed_field_or_log_error(
+            logger, parsed_elements, element_dict, method_to_parse_element
+        )
     raise_parsing_error_if_logger_has_messages(logger)
     return parsed_elements
 

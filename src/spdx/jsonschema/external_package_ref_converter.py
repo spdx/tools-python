@@ -18,8 +18,12 @@ from spdx.model.package import ExternalPackageRef
 
 
 class ExternalPackageRefConverter(TypedConverter[ExternalPackageRef]):
-    def _get_property_value(self, external_ref: ExternalPackageRef, external_ref_property: ExternalPackageRefProperty,
-                            document: Document = None) -> Any:
+    def _get_property_value(
+        self,
+        external_ref: ExternalPackageRef,
+        external_ref_property: ExternalPackageRefProperty,
+        document: Document = None,
+    ) -> Any:
         if external_ref_property == ExternalPackageRefProperty.COMMENT:
             return external_ref.comment
         elif external_ref_property == ExternalPackageRefProperty.REFERENCE_CATEGORY:

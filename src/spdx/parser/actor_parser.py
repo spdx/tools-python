@@ -17,7 +17,6 @@ from spdx.parser.parsing_functions import construct_or_raise_parsing_error
 
 
 class ActorParser:
-
     @staticmethod
     def parse_actor(actor: str) -> Actor:
         tool_re: Pattern = re.compile(r"^Tool:\s*(.+)", re.UNICODE)
@@ -38,14 +37,17 @@ class ActorParser:
             if not name:
                 raise SPDXParsingError([f"No name for Person provided: {actor}."])
             email: Optional[str] = ActorParser.get_email_or_none(person_match)
-            creator = construct_or_raise_parsing_error(Actor, dict(actor_type=ActorType.PERSON, name=name, email=email))
+            creator = construct_or_raise_parsing_error(
+                Actor, dict(actor_type=ActorType.PERSON, name=name, email=email)
+            )
         elif org_match:
             name: str = org_match.group(1).strip()
             if not name:
                 raise SPDXParsingError([f"No name for Organization provided: {actor}."])
             email: Optional[str] = ActorParser.get_email_or_none(org_match)
-            creator = construct_or_raise_parsing_error(Actor,
-                                                       dict(actor_type=ActorType.ORGANIZATION, name=name, email=email))
+            creator = construct_or_raise_parsing_error(
+                Actor, dict(actor_type=ActorType.ORGANIZATION, name=name, email=email)
+            )
         else:
             raise SPDXParsingError([f"Actor {actor} doesn't match any of person, organization or tool."])
 

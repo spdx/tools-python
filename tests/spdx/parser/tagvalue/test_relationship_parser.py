@@ -18,20 +18,31 @@ from spdx.parser.tagvalue.parser import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 
-@pytest.mark.parametrize("relationship_str, expected_relationship",
-                         [("\n".join(["Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File",
-                                      "RelationshipComment: This is a comment."]),
-                           Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES,
-                                        "SPDXRef-File", "This is a comment.")),
-                          ("Relationship: SPDXRef-DOCUMENT PATCH_FOR NOASSERTION",
-                           Relationship("SPDXRef-DOCUMENT", RelationshipType.PATCH_FOR,
-                                        SpdxNoAssertion())),
-                          ("Relationship: SPDXRef-CarolCompression DEPENDS_ON NONE",
-                           Relationship("SPDXRef-CarolCompression", RelationshipType.DEPENDS_ON, SpdxNone())),
-                          ("Relationship: DocumentRef-ExternalDocument:SPDXRef-Test DEPENDS_ON DocumentRef:AnotherRef",
-                           Relationship("DocumentRef-ExternalDocument:SPDXRef-Test", RelationshipType.DEPENDS_ON,
-                                        "DocumentRef:AnotherRef"))
-                          ])
+@pytest.mark.parametrize(
+    "relationship_str, expected_relationship",
+    [
+        (
+            "\n".join(
+                ["Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File", "RelationshipComment: This is a comment."]
+            ),
+            Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-File", "This is a comment."),
+        ),
+        (
+            "Relationship: SPDXRef-DOCUMENT PATCH_FOR NOASSERTION",
+            Relationship("SPDXRef-DOCUMENT", RelationshipType.PATCH_FOR, SpdxNoAssertion()),
+        ),
+        (
+            "Relationship: SPDXRef-CarolCompression DEPENDS_ON NONE",
+            Relationship("SPDXRef-CarolCompression", RelationshipType.DEPENDS_ON, SpdxNone()),
+        ),
+        (
+            "Relationship: DocumentRef-ExternalDocument:SPDXRef-Test DEPENDS_ON DocumentRef:AnotherRef",
+            Relationship(
+                "DocumentRef-ExternalDocument:SPDXRef-Test", RelationshipType.DEPENDS_ON, "DocumentRef:AnotherRef"
+            ),
+        ),
+    ],
+)
 def test_parse_relationship(relationship_str, expected_relationship):
     parser = Parser()
     document = parser.parse("\n".join([DOCUMENT_STR, relationship_str]))
@@ -41,12 +52,22 @@ def test_parse_relationship(relationship_str, expected_relationship):
     assert relationship == expected_relationship
 
 
-@pytest.mark.parametrize("relationship_str, expected_message",
-                         [("Relationship: spdx_id DESCRIBES",
-                           ['Error while parsing Relationship: ["Relationship couldn\'t be split in '
-                            'spdx_element_id, relationship_type and related_spdx_element. Line: 1"]']),
-                          ("Relationship: spdx_id IS spdx_id",
-                           ["Error while parsing Relationship: ['Invalid RelationshipType IS. Line: 1']"])])
+@pytest.mark.parametrize(
+    "relationship_str, expected_message",
+    [
+        (
+            "Relationship: spdx_id DESCRIBES",
+            [
+                "Error while parsing Relationship: [\"Relationship couldn't be split in "
+                'spdx_element_id, relationship_type and related_spdx_element. Line: 1"]'
+            ],
+        ),
+        (
+            "Relationship: spdx_id IS spdx_id",
+            ["Error while parsing Relationship: ['Invalid RelationshipType IS. Line: 1']"],
+        ),
+    ],
+)
 def test_parse_invalid_relationship(relationship_str, expected_message):
     parser = Parser()
     with pytest.raises(SPDXParsingError) as err:

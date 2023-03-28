@@ -54,13 +54,16 @@ def parse_checksum(checksum_str: str) -> Checksum:
     return checksum
 
 
-def set_value(parsed_value: YaccProduction, dict_to_fill: Dict[str, Any], argument_name: Optional[str] = None,
-              method_to_apply: Callable = lambda x: x):
+def set_value(
+    parsed_value: YaccProduction,
+    dict_to_fill: Dict[str, Any],
+    argument_name: Optional[str] = None,
+    method_to_apply: Callable = lambda x: x,
+):
     if not argument_name:
         argument_name = get_property_name(parsed_value[1])
     if argument_name in dict_to_fill:
-        dict_to_fill["logger"].append(
-            f"Multiple values for {parsed_value[1]} found. Line: {parsed_value.lineno(1)}")
+        dict_to_fill["logger"].append(f"Multiple values for {parsed_value[1]} found. Line: {parsed_value.lineno(1)}")
         return
     try:
         dict_to_fill[argument_name] = method_to_apply(parsed_value[2])
@@ -82,31 +85,54 @@ def get_property_name(tag: str):
 # This mapping is not complete as we only list the values which can be parsed by a generic method and don't need any
 # individual logic.
 TAG_DATA_MODEL_FIELD = {
-    "SPDXVersion": (CreationInfo, "spdx_version"), "DataLicense": (CreationInfo, "data_license"),
-    "DocumentName": (CreationInfo, "name"), "DocumentComment": (CreationInfo, "document_comment"),
-    "DocumentNamespace": (CreationInfo, "document_namespace"), "Creator": (CreationInfo, "creator"),
-    "Created": (CreationInfo, "created"), "CreatorComment": (CreationInfo, "creator_comment"),
+    "SPDXVersion": (CreationInfo, "spdx_version"),
+    "DataLicense": (CreationInfo, "data_license"),
+    "DocumentName": (CreationInfo, "name"),
+    "DocumentComment": (CreationInfo, "document_comment"),
+    "DocumentNamespace": (CreationInfo, "document_namespace"),
+    "Creator": (CreationInfo, "creator"),
+    "Created": (CreationInfo, "created"),
+    "CreatorComment": (CreationInfo, "creator_comment"),
     "LicenseListVersion": (CreationInfo, "license_list_version"),
     "ExternalDocumentRef": (CreationInfo, "external_document_refs"),
-    "FileName": (File, "name"), "FileType": (File, "file_type"), "FileChecksum": (File, "checksums"),
-    "FileNotice": (File, "notice"), "FileCopyrightText": (File, "copyright_text"),
-    "LicenseComments": (File, "license_comment"), "FileComment": (File, "comment"),
-    "LicenseConcluded": (File, "license_concluded"), "LicenseDeclared": (File, "license_declared"),
-    "PackageName": (Package, "name"), "PackageComment": (Package, "comment"),
-    "PackageCopyrightText": (Package, "copyright_text"), "PackageLicenseComments": (Package, "license_comment"),
-    "PackageLicenseDeclared": (Package, "license_declared"), "PackageLicenseConcluded": (Package, "license_concluded"),
-    "PackageFileName": (Package, "file_name"), "PackageVersion": (Package, "version"),
-    "PackageDownloadLocation": (Package, "download_location"), "PackageSummary": (Package, "summary"),
-    "PackageSourceInfo": (Package, "source_info"), "PackageSupplier": (Package, "supplier"),
-    "PackageOriginator": (Package, "originator"), "PackageDescription": (Package, "description"),
+    "FileName": (File, "name"),
+    "FileType": (File, "file_type"),
+    "FileChecksum": (File, "checksums"),
+    "FileNotice": (File, "notice"),
+    "FileCopyrightText": (File, "copyright_text"),
+    "LicenseComments": (File, "license_comment"),
+    "FileComment": (File, "comment"),
+    "LicenseConcluded": (File, "license_concluded"),
+    "LicenseDeclared": (File, "license_declared"),
+    "PackageName": (Package, "name"),
+    "PackageComment": (Package, "comment"),
+    "PackageCopyrightText": (Package, "copyright_text"),
+    "PackageLicenseComments": (Package, "license_comment"),
+    "PackageLicenseDeclared": (Package, "license_declared"),
+    "PackageLicenseConcluded": (Package, "license_concluded"),
+    "PackageFileName": (Package, "file_name"),
+    "PackageVersion": (Package, "version"),
+    "PackageDownloadLocation": (Package, "download_location"),
+    "PackageSummary": (Package, "summary"),
+    "PackageSourceInfo": (Package, "source_info"),
+    "PackageSupplier": (Package, "supplier"),
+    "PackageOriginator": (Package, "originator"),
+    "PackageDescription": (Package, "description"),
     "PackageHomePage": (Package, "homepage"),
-    "SnippetSPDXID": (Snippet, "spdx_id"), "SnippetFromFileSPDXID": (Snippet, "file_spdx_id"),
+    "SnippetSPDXID": (Snippet, "spdx_id"),
+    "SnippetFromFileSPDXID": (Snippet, "file_spdx_id"),
     "SnippetName": (Snippet, "name"),
-    "SnippetComment": (Snippet, "comment"), "SnippetCopyrightText": (Snippet, "copyright_text"),
-    "SnippetLicenseComments": (Snippet, "license_comment"), "SnippetLicenseConcluded": (Snippet, "license_concluded"),
-    "SnippetByteRange": (Snippet, "byte_range"), "SnippetLineRange": (Snippet, "line_range"),
+    "SnippetComment": (Snippet, "comment"),
+    "SnippetCopyrightText": (Snippet, "copyright_text"),
+    "SnippetLicenseComments": (Snippet, "license_comment"),
+    "SnippetLicenseConcluded": (Snippet, "license_concluded"),
+    "SnippetByteRange": (Snippet, "byte_range"),
+    "SnippetLineRange": (Snippet, "line_range"),
     "Annotator": (Annotation, "annotator"),
-    "SPDXREF": (Annotation, "spdx_id"), "AnnotationComment": (Annotation, "annotation_comment"),
-    "LicenseID": (ExtractedLicensingInfo, "license_id"), "ExtractedText": (ExtractedLicensingInfo, "extracted_text"),
-    "LicenseComment": (ExtractedLicensingInfo, "comment"), "LicenseName": (ExtractedLicensingInfo, "license_name")
+    "SPDXREF": (Annotation, "spdx_id"),
+    "AnnotationComment": (Annotation, "annotation_comment"),
+    "LicenseID": (ExtractedLicensingInfo, "license_id"),
+    "ExtractedText": (ExtractedLicensingInfo, "extracted_text"),
+    "LicenseComment": (ExtractedLicensingInfo, "comment"),
+    "LicenseName": (ExtractedLicensingInfo, "license_name"),
 }

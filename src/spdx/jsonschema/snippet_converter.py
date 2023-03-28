@@ -30,12 +30,15 @@ class SnippetConverter(TypedConverter[Snippet]):
             return "SPDXID"
         return super().json_property_name(snippet_property)
 
-    def _get_property_value(self, snippet: Snippet, snippet_property: SnippetProperty,
-                            document: Document = None) -> Any:
+    def _get_property_value(
+        self, snippet: Snippet, snippet_property: SnippetProperty, document: Document = None
+    ) -> Any:
         if snippet_property == SnippetProperty.SPDX_ID:
             return snippet.spdx_id
         elif snippet_property == SnippetProperty.ANNOTATIONS:
-            snippet_annotations = filter(lambda annotation: annotation.spdx_id == snippet.spdx_id, document.annotations)
+            snippet_annotations = filter(
+                lambda annotation: annotation.spdx_id == snippet.spdx_id, document.annotations
+            )
             return [self.annotation_converter.convert(annotation) for annotation in snippet_annotations] or None
         elif snippet_property == SnippetProperty.ATTRIBUTION_TEXTS:
             return snippet.attribution_texts or None
@@ -78,8 +81,10 @@ def convert_byte_range_to_dict(byte_range: Tuple[int, int], file_id: str) -> Dic
 
 
 def _convert_range_to_dict(int_range: Tuple[int, int], file_id: str, pointer_property: str) -> Dict:
-    return {"startPointer": _pointer(file_id, int_range[0], pointer_property),
-            "endPointer": _pointer(file_id, int_range[1], pointer_property)}
+    return {
+        "startPointer": _pointer(file_id, int_range[0], pointer_property),
+        "endPointer": _pointer(file_id, int_range[1], pointer_property),
+    }
 
 
 def _pointer(reference: str, target: int, pointer_property: str) -> Dict:

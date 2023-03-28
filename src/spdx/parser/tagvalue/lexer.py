@@ -97,20 +97,20 @@ class SPDXLexer:
         "SnippetLineRange": "SNIPPET_LINE_RANGE",
         # Common fields
         "NOASSERTION": "NO_ASSERTION",
-        "NONE": "NONE"
+        "NONE": "NONE",
     }
     states = (("text", "exclusive"),)
 
     tokens = [
-                 "TEXT",
-                 "TOOL_VALUE",
-                 "UNKNOWN_TAG",
-                 "ORGANIZATION_VALUE",
-                 "PERSON_VALUE",
-                 "ISO8601_DATE",
-                 "LINE",
-                 "CHECKSUM"
-             ] + list(reserved.values())
+        "TEXT",
+        "TOOL_VALUE",
+        "UNKNOWN_TAG",
+        "ORGANIZATION_VALUE",
+        "PERSON_VALUE",
+        "ISO8601_DATE",
+        "LINE",
+        "CHECKSUM",
+    ] + list(reserved.values())
 
     def __init__(self):
         self.lexer = None
@@ -123,7 +123,7 @@ class SPDXLexer:
     @TOKEN(r"</text>\s*")
     def t_text_end(self, t):
         t.type = "TEXT"
-        t.value = t.lexer.lexdata[t.lexer.text_start: t.lexer.lexpos]
+        t.value = t.lexer.lexdata[t.lexer.text_start : t.lexer.lexpos]
         t.lexer.lineno += t.value.count("\n")
         t.value = t.value.strip()
         t.lexer.begin("INITIAL")
@@ -137,7 +137,8 @@ class SPDXLexer:
         print("Lexer error in text state")
 
     @TOKEN(
-        r":\s*(ADLER32|BLAKE2b-256|BLAKE2b-384|BLAKE2b-512|BLAKE3|MD2|MD4|MD5|MD6|SHA1|SHA224|SHA256|SHA384|SHA512|SHA3-256|SHA3-384|SHA3-512):\s*([a-f0-9]*)")
+        r":\s*(ADLER32|BLAKE2b-256|BLAKE2b-384|BLAKE2b-512|BLAKE3|MD2|MD4|MD5|MD6|SHA1|SHA224|SHA256|SHA384|SHA512|SHA3-256|SHA3-384|SHA3-512):\s*([a-f0-9]*)"
+    )
     def t_CHECKSUM(self, t):
         t.value = t.value[1:].strip()
         return t

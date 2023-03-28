@@ -31,7 +31,7 @@ def test_write_json(temporary_file_path: str):
     with open(temporary_file_path) as written_file:
         written_json = json.load(written_file)
 
-    with open(os.path.join(os.path.dirname(__file__), 'expected_results', 'expected.json')) as expected_file:
+    with open(os.path.join(os.path.dirname(__file__), "expected_results", "expected.json")) as expected_file:
         expected_json = json.load(expected_file)
 
     assert written_json == expected_json

@@ -30,8 +30,7 @@ def test_json_str_to_enum():
     assert enum_name == "BLAKE2B_256"
 
 
-@pytest.mark.parametrize("invalid_json_str,expected_message",
-                         [(5, ["Type for enum must be str not int"])])
+@pytest.mark.parametrize("invalid_json_str,expected_message", [(5, ["Type for enum must be str not int"])])
 def test_invalid_json_str_to_enum(invalid_json_str, expected_message):
     with pytest.raises(SPDXParsingError) as err:
         json_str_to_enum_name(invalid_json_str)
@@ -46,8 +45,9 @@ def test_parse_field_or_no_assertion(input_str, expected_type):
     assert type(resulting_value) == expected_type
 
 
-@pytest.mark.parametrize("input_str,expected_type",
-                         [("NOASSERTION", SpdxNoAssertion), ("NONE", SpdxNone), ("example string", str)])
+@pytest.mark.parametrize(
+    "input_str,expected_type", [("NOASSERTION", SpdxNoAssertion), ("NONE", SpdxNone), ("example string", str)]
+)
 def test_parse_field_or_no_assertion_or_none(input_str, expected_type):
     resulting_value = parse_field_or_no_assertion_or_none(input_str, lambda x: x)
 

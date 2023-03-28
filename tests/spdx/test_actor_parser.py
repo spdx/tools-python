@@ -17,12 +17,20 @@ from spdx.parser.actor_parser import ActorParser
 from spdx.parser.error import SPDXParsingError
 
 
-@pytest.mark.parametrize("actor_string,expected_type,expected_name,expected_mail", [
-    ("Person: Jane Doe (jane.doe@example.com)", ActorType.PERSON, "Jane Doe", "jane.doe@example.com"),
-    ("Organization: Example organization (organization@example.com)", ActorType.ORGANIZATION, "Example organization",
-     "organization@example.com"),
-    ("Organization: Example organization ( )", ActorType.ORGANIZATION, "Example organization", None),
-    ("Tool: Example tool ", ActorType.TOOL, "Example tool", None)])
+@pytest.mark.parametrize(
+    "actor_string,expected_type,expected_name,expected_mail",
+    [
+        ("Person: Jane Doe (jane.doe@example.com)", ActorType.PERSON, "Jane Doe", "jane.doe@example.com"),
+        (
+            "Organization: Example organization (organization@example.com)",
+            ActorType.ORGANIZATION,
+            "Example organization",
+            "organization@example.com",
+        ),
+        ("Organization: Example organization ( )", ActorType.ORGANIZATION, "Example organization", None),
+        ("Tool: Example tool ", ActorType.TOOL, "Example tool", None),
+    ],
+)
 def test_parse_actor(actor_string, expected_type, expected_name, expected_mail):
     actor_parser = ActorParser()
 
@@ -33,12 +41,16 @@ def test_parse_actor(actor_string, expected_type, expected_name, expected_mail):
     assert actor.email == expected_mail
 
 
-@pytest.mark.parametrize("actor_string,expected_message", [
-    ("Perso: Jane Doe (jane.doe@example.com)",
-     ["Actor Perso: Jane Doe (jane.doe@example.com) doesn't match any of person, organization or tool."]),
-    ("Toole Example Tool ()",
-     ["Actor Toole Example Tool () doesn't match any of person, organization or tool."])
-])
+@pytest.mark.parametrize(
+    "actor_string,expected_message",
+    [
+        (
+            "Perso: Jane Doe (jane.doe@example.com)",
+            ["Actor Perso: Jane Doe (jane.doe@example.com) doesn't match any of person, organization or tool."],
+        ),
+        ("Toole Example Tool ()", ["Actor Toole Example Tool () doesn't match any of person, organization or tool."]),
+    ],
+)
 def test_parse_invalid_actor(actor_string, expected_message):
     actor_parser = ActorParser()
     actor_string = actor_string

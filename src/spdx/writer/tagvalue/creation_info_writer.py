@@ -30,8 +30,13 @@ def write_creation_info(creation_info: CreationInfo, text_output: TextIO):
 
     write_optional_heading(creation_info.external_document_refs, "\n## External Document References\n", text_output)
     for external_document_ref in creation_info.external_document_refs:
-        external_document_ref_str = " ".join([external_document_ref.document_ref_id, external_document_ref.document_uri,
-                                              external_document_ref.checksum.algorithm.name + ": " + external_document_ref.checksum.value])
+        external_document_ref_str = " ".join(
+            [
+                external_document_ref.document_ref_id,
+                external_document_ref.document_uri,
+                external_document_ref.checksum.algorithm.name + ": " + external_document_ref.checksum.value,
+            ]
+        )
         write_value("ExternalDocumentRef", external_document_ref_str, text_output)
     write_separator(text_output)
 

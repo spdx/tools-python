@@ -38,14 +38,16 @@ def test_wrong_type_in_email_after_initializing():
         actor.email = []
 
 
-@pytest.mark.parametrize("actor,expected_string", [(Actor(ActorType.PERSON, "personName"), "Person: personName"),
-                                                   (Actor(ActorType.PERSON, "personName", "personEmail"),
-                                                    "Person: personName (personEmail)"),
-                                                   (Actor(ActorType.ORGANIZATION, "orgName"), "Organization: orgName"),
-                                                   (Actor(ActorType.ORGANIZATION, "orgName", "orgEmail"),
-                                                    "Organization: orgName (orgEmail)"),
-                                                   (Actor(ActorType.TOOL, "toolName"), "Tool: toolName"),
-                                                   (Actor(ActorType.TOOL, "toolName", "toolEmail"),
-                                                    "Tool: toolName (toolEmail)")])
+@pytest.mark.parametrize(
+    "actor,expected_string",
+    [
+        (Actor(ActorType.PERSON, "personName"), "Person: personName"),
+        (Actor(ActorType.PERSON, "personName", "personEmail"), "Person: personName (personEmail)"),
+        (Actor(ActorType.ORGANIZATION, "orgName"), "Organization: orgName"),
+        (Actor(ActorType.ORGANIZATION, "orgName", "orgEmail"), "Organization: orgName (orgEmail)"),
+        (Actor(ActorType.TOOL, "toolName"), "Tool: toolName"),
+        (Actor(ActorType.TOOL, "toolName", "toolEmail"), "Tool: toolName (toolEmail)"),
+    ],
+)
 def test_serialization(actor: Actor, expected_string: str):
     assert actor.to_serialized_string() == expected_string

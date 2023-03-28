@@ -24,10 +24,15 @@ def converter() -> AnnotationConverter:
     return AnnotationConverter()
 
 
-@pytest.mark.parametrize("annotation_property,expected", [(AnnotationProperty.ANNOTATION_DATE, "annotationDate"),
-                                                          (AnnotationProperty.ANNOTATION_TYPE, "annotationType"),
-                                                          (AnnotationProperty.ANNOTATOR, "annotator"),
-                                                          (AnnotationProperty.COMMENT, "comment")])
+@pytest.mark.parametrize(
+    "annotation_property,expected",
+    [
+        (AnnotationProperty.ANNOTATION_DATE, "annotationDate"),
+        (AnnotationProperty.ANNOTATION_TYPE, "annotationType"),
+        (AnnotationProperty.ANNOTATOR, "annotator"),
+        (AnnotationProperty.COMMENT, "comment"),
+    ],
+)
 def test_json_property_names(converter: AnnotationConverter, annotation_property: AnnotationProperty, expected: str):
     assert converter.json_property_name(annotation_property) == expected
 
@@ -43,8 +48,7 @@ def test_data_model_type(converter: AnnotationConverter):
 def test_successful_conversion(converter: AnnotationConverter):
     date = datetime(2022, 12, 1)
     annotator = Actor(ActorType.PERSON, "actorName")
-    annotation = Annotation("spdxId", AnnotationType.REVIEW, annotator,
-                            date, "comment")
+    annotation = Annotation("spdxId", AnnotationType.REVIEW, annotator, date, "comment")
 
     converted_dict = converter.convert(annotation)
 
@@ -52,5 +56,5 @@ def test_successful_conversion(converter: AnnotationConverter):
         converter.json_property_name(AnnotationProperty.ANNOTATION_DATE): datetime_to_iso_string(date),
         converter.json_property_name(AnnotationProperty.ANNOTATION_TYPE): "REVIEW",
         converter.json_property_name(AnnotationProperty.ANNOTATOR): annotator.to_serialized_string(),
-        converter.json_property_name(AnnotationProperty.COMMENT): "comment"
+        converter.json_property_name(AnnotationProperty.COMMENT): "comment",
     }

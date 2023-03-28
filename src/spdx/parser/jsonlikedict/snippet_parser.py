@@ -56,21 +56,34 @@ class SnippetParser:
         copyright_text: Optional[str] = snippet_dict.get("copyrightText")
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
         license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
-            logger, snippet_dict.get("licenseConcluded"), self.license_expression_parser.parse_license_expression)
+            logger, snippet_dict.get("licenseConcluded"), self.license_expression_parser.parse_license_expression
+        )
 
         license_info: List[Union[LicenseExpression], SpdxNoAssertion, SpdxNone] = parse_field_or_log_error(
-            logger, snippet_dict.get("licenseInfoInSnippets"), self.license_expression_parser.parse_license_expression,
-            field_is_list=True)
+            logger,
+            snippet_dict.get("licenseInfoInSnippets"),
+            self.license_expression_parser.parse_license_expression,
+            field_is_list=True,
+        )
         if logger.has_messages():
             raise SPDXParsingError([f"Error while parsing snippet: {logger.get_messages()}"])
 
-        snippet = construct_or_raise_parsing_error(Snippet,
-                                                   dict(spdx_id=spdx_id, name=name, byte_range=byte_range,
-                                                        file_spdx_id=file_spdx_id, line_range=line_range,
-                                                        attribution_texts=attribution_texts, comment=comment,
-                                                        copyright_text=copyright_text, license_comment=license_comment,
-                                                        license_concluded=license_concluded,
-                                                        license_info_in_snippet=license_info))
+        snippet = construct_or_raise_parsing_error(
+            Snippet,
+            dict(
+                spdx_id=spdx_id,
+                name=name,
+                byte_range=byte_range,
+                file_spdx_id=file_spdx_id,
+                line_range=line_range,
+                attribution_texts=attribution_texts,
+                comment=comment,
+                copyright_text=copyright_text,
+                license_comment=license_comment,
+                license_concluded=license_concluded,
+                license_info_in_snippet=license_info,
+            ),
+        )
 
         return snippet
 
@@ -120,8 +133,9 @@ class SnippetParser:
         return RangeType.BYTE if "offset" in pointer else RangeType.LINE
 
     @staticmethod
-    def convert_range_from_str(_range: Tuple[Union[int, str], Union[int, str]]) -> Tuple[
-        Union[int, str], Union[int, str]]:
+    def convert_range_from_str(
+        _range: Tuple[Union[int, str], Union[int, str]]
+    ) -> Tuple[Union[int, str], Union[int, str]]:
         # XML does not support integers, so we have to convert from string (if possible)
         if not _range:
             return _range

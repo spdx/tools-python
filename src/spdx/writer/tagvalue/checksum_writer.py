@@ -27,5 +27,5 @@ CHECKSUM_ALGORITHM_TO_TV = {
     ChecksumAlgorithm.BLAKE2B_512.name: "BLAKE2b-512",
     ChecksumAlgorithm.SHA3_256.name: "SHA3-256",
     ChecksumAlgorithm.SHA3_384.name: "SHA3-384",
-    ChecksumAlgorithm.SHA3_512.name: "SHA3-512"
+    ChecksumAlgorithm.SHA3_512.name: "SHA3-512",
 }

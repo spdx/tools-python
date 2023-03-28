@@ -28,14 +28,16 @@ def token_assert_helper(token, token_type, value, line_number):
 
 
 def test_tokenization_of_document(lexer):
-    document_str = "\n".join([
-        "SPDXVersion: SPDX-2.1",
-        "DataLicense: CC0-1.0",
-        "DocumentName: Sample_Document-V2.1",
-        "SPDXID: SPDXRef-DOCUMENT",
-        "DocumentComment: <text>Sample Comment</text>",
-        "DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301"
-    ])
+    document_str = "\n".join(
+        [
+            "SPDXVersion: SPDX-2.1",
+            "DataLicense: CC0-1.0",
+            "DocumentName: Sample_Document-V2.1",
+            "SPDXID: SPDXRef-DOCUMENT",
+            "DocumentComment: <text>Sample Comment</text>",
+            "DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+        ]
+    )
     lexer.input(document_str)
     token_assert_helper(lexer.token(), "DOC_VERSION", "SPDXVersion", 1)
     token_assert_helper(lexer.token(), "LINE", "SPDX-2.1", 1)
@@ -48,38 +50,50 @@ def test_tokenization_of_document(lexer):
     token_assert_helper(lexer.token(), "DOC_COMMENT", "DocumentComment", 5)
     token_assert_helper(lexer.token(), "TEXT", "<text>Sample Comment</text>", 5)
     token_assert_helper(lexer.token(), "DOC_NAMESPACE", "DocumentNamespace", 6)
-    token_assert_helper(lexer.token(), "LINE",
-                        "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301", 6)
+    token_assert_helper(
+        lexer.token(), "LINE", "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301", 6
+    )
 
 
 def test_tokenization_of_external_document_references(lexer):
-    data = "\n".join([
-                         "ExternalDocumentRef:DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
-                         "ExternalDocumentRef:DocumentRef-spdx-tool-2.1 ldap://[2001:db8::7]/c=GB?objectClass?one SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759"])
+    data = "\n".join(
+        [
+            "ExternalDocumentRef:DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+            "ExternalDocumentRef:DocumentRef-spdx-tool-2.1 ldap://[2001:db8::7]/c=GB?objectClass?one SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+        ]
+    )
     lexer.input(data)
     token_assert_helper(lexer.token(), "EXT_DOC_REF", "ExternalDocumentRef", 1)
-    token_assert_helper(lexer.token(), "LINE",
-                        "DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
-                        1)
+    token_assert_helper(
+        lexer.token(),
+        "LINE",
+        "DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+        1,
+    )
     token_assert_helper(lexer.token(), "EXT_DOC_REF", "ExternalDocumentRef", 2)
-    token_assert_helper(lexer.token(), "LINE",
-                        "DocumentRef-spdx-tool-2.1 ldap://[2001:db8::7]/c=GB?objectClass?one SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
-                        2)
+    token_assert_helper(
+        lexer.token(),
+        "LINE",
+        "DocumentRef-spdx-tool-2.1 ldap://[2001:db8::7]/c=GB?objectClass?one SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+        2,
+    )
 
 
 def test_tokenization_of_file(lexer):
-    file_str = "\n".join([
-        "FileName: testfile.java",
-        "SPDXID: SPDXRef-File",
-        "FileType: SOURCE",
-        "FileType: TEXT",
-        "FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
-        "LicenseConcluded: Apache-2.0",
-        "LicenseInfoInFile: Apache-2.0",
-        "FileCopyrightText: <text>Copyright 2014 Acme Inc.</text>",
-        "FileComment: <text>Very long file</text>",
-        "FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts.</text>"
-    ])
+    file_str = "\n".join(
+        [
+            "FileName: testfile.java",
+            "SPDXID: SPDXRef-File",
+            "FileType: SOURCE",
+            "FileType: TEXT",
+            "FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
+            "LicenseConcluded: Apache-2.0",
+            "LicenseInfoInFile: Apache-2.0",
+            "FileCopyrightText: <text>Copyright 2014 Acme Inc.</text>",
+            "FileComment: <text>Very long file</text>",
+            "FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts.</text>",
+        ]
+    )
 
     lexer.input(file_str)
     token_assert_helper(lexer.token(), "FILE_NAME", "FileName", 1)
@@ -101,18 +115,23 @@ def test_tokenization_of_file(lexer):
     token_assert_helper(lexer.token(), "FILE_COMMENT", "FileComment", 9)
     token_assert_helper(lexer.token(), "TEXT", "<text>Very long file</text>", 9)
     token_assert_helper(lexer.token(), "FILE_ATTRIBUTION_TEXT", "FileAttributionText", 10)
-    token_assert_helper(lexer.token(), "TEXT",
-                        "<text>Acknowledgements that might be required to be communicated in some contexts.</text>",
-                        10)
+    token_assert_helper(
+        lexer.token(),
+        "TEXT",
+        "<text>Acknowledgements that might be required to be communicated in some contexts.</text>",
+        10,
+    )
 
 
 def test_tokenization_of_creation_info(lexer):
-    creation_str = "\n".join([
-        "Creator: Person: Bob (bob@example.com)",
-        "Creator: Organization: Acme.",
-        "Created: 2010-02-03T00:00:00Z",
-        "CreatorComment: <text>Sample Comment</text>"
-    ])
+    creation_str = "\n".join(
+        [
+            "Creator: Person: Bob (bob@example.com)",
+            "Creator: Organization: Acme.",
+            "Created: 2010-02-03T00:00:00Z",
+            "CreatorComment: <text>Sample Comment</text>",
+        ]
+    )
 
     lexer.input(creation_str)
     token_assert_helper(lexer.token(), "CREATOR", "Creator", 1)
@@ -126,34 +145,36 @@ def test_tokenization_of_creation_info(lexer):
 
 
 def test_tokenization_of_package(lexer):
-    package_str = "\n".join([
-        "PackageName: Test",
-        "SPDXID: SPDXRef-Package",
-        "PackageVersion: Version 0.9.2",
-        "PackageDownloadLocation: http://example.com/test",
-        "FilesAnalyzed: True",
-        "PackageSummary: <text>Test package</text>",
-        "PackageSourceInfo: <text>Version 1.0 of test</text>",
-        "PackageFileName: test-1.0.zip",
-        "PackageSupplier: Organization:ACME",
-        "PackageOriginator: Organization:ACME",
-        "PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
-        "PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (something.rdf, something.txt)",
-        "PackageDescription: <text>A package.</text>",
-        "PackageComment: <text>Comment on the package.</text>",
-        "PackageCopyrightText: <text> Copyright 2014 Acme Inc.</text>",
-        "PackageLicenseDeclared: Apache-2.0",
-        "PackageLicenseConcluded: (LicenseRef-2.0 and Apache-2.0)",
-        "PackageLicenseInfoFromFiles: Apache-1.0",
-        "PackageLicenseInfoFromFiles: Apache-2.0",
-        "PackageLicenseComments: <text>License Comments</text>",
-        "ExternalRef: SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:",
-        "ExternalRefComment: <text>Some comment about the package.</text>",
-        "PrimaryPackagePurpose: OPERATING-SYSTEM",
-        "BuiltDate: 2020-01-01T12:00:00Z",
-        "ReleaseDate: 2021-01-01T12:00:00Z",
-        "ValidUntilDate: 2022-01-01T12:00:00Z"
-    ])
+    package_str = "\n".join(
+        [
+            "PackageName: Test",
+            "SPDXID: SPDXRef-Package",
+            "PackageVersion: Version 0.9.2",
+            "PackageDownloadLocation: http://example.com/test",
+            "FilesAnalyzed: True",
+            "PackageSummary: <text>Test package</text>",
+            "PackageSourceInfo: <text>Version 1.0 of test</text>",
+            "PackageFileName: test-1.0.zip",
+            "PackageSupplier: Organization:ACME",
+            "PackageOriginator: Organization:ACME",
+            "PackageChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12",
+            "PackageVerificationCode: 4e3211c67a2d28fced849ee1bb76e7391b93feba (something.rdf, something.txt)",
+            "PackageDescription: <text>A package.</text>",
+            "PackageComment: <text>Comment on the package.</text>",
+            "PackageCopyrightText: <text> Copyright 2014 Acme Inc.</text>",
+            "PackageLicenseDeclared: Apache-2.0",
+            "PackageLicenseConcluded: (LicenseRef-2.0 and Apache-2.0)",
+            "PackageLicenseInfoFromFiles: Apache-1.0",
+            "PackageLicenseInfoFromFiles: Apache-2.0",
+            "PackageLicenseComments: <text>License Comments</text>",
+            "ExternalRef: SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:",
+            "ExternalRefComment: <text>Some comment about the package.</text>",
+            "PrimaryPackagePurpose: OPERATING-SYSTEM",
+            "BuiltDate: 2020-01-01T12:00:00Z",
+            "ReleaseDate: 2021-01-01T12:00:00Z",
+            "ValidUntilDate: 2022-01-01T12:00:00Z",
+        ]
+    )
 
     lexer.input(package_str)
     token_assert_helper(lexer.token(), "PKG_NAME", "PackageName", 1)
@@ -179,8 +200,9 @@ def test_tokenization_of_package(lexer):
     token_assert_helper(lexer.token(), "PKG_CHECKSUM", "PackageChecksum", 11)
     token_assert_helper(lexer.token(), "CHECKSUM", "SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12", 11)
     token_assert_helper(lexer.token(), "PKG_VERIFICATION_CODE", "PackageVerificationCode", 12)
-    token_assert_helper(lexer.token(), "LINE",
-                        "4e3211c67a2d28fced849ee1bb76e7391b93feba (something.rdf, something.txt)", 12)
+    token_assert_helper(
+        lexer.token(), "LINE", "4e3211c67a2d28fced849ee1bb76e7391b93feba (something.rdf, something.txt)", 12
+    )
     token_assert_helper(lexer.token(), "PKG_DESCRIPTION", "PackageDescription", 13)
     token_assert_helper(lexer.token(), "TEXT", "<text>A package.</text>", 13)
     token_assert_helper(lexer.token(), "PKG_COMMENT", "PackageComment", 14)
@@ -198,8 +220,9 @@ def test_tokenization_of_package(lexer):
     token_assert_helper(lexer.token(), "PKG_LICENSE_COMMENT", "PackageLicenseComments", 20)
     token_assert_helper(lexer.token(), "TEXT", "<text>License Comments</text>", 20)
     token_assert_helper(lexer.token(), "PKG_EXTERNAL_REF", "ExternalRef", 21)
-    token_assert_helper(lexer.token(), "LINE",
-                        "SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:", 21)
+    token_assert_helper(
+        lexer.token(), "LINE", "SECURITY cpe23Type cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:", 21
+    )
     token_assert_helper(lexer.token(), "PKG_EXTERNAL_REF_COMMENT", "ExternalRefComment", 22)
     token_assert_helper(lexer.token(), "TEXT", "<text>Some comment about the package.</text>", 22)
     token_assert_helper(lexer.token(), "PRIMARY_PACKAGE_PURPOSE", "PrimaryPackagePurpose", 23)
@@ -220,18 +243,20 @@ def test_tokenization_of_unknown_tag(lexer):
 
 
 def test_tokenization_of_snippet(lexer):
-    snippet_str = "\n".join([
-        "SnippetSPDXID: SPDXRef-Snippet",
-        "SnippetLicenseComments: <text>Some lic comment.</text>",
-        "SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>",
-        "SnippetComment: <text>Some snippet comment.</text>",
-        "SnippetName: from linux kernel",
-        "SnippetFromFileSPDXID: SPDXRef-DoapSource",
-        "SnippetLicenseConcluded: Apache-2.0",
-        "LicenseInfoInSnippet: Apache-2.0",
-        "SnippetByteRange: 310:420",
-        "SnippetLineRange: 5:23",
-    ])
+    snippet_str = "\n".join(
+        [
+            "SnippetSPDXID: SPDXRef-Snippet",
+            "SnippetLicenseComments: <text>Some lic comment.</text>",
+            "SnippetCopyrightText: <text> Copyright 2008-2010 John Smith </text>",
+            "SnippetComment: <text>Some snippet comment.</text>",
+            "SnippetName: from linux kernel",
+            "SnippetFromFileSPDXID: SPDXRef-DoapSource",
+            "SnippetLicenseConcluded: Apache-2.0",
+            "LicenseInfoInSnippet: Apache-2.0",
+            "SnippetByteRange: 310:420",
+            "SnippetLineRange: 5:23",
+        ]
+    )
     lexer.input(snippet_str)
     token_assert_helper(lexer.token(), "SNIPPET_SPDX_ID", "SnippetSPDXID", 1)
     token_assert_helper(lexer.token(), "LINE", "SPDXRef-Snippet", 1)
@@ -245,8 +270,7 @@ def test_tokenization_of_snippet(lexer):
     token_assert_helper(lexer.token(), "LINE", "from linux kernel", 5)
     token_assert_helper(lexer.token(), "SNIPPET_FILE_SPDXID", "SnippetFromFileSPDXID", 6)
     token_assert_helper(lexer.token(), "LINE", "SPDXRef-DoapSource", 6)
-    token_assert_helper(lexer.token(), "SNIPPET_LICENSE_CONCLUDED",
-                        "SnippetLicenseConcluded", 7)
+    token_assert_helper(lexer.token(), "SNIPPET_LICENSE_CONCLUDED", "SnippetLicenseConcluded", 7)
     token_assert_helper(lexer.token(), "LINE", "Apache-2.0", 7)
     token_assert_helper(lexer.token(), "SNIPPET_LICENSE_INFO", "LicenseInfoInSnippet", 8)
     token_assert_helper(lexer.token(), "LINE", "Apache-2.0", 8)
@@ -257,13 +281,15 @@ def test_tokenization_of_snippet(lexer):
 
 
 def test_tokenization_of_annotation(lexer):
-    annotation_str = "\n".join([
-        "Annotator: Person: Jane Doe()",
-        "AnnotationDate: 2010-01-29T18:30:22Z",
-        "AnnotationComment: <text>Document level annotation</text>",
-        "AnnotationType: OTHER",
-        "SPDXREF: SPDXRef-DOCUMENT"
-    ])
+    annotation_str = "\n".join(
+        [
+            "Annotator: Person: Jane Doe()",
+            "AnnotationDate: 2010-01-29T18:30:22Z",
+            "AnnotationComment: <text>Document level annotation</text>",
+            "AnnotationType: OTHER",
+            "SPDXREF: SPDXRef-DOCUMENT",
+        ]
+    )
 
     lexer.input(annotation_str)
     token_assert_helper(lexer.token(), "ANNOTATOR", "Annotator", 1)
@@ -279,9 +305,13 @@ def test_tokenization_of_annotation(lexer):
 
 
 def test_tokenization_of_relationship(lexer):
-    relationship_str = "\n".join(["Relationship: SPDXRef-DOCUMENT DESCRIBES NONE",
-                                  "RelationshipComment: This is a comment.",
-                                  "Relationship: DocumentRef-extern:SPDXRef-Package DESCRIBES NONE"])
+    relationship_str = "\n".join(
+        [
+            "Relationship: SPDXRef-DOCUMENT DESCRIBES NONE",
+            "RelationshipComment: This is a comment.",
+            "Relationship: DocumentRef-extern:SPDXRef-Package DESCRIBES NONE",
+        ]
+    )
 
     lexer.input(relationship_str)
     token_assert_helper(lexer.token(), "RELATIONSHIP", "Relationship", 1)

@@ -72,6 +72,11 @@ class Relationship:
     related_spdx_element_id: Union[str, SpdxNone, SpdxNoAssertion]
     comment: Optional[str] = None
 
-    def __init__(self, spdx_element_id: str, relationship_type: RelationshipType,
-                 related_spdx_element_id: Union[str, SpdxNone, SpdxNoAssertion], comment: Optional[str] = None):
+    def __init__(
+        self,
+        spdx_element_id: str,
+        relationship_type: RelationshipType,
+        related_spdx_element_id: Union[str, SpdxNone, SpdxNoAssertion],
+        comment: Optional[str] = None,
+    ):
         check_types_and_set_values(self, locals())

@@ -65,20 +65,34 @@ def test_add_package_verification_code_to_graph():
     add_package_verification_code_to_graph(verification_code, graph, URIRef("docNamespace"))
 
     assert (None, RDF.type, SPDX_NAMESPACE.PackageVerificationCode) in graph
-    assert (None, SPDX_NAMESPACE.packageVerificationCodeValue,
-            Literal("85ed0817af83a24ad8da68c2b5094de69833983c")) in graph
+    assert (
+        None,
+        SPDX_NAMESPACE.packageVerificationCodeValue,
+        Literal("85ed0817af83a24ad8da68c2b5094de69833983c"),
+    ) in graph
     assert (None, SPDX_NAMESPACE.packageVerificationCodeExcludedFile, Literal("./exclude.py")) in graph
 
 
-@pytest.mark.parametrize("external_reference,ref_type,category",
-                         [(external_package_ref_fixture(), URIRef("http://spdx.org/rdf/references/maven-central"),
-                           SPDX_NAMESPACE.referenceCategory_packageManager),
-                          (external_package_ref_fixture(locator="acmecorp/acmenator/4.1.3-alpha",
-                                                        category=ExternalPackageRefCategory.OTHER,
-                                                        reference_type="LocationRef-acmeforge",
-                                                        comment="This is the external ref for Acme"),
-                           URIRef("https://some.namespace#LocationRef-acmeforge"),
-                           SPDX_NAMESPACE.referenceCategory_other)])
+@pytest.mark.parametrize(
+    "external_reference,ref_type,category",
+    [
+        (
+            external_package_ref_fixture(),
+            URIRef("http://spdx.org/rdf/references/maven-central"),
+            SPDX_NAMESPACE.referenceCategory_packageManager,
+        ),
+        (
+            external_package_ref_fixture(
+                locator="acmecorp/acmenator/4.1.3-alpha",
+                category=ExternalPackageRefCategory.OTHER,
+                reference_type="LocationRef-acmeforge",
+                comment="This is the external ref for Acme",
+            ),
+            URIRef("https://some.namespace#LocationRef-acmeforge"),
+            SPDX_NAMESPACE.referenceCategory_other,
+        ),
+    ],
+)
 def test_external_package_ref_to_graph(external_reference, ref_type, category):
     graph = Graph()
     doc_namespace = "https://some.namespace"

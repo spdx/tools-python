@@ -42,13 +42,15 @@ def test_package_parser():
     assert package.source_info == "sourceInfo"
     assert package.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
     assert package.license_declared == get_spdx_licensing().parse("MIT AND GPL-2.0")
-    TestCase().assertCountEqual(package.license_info_from_files,
-                                [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"),
-                                 SpdxNoAssertion()])
+    TestCase().assertCountEqual(
+        package.license_info_from_files,
+        [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"), SpdxNoAssertion()],
+    )
     assert package.license_comment == "packageLicenseComment"
     assert package.copyright_text == "packageCopyrightText"
-    assert package.verification_code == PackageVerificationCode(value="85ed0817af83a24ad8da68c2b5094de69833983c",
-                                                                excluded_files=["./exclude.py"])
+    assert package.verification_code == PackageVerificationCode(
+        value="85ed0817af83a24ad8da68c2b5094de69833983c", excluded_files=["./exclude.py"]
+    )
     assert len(package.external_references) == 1
     assert package.summary == "packageSummary"
     assert package.description == "packageDescription"
@@ -59,11 +61,25 @@ def test_package_parser():
     assert package.originator == Actor(ActorType.PERSON, "originatorName", "some@mail.com")
 
 
-@pytest.mark.parametrize("download_location,category,locator,type,comment",
-                         [("https://download.com", ExternalPackageRefCategory.PACKAGE_MANAGER,
-                           "org.apache.tomcat:tomcat:9.0.0.M4", "maven-central", "externalPackageRefComment"),
-                          ("http://differentdownload.com", ExternalPackageRefCategory.OTHER,
-                           "acmecorp/acmenator/4.1.3-alpha", "LocationRef-acmeforge","This is the external ref for Acme")])
+@pytest.mark.parametrize(
+    "download_location,category,locator,type,comment",
+    [
+        (
+            "https://download.com",
+            ExternalPackageRefCategory.PACKAGE_MANAGER,
+            "org.apache.tomcat:tomcat:9.0.0.M4",
+            "maven-central",
+            "externalPackageRefComment",
+        ),
+        (
+            "http://differentdownload.com",
+            ExternalPackageRefCategory.OTHER,
+            "acmecorp/acmenator/4.1.3-alpha",
+            "LocationRef-acmeforge",
+            "This is the external ref for Acme",
+        ),
+    ],
+)
 def test_external_package_ref_parser(download_location, category, locator, type, comment):
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
     doc_namespace = "https://some.namespace"

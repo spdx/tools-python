@@ -60,7 +60,8 @@ class TypedConverter(ABC, Generic[T]):
         if not isinstance(instance, self.get_data_model_type()):
             raise TypeError(
                 f"Converter of type {self.__class__} can only convert objects of type "
-                f"{self.get_data_model_type()}. Received {type(instance)} instead.")
+                f"{self.get_data_model_type()}. Received {type(instance)} instead."
+            )
         if self.requires_full_document() and not document:
             raise ValueError(f"Converter of type {self.__class__} requires the full document")
 

@@ -31,8 +31,8 @@ from tests.spdx.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
-@mock.patch('spdx.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
-@mock.patch('spdx.jsonschema.annotation_converter.AnnotationConverter', autospec=True)
+@mock.patch("spdx.jsonschema.checksum_converter.ChecksumConverter", autospec=True)
+@mock.patch("spdx.jsonschema.annotation_converter.AnnotationConverter", autospec=True)
 def converter(annotation_converter_mock: MagicMock, checksum_converter_mock: MagicMock) -> FileConverter:
     converter = FileConverter()
     converter.checksum_converter = checksum_converter_mock()
@@ -40,22 +40,26 @@ def converter(annotation_converter_mock: MagicMock, checksum_converter_mock: Mag
     return converter
 
 
-@pytest.mark.parametrize("file_property,expected",
-                         [(FileProperty.SPDX_ID, "SPDXID"),
-                          (FileProperty.ANNOTATIONS, "annotations"),
-                          (FileProperty.ARTIFACT_OFS, "artifactOfs"),
-                          (FileProperty.ATTRIBUTION_TEXTS, "attributionTexts"),
-                          (FileProperty.CHECKSUMS, "checksums"),
-                          (FileProperty.COMMENT, "comment"),
-                          (FileProperty.COPYRIGHT_TEXT, "copyrightText"),
-                          (FileProperty.FILE_CONTRIBUTORS, "fileContributors"),
-                          (FileProperty.FILE_DEPENDENCIES, "fileDependencies"),
-                          (FileProperty.FILE_NAME, "fileName"),
-                          (FileProperty.FILE_TYPES, "fileTypes"),
-                          (FileProperty.LICENSE_COMMENTS, "licenseComments"),
-                          (FileProperty.LICENSE_CONCLUDED, "licenseConcluded"),
-                          (FileProperty.LICENSE_INFO_IN_FILES, "licenseInfoInFiles"),
-                          (FileProperty.NOTICE_TEXT, "noticeText")])
+@pytest.mark.parametrize(
+    "file_property,expected",
+    [
+        (FileProperty.SPDX_ID, "SPDXID"),
+        (FileProperty.ANNOTATIONS, "annotations"),
+        (FileProperty.ARTIFACT_OFS, "artifactOfs"),
+        (FileProperty.ATTRIBUTION_TEXTS, "attributionTexts"),
+        (FileProperty.CHECKSUMS, "checksums"),
+        (FileProperty.COMMENT, "comment"),
+        (FileProperty.COPYRIGHT_TEXT, "copyrightText"),
+        (FileProperty.FILE_CONTRIBUTORS, "fileContributors"),
+        (FileProperty.FILE_DEPENDENCIES, "fileDependencies"),
+        (FileProperty.FILE_NAME, "fileName"),
+        (FileProperty.FILE_TYPES, "fileTypes"),
+        (FileProperty.LICENSE_COMMENTS, "licenseComments"),
+        (FileProperty.LICENSE_CONCLUDED, "licenseConcluded"),
+        (FileProperty.LICENSE_INFO_IN_FILES, "licenseInfoInFiles"),
+        (FileProperty.NOTICE_TEXT, "noticeText"),
+    ],
+)
 def test_json_property_names(converter: FileConverter, file_property: FileProperty, expected: str):
     assert converter.json_property_name(file_property) == expected
 
@@ -71,16 +75,30 @@ def test_data_model_type(converter: FileConverter):
 def test_successful_conversion(converter: FileConverter):
     converter.checksum_converter.convert.return_value = "mock_converted_checksum"
     converter.annotation_converter.convert.return_value = "mock_converted_annotation"
-    file = File(name="name", spdx_id="spdxId",
-                checksums=[Checksum(ChecksumAlgorithm.SHA224, "sha224"), Checksum(ChecksumAlgorithm.MD2, "md2")],
-                file_types=[FileType.SPDX, FileType.OTHER], license_concluded=Licensing().parse("MIT and GPL-2.0"),
-                license_info_in_file=[Licensing().parse("MIT"), Licensing().parse("GPL-2.0"), SpdxNoAssertion()],
-                license_comment="licenseComment", copyright_text="copyrightText", comment="comment", notice="notice",
-                contributors=["contributor1", "contributor2"],
-                attribution_texts=["attributionText1", "attributionText2"])
+    file = File(
+        name="name",
+        spdx_id="spdxId",
+        checksums=[Checksum(ChecksumAlgorithm.SHA224, "sha224"), Checksum(ChecksumAlgorithm.MD2, "md2")],
+        file_types=[FileType.SPDX, FileType.OTHER],
+        license_concluded=Licensing().parse("MIT and GPL-2.0"),
+        license_info_in_file=[Licensing().parse("MIT"), Licensing().parse("GPL-2.0"), SpdxNoAssertion()],
+        license_comment="licenseComment",
+        copyright_text="copyrightText",
+        comment="comment",
+        notice="notice",
+        contributors=["contributor1", "contributor2"],
+        attribution_texts=["attributionText1", "attributionText2"],
+    )
 
-    annotations = [Annotation(file.spdx_id, AnnotationType.REVIEW, Actor(ActorType.PERSON, "annotatorName"),
-                              datetime(2022, 12, 5), "review comment")]
+    annotations = [
+        Annotation(
+            file.spdx_id,
+            AnnotationType.REVIEW,
+            Actor(ActorType.PERSON, "annotatorName"),
+            datetime(2022, 12, 5),
+            "review comment",
+        )
+    ]
     document = Document(creation_info_fixture(), files=[file], annotations=annotations)
 
     converted_dict = converter.convert(file, document)
@@ -98,13 +116,23 @@ def test_successful_conversion(converter: FileConverter):
         converter.json_property_name(FileProperty.LICENSE_COMMENTS): "licenseComment",
         converter.json_property_name(FileProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0",
         converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES): ["MIT", "GPL-2.0", "NOASSERTION"],
-        converter.json_property_name(FileProperty.NOTICE_TEXT): "notice"
+        converter.json_property_name(FileProperty.NOTICE_TEXT): "notice",
     }
 
 
 def test_null_values(converter: FileConverter):
-    file = file_fixture(copyright_text=None, license_concluded=None, license_comment=None, comment=None, notice=None,
-                        attribution_texts=[], checksums=[], contributors=[], file_types=[], license_info_in_file=[])
+    file = file_fixture(
+        copyright_text=None,
+        license_concluded=None,
+        license_comment=None,
+        comment=None,
+        notice=None,
+        attribution_texts=[],
+        checksums=[],
+        contributors=[],
+        file_types=[],
+        license_info_in_file=[],
+    )
     document = Document(creation_info_fixture(), files=[file])
 
     converted_dict = converter.convert(file, document)
@@ -123,16 +151,18 @@ def test_null_values(converter: FileConverter):
 
 
 def test_spdx_no_assertion(converter: FileConverter):
-    file = file_fixture(license_concluded=SpdxNoAssertion(), license_info_in_file=[SpdxNoAssertion()],
-                        copyright_text=SpdxNoAssertion())
+    file = file_fixture(
+        license_concluded=SpdxNoAssertion(), license_info_in_file=[SpdxNoAssertion()], copyright_text=SpdxNoAssertion()
+    )
     document = Document(creation_info_fixture(), files=[file])
 
     converted_dict = converter.convert(file, document)
 
-    assert converted_dict[
-               converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == SPDX_NO_ASSERTION_STRING
+    assert converted_dict[converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == SPDX_NO_ASSERTION_STRING
     assert converted_dict[converter.json_property_name(FileProperty.LICENSE_CONCLUDED)] == SPDX_NO_ASSERTION_STRING
-    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == [SPDX_NO_ASSERTION_STRING]
+    assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == [
+        SPDX_NO_ASSERTION_STRING
+    ]
 
 
 def test_spdx_none(converter: FileConverter):
@@ -141,8 +171,7 @@ def test_spdx_none(converter: FileConverter):
 
     converted_dict = converter.convert(file, document)
 
-    assert converted_dict[
-               converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == SPDX_NONE_STRING
+    assert converted_dict[converter.json_property_name(FileProperty.COPYRIGHT_TEXT)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(FileProperty.LICENSE_CONCLUDED)] == SPDX_NONE_STRING
     assert converted_dict[converter.json_property_name(FileProperty.LICENSE_INFO_IN_FILES)] == [SPDX_NONE_STRING]
 
@@ -156,8 +185,14 @@ def test_file_annotations(converter: FileConverter):
     package_annotation = annotation_fixture(spdx_id=document.packages[0].spdx_id)
     snippet_annotation = annotation_fixture(spdx_id=document.snippets[0].spdx_id)
     other_annotation = annotation_fixture(spdx_id="otherId")
-    annotations = [first_file_annotation, second_file_annotation, document_annotation, package_annotation,
-                   snippet_annotation, other_annotation]
+    annotations = [
+        first_file_annotation,
+        second_file_annotation,
+        document_annotation,
+        package_annotation,
+        snippet_annotation,
+        other_annotation,
+    ]
     document.annotations = annotations
 
     # Weird type hint to make warnings about unresolved references from the mock class disappear
@@ -166,7 +201,8 @@ def test_file_annotations(converter: FileConverter):
 
     converted_dict = converter.convert(file, document)
 
-    assert_mock_method_called_with_arguments(annotation_converter, "convert", first_file_annotation,
-                                             second_file_annotation)
+    assert_mock_method_called_with_arguments(
+        annotation_converter, "convert", first_file_annotation, second_file_annotation
+    )
     converted_file_annotations = converted_dict.get(converter.json_property_name(FileProperty.ANNOTATIONS))
     assert converted_file_annotations == ["mock_converted_annotation", "mock_converted_annotation"]

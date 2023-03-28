@@ -18,8 +18,9 @@ from spdx.model.relationship import Relationship
 
 
 class RelationshipConverter(TypedConverter[Relationship]):
-    def _get_property_value(self, relationship: Relationship, relationship_property: RelationshipProperty,
-                            document: Document = None) -> Any:
+    def _get_property_value(
+        self, relationship: Relationship, relationship_property: RelationshipProperty, document: Document = None
+    ) -> Any:
         if relationship_property == RelationshipProperty.SPDX_ELEMENT_ID:
             return relationship.spdx_element_id
         elif relationship_property == RelationshipProperty.COMMENT:

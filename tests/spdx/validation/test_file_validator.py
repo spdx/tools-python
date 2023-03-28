@@ -27,23 +27,35 @@ def test_valid_file():
     assert validation_messages == []
 
 
-@pytest.mark.parametrize("file_input, spdx_id, expected_message",
-                         [(file_fixture(name="/invalid/file/name"), file_fixture().spdx_id,
-                           f'file name must not be an absolute path starting with "/", but is: /invalid/file/name'),
-                          (
-                          file_fixture(checksums=[Checksum(ChecksumAlgorithm.MD2, "d4c41ce30a517d6ce9d79c8c17bb4b66")]),
-                          file_fixture().spdx_id,
-                          f'checksums must contain a SHA1 algorithm checksum, but only contains: [<ChecksumAlgorithm.MD2: 13>]')
-                          ])
+@pytest.mark.parametrize(
+    "file_input, spdx_id, expected_message",
+    [
+        (
+            file_fixture(name="/invalid/file/name"),
+            file_fixture().spdx_id,
+            f'file name must not be an absolute path starting with "/", but is: /invalid/file/name',
+        ),
+        (
+            file_fixture(checksums=[Checksum(ChecksumAlgorithm.MD2, "d4c41ce30a517d6ce9d79c8c17bb4b66")]),
+            file_fixture().spdx_id,
+            f"checksums must contain a SHA1 algorithm checksum, but only contains: [<ChecksumAlgorithm.MD2: 13>]",
+        ),
+    ],
+)
 def test_invalid_file(file_input, spdx_id, expected_message):
-    validation_messages: List[ValidationMessage] = validate_file_within_document(file_input, "SPDX-2.3",
-                                                                                 document_fixture())
+    validation_messages: List[ValidationMessage] = validate_file_within_document(
+        file_input, "SPDX-2.3", document_fixture()
+    )
 
-    expected = ValidationMessage(expected_message,
-                                 ValidationContext(spdx_id=spdx_id,
-                                                   parent_id=document_fixture().creation_info.spdx_id,
-                                                   element_type=SpdxElementType.FILE,
-                                                   full_element=file_input))
+    expected = ValidationMessage(
+        expected_message,
+        ValidationContext(
+            spdx_id=spdx_id,
+            parent_id=document_fixture().creation_info.spdx_id,
+            element_type=SpdxElementType.FILE,
+            full_element=file_input,
+        ),
+    )
 
     assert validation_messages == [expected]
 

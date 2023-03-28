@@ -26,12 +26,18 @@ def converter() -> CreationInfoConverter:
     return CreationInfoConverter()
 
 
-@pytest.mark.parametrize("creation_info_property,expected",
-                         [(CreationInfoProperty.CREATED, "created"), (CreationInfoProperty.CREATORS, "creators"),
-                          (CreationInfoProperty.LICENSE_LIST_VERSION, "licenseListVersion"),
-                          (CreationInfoProperty.COMMENT, "comment")])
-def test_json_property_names(converter: CreationInfoConverter, creation_info_property: CreationInfoProperty,
-                             expected: str):
+@pytest.mark.parametrize(
+    "creation_info_property,expected",
+    [
+        (CreationInfoProperty.CREATED, "created"),
+        (CreationInfoProperty.CREATORS, "creators"),
+        (CreationInfoProperty.LICENSE_LIST_VERSION, "licenseListVersion"),
+        (CreationInfoProperty.COMMENT, "comment"),
+    ],
+)
+def test_json_property_names(
+    converter: CreationInfoConverter, creation_info_property: CreationInfoProperty, expected: str
+):
     assert converter.json_property_name(creation_info_property) == expected
 
 
@@ -40,14 +46,16 @@ def test_successful_conversion(converter: CreationInfoConverter):
     created = datetime(2022, 12, 1)
 
     converted_dict = converter.convert(
-        creation_info_fixture(creators=creators, created=created, creator_comment="comment",
-                              license_list_version=Version(1, 2)))
+        creation_info_fixture(
+            creators=creators, created=created, creator_comment="comment", license_list_version=Version(1, 2)
+        )
+    )
 
     assert converted_dict == {
         converter.json_property_name(CreationInfoProperty.CREATED): datetime_to_iso_string(created),
         converter.json_property_name(CreationInfoProperty.CREATORS): ["Person: personName", "Tool: toolName"],
         converter.json_property_name(CreationInfoProperty.LICENSE_LIST_VERSION): "1.2",
-        converter.json_property_name(CreationInfoProperty.COMMENT): "comment"
+        converter.json_property_name(CreationInfoProperty.COMMENT): "comment",
     }
 
 

@@ -25,29 +25,20 @@ def validate_creation_info(creation_info: CreationInfo, spdx_version: str) -> Li
 
     if creation_info.spdx_id != "SPDXRef-DOCUMENT":
         validation_messages.append(
-            ValidationMessage(
-                f'spdx_id must be "SPDXRef-DOCUMENT", but is: {creation_info.spdx_id}',
-                context
-            )
+            ValidationMessage(f'spdx_id must be "SPDXRef-DOCUMENT", but is: {creation_info.spdx_id}', context)
         )
 
     if creation_info.data_license != "CC0-1.0":
         validation_messages.append(
-            ValidationMessage(
-                f'data_license must be "CC0-1.0", but is: {creation_info.data_license}',
-                context
-            )
+            ValidationMessage(f'data_license must be "CC0-1.0", but is: {creation_info.data_license}', context)
         )
 
     for message in validate_uri(creation_info.document_namespace):
-        validation_messages.append(
-            ValidationMessage(
-                "document_namespace " + message, context
-            )
-        )
+        validation_messages.append(ValidationMessage("document_namespace " + message, context))
 
     validation_messages.extend(validate_actors(creation_info.creators, creation_info.spdx_id))
     validation_messages.extend(
-        validate_external_document_refs(creation_info.external_document_refs, creation_info.spdx_id, spdx_version))
+        validate_external_document_refs(creation_info.external_document_refs, creation_info.spdx_id, spdx_version)
+    )
 
     return validation_messages

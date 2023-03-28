@@ -63,15 +63,17 @@ class DocumentConverter(TypedConverter[Document]):
             return "SPDXID"
         return super().json_property_name(document_property)
 
-    def _get_property_value(self, document: Document, document_property: DocumentProperty,
-                            _document: Document = None) -> Any:
+    def _get_property_value(
+        self, document: Document, document_property: DocumentProperty, _document: Document = None
+    ) -> Any:
         if document_property == DocumentProperty.SPDX_ID:
             return document.creation_info.spdx_id
         elif document_property == DocumentProperty.ANNOTATIONS:
             # annotations referencing files, packages or snippets will be added to those elements directly
             element_ids = get_contained_spdx_element_ids(document)
-            document_annotations = filter(lambda annotation: annotation.spdx_id not in element_ids,
-                                          document.annotations)
+            document_annotations = filter(
+                lambda annotation: annotation.spdx_id not in element_ids, document.annotations
+            )
             return [self.annotation_converter.convert(annotation) for annotation in document_annotations] or None
         elif document_property == DocumentProperty.COMMENT:
             return document.creation_info.document_comment
@@ -80,11 +82,15 @@ class DocumentConverter(TypedConverter[Document]):
         elif document_property == DocumentProperty.DATA_LICENSE:
             return document.creation_info.data_license
         elif document_property == DocumentProperty.EXTERNAL_DOCUMENT_REFS:
-            return [self.external_document_ref_converter.convert(external_document_ref) for
-                    external_document_ref in document.creation_info.external_document_refs] or None
+            return [
+                self.external_document_ref_converter.convert(external_document_ref)
+                for external_document_ref in document.creation_info.external_document_refs
+            ] or None
         elif document_property == DocumentProperty.HAS_EXTRACTED_LICENSING_INFOS:
-            return [self.extracted_licensing_info_converter.convert(licensing_info) for licensing_info in
-                    document.extracted_licensing_info] or None
+            return [
+                self.extracted_licensing_info_converter.convert(licensing_info)
+                for licensing_info in document.extracted_licensing_info
+            ] or None
         elif document_property == DocumentProperty.NAME:
             return document.creation_info.name
         elif document_property == DocumentProperty.SPDX_VERSION:
@@ -92,12 +98,18 @@ class DocumentConverter(TypedConverter[Document]):
         elif document_property == DocumentProperty.DOCUMENT_NAMESPACE:
             return document.creation_info.document_namespace
         elif document_property == DocumentProperty.DOCUMENT_DESCRIBES:
-            describes_ids = [relationship.related_spdx_element_id for relationship in
-                             filter_by_type_and_origin(document.relationships, RelationshipType.DESCRIBES,
-                                                       document.creation_info.spdx_id)]
-            described_by_ids = [relationship.spdx_element_id for relationship in
-                                filter_by_type_and_target(document.relationships, RelationshipType.DESCRIBED_BY,
-                                                          document.creation_info.spdx_id)]
+            describes_ids = [
+                relationship.related_spdx_element_id
+                for relationship in filter_by_type_and_origin(
+                    document.relationships, RelationshipType.DESCRIBES, document.creation_info.spdx_id
+                )
+            ]
+            described_by_ids = [
+                relationship.spdx_element_id
+                for relationship in filter_by_type_and_target(
+                    document.relationships, RelationshipType.DESCRIBED_BY, document.creation_info.spdx_id
+                )
+            ]
             return describes_ids + described_by_ids or None
         elif document_property == DocumentProperty.PACKAGES:
             return [self.package_converter.convert(package, document) for package in document.packages] or None
@@ -106,16 +118,22 @@ class DocumentConverter(TypedConverter[Document]):
         elif document_property == DocumentProperty.SNIPPETS:
             return [self.snippet_converter.convert(snippet, document) for snippet in document.snippets] or None
         elif document_property == DocumentProperty.RELATIONSHIPS:
-            already_covered_relationships = filter_by_type_and_origin(document.relationships,
-                                                                      RelationshipType.DESCRIBES,
-                                                                      document.creation_info.spdx_id)
+            already_covered_relationships = filter_by_type_and_origin(
+                document.relationships, RelationshipType.DESCRIBES, document.creation_info.spdx_id
+            )
             already_covered_relationships.extend(
-                filter_by_type_and_target(document.relationships, RelationshipType.DESCRIBED_BY,
-                                          document.creation_info.spdx_id))
+                filter_by_type_and_target(
+                    document.relationships, RelationshipType.DESCRIBED_BY, document.creation_info.spdx_id
+                )
+            )
             for package in document.packages:
                 already_covered_relationships.extend(find_package_contains_file_relationships(document, package))
                 already_covered_relationships.extend(find_file_contained_by_package_relationships(document, package))
-            relationships_to_ignore = [relationship for relationship in already_covered_relationships if
-                                       relationship.comment is None]
-            return [self.relationship_converter.convert(relationship) for relationship in document.relationships if
-                    relationship not in relationships_to_ignore] or None
+            relationships_to_ignore = [
+                relationship for relationship in already_covered_relationships if relationship.comment is None
+            ]
+            return [
+                self.relationship_converter.convert(relationship)
+                for relationship in document.relationships
+                if relationship not in relationships_to_ignore
+            ] or None

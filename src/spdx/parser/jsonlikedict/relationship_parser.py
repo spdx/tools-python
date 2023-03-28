@@ -33,21 +33,33 @@ class RelationshipParser:
         relationships = []
         relationship_dicts: List[Dict] = input_doc_dict.get("relationships", [])
         relationships.extend(
-            parse_field_or_log_error(self.logger, relationship_dicts, self.parse_relationship, [], True))
+            parse_field_or_log_error(self.logger, relationship_dicts, self.parse_relationship, [], True)
+        )
 
         document_describes: List[str] = delete_duplicates_from_list(input_doc_dict.get("documentDescribes", []))
         doc_spdx_id: Optional[str] = input_doc_dict.get("SPDXID")
 
         relationships.extend(
-            parse_field_or_log_error(self.logger, document_describes, lambda x: self.parse_document_describes(
-                doc_spdx_id=doc_spdx_id, described_spdx_ids=x,
-                existing_relationships=relationships), []))
+            parse_field_or_log_error(
+                self.logger,
+                document_describes,
+                lambda x: self.parse_document_describes(
+                    doc_spdx_id=doc_spdx_id, described_spdx_ids=x, existing_relationships=relationships
+                ),
+                [],
+            )
+        )
 
         package_dicts: List[Dict] = input_doc_dict.get("packages", [])
 
-        relationships.extend(parse_field_or_log_error(
-            self.logger, package_dicts,
-            lambda x: self.parse_has_files(package_dicts=x, existing_relationships=relationships), []))
+        relationships.extend(
+            parse_field_or_log_error(
+                self.logger,
+                package_dicts,
+                lambda x: self.parse_has_files(package_dicts=x, existing_relationships=relationships),
+                [],
+            )
+        )
 
         file_dicts: List[Dict] = input_doc_dict.get("files", [])
 
@@ -62,16 +74,24 @@ class RelationshipParser:
     def parse_relationship(self, relationship_dict: Dict) -> Relationship:
         logger = Logger()
         spdx_element_id: Optional[str] = relationship_dict.get("spdxElementId")
-        related_spdx_element: Optional[str] = parse_field_or_no_assertion_or_none(relationship_dict.get("relatedSpdxElement"))
-        relationship_type: Optional[RelationshipType] = parse_field_or_log_error(logger, relationship_dict.get(
-            "relationshipType"), self.parse_relationship_type)
+        related_spdx_element: Optional[str] = parse_field_or_no_assertion_or_none(
+            relationship_dict.get("relatedSpdxElement")
+        )
+        relationship_type: Optional[RelationshipType] = parse_field_or_log_error(
+            logger, relationship_dict.get("relationshipType"), self.parse_relationship_type
+        )
         relationship_comment: Optional[str] = relationship_dict.get("comment")
         raise_parsing_error_if_logger_has_messages(logger, "Relationship")
 
-        relationship = construct_or_raise_parsing_error(Relationship, dict(spdx_element_id=spdx_element_id,
-                                                                           relationship_type=relationship_type,
-                                                                           related_spdx_element_id=related_spdx_element,
-                                                                           comment=relationship_comment))
+        relationship = construct_or_raise_parsing_error(
+            Relationship,
+            dict(
+                spdx_element_id=spdx_element_id,
+                relationship_type=relationship_type,
+                related_spdx_element_id=related_spdx_element,
+                comment=relationship_comment,
+            ),
+        )
         return relationship
 
     @staticmethod
@@ -82,15 +102,18 @@ class RelationshipParser:
             raise SPDXParsingError([f"Invalid RelationshipType: {relationship_type_str}"])
         return relationship_type
 
-    def parse_document_describes(self, doc_spdx_id: str, described_spdx_ids: List[str],
-                                 existing_relationships: List[Relationship]) -> List[Relationship]:
+    def parse_document_describes(
+        self, doc_spdx_id: str, described_spdx_ids: List[str], existing_relationships: List[Relationship]
+    ) -> List[Relationship]:
         logger = Logger()
         describes_relationships = []
         for spdx_id in described_spdx_ids:
             try:
-                describes_relationship = Relationship(spdx_element_id=doc_spdx_id,
-                                                      relationship_type=RelationshipType.DESCRIBES,
-                                                      related_spdx_element_id=spdx_id)
+                describes_relationship = Relationship(
+                    spdx_element_id=doc_spdx_id,
+                    relationship_type=RelationshipType.DESCRIBES,
+                    related_spdx_element_id=spdx_id,
+                )
             except ConstructorTypeErrors as err:
                 logger.append(err.get_messages())
                 continue
@@ -100,8 +123,9 @@ class RelationshipParser:
 
         return describes_relationships
 
-    def parse_has_files(self, package_dicts: List[Dict], existing_relationships: List[Relationship]) -> List[
-        Relationship]:
+    def parse_has_files(
+        self, package_dicts: List[Dict], existing_relationships: List[Relationship]
+    ) -> List[Relationship]:
         logger = Logger()
         contains_relationships = []
         for package in package_dicts:
@@ -111,23 +135,28 @@ class RelationshipParser:
                 continue
             for file_spdx_id in contained_files:
                 try:
-                    contains_relationship = Relationship(spdx_element_id=package_spdx_id,
-                                                         relationship_type=RelationshipType.CONTAINS,
-                                                         related_spdx_element_id=file_spdx_id)
+                    contains_relationship = Relationship(
+                        spdx_element_id=package_spdx_id,
+                        relationship_type=RelationshipType.CONTAINS,
+                        related_spdx_element_id=file_spdx_id,
+                    )
                 except ConstructorTypeErrors as err:
                     logger.append(err.get_messages())
                     continue
-                if not self.check_if_relationship_exists(relationship=contains_relationship,
-                                                         existing_relationships=existing_relationships):
+                if not self.check_if_relationship_exists(
+                    relationship=contains_relationship, existing_relationships=existing_relationships
+                ):
                     contains_relationships.append(contains_relationship)
         raise_parsing_error_if_logger_has_messages(logger, "package contains relationships")
 
         return contains_relationships
 
-    def check_if_relationship_exists(self, relationship: Relationship,
-                                     existing_relationships: List[Relationship]) -> bool:
+    def check_if_relationship_exists(
+        self, relationship: Relationship, existing_relationships: List[Relationship]
+    ) -> bool:
         existing_relationships_without_comments: List[Relationship] = self.get_all_relationships_without_comments(
-            existing_relationships)
+            existing_relationships
+        )
         if relationship in existing_relationships_without_comments:
             return True
         relationship_inverted: Relationship = self.invert_relationship(relationship)
@@ -138,26 +167,33 @@ class RelationshipParser:
 
     @staticmethod
     def get_all_relationships_without_comments(existing_relationships: List[Relationship]) -> List[Relationship]:
-        relationships_without_comments = [Relationship(relationship_type=relationship.relationship_type,
-                                                       related_spdx_element_id=relationship.related_spdx_element_id,
-                                                       spdx_element_id=relationship.spdx_element_id) for relationship in
-                                          existing_relationships]
+        relationships_without_comments = [
+            Relationship(
+                relationship_type=relationship.relationship_type,
+                related_spdx_element_id=relationship.related_spdx_element_id,
+                spdx_element_id=relationship.spdx_element_id,
+            )
+            for relationship in existing_relationships
+        ]
         return relationships_without_comments
 
     def invert_relationship(self, relationship: Relationship) -> Relationship:
-        return Relationship(related_spdx_element_id=relationship.spdx_element_id,
-                            spdx_element_id=relationship.related_spdx_element_id,
-                            relationship_type=self.invert_relationship_types[relationship.relationship_type],
-                            comment=relationship.comment)
+        return Relationship(
+            related_spdx_element_id=relationship.spdx_element_id,
+            spdx_element_id=relationship.related_spdx_element_id,
+            relationship_type=self.invert_relationship_types[relationship.relationship_type],
+            comment=relationship.comment,
+        )
 
-    invert_relationship_types = {RelationshipType.DESCRIBES: RelationshipType.DESCRIBED_BY,
-                                 RelationshipType.DESCRIBED_BY: RelationshipType.DESCRIBES,
-                                 RelationshipType.CONTAINS: RelationshipType.CONTAINED_BY,
-                                 RelationshipType.CONTAINED_BY: RelationshipType.CONTAINS}
+    invert_relationship_types = {
+        RelationshipType.DESCRIBES: RelationshipType.DESCRIBED_BY,
+        RelationshipType.DESCRIBED_BY: RelationshipType.DESCRIBES,
+        RelationshipType.CONTAINS: RelationshipType.CONTAINED_BY,
+        RelationshipType.CONTAINED_BY: RelationshipType.CONTAINS,
+    }
 
     @staticmethod
-    def parse_file_dependencies(file_dicts: List[Dict]) -> List[
-        Relationship]:
+    def parse_file_dependencies(file_dicts: List[Dict]) -> List[Relationship]:
         dependency_relationships = []
         # the field fileDependencies is deprecated and should be converted to a relationship (https://github.com/spdx/tools-python/issues/387)
         return dependency_relationships

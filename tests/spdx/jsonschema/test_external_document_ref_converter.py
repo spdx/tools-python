@@ -20,7 +20,7 @@ from spdx.model.external_document_ref import ExternalDocumentRef
 
 
 @pytest.fixture
-@mock.patch('spdx.jsonschema.checksum_converter.ChecksumConverter', autospec=True)
+@mock.patch("spdx.jsonschema.checksum_converter.ChecksumConverter", autospec=True)
 def converter(checksum_converter_magic_mock: MagicMock) -> ExternalDocumentRefConverter:
     mocked_checksum_converter = checksum_converter_magic_mock()
     converter = ExternalDocumentRefConverter()
@@ -28,12 +28,17 @@ def converter(checksum_converter_magic_mock: MagicMock) -> ExternalDocumentRefCo
     return converter
 
 
-@pytest.mark.parametrize("external_document_ref_property,expected",
-                         [(ExternalDocumentRefProperty.EXTERNAL_DOCUMENT_ID, "externalDocumentId"),
-                          (ExternalDocumentRefProperty.SPDX_DOCUMENT, "spdxDocument"),
-                          (ExternalDocumentRefProperty.CHECKSUM, "checksum")])
-def test_json_property_names(converter: ExternalDocumentRefConverter,
-                             external_document_ref_property: ExternalDocumentRefProperty, expected: str):
+@pytest.mark.parametrize(
+    "external_document_ref_property,expected",
+    [
+        (ExternalDocumentRefProperty.EXTERNAL_DOCUMENT_ID, "externalDocumentId"),
+        (ExternalDocumentRefProperty.SPDX_DOCUMENT, "spdxDocument"),
+        (ExternalDocumentRefProperty.CHECKSUM, "checksum"),
+    ],
+)
+def test_json_property_names(
+    converter: ExternalDocumentRefConverter, external_document_ref_property: ExternalDocumentRefProperty, expected: str
+):
     assert converter.json_property_name(external_document_ref_property) == expected
 
 
@@ -47,7 +52,7 @@ def test_successful_conversion(converter: ExternalDocumentRefConverter):
     assert converted_dict == {
         converter.json_property_name(ExternalDocumentRefProperty.EXTERNAL_DOCUMENT_ID): "document_ref_id",
         converter.json_property_name(ExternalDocumentRefProperty.SPDX_DOCUMENT): "document_uri",
-        converter.json_property_name(ExternalDocumentRefProperty.CHECKSUM): "mock_converted_checksum"
+        converter.json_property_name(ExternalDocumentRefProperty.CHECKSUM): "mock_converted_checksum",
     }
 
 

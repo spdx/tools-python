@@ -37,19 +37,27 @@ def validate_full_spdx_document(document: Document, spdx_version: str = None) ->
         validation_messages.append(
             ValidationMessage(
                 f'only SPDX versions "SPDX-2.2" and "SPDX-2.3" are supported, but the document\'s spdx_version is: {document_version}',
-                context
+                context,
             )
         )
     elif spdx_version != document_version:
         validation_messages.append(
-            ValidationMessage(f"provided SPDX version {spdx_version} does not match "
-                              f"the document's SPDX version {document_version}", context)
+            ValidationMessage(
+                f"provided SPDX version {spdx_version} does not match "
+                f"the document's SPDX version {document_version}",
+                context,
+            )
         )
 
     if validation_messages:
-        validation_messages.append(ValidationMessage("There are issues concerning the SPDX version of the document. "
-                                                     "As subsequent validation relies on the correct version, "
-                                                     "the validation process has been cancelled.", context))
+        validation_messages.append(
+            ValidationMessage(
+                "There are issues concerning the SPDX version of the document. "
+                "As subsequent validation relies on the correct version, "
+                "the validation process has been cancelled.",
+                context,
+            )
+        )
         return validation_messages
 
     validation_messages.extend(validate_creation_info(document.creation_info, spdx_version))
@@ -61,29 +69,34 @@ def validate_full_spdx_document(document: Document, spdx_version: str = None) ->
     validation_messages.extend(validate_extracted_licensing_infos(document.extracted_licensing_info))
 
     document_id = document.creation_info.spdx_id
-    document_describes_relationships = filter_by_type_and_origin(document.relationships, RelationshipType.DESCRIBES,
-                                                                 document_id)
-    described_by_document_relationships = filter_by_type_and_target(document.relationships,
-                                                                    RelationshipType.DESCRIBED_BY, document_id)
+    document_describes_relationships = filter_by_type_and_origin(
+        document.relationships, RelationshipType.DESCRIBES, document_id
+    )
+    described_by_document_relationships = filter_by_type_and_target(
+        document.relationships, RelationshipType.DESCRIBED_BY, document_id
+    )
 
     if not document_describes_relationships + described_by_document_relationships:
         validation_messages.append(
             ValidationMessage(
                 f'there must be at least one relationship "{document_id} DESCRIBES ..." or "... DESCRIBED_BY '
                 f'{document_id}"',
-                ValidationContext(spdx_id=document_id,
-                                  element_type=SpdxElementType.DOCUMENT)))
+                ValidationContext(spdx_id=document_id, element_type=SpdxElementType.DOCUMENT),
+            )
+        )
 
     all_spdx_ids: List[str] = get_list_of_all_spdx_ids(document)
     auxiliary_set = set()
     duplicated_spdx_ids = set(
-        spdx_id for spdx_id in all_spdx_ids if spdx_id in auxiliary_set or auxiliary_set.add(spdx_id))
+        spdx_id for spdx_id in all_spdx_ids if spdx_id in auxiliary_set or auxiliary_set.add(spdx_id)
+    )
 
     if duplicated_spdx_ids:
         validation_messages.append(
             ValidationMessage(
                 f"every spdx_id must be unique within the document, but found the following duplicates: {sorted(duplicated_spdx_ids)}",
-                context)
+                context,
+            )
         )
 
     return validation_messages

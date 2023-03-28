@@ -4,8 +4,7 @@ from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 
 
 def test_correct_initialization():
-    external_package_reference = ExternalPackageRef(ExternalPackageRefCategory.OTHER, "type", "locator",
-                                                          "comment")
+    external_package_reference = ExternalPackageRef(ExternalPackageRefCategory.OTHER, "type", "locator", "comment")
     assert external_package_reference.category == ExternalPackageRefCategory.OTHER
     assert external_package_reference.reference_type == "type"
     assert external_package_reference.locator == "locator"

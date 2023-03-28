@@ -20,9 +20,10 @@ def test_snake_case_to_camel_case(snake_case_str, camel_case_str):
     assert camel_case == camel_case_str
 
 
-@pytest.mark.parametrize("camel_case_str,snake_case_str",
-                         [("camelCase", "camel_case"), ("camelCaseMore", "camel_case_more"),
-                          ("CamelCase", "camel_case")])
+@pytest.mark.parametrize(
+    "camel_case_str,snake_case_str",
+    [("camelCase", "camel_case"), ("camelCaseMore", "camel_case_more"), ("CamelCase", "camel_case")],
+)
 def test_camel_case_to_snake_case(camel_case_str, snake_case_str):
     snake_case = camel_case_to_snake_case(camel_case_str)
 
