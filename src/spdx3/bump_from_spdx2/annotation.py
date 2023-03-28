@@ -10,6 +10,8 @@
 # limitations under the License.
 from copy import deepcopy
 
+from spdx.model.actor import ActorType
+
 from spdx.model.annotation import Annotation as Spdx2_Annotation
 from spdx3.bump_from_spdx2.actor import bump_actor
 from spdx3.bump_from_spdx2.message import print_missing_conversion
@@ -23,11 +25,17 @@ def bump_annotation(spdx2_annotation: Spdx2_Annotation, payload: Payload, creati
     spdx_id: str = f"SPDXRef-Annotation-{counter}"
     creation_info = deepcopy(creation_info)
     creation_info.created = spdx2_annotation.annotation_date
+
     # caution: the annotator and the annotation will only share the same creation_info if the actor
     #          has not been previously defined
-    creator_id: str = bump_actor(spdx2_annotation.annotator, payload, creation_info)
-    creation_info.created_by = [creator_id]
-    print_missing_conversion("annotation.annotator", 1, "of Entity")
+    annotator = spdx2_annotation.annotator
+    creator_id: str = bump_actor(annotator, payload, creation_info)
+    if annotator.actor_type in [ActorType.PERSON, ActorType.ORGANIZATION]:
+        creation_info.created_by = [creator_id]
+    else:
+        raise NotImplementedError("The SPDX2 annotation is not of Type Person or Organization."
+                                  " This case leads to an invalid SPDX3 document and is currently not supported.")
+
     annotation_type: AnnotationType = AnnotationType[spdx2_annotation.annotation_type.name]
     subject: str = spdx2_annotation.spdx_id
     statement: str = spdx2_annotation.annotation_comment
