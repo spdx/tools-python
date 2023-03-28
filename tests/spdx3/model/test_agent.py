@@ -24,11 +24,11 @@ from spdx3.model.software_agent import SoftwareAgent
 @pytest.mark.parametrize("agent_class", [Agent, Person, Organization, SoftwareAgent])
 def test_correct_initialization(agent_class):
     agent = agent_class("SPDXRef-Agent",
-                        CreationInformation(Version("3.0.0"), datetime(2023, 1, 1), ["SPDXRef-Agent"], ["core"], "CC0"),
+                        CreationInformation(Version("3.0.0"), datetime(2023, 1, 1), ["SPDXRef-Agent"], [], ["core"], "CC0"),
                         external_identifier=[ExternalIdentifier(ExternalIdentifierType.EMAIL, "some@mail.com")])
 
     assert agent.spdx_id == "SPDXRef-Agent"
-    assert agent.creation_info == CreationInformation(Version("3.0.0"), datetime(2023, 1, 1), ["SPDXRef-Agent"],
+    assert agent.creation_info == CreationInformation(Version("3.0.0"), datetime(2023, 1, 1), ["SPDXRef-Agent"], [],
                                                       ["core"], "CC0")
     assert agent.external_identifier == [ExternalIdentifier(ExternalIdentifierType.EMAIL, "some@mail.com")]
 
