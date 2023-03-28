@@ -9,10 +9,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import pytest
-from rdflib import Graph, URIRef, RDF, Literal, RDFS
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE, LICENSE_NAMESPACE
+from rdflib import RDF, RDFS, Graph, Literal, URIRef
 
-from spdx.writer.rdf.snippet_writer import add_snippet_to_graph, add_range_to_graph
+from spdx.rdfschema.namespace import LICENSE_NAMESPACE, POINTER_NAMESPACE, SPDX_NAMESPACE
+from spdx.writer.rdf.snippet_writer import add_range_to_graph, add_snippet_to_graph
 from tests.spdx.fixtures import snippet_fixture
 
 

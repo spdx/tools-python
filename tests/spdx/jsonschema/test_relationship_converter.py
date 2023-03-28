@@ -13,8 +13,8 @@ import pytest
 from spdx.jsonschema.relationship_converter import RelationshipConverter
 from spdx.jsonschema.relationship_properties import RelationshipProperty
 from spdx.model.relationship import Relationship, RelationshipType
-from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
-from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
+from spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING, SpdxNoAssertion
+from spdx.model.spdx_none import SPDX_NONE_STRING, SpdxNone
 from tests.spdx.fixtures import relationship_fixture
 
 

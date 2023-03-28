@@ -10,13 +10,17 @@
 # limitations under the License.
 from typing import Dict, List, Optional
 
-from spdx.model.relationship import Relationship, RelationshipType
 from common.typing.constructor_type_errors import ConstructorTypeErrors
+from spdx.model.relationship import Relationship, RelationshipType
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.dict_parsing_functions import json_str_to_enum_name, \
-    parse_field_or_log_error, parse_field_or_no_assertion_or_none, delete_duplicates_from_list
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
+from spdx.parser.jsonlikedict.dict_parsing_functions import (
+    delete_duplicates_from_list,
+    json_str_to_enum_name,
+    parse_field_or_log_error,
+    parse_field_or_no_assertion_or_none,
+)
 from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 
 
 class RelationshipParser:

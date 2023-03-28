@@ -10,10 +10,11 @@
 # limitations under the License.
 from typing import Dict, List
 
-from rdflib import Graph, DOAP
+from rdflib import DOAP, Graph
 from rdflib.compare import to_isomorphic
 
 from spdx.model.document import Document
+from spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage
 from spdx.writer.rdf.annotation_writer import add_annotation_to_graph
@@ -23,7 +24,6 @@ from spdx.writer.rdf.file_writer import add_file_to_graph
 from spdx.writer.rdf.package_writer import add_package_to_graph
 from spdx.writer.rdf.relationship_writer import add_relationship_to_graph
 from spdx.writer.rdf.snippet_writer import add_snippet_to_graph
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
 
 
 def write_document_to_file(document: Document, file_name: str, validate: bool):

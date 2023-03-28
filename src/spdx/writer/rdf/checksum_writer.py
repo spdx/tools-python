@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, URIRef, BNode, RDF, Literal
+from rdflib import RDF, BNode, Graph, Literal, URIRef
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.rdfschema.namespace import SPDX_NAMESPACE

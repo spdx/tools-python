@@ -10,16 +10,17 @@
 # limitations under the License.
 from typing import Dict, List, Optional, Union
 
+from license_expression import LicenseExpression
+
 from spdx.model.checksum import Checksum
 from spdx.model.file import File, FileType
-from license_expression import LicenseExpression
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.jsonlikedict.checksum_parser import ChecksumParser
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_field_or_log_error
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 
 
 class FileParser:

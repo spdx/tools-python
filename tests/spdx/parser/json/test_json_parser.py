@@ -10,10 +10,12 @@
 # limitations under the License.
 
 import os
+
 import pytest
 
 from spdx.model.document import Document
 from spdx.parser.json import json_parser
+
 
 def test_parse_json_file_not_found():
     with pytest.raises(FileNotFoundError) as err:

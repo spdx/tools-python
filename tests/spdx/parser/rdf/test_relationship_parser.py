@@ -10,7 +10,7 @@
 # limitations under the License.
 import os
 
-from rdflib import Graph, RDF
+from rdflib import RDF, Graph
 
 from spdx.model.relationship import RelationshipType
 from spdx.parser.rdf.relationship_parser import parse_relationship

@@ -15,13 +15,13 @@ from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.annotation_parser import AnnotationParser
 from spdx.parser.jsonlikedict.creation_info_parser import CreationInfoParser
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.jsonlikedict.extracted_licensing_info_parser import ExtractedLicensingInfoParser
 from spdx.parser.jsonlikedict.file_parser import FileParser
-from spdx.parser.logger import Logger
 from spdx.parser.jsonlikedict.package_parser import PackageParser
 from spdx.parser.jsonlikedict.relationship_parser import RelationshipParser
 from spdx.parser.jsonlikedict.snippet_parser import SnippetParser
+from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 
 
 class JsonLikeDictParser:

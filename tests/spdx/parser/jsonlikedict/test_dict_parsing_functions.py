@@ -15,8 +15,11 @@ import pytest
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.dict_parsing_functions import json_str_to_enum_name, \
-    parse_field_or_no_assertion, parse_field_or_no_assertion_or_none
+from spdx.parser.jsonlikedict.dict_parsing_functions import (
+    json_str_to_enum_name,
+    parse_field_or_no_assertion,
+    parse_field_or_no_assertion_or_none,
+)
 
 
 def test_json_str_to_enum():

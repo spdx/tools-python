@@ -2,14 +2,13 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import datetime
-from unittest.mock import mock_open, patch, call, MagicMock
+from unittest.mock import MagicMock, call, mock_open, patch
 
 import pytest
 
 from spdx.model.document import CreationInfo
-from tests.spdx.fixtures import creation_info_fixture, actor_fixture
-
 from spdx.writer.tagvalue.creation_info_writer import write_creation_info
+from tests.spdx.fixtures import actor_fixture, creation_info_fixture
 
 
 @pytest.mark.parametrize("creation_info, expected_calls",

@@ -11,7 +11,6 @@
 from unittest import TestCase
 
 import pytest
-
 from license_expression import Licensing
 
 from spdx.model.spdx_no_assertion import SpdxNoAssertion

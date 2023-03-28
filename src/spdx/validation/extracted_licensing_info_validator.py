@@ -14,7 +14,7 @@ from typing import List, Optional
 
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx.validation.uri_validators import validate_url
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_extracted_licensing_infos(extracted_licensing_infos: Optional[List[ExtractedLicensingInfo]]) -> List[

@@ -11,21 +11,32 @@
 from datetime import datetime
 from typing import Dict, List, Optional, Union
 
-from spdx.model.actor import Actor
 from license_expression import LicenseExpression
-from spdx.model.package import Package, ExternalPackageRef, PackageVerificationCode, PackagePurpose, \
-    ExternalPackageRefCategory
+
+from spdx.datetime_conversions import datetime_from_str
+from spdx.model.actor import Actor
+from spdx.model.package import (
+    ExternalPackageRef,
+    ExternalPackageRefCategory,
+    Package,
+    PackagePurpose,
+    PackageVerificationCode,
+)
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from spdx.parser.error import SPDXParsingError
 from spdx.parser.actor_parser import ActorParser
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.checksum_parser import ChecksumParser
-from spdx.parser.jsonlikedict.dict_parsing_functions import append_parsed_field_or_log_error, \
-    json_str_to_enum_name, parse_field_or_log_error, parse_field_or_no_assertion_or_none, parse_field_or_no_assertion
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
-from spdx.datetime_conversions import datetime_from_str
+from spdx.parser.jsonlikedict.dict_parsing_functions import (
+    append_parsed_field_or_log_error,
+    json_str_to_enum_name,
+    parse_field_or_log_error,
+    parse_field_or_no_assertion,
+    parse_field_or_no_assertion_or_none,
+)
 from spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 
 
 class PackageParser:

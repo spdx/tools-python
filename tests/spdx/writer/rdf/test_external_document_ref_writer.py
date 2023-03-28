@@ -8,9 +8,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, URIRef, RDF
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from rdflib import RDF, Graph, URIRef
 
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
 from tests.spdx.fixtures import external_document_ref_fixture
 

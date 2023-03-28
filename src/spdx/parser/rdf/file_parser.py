@@ -8,14 +8,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import URIRef, Graph, RDFS
+from rdflib import RDFS, Graph, URIRef
 
 from spdx.model.file import File, FileType
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.checksum_parser import parse_checksum
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_literal_or_no_assertion_or_none, \
-    get_correctly_typed_value, apply_parsing_method_or_log_error, parse_enum_value
+from spdx.parser.rdf.graph_parsing_functions import (
+    apply_parsing_method_or_log_error,
+    get_correctly_typed_value,
+    parse_enum_value,
+    parse_literal,
+    parse_literal_or_no_assertion_or_none,
+    parse_spdx_id,
+)
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 

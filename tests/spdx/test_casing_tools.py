@@ -10,7 +10,7 @@
 # limitations under the License.
 import pytest
 
-from spdx.casing_tools import snake_case_to_camel_case, camel_case_to_snake_case
+from spdx.casing_tools import camel_case_to_snake_case, snake_case_to_camel_case
 
 
 @pytest.mark.parametrize("snake_case_str,camel_case_str", [("snake_case", "snakeCase")])

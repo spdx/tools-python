@@ -10,19 +10,20 @@
 # limitations under the License.
 import os
 from datetime import datetime
-from typing import Tuple, List
+from typing import List, Tuple
 
 import pytest
-from rdflib import Graph, RDF, URIRef
+from rdflib import RDF, Graph, URIRef
 from rdflib.term import Node
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
-
-from spdx.model.version import Version
 
 from spdx.model.actor import Actor, ActorType
-
-from spdx.parser.rdf.creation_info_parser import parse_creation_info, parse_namespace_and_spdx_id, \
-    parse_external_document_refs
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.model.version import Version
+from spdx.parser.rdf.creation_info_parser import (
+    parse_creation_info,
+    parse_external_document_refs,
+    parse_namespace_and_spdx_id,
+)
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 

@@ -14,7 +14,7 @@ from unittest import TestCase
 import pytest
 
 from spdx.model.actor import Actor, ActorType
-from spdx.model.annotation import AnnotationType, Annotation
+from spdx.model.annotation import Annotation, AnnotationType
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.annotation_parser import AnnotationParser
 

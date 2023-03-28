@@ -14,7 +14,7 @@ import os
 import pytest
 
 from spdx.model.document import Document
-from spdx.model.relationship import RelationshipType, Relationship
+from spdx.model.relationship import Relationship, RelationshipType
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR

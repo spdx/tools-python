@@ -12,8 +12,8 @@ from typing import Dict, Optional
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.parser.jsonlikedict.dict_parsing_functions import json_str_to_enum_name
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 
 
 class ChecksumParser:

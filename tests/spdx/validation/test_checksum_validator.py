@@ -15,7 +15,7 @@ import pytest
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.validation.checksum_validator import validate_checksum
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import checksum_fixture
 
 

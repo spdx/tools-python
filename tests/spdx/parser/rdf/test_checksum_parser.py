@@ -12,10 +12,10 @@ import os
 
 import pytest
 from rdflib import Graph, URIRef
-from spdx.parser.error import SPDXParsingError
 
 from spdx.model.checksum import ChecksumAlgorithm
-from spdx.parser.rdf.checksum_parser import parse_checksum, convert_rdf_to_algorithm
+from spdx.parser.error import SPDXParsingError
+from spdx.parser.rdf.checksum_parser import convert_rdf_to_algorithm, parse_checksum
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 

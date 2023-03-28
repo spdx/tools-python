@@ -8,13 +8,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import List
-from typing import Union
+from typing import List, Union
 
 from spdx.model.document import Document
-from spdx.model.snippet import Snippet
-from spdx.model.package import Package
 from spdx.model.file import File
+from spdx.model.package import Package
+from spdx.model.snippet import Snippet
 
 
 def get_contained_spdx_element_ids(document: Document) -> List[str]:

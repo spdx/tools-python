@@ -8,11 +8,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, Literal, RDFS, URIRef, RDF
+from rdflib import RDF, RDFS, Graph, Literal, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
+from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 from spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 from tests.spdx.fixtures import creation_info_fixture
 
 

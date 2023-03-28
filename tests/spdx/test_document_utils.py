@@ -5,8 +5,8 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.document_utils import get_element_from_spdx_id, get_contained_spdx_element_ids
-from tests.spdx.fixtures import document_fixture, snippet_fixture, package_fixture, file_fixture
+from spdx.document_utils import get_contained_spdx_element_ids, get_element_from_spdx_id
+from tests.spdx.fixtures import document_fixture, file_fixture, package_fixture, snippet_fixture
 
 
 @pytest.fixture

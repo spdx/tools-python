@@ -13,15 +13,15 @@ from typing import List, Optional
 
 from spdx.model.document import Document
 from spdx.model.package import Package
-from spdx.model.relationship import RelationshipType, Relationship
+from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target
 from spdx.validation.checksum_validator import validate_checksums
 from spdx.validation.external_package_ref_validator import validate_external_package_refs
 from spdx.validation.license_expression_validator import validate_license_expression, validate_license_expressions
 from spdx.validation.package_verification_code_validator import validate_verification_code
 from spdx.validation.spdx_id_validators import validate_spdx_id
-from spdx.validation.uri_validators import validate_url, validate_download_location
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.uri_validators import validate_download_location, validate_url
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_packages(packages: List[Package], spdx_version: str, document: Optional[Document] = None) -> List[

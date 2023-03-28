@@ -9,11 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from dataclasses import field
-from typing import Optional, List, Union
+from typing import List, Optional, Union
 
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from common.typing.type_checks import check_types_and_set_values
+from spdx.model.spdx_no_assertion import SpdxNoAssertion
 
 
 @dataclass_with_properties

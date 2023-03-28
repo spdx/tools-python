@@ -8,18 +8,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Union, List
+from typing import List, Union
 
 from boolean import Expression
-from rdflib import Graph, URIRef, BNode, RDF
-from license_expression import AND, OR, LicenseWithExceptionSymbol, LicenseSymbol, get_spdx_licensing, ExpressionInfo, \
-    LicenseExpression
-from rdflib.term import Node, Literal
+from license_expression import (
+    AND,
+    OR,
+    ExpressionInfo,
+    LicenseExpression,
+    LicenseSymbol,
+    LicenseWithExceptionSymbol,
+    get_spdx_licensing,
+)
+from rdflib import RDF, BNode, Graph, URIRef
+from rdflib.term import Literal, Node
 
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
+from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 
 
 def add_license_expression_or_none_or_no_assertion(value: Union[

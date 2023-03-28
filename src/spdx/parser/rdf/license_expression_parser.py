@@ -10,12 +10,12 @@
 # limitations under the License.
 from typing import Union
 
-from rdflib import Graph, RDF
 from license_expression import LicenseExpression, get_spdx_licensing
-from rdflib.term import Identifier, URIRef, BNode, Node
-from spdx.parser.rdf.graph_parsing_functions import remove_prefix
+from rdflib import RDF, Graph
+from rdflib.term import BNode, Identifier, Node, URIRef
 
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
+from spdx.parser.rdf.graph_parsing_functions import remove_prefix
+from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 
 
 def parse_license_expression(license_expression_node: Union[URIRef, BNode, Node], graph: Graph,

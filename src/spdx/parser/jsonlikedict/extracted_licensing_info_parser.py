@@ -13,8 +13,8 @@ from typing import Dict, List, Optional, Union
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_field_or_no_assertion
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error
 from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error
 
 
 class ExtractedLicensingInfoParser:

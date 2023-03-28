@@ -9,9 +9,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from rdflib import Graph, URIRef
-from spdx.parser.error import SPDXParsingError
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.graph_parsing_functions import parse_literal, remove_prefix

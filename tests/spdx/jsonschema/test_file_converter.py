@@ -14,6 +14,7 @@ from unittest import mock
 from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
+from license_expression import Licensing
 
 from spdx.jsonschema.annotation_converter import AnnotationConverter
 from spdx.jsonschema.file_converter import FileConverter
@@ -23,10 +24,9 @@ from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.document import Document
 from spdx.model.file import File, FileType
-from license_expression import Licensing
-from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
-from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
-from tests.spdx.fixtures import creation_info_fixture, file_fixture, annotation_fixture, document_fixture
+from spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING, SpdxNoAssertion
+from spdx.model.spdx_none import SPDX_NONE_STRING, SpdxNone
+from tests.spdx.fixtures import annotation_fixture, creation_info_fixture, document_fixture, file_fixture
 from tests.spdx.mock_utils import assert_mock_method_called_with_arguments
 
 

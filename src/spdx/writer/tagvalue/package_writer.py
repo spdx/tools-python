@@ -13,8 +13,12 @@ from typing import TextIO
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.package import Package, PackageVerificationCode
 from spdx.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, \
-    transform_enum_name_to_tv, write_actor
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import (
+    transform_enum_name_to_tv,
+    write_actor,
+    write_text_value,
+    write_value,
+)
 
 
 def write_package(package: Package, text_output: TextIO):

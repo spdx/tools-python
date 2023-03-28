@@ -12,7 +12,7 @@ from typing import TextIO
 
 from spdx.model.file import File
 from spdx.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_text_value, write_value
 
 
 def write_file(file: File, text_output: TextIO):

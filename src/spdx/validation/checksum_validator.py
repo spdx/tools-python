@@ -10,10 +10,10 @@
 # limitations under the License.
 
 import re
-from typing import List, Dict
+from typing import Dict, List
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 # in hexadecimal digits
 algorithm_length: Dict = {

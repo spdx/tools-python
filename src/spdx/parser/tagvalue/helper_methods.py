@@ -9,7 +9,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import re
-from typing import Optional, Callable, Any, Dict
+from typing import Any, Callable, Dict, Optional
 
 from ply.yacc import YaccProduction
 

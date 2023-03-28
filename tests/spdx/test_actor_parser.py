@@ -8,12 +8,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import pytest
 from unittest import TestCase
 
+import pytest
+
 from spdx.model.actor import ActorType
-from spdx.parser.error import SPDXParsingError
 from spdx.parser.actor_parser import ActorParser
+from spdx.parser.error import SPDXParsingError
 
 
 @pytest.mark.parametrize("actor_string,expected_type,expected_name,expected_mail", [

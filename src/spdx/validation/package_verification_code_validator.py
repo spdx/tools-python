@@ -13,7 +13,7 @@ import re
 from typing import List
 
 from spdx.model.package import PackageVerificationCode
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_verification_code(verification_code: PackageVerificationCode, parent_id: str) -> List[ValidationMessage]:

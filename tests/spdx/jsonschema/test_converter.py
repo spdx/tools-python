@@ -9,16 +9,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from enum import auto
-from typing import Type, Any
+from typing import Any, Type
 
 import pytest
 
+from common.typing.dataclass_with_properties import dataclass_with_properties
+from common.typing.type_checks import check_types_and_set_values
 from spdx.jsonschema.converter import TypedConverter
 from spdx.jsonschema.json_property import JsonProperty
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.document import Document
-from common.typing.dataclass_with_properties import dataclass_with_properties
-from common.typing.type_checks import check_types_and_set_values
 
 
 class TestPropertyType(JsonProperty):

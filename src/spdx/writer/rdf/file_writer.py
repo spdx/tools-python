@@ -10,14 +10,14 @@
 # limitations under the License.
 from typing import Dict
 
-from rdflib import Graph, URIRef, Literal, RDF, RDFS
+from rdflib import RDF, RDFS, Graph, Literal, URIRef
 
-from spdx.model.file import File
 from spdx.casing_tools import snake_case_to_camel_case
+from spdx.model.file import File
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx.writer.rdf.checksum_writer import add_checksum_to_graph
 from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
-from spdx.writer.rdf.writer_utils import add_optional_literal, add_namespace_to_spdx_id
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id, add_optional_literal
 
 
 def add_file_to_graph(file: File, graph: Graph, doc_namespace: str,

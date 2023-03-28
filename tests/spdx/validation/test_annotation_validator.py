@@ -16,8 +16,8 @@ import pytest
 from spdx.model.annotation import Annotation
 from spdx.model.document import Document
 from spdx.validation.annotation_validator import validate_annotation
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.spdx.fixtures import document_fixture, annotation_fixture, file_fixture
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from tests.spdx.fixtures import annotation_fixture, document_fixture, file_fixture
 
 
 def test_valid_annotation():

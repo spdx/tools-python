@@ -9,19 +9,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from typing import Optional
-from rdflib import URIRef, Graph, RDFS, DOAP, Literal
+
+from rdflib import DOAP, RDFS, Graph, Literal, URIRef
 
 from spdx.datetime_conversions import datetime_from_str
-from spdx.model.package import Package, PackagePurpose, ExternalPackageRef, PackageVerificationCode, \
-    ExternalPackageRefCategory
+from spdx.model.package import (
+    ExternalPackageRef,
+    ExternalPackageRefCategory,
+    Package,
+    PackagePurpose,
+    PackageVerificationCode,
+)
 from spdx.parser.actor_parser import ActorParser
 from spdx.parser.logger import Logger
-from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.checksum_parser import parse_checksum
-from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, parse_literal, parse_enum_value, \
-    parse_literal_or_no_assertion_or_none, get_correctly_typed_value, parse_literal_or_no_assertion_or_none, remove_prefix
+from spdx.parser.rdf.graph_parsing_functions import (
+    get_correctly_typed_value,
+    parse_enum_value,
+    parse_literal,
+    parse_literal_or_no_assertion_or_none,
+    parse_spdx_id,
+    remove_prefix,
+)
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
+from spdx.rdfschema.namespace import REFERENCE_NAMESPACE, SPDX_NAMESPACE
 
 
 def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Package:

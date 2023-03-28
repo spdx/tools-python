@@ -11,11 +11,10 @@
 from unittest import TestCase
 
 import pytest
+from license_expression import Licensing
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.file import FileType
-from license_expression import Licensing
-
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements

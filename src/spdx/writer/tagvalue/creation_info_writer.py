@@ -12,8 +12,12 @@ from typing import TextIO
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.document import CreationInfo
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, write_optional_heading, \
-    write_separator
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import (
+    write_optional_heading,
+    write_separator,
+    write_text_value,
+    write_value,
+)
 
 
 def write_creation_info(creation_info: CreationInfo, text_output: TextIO):

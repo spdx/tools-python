@@ -8,11 +8,12 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import TextIO, Tuple, List, Dict, Any, Union, Callable, Optional
+from typing import Any, Callable, Dict, List, Optional, TextIO, Tuple, Union
+
+from license_expression import LicenseExpression
 
 from spdx.model.actor import Actor
 from spdx.model.file import File
-from license_expression import LicenseExpression
 from spdx.model.package import Package
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.snippet import Snippet

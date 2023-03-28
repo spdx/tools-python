@@ -24,8 +24,16 @@ from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.document import Document
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx.model.relationship import Relationship, RelationshipType
-from tests.spdx.fixtures import creation_info_fixture, file_fixture, package_fixture, external_document_ref_fixture, \
-    snippet_fixture, annotation_fixture, document_fixture, relationship_fixture
+from tests.spdx.fixtures import (
+    annotation_fixture,
+    creation_info_fixture,
+    document_fixture,
+    external_document_ref_fixture,
+    file_fixture,
+    package_fixture,
+    relationship_fixture,
+    snippet_fixture,
+)
 from tests.spdx.mock_utils import assert_mock_method_called_with_arguments, assert_no_mock_methods_called
 
 

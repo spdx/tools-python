@@ -12,7 +12,7 @@ from typing import TextIO
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.annotation import Annotation
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_text_value, write_value
 
 
 def write_annotation(annotation: Annotation, text_output: TextIO):

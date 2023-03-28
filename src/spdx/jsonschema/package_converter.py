@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Type, Any
+from typing import Any, Type
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.jsonschema.annotation_converter import AnnotationConverter
@@ -22,8 +22,10 @@ from spdx.jsonschema.package_verification_code_converter import PackageVerificat
 from spdx.model.actor import Actor
 from spdx.model.document import Document
 from spdx.model.package import Package
-from spdx.model.relationship_filters import find_package_contains_file_relationships, \
-    find_file_contained_by_package_relationships
+from spdx.model.relationship_filters import (
+    find_file_contained_by_package_relationships,
+    find_package_contains_file_relationships,
+)
 
 
 class PackageConverter(TypedConverter[Package]):

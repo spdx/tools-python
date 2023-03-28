@@ -9,11 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import pytest
-from rdflib import Graph, URIRef, Literal, RDF
+from rdflib import RDF, Graph, Literal, URIRef
 
 from spdx.model.checksum import ChecksumAlgorithm
-from spdx.writer.rdf.checksum_writer import add_checksum_to_graph, algorithm_to_rdf_string
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.writer.rdf.checksum_writer import add_checksum_to_graph, algorithm_to_rdf_string
 from tests.spdx.fixtures import checksum_fixture
 
 

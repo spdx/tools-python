@@ -16,7 +16,7 @@ from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.validation.spdx_id_validators import validate_spdx_id
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_relationships(relationships: List[Relationship], spdx_version: str, document: Document) -> List[
