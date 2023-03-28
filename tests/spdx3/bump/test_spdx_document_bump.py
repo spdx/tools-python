@@ -10,22 +10,24 @@
 # limitations under the License.
 import sys
 
+from spdx.model.actor import ActorType
 from spdx.model.document import Document as Spdx2_Document
 from spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
 from spdx3.payload import Payload
 from spdx3.writer.console.payload_writer import write_payload
-from tests.spdx.fixtures import document_fixture, creation_info_fixture, annotation_fixture
+from tests.spdx.fixtures import document_fixture, creation_info_fixture, annotation_fixture, actor_fixture
 
 
 def test_bump_spdx_document():
     spdx2_document: Spdx2_Document = document_fixture()
+    spdx2_document.creation_info.creators.append(actor_fixture(ActorType.TOOL, "tool_name", None))
 
     payload: Payload = bump_spdx_document(spdx2_document)
 
     write_payload(payload, sys.stdout)
 
     assert "SPDXRef-Package" in payload.get_full_map()
-    assert len(payload.get_full_map()) == 9
+    assert len(payload.get_full_map()) == 10
 
     # this is more of a temporary test to make sure the dates don't get messed up again
     assert payload.get_element("SPDXRef-DOCUMENT").creation_info.created == creation_info_fixture().created

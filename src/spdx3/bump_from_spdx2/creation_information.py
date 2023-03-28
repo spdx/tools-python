@@ -12,6 +12,8 @@ from datetime import datetime
 from typing import List
 
 from semantic_version import Version
+from spdx.model.actor import ActorType
+
 from spdx3.payload import Payload
 
 from spdx.model.document import CreationInfo as Spdx2_CreationInfo
@@ -43,15 +45,26 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     print_missing_conversion("creation_info.license_list_version", 0)
     # creation_info.document_comment -> spdx_document.comment
     document_comment = spdx2_creation_info.document_comment
-    creation_information = CreationInformation(Version("3.0.0"), created, [], ["core", "software", "licensing"],
+    creation_information = CreationInformation(Version("3.0.0"), created, [], [], ["core", "software", "licensing"],
                                                data_license)
 
     # due to creators having a creation_information themselves which inherits from the document's one,
     # we have to add them after the creation_information has been initialized
     creator_ids: List[str] = []
+    tool_ids: List[str] = []
     for creator in spdx2_creation_info.creators:
-        creator_ids.append(bump_actor(creator, payload, creation_information))
+        bumped_actor_id = bump_actor(creator, payload, creation_information)
+        if creator.actor_type in [ActorType.PERSON, ActorType.ORGANIZATION]:
+            creator_ids.append(bumped_actor_id)
+        else:
+            tool_ids.append(bumped_actor_id)
+
+    if not creator_ids:
+        raise NotImplementedError("The SPDX2 creation_info does not contain creators of Type Person or Organization."
+                                  " This case leads to an invalid SPDX3 document and is currently not supported.")
+
     creation_information.created_by = creator_ids
+    creation_information.created_using = tool_ids
 
     spdx_document = SpdxDocument(spdx_id=spdx_id, creation_info=creation_information, name=name,
                                  comment=document_comment, elements=[], root_elements=[], imports=imports)
