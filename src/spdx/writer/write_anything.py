@@ -27,6 +27,6 @@ def write_file(document: Document, file_name: str, validate: bool = True):
     elif output_format == FileFormat.XML:
         xml_writer.write_document_to_file(document, file_name, validate)
     elif output_format == FileFormat.TAG_VALUE:
-        tagvalue_writer.write_document_to_file(document, file_name)
+        tagvalue_writer.write_document_to_file(document, file_name, validate)
     elif output_format == FileFormat.RDF_XML:
         rdf_writer.write_document_to_file(document, file_name, validate)
