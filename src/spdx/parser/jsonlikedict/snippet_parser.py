@@ -8,20 +8,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from enum import auto, Enum
-from typing import Dict, Tuple, List, Optional, Union
+from enum import Enum, auto
+from typing import Dict, List, Optional, Tuple, Union
 
 from license_expression import LicenseExpression
+
 from spdx.model.snippet import Snippet
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.dict_parsing_functions import parse_field_or_log_error, \
-    parse_field_or_no_assertion_or_none
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error
-
+from spdx.parser.jsonlikedict.dict_parsing_functions import (
+    parse_field_or_log_error,
+    parse_field_or_no_assertion_or_none,
+)
 from spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error
 
 
 class RangeType(Enum):

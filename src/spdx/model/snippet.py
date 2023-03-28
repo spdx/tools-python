@@ -9,13 +9,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from dataclasses import field
-from typing import Tuple, Optional, List, Union
+from typing import List, Optional, Tuple, Union
+
+from license_expression import LicenseExpression
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
-from license_expression import LicenseExpression
+from common.typing.type_checks import check_types_and_set_values
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from common.typing.type_checks import check_types_and_set_values
 
 
 @dataclass_with_properties

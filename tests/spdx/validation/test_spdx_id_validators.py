@@ -12,10 +12,22 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.validation.spdx_id_validators import is_valid_internal_spdx_id, is_valid_external_doc_ref_id, \
-    get_list_of_all_spdx_ids, is_spdx_id_present_in_document, is_external_doc_ref_present_in_document, validate_spdx_id
-from tests.spdx.fixtures import document_fixture, file_fixture, package_fixture, snippet_fixture, creation_info_fixture, \
-    external_document_ref_fixture
+from spdx.validation.spdx_id_validators import (
+    get_list_of_all_spdx_ids,
+    is_external_doc_ref_present_in_document,
+    is_spdx_id_present_in_document,
+    is_valid_external_doc_ref_id,
+    is_valid_internal_spdx_id,
+    validate_spdx_id,
+)
+from tests.spdx.fixtures import (
+    creation_info_fixture,
+    document_fixture,
+    external_document_ref_fixture,
+    file_fixture,
+    package_fixture,
+    snippet_fixture,
+)
 
 DOCUMENT = document_fixture(files=[file_fixture(spdx_id="SPDXRef-File1"),
                                    file_fixture(spdx_id="SPDXRef-File2")],

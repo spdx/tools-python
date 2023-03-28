@@ -11,12 +11,12 @@
 
 from typing import List, Optional, Union
 
-from license_expression import LicenseExpression, get_spdx_licensing, ExpressionError, ExpressionParseError
-from spdx.model.document import Document
+from license_expression import ExpressionError, ExpressionParseError, LicenseExpression, get_spdx_licensing
 
+from spdx.model.document import Document
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_license_expressions(

@@ -10,7 +10,7 @@
 # limitations under the License.
 import pytest
 
-from spdx.model.relationship import RelationshipType, Relationship
+from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError

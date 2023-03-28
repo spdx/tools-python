@@ -13,10 +13,9 @@ from typing import List, Optional
 
 from spdx.model.document import Document
 from spdx.model.snippet import Snippet
-from spdx.validation.license_expression_validator import validate_license_expression, \
-    validate_license_expressions
+from spdx.validation.license_expression_validator import validate_license_expression, validate_license_expressions
 from spdx.validation.spdx_id_validators import validate_spdx_id
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_snippets(snippets: List[Snippet], spdx_version: str, document: Optional[Document] = None) -> List[

@@ -12,7 +12,7 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.model.relationship import RelationshipType, Relationship
+from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.relationship_parser import RelationshipParser

@@ -10,7 +10,7 @@
 # limitations under the License.
 import logging
 from datetime import datetime
-from typing import Any, Optional, Dict
+from typing import Any, Dict, Optional
 
 from rdflib import Graph, Literal
 from rdflib.term import Node

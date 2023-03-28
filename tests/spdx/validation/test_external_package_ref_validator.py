@@ -14,9 +14,19 @@ from typing import List
 import pytest
 
 from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
-from spdx.validation.external_package_ref_validator import validate_external_package_ref, CPE22TYPE_REGEX, \
-    CPE23TYPE_REGEX, MAVEN_CENTRAL_REGEX, NPM_REGEX, NUGET_REGEX, BOWER_REGEX, PURL_REGEX, SWH_REGEX, GITOID_REGEX
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.external_package_ref_validator import (
+    BOWER_REGEX,
+    CPE22TYPE_REGEX,
+    CPE23TYPE_REGEX,
+    GITOID_REGEX,
+    MAVEN_CENTRAL_REGEX,
+    NPM_REGEX,
+    NUGET_REGEX,
+    PURL_REGEX,
+    SWH_REGEX,
+    validate_external_package_ref,
+)
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 @pytest.mark.parametrize("category, reference_type, locator",

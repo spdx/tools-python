@@ -8,14 +8,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import URIRef, Graph, RDFS
+from rdflib import RDFS, Graph, URIRef
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.annotation import Annotation, AnnotationType
 from spdx.parser.actor_parser import ActorParser
 from spdx.parser.logger import Logger
-from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages, construct_or_raise_parsing_error
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_enum_value
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
+from spdx.parser.rdf.graph_parsing_functions import parse_enum_value, parse_literal, parse_spdx_id
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 

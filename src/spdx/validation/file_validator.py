@@ -15,9 +15,9 @@ from spdx.model.checksum import ChecksumAlgorithm
 from spdx.model.document import Document
 from spdx.model.file import File
 from spdx.validation.checksum_validator import validate_checksums
-from spdx.validation.license_expression_validator import validate_license_expressions, validate_license_expression
+from spdx.validation.license_expression_validator import validate_license_expression, validate_license_expressions
 from spdx.validation.spdx_id_validators import validate_spdx_id
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_files(files: List[File], spdx_version: str, document: Optional[Document] = None) -> List[

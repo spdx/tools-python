@@ -11,7 +11,7 @@
 
 import pytest
 
-from spdx.validation.uri_validators import validate_url, validate_download_location, validate_uri
+from spdx.validation.uri_validators import validate_download_location, validate_uri, validate_url
 
 
 @pytest.mark.parametrize("input_value", ["https://some.url",

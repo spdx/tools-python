@@ -15,7 +15,7 @@ from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.validation.checksum_validator import validate_checksum
 from spdx.validation.spdx_id_validators import is_valid_external_doc_ref_id
 from spdx.validation.uri_validators import validate_uri
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_external_document_refs(external_document_refs: List[ExternalDocumentRef], parent_id: str,

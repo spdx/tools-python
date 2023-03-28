@@ -9,13 +9,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import re
-from typing import List, Dict
+from typing import Dict, List
 
 import uritools
 
-from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
+from spdx.model.package import CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES, ExternalPackageRef, ExternalPackageRefCategory
 from spdx.validation.uri_validators import validate_url
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 CPE22TYPE_REGEX = r'^c[pP][eE]:/[AHOaho]?(:[A-Za-z0-9._\-~%]*){0,6}$'
 CPE23TYPE_REGEX = r'^cpe:2\.3:[aho\*\-](:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){5}(:(([a-zA-Z]{2,3}(-([a-zA-Z]{2}|[0-9]{3}))?)|[\*\-]))(:(((\?*|\*?)([a-zA-Z0-9\-\._]|(\\[\\\*\?!"#$$%&\'\(\)\+,\/:;<=>@\[\]\^`\{\|}~]))+(\?*|\*?))|[\*\-])){4}$'

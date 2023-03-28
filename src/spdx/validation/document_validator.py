@@ -21,7 +21,7 @@ from spdx.validation.package_validator import validate_packages
 from spdx.validation.relationship_validator import validate_relationships
 from spdx.validation.snippet_validator import validate_snippets
 from spdx.validation.spdx_id_validators import get_list_of_all_spdx_ids
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_full_spdx_document(document: Document, spdx_version: str = None) -> List[ValidationMessage]:

@@ -8,20 +8,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Tuple, Optional, Dict
+from typing import Dict, Optional, Tuple
 
-from rdflib import Graph, RDF, RDFS
+from rdflib import RDF, RDFS, Graph
 from rdflib.exceptions import UniquenessError
-from rdflib.term import URIRef, Node
-from spdx.parser.error import SPDXParsingError
+from rdflib.term import Node, URIRef
 
 from spdx.model.snippet import Snippet
+from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, parse_literal_or_no_assertion_or_none, \
-    get_correctly_typed_value, apply_parsing_method_or_log_error
+from spdx.parser.rdf.graph_parsing_functions import (
+    apply_parsing_method_or_log_error,
+    get_correctly_typed_value,
+    parse_literal,
+    parse_literal_or_no_assertion_or_none,
+    parse_spdx_id,
+)
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
+from spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
 
 
 def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Snippet:

@@ -12,16 +12,16 @@ from dataclasses import field
 from datetime import datetime
 from typing import List, Optional
 
+from common.typing.dataclass_with_properties import dataclass_with_properties
+from common.typing.type_checks import check_types_and_set_values
 from spdx.model.actor import Actor
 from spdx.model.annotation import Annotation
-from common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx.model.file import File
 from spdx.model.package import Package
 from spdx.model.relationship import Relationship
 from spdx.model.snippet import Snippet
-from common.typing.type_checks import check_types_and_set_values
 from spdx.model.version import Version
 
 

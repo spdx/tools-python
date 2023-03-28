@@ -8,10 +8,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, Literal, RDFS, RDF, URIRef
+from rdflib import RDF, RDFS, Graph, Literal, URIRef
 
+from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 from spdx.writer.rdf.file_writer import add_file_to_graph
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 from tests.spdx.fixtures import file_fixture
 
 

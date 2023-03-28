@@ -12,10 +12,9 @@ import os
 
 import pytest
 
-from tests.spdx.fixtures import document_fixture
-
 from spdx.model.document import Document
 from spdx.writer.rdf.rdf_writer import write_document_to_file
+from tests.spdx.fixtures import document_fixture
 
 
 @pytest.fixture

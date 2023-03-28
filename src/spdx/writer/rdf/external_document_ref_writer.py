@@ -8,11 +8,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, URIRef, RDF
+from rdflib import RDF, Graph, URIRef
 
 from spdx.model.external_document_ref import ExternalDocumentRef
-from spdx.writer.rdf.checksum_writer import add_checksum_to_graph
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.writer.rdf.checksum_writer import add_checksum_to_graph
 
 
 def add_external_document_ref_to_graph(external_document_ref: ExternalDocumentRef, graph: Graph, doc_node: URIRef,

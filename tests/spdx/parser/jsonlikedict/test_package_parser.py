@@ -12,11 +12,11 @@ from datetime import datetime
 from unittest import TestCase
 
 import pytest
+from license_expression import Licensing
 
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from license_expression import Licensing
-from spdx.model.package import PackageVerificationCode, ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
+from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose, PackageVerificationCode
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements

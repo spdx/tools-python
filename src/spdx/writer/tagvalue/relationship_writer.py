@@ -11,7 +11,7 @@
 from typing import TextIO
 
 from spdx.model.relationship import Relationship
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_text_value, write_value
 
 
 def write_relationship(relationship: Relationship, text_output: TextIO):

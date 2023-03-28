@@ -8,10 +8,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, URIRef, RDFS, Literal
+from rdflib import RDFS, Graph, Literal, URIRef
 
-from spdx.writer.rdf.relationship_writer import add_relationship_to_graph
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.writer.rdf.relationship_writer import add_relationship_to_graph
 from tests.spdx.fixtures import relationship_fixture
 
 

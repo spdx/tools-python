@@ -8,11 +8,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from spdx.writer.rdf import rdf_writer
-
-from spdx.formats import file_name_to_format, FileFormat
+from spdx.formats import FileFormat, file_name_to_format
 from spdx.model.document import Document
 from spdx.writer.json import json_writer
+from spdx.writer.rdf import rdf_writer
 from spdx.writer.tagvalue import tagvalue_writer
 from spdx.writer.xml import xml_writer
 from spdx.writer.yaml import yaml_writer

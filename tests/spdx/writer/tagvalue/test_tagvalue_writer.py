@@ -14,8 +14,8 @@ import os
 import pytest
 
 from spdx.parser.tagvalue import tagvalue_parser
-from tests.spdx.fixtures import document_fixture
 from spdx.writer.tagvalue.tagvalue_writer import write_document_to_file
+from tests.spdx.fixtures import document_fixture
 
 
 @pytest.fixture

@@ -10,17 +10,24 @@
 # limitations under the License.
 from typing import Dict
 
-from rdflib import Graph, URIRef, RDF, Literal, XSD, BNode, DOAP, RDFS
-from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
+from rdflib import DOAP, RDF, RDFS, XSD, BNode, Graph, Literal, URIRef
 
 from spdx.casing_tools import snake_case_to_camel_case
+from spdx.model.package import (
+    CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES,
+    ExternalPackageRef,
+    Package,
+    PackageVerificationCode,
+)
+from spdx.rdfschema.namespace import REFERENCE_NAMESPACE, SPDX_NAMESPACE
 from spdx.writer.rdf.checksum_writer import add_checksum_to_graph
-
-from spdx.model.package import Package, PackageVerificationCode, ExternalPackageRef, \
-    CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
-from spdx.writer.rdf.writer_utils import add_optional_literal, add_literal_or_no_assertion_or_none, \
-    add_datetime_to_graph, add_namespace_to_spdx_id
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, REFERENCE_NAMESPACE
+from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
+from spdx.writer.rdf.writer_utils import (
+    add_datetime_to_graph,
+    add_literal_or_no_assertion_or_none,
+    add_namespace_to_spdx_id,
+    add_optional_literal,
+)
 
 
 def add_package_to_graph(package: Package, graph: Graph, doc_namespace: str,

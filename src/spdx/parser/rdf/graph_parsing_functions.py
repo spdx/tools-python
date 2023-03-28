@@ -16,12 +16,12 @@ from rdflib.exceptions import UniquenessError
 from rdflib.namespace import NamespaceManager
 from rdflib.term import Node
 
-from spdx.model.spdx_no_assertion import SpdxNoAssertion, SPDX_NO_ASSERTION_STRING
-from spdx.model.spdx_none import SpdxNone, SPDX_NONE_STRING
+from spdx.casing_tools import camel_case_to_snake_case
+from spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING, SpdxNoAssertion
+from spdx.model.spdx_none import SPDX_NONE_STRING, SpdxNone
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
-from spdx.casing_tools import camel_case_to_snake_case
 
 
 def parse_literal(logger: Logger, graph: Graph, subject: Node, predicate: Node,

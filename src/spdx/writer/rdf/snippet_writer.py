@@ -8,15 +8,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Tuple, Optional, Dict
+from typing import Dict, Optional, Tuple
 
-from rdflib import Graph, URIRef, RDF, RDFS, Literal, BNode
-
-from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
-from spdx.writer.rdf.writer_utils import add_optional_literal, add_namespace_to_spdx_id
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, POINTER_NAMESPACE
+from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
 from spdx.model.snippet import Snippet
+from spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
+from spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
+from spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id, add_optional_literal
 
 
 def add_snippet_to_graph(snippet: Snippet, graph: Graph, doc_namespace: str,

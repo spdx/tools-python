@@ -8,13 +8,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, BNode, RDF, Literal, RDFS, URIRef
+from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.document import CreationInfo
+from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 from spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
 from spdx.writer.rdf.writer_utils import add_optional_literal
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 
 
 def add_creation_info_to_graph(creation_info: CreationInfo, graph: Graph):

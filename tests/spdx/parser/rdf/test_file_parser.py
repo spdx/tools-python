@@ -12,9 +12,9 @@ import os
 from unittest import TestCase
 
 from license_expression import get_spdx_licensing
-from rdflib import Graph, RDF
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from rdflib import RDF, Graph
 
+from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.file import FileType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.rdf.file_parser import parse_file

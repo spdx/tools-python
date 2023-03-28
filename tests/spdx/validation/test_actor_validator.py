@@ -15,7 +15,7 @@ import pytest
 
 from spdx.model.actor import ActorType
 from spdx.validation.actor_validator import validate_actor
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import actor_fixture
 
 

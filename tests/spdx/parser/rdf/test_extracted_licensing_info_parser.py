@@ -10,7 +10,7 @@
 # limitations under the License.
 import os
 
-from rdflib import Graph, RDF
+from rdflib import RDF, Graph
 
 from spdx.parser.rdf.extracted_licensing_info_parser import parse_extracted_licensing_info
 from spdx.rdfschema.namespace import SPDX_NAMESPACE

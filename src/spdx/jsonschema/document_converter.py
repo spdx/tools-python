@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Type, Any
+from typing import Any, Type
 
 from spdx.document_utils import get_contained_spdx_element_ids
 from spdx.jsonschema.annotation_converter import AnnotationConverter
@@ -24,9 +24,12 @@ from spdx.jsonschema.relationship_converter import RelationshipConverter
 from spdx.jsonschema.snippet_converter import SnippetConverter
 from spdx.model.document import Document
 from spdx.model.relationship import RelationshipType
-from spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target, \
-    find_package_contains_file_relationships, \
-    find_file_contained_by_package_relationships
+from spdx.model.relationship_filters import (
+    filter_by_type_and_origin,
+    filter_by_type_and_target,
+    find_file_contained_by_package_relationships,
+    find_package_contains_file_relationships,
+)
 
 
 class DocumentConverter(TypedConverter[Document]):

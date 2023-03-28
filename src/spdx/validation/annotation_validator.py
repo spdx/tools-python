@@ -15,7 +15,7 @@ from spdx.model.annotation import Annotation
 from spdx.model.document import Document
 from spdx.validation.actor_validator import validate_actor
 from spdx.validation.spdx_id_validators import validate_spdx_id
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_annotations(annotations: List[Annotation], document: Document) -> List[ValidationMessage]:

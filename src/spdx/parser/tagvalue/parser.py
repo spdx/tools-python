@@ -11,20 +11,25 @@
 # limitations under the License.
 
 import re
-from typing import Any, List, Dict
+from typing import Any, Dict, List
 
 from license_expression import get_spdx_licensing
 from ply import yacc
 from ply.yacc import LRParser
 
 from spdx.datetime_conversions import datetime_from_str
-from spdx.model.annotation import AnnotationType, Annotation
-from spdx.model.document import Document, CreationInfo
+from spdx.model.annotation import Annotation, AnnotationType
+from spdx.model.document import CreationInfo, Document
 from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx.model.file import File, FileType
-from spdx.model.package import Package, PackageVerificationCode, PackagePurpose, ExternalPackageRef, \
-    ExternalPackageRefCategory
+from spdx.model.package import (
+    ExternalPackageRef,
+    ExternalPackageRefCategory,
+    Package,
+    PackagePurpose,
+    PackageVerificationCode,
+)
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.snippet import Snippet
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
@@ -34,9 +39,14 @@ from spdx.parser.actor_parser import ActorParser
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
+from spdx.parser.tagvalue.helper_methods import (
+    TAG_DATA_MODEL_FIELD,
+    grammar_rule,
+    parse_checksum,
+    set_value,
+    str_from_text,
+)
 from spdx.parser.tagvalue.lexer import SPDXLexer
-from spdx.parser.tagvalue.helper_methods import grammar_rule, str_from_text, parse_checksum, set_value, \
-    TAG_DATA_MODEL_FIELD
 
 CLASS_MAPPING = dict(File="files", Annotation="annotations", Relationship="relationships", Snippet="snippets",
                      Package="packages", ExtractedLicensingInfo="extracted_licensing_info")

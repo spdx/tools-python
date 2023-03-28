@@ -10,14 +10,14 @@
 # limitations under the License.
 from typing import Dict
 
-from rdflib import Graph, BNode, RDF, URIRef, RDFS, Literal
+from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
+from spdx.casing_tools import snake_case_to_camel_case
 from spdx.model.relationship import Relationship
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from spdx.casing_tools import snake_case_to_camel_case
-from spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id
 
 
 def add_relationship_to_graph(relationship: Relationship, graph: Graph, doc_namespace: str,

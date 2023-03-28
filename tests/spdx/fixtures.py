@@ -19,8 +19,13 @@ from spdx.model.document import CreationInfo, Document
 from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx.model.file import File, FileType
-from spdx.model.package import Package, PackageVerificationCode, PackagePurpose, ExternalPackageRef, \
-    ExternalPackageRefCategory
+from spdx.model.package import (
+    ExternalPackageRef,
+    ExternalPackageRefCategory,
+    Package,
+    PackagePurpose,
+    PackageVerificationCode,
+)
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.snippet import Snippet
 from spdx.model.spdx_no_assertion import SpdxNoAssertion

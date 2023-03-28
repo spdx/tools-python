@@ -8,7 +8,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import TextIO, List
+from typing import List, TextIO
 
 from spdx.model.document import Document
 from spdx.validation.document_validator import validate_full_spdx_document
@@ -20,8 +20,13 @@ from spdx.writer.tagvalue.file_writer import write_file
 from spdx.writer.tagvalue.package_writer import write_package
 from spdx.writer.tagvalue.relationship_writer import write_relationship
 from spdx.writer.tagvalue.snippet_writer import write_snippet
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_separator, scan_relationships, \
-    get_file_ids_with_contained_snippets, write_optional_heading, write_list_of_elements
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import (
+    get_file_ids_with_contained_snippets,
+    scan_relationships,
+    write_list_of_elements,
+    write_optional_heading,
+    write_separator,
+)
 
 
 def write_document_to_file(document: Document, file_name: str, validate: bool = True):

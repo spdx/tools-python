@@ -11,15 +11,16 @@
 from dataclasses import field
 from datetime import datetime
 from enum import Enum, auto
-from typing import Optional, Union, List, Dict
+from typing import Dict, List, Optional, Union
 
+from license_expression import LicenseExpression
+
+from common.typing.dataclass_with_properties import dataclass_with_properties
+from common.typing.type_checks import check_types_and_set_values
 from spdx.model.actor import Actor
 from spdx.model.checksum import Checksum
-from common.typing.dataclass_with_properties import dataclass_with_properties
-from license_expression import LicenseExpression
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from common.typing.type_checks import check_types_and_set_values
 
 
 class PackagePurpose(Enum):

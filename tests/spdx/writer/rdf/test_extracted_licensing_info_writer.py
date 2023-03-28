@@ -8,9 +8,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, Literal, RDFS, URIRef, RDF
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from rdflib import RDF, RDFS, Graph, Literal, URIRef
 
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx.writer.rdf.extracted_licensing_info_writer import add_extracted_licensing_info_to_graph
 from tests.spdx.fixtures import extracted_licensing_info_fixture
 

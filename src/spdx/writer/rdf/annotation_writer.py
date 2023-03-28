@@ -10,13 +10,13 @@
 # limitations under the License.
 from typing import Dict
 
-from rdflib import Graph, Literal, RDFS, URIRef, RDF, BNode
+from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
+from spdx.casing_tools import snake_case_to_camel_case
 from spdx.datetime_conversions import datetime_to_iso_string
 from spdx.model.annotation import Annotation
-from spdx.casing_tools import snake_case_to_camel_case
-from spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id
 
 
 def add_annotation_to_graph(annotation: Annotation, graph: Graph, doc_namespace: str,

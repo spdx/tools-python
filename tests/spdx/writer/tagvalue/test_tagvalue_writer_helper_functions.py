@@ -10,7 +10,7 @@
 # limitations under the License.
 from spdx.model.relationship import RelationshipType
 from spdx.writer.tagvalue.tagvalue_writer_helper_functions import scan_relationships
-from tests.spdx.fixtures import package_fixture, file_fixture, relationship_fixture
+from tests.spdx.fixtures import file_fixture, package_fixture, relationship_fixture
 
 
 def test_scan_relationships():

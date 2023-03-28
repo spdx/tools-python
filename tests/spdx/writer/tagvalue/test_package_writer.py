@@ -8,10 +8,10 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from unittest.mock import patch, mock_open, call, MagicMock
+from unittest.mock import MagicMock, call, mock_open, patch
 
-from tests.spdx.fixtures import package_fixture
 from spdx.writer.tagvalue.package_writer import write_package
+from tests.spdx.fixtures import package_fixture
 
 
 def test_package_writer():

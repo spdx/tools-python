@@ -11,7 +11,8 @@
 from typing import TextIO
 
 from spdx.model.snippet import Snippet
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_value, write_text_value, write_range
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_range, write_text_value, write_value
+
 
 def write_snippet(snippet: Snippet, text_output: TextIO):
     text_output.write("## Snippet Information\n")

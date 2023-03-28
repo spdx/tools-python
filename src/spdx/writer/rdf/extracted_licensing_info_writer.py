@@ -8,11 +8,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from rdflib import Graph, URIRef, RDF, BNode, RDFS, Literal
-from spdx.writer.rdf.writer_utils import add_optional_literal, add_literal_or_no_assertion
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx.writer.rdf.writer_utils import add_literal_or_no_assertion, add_optional_literal
 
 
 def add_extracted_licensing_info_to_graph(extracted_licensing_info: ExtractedLicensingInfo, graph: Graph, doc_node,

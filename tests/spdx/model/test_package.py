@@ -2,9 +2,9 @@ from datetime import datetime
 from unittest import mock
 
 import pytest
+from license_expression import LicenseExpression, Licensing
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from license_expression import LicenseExpression, Licensing
 from spdx.model.package import Package, PackagePurpose
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone

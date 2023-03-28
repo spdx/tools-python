@@ -18,9 +18,9 @@ from license_expression import Licensing
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from spdx.validation.package_validator import validate_package_within_document, validate_package
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.spdx.fixtures import package_fixture, package_verification_code_fixture, document_fixture, file_fixture
+from spdx.validation.package_validator import validate_package, validate_package_within_document
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from tests.spdx.fixtures import document_fixture, file_fixture, package_fixture, package_verification_code_fixture
 
 
 def test_valid_package():

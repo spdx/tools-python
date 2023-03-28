@@ -9,11 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from abc import ABC, abstractmethod
-from typing import Any, Type, Dict, TypeVar, Generic
+from typing import Any, Dict, Generic, Type, TypeVar
 
+from spdx.casing_tools import snake_case_to_camel_case
 from spdx.jsonschema.json_property import JsonProperty
 from spdx.model.document import Document
-from spdx.casing_tools import snake_case_to_camel_case
 
 MISSING_IMPLEMENTATION_MESSAGE = "Must be implemented"
 

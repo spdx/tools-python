@@ -15,7 +15,7 @@ from spdx.model.document import CreationInfo
 from spdx.validation.actor_validator import validate_actors
 from spdx.validation.external_document_ref_validator import validate_external_document_refs
 from spdx.validation.uri_validators import validate_uri
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def validate_creation_info(creation_info: CreationInfo, spdx_version: str) -> List[ValidationMessage]:

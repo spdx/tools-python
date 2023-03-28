@@ -13,11 +13,11 @@ from typing import List, Optional
 
 import pytest
 
-from spdx.model.document import Document, CreationInfo
+from spdx.model.document import CreationInfo, Document
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.validation.document_validator import validate_full_spdx_document
-from spdx.validation.validation_message import ValidationMessage, ValidationContext, SpdxElementType
-from tests.spdx.fixtures import document_fixture, creation_info_fixture, file_fixture, package_fixture, snippet_fixture
+from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from tests.spdx.fixtures import creation_info_fixture, document_fixture, file_fixture, package_fixture, snippet_fixture
 
 
 def test_valid_document():

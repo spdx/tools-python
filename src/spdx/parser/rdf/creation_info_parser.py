@@ -13,22 +13,21 @@ import sys
 from typing import Tuple
 from urllib.parse import urldefrag
 
-from rdflib import Graph, RDFS, RDF, Namespace
+from rdflib import RDF, RDFS, Graph, Namespace
 from rdflib.exceptions import UniquenessError
 from rdflib.term import URIRef
-
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.logger import Logger
-from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
-from spdx.parser.rdf.checksum_parser import parse_checksum
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, remove_prefix
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.document import CreationInfo
 from spdx.model.external_document_ref import ExternalDocumentRef
 from spdx.model.version import Version
 from spdx.parser.actor_parser import ActorParser
+from spdx.parser.error import SPDXParsingError
+from spdx.parser.logger import Logger
+from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
+from spdx.parser.rdf.checksum_parser import parse_checksum
+from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, remove_prefix
+from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 
 
 def parse_creation_info(graph: Graph) -> Tuple[CreationInfo, URIRef]:

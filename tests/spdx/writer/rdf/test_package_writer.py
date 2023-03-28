@@ -9,14 +9,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import pytest
-from rdflib import Graph, URIRef, RDF, Literal, XSD, RDFS, DOAP
-from spdx.model.package import ExternalPackageRefCategory
+from rdflib import DOAP, RDF, RDFS, XSD, Graph, Literal, URIRef
 
 from spdx.datetime_conversions import datetime_to_iso_string
-from spdx.writer.rdf.package_writer import add_package_to_graph, add_external_package_ref_to_graph, \
-    add_package_verification_code_to_graph
-from spdx.rdfschema.namespace import SPDX_NAMESPACE, LICENSE_NAMESPACE
-from tests.spdx.fixtures import package_fixture, external_package_ref_fixture, package_verification_code_fixture
+from spdx.model.package import ExternalPackageRefCategory
+from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
+from spdx.writer.rdf.package_writer import (
+    add_external_package_ref_to_graph,
+    add_package_to_graph,
+    add_package_verification_code_to_graph,
+)
+from tests.spdx.fixtures import external_package_ref_fixture, package_fixture, package_verification_code_fixture
 
 
 def test_add_package_to_graph():
