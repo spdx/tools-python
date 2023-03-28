@@ -72,7 +72,8 @@ def validate_file(
     if ChecksumAlgorithm.SHA1 not in [checksum.algorithm for checksum in file.checksums]:
         validation_messages.append(
             ValidationMessage(
-                f"checksums must contain a SHA1 algorithm checksum, but only contains: {[checksum.algorithm for checksum in file.checksums]}",
+                f"checksums must contain a SHA1 algorithm checksum, but only contains: "
+                f"{[checksum.algorithm for checksum in file.checksums]}",
                 context,
             )
         )
@@ -81,10 +82,10 @@ def validate_file(
 
     if spdx_version == "SPDX-2.2":
         if file.license_concluded is None:
-            validation_messages.append(ValidationMessage(f"license_concluded is mandatory in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("license_concluded is mandatory in SPDX-2.2", context))
         if not file.license_info_in_file:
-            validation_messages.append(ValidationMessage(f"license_info_in_file is mandatory in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("license_info_in_file is mandatory in SPDX-2.2", context))
         if file.copyright_text is None:
-            validation_messages.append(ValidationMessage(f"copyright_text is mandatory in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("copyright_text is mandatory in SPDX-2.2", context))
 
     return validation_messages

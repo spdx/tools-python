@@ -93,7 +93,7 @@ def parse_namespace_and_spdx_id(graph: Graph) -> (str, str):
     if not subject:
         logging.error("No SpdxDocument found, can't parse rdf file.")
         sys.exit(1)
-    if not "#" in subject:
+    if "#" not in subject:
         logging.error(
             "No '#' found in the URI of SpdxDocument, "
             "the URI for the SpdxDocument should be the namespace appended by '#SPDXRef-DOCUMENT."

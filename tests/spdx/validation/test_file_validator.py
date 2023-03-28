@@ -33,12 +33,12 @@ def test_valid_file():
         (
             file_fixture(name="/invalid/file/name"),
             file_fixture().spdx_id,
-            f'file name must not be an absolute path starting with "/", but is: /invalid/file/name',
+            'file name must not be an absolute path starting with "/", but is: /invalid/file/name',
         ),
         (
             file_fixture(checksums=[Checksum(ChecksumAlgorithm.MD2, "d4c41ce30a517d6ce9d79c8c17bb4b66")]),
             file_fixture().spdx_id,
-            f"checksums must contain a SHA1 algorithm checksum, but only contains: [<ChecksumAlgorithm.MD2: 13>]",
+            "checksums must contain a SHA1 algorithm checksum, but only contains: [<ChecksumAlgorithm.MD2: 13>]",
         ),
     ],
 )

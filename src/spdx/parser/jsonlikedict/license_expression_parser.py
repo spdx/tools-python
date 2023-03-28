@@ -8,16 +8,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import List, Union
+from typing import Union
 
 from license_expression import ExpressionError, LicenseExpression, Licensing
 
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.dict_parsing_functions import append_parsed_field_or_log_error
-from spdx.parser.logger import Logger
-from spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages
 
 
 class LicenseExpressionParser:

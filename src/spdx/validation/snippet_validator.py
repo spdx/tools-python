@@ -81,7 +81,8 @@ def validate_snippet(
     if snippet.byte_range[0] > snippet.byte_range[1]:
         validation_messages.append(
             ValidationMessage(
-                f"the first value of byte_range must be less than or equal to the second, but is: {snippet.byte_range}",
+                f"the first value of byte_range must be less than or equal to the second, but is: "
+                f"{snippet.byte_range}",
                 context,
             )
         )
@@ -97,15 +98,16 @@ def validate_snippet(
         if snippet.line_range[0] > snippet.line_range[1]:
             validation_messages.append(
                 ValidationMessage(
-                    f"the first value of line_range must be less than or equal to the second, but is: {snippet.line_range}",
+                    f"the first value of line_range must be less than or equal to the second, "
+                    f"but is: {snippet.line_range}",
                     context,
                 )
             )
 
     if spdx_version == "SPDX-2.2":
         if snippet.license_concluded is None:
-            validation_messages.append(ValidationMessage(f"license_concluded is mandatory in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("license_concluded is mandatory in SPDX-2.2", context))
         if snippet.copyright_text is None:
-            validation_messages.append(ValidationMessage(f"copyright_text is mandatory in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("copyright_text is mandatory in SPDX-2.2", context))
 
     return validation_messages

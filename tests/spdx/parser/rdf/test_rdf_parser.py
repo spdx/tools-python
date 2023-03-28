@@ -17,7 +17,7 @@ from spdx.parser.rdf import rdf_parser
 
 
 def test_rdf_parser_file_not_found():
-    with pytest.raises(FileNotFoundError, match="No such file or directory") as err:
+    with pytest.raises(FileNotFoundError, match="No such file or directory"):
         wrong_file_path = os.path.join(os.path.dirname(__file__), "hnjfkjsedhnflsiafg.json")
         rdf_parser.parse_from_file(wrong_file_path)
 

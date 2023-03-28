@@ -32,8 +32,8 @@ from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.model.version import Version
 
-"""Utility methods to create data model instances. All properties have valid defaults, so they don't need to be 
-specified unless relevant for the test."""
+# Utility methods to create data model instances. All properties have valid defaults, so they don't need to be
+# specified unless relevant for the test.
 
 
 def actor_fixture(actor_type=ActorType.PERSON, name="actorName", email="some@mail.com") -> Actor:

@@ -58,8 +58,10 @@ def test_tokenization_of_document(lexer):
 def test_tokenization_of_external_document_references(lexer):
     data = "\n".join(
         [
-            "ExternalDocumentRef:DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
-            "ExternalDocumentRef:DocumentRef-spdx-tool-2.1 ldap://[2001:db8::7]/c=GB?objectClass?one SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+            "ExternalDocumentRef:DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3"
+            "-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+            "ExternalDocumentRef:DocumentRef-spdx-tool-2.1 ldap://[2001:db8::7]/c=GB?objectClass?one "
+            "SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
         ]
     )
     lexer.input(data)
@@ -67,14 +69,16 @@ def test_tokenization_of_external_document_references(lexer):
     token_assert_helper(
         lexer.token(),
         "LINE",
-        "DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+        "DocumentRef-spdx-tool-2.1 http://spdx.org/spdxdocs/spdx-tools-v2.1-3F2504E0-4F89-41D3-9A0C-0305E82C3301 "
+        "SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
         1,
     )
     token_assert_helper(lexer.token(), "EXT_DOC_REF", "ExternalDocumentRef", 2)
     token_assert_helper(
         lexer.token(),
         "LINE",
-        "DocumentRef-spdx-tool-2.1 ldap://[2001:db8::7]/c=GB?objectClass?one SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+        "DocumentRef-spdx-tool-2.1 ldap://[2001:db8::7]/c=GB?objectClass?one "
+        "SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
         2,
     )
 
@@ -91,7 +95,8 @@ def test_tokenization_of_file(lexer):
             "LicenseInfoInFile: Apache-2.0",
             "FileCopyrightText: <text>Copyright 2014 Acme Inc.</text>",
             "FileComment: <text>Very long file</text>",
-            "FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts.</text>",
+            "FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts."
+            "</text>",
         ]
     )
 

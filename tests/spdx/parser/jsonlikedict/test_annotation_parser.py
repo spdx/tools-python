@@ -132,7 +132,8 @@ def test_parse_all_annotations():
             {"annotator": "Person: Jane Doe ()"},
             [
                 "Error while constructing Annotation: ['SetterError Annotation: type of "
-                'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError Annotation: type of argument "annotation_type" must be '
+                'argument "spdx_id" must be str; got NoneType instead: None\', '
+                '\'SetterError Annotation: type of argument "annotation_type" must be '
                 "spdx.model.annotation.AnnotationType; got NoneType instead: None', "
                 '\'SetterError Annotation: type of argument "annotation_date" must be '
                 "datetime.datetime; got NoneType instead: None', 'SetterError Annotation: "
@@ -144,7 +145,8 @@ def test_parse_all_annotations():
             {"annotationDate": "2010-01-29T18:30:22Z"},
             [
                 "Error while constructing Annotation: ['SetterError Annotation: type of "
-                'argument "spdx_id" must be str; got NoneType instead: None\', \'SetterError Annotation: type of argument "annotation_type" must be '
+                'argument "spdx_id" must be str; got NoneType instead: None\', '
+                '\'SetterError Annotation: type of argument "annotation_type" must be '
                 "spdx.model.annotation.AnnotationType; got NoneType instead: None', "
                 '\'SetterError Annotation: type of argument "annotator" must be '
                 "spdx.model.actor.Actor; got NoneType instead: None', 'SetterError Annotation: "

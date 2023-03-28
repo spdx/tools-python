@@ -138,7 +138,7 @@ def test_parse_ranges_wrong_pair_of_pointer_classes(predicate_value_class_member
                 (POINTER_NAMESPACE.startPointer, 100, POINTER_NAMESPACE.LineCharPointer, POINTER_NAMESPACE.lineNumber),
                 (POINTER_NAMESPACE.endPointer, 200, POINTER_NAMESPACE.ByteOffsetPointer, POINTER_NAMESPACE.offset),
             ],
-            f"Types of startPointer and endPointer don't match",
+            "Types of startPointer and endPointer don't match",
         ),
     ],
 )

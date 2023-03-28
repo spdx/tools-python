@@ -37,7 +37,7 @@ def test_package_parser():
     assert package.version == "12.2"
     assert package.file_name == "./packageFileName"
     assert package.homepage == "https://homepage.com"
-    assert package.files_analyzed == True
+    assert package.files_analyzed is True
     assert package.checksums == [Checksum(ChecksumAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c")]
     assert package.source_info == "sourceInfo"
     assert package.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")

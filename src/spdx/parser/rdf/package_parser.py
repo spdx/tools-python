@@ -10,7 +10,7 @@
 # limitations under the License.
 from typing import Optional
 
-from rdflib import DOAP, RDFS, Graph, Literal, URIRef
+from rdflib import DOAP, RDFS, Graph, URIRef
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.package import (
@@ -30,7 +30,6 @@ from spdx.parser.rdf.graph_parsing_functions import (
     parse_literal,
     parse_literal_or_no_assertion_or_none,
     parse_spdx_id,
-    remove_prefix,
 )
 from spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx.rdfschema.namespace import REFERENCE_NAMESPACE, SPDX_NAMESPACE

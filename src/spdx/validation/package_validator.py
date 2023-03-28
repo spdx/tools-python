@@ -79,7 +79,8 @@ def validate_package_within_document(
         if not package.files_analyzed:
             validation_messages.append(
                 ValidationMessage(
-                    f"license_info_from_files must be None if files_analyzed is False, but is: {license_info_from_files}",
+                    f"license_info_from_files must be None if files_analyzed is False, but is: "
+                    f"{license_info_from_files}",
                     context,
                 )
             )
@@ -134,20 +135,20 @@ def validate_package(
     if spdx_version == "SPDX-2.2":
         if package.primary_package_purpose is not None:
             validation_messages.append(
-                ValidationMessage(f"primary_package_purpose is not supported in SPDX-2.2", context)
+                ValidationMessage("primary_package_purpose is not supported in SPDX-2.2", context)
             )
         if package.built_date is not None:
-            validation_messages.append(ValidationMessage(f"built_date is not supported in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("built_date is not supported in SPDX-2.2", context))
         if package.release_date is not None:
-            validation_messages.append(ValidationMessage(f"release_date is not supported in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("release_date is not supported in SPDX-2.2", context))
         if package.valid_until_date is not None:
-            validation_messages.append(ValidationMessage(f"valid_until_date is not supported in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("valid_until_date is not supported in SPDX-2.2", context))
 
         if package.license_concluded is None:
-            validation_messages.append(ValidationMessage(f"license_concluded is mandatory in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("license_concluded is mandatory in SPDX-2.2", context))
         if package.license_declared is None:
-            validation_messages.append(ValidationMessage(f"license_declared is mandatory in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("license_declared is mandatory in SPDX-2.2", context))
         if package.copyright_text is None:
-            validation_messages.append(ValidationMessage(f"copyright_text is mandatory in SPDX-2.2", context))
+            validation_messages.append(ValidationMessage("copyright_text is mandatory in SPDX-2.2", context))
 
     return validation_messages

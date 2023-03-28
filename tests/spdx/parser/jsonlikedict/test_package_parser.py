@@ -29,7 +29,10 @@ def test_parse_package():
     package_dict = {
         "SPDXID": "SPDXRef-Package",
         "attributionTexts": [
-            "The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually."
+            "The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for "
+            "notices about a few contributions that require these additional notices to be distributed.  License "
+            "copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the "
+            "range, inclusive, is a copyrightable year that would otherwise be listed individually."
         ],
         "builtDate": "2011-01-29T18:30:22Z",
         "checksums": [
@@ -41,12 +44,15 @@ def test_parse_package():
             },
             {
                 "algorithm": "BLAKE2b-384",
-                "checksumValue": "aaabd89c926ab525c242e6621f2f5fa73aa4afe3d9e24aed727faaadd6af38b620bdb623dd2b4788b1c8086984af8706",
+                "checksumValue": "aaabd89c926ab525c242e6621f2f5fa73aa4afe3d9e24aed727faaadd6af38b620bdb623dd2b4788b1c8"
+                "086984af8706",
             },
         ],
         "comment": "This is a comment.",
         "copyrightText": "Copyright 2008-2010 John Smith",
-        "description": "The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems.",
+        "description": "The GNU C Library defines functions that are specified by the ISO C standard, as well as "
+        "additional features specific to POSIX and other derivatives of the Unix operating system, and "
+        "extensions specific to GNU systems.",
         "downloadLocation": "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
         "externalRefs": [
             {
@@ -64,7 +70,8 @@ def test_parse_package():
         ],
         "filesAnalyzed": True,
         "homepage": "http://ftp.gnu.org/gnu/glibc",
-        "licenseComments": "The license for this project changed with the release of version x.y.  The version of the project included here post-dates the license change.",
+        "licenseComments": "The license for this project changed with the release of version x.y.  The version of the "
+        "project included here post-dates the license change.",
         "licenseConcluded": "(LGPL-2.0-only OR LicenseRef-3)",
         "licenseDeclared": "(LGPL-2.0-only AND LicenseRef-3)",
         "licenseInfoFromFiles": ["GPL-2.0-only", "LicenseRef-2", "LicenseRef-1", "NOASSERTION"],
@@ -93,7 +100,7 @@ def test_parse_package():
     assert package.file_name == "glibc-2.11.1.tar.gz"
     assert package.supplier == Actor(ActorType.PERSON, "Jane Doe", "jane.doe@example.com")
     assert package.originator == Actor(ActorType.ORGANIZATION, "ExampleCodeInspect", "contact@example.com")
-    assert package.files_analyzed == True
+    assert package.files_analyzed is True
     assert package.verification_code == PackageVerificationCode(
         value="d6a770ba38583ed4bb4525bd96e50461655d2758", excluded_files=["./package.spdx"]
     )
@@ -125,13 +132,16 @@ def test_parse_package():
     assert package.license_declared == Licensing().parse("(LGPL-2.0-only AND LicenseRef-3)")
     assert (
         package.license_comment
-        == "The license for this project changed with the release of version x.y.  The version of the project included here post-dates the license change."
+        == "The license for this project changed with the release of version x.y.  The version of the project included"
+        " here post-dates the license change."
     )
     assert package.copyright_text == "Copyright 2008-2010 John Smith"
     assert package.summary == "GNU C library."
     assert (
         package.description
-        == "The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems."
+        == "The GNU C Library defines functions that are specified by the ISO C standard, as well as additional "
+        "features specific to POSIX and other derivatives of the Unix operating system, and extensions specific "
+        "to GNU systems."
     )
     assert package.comment == "This is a comment."
     assert len(package.external_references) == 2
@@ -152,7 +162,10 @@ def test_parse_package():
         ],
     )
     assert package.attribution_texts == [
-        "The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually."
+        "The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for "
+        "notices about a few contributions that require these additional notices to be distributed.  License "
+        "copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the "
+        "range, inclusive, is a copyrightable year that would otherwise be listed individually."
     ]
     assert package.primary_package_purpose == PackagePurpose.SOURCE
     assert package.release_date == datetime(2012, 1, 29, 18, 30, 22)
@@ -167,7 +180,9 @@ def test_parse_package():
             {"SPDXID": "SPDXRef-Package"},
             [
                 "Error while constructing Package: ['SetterError Package: type of "
-                'argument "name" must be str; got NoneType instead: None\', \'SetterError Package: type of argument "download_location" must be one of (str, spdx.model.spdx_no_assertion.SpdxNoAssertion, spdx.model.spdx_none.SpdxNone); '
+                "argument \"name\" must be str; got NoneType instead: None', 'SetterError Package: type of argument "
+                '"download_location" must be one of (str, spdx.model.spdx_no_assertion.SpdxNoAssertion, '
+                "spdx.model.spdx_none.SpdxNone); "
                 "got NoneType instead: None']"
             ],
         ),

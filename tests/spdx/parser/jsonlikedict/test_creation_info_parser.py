@@ -121,7 +121,8 @@ def test_parse_invalid_creation_info():
         err.value.get_messages(),
         [
             "Error while constructing CreationInfo: ['SetterError CreationInfo: type of "
-            'argument "document_namespace" must be str; got NoneType instead: None\', \'SetterError CreationInfo: type of argument "data_license" must be str; got '
+            'argument "document_namespace" must be str; got NoneType instead: None\', '
+            '\'SetterError CreationInfo: type of argument "data_license" must be str; got '
             "NoneType instead: None']"
         ],
     )

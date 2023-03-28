@@ -32,7 +32,8 @@ def test_parse_file():
             "LicenseInfoInFile: NOASSERTION",
             "FileCopyrightText: <text>Copyright 2014 Acme Inc.</text>",
             "FileComment: <text>Very long file</text>",
-            "FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts.</text>",
+            "FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts."
+            "</text>",
         ]
     )
     document = parser.parse("\n".join([DOCUMENT_STR, file_str]))
@@ -63,7 +64,8 @@ def test_parse_invalid_file():
             "LicenseInfoInFile: Apache-2.0",
             "FileCopyrightText: <text>Copyright 2014 Acme Inc.</text>",
             "FileComment: <text>Very long file</text>",
-            "FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts.</text>",
+            "FileAttributionText: <text>Acknowledgements that might be required to be communicated in some contexts."
+            "</text>",
         ]
     )
 

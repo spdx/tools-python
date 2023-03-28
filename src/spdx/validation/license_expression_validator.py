@@ -54,7 +54,8 @@ def validate_license_expression(
         if non_spdx_token not in license_ref_ids:
             validation_messages.append(
                 ValidationMessage(
-                    f"Unrecognized license reference: {non_spdx_token}. license_expression must only use IDs from the license list or extracted licensing info, but is: {license_expression}",
+                    f"Unrecognized license reference: {non_spdx_token}. license_expression must only use IDs from the "
+                    f"license list or extracted licensing info, but is: {license_expression}",
                     context,
                 )
             )
@@ -66,8 +67,9 @@ def validate_license_expression(
         # So far, it only catches the first such error in the provided string.
         validation_messages.append(ValidationMessage(f"{err}. for license_expression: {license_expression}", context))
     except ExpressionError:
-        # This error is raised for invalid symbols within the license_expression, but it provides only a string of these.
-        # On the other hand, get_spdx_licensing().validate() gives an actual list of invalid symbols, so this is handled above.
+        # This error is raised for invalid symbols within the license_expression, but it provides only a string of
+        # these. On the other hand, get_spdx_licensing().validate() gives an actual list of invalid symbols, so this is
+        # handled above.
         pass
 
     return validation_messages
