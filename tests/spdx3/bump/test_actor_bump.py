@@ -31,7 +31,7 @@ from spdx3.payload import Payload
                           ])
 def test_bump_actor(actor_type, actor_name, actor_mail, element_type, new_spdx_id):
     payload = Payload()
-    creation_info = CreationInformation(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], ["core"])
+    creation_info = CreationInformation(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], [], ["core"])
     actor = Actor(actor_type, actor_name, actor_mail)
     agent_or_tool_id = bump_actor(actor, payload, creation_info)
 
@@ -43,8 +43,8 @@ def test_bump_actor(actor_type, actor_name, actor_mail, element_type, new_spdx_i
 
 
 def test_bump_actor_with_already_existing_actor():
-    creation_info_old = CreationInformation(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], ["core"])
-    creation_info_new = CreationInformation(Version("3.0.0"), datetime(2023, 2, 2), ["Creator"], ["core"])
+    creation_info_old = CreationInformation(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], [], ["core"])
+    creation_info_new = CreationInformation(Version("3.0.0"), datetime(2023, 2, 2), ["Creator"], [], ["core"])
 
     name = "some name"
     payload = Payload({"SPDXRef-Actor-somename-some@mail.com":
