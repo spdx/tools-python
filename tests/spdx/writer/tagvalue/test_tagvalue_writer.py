@@ -28,7 +28,7 @@ def temporary_file_path() -> str:
 def test_write_tag_value(temporary_file_path: str):
     document = document_fixture()
 
-    write_document_to_file(document, temporary_file_path)
+    write_document_to_file(document, temporary_file_path, False)
 
     parsed_document = tagvalue_parser.parse_from_file(temporary_file_path)
 
