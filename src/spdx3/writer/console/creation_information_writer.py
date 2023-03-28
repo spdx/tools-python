@@ -21,5 +21,7 @@ def write_creation_info(creation_info: CreationInformation, text_output: TextIO,
     write_value("created", datetime_to_iso_string(creation_info.created), text_output, indent)
     for created_by in creation_info.created_by:
         write_value("created by", created_by, text_output, indent)
+    for created_using in creation_info.created_using:
+        write_value("created using", created_using, text_output, indent)
     write_value("profile", ", ".join(creation_info.profile), text_output, indent)
     write_value("data license", creation_info.data_license, text_output, indent)
