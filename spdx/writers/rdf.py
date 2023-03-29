@@ -248,9 +248,7 @@ class FileWriter(LicenseWriter):
         """
         Create a node for spdx.file.
         """
-        file_node = URIRef(
-            "http://www.spdx.org/files#{id}".format(id=str(doc_file.spdx_id))
-        )
+        file_node = URIRef(f"{self.document.namespace}#{doc_file.spdx_id}")
         type_triple = (file_node, RDF.type, self.spdx_namespace.File)
         self.graph.add(type_triple)
 
@@ -386,7 +384,7 @@ class SnippetWriter(LicenseWriter):
         """
         Return a snippet node.
         """
-        snippet_node = URIRef("http://spdx.org/rdf/terms/Snippet#" + snippet.spdx_id)
+        snippet_node = URIRef(f"{self.document.namespace}#{snippet.spdx_id}")
         type_triple = (snippet_node, RDF.type, self.spdx_namespace.Snippet)
         self.graph.add(type_triple)
 
@@ -793,7 +791,7 @@ class PackageWriter(LicenseWriter):
         Return a Node representing the package.
         Files must have been added to the graph before this method is called.
         """
-        package_node = URIRef(f"http://www.spdx.org/tools#{package.spdx_id}")
+        package_node = URIRef(f"{self.document.namespace}#{package.spdx_id}")
         type_triple = (package_node, RDF.type, self.spdx_namespace.Package)
         self.graph.add(type_triple)
         # Handle optional fields:
@@ -984,7 +982,7 @@ class Writer(
         """
         Add and return the root document node to graph.
         """
-        doc_node = URIRef("http://www.spdx.org/tools#SPDXRef-DOCUMENT")
+        doc_node = URIRef(f"{self.document.namespace}#SPDXRef-DOCUMENT")
         # Doc type
         self.graph.add((doc_node, RDF.type, self.spdx_namespace.SpdxDocument))
         # Version
