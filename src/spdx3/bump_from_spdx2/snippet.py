@@ -15,8 +15,9 @@ from spdx3.model.software.snippet import Snippet
 from spdx3.payload import Payload
 
 
-def bump_snippet(spdx2_snippet: Spdx2_Snippet, payload: Payload, creation_information: CreationInformation):
-    spdx_id = spdx2_snippet.spdx_id
+def bump_snippet(spdx2_snippet: Spdx2_Snippet, payload: Payload, creation_information: CreationInformation,
+    document_namespace: str):
+    spdx_id = "#".join([document_namespace, spdx2_snippet.spdx_id])
     print_missing_conversion("snippet.file_spdx_id", 0)
     byte_range = spdx2_snippet.byte_range
     line_range = spdx2_snippet.line_range
