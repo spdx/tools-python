@@ -1,6 +1,11 @@
 name: Install and Test
 
-on: [ workflow_dispatch, pull_request ]
+on:
+  push:
+    branches:
+      - refactor-python-tools
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   install_and_test:
