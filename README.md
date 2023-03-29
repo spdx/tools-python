@@ -7,13 +7,21 @@ CI status (Linux, macOS and Windows): [![Install and Test][1]][2]
 [2]: https://github.com/spdx/tools-python/actions/workflows/install_and_test.yml
 
 
-# Current state
+# Current state, please read!
 
 This repository was subject to a major refactoring recently to get ready for the upcoming SPDX v3.0 release.
 Therefore, we'd like to encourage you to post any and all issues you find at https://github.com/spdx/tools-python/issues.  
-If you prefer a version that has been longer in use, please check out
-the [latest release](https://github.com/spdx/tools-python/releases/tag/v0.7.0).
+If you are looking for the source code of the [current PyPI release](https://pypi.python.org/pypi/spdx-tools), check out
+the [v0.7.1 branch](https://github.com/spdx/tools-python/tree/release/v0.7.1).
 Note, though, that this will only receive bug fixes but no new features.
+
+We encourage you to use the new, refactored version (on the main branch) if you
+- want to use the soon-to-be released SPDX v3.0 in the future
+- want to perform full validation of your SPDX documents against the v2.2 and v2.3 specification
+- want to use the RDF format of SPDX with all v2.3 features.
+
+If you are planning to migrate from v0.7.x of these tools,
+please have a look at the [migration guide](https://github.com/spdx/tools-python/wiki/How-to-migrate-from-0.7-to-1.0).
 
 # Information
 
