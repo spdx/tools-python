@@ -21,14 +21,15 @@ from tests.spdx.fixtures import document_fixture, creation_info_fixture, annotat
 def test_bump_spdx_document():
     spdx2_document: Spdx2_Document = document_fixture()
     spdx2_document.creation_info.creators.append(actor_fixture(ActorType.TOOL, "tool_name", None))
+    document_namespace = document_fixture().creation_info.document_namespace
 
     payload: Payload = bump_spdx_document(spdx2_document)
 
     write_payload(payload, sys.stdout)
 
-    assert "SPDXRef-Package" in payload.get_full_map()
+    assert "#".join([document_namespace, "SPDXRef-Package"]) in payload.get_full_map()
     assert len(payload.get_full_map()) == 10
 
     # this is more of a temporary test to make sure the dates don't get messed up again
-    assert payload.get_element("SPDXRef-DOCUMENT").creation_info.created == creation_info_fixture().created
-    assert payload.get_element("SPDXRef-Annotation-0").creation_info.created == annotation_fixture().annotation_date
+    assert payload.get_element("#".join([document_namespace, "SPDXRef-DOCUMENT"])).creation_info.created == creation_info_fixture().created
+    assert payload.get_element("#".join([document_namespace, "SPDXRef-Annotation-0"])).creation_info.created == annotation_fixture().annotation_date
