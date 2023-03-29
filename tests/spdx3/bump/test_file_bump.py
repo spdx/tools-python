@@ -24,8 +24,11 @@ def test_bump_file(creation_information):
     integrity_method: Hash = Hash(HashAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c")
 
     payload = Payload()
-    bump_file(spdx2_file, payload, creation_information=creation_information)
-    file = payload.get_element(file_fixture().spdx_id)
+    document_namespace = "https://doc.namespace"
+    bump_file(spdx2_file, payload, creation_information, document_namespace)
+    expected_new_file_id = document_namespace + "#" + file_fixture().spdx_id
+    file = payload.get_element(expected_new_file_id)
+
     assert isinstance(file, File)
-    assert file.spdx_id == "SPDXRef-File"
+    assert file.spdx_id == expected_new_file_id
     assert file.verified_using == [integrity_method]

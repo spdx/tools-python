@@ -32,14 +32,15 @@ from spdx3.payload import Payload
                           ])
 def test_bump_actor(actor_type, actor_name, actor_mail, element_type, new_spdx_id):
     payload = Payload()
+    document_namespace = "https://doc.namespace"
     creation_info = CreationInformation(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], [], ["core"])
     actor = Actor(actor_type, actor_name, actor_mail)
-    agent_or_tool_id = bump_actor(actor, payload, creation_info)
+    agent_or_tool_id = bump_actor(actor, payload, creation_info, document_namespace)
 
     agent_or_tool = payload.get_element(agent_or_tool_id)
 
     assert isinstance(agent_or_tool, element_type)
-    assert agent_or_tool.spdx_id == new_spdx_id
+    assert agent_or_tool.spdx_id == document_namespace + "#" + new_spdx_id
     assert agent_or_tool.name == actor_name
     if actor_mail:
         assert len(agent_or_tool.external_identifier) == 1
@@ -53,11 +54,13 @@ def test_bump_actor_that_already_exists():
     creation_info_new = CreationInformation(Version("3.0.0"), datetime(2023, 2, 2), ["Creator"], [], ["core"])
 
     name = "some name"
-    payload = Payload({"SPDXRef-Actor-somename-some@mail.com":
-                           Person("SPDXRef-Actor-somename-some@mail.com", creation_info_old, name)})
+    document_namespace = "https://doc.namespace"
+    payload = Payload({"https://doc.namespace#SPDXRef-Actor-somename-some@mail.com":
+                           Person("https://doc.namespace#SPDXRef-Actor-somename-some@mail.com", creation_info_old,
+                                  name)})
 
     actor = Actor(ActorType.PERSON, name, "some@mail.com")
-    agent_spdx_id = bump_actor(actor, payload, creation_info_new)
+    agent_spdx_id = bump_actor(actor, payload, creation_info_new, document_namespace)
 
     # assert that there is only one Person in the payload
     assert len([payload.get_element(person_id) for person_id in payload.get_full_map() if
