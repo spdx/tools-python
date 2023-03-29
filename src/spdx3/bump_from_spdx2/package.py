@@ -19,8 +19,9 @@ from spdx3.model.software.software_purpose import SoftwarePurpose
 from spdx3.payload import Payload
 
 
-def bump_package(spdx2_package: Spdx2_Package, payload: Payload, creation_information: CreationInformation):
-    spdx_id = spdx2_package.spdx_id
+def bump_package(spdx2_package: Spdx2_Package, payload: Payload, creation_information: CreationInformation,
+                 document_namespace: str):
+    spdx_id = "#".join([document_namespace, spdx2_package.spdx_id])
     name = spdx2_package.name
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
     # package2.version -> ?
@@ -29,7 +30,7 @@ def bump_package(spdx2_package: Spdx2_Package, payload: Payload, creation_inform
     print_missing_conversion("package2.file_name", 0)
     # package.supplier -> Relationship, suppliedBy?
     print_missing_conversion("package2.supplier", 1, "of relationships")
-    originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information)
+    originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information, document_namespace)
     # package.files_analyzed  -> ?
     print_missing_conversion("package2.files_analyzed", 0)
     # package.verification_code -> package.verified_using
