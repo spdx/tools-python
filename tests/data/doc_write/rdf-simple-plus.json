@@ -5,9 +5,9 @@
     "ns1:SpdxDocument": {
       "ns1:describesPackage": {
         "ns1:Package": {
-          "@rdf:about": "http://www.spdx.org/tools#SPDXRef-Package",
+          "@rdf:about": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-Package",
           "ns1:hasFile": {
-            "@rdf:resource": "http://www.spdx.org/files#SPDXRef-File"
+            "@rdf:resource": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File"
           },
           "ns1:name": "some/path",
           "ns1:licenseDeclared": {
@@ -48,7 +48,7 @@
       },
       "ns1:referencesFile": {
         "ns1:File": {
-          "@rdf:about": "http://www.spdx.org/files#SPDXRef-File",
+          "@rdf:about": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-File",
           "ns1:fileName": "./some/path/tofile", 
           "ns1:checksum": [
             {
@@ -96,7 +96,7 @@
                     }
                 }
             ],
-            "@rdf:about": "http://www.spdx.org/tools#SPDXRef-DOCUMENT"
+            "@rdf:about": "https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#SPDXRef-DOCUMENT"
         }
     }
 }
