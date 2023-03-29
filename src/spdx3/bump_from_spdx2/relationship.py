@@ -20,8 +20,10 @@ from spdx3.payload import Payload
 
 
 def bump_relationship(spdx2_relationship: Spdx2_Relationship, payload: Payload,
-                      creation_information: CreationInformation, counter: int):
+                      creation_information: CreationInformation, document_namespace: str, counter: int):
     relationship_type, swap_direction = bump_relationship_type(spdx2_relationship.relationship_type)
+
+    spdx_id = "#".join([document_namespace, f"SPDXRef-Relationship-{counter}"])
 
     if isinstance(spdx2_relationship.related_spdx_element_id,
                   SpdxNoAssertion):  # how to translate none/ no assertion to element?
@@ -39,7 +41,7 @@ def bump_relationship(spdx2_relationship: Spdx2_Relationship, payload: Payload,
         to = [spdx2_relationship.related_spdx_element_id]
     comment = spdx2_relationship.comment
 
-    payload.add_element(Relationship(f"SPDXRef-Relationship-{counter}", creation_information, from_element, to,
+    payload.add_element(Relationship(spdx_id, creation_information, from_element, to,
                                      relationship_type, comment=comment, completeness=completeness))
 
 

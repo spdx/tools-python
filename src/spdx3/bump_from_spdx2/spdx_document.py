@@ -26,25 +26,26 @@ from spdx3.payload import Payload
 
 def bump_spdx_document(document: Spdx2_Document) -> Payload:
     payload = Payload()
+    document_namespace: str = document.creation_info.document_namespace
     spdx_document: SpdxDocument = bump_creation_information(document.creation_info, payload)
     creation_info: CreationInformation = spdx_document.creation_info
 
     payload.add_element(spdx_document)
 
     for spdx2_package in document.packages:
-        bump_package(spdx2_package, payload, creation_info)
+        bump_package(spdx2_package, payload, creation_info, document_namespace)
 
     for spdx2_file in document.files:
-        bump_file(spdx2_file, payload, creation_info)
+        bump_file(spdx2_file, payload, creation_info, document_namespace)
 
     for spdx2_snippet in document.snippets:
-        bump_snippet(spdx2_snippet, payload, creation_info)
+        bump_snippet(spdx2_snippet, payload, creation_info, document_namespace)
 
     for counter, spdx2_relationship in enumerate(document.relationships):
-        bump_relationship(spdx2_relationship, payload, creation_info, counter)
+        bump_relationship(spdx2_relationship, payload, creation_info, document_namespace, counter)
 
     for counter, spdx2_annotation in enumerate(document.annotations):
-        bump_annotation(spdx2_annotation, payload, creation_info, counter)
+        bump_annotation(spdx2_annotation, payload, creation_info, document_namespace, counter)
 
     spdx_document.elements = [spdx_id for spdx_id in payload.get_full_map() if spdx_id != spdx_document.spdx_id]
 
