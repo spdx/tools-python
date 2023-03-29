@@ -26,7 +26,8 @@ from spdx3.model.spdx_document import SpdxDocument
 
 def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload) -> SpdxDocument:
     # creation_info.spdx_id -> spdx_document.spdx_id
-    spdx_id = spdx2_creation_info.spdx_id
+    document_namespace = spdx2_creation_info.document_namespace
+    spdx_id = f"{document_namespace}#{spdx2_creation_info.spdx_id}"
 
     # creation_info.name -> spdx_document.name
     name = spdx2_creation_info.name
@@ -53,7 +54,7 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     creator_ids: List[str] = []
     tool_ids: List[str] = []
     for creator in spdx2_creation_info.creators:
-        bumped_actor_id = bump_actor(creator, payload, creation_information)
+        bumped_actor_id = bump_actor(creator, payload, creation_information, document_namespace)
         if creator.actor_type in [ActorType.PERSON, ActorType.ORGANIZATION]:
             creator_ids.append(bumped_actor_id)
         else:
