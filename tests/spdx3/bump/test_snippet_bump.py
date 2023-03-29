@@ -22,7 +22,10 @@ def test_bump_snippet(creation_information):
     spdx2_snippet: Spdx2_Snippet = snippet_fixture()
 
     payload = Payload()
-    bump_snippet(spdx2_snippet, payload, creation_information=creation_information)
-    snippet = payload.get_element(snippet_fixture().spdx_id)
+    document_namespace = "https://doc.namespace"
+    bump_snippet(spdx2_snippet, payload, creation_information, document_namespace)
+    expected_new_snippet_id = document_namespace + "#" + snippet_fixture().spdx_id
+    snippet = payload.get_element(expected_new_snippet_id)
+
     assert isinstance(snippet, Snippet)
-    assert snippet.spdx_id == "SPDXRef-Snippet"
+    assert snippet.spdx_id == expected_new_snippet_id
