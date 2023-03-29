@@ -16,9 +16,10 @@ from spdx3.model.software.file import File
 from spdx3.payload import Payload
 
 
-def bump_file(spdx2_file: Spdx2_File, payload: Payload, creation_information: CreationInformation):
+def bump_file(spdx2_file: Spdx2_File, payload: Payload, creation_information: CreationInformation,
+              document_namespace: str):
+    spdx_id = "#".join([document_namespace, spdx2_file.spdx_id])
     name = spdx2_file.name
-    spdx_id = spdx2_file.spdx_id
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_file.checksums]
     # file.checksums -> file.verifiedUsing
     # file.file_types -> file.content_type (MediaType with Cardinality 1)
