@@ -1,129 +1,15 @@
+# Empty Circle CI configuration file to make pipeline pass
+
 version: 2.1
 
-commands:
-  mac_install_python:
-    parameters:
-      python_version:
-        description: "version of python to install"
-        type: string
-        default: 3.7.10
-    steps:
-      - run: |
-          brew update
-          python --version
-          sudo -H pip install --upgrade virtualenv
-          brew install pyenv
-          echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
-          echo 'eval "$(pyenv init -)"' >> ~/.bash_profile
-          source ~/.bash_profile
-          pyenv install --list
-          pyenv install << parameters.python_version >>
-          pyenv versions
-          pyenv global << parameters.python_version >>
-          python --version
-
-  update_packaging_tools:
-    steps:
-      - run: |
-          python -m pip install --upgrade pip
-      - run: |
-          python -m pip install --upgrade setuptools wheel setuptools_scm build
-
-  install_run_tests:
-    steps:
-      - run: |
-          python -m build -nwx .
-          python -m pip install --upgrade ./dist/*.whl
-          python -m pip install pytest
-      - run: pytest
-        
 jobs:
-  mac_python_3_7:
-    shell: /bin/bash --login
-    macos:
-      xcode: '13.0.0'
-    steps:
-    - checkout
-    - mac_install_python:
-        python_version: "3.7.10"
-    - update_packaging_tools
-    - install_run_tests
-
-
-  mac_python_3_8:
-    shell: /bin/bash --login
-    macos:
-      xcode: '13.0.0'
-    steps:
-    - checkout
-    - mac_install_python:
-        python_version: "3.8.10"
-    - update_packaging_tools
-    - install_run_tests
-
-  mac_python_3_9:
-    shell: /bin/bash --login
-    macos:
-      xcode: '13.0.0'
-    steps:
-    - checkout
-    - mac_install_python:
-        python_version: "3.9.5"
-    - update_packaging_tools
-    - install_run_tests
-
-  mac_python_3_10:
-    shell: /bin/bash --login
-    macos:
-      xcode: '13.0.0'
-    steps:
-    - checkout
-    - mac_install_python:
-        python_version: "3.10.6"
-    - update_packaging_tools
-    - install_run_tests
-
-  linux_python_3_7:
+  empty-job:
     docker:
-      - image: python:3.7
+      - image: python:3.11
     steps:
-    - checkout
-    - update_packaging_tools
-    - install_run_tests
-
-  linux_python_3_8:
-    docker:
-      - image: python:3.8
-    steps:
-    - checkout
-    - update_packaging_tools
-    - install_run_tests
-
-  linux_python_3_9:
-    docker:
-      - image: python:3.9
-    steps:
-    - checkout
-    - update_packaging_tools
-    - install_run_tests
-
-  linux_python_3_10:
-    docker:
-      - image: python:3.10
-    steps:
-    - checkout
-    - update_packaging_tools
-    - install_run_tests
+      - run: echo "Empty Job to make CircleCI green, we switched to https://github.com/spdx/tools-python/actions"
 
 workflows:
-  version: 2
-  python_matrix_build:
+  simple-workflow:
     jobs:
-      - mac_python_3_7
-      - mac_python_3_8
-      - mac_python_3_9
-      - mac_python_3_10
-      - linux_python_3_7
-      - linux_python_3_8
-      - linux_python_3_9
-      - linux_python_3_10
+      - empty-job

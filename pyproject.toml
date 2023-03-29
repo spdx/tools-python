@@ -4,19 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "spdx-tools"
-authors = [
-    {name = "Ahmed H. Ismail", email = "ahm3d.hisham@gmail.com"},
-    {name = "Armin Tänzer", email = "armin.taenzer@tngtech.com"},
-    {name = "Meret Behrens", email = "meret.behrens@tngtech.com"},
-    {name = "Maximilian Huber", email = "maximilian.huber@tngtech.com"}
-]
+authors = [{ name = "Ahmed H. Ismail", email = "ahm3d.hisham@gmail.com" }]
 maintainers = [
-    {name = "Philippe Ombredanne", email = "pombredanne@gmail.com"},
-    {name = "Maximilian Huber", email = "maximilian.huber@tngtech.com"},
-    {name = "Jeff Licquia", email = "licquia@linuxfoundation.org"},
-    {name = "SPDX group at the Linux Foundation and others"},
+    { name = "Philippe Ombredanne", email = "pombredanne@gmail.com" },
+    { name = "SPDX group at the Linux Foundation and others" },
 ]
-license = {text = "Apache-2.0"}
+license = { text = "Apache-2.0" }
 description = "SPDX parser and tools."
 readme = "README.md"
 classifiers = [
@@ -29,27 +22,31 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
-urls = {Homepage = "https://github.com/spdx/tools-python"}
+urls = { Homepage = "https://github.com/spdx/tools-python" }
 requires-python = ">=3.7"
-dependencies = ["ply", "rdflib", "click", "pyyaml", "xmltodict", "uritools"]
+dependencies = ["click", "pyyaml", "xmltodict", "rdflib", "typeguard==2.13.3", "uritools", "license_expression", "ply"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
 test = ["pytest"]
 
 [project.scripts]
-pyspdxtools_convertor = "spdx.cli_tools.convertor:main"
-pyspdxtools_parser = "spdx.cli_tools.parser:main"
+pyspdxtools = "spdx.clitools.pyspdxtools:main"
 
 [tool.setuptools]
 zip-safe = false  # because of the uses of __file__: https://github.com/spdx/tools-python/issues/257
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["spdx", "spdx.*"]
+where = ["src"]
 
+[tool.setuptools.package-data]
+"*" = ["py.typed"]
+
+# the default git describe resolves to the tag `python3.6` because the current release tag is not on main
+# by adding "v" the command resolves to the alpha release of 0.7.0 which leads to the desired name spdx-tools-0.7.0
 [tool.setuptools_scm]
-git_describe_command = ["git", "describe", "--dirty", "--tags", "--long", "--match",  "v[0-9]*"]  # `python3.6` tag falsely matches to the default one, clrearly a bug in setuptools_scm
+git_describe_command = ["git", "describe", "--dirty", "--tags", "--long", "--match", "v[0-9]*"]
 
 [tool.aliases]
 release = "clean --all sdist --formats=gztar bdist_wheel"

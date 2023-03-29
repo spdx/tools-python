@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+    xmlns:spdx="http://spdx.org/rdf/terms#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ptr="http://www.w3.org/2009/pointers#"
+    xmlns:doap="http://usefulinc.com/ns/doap#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+>
+    <spdx:SpdxDocument rdf:about="https://some.namespace#SPDXRef-DOCUMENT">
+        <spdx:specVersion>SPDX-2.3</spdx:specVersion>
+        <spdx:hasExtractedLicensingInfo>
+            <spdx:ExtractedLicensingInfo rdf:about="https://some.namespace#LicenseRef-1">
+                <rdfs:seeAlso>https://see.also</rdfs:seeAlso>
+                <spdx:extractedText>extractedText</spdx:extractedText>
+                <spdx:licenseId>LicenseRef-1</spdx:licenseId>
+                <rdfs:comment>licenseComment</rdfs:comment>
+                <spdx:name>licenseName</spdx:name>
+            </spdx:ExtractedLicensingInfo>
+        </spdx:hasExtractedLicensingInfo>
+        <rdfs:comment>documentComment</rdfs:comment>
+        <spdx:name>documentName</spdx:name>
+        <spdx:relationship>
+            <spdx:Relationship rdf:nodeID="Nfd1c148a22234ed0a8c44ae5df10a63b">
+                <spdx:relationshipType rdf:resource="http://spdx.org/rdf/terms#relationshipType_describes"/>
+                <spdx:relatedSpdxElement>
+                    <spdx:File rdf:about="https://some.namespace#SPDXRef-File">
+                        <spdx:noticeText>fileNotice</spdx:noticeText>
+                        <spdx:annotation>
+                            <spdx:Annotation rdf:nodeID="N551df66afdcd43b39c9f8c6541f6fe66">
+                                <rdfs:comment>annotationComment</rdfs:comment>
+                                <spdx:annotator>Person: annotatorName (some@mail.com)</spdx:annotator>
+                                <spdx:annotationDate>2022-12-01T00:00:00Z</spdx:annotationDate>
+                                <spdx:annotationType rdf:resource="http://spdx.org/rdf/terms#annotationType_review"/>
+                            </spdx:Annotation>
+                        </spdx:annotation>
+                        <spdx:attributionText>fileAttributionText</spdx:attributionText>
+                        <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+                        <spdx:licenseInfoInFile rdf:resource="http://spdx.org/licenses/MIT"/>
+                        <spdx:licenseInfoInFile rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
+                        <spdx:licenseConcluded>
+                            <spdx:ConjunctiveLicenseSet rdf:nodeID="N5e31606df67c474d91e1fed07961f561">
+                                <spdx:member rdf:resource="http://spdx.org/licenses/MIT"/>
+                                <spdx:member rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+                            </spdx:ConjunctiveLicenseSet>
+                        </spdx:licenseConcluded>
+                        <spdx:fileContributor>fileContributor</spdx:fileContributor>
+                        <spdx:fileType rdf:resource="http://spdx.org/rdf/terms#fileType_text"/>
+                        <spdx:copyrightText>copyrightText</spdx:copyrightText>
+                        <spdx:checksum>
+                            <spdx:Checksum rdf:nodeID="Nab58c45c3b81449e9d4fbcb81940ceee">
+                                <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+                                <spdx:checksumValue>71c4025dd9897b364f3ebbb42c484ff43d00791c</spdx:checksumValue>
+                            </spdx:Checksum>
+                        </spdx:checksum>
+                        <rdfs:comment>fileComment</rdfs:comment>
+                        <spdx:fileName>./fileName.py</spdx:fileName>
+                        <spdx:licenseComments>licenseComment</spdx:licenseComments>
+                    </spdx:File>
+                </spdx:relatedSpdxElement>
+                <rdfs:comment>relationshipComment</rdfs:comment>
+            </spdx:Relationship>
+        </spdx:relationship>
+        <spdx:dataLicense rdf:resource="http://spdx.org/licenses/CC0-1.0"/>
+        <spdx:creationInfo>
+            <spdx:CreationInfo rdf:nodeID="N80af30c2c55b44afb3a7cf4124ed9aff">
+                <rdfs:comment>creatorComment</rdfs:comment>
+                <spdx:creator>Person: creatorName (some@mail.com)</spdx:creator>
+                <spdx:licenseListVersion>3.19</spdx:licenseListVersion>
+                <spdx:created>2022-12-01T00:00:00Z</spdx:created>
+            </spdx:CreationInfo>
+        </spdx:creationInfo>
+        <spdx:externalDocumentRef>
+            <spdx:ExternalDocumentRef rdf:about="https://some.namespace#DocumentRef-external">
+                <spdx:checksum>
+                    <spdx:Checksum rdf:nodeID="N9c0197693ea647a09909ac0cfbc624e4">
+                        <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+                        <spdx:checksumValue>71c4025dd9897b364f3ebbb42c484ff43d00791c</spdx:checksumValue>
+                    </spdx:Checksum>
+                </spdx:checksum>
+                <spdx:spdxDocument rdf:resource="https://namespace.com"/>
+            </spdx:ExternalDocumentRef>
+        </spdx:externalDocumentRef>
+    </spdx:SpdxDocument>
+    <spdx:Package rdf:about="https://some.namespace#SPDXRef-Package">
+        <spdx:licenseConcluded>
+            <spdx:ConjunctiveLicenseSet rdf:nodeID="N7cbb6cbf0d9d4b77bed24cab18272c1f">
+                <spdx:member rdf:resource="http://spdx.org/licenses/MIT"/>
+                <spdx:member rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+            </spdx:ConjunctiveLicenseSet>
+        </spdx:licenseConcluded>
+        <spdx:versionInfo>12.2</spdx:versionInfo>
+        <spdx:packageFileName>./packageFileName</spdx:packageFileName>
+        <spdx:supplier>Person: supplierName (some@mail.com)</spdx:supplier>
+        <spdx:downloadLocation>https://download.com</spdx:downloadLocation>
+        <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+        <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/licenses/MIT"/>
+        <spdx:licenseInfoFromFiles rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
+        <spdx:originator>Person: originatorName (some@mail.com)</spdx:originator>
+        <spdx:licenseDeclared>
+            <spdx:ConjunctiveLicenseSet rdf:nodeID="Nf293aa1ae6044fa4886ffb2d30f8408b">
+                <spdx:member rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+                <spdx:member rdf:resource="http://spdx.org/licenses/MIT"/>
+            </spdx:ConjunctiveLicenseSet>
+        </spdx:licenseDeclared>
+        <spdx:validUntilDate>2022-12-03T00:00:00Z</spdx:validUntilDate>
+        <spdx:filesAnalyzed rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</spdx:filesAnalyzed>
+        <spdx:description>packageDescription</spdx:description>
+        <spdx:primaryPackagePurpose rdf:resource="http://spdx.org/rdf/terms#purpose_source"/>
+        <spdx:sourceInfo>sourceInfo</spdx:sourceInfo>
+        <spdx:licenseComments>packageLicenseComment</spdx:licenseComments>
+        <spdx:packageVerificationCode>
+            <spdx:PackageVerificationCode rdf:nodeID="N361c610966234953a125fcbf199dac52">
+                <spdx:packageVerificationCodeExcludedFile>./exclude.py</spdx:packageVerificationCodeExcludedFile>
+                <spdx:packageVerificationCodeValue>85ed0817af83a24ad8da68c2b5094de69833983c
+                </spdx:packageVerificationCodeValue>
+            </spdx:PackageVerificationCode>
+        </spdx:packageVerificationCode>
+        <spdx:builtDate>2022-12-02T00:00:00Z</spdx:builtDate>
+        <rdfs:comment>packageComment</rdfs:comment>
+        <spdx:attributionText>packageAttributionText</spdx:attributionText>
+        <doap:homepage>https://homepage.com</doap:homepage>
+        <spdx:releaseDate>2022-12-01T00:00:00Z</spdx:releaseDate>
+        <spdx:name>packageName</spdx:name>
+        <spdx:summary>packageSummary</spdx:summary>
+        <spdx:checksum>
+            <spdx:Checksum rdf:nodeID="N2cc0fd4f8c1a4c1498f6a01fe721c3ac">
+                <spdx:checksumValue>71c4025dd9897b364f3ebbb42c484ff43d00791c</spdx:checksumValue>
+                <spdx:algorithm rdf:resource="http://spdx.org/rdf/terms#checksumAlgorithm_sha1"/>
+            </spdx:Checksum>
+        </spdx:checksum>
+        <spdx:copyrightText>packageCopyrightText</spdx:copyrightText>
+        <spdx:externalRef>
+            <spdx:ExternalRef rdf:nodeID="N4e5d5a5fc0a34245a2a4c498c3d49d62">
+                <spdx:referenceLocator>org.apache.tomcat:tomcat:9.0.0.M4</spdx:referenceLocator>
+                <spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_packageManager"/>
+                <spdx:referenceType rdf:resource="http://spdx.org/rdf/references/maven-central"/>
+                <rdfs:comment>externalPackageRefComment</rdfs:comment>
+            </spdx:ExternalRef>
+        </spdx:externalRef>
+    </spdx:Package>
+    <spdx:Package rdf:about="https://some.namespace#SPDXRef-Package2">
+        <spdx:name>packageName</spdx:name>
+        <spdx:downloadLocation>http://differentdownload.com</spdx:downloadLocation>
+        <spdx:externalRef>
+            <spdx:ExternalRef rdf:nodeID="Nda50d273cd134f45b1ca926a378b8db4">
+                <spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_other"/>
+                <rdfs:comment>This is the external ref for Acme</rdfs:comment>
+                <spdx:referenceLocator>acmecorp/acmenator/4.1.3-alpha</spdx:referenceLocator>
+                <spdx:referenceType rdf:resource="https://some.namespace#LocationRef-acmeforge"/>
+            </spdx:ExternalRef>
+        </spdx:externalRef>
+    </spdx:Package>
+    <spdx:Snippet rdf:about="https://some.namespace#SPDXRef-Snippet">
+        <spdx:range>
+            <ptr:StartEndPointer rdf:nodeID="N079962c320a64e15bc1b4f2c01ea04b8">
+                <ptr:startPointer>
+                    <ptr:LineCharPointer rdf:nodeID="N42ab092d6b334333b1a457cf9387cbb8">
+                        <ptr:reference rdf:resource="https://some.namespace#SPDXRef-File"/>
+                        <ptr:lineNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</ptr:lineNumber>
+                    </ptr:LineCharPointer>
+                </ptr:startPointer>
+                <ptr:endPointer>
+                    <ptr:LineCharPointer rdf:nodeID="Nbb9c38211e154a9b92f2489289580125">
+                        <ptr:reference rdf:resource="https://some.namespace#SPDXRef-File"/>
+                        <ptr:lineNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ptr:lineNumber>
+                    </ptr:LineCharPointer>
+                </ptr:endPointer>
+            </ptr:StartEndPointer>
+        </spdx:range>
+        <spdx:range>
+            <ptr:StartEndPointer rdf:nodeID="N77e7b08564a0412a9413b90ff9b3ddd9">
+                <ptr:startPointer>
+                    <ptr:ByteOffsetPointer rdf:nodeID="N89d93c1292de424f9aa75ee1e297ede9">
+                        <ptr:offset rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</ptr:offset>
+                        <ptr:reference rdf:resource="https://some.namespace#SPDXRef-File"/>
+                    </ptr:ByteOffsetPointer>
+                </ptr:startPointer>
+                <ptr:endPointer>
+                    <ptr:ByteOffsetPointer rdf:nodeID="N7099800c04534fcc8a998b551fee34ce">
+                        <ptr:reference rdf:resource="https://some.namespace#SPDXRef-File"/>
+                        <ptr:offset rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</ptr:offset>
+                    </ptr:ByteOffsetPointer>
+                </ptr:endPointer>
+            </ptr:StartEndPointer>
+        </spdx:range>
+        <spdx:snippetFromFile rdf:resource="https://some.namespace#SPDXRef-File"/>
+        <spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/licenses/MIT"/>
+        <spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+        <spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
+        <spdx:attributionText>snippetAttributionText</spdx:attributionText>
+        <spdx:name>snippetName</spdx:name>
+        <spdx:licenseComments>snippetLicenseComment</spdx:licenseComments>
+        <rdfs:comment>snippetComment</rdfs:comment>
+        <spdx:copyrightText>licenseCopyrightText</spdx:copyrightText>
+        <spdx:licenseConcluded>
+            <spdx:ConjunctiveLicenseSet rdf:nodeID="Ndf36ad77a5c244e5af7928009800aed7">
+                <spdx:member rdf:resource="http://spdx.org/licenses/MIT"/>
+                <spdx:member rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+            </spdx:ConjunctiveLicenseSet>
+        </spdx:licenseConcluded>
+    </spdx:Snippet>
+</rdf:RDF>

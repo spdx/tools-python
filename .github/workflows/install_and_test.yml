@@ -1,6 +1,11 @@
 name: Install and Test
 
-on: [ workflow_dispatch, pull_request ]
+on:
+  push:
+    branches:
+      - refactor-python-tools
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   install_and_test:
@@ -8,7 +13,7 @@ jobs:
     strategy:
       matrix:
         os: [ ubuntu-latest, macos-latest, windows-latest ]
-        python-version: [ "3.7", "3.8", "3.9", "3.10" ]
+        python-version: [ "3.7", "3.8", "3.9", "3.10", "3.11" ]
 
     steps:
       - uses: actions/checkout@v3
@@ -27,6 +32,4 @@ jobs:
       - name: Run tests
         run: pytest
       - name: Run CLI
-        run: |
-          pyspdxtools_parser --file ./tests/data/formats/SPDXJSONExample-v2.3.spdx.json
-          pyspdxtools_convertor --infile ./tests/data/formats/SPDXTagExample-v2.3.spdx -o temp.json
+        run: pyspdxtools -i ./tests/spdx/data/formats/SPDXJSONExample-v2.3.spdx.json
