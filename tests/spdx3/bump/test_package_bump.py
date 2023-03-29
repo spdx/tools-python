@@ -23,8 +23,10 @@ def test_bump_package(creation_information):
     spdx2_package: Spdx2_Package = package_fixture()
 
     payload = Payload()
-    bump_package(spdx2_package, payload, creation_information=creation_information)
-    package = payload.get_element(package_fixture().spdx_id)
-    assert isinstance(package, Package)
+    document_namespace = "https://doc.namespace"
+    bump_package(spdx2_package, payload, creation_information, document_namespace)
+    expected_new_package_id = document_namespace + "#" + package_fixture().spdx_id
+    package = payload.get_element(expected_new_package_id)
 
-    assert package.spdx_id == "SPDXRef-Package"
+    assert isinstance(package, Package)
+    assert package.spdx_id == expected_new_package_id
