@@ -12,7 +12,7 @@ CI status (Linux, macOS and Windows): [![Install and Test][1]][2]
 This repository was subject to a major refactoring recently to get ready for the upcoming SPDX v3.0 release.
 Therefore, we'd like to encourage you to post any and all issues you find at https://github.com/spdx/tools-python/issues.  
 If you are looking for the source code of the [current PyPI release](https://pypi.python.org/pypi/spdx-tools), check out
-the [v0.7.1 branch](https://github.com/spdx/tools-python/tree/release/v0.7.1).
+the [v0.7 branch](https://github.com/spdx/tools-python/tree/version/v0.7).
 Note, though, that this will only receive bug fixes but no new features.
 
 We encourage you to use the new, refactored version (on the main branch) if you
