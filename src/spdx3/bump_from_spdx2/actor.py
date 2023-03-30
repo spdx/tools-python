@@ -30,9 +30,9 @@ def bump_actor(spdx2_actor: Spdx2_Actor, payload: Payload, creation_info: Creati
     name_without_whitespace = ''.join(name.split())
     if email:
         external_identifiers.append(ExternalIdentifier(ExternalIdentifierType.EMAIL, email))
-        spdx_id: str = "#".join([document_namespace, f"SPDXRef-Actor-{name_without_whitespace}-{email}"])
+        spdx_id: str = f"{document_namespace}#SPDXRef-Actor-{name_without_whitespace}-{email}"
     else:
-        spdx_id: str = "#".join([document_namespace, f"SPDXRef-Actor-{name_without_whitespace}"])
+        spdx_id: str = f"{document_namespace}#SPDXRef-Actor-{name_without_whitespace}"
 
     if spdx_id in payload.get_full_map(): # the agent/tool already exists, so we don't need to create a new one
         return spdx_id
