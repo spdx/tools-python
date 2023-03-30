@@ -29,6 +29,7 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 test = ["pytest"]
+code_style = ["isort", "black", "flake8"]
 
 [project.scripts]
 pyspdxtools = "spdx.clitools.pyspdxtools:main"
@@ -50,3 +51,11 @@ git_describe_command = ["git", "describe", "--dirty", "--tags", "--long", "--mat
 
 [tool.aliases]
 release = "clean --all sdist --formats=gztar bdist_wheel"
+
+[tool.black]
+line-length = 119
+include = "(^/src/.*.py|^/tests/.*.py)"
+
+[tool.isort]
+profile = "black"
+line_length = 119
