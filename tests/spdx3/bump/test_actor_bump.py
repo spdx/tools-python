@@ -35,12 +35,12 @@ def test_bump_actor(actor_type, actor_name, actor_mail, element_type, new_spdx_i
     document_namespace = "https://doc.namespace"
     creation_info = CreationInformation(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], [], ["core"])
     actor = Actor(actor_type, actor_name, actor_mail)
-    agent_or_tool_id = bump_actor(actor, payload, creation_info, document_namespace)
 
+    agent_or_tool_id = bump_actor(actor, payload, creation_info, document_namespace)
     agent_or_tool = payload.get_element(agent_or_tool_id)
 
     assert isinstance(agent_or_tool, element_type)
-    assert agent_or_tool.spdx_id == document_namespace + "#" + new_spdx_id
+    assert agent_or_tool.spdx_id == f"{document_namespace}#{new_spdx_id}"
     assert agent_or_tool.name == actor_name
     if actor_mail:
         assert len(agent_or_tool.external_identifier) == 1
