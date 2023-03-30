@@ -3,7 +3,7 @@ name: Install and Test
 on:
   push:
     branches:
-      - refactor-python-tools
+      - main
   pull_request:
   workflow_dispatch:
 
