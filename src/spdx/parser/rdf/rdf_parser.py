@@ -65,7 +65,9 @@ def translate_graph_to_document(graph: Graph) -> Document:
     extracted_licensing_infos = []
     for _, _, extracted_licensing_info_node in graph.triples((None, SPDX_NAMESPACE.hasExtractedLicensingInfo, None)):
         try:
-            extracted_licensing_infos.append(parse_extracted_licensing_info(extracted_licensing_info_node, graph))
+            extracted_licensing_infos.append(
+                parse_extracted_licensing_info(extracted_licensing_info_node, graph, creation_info.document_namespace)
+            )
         except SPDXParsingError as err:
             logger.extend(err.get_messages())
     parsed_fields["extracted_licensing_info"] = extracted_licensing_infos

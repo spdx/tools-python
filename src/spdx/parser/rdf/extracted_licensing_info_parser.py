@@ -10,9 +10,18 @@ from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_literal
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
-def parse_extracted_licensing_info(extracted_licensing_info_node: URIRef, graph: Graph) -> ExtractedLicensingInfo:
+def parse_extracted_licensing_info(
+    extracted_licensing_info_node: URIRef, graph: Graph, doc_namespace: str
+) -> ExtractedLicensingInfo:
     logger = Logger()
     license_id = parse_literal(logger, graph, extracted_licensing_info_node, SPDX_NAMESPACE.licenseId)
+    if not license_id:
+        license_id = (
+            extracted_licensing_info_node.fragment
+            if extracted_licensing_info_node.startswith(f"{doc_namespace}#")
+            else extracted_licensing_info_node.toPython()
+        )
+
     extracted_text = parse_literal(logger, graph, extracted_licensing_info_node, SPDX_NAMESPACE.extractedText)
     comment = parse_literal(logger, graph, extracted_licensing_info_node, RDFS.comment)
     license_name = parse_literal_or_no_assertion_or_none(
