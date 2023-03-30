@@ -27,7 +27,7 @@ def test_bump_spdx_document():
 
     write_payload(payload, sys.stdout)
 
-    assert "#".join([document_namespace, "SPDXRef-Package"]) in payload.get_full_map()
+    assert f"{document_namespace}#SPDXRef-Package" in payload.get_full_map()
     assert len(payload.get_full_map()) == 10
 
     # this is more of a temporary test to make sure the dates don't get messed up again
