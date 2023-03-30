@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Installation
-        run: pip install ".[codestyle]"
+        run: pip install ".[code_style]"
       - name: Check code with isort
         run: |
           isort src tests --check
