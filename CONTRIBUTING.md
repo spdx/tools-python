@@ -47,23 +47,36 @@ Here's the process to make changes to the codebase:
    of [the Developer Certificate of Origin](https://developercertificate.org/). Git has utilities for signing off on
    commits: `git commit -s` or `--signoff` signs a current commit, and `git rebase --signoff <revision-range>`
    retroactively signs a range of past commits.
-
 6. Test your changes:
    ```sh
-   python setup.py test # in the repo root
+   pip install pytest
+   pytest -vvs # in the repo root
    ```
-   You may use other test runners, such as `pytest` or `nose` at your preference.
-7. Push the branch to your fork on GitHub:
+
+7. Check your code style. When opening a pull request, your changes will automatically be checked with `isort`, `black` 
+   and `flake8` to make sure your changes fit with the rest of the code style. 
+    ```sh
+   pip install .[code_style]
+   # run the following commands in the repo root
+   isort src tests 
+   black src tests
+   flake8 src tests 
+   ```
+   `black` and `isort` will automatically format the code and sort the imports. The configuration for these linters 
+   can be found in the `pyproject.toml`. `flake8` lists all problems found which then need to be resolved manually.
+   The configuration for the linter can be found in the `.flake8` file.
+
+8. Push the branch to your fork on GitHub:
    ```sh
    git push origin fix-or-improve-something
    ```
-8. Make a pull request on GitHub.
-9. Continue making more changes and commits on the branch, with `git commit --signoff` and `git push`.
-10. When done, write a comment on the PR asking for a code review.
-11. Some other developer will review your changes and accept your PR. The merge should be done with `rebase`, if
+9. Make a pull request on GitHub.
+10. Continue making more changes and commits on the branch, with `git commit --signoff` and `git push`.
+11. When done, write a comment on the PR asking for a code review.
+12. Some other developer will review your changes and accept your PR. The merge should be done with `rebase`, if
     possible, or with `squash`.
-12. The temporary branch on GitHub should be deleted (there is a button for deleting it).
-13. Delete the local branch as well:
+13. The temporary branch on GitHub should be deleted (there is a button for deleting it).
+14. Delete the local branch as well:
     ```sh
     git checkout master
     git pull -p
