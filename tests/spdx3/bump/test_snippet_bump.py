@@ -10,21 +10,21 @@
 # limitations under the License.
 from unittest import mock
 
+from spdx.model.snippet import Snippet as Spdx2_Snippet
 from spdx3.bump_from_spdx2.snippet import bump_snippet
+from spdx3.model.software.snippet import Snippet
 from spdx3.payload import Payload
 from tests.spdx.fixtures import snippet_fixture
-from spdx.model.snippet import Snippet as Spdx2_Snippet
-from spdx3.model.software.snippet import Snippet
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_bump_snippet(creation_information):
-    spdx2_snippet: Spdx2_Snippet = snippet_fixture()
-
     payload = Payload()
     document_namespace = "https://doc.namespace"
+    spdx2_snippet: Spdx2_Snippet = snippet_fixture()
+    expected_new_snippet_id = f"{document_namespace}#{spdx2_snippet.spdx_id}"
+
     bump_snippet(spdx2_snippet, payload, creation_information, document_namespace)
-    expected_new_snippet_id = document_namespace + "#" + snippet_fixture().spdx_id
     snippet = payload.get_element(expected_new_snippet_id)
 
     assert isinstance(snippet, Snippet)
