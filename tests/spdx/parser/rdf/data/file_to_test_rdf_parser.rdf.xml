@@ -149,6 +149,14 @@
                 <spdx:referenceType rdf:resource="https://some.namespace#LocationRef-acmeforge"/>
             </spdx:ExternalRef>
         </spdx:externalRef>
+        <spdx:licenseConcluded>
+                <spdx:ExtractedLicensingInfo rdf:about="https://some.namespace#LicenseRef-2">
+                    <rdfs:seeAlso>https://see.also</rdfs:seeAlso>
+                    <spdx:extractedText>extractedText</spdx:extractedText>
+                    <rdfs:comment>licenseComment</rdfs:comment>
+                    <spdx:name>another license</spdx:name>
+                </spdx:ExtractedLicensingInfo>
+        </spdx:licenseConcluded>
     </spdx:Package>
     <spdx:Snippet rdf:about="https://some.namespace#SPDXRef-Snippet">
         <spdx:range>
