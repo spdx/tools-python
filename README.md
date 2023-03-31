@@ -114,22 +114,26 @@ document.creation_info.name = "new document name"
 # define a file and a DESCRIBES relationship between the file and the document
 checksum = Checksum(ChecksumAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c")
 
-file = File(name="./fileName.py", spdx_id="SPDXRef-File", checksums=[checksum], file_types=[FileType.TEXT],
+file = File(name="./fileName.py", spdx_id="SPDXRef-File", checksums=[checksum], 
+            file_types=[FileType.TEXT], 
             license_concluded=get_spdx_licensing().parse("MIT and GPL-2.0"),
             license_comment="licenseComment", copyright_text="copyrightText")
 
 relationship = Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-File")
 
-# add the file and the relationship to the document (note that we do not use "document.files.append(file)" as that would circumvent the type checking)
+# add the file and the relationship to the document 
+# (note that we do not use "document.files.append(file)" as that would circumvent the type checking)
 document.files = document.files + [file]
 document.relationships = document.relationships + [relationship]
 
-# validate the edited document and log the validation messages (depending on your use case, you might also want to utilize the provided validation_message.context)
+# validate the edited document and log the validation messages
+# (depending on your use case, you might also want to utilize the validation_message.context)
 validation_messages = validate_full_spdx_document(document)
 for validation_message in validation_messages:
     logging.warning(validation_message.validation_message)
 
-# if there are no validation messages, the document is valid and we can safely serialize it without validating again
+# if there are no validation messages, the document is valid 
+# and we can safely serialize it without validating again
 if not validation_messages:
     write_file(document, "new_spdx_document.rdf", validate=False)
 ```
