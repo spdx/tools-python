@@ -33,6 +33,7 @@ class ExternalIdentifier:
     identifier: str
     comment: Optional[str] = None
 
-    def __init__(self, external_identifier_type: ExternalIdentifierType, identifier: str,
-                 comment: Optional[str] = None):
+    def __init__(
+        self, external_identifier_type: ExternalIdentifierType, identifier: str, comment: Optional[str] = None
+    ):
         check_types_and_set_values(self, locals())

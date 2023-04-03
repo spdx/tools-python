@@ -12,15 +12,20 @@ from unittest import mock
 
 import pytest
 
-from spdx3.model.software.software_purpose import SoftwarePurpose
-
 from spdx3.model.software.snippet import Snippet
+from spdx3.model.software.software_purpose import SoftwarePurpose
 
 
 @mock.patch("spdx3.model.software.snippet.Snippet", autospec=True)
 def test_correct_initialization(creation_information):
-    snippet = Snippet("SPDXRef-Snippet", creation_information, content_identifier="https://content.identifier",
-                      snippet_purpose=[SoftwarePurpose.SOURCE], byte_range=(3, 4), line_range=(346, 456))
+    snippet = Snippet(
+        "SPDXRef-Snippet",
+        creation_information,
+        content_identifier="https://content.identifier",
+        snippet_purpose=[SoftwarePurpose.SOURCE],
+        byte_range=(3, 4),
+        line_range=(346, 456),
+    )
 
     assert snippet.spdx_id == "SPDXRef-Snippet"
     assert snippet.creation_info == creation_information
@@ -35,9 +40,9 @@ def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Snippet(2, creation_information, originated_by=34, byte_range="34:45")
 
-    assert err.value.args[0] == ['SetterError Snippet: type of argument "spdx_id" must be str; got int '
-                                 'instead: 2',
-                                 'SetterError Snippet: type of argument "originated_by" must be one of (str, '
-                                 'NoneType); got int instead: 34',
-                                 'SetterError Snippet: type of argument "byte_range" must be one of '
-                                 '(Tuple[int, int], NoneType); got str instead: 34:45']
+    assert err.value.args[0] == [
+        'SetterError Snippet: type of argument "spdx_id" must be str; got int ' "instead: 2",
+        'SetterError Snippet: type of argument "originated_by" must be one of (str, ' "NoneType); got int instead: 34",
+        'SetterError Snippet: type of argument "byte_range" must be one of '
+        "(Tuple[int, int], NoneType); got str instead: 34:45",
+    ]
