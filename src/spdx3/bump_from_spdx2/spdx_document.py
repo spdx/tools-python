@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 from spdx3.bump_from_spdx2.annotation import bump_annotation
 from spdx3.bump_from_spdx2.creation_information import bump_creation_information
