@@ -71,19 +71,30 @@ class RelationshipCompleteness(Enum):
 
 @dataclass_with_properties
 class Relationship(Element):
-    # due to the inheritance we need to make all fields non-default in the __annotation__, the __init__ method still raises an error if required fields are not set
+    # due to the inheritance we need to make all fields non-default in the __annotation__,
+    # the __init__ method still raises an error if required fields are not set
     from_element: str = None
     to: List[str] = None
     relationship_type: RelationshipType = None
     completeness: Optional[RelationshipCompleteness] = None
 
-    def __init__(self, spdx_id: str, creation_info: CreationInformation, from_element: str, to: List[str],
-                 relationship_type: RelationshipType, name: Optional[str] = None, summary: Optional[str] = None,
-                 description: Optional[str] = None, comment: Optional[str] = None,
-                 verified_using: Optional[List[IntegrityMethod]] = None,
-                 external_references: Optional[List[ExternalReference]] = None,
-                 external_identifier: Optional[List[ExternalIdentifier]] = None, extension: None = None,
-                 completeness: Optional[RelationshipCompleteness] = None):
+    def __init__(
+        self,
+        spdx_id: str,
+        creation_info: CreationInformation,
+        from_element: str,
+        to: List[str],
+        relationship_type: RelationshipType,
+        name: Optional[str] = None,
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        comment: Optional[str] = None,
+        verified_using: Optional[List[IntegrityMethod]] = None,
+        external_references: Optional[List[ExternalReference]] = None,
+        external_identifier: Optional[List[ExternalIdentifier]] = None,
+        extension: None = None,
+        completeness: Optional[RelationshipCompleteness] = None,
+    ):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier

@@ -49,7 +49,7 @@ MAP_CLASS_TO_WRITE_METHOD = {
     Person: write_agent,
     Organization: write_agent,
     SoftwareAgent: write_agent,
-    Tool: write_tool
+    Tool: write_tool,
 }
 
 
