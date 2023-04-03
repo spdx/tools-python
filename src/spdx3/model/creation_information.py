@@ -26,6 +26,13 @@ class CreationInformation:
     profile: List[str]  # or create an Enum for ProfileIdentifier?
     data_license: str
 
-    def __init__(self, spec_version: Version, created: datetime, created_by: List[str], created_using: List[str],
-                 profile: List[str], data_license: str = "CC0"):
+    def __init__(
+        self,
+        spec_version: Version,
+        created: datetime,
+        created_by: List[str],
+        created_using: List[str],
+        profile: List[str],
+        data_license: str = "CC0",
+    ):
         check_types_and_set_values(self, locals())

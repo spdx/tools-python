@@ -8,25 +8,31 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
+from spdx3.model.creation_information import CreationInformation
+from spdx3.model.relationship import Relationship, RelationshipCompleteness, RelationshipType
+from spdx3.payload import Payload
 from spdx.model.relationship import Relationship as Spdx2_Relationship
 from spdx.model.relationship import RelationshipType as Spdx2_RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
-from spdx3.model.creation_information import CreationInformation
-from spdx3.model.relationship import Relationship, RelationshipType, RelationshipCompleteness
-from spdx3.payload import Payload
 
 
-def bump_relationship(spdx2_relationship: Spdx2_Relationship, payload: Payload,
-                      creation_information: CreationInformation, document_namespace: str, counter: int):
+def bump_relationship(
+    spdx2_relationship: Spdx2_Relationship,
+    payload: Payload,
+    creation_information: CreationInformation,
+    document_namespace: str,
+    counter: int,
+):
     relationship_type, swap_direction = bump_relationship_type(spdx2_relationship.relationship_type)
 
     spdx_id = "#".join([document_namespace, f"SPDXRef-Relationship-{counter}"])
 
-    if isinstance(spdx2_relationship.related_spdx_element_id,
-                  SpdxNoAssertion):  # how to translate none/ no assertion to element?
+    if isinstance(
+        spdx2_relationship.related_spdx_element_id, SpdxNoAssertion
+    ):  # how to translate none/ no assertion to element?
         completeness = RelationshipCompleteness.UNKNOWN
     elif isinstance(spdx2_relationship.related_spdx_element_id, SpdxNone):
         completeness = RelationshipCompleteness.KNOWN
@@ -41,8 +47,17 @@ def bump_relationship(spdx2_relationship: Spdx2_Relationship, payload: Payload,
         to = [spdx2_relationship.related_spdx_element_id]
     comment = spdx2_relationship.comment
 
-    payload.add_element(Relationship(spdx_id, creation_information, from_element, to,
-                                     relationship_type, comment=comment, completeness=completeness))
+    payload.add_element(
+        Relationship(
+            spdx_id,
+            creation_information,
+            from_element,
+            to,
+            relationship_type,
+            comment=comment,
+            completeness=completeness,
+        )
+    )
 
 
 def bump_relationship_type(spdx2_relationship_type: Spdx2_RelationshipType) -> Optional[Tuple[RelationshipType, bool]]:

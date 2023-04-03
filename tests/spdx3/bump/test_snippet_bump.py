@@ -10,10 +10,10 @@
 # limitations under the License.
 from unittest import mock
 
-from spdx.model.snippet import Snippet as Spdx2_Snippet
 from spdx3.bump_from_spdx2.snippet import bump_snippet
 from spdx3.model.software.snippet import Snippet
 from spdx3.payload import Payload
+from spdx.model.snippet import Snippet as Spdx2_Snippet
 from tests.spdx.fixtures import snippet_fixture
 
 

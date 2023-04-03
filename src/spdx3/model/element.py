@@ -10,7 +10,7 @@
 # limitations under the License.
 from abc import ABC, abstractmethod
 from dataclasses import field
-from typing import Optional, List
+from typing import List, Optional
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx3.model.creation_information import CreationInformation

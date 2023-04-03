@@ -8,7 +8,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Optional, List
+from typing import List, Optional
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from common.typing.type_checks import check_types_and_set_values
@@ -24,14 +24,26 @@ from spdx3.model.namespace_map import NamespaceMap
 @dataclass_with_properties
 class SpdxDocument(Bundle):
     # The inherited field "name" is required for a SpdxDocument, no longer optional.
-    # We overwrite the super-__init__ as check_types_and_set_values() takes care of all fields (including inherited ones).
-    def __init__(self, spdx_id: str, creation_info: CreationInformation, name: str, elements: List[str],
-                 root_elements: List[str], summary: Optional[str] = None, description: Optional[str] = None,
-                 comment: Optional[str] = None, verified_using: Optional[List[IntegrityMethod]] = None,
-                 external_references: Optional[List[ExternalReference]] = None,
-                 external_identifier: Optional[List[ExternalIdentifier]] = None, extension: None = None,
-                 namespaces: Optional[List[NamespaceMap]] = None, imports: Optional[List[ExternalMap]] = None,
-                 context: Optional[str] = None):
+    # We overwrite the super-__init__ as check_types_and_set_values()
+    # takes care of all fields (including inherited ones).
+    def __init__(
+        self,
+        spdx_id: str,
+        creation_info: CreationInformation,
+        name: str,
+        elements: List[str],
+        root_elements: List[str],
+        summary: Optional[str] = None,
+        description: Optional[str] = None,
+        comment: Optional[str] = None,
+        verified_using: Optional[List[IntegrityMethod]] = None,
+        external_references: Optional[List[ExternalReference]] = None,
+        external_identifier: Optional[List[ExternalIdentifier]] = None,
+        extension: None = None,
+        namespaces: Optional[List[NamespaceMap]] = None,
+        imports: Optional[List[ExternalMap]] = None,
+        context: Optional[str] = None,
+    ):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
