@@ -18,8 +18,7 @@ def bump_package(
     spdx_id = "#".join([document_namespace, spdx2_package.spdx_id])
     name = spdx2_package.name
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
-    # package2.version -> ?
-    print_missing_conversion("package2.version", 0)
+    package_version = spdx2_package.version
     # package.file_name -> ?
     print_missing_conversion("package2.file_name", 0)
     # package.supplier -> Relationship, suppliedBy?
@@ -54,13 +53,14 @@ def bump_package(
             spdx_id,
             creation_information,
             name,
-            verified_using=integrity_methods,
-            download_location=download_location,
-            homepage=homepage,
             summary=summary,
             description=description,
             comment=comment,
+            verified_using=integrity_methods,
             originated_by=originated_by_spdx_id,
             package_purpose=package_purpose,
+            package_version=package_version,
+            download_location=download_location,
+            homepage=homepage,
         )
     )
