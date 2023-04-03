@@ -9,12 +9,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import TextIO, Union, Optional
+from typing import Optional, TextIO, Union
 
 
 def write_value(tag: str, value: Optional[Union[bool, str]], out: TextIO, indent: bool = False):
-    """ This function is duplicated from spdx.writer.tagvalue.tag_value_writer_helper_functions and slightly adapted to
-        make indentation of output possible."""
+    """This function is duplicated from spdx.writer.tagvalue.tag_value_writer_helper_functions and slightly adapted to
+    make indentation of output possible."""
     if not value:
         return
     if indent:
