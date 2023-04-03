@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 from dataclasses import field
 from typing import List, Optional, Tuple, Union

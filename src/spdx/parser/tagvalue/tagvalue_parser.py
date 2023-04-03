@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 from spdx.model.document import Document
 from spdx.parser.tagvalue.parser import Parser

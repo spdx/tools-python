@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 from spdx.formats import FileFormat, file_name_to_format
 from spdx.model.document import Document
