@@ -30,6 +30,7 @@ dynamic = ["version"]
 [project.optional-dependencies]
 test = ["pytest"]
 code_style = ["isort", "black", "flake8"]
+graph_generation = ["pygraphviz", "networkx"]
 
 [project.scripts]
 pyspdxtools = "spdx.clitools.pyspdxtools:main"

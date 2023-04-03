@@ -18,6 +18,7 @@ from typing import List
 
 import click
 
+from spdx.graph_generation import export_graph_from_document
 from spdx.model.document import Document
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.parse_anything import parse_file
@@ -32,7 +33,8 @@ from spdx.writer.write_anything import write_file
 @click.option(
     "--outfile",
     "-o",
-    help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion).",
+    help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion). "
+    "If you add the option --graph to the command the generated graph will be written to this file.",
 )
 @click.option(
     "--version",
@@ -41,7 +43,15 @@ from spdx.writer.write_anything import write_file
     default=None,
 )
 @click.option("--novalidation", is_flag=True, help="Don't validate the provided document.")
-def main(infile: str, outfile: str, version: str, novalidation: bool):
+@click.option(
+    "--graph",
+    is_flag=True,
+    default=False,
+    help="Generate a relationship graph from the input file. "
+    "The generated graph is saved to the file specified with --outfile. "
+    "Note: You need to install the optional dependencies 'networkx' and 'pygraphviz' for this feature.",
+)
+def main(infile: str, outfile: str, version: str, novalidation: bool, graph: bool):
     """
     CLI-tool for validating SPDX documents and converting between RDF, TAG-VALUE, JSON, YAML and XML formats.
     Formats are determined by the file endings.
@@ -49,9 +59,6 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
     """
     try:
         document: Document = parse_file(infile)
-
-        if outfile == "-":
-            tagvalue_writer.write_document(document, sys.stdout)
 
         if not novalidation:
             if not version:
@@ -72,7 +79,20 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
             else:
                 logging.info("The document is valid.")
 
-        if outfile and outfile != "-":
+        if outfile == "-":
+            tagvalue_writer.write_document(document, sys.stdout)
+
+        elif graph:
+            try:
+                export_graph_from_document(document, outfile)
+            except ImportError:
+                logging.error(
+                    "To be able to draw a relationship graph of the parsed document "
+                    "you need to install 'networkx' and 'pygraphviz'. Run 'pip install \".[graph_generation]\"'."
+                )
+                sys.exit(1)
+
+        elif outfile:
             write_file(document, outfile, validate=False)
 
     except NotImplementedError as err:

@@ -38,9 +38,11 @@ This library implements SPDX parsers, convertors, validators and handlers in Pyt
 
 # Features
 
-* API to create and manipulate SPDX v2.2 and v2.3 documents.
+* API to create and manipulate SPDX v2.2 and v2.3 documents
 * Parse, convert, create and validate SPDX files
 * supported formats: Tag/Value, RDF, JSON, YAML, XML
+* visualize the structure of a SPDX document by creating an `AGraph`. Note: This is an optional feature and requires 
+additional installation of optional dependencies
 
 # Planned features
 
@@ -77,6 +79,18 @@ instead of `bin`.
   (use this with caution: note that undetected invalid documents may lead to unexpected behavior of the tool)
   
 * For help use `pyspdxtools --help`
+
+3. **GRAPH GENERATION** (optional feature)
+
+* This feature generates a graph representing all elements in the SPDX document and their connections based on the provided
+  relationships. The graph can be rendered to a picture. Below is an example for the file `tests/data/formats/SPDXJSONExample-v2.3.spdx.json`:
+![SPDXJSONExample-v2.3.spdx.png](assets/SPDXJSONExample-v2.3.spdx.png)
+* Make sure you install the optional dependencies `networkx` and `pygraphviz`. To do so run `pip install ".[graph_generation]"`.
+* Use `pyspdxtools -i <input_file> --graph -o <output_file>` where `<output_file>` is an output file name with valid format for `pygraphviz` (check 
+  the documentation [here](https://pygraphviz.github.io/documentation/stable/reference/agraph.html#pygraphviz.AGraph.draw)). 
+* If you are using a source distribution, try running
+  `pyspdxtools -i tests/data/formats/SPDXJSONExample-v2.3.spdx.json --graph -o SPDXJSONExample-v2.3.spdx.png` to generate 
+  a png with an overview of the structure of the example file.  
 
 ## Library usage
 1. **DATA MODEL**
