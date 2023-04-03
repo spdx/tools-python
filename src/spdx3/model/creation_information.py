@@ -2,7 +2,7 @@
 
 # SPDX-License-Identifier: Apache-2.0
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 from semantic_version import Version
 
@@ -18,6 +18,7 @@ class CreationInformation:
     created_using: List[str]  # SPDXID of Tools
     profile: List[str]  # or create an Enum for ProfileIdentifier?
     data_license: str
+    comment: Optional[str] = None
 
     def __init__(
         self,
@@ -27,5 +28,6 @@ class CreationInformation:
         created_using: List[str],
         profile: List[str],
         data_license: str = "CC0",
+        comment: Optional[str] = None,
     ):
         check_types_and_set_values(self, locals())
