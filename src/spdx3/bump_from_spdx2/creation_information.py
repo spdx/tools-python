@@ -12,16 +12,15 @@ from datetime import datetime
 from typing import List
 
 from semantic_version import Version
-from spdx.model.actor import ActorType
 
-from spdx3.payload import Payload
-
-from spdx.model.document import CreationInfo as Spdx2_CreationInfo
 from spdx3.bump_from_spdx2.actor import bump_actor
 from spdx3.bump_from_spdx2.external_document_ref import bump_external_document_ref
 from spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx3.model.creation_information import CreationInformation
 from spdx3.model.spdx_document import SpdxDocument
+from spdx3.payload import Payload
+from spdx.model.actor import ActorType
+from spdx.model.document import CreationInfo as Spdx2_CreationInfo
 
 
 def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload) -> SpdxDocument:
@@ -40,14 +39,17 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     print_missing_conversion("creation_info.creator_comment", 0)
     data_license = spdx2_creation_info.data_license
     # creation_info.external_document_refs -> spdx_document.imports
-    imports = [bump_external_document_ref(external_document_ref) for external_document_ref in
-               spdx2_creation_info.external_document_refs]
+    imports = [
+        bump_external_document_ref(external_document_ref)
+        for external_document_ref in spdx2_creation_info.external_document_refs
+    ]
     # creation_info.license_list_version -> ?
     print_missing_conversion("creation_info.license_list_version", 0)
     # creation_info.document_comment -> spdx_document.comment
     document_comment = spdx2_creation_info.document_comment
-    creation_information = CreationInformation(Version("3.0.0"), created, [], [], ["core", "software", "licensing"],
-                                               data_license)
+    creation_information = CreationInformation(
+        Version("3.0.0"), created, [], [], ["core", "software", "licensing"], data_license
+    )
 
     # due to creators having a creation_information themselves which inherits from the document's one,
     # we have to add them after the creation_information has been initialized
@@ -61,13 +63,22 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
             tool_ids.append(bumped_actor_id)
 
     if not creator_ids:
-        raise NotImplementedError("The SPDX2 creation_info does not contain creators of Type Person or Organization."
-                                  " This case leads to an invalid SPDX3 document and is currently not supported.")
+        raise NotImplementedError(
+            "The SPDX2 creation_info does not contain creators of Type Person or Organization."
+            " This case leads to an invalid SPDX3 document and is currently not supported."
+        )
 
     creation_information.created_by = creator_ids
     creation_information.created_using = tool_ids
 
-    spdx_document = SpdxDocument(spdx_id=spdx_id, creation_info=creation_information, name=name,
-                                 comment=document_comment, elements=[], root_elements=[], imports=imports)
+    spdx_document = SpdxDocument(
+        spdx_id=spdx_id,
+        creation_info=creation_information,
+        name=name,
+        comment=document_comment,
+        elements=[],
+        root_elements=[],
+        imports=imports,
+    )
 
     return spdx_document

@@ -17,7 +17,7 @@ from spdx3.model.element import Element
 
 @dataclass_with_properties
 class Artifact(Element):
-    originated_by: Optional[str] = None # SPDXID of the Agent/Tool
+    originated_by: Optional[str] = None  # SPDXID of the Agent/Tool
 
     @abstractmethod
     def __init__(self):
