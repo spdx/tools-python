@@ -11,7 +11,7 @@ from spdx3.model.creation_information import CreationInformation
 
 def test_correct_initialization():
     creation_information = CreationInformation(
-        Version("3.0.0"), datetime(2023, 1, 11, 16, 21), [], [], ["core", "software"], "CC0"
+        Version("3.0.0"), datetime(2023, 1, 11, 16, 21), [], [], ["core", "software"], "CC0", "some comment"
     )
 
     assert creation_information.spec_version == Version("3.0.0")
@@ -20,11 +20,12 @@ def test_correct_initialization():
     assert creation_information.created_using == []
     assert creation_information.profile == ["core", "software"]
     assert creation_information.data_license == "CC0"
+    assert creation_information.comment == "some comment"
 
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        CreationInformation("2.3", "2012-01-01", [], [], "core", 3)
+        CreationInformation("2.3", "2012-01-01", [], [], "core", 3, [])
 
     assert err.value.args[0] == [
         'SetterError CreationInformation: type of argument "spec_version" must be '
@@ -33,6 +34,8 @@ def test_invalid_initialization():
         "datetime.datetime; got str instead: 2012-01-01",
         'SetterError CreationInformation: type of argument "profile" must be a list; ' "got str instead: core",
         'SetterError CreationInformation: type of argument "data_license" must be ' "str; got int instead: 3",
+        'SetterError CreationInformation: type of argument "comment" must be'
+        " one of (str, NoneType); got list instead: []",
     ]
 
 
