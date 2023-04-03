@@ -10,7 +10,7 @@
 # limitations under the License.
 from dataclasses import field
 from enum import Enum, auto
-from typing import Optional, List
+from typing import List, Optional
 
 from common.typing.dataclass_with_properties import dataclass_with_properties
 from common.typing.type_checks import check_types_and_set_values
@@ -32,7 +32,12 @@ class ExternalReference:
     content_type: Optional[str] = None  # placeholder for MediaType
     comment: Optional[str] = None
 
-    def __init__(self, external_reference_type: Optional[ExternalReferenceType] = None, locator: List[str] = None,
-                 content_type: Optional[str] = None, comment: Optional[str] = None):
+    def __init__(
+        self,
+        external_reference_type: Optional[ExternalReferenceType] = None,
+        locator: List[str] = None,
+        content_type: Optional[str] = None,
+        comment: Optional[str] = None,
+    ):
         locator = [] if locator is None else locator
         check_types_and_set_values(self, locals())
