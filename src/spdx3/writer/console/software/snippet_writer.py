@@ -10,10 +10,10 @@
 # limitations under the License.
 from typing import TextIO
 
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_range
 from spdx3.model.software.snippet import Snippet
 from spdx3.writer.console.artifact_writer import write_artifact_properties
 from spdx3.writer.console.console import write_value
+from spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_range
 
 
 def write_snippet(snippet: Snippet, text_output: TextIO):
