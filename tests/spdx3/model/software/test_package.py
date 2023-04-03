@@ -16,6 +16,7 @@ def test_correct_initialization(creation_information):
         creation_information,
         content_identifier="https://any.uri",
         package_purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH],
+        package_version="1:23a_bc",
         download_location="https://downloadlocation",
         package_uri="https://package.uri",
         homepage="https://homepage",
@@ -25,6 +26,7 @@ def test_correct_initialization(creation_information):
     assert package.creation_info == creation_information
     assert package.content_identifier == "https://any.uri"
     assert package.package_purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH]
+    assert package.package_version == "1:23a_bc"
     assert package.download_location == "https://downloadlocation"
     assert package.package_uri == "https://package.uri"
     assert package.homepage == "https://homepage"
@@ -38,6 +40,7 @@ def test_invalid_initialization(creation_information):
             creation_information,
             content_identifier=3,
             package_purpose=SoftwarePurpose.FILE,
+            package_version=42,
             download_location=4,
             package_uri=["uris"],
             homepage=True,
@@ -50,6 +53,8 @@ def test_invalid_initialization(creation_information):
         "(List[spdx3.model.software.software_purpose.SoftwarePurpose], NoneType); got "
         "spdx3.model.software.software_purpose.SoftwarePurpose instead: "
         "SoftwarePurpose.FILE",
+        'SetterError Package: type of argument "package_version" must be one of '
+        "(str, NoneType); got int instead: 42",
         'SetterError Package: type of argument "download_location" must be one of '
         "(str, NoneType); got int instead: 4",
         'SetterError Package: type of argument "package_uri" must be one of (str, '
