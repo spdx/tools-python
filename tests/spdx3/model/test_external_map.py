@@ -9,9 +9,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from unittest import mock
+
 import pytest
 
 from spdx3.model.external_map import ExternalMap
+
 
 @mock.patch("spdx3.model.integrity_method.IntegrityMethod", autospec=True)
 def test_correct_initialization(integrity_method):
@@ -26,7 +28,8 @@ def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         ExternalMap(234, None, ["location  hints"])
 
-    assert err.value.args[0] == ['SetterError ExternalMap: type of argument "external_id" must be str; got int '
-                                 'instead: 234',
-                                 'SetterError ExternalMap: type of argument "location_hint" must be one of '
-                                 "(str, NoneType); got list instead: ['location  hints']"]
+    assert err.value.args[0] == [
+        'SetterError ExternalMap: type of argument "external_id" must be str; got int ' "instead: 234",
+        'SetterError ExternalMap: type of argument "location_hint" must be one of '
+        "(str, NoneType); got list instead: ['location  hints']",
+    ]

@@ -10,12 +10,12 @@
 # limitations under the License.
 import sys
 
-from spdx.model.actor import ActorType
-from spdx.model.document import Document as Spdx2_Document
 from spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
 from spdx3.payload import Payload
 from spdx3.writer.console.payload_writer import write_payload
-from tests.spdx.fixtures import document_fixture, creation_info_fixture, annotation_fixture, actor_fixture
+from spdx.model.actor import ActorType
+from spdx.model.document import Document as Spdx2_Document
+from tests.spdx.fixtures import actor_fixture, annotation_fixture, creation_info_fixture, document_fixture
 
 
 def test_bump_spdx_document():
@@ -31,5 +31,11 @@ def test_bump_spdx_document():
     assert len(payload.get_full_map()) == 10
 
     # this is more of a temporary test to make sure the dates don't get messed up again
-    assert payload.get_element("#".join([document_namespace, "SPDXRef-DOCUMENT"])).creation_info.created == creation_info_fixture().created
-    assert payload.get_element("#".join([document_namespace, "SPDXRef-Annotation-0"])).creation_info.created == annotation_fixture().annotation_date
+    assert (
+        payload.get_element("#".join([document_namespace, "SPDXRef-DOCUMENT"])).creation_info.created
+        == creation_info_fixture().created
+    )
+    assert (
+        payload.get_element("#".join([document_namespace, "SPDXRef-Annotation-0"])).creation_info.created
+        == annotation_fixture().annotation_date
+    )

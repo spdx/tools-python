@@ -8,8 +8,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from spdx.model.checksum import Checksum as Spdx2_Checksum, ChecksumAlgorithm
-from spdx3.model.hash import HashAlgorithm, Hash
+from spdx3.model.hash import Hash, HashAlgorithm
+from spdx.model.checksum import Checksum as Spdx2_Checksum
+from spdx.model.checksum import ChecksumAlgorithm
 
 
 def bump_checksum(spdx2_checksum: Spdx2_Checksum) -> Hash:

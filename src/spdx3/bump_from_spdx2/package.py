@@ -8,7 +8,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from spdx.model.package import Package as Spdx2_Package
 from spdx3.bump_from_spdx2.actor import bump_actor
 from spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx3.bump_from_spdx2.checksum import bump_checksum
@@ -17,10 +16,12 @@ from spdx3.model.creation_information import CreationInformation
 from spdx3.model.software.package import Package
 from spdx3.model.software.software_purpose import SoftwarePurpose
 from spdx3.payload import Payload
+from spdx.model.package import Package as Spdx2_Package
 
 
-def bump_package(spdx2_package: Spdx2_Package, payload: Payload, creation_information: CreationInformation,
-                 document_namespace: str):
+def bump_package(
+    spdx2_package: Spdx2_Package, payload: Payload, creation_information: CreationInformation, document_namespace: str
+):
     spdx_id = "#".join([document_namespace, spdx2_package.spdx_id])
     name = spdx2_package.name
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
@@ -39,19 +40,34 @@ def bump_package(spdx2_package: Spdx2_Package, payload: Payload, creation_inform
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_package.checksums]
     homepage = spdx2_package.homepage
     print_missing_conversion("package2.source_info", 0)
-    print_missing_conversion("package2.license_concluded, package2.license_info_from_files, package2.license_declared, "
-                             "package2.license_comment, package2.copyright_text", 0,
-                             "and missing definition of license profile")
+    print_missing_conversion(
+        "package2.license_concluded, package2.license_info_from_files, package2.license_declared, "
+        "package2.license_comment, package2.copyright_text",
+        0,
+        "and missing definition of license profile",
+    )
     summary = spdx2_package.summary
     description = spdx2_package.description
     comment = spdx2_package.comment
     print_missing_conversion("package2.external_references", 1, "of ExternalReferences / ExternalIdentifiers")
     print_missing_conversion("package2.attribution_texts", 0)
-    package_purpose = [SoftwarePurpose[
-                           spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
+    package_purpose = (
+        [SoftwarePurpose[spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
+    )
     print_missing_conversion("package2.release_date, package2.built_date, package2.valid_until_date", 0)
 
-    payload.add_element(Package(spdx_id, creation_information, name, verified_using=integrity_methods,
-                                download_location=download_location, homepage=homepage, summary=summary,
-                                description=description, comment=comment, originated_by=originated_by_spdx_id,
-                                package_purpose=package_purpose))
+    payload.add_element(
+        Package(
+            spdx_id,
+            creation_information,
+            name,
+            verified_using=integrity_methods,
+            download_location=download_location,
+            homepage=homepage,
+            summary=summary,
+            description=description,
+            comment=comment,
+            originated_by=originated_by_spdx_id,
+            package_purpose=package_purpose,
+        )
+    )

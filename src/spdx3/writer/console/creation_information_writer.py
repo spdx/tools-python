@@ -10,9 +10,9 @@
 # limitations under the License.
 from typing import TextIO
 
-from spdx.datetime_conversions import datetime_to_iso_string
 from spdx3.model.creation_information import CreationInformation
 from spdx3.writer.console.console import write_value
+from spdx.datetime_conversions import datetime_to_iso_string
 
 
 def write_creation_info(creation_info: CreationInformation, text_output: TextIO, indent: bool = True):

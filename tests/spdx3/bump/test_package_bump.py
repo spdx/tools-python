@@ -10,10 +10,10 @@
 # limitations under the License.
 from unittest import mock
 
-from spdx.model.package import Package as Spdx2_Package
 from spdx3.bump_from_spdx2.package import bump_package
 from spdx3.model.software.package import Package
 from spdx3.payload import Payload
+from spdx.model.package import Package as Spdx2_Package
 from tests.spdx.fixtures import package_fixture
 
 
