@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 
 from common.typing.dataclass_with_properties import dataclass_with_properties

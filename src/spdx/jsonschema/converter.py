@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 from abc import ABC, abstractmethod
 from typing import Any, Dict, Generic, Type, TypeVar

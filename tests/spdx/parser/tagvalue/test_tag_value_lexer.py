@@ -1,6 +1,6 @@
 # Copyright (c) 2014 Ahmed H. Ismail
 # SPDX-FileCopyrightText: 2023 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 

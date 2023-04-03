@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 from rdflib import DOAP, RDF, RDFS, XSD, Graph, Literal, URIRef
