@@ -28,8 +28,7 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     print_missing_conversion("creation_info.document_namespace", 0)
 
     created: datetime = spdx2_creation_info.created
-    # creation_info.creator_comment -> ?
-    print_missing_conversion("creation_info.creator_comment", 0)
+    comment = spdx2_creation_info.document_comment
     data_license = spdx2_creation_info.data_license
     # creation_info.external_document_refs -> spdx_document.imports
     imports = [
@@ -41,7 +40,7 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     # creation_info.document_comment -> spdx_document.comment
     document_comment = spdx2_creation_info.document_comment
     creation_information = CreationInformation(
-        Version("3.0.0"), created, [], [], ["core", "software", "licensing"], data_license
+        Version("3.0.0"), created, [], [], ["core", "software", "licensing"], data_license, comment
     )
 
     # due to creators having a creation_information themselves which inherits from the document's one,

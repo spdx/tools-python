@@ -18,3 +18,4 @@ def write_creation_info(creation_info: CreationInformation, text_output: TextIO,
         write_value("created using", created_using, text_output, indent)
     write_value("profile", ", ".join(creation_info.profile), text_output, indent)
     write_value("data license", creation_info.data_license, text_output, indent)
+    write_value("comment", creation_info.comment, text_output, indent)
