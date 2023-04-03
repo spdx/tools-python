@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 from spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx3.bump_from_spdx2.message import print_missing_conversion
