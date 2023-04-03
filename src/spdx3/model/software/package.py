@@ -17,6 +17,7 @@ from spdx3.model.software.software_purpose import SoftwarePurpose
 class Package(Artifact):
     content_identifier: Optional[str] = None  # anyURI
     package_purpose: Optional[List[SoftwarePurpose]] = None
+    package_version: Optional[str] = None
     download_location: Optional[str] = None  # anyURI
     package_uri: Optional[str] = None  # anyURI
     homepage: Optional[str] = None  # anyURI
@@ -36,6 +37,7 @@ class Package(Artifact):
         originated_by: Optional[str] = None,
         content_identifier: Optional[str] = None,
         package_purpose: Optional[List[SoftwarePurpose]] = None,
+        package_version: Optional[str] = None,
         download_location: Optional[str] = None,
         package_uri: Optional[str] = None,
         homepage: Optional[str] = None,
