@@ -22,3 +22,4 @@ def test_bump_package(creation_information):
 
     assert isinstance(package, Package)
     assert package.spdx_id == expected_new_package_id
+    assert package.package_version == spdx2_package.version
