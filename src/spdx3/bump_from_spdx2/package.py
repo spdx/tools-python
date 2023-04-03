@@ -1,5 +1,5 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
-
+#
 # SPDX-License-Identifier: Apache-2.0
 from spdx3.bump_from_spdx2.actor import bump_actor
 from spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
