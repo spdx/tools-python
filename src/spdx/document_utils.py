@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import List, Union
+from typing import Dict, List, Union
 
 from spdx.model.document import Document
 from spdx.model.file import File
@@ -17,9 +17,15 @@ def get_contained_spdx_element_ids(document: Document) -> List[str]:
 
 
 def get_element_from_spdx_id(document: Document, spdx_id: str) -> Union[Package, File, Snippet, None]:
-    elements = [file_ for file_ in document.files]
-    elements.extend([package_ for package_ in document.packages])
-    elements.extend([snippet_ for snippet_ in document.snippets])
-    for element in elements:
-        if element.spdx_id == spdx_id:
-            return element
+    contained_spdx_elements: Dict[str, Union[Package, File, Snippet]] = get_contained_spdx_elements(document)
+    if spdx_id not in contained_spdx_elements:
+        return None
+    return contained_spdx_elements[spdx_id]
+
+
+def get_contained_spdx_elements(document: Document) -> Dict[str, Union[Package, File, Snippet]]:
+    contained_spdx_elements = {package.spdx_id: package for package in document.packages}
+    contained_spdx_elements.update({file.spdx_id: file for file in document.files})
+    contained_spdx_elements.update({snippet.spdx_id: snippet for snippet in document.snippets})
+
+    return contained_spdx_elements
