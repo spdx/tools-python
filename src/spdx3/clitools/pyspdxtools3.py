@@ -13,22 +13,29 @@ from typing import List
 
 import click
 
+from spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
+from spdx3.payload import Payload
+from spdx3.writer.console.payload_writer import write_payload
 from spdx.model.document import Document
 from spdx.parser.parse_anything import parse_file
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage
-from spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
-from spdx3.payload import Payload
-from spdx3.writer.console.payload_writer import write_payload
 
 
 @click.command()
-@click.option("--infile", "-i", prompt="input file path",
-              help="The file containing the document to be validated or converted.")
-@click.option("--outfile", "-o",
-              help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion).")
-@click.option("--version", help='The SPDX version to be used during parsing and validation (format "SPDX-2.3").',
-              default="SPDX-2.3")
+@click.option(
+    "--infile", "-i", prompt="input file path", help="The file containing the document to be validated or converted."
+)
+@click.option(
+    "--outfile",
+    "-o",
+    help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion).",
+)
+@click.option(
+    "--version",
+    help='The SPDX version to be used during parsing and validation (format "SPDX-2.3").',
+    default="SPDX-2.3",
+)
 @click.option("--novalidation", is_flag=True, help="Don't validate the provided document.")
 def main(infile: str, outfile: str, version: str, novalidation: bool):
     """

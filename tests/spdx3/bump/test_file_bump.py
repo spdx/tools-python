@@ -10,11 +10,11 @@
 # limitations under the License.
 from unittest import mock
 
-from spdx.model.file import File as Spdx2_File
 from spdx3.bump_from_spdx2.file import bump_file
 from spdx3.model.hash import Hash, HashAlgorithm
 from spdx3.model.software.file import File
 from spdx3.payload import Payload
+from spdx.model.file import File as Spdx2_File
 from tests.spdx.fixtures import file_fixture
 
 
