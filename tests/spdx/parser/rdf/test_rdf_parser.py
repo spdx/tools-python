@@ -44,5 +44,5 @@ def test_rdf_parser_with_2_2_example():
     assert len(doc.files) == 4
     assert len(doc.annotations) == 5
     assert len(doc.packages) == 4
-    assert len(doc.relationships) == 9
+    assert len(doc.relationships) == 11
     assert len(doc.extracted_licensing_info) == 5

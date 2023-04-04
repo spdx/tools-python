@@ -49,3 +49,23 @@ def parse_relationship(
     )
 
     return relationship
+
+
+def parse_implicit_relationship(
+    spdx_element_node: URIRef,
+    relationship_type: RelationshipType,
+    related_spdx_element_node: URIRef,
+    graph: Graph,
+    doc_namespace: str,
+) -> Relationship:
+    spdx_element_id = parse_spdx_id(spdx_element_node, doc_namespace, graph)
+    related_spdx_element_id = parse_spdx_id(related_spdx_element_node, doc_namespace, graph)
+    relationship = construct_or_raise_parsing_error(
+        Relationship,
+        dict(
+            spdx_element_id=spdx_element_id,
+            relationship_type=relationship_type,
+            related_spdx_element_id=related_spdx_element_id,
+        ),
+    )
+    return relationship
