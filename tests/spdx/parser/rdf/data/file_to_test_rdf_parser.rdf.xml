@@ -80,8 +80,8 @@
                 <spdx:spdxDocument rdf:resource="https://namespace.com"/>
             </spdx:ExternalDocumentRef>
         </spdx:externalDocumentRef>
-    </spdx:SpdxDocument>
-    <spdx:Package rdf:about="https://some.namespace#SPDXRef-Package">
+                <spdx:describesPackage>
+                <spdx:Package rdf:about="https://some.namespace#SPDXRef-Package">
         <spdx:licenseConcluded>
             <spdx:ConjunctiveLicenseSet rdf:nodeID="N7cbb6cbf0d9d4b77bed24cab18272c1f">
                 <spdx:member rdf:resource="http://spdx.org/licenses/MIT"/>
@@ -137,27 +137,32 @@
                 <rdfs:comment>externalPackageRefComment</rdfs:comment>
             </spdx:ExternalRef>
         </spdx:externalRef>
+        <spdx:hasFile rdf:resource="https://some.namespace#SPDXRef-File"/>
     </spdx:Package>
-    <spdx:Package rdf:about="https://some.namespace#SPDXRef-Package2">
-        <spdx:name>packageName</spdx:name>
-        <spdx:downloadLocation>http://differentdownload.com</spdx:downloadLocation>
-        <spdx:externalRef>
-            <spdx:ExternalRef rdf:nodeID="Nda50d273cd134f45b1ca926a378b8db4">
-                <spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_other"/>
-                <rdfs:comment>This is the external ref for Acme</rdfs:comment>
-                <spdx:referenceLocator>acmecorp/acmenator/4.1.3-alpha</spdx:referenceLocator>
-                <spdx:referenceType rdf:resource="https://some.namespace#LocationRef-acmeforge"/>
-            </spdx:ExternalRef>
-        </spdx:externalRef>
-        <spdx:licenseConcluded>
-                <spdx:ExtractedLicensingInfo rdf:about="https://some.namespace#LicenseRef-2">
-                    <rdfs:seeAlso>https://see.also</rdfs:seeAlso>
-                    <spdx:extractedText>extractedText</spdx:extractedText>
-                    <rdfs:comment>licenseComment</rdfs:comment>
-                    <spdx:name>another license</spdx:name>
-                </spdx:ExtractedLicensingInfo>
-        </spdx:licenseConcluded>
-    </spdx:Package>
+        </spdx:describesPackage>
+        <spdx:describesPackage>
+            <spdx:Package rdf:about="https://some.namespace#SPDXRef-Package2">
+                <spdx:name>packageName</spdx:name>
+                <spdx:downloadLocation>http://differentdownload.com</spdx:downloadLocation>
+                <spdx:externalRef>
+                    <spdx:ExternalRef rdf:nodeID="Nda50d273cd134f45b1ca926a378b8db4">
+                        <spdx:referenceCategory rdf:resource="http://spdx.org/rdf/terms#referenceCategory_other"/>
+                        <rdfs:comment>This is the external ref for Acme</rdfs:comment>
+                        <spdx:referenceLocator>acmecorp/acmenator/4.1.3-alpha</spdx:referenceLocator>
+                        <spdx:referenceType rdf:resource="https://some.namespace#LocationRef-acmeforge"/>
+                    </spdx:ExternalRef>
+                </spdx:externalRef>
+                <spdx:licenseConcluded>
+                    <spdx:ExtractedLicensingInfo rdf:about="https://some.namespace#LicenseRef-2">
+                        <rdfs:seeAlso>https://see.also</rdfs:seeAlso>
+                        <spdx:extractedText>extractedText</spdx:extractedText>
+                        <rdfs:comment>licenseComment</rdfs:comment>
+                        <spdx:name>another license</spdx:name>
+                    </spdx:ExtractedLicensingInfo>
+                </spdx:licenseConcluded>
+            </spdx:Package>
+        </spdx:describesPackage>
+    </spdx:SpdxDocument>
     <spdx:Snippet rdf:about="https://some.namespace#SPDXRef-Snippet">
         <spdx:range>
             <ptr:StartEndPointer rdf:nodeID="N079962c320a64e15bc1b4f2c01ea04b8">
