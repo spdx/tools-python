@@ -6,6 +6,7 @@ from unittest import TestCase
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.external_document_ref import ExternalDocumentRef
@@ -18,7 +19,7 @@ DOCUMENT_STR = "\n".join(
         "SPDXVersion: SPDX-2.3",
         "DataLicense: CC0-1.0",
         "DocumentName: Sample_Document-V2.3",
-        "SPDXID: SPDXRef-DOCUMENT",
+        f"SPDXID: {DOCUMENT_SPDX_ID}",
         "DocumentComment: <text>Sample Comment</text>",
         "DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
         "ExternalDocumentRef: DocumentRef-spdx-tool-1.2 "
@@ -42,7 +43,7 @@ def test_parse_creation_info():
     assert creation_info.spdx_version == "SPDX-2.3"
     assert creation_info.data_license == "CC0-1.0"
     assert creation_info.name == "Sample_Document-V2.3"
-    assert creation_info.spdx_id == "SPDXRef-DOCUMENT"
+    assert creation_info.spdx_id == DOCUMENT_SPDX_ID
     assert creation_info.document_comment == "Sample Comment"
     assert (
         creation_info.document_namespace
@@ -74,7 +75,7 @@ def test_parse_creation_info():
                         "SPDXVersion: SPDX-2.3",
                         "DataLicense: CC0-1.0",
                         "DocumentName: Sample_Document-V2.3",
-                        "SPDXID: SPDXRef-DOCUMENT",
+                        f"SPDXID: {DOCUMENT_SPDX_ID}",
                         "DocumentComment: <text>Sample Comment</text>",
                         "DocumentNamespace: <text>Sample Comment</text>",
                         "ExternalDocumentRef: DocumentRef-spdx-tool-1.2:htp://spdx.org:SHA1: "
@@ -102,7 +103,7 @@ def test_parse_creation_info():
                         "SPDXVersion: SPDX-2.3",
                         "DataLicense: CC0-1.0",
                         "DocumentName: Sample_Document-V2.3",
-                        "SPDXID: SPDXRef-DOCUMENT",
+                        f"SPDXID: {DOCUMENT_SPDX_ID}",
                     ]
                 ),
                 r"__init__() missing 3 required positional arguments: 'document_namespace', 'creators', and 'created'",

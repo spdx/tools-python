@@ -6,6 +6,7 @@ from unittest import TestCase
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.actor import Actor, ActorType
 from spdx.model.annotation import Annotation, AnnotationType
 from spdx.parser.error import SPDXParsingError
@@ -21,19 +22,19 @@ def test_parse_annotation():
         "comment": "Document level annotation",
     }
 
-    annotation = annotation_parser.parse_annotation(annotation_dict, spdx_id="SPDXRef-DOCUMENT")
+    annotation = annotation_parser.parse_annotation(annotation_dict, spdx_id=DOCUMENT_SPDX_ID)
 
     assert annotation.annotator == Actor(ActorType.PERSON, name="Jane Doe")
     assert annotation.annotation_type == AnnotationType.OTHER
     assert annotation.annotation_date == datetime.datetime(2010, 1, 29, 18, 30, 22)
     assert annotation.annotation_comment == "Document level annotation"
-    assert annotation.spdx_id == "SPDXRef-DOCUMENT"
+    assert annotation.spdx_id == DOCUMENT_SPDX_ID
 
 
 def test_parse_all_annotations():
     annotation_parser = AnnotationParser()
     doc_dict = {
-        "SPDXID": "SPDXRef-DOCUMENT",
+        "SPDXID": DOCUMENT_SPDX_ID,
         "packages": [
             {
                 "SPDXID": "SPDXRef-Package",
@@ -87,7 +88,7 @@ def test_parse_all_annotations():
         annotations,
         [
             Annotation(
-                spdx_id="SPDXRef-DOCUMENT",
+                spdx_id=DOCUMENT_SPDX_ID,
                 annotation_type=AnnotationType.REVIEW,
                 annotator=Actor(actor_type=ActorType.PERSON, name="Jane Doe", email=None),
                 annotation_date=datetime.datetime(2010, 1, 29, 18, 30, 22),

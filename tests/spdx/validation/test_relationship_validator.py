@@ -6,6 +6,7 @@ from typing import List
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.document import Document
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
@@ -17,9 +18,7 @@ from tests.spdx.fixtures import document_fixture, relationship_fixture
 
 @pytest.mark.parametrize("related_spdx_element", ["SPDXRef-Package", SpdxNoAssertion(), SpdxNone()])
 def test_valid_relationship(related_spdx_element):
-    relationship = Relationship(
-        "SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, related_spdx_element, comment="comment"
-    )
+    relationship = Relationship(DOCUMENT_SPDX_ID, RelationshipType.DESCRIBES, related_spdx_element, comment="comment")
     validation_messages: List[ValidationMessage] = validate_relationship(relationship, "SPDX-2.3", document_fixture())
 
     assert validation_messages == []
@@ -57,11 +56,11 @@ def test_unknown_spdx_id(spdx_element_id, related_spdx_element_id, expected_mess
     "relationship, expected_message",
     [
         (
-            Relationship("SPDXRef-DOCUMENT", RelationshipType.SPECIFICATION_FOR, "SPDXRef-Package"),
+            Relationship(DOCUMENT_SPDX_ID, RelationshipType.SPECIFICATION_FOR, "SPDXRef-Package"),
             "RelationshipType.SPECIFICATION_FOR is not supported in SPDX-2.2",
         ),
         (
-            Relationship("SPDXRef-DOCUMENT", RelationshipType.REQUIREMENT_DESCRIPTION_FOR, "SPDXRef-Package"),
+            Relationship(DOCUMENT_SPDX_ID, RelationshipType.REQUIREMENT_DESCRIPTION_FOR, "SPDXRef-Package"),
             "RelationshipType.REQUIREMENT_DESCRIPTION_FOR is not supported in SPDX-2.2",
         ),
     ],

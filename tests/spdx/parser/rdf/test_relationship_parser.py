@@ -6,6 +6,7 @@ import os
 import pytest
 from rdflib import RDF, Graph, URIRef
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.relationship import RelationshipType
 from spdx.parser.rdf.relationship_parser import parse_implicit_relationship, parse_relationship
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
@@ -20,7 +21,7 @@ def test_relationship_parser():
 
     relationship = parse_relationship(relationship_node, graph, parent_node, doc_namespace)
 
-    assert relationship.spdx_element_id == "SPDXRef-DOCUMENT"
+    assert relationship.spdx_element_id == DOCUMENT_SPDX_ID
     assert relationship.relationship_type == RelationshipType.DESCRIBES
     assert relationship.related_spdx_element_id == "SPDXRef-File"
     assert relationship.comment == "relationshipComment"
@@ -32,7 +33,7 @@ def test_relationship_parser():
         (
             SPDX_NAMESPACE.SpdxDocument,
             SPDX_NAMESPACE.describesPackage,
-            "SPDXRef-DOCUMENT",
+            DOCUMENT_SPDX_ID,
             RelationshipType.DESCRIBES,
             "SPDXRef-Package",
         ),

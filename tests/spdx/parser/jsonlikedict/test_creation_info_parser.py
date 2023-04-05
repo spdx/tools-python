@@ -6,6 +6,7 @@ from unittest import TestCase
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.external_document_ref import ExternalDocumentRef
@@ -18,7 +19,7 @@ def test_parse_creation_info():
     creation_info_parser = CreationInfoParser()
     doc_dict = {
         "spdxVersion": "2.3",
-        "SPDXID": "SPDXRef-DOCUMENT",
+        "SPDXID": DOCUMENT_SPDX_ID,
         "name": "Example Document",
         "dataLicense": "CC0-1.0",
         "documentNamespace": "namespace",
@@ -39,7 +40,7 @@ def test_parse_creation_info():
     creation_info = creation_info_parser.parse_creation_info(doc_dict)
 
     assert creation_info.spdx_version == "2.3"
-    assert creation_info.spdx_id == "SPDXRef-DOCUMENT"
+    assert creation_info.spdx_id == DOCUMENT_SPDX_ID
     assert creation_info.name == "Example Document"
     assert creation_info.document_namespace == "namespace"
     assert creation_info.created == datetime(2010, 1, 29, 18, 30, 22)
@@ -65,7 +66,7 @@ def test_parse_creation_info():
     "incomplete_dict,expected_message",
     [
         (
-            {"spdxVersion": "2.3", "SPDXID": "SPDXRef-DOCUMENT", "name": "Example Document"},
+            {"spdxVersion": "2.3", "SPDXID": DOCUMENT_SPDX_ID, "name": "Example Document"},
             ["Error while parsing document Example Document: ['CreationInfo does not exist.']"],
         ),
         (
@@ -98,7 +99,7 @@ def test_parse_invalid_creation_info():
     creation_info_parser = CreationInfoParser()
     doc_dict = {
         "spdxVersion": "2.3",
-        "SPDXID": "SPDXRef-DOCUMENT",
+        "SPDXID": DOCUMENT_SPDX_ID,
         "name": "Example Document",
         "creationInfo": {
             "created": "2010-01-29T18:30:22Z",

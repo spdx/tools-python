@@ -9,6 +9,7 @@ import pytest
 from rdflib import RDF, Graph, URIRef
 from rdflib.term import Node
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.version import Version
@@ -24,7 +25,7 @@ def test_parse_creation_info():
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
 
     creation_info, _ = parse_creation_info(graph)
-    assert creation_info.spdx_id == "SPDXRef-DOCUMENT"
+    assert creation_info.spdx_id == DOCUMENT_SPDX_ID
     assert creation_info.spdx_version == "SPDX-2.3"
     assert creation_info.name == "documentName"
     assert creation_info.document_namespace == "https://some.namespace"
@@ -53,7 +54,7 @@ def test_parse_namespace_and_spdx_id():
             r"No '#' found in the URI of SpdxDocument",
         ),
         ([(URIRef(""), RDF.type, URIRef(""))], r"No SpdxDocument found, can't parse rdf file."),
-        ([(URIRef("#SPDXRef-DOCUMENT"), RDF.type, SPDX_NAMESPACE.SpdxDocument)], "No namespace found"),
+        ([(URIRef(f"#{DOCUMENT_SPDX_ID}"), RDF.type, SPDX_NAMESPACE.SpdxDocument)], "No namespace found"),
         (
             [
                 (URIRef("docNamespace1"), RDF.type, SPDX_NAMESPACE.SpdxDocument),
@@ -80,7 +81,7 @@ def test_parse_external_document_refs():
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
     doc_namespace = "https://some.namespace"
     external_doc_ref_node = graph.value(
-        subject=URIRef(f"{doc_namespace}#SPDXRef-DOCUMENT"), predicate=SPDX_NAMESPACE.externalDocumentRef
+        subject=URIRef(f"{doc_namespace}#{DOCUMENT_SPDX_ID}"), predicate=SPDX_NAMESPACE.externalDocumentRef
     )
     assert isinstance(external_doc_ref_node, URIRef)
 

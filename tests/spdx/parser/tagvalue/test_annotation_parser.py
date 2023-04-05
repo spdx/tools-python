@@ -5,6 +5,7 @@ from datetime import datetime
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.annotation import AnnotationType
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser import Parser
@@ -19,7 +20,7 @@ def test_parse_annotation():
             "AnnotationDate: 2010-01-29T18:30:22Z",
             "AnnotationComment: <text>Document level annotation</text>",
             "AnnotationType: OTHER",
-            "SPDXREF: SPDXRef-DOCUMENT",
+            f"SPDXREF: {DOCUMENT_SPDX_ID}",
         ]
     )
     document = parser.parse("\n".join([DOCUMENT_STR, annotation_str]))
@@ -30,7 +31,7 @@ def test_parse_annotation():
     assert annotation.annotation_date == datetime(2010, 1, 29, 18, 30, 22)
     assert annotation.annotation_comment == "Document level annotation"
     assert annotation.annotation_type == AnnotationType.OTHER
-    assert annotation.spdx_id == "SPDXRef-DOCUMENT"
+    assert annotation.spdx_id == DOCUMENT_SPDX_ID
 
 
 @pytest.mark.parametrize(
@@ -51,7 +52,7 @@ def test_parse_annotation():
         (
             "Annotator: Jane Doe()\nAnnotationDate: 201001-29T18:30:22Z\n"
             "AnnotationComment: <text>Document level annotation</text>\nAnnotationType: OTHER\n"
-            "SPDXREF: SPDXRef-DOCUMENT",
+            f"SPDXREF: {DOCUMENT_SPDX_ID}",
             "Error while parsing Annotation: ['Error while parsing Annotator: Token did "
             "not match specified grammar rule. Line: 1', 'Error while parsing "
             "AnnotationDate: Token did not match specified grammar rule. Line: 2']",

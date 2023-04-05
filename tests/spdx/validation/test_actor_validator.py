@@ -6,6 +6,7 @@ from typing import List
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.actor import ActorType
 from spdx.validation.actor_validator import validate_actor
 from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
@@ -14,7 +15,7 @@ from tests.spdx.fixtures import actor_fixture
 
 def test_valid_actor_person():
     actor = actor_fixture()
-    validation_messages: List[ValidationMessage] = validate_actor(actor, "SPDXRef-DOCUMENT")
+    validation_messages: List[ValidationMessage] = validate_actor(actor, DOCUMENT_SPDX_ID)
 
     assert validation_messages == []
 
@@ -29,7 +30,7 @@ def test_valid_actor_person():
     ],
 )
 def test_invalid_actor(actor, expected_message):
-    parent_id = "SPDXRef-DOCUMENT"
+    parent_id = DOCUMENT_SPDX_ID
     validation_messages: List[ValidationMessage] = validate_actor(actor, parent_id)
 
     expected = ValidationMessage(

@@ -10,6 +10,7 @@ from rdflib import RDF, RDFS, Graph, Namespace
 from rdflib.exceptions import UniquenessError
 from rdflib.term import URIRef
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.document import CreationInfo
 from spdx.model.external_document_ref import ExternalDocumentRef
@@ -98,7 +99,7 @@ def parse_namespace_and_spdx_id(graph: Graph) -> (str, str):
     if "#" not in subject:
         logging.error(
             "No '#' found in the URI of SpdxDocument, "
-            "the URI for the SpdxDocument should be the namespace appended by '#SPDXRef-DOCUMENT."
+            f"the URI for the SpdxDocument should be the namespace appended by '#{DOCUMENT_SPDX_ID}."
         )
         sys.exit(1)
 
@@ -106,7 +107,8 @@ def parse_namespace_and_spdx_id(graph: Graph) -> (str, str):
 
     if not namespace:
         logging.error(
-            "No namespace found, the URI for the SpdxDocument should be the namespace appended by '#SPDXRef-DOCUMENT."
+            f"No namespace found, the URI for the SpdxDocument should be the namespace appended by "
+            f"'#{DOCUMENT_SPDX_ID}."
         )
         sys.exit(1)
 

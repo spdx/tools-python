@@ -5,6 +5,7 @@ from unittest import TestCase
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
@@ -15,7 +16,7 @@ def test_parse_relationship():
     relationship_parser = RelationshipParser()
 
     relationship_dict = {
-        "spdxElementId": "SPDXRef-DOCUMENT",
+        "spdxElementId": DOCUMENT_SPDX_ID,
         "relationshipType": "CONTAINS",
         "relatedSpdxElement": "NOASSERTION",
         "comment": "Comment.",
@@ -24,7 +25,7 @@ def test_parse_relationship():
     relationship = relationship_parser.parse_relationship(relationship_dict)
 
     assert relationship.relationship_type == RelationshipType.CONTAINS
-    assert relationship.spdx_element_id == "SPDXRef-DOCUMENT"
+    assert relationship.spdx_element_id == DOCUMENT_SPDX_ID
     assert relationship.related_spdx_element_id == SpdxNoAssertion()
     assert relationship.comment == "Comment."
 
@@ -32,7 +33,7 @@ def test_parse_relationship():
 def test_parse_incomplete_relationship():
     relationship_parser = RelationshipParser()
     relationship_dict = {
-        "spdxElementId": "SPDXRef-DOCUMENT",
+        "spdxElementId": DOCUMENT_SPDX_ID,
         "relatedSpdxElement": "SPDXRef-Package",
         "comment": "Comment.",
     }
@@ -62,12 +63,12 @@ def test_parse_document_describes():
     relationship_parser = RelationshipParser()
 
     document_dict = {
-        "SPDXID": "SPDXRef-DOCUMENT",
+        "SPDXID": DOCUMENT_SPDX_ID,
         "documentDescribes": ["SPDXRef-Package", "SPDXRef-File", "SPDXRef-Snippet"],
     }
 
     relationships = relationship_parser.parse_document_describes(
-        doc_spdx_id="SPDXRef-DOCUMENT",
+        doc_spdx_id=DOCUMENT_SPDX_ID,
         described_spdx_ids=document_dict.get("documentDescribes"),
         existing_relationships=[],
     )
@@ -76,9 +77,9 @@ def test_parse_document_describes():
     TestCase().assertCountEqual(
         relationships,
         [
-            Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-Package"),
-            Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-File"),
-            Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-Snippet"),
+            Relationship(DOCUMENT_SPDX_ID, RelationshipType.DESCRIBES, "SPDXRef-Package"),
+            Relationship(DOCUMENT_SPDX_ID, RelationshipType.DESCRIBES, "SPDXRef-File"),
+            Relationship(DOCUMENT_SPDX_ID, RelationshipType.DESCRIBES, "SPDXRef-Snippet"),
         ],
     )
 
@@ -90,14 +91,14 @@ def test_parse_document_describes():
             ["SPDXRef-Package", "SPDXRef-File"],
             [
                 {
-                    "spdxElementId": "SPDXRef-DOCUMENT",
+                    "spdxElementId": DOCUMENT_SPDX_ID,
                     "relatedSpdxElement": "SPDXRef-Package",
                     "relationshipType": "DESCRIBES",
                     "comment": "This relationship has a comment.",
                 },
                 {
                     "spdxElementId": "SPDXRef-File",
-                    "relatedSpdxElement": "SPDXRef-DOCUMENT",
+                    "relatedSpdxElement": DOCUMENT_SPDX_ID,
                     "relationshipType": "DESCRIBED_BY",
                     "comment": "This relationship has a comment.",
                 },
@@ -106,11 +107,11 @@ def test_parse_document_describes():
                 Relationship(
                     related_spdx_element_id="SPDXRef-Package",
                     relationship_type=RelationshipType.DESCRIBES,
-                    spdx_element_id="SPDXRef-DOCUMENT",
+                    spdx_element_id=DOCUMENT_SPDX_ID,
                     comment="This relationship has a comment.",
                 ),
                 Relationship(
-                    related_spdx_element_id="SPDXRef-DOCUMENT",
+                    related_spdx_element_id=DOCUMENT_SPDX_ID,
                     relationship_type=RelationshipType.DESCRIBED_BY,
                     spdx_element_id="SPDXRef-File",
                     comment="This relationship has a comment.",
@@ -124,12 +125,12 @@ def test_parse_document_describes():
                 Relationship(
                     related_spdx_element_id="SPDXRef-Package",
                     relationship_type=RelationshipType.DESCRIBES,
-                    spdx_element_id="SPDXRef-DOCUMENT",
+                    spdx_element_id=DOCUMENT_SPDX_ID,
                 ),
                 Relationship(
                     related_spdx_element_id="SPDXRef-File",
                     relationship_type=RelationshipType.DESCRIBES,
-                    spdx_element_id="SPDXRef-DOCUMENT",
+                    spdx_element_id=DOCUMENT_SPDX_ID,
                 ),
             ],
         ),
@@ -140,7 +141,7 @@ def test_parse_document_describes_without_duplicating_relationships(
 ):
     relationship_parser = RelationshipParser()
     document_dict = {
-        "SPDXID": "SPDXRef-DOCUMENT",
+        "SPDXID": DOCUMENT_SPDX_ID,
         "documentDescribes": document_describes,
         "relationships": relationships,
     }
