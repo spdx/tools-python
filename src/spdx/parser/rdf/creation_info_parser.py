@@ -19,7 +19,12 @@ from spdx.parser.error import SPDXParsingError
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.checksum_parser import parse_checksum
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_spdx_id, remove_prefix
+from spdx.parser.rdf.graph_parsing_functions import (
+    get_correctly_typed_triples,
+    parse_literal,
+    parse_spdx_id,
+    remove_prefix,
+)
 from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 
 
@@ -50,10 +55,14 @@ def parse_creation_info(graph: Graph) -> Tuple[CreationInfo, URIRef]:
     )
     creator_comment = parse_literal(logger, graph, creation_info_node, RDFS.comment)
     creators = []
-    for _, _, creator_literal in graph.triples((creation_info_node, SPDX_NAMESPACE.creator, None)):
-        creators.append(ActorParser.parse_actor(creator_literal))
+    for _, _, creator_literal in get_correctly_typed_triples(
+        logger, graph, creation_info_node, SPDX_NAMESPACE.creator
+    ):
+        creators.append(ActorParser.parse_actor(creator_literal.toPython()))
     external_document_refs = []
-    for _, _, external_document_node in graph.triples((doc_node, SPDX_NAMESPACE.externalDocumentRef, None)):
+    for _, _, external_document_node in get_correctly_typed_triples(
+        logger, graph, doc_node, SPDX_NAMESPACE.externalDocumentRef
+    ):
         external_document_refs.append(parse_external_document_refs(external_document_node, graph, namespace))
 
     raise_parsing_error_if_logger_has_messages(logger, "CreationInfo")
@@ -93,7 +102,7 @@ def parse_namespace_and_spdx_id(graph: Graph) -> (str, str):
         )
         sys.exit(1)
 
-    namespace, spdx_id = urldefrag(subject)
+    namespace, spdx_id = urldefrag(str(subject))
 
     if not namespace:
         logging.error(

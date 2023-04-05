@@ -9,6 +9,7 @@ from spdx.parser.parsing_functions import construct_or_raise_parsing_error, rais
 from spdx.parser.rdf.checksum_parser import parse_checksum
 from spdx.parser.rdf.graph_parsing_functions import (
     apply_parsing_method_or_log_error,
+    get_correctly_typed_triples,
     get_correctly_typed_value,
     parse_enum_value,
     parse_literal,
@@ -24,7 +25,7 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
     spdx_id = parse_spdx_id(file_node, doc_namespace, graph)
     name = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.fileName)
     checksums = []
-    for _, _, checksum_node in graph.triples((file_node, SPDX_NAMESPACE.checksum, None)):
+    for _, _, checksum_node in get_correctly_typed_triples(logger, graph, file_node, SPDX_NAMESPACE.checksum):
         checksums.append(parse_checksum(checksum_node, graph))
 
     file_types = []
@@ -39,25 +40,31 @@ def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
         graph,
         file_node,
         SPDX_NAMESPACE.licenseConcluded,
-        parsing_method=lambda x: parse_license_expression(x, graph, doc_namespace),
+        parsing_method=lambda x: parse_license_expression(x, graph, doc_namespace, logger),
     )
     license_info_in_file = []
     for _, _, license_info_from_files_node in graph.triples((file_node, SPDX_NAMESPACE.licenseInfoInFile, None)):
         license_info_in_file.append(
             get_correctly_typed_value(
-                logger, license_info_from_files_node, lambda x: parse_license_expression(x, graph, doc_namespace)
+                logger,
+                license_info_from_files_node,
+                lambda x: parse_license_expression(x, graph, doc_namespace, logger),
             )
         )
     license_comment = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.licenseComments)
     copyright_text = parse_literal_or_no_assertion_or_none(logger, graph, file_node, SPDX_NAMESPACE.copyrightText)
     file_contributors = []
-    for _, _, file_contributor in graph.triples((file_node, SPDX_NAMESPACE.fileContributor, None)):
+    for _, _, file_contributor in get_correctly_typed_triples(
+        logger, graph, file_node, SPDX_NAMESPACE.fileContributor, None
+    ):
         file_contributors.append(file_contributor.toPython())
 
     notice_text = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.noticeText)
     comment = parse_literal(logger, graph, file_node, RDFS.comment)
     attribution_texts = []
-    for _, _, attribution_text_literal in graph.triples((file_node, SPDX_NAMESPACE.attributionText, None)):
+    for _, _, attribution_text_literal in get_correctly_typed_triples(
+        logger, graph, file_node, SPDX_NAMESPACE.attributionText, None
+    ):
         attribution_texts.append(attribution_text_literal.toPython())
     raise_parsing_error_if_logger_has_messages(logger, "File")
     file = construct_or_raise_parsing_error(

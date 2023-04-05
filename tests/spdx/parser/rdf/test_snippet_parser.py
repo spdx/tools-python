@@ -6,7 +6,7 @@ from unittest import TestCase
 
 import pytest
 from license_expression import get_spdx_licensing
-from rdflib import RDF, BNode, Graph, Literal
+from rdflib import RDF, BNode, Graph, Literal, URIRef
 
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.parser.error import SPDXParsingError
@@ -18,6 +18,7 @@ def test_parse_snippet():
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
     snippet_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.Snippet)
     doc_namespace = "https://some.namespace"
+    assert isinstance(snippet_node, URIRef)
 
     snippet = parse_snippet(snippet_node, graph, doc_namespace)
 
@@ -60,7 +61,9 @@ def test_parse_ranges(predicate_value_class_member):
 
     add_range_to_graph_helper(graph, predicate_value_class_member)
 
-    range_dict = parse_ranges(graph.value(predicate=RDF.type, object=POINTER_NAMESPACE.StartEndPointer), graph)
+    range_node = graph.value(predicate=RDF.type, object=POINTER_NAMESPACE.StartEndPointer)
+    assert isinstance(range_node, BNode)
+    range_dict = parse_ranges(range_node, graph)
 
     assert pointer_class.fragment in range_dict.keys()
     assert range_dict[pointer_class.fragment][0] == predicate_value_class_member[0][1]
@@ -90,7 +93,9 @@ def test_parse_ranges_wrong_pair_of_pointer_classes(predicate_value_class_member
 
     add_range_to_graph_helper(graph, predicate_value_class_member)
 
-    range_dict = parse_ranges(graph.value(predicate=RDF.type, object=POINTER_NAMESPACE.StartEndPointer), graph)
+    range_node = graph.value(predicate=RDF.type, object=POINTER_NAMESPACE.StartEndPointer)
+    assert isinstance(range_node, BNode)
+    range_dict = parse_ranges(range_node, graph)
 
     assert pointer_class.fragment in range_dict.keys()
     assert range_dict[pointer_class.fragment][0] is None
@@ -141,7 +146,9 @@ def test_parse_ranges_error(predicate_value_class_member, expected_message):
     add_range_to_graph_helper(graph, predicate_value_class_member)
 
     with pytest.raises(SPDXParsingError, match=expected_message):
-        parse_ranges(graph.value(predicate=RDF.type, object=POINTER_NAMESPACE.StartEndPointer), graph)
+        range_node = graph.value(predicate=RDF.type, object=POINTER_NAMESPACE.StartEndPointer)
+        assert isinstance(range_node, BNode)
+        parse_ranges(range_node, graph)
 
 
 def add_range_to_graph_helper(graph, predicate_value_class_member):

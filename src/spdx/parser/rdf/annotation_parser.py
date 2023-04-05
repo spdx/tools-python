@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from rdflib import RDFS, Graph, URIRef
+from rdflib import RDFS, BNode, Graph, URIRef
 
 from spdx.datetime_conversions import datetime_from_str
 from spdx.model.annotation import Annotation, AnnotationType
@@ -12,7 +12,7 @@ from spdx.parser.rdf.graph_parsing_functions import parse_enum_value, parse_lite
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
-def parse_annotation(annotation_node: URIRef, graph: Graph, parent_node: URIRef, doc_namespace: str) -> Annotation:
+def parse_annotation(annotation_node: BNode, graph: Graph, parent_node: URIRef, doc_namespace: str) -> Annotation:
     logger = Logger()
     spdx_id = parse_spdx_id(parent_node, doc_namespace, graph)
     annotator = parse_literal(

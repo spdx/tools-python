@@ -4,7 +4,7 @@
 import os
 from datetime import datetime
 
-from rdflib import Graph, URIRef
+from rdflib import BNode, Graph, URIRef
 
 from spdx.model.actor import Actor, ActorType
 from spdx.model.annotation import AnnotationType
@@ -17,6 +17,7 @@ def test_parse_annotation():
     doc_namespace = "https://some.namespace"
     file_node = URIRef(f"{doc_namespace}#SPDXRef-File")
     annotation_node = graph.value(subject=file_node, predicate=SPDX_NAMESPACE.annotation)
+    assert isinstance(annotation_node, BNode)
 
     annotation = parse_annotation(annotation_node, graph, file_node, doc_namespace)
 

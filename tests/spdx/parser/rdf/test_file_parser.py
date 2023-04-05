@@ -5,7 +5,7 @@ import os
 from unittest import TestCase
 
 from license_expression import get_spdx_licensing
-from rdflib import RDF, Graph
+from rdflib import RDF, Graph, URIRef
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.file import FileType
@@ -18,6 +18,7 @@ def test_parse_file():
     graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/file_to_test_rdf_parser.rdf.xml"))
     file_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.File)
     doc_namespace = "https://some.namespace"
+    assert isinstance(file_node, URIRef)
 
     file = parse_file(file_node, graph, doc_namespace)
 

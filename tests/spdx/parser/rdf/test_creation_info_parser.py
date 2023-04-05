@@ -82,6 +82,7 @@ def test_parse_external_document_refs():
     external_doc_ref_node = graph.value(
         subject=URIRef(f"{doc_namespace}#SPDXRef-DOCUMENT"), predicate=SPDX_NAMESPACE.externalDocumentRef
     )
+    assert isinstance(external_doc_ref_node, URIRef)
 
     external_document_ref = parse_external_document_refs(external_doc_ref_node, graph, doc_namespace)
 

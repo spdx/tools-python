@@ -5,7 +5,7 @@ from typing import Dict, Optional, Tuple
 
 from rdflib import RDF, RDFS, Graph
 from rdflib.exceptions import UniquenessError
-from rdflib.term import Node, URIRef
+from rdflib.term import BNode, Node, URIRef
 
 from spdx.model.snippet import Snippet
 from spdx.parser.error import SPDXParsingError
@@ -13,7 +13,9 @@ from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
 from spdx.parser.rdf.graph_parsing_functions import (
     apply_parsing_method_or_log_error,
+    get_correctly_typed_triples,
     get_correctly_typed_value,
+    get_value_from_graph,
     parse_literal,
     parse_literal_or_no_assertion_or_none,
     parse_spdx_id,
@@ -25,7 +27,9 @@ from spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
 def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Snippet:
     logger = Logger()
     spdx_id = parse_spdx_id(snippet_node, doc_namespace, graph)
-    file_spdx_id_uri = graph.value(subject=snippet_node, predicate=SPDX_NAMESPACE.snippetFromFile)
+    file_spdx_id_uri = get_value_from_graph(
+        logger, graph, subject=snippet_node, predicate=SPDX_NAMESPACE.snippetFromFile
+    )
     file_spdx_id = parse_spdx_id(file_spdx_id_uri, doc_namespace, graph)
     byte_range = None
     line_range = None
@@ -40,13 +44,15 @@ def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Sni
         graph,
         snippet_node,
         SPDX_NAMESPACE.licenseConcluded,
-        parsing_method=lambda x: parse_license_expression(x, graph, doc_namespace),
+        parsing_method=lambda x: parse_license_expression(x, graph, doc_namespace, logger),
     )
     license_info_in_snippet = []
     for _, _, license_info_in_snippet_node in graph.triples((snippet_node, SPDX_NAMESPACE.licenseInfoInSnippet, None)):
         license_info_in_snippet.append(
             get_correctly_typed_value(
-                logger, license_info_in_snippet_node, lambda x: parse_license_expression(x, graph, doc_namespace)
+                logger,
+                license_info_in_snippet_node,
+                lambda x: parse_license_expression(x, graph, doc_namespace, logger),
             )
         )
     license_comment = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.licenseComments)
@@ -54,7 +60,9 @@ def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Sni
     comment = parse_literal(logger, graph, snippet_node, RDFS.comment)
     name = parse_literal(logger, graph, snippet_node, SPDX_NAMESPACE.name)
     attribution_texts = []
-    for _, _, attribution_text_literal in graph.triples((snippet_node, SPDX_NAMESPACE.attributionText, None)):
+    for _, _, attribution_text_literal in get_correctly_typed_triples(
+        logger, graph, snippet_node, SPDX_NAMESPACE.attributionText, None
+    ):
         attribution_texts.append(attribution_text_literal.toPython())
 
     raise_parsing_error_if_logger_has_messages(logger, "Snippet")
@@ -96,7 +104,7 @@ def set_range_or_log_error(
     return byte_range, line_range
 
 
-def parse_ranges(start_end_pointer: URIRef, graph: Graph) -> Dict[str, Tuple[int, int]]:
+def parse_ranges(start_end_pointer: BNode, graph: Graph) -> Dict[str, Tuple[int, int]]:
     range_values = dict()
     start_pointer_type, start_pointer_node = get_pointer_type(graph, POINTER_NAMESPACE.startPointer, start_end_pointer)
     end_pointer_type, end_pointer_node = get_pointer_type(graph, POINTER_NAMESPACE.endPointer, start_end_pointer)
@@ -110,14 +118,14 @@ def parse_ranges(start_end_pointer: URIRef, graph: Graph) -> Dict[str, Tuple[int
     return {str(start_pointer_type.fragment): (range_values["startPointer"], range_values["endPointer"])}
 
 
-def get_pointer_type(graph: Graph, pointer: URIRef, start_end_pointer: URIRef) -> Tuple[URIRef, URIRef]:
+def get_pointer_type(graph: Graph, pointer: URIRef, start_end_pointer: BNode) -> Tuple[URIRef, Node]:
     try:
         pointer_node = graph.value(start_end_pointer, pointer, any=False)
     except UniquenessError:
         raise SPDXParsingError([f"Multiple values for {pointer.fragment}"])
     if not pointer_node:
         raise SPDXParsingError([f"Couldn't find pointer of type {pointer.fragment}."])
-    pointer_type = graph.value(pointer_node, RDF.type)
+    pointer_type = get_value_from_graph(Logger(), graph, pointer_node, RDF.type)
     return pointer_type, pointer_node
 
 
@@ -129,9 +137,9 @@ POINTER_MATCHING = {
 
 def parse_range_value(graph: Graph, pointer_node: Node, predicate: URIRef) -> Optional[int]:
     try:
-        value = graph.value(pointer_node, predicate, any=False)
+        value = get_value_from_graph(Logger(), graph, pointer_node, predicate, _any=False)
     except UniquenessError:
         raise SPDXParsingError([f"Multiple values for {predicate.fragment} found."])
     if value:
-        value = int(value)
+        value = int(value.toPython())
     return value

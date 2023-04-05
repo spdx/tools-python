@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from rdflib import Graph, URIRef
+from rdflib import BNode, Graph
 
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.parser.error import SPDXParsingError
@@ -11,7 +11,7 @@ from spdx.parser.rdf.graph_parsing_functions import parse_literal, remove_prefix
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
-def parse_checksum(parent_node: URIRef, graph: Graph) -> Checksum:
+def parse_checksum(parent_node: BNode, graph: Graph) -> Checksum:
     logger = Logger()
     algorithm = parse_literal(
         logger, graph, parent_node, SPDX_NAMESPACE.algorithm, parsing_method=convert_rdf_to_algorithm
