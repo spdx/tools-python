@@ -7,6 +7,7 @@ from unittest import TestCase
 import pytest
 from license_expression import get_spdx_licensing
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
@@ -112,7 +113,7 @@ def test_parse_package():
             "Error while parsing Package: ['Invalid ExternalPackageRefCategory: " "category. Line: 2']",
         ),
         (
-            "SPDXID:SPDXRef-DOCUMENT\nPackageName: TestPackage\nSPDXID:SPDXRef-Package\n"
+            f"SPDXID:{DOCUMENT_SPDX_ID}\nPackageName: TestPackage\nSPDXID:SPDXRef-Package\n"
             "PackageDownloadLocation: download.com\nPackageVerificationCode: category reference locator",
             "Error while parsing Package: ['Error while parsing PackageVerificationCode: "
             "Value did not match expected format. Line: 5']",

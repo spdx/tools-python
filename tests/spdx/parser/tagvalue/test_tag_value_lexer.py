@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.parser.tagvalue.lexer import SPDXLexer
 
 
@@ -26,7 +27,7 @@ def test_tokenization_of_document(lexer):
             "SPDXVersion: SPDX-2.1",
             "DataLicense: CC0-1.0",
             "DocumentName: Sample_Document-V2.1",
-            "SPDXID: SPDXRef-DOCUMENT",
+            f"SPDXID: {DOCUMENT_SPDX_ID}",
             "DocumentComment: <text>Sample Comment</text>",
             "DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
         ]
@@ -39,7 +40,7 @@ def test_tokenization_of_document(lexer):
     token_assert_helper(lexer.token(), "DOC_NAME", "DocumentName", 3)
     token_assert_helper(lexer.token(), "LINE", "Sample_Document-V2.1", 3)
     token_assert_helper(lexer.token(), "SPDX_ID", "SPDXID", 4)
-    token_assert_helper(lexer.token(), "LINE", "SPDXRef-DOCUMENT", 4)
+    token_assert_helper(lexer.token(), "LINE", DOCUMENT_SPDX_ID, 4)
     token_assert_helper(lexer.token(), "DOC_COMMENT", "DocumentComment", 5)
     token_assert_helper(lexer.token(), "TEXT", "<text>Sample Comment</text>", 5)
     token_assert_helper(lexer.token(), "DOC_NAMESPACE", "DocumentNamespace", 6)
@@ -285,7 +286,7 @@ def test_tokenization_of_annotation(lexer):
             "AnnotationDate: 2010-01-29T18:30:22Z",
             "AnnotationComment: <text>Document level annotation</text>",
             "AnnotationType: OTHER",
-            "SPDXREF: SPDXRef-DOCUMENT",
+            f"SPDXREF: {DOCUMENT_SPDX_ID}",
         ]
     )
 
@@ -299,13 +300,13 @@ def test_tokenization_of_annotation(lexer):
     token_assert_helper(lexer.token(), "ANNOTATION_TYPE", "AnnotationType", 4)
     token_assert_helper(lexer.token(), "LINE", "OTHER", 4)
     token_assert_helper(lexer.token(), "ANNOTATION_SPDX_ID", "SPDXREF", 5)
-    token_assert_helper(lexer.token(), "LINE", "SPDXRef-DOCUMENT", 5)
+    token_assert_helper(lexer.token(), "LINE", DOCUMENT_SPDX_ID, 5)
 
 
 def test_tokenization_of_relationship(lexer):
     relationship_str = "\n".join(
         [
-            "Relationship: SPDXRef-DOCUMENT DESCRIBES NONE",
+            f"Relationship: {DOCUMENT_SPDX_ID} DESCRIBES NONE",
             "RelationshipComment: This is a comment.",
             "Relationship: DocumentRef-extern:SPDXRef-Package DESCRIBES NONE",
         ]
@@ -313,7 +314,7 @@ def test_tokenization_of_relationship(lexer):
 
     lexer.input(relationship_str)
     token_assert_helper(lexer.token(), "RELATIONSHIP", "Relationship", 1)
-    token_assert_helper(lexer.token(), "LINE", "SPDXRef-DOCUMENT DESCRIBES NONE", 1)
+    token_assert_helper(lexer.token(), "LINE", f"{DOCUMENT_SPDX_ID} DESCRIBES NONE", 1)
     token_assert_helper(lexer.token(), "RELATIONSHIP_COMMENT", "RelationshipComment", 2)
     token_assert_helper(lexer.token(), "LINE", "This is a comment.", 2)
     token_assert_helper(lexer.token(), "RELATIONSHIP", "Relationship", 3)

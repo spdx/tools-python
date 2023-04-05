@@ -6,6 +6,7 @@ from unittest.mock import MagicMock, call, mock_open, patch
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.document import CreationInfo
 from spdx.writer.tagvalue.creation_info_writer import write_creation_info
 from tests.spdx.fixtures import actor_fixture, creation_info_fixture
@@ -19,7 +20,7 @@ from tests.spdx.fixtures import actor_fixture, creation_info_fixture
             [
                 call("SPDXVersion: SPDX-2.3\n"),
                 call("DataLicense: CC0-1.0\n"),
-                call("SPDXID: SPDXRef-DOCUMENT\n"),
+                call(f"SPDXID: {DOCUMENT_SPDX_ID}\n"),
                 call("DocumentName: documentName\n"),
                 call("DocumentNamespace: https://some.namespace\n"),
                 call("DocumentComment: documentComment\n"),
@@ -39,7 +40,7 @@ from tests.spdx.fixtures import actor_fixture, creation_info_fixture
         (
             CreationInfo(
                 spdx_version="SPDX-2.3",
-                spdx_id="SPDXRef-DOCUMENT",
+                spdx_id=DOCUMENT_SPDX_ID,
                 creators=[actor_fixture()],
                 name="Test document",
                 document_namespace="https://namespace.com",
@@ -48,7 +49,7 @@ from tests.spdx.fixtures import actor_fixture, creation_info_fixture
             [
                 call("SPDXVersion: SPDX-2.3\n"),
                 call("DataLicense: CC0-1.0\n"),
-                call("SPDXID: SPDXRef-DOCUMENT\n"),
+                call(f"SPDXID: {DOCUMENT_SPDX_ID}\n"),
                 call("DocumentName: Test document\n"),
                 call("DocumentNamespace: https://namespace.com\n"),
                 call("\n"),

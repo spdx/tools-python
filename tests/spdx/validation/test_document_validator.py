@@ -6,6 +6,7 @@ from typing import List, Optional
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.document import CreationInfo, Document
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.validation.document_validator import validate_full_spdx_document
@@ -82,8 +83,8 @@ def test_spdx_version_handling(creation_info: CreationInfo, version_input: str, 
 @pytest.mark.parametrize(
     "relationships",
     [
-        [Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-File")],
-        [Relationship("SPDXRef-File", RelationshipType.DESCRIBED_BY, "SPDXRef-DOCUMENT")],
+        [Relationship(DOCUMENT_SPDX_ID, RelationshipType.DESCRIBES, "SPDXRef-File")],
+        [Relationship("SPDXRef-File", RelationshipType.DESCRIBED_BY, DOCUMENT_SPDX_ID)],
     ],
 )
 def test_document_describes_at_least_one_element(relationships):
@@ -101,9 +102,9 @@ def test_document_does_not_describe_an_element():
 
     assert validation_messages == [
         ValidationMessage(
-            'there must be at least one relationship "SPDXRef-DOCUMENT DESCRIBES ..." or "... DESCRIBED_BY '
-            'SPDXRef-DOCUMENT"',
-            ValidationContext(spdx_id="SPDXRef-DOCUMENT", element_type=SpdxElementType.DOCUMENT),
+            f'there must be at least one relationship "{DOCUMENT_SPDX_ID} DESCRIBES ..." or "... DESCRIBED_BY '
+            f'{DOCUMENT_SPDX_ID}"',
+            ValidationContext(spdx_id=DOCUMENT_SPDX_ID, element_type=SpdxElementType.DOCUMENT),
         )
     ]
 
@@ -115,7 +116,7 @@ def test_duplicated_spdx_ids():
             file_fixture(spdx_id="SPDXRef-2"),
             file_fixture(spdx_id="SPDXRef-3"),
         ],
-        packages=[package_fixture(spdx_id="SPDXRef-2"), package_fixture(spdx_id="SPDXRef-DOCUMENT")],
+        packages=[package_fixture(spdx_id="SPDXRef-2"), package_fixture(spdx_id=DOCUMENT_SPDX_ID)],
         snippets=[snippet_fixture(spdx_id="SPDXRef-2"), snippet_fixture(spdx_id="SPDXRef-3")],
     )
 
@@ -126,7 +127,7 @@ def test_duplicated_spdx_ids():
     assert validation_messages == [
         ValidationMessage(
             "every spdx_id must be unique within the document, but found the following duplicates: ['SPDXRef-2', "
-            "'SPDXRef-3', 'SPDXRef-DOCUMENT']",
+            f"'SPDXRef-3', '{DOCUMENT_SPDX_ID}']",
             context,
         )
     ]

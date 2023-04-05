@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
@@ -16,13 +17,13 @@ from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
     [
         (
             "\n".join(
-                ["Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-File", "RelationshipComment: This is a comment."]
+                [f"Relationship: {DOCUMENT_SPDX_ID} DESCRIBES SPDXRef-File", "RelationshipComment: This is a comment."]
             ),
-            Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-File", "This is a comment."),
+            Relationship(DOCUMENT_SPDX_ID, RelationshipType.DESCRIBES, "SPDXRef-File", "This is a comment."),
         ),
         (
-            "Relationship: SPDXRef-DOCUMENT PATCH_FOR NOASSERTION",
-            Relationship("SPDXRef-DOCUMENT", RelationshipType.PATCH_FOR, SpdxNoAssertion()),
+            f"Relationship: {DOCUMENT_SPDX_ID} PATCH_FOR NOASSERTION",
+            Relationship(DOCUMENT_SPDX_ID, RelationshipType.PATCH_FOR, SpdxNoAssertion()),
         ),
         (
             "Relationship: SPDXRef-CarolCompression DEPENDS_ON NONE",

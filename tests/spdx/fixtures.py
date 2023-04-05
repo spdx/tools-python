@@ -5,6 +5,7 @@ from datetime import datetime
 
 from license_expression import get_spdx_licensing
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.actor import Actor, ActorType
 from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
@@ -46,7 +47,7 @@ def package_verification_code_fixture(
 
 def creation_info_fixture(
     spdx_version="SPDX-2.3",
-    spdx_id="SPDXRef-DOCUMENT",
+    spdx_id=DOCUMENT_SPDX_ID,
     name="documentName",
     document_namespace="https://some.namespace",
     creators=None,
@@ -264,7 +265,7 @@ def extracted_licensing_info_fixture(
 
 
 def relationship_fixture(
-    spdx_element_id="SPDXRef-DOCUMENT",
+    spdx_element_id=DOCUMENT_SPDX_ID,
     relationship_type=RelationshipType.DESCRIBES,
     related_spdx_element_id="SPDXRef-File",
     comment="relationshipComment",

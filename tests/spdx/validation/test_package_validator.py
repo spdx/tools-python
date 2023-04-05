@@ -8,6 +8,7 @@ from unittest import TestCase
 import pytest
 from license_expression import Licensing
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
@@ -63,7 +64,7 @@ def test_invalid_package(package_input, expected_message):
         expected_message,
         ValidationContext(
             spdx_id=package_input.spdx_id,
-            parent_id="SPDXRef-DOCUMENT",
+            parent_id=DOCUMENT_SPDX_ID,
             element_type=SpdxElementType.PACKAGE,
             full_element=package_input,
         ),

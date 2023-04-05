@@ -5,6 +5,7 @@ from unittest import TestCase
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.validation.spdx_id_validators import (
     get_list_of_all_spdx_ids,
     is_external_doc_ref_present_in_document,
@@ -35,7 +36,7 @@ DOCUMENT = document_fixture(
 )
 
 
-@pytest.mark.parametrize("spdx_id", ["SPDXRef-DOCUMENT", "SPDXRef-File1", "SPDXRef-1.3-3.7"])
+@pytest.mark.parametrize("spdx_id", [DOCUMENT_SPDX_ID, "SPDXRef-File1", "SPDXRef-1.3-3.7"])
 def test_valid_internal_spdx_ids(spdx_id):
     assert is_valid_internal_spdx_id(spdx_id)
 
@@ -63,7 +64,7 @@ def test_is_spdx_id_present_in_document():
     assert is_spdx_id_present_in_document("SPDXRef-File1", DOCUMENT)
     assert is_spdx_id_present_in_document("SPDXRef-Package2", DOCUMENT)
     assert is_spdx_id_present_in_document("SPDXRef-Snippet1", DOCUMENT)
-    assert is_spdx_id_present_in_document("SPDXRef-DOCUMENT", DOCUMENT)
+    assert is_spdx_id_present_in_document(DOCUMENT_SPDX_ID, DOCUMENT)
     assert not is_spdx_id_present_in_document("SPDXRef-file2", DOCUMENT)
 
 
@@ -76,7 +77,7 @@ def test_list_of_all_spdx_ids():
     TestCase().assertCountEqual(
         get_list_of_all_spdx_ids(DOCUMENT),
         [
-            "SPDXRef-DOCUMENT",
+            DOCUMENT_SPDX_ID,
             "SPDXRef-File1",
             "SPDXRef-File2",
             "SPDXRef-Package1",
@@ -146,7 +147,7 @@ def test_invalid_spdx_id(spdx_id, expected_messages):
 
 @pytest.mark.parametrize(
     "spdx_id",
-    ["DocumentRef-external:SPDXRef-File", "SPDXRef-DOCUMENT", "SPDXRef-File1", "SPDXRef-Package1", "SPDXRef-Snippet1"],
+    ["DocumentRef-external:SPDXRef-File", DOCUMENT_SPDX_ID, "SPDXRef-File1", "SPDXRef-Package1", "SPDXRef-Snippet1"],
 )
 def test_valid_spdx_id_with_check_document(spdx_id):
     validation_messages = validate_spdx_id(spdx_id, DOCUMENT, check_document=True)

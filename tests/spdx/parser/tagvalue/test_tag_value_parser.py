@@ -6,6 +6,7 @@ import os
 
 import pytest
 
+from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.document import Document
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.parser.error import SPDXParsingError
@@ -75,7 +76,7 @@ def test_document_with_mixed_values():
     parser = Parser()
     document_str = "\n".join(
         [
-            "SPDXID:SPDXRef-DOCUMENT",
+            f"SPDXID:{DOCUMENT_SPDX_ID}",
             "FileName: File without package",
             "SPDXID: SPDXRef-File",
             "PackageDownloadLocation: https://download.com",
