@@ -14,6 +14,7 @@ from spdx.parser.rdf.annotation_parser import parse_annotation
 from spdx.parser.rdf.creation_info_parser import parse_creation_info
 from spdx.parser.rdf.extracted_licensing_info_parser import parse_extracted_licensing_info
 from spdx.parser.rdf.file_parser import parse_file
+from spdx.parser.rdf.graph_parsing_functions import get_correctly_typed_triples
 from spdx.parser.rdf.package_parser import parse_package
 from spdx.parser.rdf.relationship_parser import parse_implicit_relationship, parse_relationship
 from spdx.parser.rdf.snippet_parser import parse_snippet
@@ -46,7 +47,7 @@ def translate_graph_to_document(graph: Graph) -> Document:
         ("snippets", (None, RDF.type, SPDX_NAMESPACE.Snippet), parse_snippet),
     ]:
         elements = []
-        for element_node, _, _ in graph.triples(triple):
+        for element_node, _, _ in get_correctly_typed_triples(logger, graph, *triple):
             try:
                 elements.append(parsing_method(element_node, graph, creation_info.document_namespace))
             except SPDXParsingError as err:
@@ -69,7 +70,7 @@ def translate_graph_to_document(graph: Graph) -> Document:
         ((None, SPDX_NAMESPACE.hasFile, None), RelationshipType.CONTAINS),
         ((None, SPDX_NAMESPACE.describesPackage, None), RelationshipType.DESCRIBES),
     ]:
-        for parent_node, _, element_node in graph.triples(triple):
+        for parent_node, _, element_node in get_correctly_typed_triples(logger, graph, *triple):
             try:
                 relationship = parse_implicit_relationship(
                     parent_node, relationship_type, element_node, graph, creation_info.document_namespace
@@ -81,7 +82,9 @@ def translate_graph_to_document(graph: Graph) -> Document:
                 logger.extend(err.get_messages())
 
     extracted_licensing_infos = []
-    for _, _, extracted_licensing_info_node in graph.triples((None, SPDX_NAMESPACE.hasExtractedLicensingInfo, None)):
+    for _, _, extracted_licensing_info_node in get_correctly_typed_triples(
+        logger, graph, None, SPDX_NAMESPACE.hasExtractedLicensingInfo
+    ):
         try:
             extracted_licensing_infos.append(
                 parse_extracted_licensing_info(extracted_licensing_info_node, graph, creation_info.document_namespace)

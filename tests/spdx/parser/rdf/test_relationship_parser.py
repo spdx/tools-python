@@ -16,6 +16,7 @@ def test_relationship_parser():
     parent_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.SpdxDocument)
     relationship_node = graph.value(subject=parent_node, predicate=SPDX_NAMESPACE.relationship)
     doc_namespace = "https://some.namespace"
+    assert isinstance(parent_node, URIRef)
 
     relationship = parse_relationship(relationship_node, graph, parent_node, doc_namespace)
 

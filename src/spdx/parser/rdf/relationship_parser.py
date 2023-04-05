@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from rdflib import RDFS, Graph, URIRef
+from rdflib.term import Node
 
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.parser.logger import Logger
@@ -15,9 +16,7 @@ from spdx.parser.rdf.graph_parsing_functions import (
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
-def parse_relationship(
-    relationship_node: URIRef, graph: Graph, parent_node: URIRef, doc_namespace: str
-) -> Relationship:
+def parse_relationship(relationship_node: Node, graph: Graph, parent_node: URIRef, doc_namespace: str) -> Relationship:
     logger = Logger()
     spdx_element_id = parse_spdx_id(parent_node, doc_namespace, graph)
 

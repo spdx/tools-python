@@ -6,7 +6,7 @@ from unittest import TestCase
 
 import pytest
 from license_expression import get_spdx_licensing
-from rdflib import RDF, Graph, Literal
+from rdflib import RDF, BNode, Graph, Literal, URIRef
 
 from spdx.model.actor import Actor, ActorType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
@@ -21,6 +21,7 @@ def test_package_parser():
     # we have two packages in the test file, graph.value() will return the first package
     package_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.Package)
     doc_namespace = "https://some.namespace"
+    assert isinstance(package_node, URIRef)
 
     package = parse_package(package_node, graph, doc_namespace)
 
@@ -80,6 +81,7 @@ def test_external_package_ref_parser(download_location, category, locator, type,
     # in the test file we have two different external package refs depending on the package
     package_node = graph.value(predicate=SPDX_NAMESPACE.downloadLocation, object=Literal(download_location))
     external_package_ref_node = graph.value(package_node, SPDX_NAMESPACE.externalRef)
+    assert isinstance(external_package_ref_node, BNode)
 
     external_package_ref = parse_external_package_ref(external_package_ref_node, graph, doc_namespace)
 

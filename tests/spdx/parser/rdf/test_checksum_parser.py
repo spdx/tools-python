@@ -4,7 +4,7 @@
 import os
 
 import pytest
-from rdflib import Graph, URIRef
+from rdflib import BNode, Graph, URIRef
 
 from spdx.model.checksum import ChecksumAlgorithm
 from spdx.parser.error import SPDXParsingError
@@ -17,6 +17,7 @@ def test_parse_checksum():
     checksum_node = graph.value(
         subject=URIRef("https://some.namespace#DocumentRef-external"), predicate=SPDX_NAMESPACE.checksum
     )
+    assert isinstance(checksum_node, BNode)
 
     checksum = parse_checksum(checksum_node, graph)
 

@@ -6,7 +6,11 @@ from rdflib import RDFS, Graph, URIRef
 from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error, raise_parsing_error_if_logger_has_messages
-from spdx.parser.rdf.graph_parsing_functions import parse_literal, parse_literal_or_no_assertion_or_none
+from spdx.parser.rdf.graph_parsing_functions import (
+    get_correctly_typed_triples,
+    parse_literal,
+    parse_literal_or_no_assertion_or_none,
+)
 from spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
@@ -28,7 +32,9 @@ def parse_extracted_licensing_info(
         logger, graph, extracted_licensing_info_node, SPDX_NAMESPACE.name
     )
     cross_references = []
-    for _, _, cross_reference_node in graph.triples((extracted_licensing_info_node, RDFS.seeAlso, None)):
+    for _, _, cross_reference_node in get_correctly_typed_triples(
+        logger, graph, extracted_licensing_info_node, RDFS.seeAlso
+    ):
         cross_references.append(cross_reference_node.toPython())
     raise_parsing_error_if_logger_has_messages(logger, "ExtractedLicensingInfo")
     extracted_licensing_info = construct_or_raise_parsing_error(
