@@ -15,5 +15,5 @@ def write_package(package: Package, text_output: TextIO):
     write_value("package_purpose", ", ".join([purpose.name for purpose in package.package_purpose]), text_output)
     write_value("package_version", package.package_version, text_output)
     write_value("download_location", package.download_location, text_output)
-    write_value("package_uri", package.package_uri, text_output)
+    write_value("package_uri", package.package_url, text_output)
     write_value("homepage", package.homepage, text_output)
