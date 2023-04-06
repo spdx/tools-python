@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from unittest import mock
+from unittest import TestCase, mock
 
 from spdx3.bump_from_spdx2.package import bump_package
 from spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
@@ -39,3 +39,48 @@ def test_bump_package(creation_information):
     assert package.external_identifier == [
         ExternalIdentifier(ExternalIdentifierType.SWHID, "swh_locator", "swh_comment")
     ]
+
+
+@mock.patch("spdx3.model.creation_information.CreationInformation")
+def test_bump_of_single_purl(creation_information):
+    payload = Payload()
+    document_namespace = "https://doc.namespace"
+    spdx2_package: Spdx2_Package = package_fixture(
+        external_references=[
+            ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", "purl_comment"),
+        ]
+    )
+    expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
+
+    bump_package(spdx2_package, payload, creation_information, document_namespace)
+    package = payload.get_element(expected_new_package_id)
+
+    assert package.package_url == "purl_locator"
+    assert package.external_references == []
+    assert package.external_identifier == []
+
+
+@mock.patch("spdx3.model.creation_information.CreationInformation")
+def test_bump_of_multiple_purls(creation_information):
+    payload = Payload()
+    document_namespace = "https://doc.namespace"
+    spdx2_package: Spdx2_Package = package_fixture(
+        external_references=[
+            ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", "purl_comment"),
+            ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator2", "purl_comment2"),
+        ]
+    )
+    expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
+
+    bump_package(spdx2_package, payload, creation_information, document_namespace)
+    package = payload.get_element(expected_new_package_id)
+
+    assert package.package_url is None
+    assert package.external_references == []
+    TestCase().assertCountEqual(
+        package.external_identifier,
+        [
+            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "purl_comment"),
+            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator2", "purl_comment2"),
+        ],
+    )
