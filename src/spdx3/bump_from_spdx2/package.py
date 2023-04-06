@@ -1,14 +1,19 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from typing import Union
+
 from spdx3.bump_from_spdx2.actor import bump_actor
 from spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx3.model.creation_information import CreationInformation
+from spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
+from spdx3.model.external_reference import ExternalReference, ExternalReferenceType
 from spdx3.model.software.package import Package
 from spdx3.model.software.software_purpose import SoftwarePurpose
 from spdx3.payload import Payload
+from spdx.model.package import ExternalPackageRef
 from spdx.model.package import Package as Spdx2_Package
 
 
@@ -41,7 +46,16 @@ def bump_package(
     summary = spdx2_package.summary
     description = spdx2_package.description
     comment = spdx2_package.comment
-    print_missing_conversion("package2.external_references", 1, "of ExternalReferences / ExternalIdentifiers")
+
+    external_references = []
+    external_identifiers = []
+    for spdx2_external_ref in spdx2_package.external_references:
+        id_or_ref = bump_external_package_ref(spdx2_external_ref)
+        if isinstance(id_or_ref, ExternalReference):
+            external_references.append(id_or_ref)
+        elif isinstance(id_or_ref, ExternalIdentifier):
+            external_identifiers.append(id_or_ref)
+
     print_missing_conversion("package2.attribution_texts", 0)
     package_purpose = (
         [SoftwarePurpose[spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
@@ -57,6 +71,8 @@ def bump_package(
             description=description,
             comment=comment,
             verified_using=integrity_methods,
+            external_references=external_references,
+            external_identifier=external_identifiers,
             originated_by=originated_by_spdx_id,
             package_purpose=package_purpose,
             package_version=package_version,
@@ -64,3 +80,33 @@ def bump_package(
             homepage=homepage,
         )
     )
+
+
+external_ref_map = {
+    "cpe22Type": ExternalIdentifierType.CPE22,
+    "cpe23Type": ExternalIdentifierType.CPE23,
+    "advisory": ExternalReferenceType.SECURITY_ADVISORY,
+    "fix": ExternalReferenceType.SECURITY_FIX,
+    "url": None,
+    "swid": ExternalIdentifierType.SWID,
+    "maven-central": None,
+    "npm": None,
+    "nuget": None,
+    "bower": None,
+    "purl": ExternalIdentifierType.PURL,
+    "swh": ExternalIdentifierType.SWHID,
+    "gitoid": ExternalIdentifierType.GITOID,
+}
+
+
+def bump_external_package_ref(spdx2_external_ref: ExternalPackageRef) -> Union[ExternalReference, ExternalIdentifier]:
+    type = spdx2_external_ref.reference_type
+    locator = spdx2_external_ref.locator
+    comment = spdx2_external_ref.comment
+
+    id_or_ref = external_ref_map[type]
+
+    if isinstance(id_or_ref, ExternalReferenceType):
+        return ExternalReference(id_or_ref, [locator], None, comment)
+    elif isinstance(id_or_ref, ExternalIdentifierType):
+        return ExternalIdentifier(id_or_ref, locator, comment)
