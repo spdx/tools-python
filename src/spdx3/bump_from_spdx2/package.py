@@ -49,7 +49,16 @@ def bump_package(
 
     external_references = []
     external_identifiers = []
+    purl_refs = [
+        external_ref for external_ref in spdx2_package.external_references if external_ref.reference_type == "purl"
+    ]
+    exactly_one_purl = len(purl_refs) == 1
+    package_url = None
+    if exactly_one_purl:
+        package_url = purl_refs[0].locator
     for spdx2_external_ref in spdx2_package.external_references:
+        if exactly_one_purl and spdx2_external_ref.reference_type == "purl":
+            continue
         id_or_ref = bump_external_package_ref(spdx2_external_ref)
         if isinstance(id_or_ref, ExternalReference):
             external_references.append(id_or_ref)
@@ -77,12 +86,13 @@ def bump_package(
             package_purpose=package_purpose,
             package_version=package_version,
             download_location=download_location,
+            package_url=package_url,
             homepage=homepage,
         )
     )
 
 
-external_ref_map = {
+external_ref_type_map = {
     "cpe22Type": ExternalIdentifierType.CPE22,
     "cpe23Type": ExternalIdentifierType.CPE23,
     "advisory": ExternalReferenceType.SECURITY_ADVISORY,
@@ -100,13 +110,18 @@ external_ref_map = {
 
 
 def bump_external_package_ref(spdx2_external_ref: ExternalPackageRef) -> Union[ExternalReference, ExternalIdentifier]:
-    type = spdx2_external_ref.reference_type
+    reference_type = spdx2_external_ref.reference_type
     locator = spdx2_external_ref.locator
     comment = spdx2_external_ref.comment
 
-    id_or_ref = external_ref_map[type]
+    if reference_type not in external_ref_type_map:
+        raise NotImplementedError(
+            f"Conversion of ExternalPackageRef of type {reference_type} is currently not supported."
+        )
 
-    if isinstance(id_or_ref, ExternalReferenceType):
-        return ExternalReference(id_or_ref, [locator], None, comment)
-    elif isinstance(id_or_ref, ExternalIdentifierType):
-        return ExternalIdentifier(id_or_ref, locator, comment)
+    id_or_ref_type = external_ref_type_map[reference_type]
+
+    if isinstance(id_or_ref_type, ExternalReferenceType):
+        return ExternalReference(id_or_ref_type, [locator], None, comment)
+    elif isinstance(id_or_ref_type, ExternalIdentifierType):
+        return ExternalIdentifier(id_or_ref_type, locator, comment)
