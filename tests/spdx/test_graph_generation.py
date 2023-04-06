@@ -15,7 +15,6 @@ from tests.spdx.fixtures import document_fixture, file_fixture, package_fixture
 
 try:
     import networkx  # noqa: F401
-    import pygraphviz  # noqa: F401
 except ImportError:
     pytest.skip("Skip this module as the tests need optional dependencies to run.", allow_module_level=True)
 
@@ -44,7 +43,7 @@ except ImportError:
         (
             "SPDXRdfExample-v2.2.spdx.rdf.xml",
             20,
-            17,
+            19,
             ["SPDXRef-Package_DYNAMIC_LINK", "SPDXRef-JenaLib_CONTAINS"],
         ),
         (
