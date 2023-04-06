@@ -18,7 +18,7 @@ def test_correct_initialization(creation_information):
         package_purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH],
         package_version="1:23a_bc",
         download_location="https://downloadlocation",
-        package_uri="https://package.uri",
+        package_url="https://package.uri",
         homepage="https://homepage",
     )
 
@@ -28,7 +28,7 @@ def test_correct_initialization(creation_information):
     assert package.package_purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH]
     assert package.package_version == "1:23a_bc"
     assert package.download_location == "https://downloadlocation"
-    assert package.package_uri == "https://package.uri"
+    assert package.package_url == "https://package.uri"
     assert package.homepage == "https://homepage"
 
 
@@ -42,7 +42,7 @@ def test_invalid_initialization(creation_information):
             package_purpose=SoftwarePurpose.FILE,
             package_version=42,
             download_location=4,
-            package_uri=["uris"],
+            package_url=["uris"],
             homepage=True,
         )
 
@@ -57,7 +57,7 @@ def test_invalid_initialization(creation_information):
         "(str, NoneType); got int instead: 42",
         'SetterError Package: type of argument "download_location" must be one of '
         "(str, NoneType); got int instead: 4",
-        'SetterError Package: type of argument "package_uri" must be one of (str, '
+        'SetterError Package: type of argument "package_url" must be one of (str, '
         "NoneType); got list instead: ['uris']",
         'SetterError Package: type of argument "homepage" must be one of (str, ' "NoneType); got bool instead: True",
     ]
