@@ -19,7 +19,7 @@ class Package(Artifact):
     package_purpose: Optional[List[SoftwarePurpose]] = None
     package_version: Optional[str] = None
     download_location: Optional[str] = None  # anyURI
-    package_uri: Optional[str] = None  # anyURI
+    package_url: Optional[str] = None  # anyURI
     homepage: Optional[str] = None  # anyURI
 
     def __init__(
@@ -39,7 +39,7 @@ class Package(Artifact):
         package_purpose: Optional[List[SoftwarePurpose]] = None,
         package_version: Optional[str] = None,
         download_location: Optional[str] = None,
-        package_uri: Optional[str] = None,
+        package_url: Optional[str] = None,
         homepage: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
