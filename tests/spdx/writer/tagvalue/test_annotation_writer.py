@@ -20,7 +20,7 @@ def test_annotation_writer():
     handle.write.assert_has_calls(
         [
             call(f"Annotator: Person: {annotation.annotator.name} ({annotation.annotator.email})\n"),
-            call("AnnotationDate: 2022-12-01T00:00:00Z\n"),
+            call("AnnotationDate: 2022-12-24T00:00:00Z\n"),
             call(f"AnnotationType: {annotation.annotation_type.name}\n"),
             call(f"SPDXREF: {annotation.spdx_id}\n"),
             call(f"AnnotationComment: {annotation.annotation_comment}\n"),
