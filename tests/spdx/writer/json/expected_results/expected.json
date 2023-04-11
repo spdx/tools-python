@@ -29,7 +29,7 @@
             "SPDXID": "SPDXRef-File",
             "annotations": [
                 {
-                    "annotationDate": "2022-12-01T00:00:00Z",
+                    "annotationDate": "2022-12-24T00:00:00Z",
                     "annotationType": "REVIEW",
                     "annotator": "Person: annotatorName (some@mail.com)",
                     "comment": "annotationComment"
@@ -77,7 +77,7 @@
             "attributionTexts": [
                 "packageAttributionText"
             ],
-            "builtDate": "2022-12-02T00:00:00Z",
+            "builtDate": "2022-11-02T00:00:00Z",
             "checksums": [
                 {
                     "algorithm": "SHA1",
@@ -112,11 +112,11 @@
                 "packageVerificationCodeValue": "85ed0817af83a24ad8da68c2b5094de69833983c"
             },
             "primaryPackagePurpose": "SOURCE",
-            "releaseDate": "2022-12-01T00:00:00Z",
+            "releaseDate": "2022-11-01T00:00:00Z",
             "sourceInfo": "sourceInfo",
             "summary": "packageSummary",
             "supplier": "Person: supplierName (some@mail.com)",
-            "validUntilDate": "2022-12-03T00:00:00Z",
+            "validUntilDate": "2022-11-03T00:00:00Z",
             "versionInfo": "12.2"
         }
     ],

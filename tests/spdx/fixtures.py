@@ -140,9 +140,9 @@ def package_fixture(
     external_references=None,
     attribution_texts=None,
     primary_package_purpose=PackagePurpose.SOURCE,
-    release_date=datetime(2022, 12, 1),
-    built_date=datetime(2022, 12, 2),
-    valid_until_date=datetime(2022, 12, 3),
+    release_date=datetime(2022, 11, 1),
+    built_date=datetime(2022, 11, 2),
+    valid_until_date=datetime(2022, 11, 3),
 ) -> Package:
     checksums = [checksum_fixture()] if checksums is None else checksums
     license_info_from_files = (
@@ -235,7 +235,7 @@ def annotation_fixture(
     spdx_id="SPDXRef-File",
     annotation_type=AnnotationType.REVIEW,
     annotator=actor_fixture(name="annotatorName"),
-    annotation_date=datetime(2022, 12, 1),
+    annotation_date=datetime(2022, 12, 24),
     annotation_comment="annotationComment",
 ) -> Annotation:
     return Annotation(

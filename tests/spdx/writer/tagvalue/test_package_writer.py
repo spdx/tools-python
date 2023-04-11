@@ -49,8 +49,8 @@ def test_package_writer():
             call(f"ExternalRefComment: {package.external_references[0].comment}\n"),
             call(f"PackageAttributionText: {package.attribution_texts[0]}\n"),
             call(f"PrimaryPackagePurpose: {package.primary_package_purpose.name}\n"),
-            call("ReleaseDate: 2022-12-01T00:00:00Z\n"),
-            call("BuiltDate: 2022-12-02T00:00:00Z\n"),
-            call("ValidUntilDate: 2022-12-03T00:00:00Z\n"),
+            call("ReleaseDate: 2022-11-01T00:00:00Z\n"),
+            call("BuiltDate: 2022-11-02T00:00:00Z\n"),
+            call("ValidUntilDate: 2022-11-03T00:00:00Z\n"),
         ]
     )
