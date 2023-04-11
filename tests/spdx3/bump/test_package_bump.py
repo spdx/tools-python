@@ -42,12 +42,12 @@ def test_bump_package(creation_information):
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation")
-def test_bump_of_single_purl(creation_information):
+def test_bump_of_single_purl_without_comment(creation_information):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
         external_references=[
-            ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", "purl_comment"),
+            ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", None),
         ]
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
@@ -61,13 +61,34 @@ def test_bump_of_single_purl(creation_information):
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation")
-def test_bump_of_multiple_purls(creation_information):
+def test_bump_of_single_purl_with_comment(creation_information):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
         external_references=[
             ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", "purl_comment"),
-            ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator2", "purl_comment2"),
+        ]
+    )
+    expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
+
+    bump_package(spdx2_package, payload, creation_information, document_namespace)
+    package = payload.get_element(expected_new_package_id)
+
+    assert package.package_url is None
+    assert package.external_references == []
+    assert package.external_identifier == [
+        ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "purl_comment")
+    ]
+
+
+@mock.patch("spdx3.model.creation_information.CreationInformation")
+def test_bump_of_multiple_purls(creation_information):
+    payload = Payload()
+    document_namespace = "https://doc.namespace"
+    spdx2_package: Spdx2_Package = package_fixture(
+        external_references=[
+            ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", "comment"),
+            ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator2", None),
         ]
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
@@ -80,7 +101,7 @@ def test_bump_of_multiple_purls(creation_information):
     TestCase().assertCountEqual(
         package.external_identifier,
         [
-            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "purl_comment"),
-            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator2", "purl_comment2"),
+            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "comment"),
+            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator2", None),
         ],
     )
