@@ -52,12 +52,12 @@ def bump_package(
     purl_refs = [
         external_ref for external_ref in spdx2_package.external_references if external_ref.reference_type == "purl"
     ]
-    exactly_one_purl = len(purl_refs) == 1
+    exactly_one_purl_without_comment = len(purl_refs) == 1 and purl_refs[0].comment is None
     package_url = None
-    if exactly_one_purl:
+    if exactly_one_purl_without_comment:
         package_url = purl_refs[0].locator
     for spdx2_external_ref in spdx2_package.external_references:
-        if exactly_one_purl and spdx2_external_ref.reference_type == "purl":
+        if exactly_one_purl_without_comment and spdx2_external_ref.reference_type == "purl":
             continue
         id_or_ref = bump_external_package_ref(spdx2_external_ref)
         if isinstance(id_or_ref, ExternalReference):
