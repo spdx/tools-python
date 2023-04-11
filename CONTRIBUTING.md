@@ -34,8 +34,10 @@ Here's the process to make changes to the codebase:
    git checkout -b fix-or-improve-something
    python -m venv ./venv
    ./venv/bin/activate
-   pip install -e .
+   pip install -e ".[development]"
    ```
+   Note: By using the group `[development]` for the installation, all dependencies (including optional ones) will be 
+   installed. This way we make sure that all tests are executed. 
 5. Make some changes and commit them to the branch:
    ```sh
    git commit --signoff -m 'description of my changes'
@@ -49,14 +51,12 @@ Here's the process to make changes to the codebase:
    retroactively signs a range of past commits.
 6. Test your changes:
    ```sh
-   pip install pytest
    pytest -vvs # in the repo root
    ```
 
 7. Check your code style. When opening a pull request, your changes will automatically be checked with `isort`, `black` 
    and `flake8` to make sure your changes fit with the rest of the code style. 
     ```sh
-   pip install .[code_style]
    # run the following commands in the repo root
    isort src tests 
    black src tests
