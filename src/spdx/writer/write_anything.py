@@ -13,7 +13,7 @@ from spdx.writer.yaml import yaml_writer
 def write_file(document: Document, file_name: str, validate: bool = True):
     output_format = file_name_to_format(file_name)
     if output_format == FileFormat.JSON:
-        json_writer.write_document(document, file_name, validate)
+        json_writer.write_document_to_file(document, file_name, validate)
     elif output_format == FileFormat.YAML:
         yaml_writer.write_document_to_file(document, file_name, validate)
     elif output_format == FileFormat.XML:
