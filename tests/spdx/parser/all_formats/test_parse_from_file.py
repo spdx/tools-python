@@ -34,9 +34,7 @@ class TestParseFromFile:
 
     def test_parse_from_file_with_2_3_example(self, parser, format_name, extension):
         doc = parser.parse_from_file(
-            os.path.join(
-                os.path.dirname(__file__), f"../../data/formats/SPDX{format_name}Example-v2.3.spdx{extension}"
-            )
+            os.path.join(os.path.dirname(__file__), f"../../data/SPDX{format_name}Example-v2.3.spdx{extension}")
         )
         assert type(doc) == Document
         assert len(doc.annotations) == 5
@@ -48,9 +46,7 @@ class TestParseFromFile:
 
     def test_parse_json_with_2_2_example(self, parser, format_name, extension):
         doc = parser.parse_from_file(
-            os.path.join(
-                os.path.dirname(__file__), f"../../data/formats/SPDX{format_name}Example-v2.2.spdx{extension}"
-            )
+            os.path.join(os.path.dirname(__file__), f"../../data/SPDX{format_name}Example-v2.2.spdx{extension}")
         )
         assert type(doc) == Document
         assert len(doc.annotations) == 5

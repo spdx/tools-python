@@ -24,7 +24,7 @@ def test_license_expression_parser():
 
 def test_license_expression_parser_with_coupled_licenses():
     doc = rdf_parser.parse_from_file(
-        os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXRdfExample-v2.3.spdx.rdf.xml")
+        os.path.join(os.path.dirname(__file__), "../../data/SPDXRdfExample-v2.3.spdx.rdf.xml")
     )
 
     packages_by_spdx_id = {package.spdx_id: package for package in doc.packages}
