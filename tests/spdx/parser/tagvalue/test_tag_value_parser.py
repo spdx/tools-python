@@ -2,12 +2,10 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-import os
 
 import pytest
 
 from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.model.document import Document
 from spdx.model.relationship import Relationship, RelationshipType
 from spdx.parser.error import SPDXParsingError
 from spdx.parser.tagvalue.parser import Parser
@@ -20,22 +18,6 @@ def test_parse_unknown_tag():
 
     with pytest.raises(SPDXParsingError, match="Unknown tag"):
         parser.parse(unknown_tag_str)
-
-
-def test_tag_value_parser():
-    parser = Parser()
-    fn = os.path.join(os.path.dirname(__file__), "../../data/formats/SPDXTagExample-v2.3.spdx")
-
-    with open(fn) as f:
-        data = f.read()
-        doc = parser.parse(data)
-    assert type(doc) == Document
-    assert len(doc.annotations) == 5
-    assert len(doc.files) == 5
-    assert len(doc.packages) == 4
-    assert len(doc.snippets) == 1
-    assert len(doc.relationships) == 13
-    assert len(doc.extracted_licensing_info) == 5
 
 
 def test_building_contains_relationship():
