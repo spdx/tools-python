@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from spdx.writer.json.json_writer import write_document
+from spdx.writer.json.json_writer import write_document_to_file
 from tests.spdx.fixtures import document_fixture
 
 
@@ -19,7 +19,7 @@ def temporary_file_path() -> str:
 
 def test_write_json(temporary_file_path: str):
     document = document_fixture()
-    write_document(document, temporary_file_path, validate=True)
+    write_document_to_file(document, temporary_file_path, validate=True)
 
     with open(temporary_file_path) as written_file:
         written_json = json.load(written_file)
@@ -35,7 +35,7 @@ def test_document_is_validated():
     document.creation_info.spdx_id = "InvalidId"
 
     with pytest.raises(ValueError) as error:
-        write_document(document, "dummy_path")
+        write_document_to_file(document, "dummy_path")
     assert "Document is not valid" in error.value.args[0]
 
 
@@ -43,4 +43,4 @@ def test_document_validation_can_be_overridden(temporary_file_path: str):
     document = document_fixture()
     document.creation_info.spdx_id = "InvalidId"
 
-    write_document(document, temporary_file_path, validate=False)
+    write_document_to_file(document, temporary_file_path, validate=False)
