@@ -70,11 +70,12 @@ def validate_full_spdx_document(document: Document, spdx_version: str = None) ->
         document.relationships, RelationshipType.DESCRIBED_BY, document_id
     )
 
-    if not document_describes_relationships + described_by_document_relationships:
+    only_a_single_package = len(document.packages) == 1 and not document.files and not document.snippets
+    if not only_a_single_package and not document_describes_relationships + described_by_document_relationships:
         validation_messages.append(
             ValidationMessage(
                 f'there must be at least one relationship "{document_id} DESCRIBES ..." or "... DESCRIBED_BY '
-                f'{document_id}"',
+                f'{document_id}" when there is not only a single package present',
                 ValidationContext(spdx_id=document_id, element_type=SpdxElementType.DOCUMENT),
             )
         )

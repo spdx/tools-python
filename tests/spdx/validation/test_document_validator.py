@@ -94,7 +94,20 @@ def test_document_describes_at_least_one_element(relationships):
     assert validation_messages == []
 
 
-def test_document_does_not_describe_an_element():
+def test_document_does_not_describe_an_element_with_only_one_package():
+    document = document_fixture(
+        packages=[package_fixture()],
+        files=[],
+        snippets=[],
+        relationships=[],
+        annotations=[],
+    )
+    validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
+
+    assert validation_messages == []
+
+
+def test_document_does_not_describe_an_element_with_multiple_elements():
     document = document_fixture(
         relationships=[Relationship("SPDXRef-Package", RelationshipType.DESCRIBES, "SPDXRef-File")]
     )
@@ -103,7 +116,7 @@ def test_document_does_not_describe_an_element():
     assert validation_messages == [
         ValidationMessage(
             f'there must be at least one relationship "{DOCUMENT_SPDX_ID} DESCRIBES ..." or "... DESCRIBED_BY '
-            f'{DOCUMENT_SPDX_ID}"',
+            f'{DOCUMENT_SPDX_ID}" when there is not only a single package present',
             ValidationContext(spdx_id=DOCUMENT_SPDX_ID, element_type=SpdxElementType.DOCUMENT),
         )
     ]
