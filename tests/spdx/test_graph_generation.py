@@ -60,7 +60,7 @@ def test_generate_graph_from_spdx(
     edges_count: int,
     relationship_node_keys: List[str],
 ) -> None:
-    document = parse_file(str(Path(__file__).resolve().parent.parent / "spdx" / "data" / "formats" / file_name))
+    document = parse_file(str(Path(__file__).resolve().parent.parent / "spdx" / "data" / file_name))
     graph = generate_relationship_graph_from_spdx(document)
 
     assert document.creation_info.spdx_id in graph.nodes()
