@@ -102,7 +102,7 @@ instead of `bin`.
     * Note: in-place manipulations like `list.append(item)` will circumvent the type checking (a `TypeError` will still be raised when reading `list` again). We recommend using `list = list + [item]` instead.
   * The main entry point of an SPDX document is the `Document` class, which links to all other classes.
   * For license handling, the [license_expression](https://github.com/nexB/license-expression) library is used.
-  * Note on `documentDescribes` and `hasFiles`: These fields will be converted to relationships in the internal data model. During serialization, they will be written again where appropriate.
+  * Note on `documentDescribes` and `hasFiles`: These fields will be converted to relationships in the internal data model. As they are deprecated, these fields will not be written in the output.
 2. **PARSING**
   * Use `parse_file(file_name)` from the `parse_anything.py` module to parse an arbitrary file with one of the supported file endings.
   * Successful parsing will return a `Document` instance. Unsuccessful parsing will raise `SPDXParsingError` with a list of all encountered problems.
