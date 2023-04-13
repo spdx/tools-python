@@ -11,7 +11,6 @@ import pytest
 from spdx.jsonschema.annotation_converter import AnnotationConverter
 from spdx.jsonschema.document_converter import DocumentConverter
 from spdx.jsonschema.document_properties import DocumentProperty
-from spdx.jsonschema.relationship_converter import RelationshipConverter
 from spdx.model.actor import Actor, ActorType
 from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.document import Document
@@ -20,14 +19,12 @@ from spdx.model.relationship import Relationship, RelationshipType
 from tests.spdx.fixtures import (
     annotation_fixture,
     creation_info_fixture,
-    document_fixture,
     external_document_ref_fixture,
     file_fixture,
     package_fixture,
-    relationship_fixture,
     snippet_fixture,
 )
-from tests.spdx.mock_utils import assert_mock_method_called_with_arguments, assert_no_mock_methods_called
+from tests.spdx.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
@@ -139,11 +136,13 @@ def test_successful_conversion(converter: DocumentConverter):
         converter.json_property_name(DocumentProperty.NAME): "name",
         converter.json_property_name(DocumentProperty.SPDX_VERSION): "spdxVersion",
         converter.json_property_name(DocumentProperty.DOCUMENT_NAMESPACE): "namespace",
-        converter.json_property_name(DocumentProperty.DOCUMENT_DESCRIBES): ["describedElementId"],
         converter.json_property_name(DocumentProperty.PACKAGES): ["mock_converted_package"],
         converter.json_property_name(DocumentProperty.FILES): ["mock_converted_file"],
         converter.json_property_name(DocumentProperty.SNIPPETS): ["mock_converted_snippet"],
-        converter.json_property_name(DocumentProperty.RELATIONSHIPS): ["mock_converted_relationship"],
+        converter.json_property_name(DocumentProperty.RELATIONSHIPS): [
+            "mock_converted_relationship",
+            "mock_converted_relationship",
+        ],
     }
 
 
@@ -163,7 +162,6 @@ def test_null_values(converter: DocumentConverter):
     assert converter.json_property_name(DocumentProperty.ANNOTATIONS) not in converted_dict
     assert converter.json_property_name(DocumentProperty.EXTERNAL_DOCUMENT_REFS) not in converted_dict
     assert converter.json_property_name(DocumentProperty.HAS_EXTRACTED_LICENSING_INFOS) not in converted_dict
-    assert converter.json_property_name(DocumentProperty.DOCUMENT_DESCRIBES) not in converted_dict
     assert converter.json_property_name(DocumentProperty.PACKAGES) not in converted_dict
     assert converter.json_property_name(DocumentProperty.FILES) not in converted_dict
     assert converter.json_property_name(DocumentProperty.SNIPPETS) not in converted_dict
@@ -205,88 +203,3 @@ def test_document_annotations(converter: DocumentConverter):
     assert_mock_method_called_with_arguments(annotation_converter, "convert", document_annotation, other_annotation)
     converted_document_annotations = converted_dict.get(converter.json_property_name(DocumentProperty.ANNOTATIONS))
     assert converted_document_annotations == ["mock_converted_annotation", "mock_converted_annotation"]
-
-
-def test_document_describes(converter: DocumentConverter):
-    document = document_fixture()
-    document_id = document.creation_info.spdx_id
-    document_describes_relationship = relationship_fixture(
-        spdx_element_id=document_id,
-        relationship_type=RelationshipType.DESCRIBES,
-        related_spdx_element_id="describesId",
-    )
-    described_by_document_relationship = relationship_fixture(
-        related_spdx_element_id=document_id,
-        relationship_type=RelationshipType.DESCRIBED_BY,
-        spdx_element_id="describedById",
-    )
-    other_describes_relationship = relationship_fixture(
-        spdx_element_id="DocumentRef-external", relationship_type=RelationshipType.DESCRIBES
-    )
-    other_relationship = relationship_fixture(spdx_element_id=document_id, relationship_type=RelationshipType.CONTAINS)
-    document.relationships = [
-        document_describes_relationship,
-        described_by_document_relationship,
-        other_describes_relationship,
-        other_relationship,
-    ]
-
-    converted_dict = converter.convert(document)
-
-    document_describes = converted_dict.get(converter.json_property_name(DocumentProperty.DOCUMENT_DESCRIBES))
-    assert document_describes == [
-        document_describes_relationship.related_spdx_element_id,
-        described_by_document_relationship.spdx_element_id,
-    ]
-
-
-DOCUMENT_ID = "docConverterTestDocumentId"
-PACKAGE_ID = "docConverterTestPackageId"
-FILE_ID = "docConverterTestFileId"
-
-
-@pytest.mark.parametrize(
-    "relationship,should_be_written",
-    [
-        (relationship_fixture(DOCUMENT_ID, RelationshipType.DESCRIBES), True),
-        (relationship_fixture(DOCUMENT_ID, RelationshipType.DESCRIBES, comment=None), False),
-        (
-            relationship_fixture(relationship_type=RelationshipType.DESCRIBED_BY, related_spdx_element_id=DOCUMENT_ID),
-            True,
-        ),
-        (
-            relationship_fixture(
-                relationship_type=RelationshipType.DESCRIBED_BY, related_spdx_element_id=DOCUMENT_ID, comment=None
-            ),
-            False,
-        ),
-        (relationship_fixture(DOCUMENT_ID, RelationshipType.AMENDS, comment=None), True),
-        (relationship_fixture(PACKAGE_ID, RelationshipType.CONTAINS, FILE_ID), True),
-        (relationship_fixture(PACKAGE_ID, RelationshipType.CONTAINS, FILE_ID, comment=None), False),
-        (relationship_fixture(FILE_ID, RelationshipType.CONTAINED_BY, PACKAGE_ID), True),
-        (relationship_fixture(FILE_ID, RelationshipType.CONTAINED_BY, PACKAGE_ID, comment=None), False),
-        (relationship_fixture(PACKAGE_ID, RelationshipType.CONTAINS, comment=None), True),
-        (relationship_fixture(PACKAGE_ID, RelationshipType.COPY_OF, FILE_ID, comment=None), True),
-    ],
-)
-def test_document_relationships(converter: DocumentConverter, relationship: Relationship, should_be_written: bool):
-    package = package_fixture(spdx_id=PACKAGE_ID)
-    file = file_fixture(spdx_id=FILE_ID)
-    document = document_fixture(
-        creation_info_fixture(spdx_id=DOCUMENT_ID), packages=[package], files=[file], relationships=[relationship]
-    )
-
-    # Weird type hint to make warnings about unresolved references from the mock class disappear
-    relationship_converter: Union[RelationshipConverter, NonCallableMagicMock] = converter.relationship_converter
-    relationship_converter.convert.return_value = "mock_converted_relationship"
-
-    converted_dict = converter.convert(document)
-
-    relationships = converted_dict.get(converter.json_property_name(DocumentProperty.RELATIONSHIPS))
-
-    if should_be_written:
-        assert_mock_method_called_with_arguments(relationship_converter, "convert", relationship)
-        assert relationships == ["mock_converted_relationship"]
-    else:
-        assert_no_mock_methods_called(relationship_converter)
-        assert relationships is None
