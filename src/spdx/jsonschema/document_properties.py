@@ -17,7 +17,6 @@ class DocumentProperty(JsonProperty):
     NAME = auto()
     SPDX_VERSION = auto()
     DOCUMENT_NAMESPACE = auto()
-    DOCUMENT_DESCRIBES = auto()
     PACKAGES = auto()
     FILES = auto()
     SNIPPETS = auto()

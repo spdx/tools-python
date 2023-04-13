@@ -10,9 +10,6 @@
         "licenseListVersion": "3.19"
     },
     "dataLicense": "CC0-1.0",
-    "documentDescribes": [
-        "SPDXRef-File"
-    ],
     "documentNamespace": "https://some.namespace",
     "externalDocumentRefs": [
         {

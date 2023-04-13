@@ -16,13 +16,6 @@ from spdx.jsonschema.package_converter import PackageConverter
 from spdx.jsonschema.relationship_converter import RelationshipConverter
 from spdx.jsonschema.snippet_converter import SnippetConverter
 from spdx.model.document import Document
-from spdx.model.relationship import RelationshipType
-from spdx.model.relationship_filters import (
-    filter_by_type_and_origin,
-    filter_by_type_and_target,
-    find_file_contained_by_package_relationships,
-    find_package_contains_file_relationships,
-)
 
 
 class DocumentConverter(TypedConverter[Document]):
@@ -90,20 +83,6 @@ class DocumentConverter(TypedConverter[Document]):
             return document.creation_info.spdx_version
         elif document_property == DocumentProperty.DOCUMENT_NAMESPACE:
             return document.creation_info.document_namespace
-        elif document_property == DocumentProperty.DOCUMENT_DESCRIBES:
-            describes_ids = [
-                relationship.related_spdx_element_id
-                for relationship in filter_by_type_and_origin(
-                    document.relationships, RelationshipType.DESCRIBES, document.creation_info.spdx_id
-                )
-            ]
-            described_by_ids = [
-                relationship.spdx_element_id
-                for relationship in filter_by_type_and_target(
-                    document.relationships, RelationshipType.DESCRIBED_BY, document.creation_info.spdx_id
-                )
-            ]
-            return describes_ids + described_by_ids or None
         elif document_property == DocumentProperty.PACKAGES:
             return [self.package_converter.convert(package, document) for package in document.packages] or None
         elif document_property == DocumentProperty.FILES:
@@ -111,22 +90,6 @@ class DocumentConverter(TypedConverter[Document]):
         elif document_property == DocumentProperty.SNIPPETS:
             return [self.snippet_converter.convert(snippet, document) for snippet in document.snippets] or None
         elif document_property == DocumentProperty.RELATIONSHIPS:
-            already_covered_relationships = filter_by_type_and_origin(
-                document.relationships, RelationshipType.DESCRIBES, document.creation_info.spdx_id
-            )
-            already_covered_relationships.extend(
-                filter_by_type_and_target(
-                    document.relationships, RelationshipType.DESCRIBED_BY, document.creation_info.spdx_id
-                )
-            )
-            for package in document.packages:
-                already_covered_relationships.extend(find_package_contains_file_relationships(document, package))
-                already_covered_relationships.extend(find_file_contained_by_package_relationships(document, package))
-            relationships_to_ignore = [
-                relationship for relationship in already_covered_relationships if relationship.comment is None
-            ]
             return [
-                self.relationship_converter.convert(relationship)
-                for relationship in document.relationships
-                if relationship not in relationships_to_ignore
+                self.relationship_converter.convert(relationship) for relationship in document.relationships
             ] or None
