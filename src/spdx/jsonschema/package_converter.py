@@ -15,10 +15,6 @@ from spdx.jsonschema.package_verification_code_converter import PackageVerificat
 from spdx.model.actor import Actor
 from spdx.model.document import Document
 from spdx.model.package import Package
-from spdx.model.relationship_filters import (
-    find_file_contained_by_package_relationships,
-    find_package_contains_file_relationships,
-)
 
 
 class PackageConverter(TypedConverter[Package]):
@@ -71,16 +67,6 @@ class PackageConverter(TypedConverter[Package]):
             ] or None
         elif package_property == PackageProperty.FILES_ANALYZED:
             return package.files_analyzed
-        elif package_property == PackageProperty.HAS_FILES:
-            package_contains_file_ids = [
-                relationship.related_spdx_element_id
-                for relationship in find_package_contains_file_relationships(document, package)
-            ]
-            file_contained_in_package_ids = [
-                relationship.spdx_element_id
-                for relationship in find_file_contained_by_package_relationships(document, package)
-            ]
-            return package_contains_file_ids + file_contained_in_package_ids or None
         elif package_property == PackageProperty.HOMEPAGE:
             return apply_if_present(str, package.homepage)
         elif package_property == PackageProperty.LICENSE_COMMENTS:

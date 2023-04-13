@@ -18,7 +18,6 @@ class PackageProperty(JsonProperty):
     DOWNLOAD_LOCATION = auto()
     EXTERNAL_REFS = auto()
     FILES_ANALYZED = auto()
-    HAS_FILES = auto()
     HOMEPAGE = auto()
     LICENSE_COMMENTS = auto()
     LICENSE_CONCLUDED = auto()

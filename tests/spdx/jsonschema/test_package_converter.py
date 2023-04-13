@@ -17,7 +17,6 @@ from spdx.model.annotation import Annotation, AnnotationType
 from spdx.model.checksum import Checksum, ChecksumAlgorithm
 from spdx.model.document import Document
 from spdx.model.package import Package, PackagePurpose, PackageVerificationCode
-from spdx.model.relationship import RelationshipType
 from spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING, SpdxNoAssertion
 from spdx.model.spdx_none import SPDX_NONE_STRING, SpdxNone
 from tests.spdx.fixtures import (
@@ -25,10 +24,7 @@ from tests.spdx.fixtures import (
     creation_info_fixture,
     document_fixture,
     external_package_ref_fixture,
-    file_fixture,
     package_fixture,
-    relationship_fixture,
-    snippet_fixture,
 )
 from tests.spdx.mock_utils import assert_mock_method_called_with_arguments
 
@@ -66,7 +62,6 @@ def converter(
         (PackageProperty.DOWNLOAD_LOCATION, "downloadLocation"),
         (PackageProperty.EXTERNAL_REFS, "externalRefs"),
         (PackageProperty.FILES_ANALYZED, "filesAnalyzed"),
-        (PackageProperty.HAS_FILES, "hasFiles"),
         (PackageProperty.HOMEPAGE, "homepage"),
         (PackageProperty.LICENSE_COMMENTS, "licenseComments"),
         (PackageProperty.LICENSE_CONCLUDED, "licenseConcluded"),
@@ -230,7 +225,6 @@ def test_null_values(converter: PackageConverter):
     assert converter.json_property_name(PackageProperty.ATTRIBUTION_TEXTS) not in converted_dict
     assert converter.json_property_name(PackageProperty.CHECKSUMS) not in converted_dict
     assert converter.json_property_name(PackageProperty.EXTERNAL_REFS) not in converted_dict
-    assert converter.json_property_name(PackageProperty.HAS_FILES) not in converted_dict
     assert converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES) not in converted_dict
 
 
@@ -314,45 +308,3 @@ def test_package_annotations(converter: PackageConverter):
     )
     converted_file_annotations = converted_dict.get(converter.json_property_name(PackageProperty.ANNOTATIONS))
     assert converted_file_annotations == ["mock_converted_annotation", "mock_converted_annotation"]
-
-
-def test_has_files(converter: PackageConverter):
-    package = package_fixture()
-    first_contained_file = file_fixture(spdx_id="firstFileId")
-    second_contained_file = file_fixture(spdx_id="secondFileId")
-    non_contained_file = file_fixture(spdx_id="otherFileId")
-    snippet = snippet_fixture()
-    document = document_fixture(
-        packages=[package], files=[first_contained_file, second_contained_file, non_contained_file], snippets=[snippet]
-    )
-    package_contains_file_relationship = relationship_fixture(
-        spdx_element_id=package.spdx_id,
-        relationship_type=RelationshipType.CONTAINS,
-        related_spdx_element_id=first_contained_file.spdx_id,
-    )
-    file_contained_in_package_relationship = relationship_fixture(
-        spdx_element_id=second_contained_file.spdx_id,
-        relationship_type=RelationshipType.CONTAINED_BY,
-        related_spdx_element_id=package.spdx_id,
-    )
-    package_contains_snippet_relationship = relationship_fixture(
-        spdx_element_id=package.spdx_id,
-        relationship_type=RelationshipType.CONTAINS,
-        related_spdx_element_id=snippet.spdx_id,
-    )
-    package_describes_file_relationship = relationship_fixture(
-        spdx_element_id=package.spdx_id,
-        relationship_type=RelationshipType.DESCRIBES,
-        related_spdx_element_id=non_contained_file.spdx_id,
-    )
-    document.relationships = [
-        package_contains_file_relationship,
-        file_contained_in_package_relationship,
-        package_contains_snippet_relationship,
-        package_describes_file_relationship,
-    ]
-
-    converted_dict = converter.convert(package, document)
-
-    has_files = converted_dict.get(converter.json_property_name(PackageProperty.HAS_FILES))
-    assert has_files == [first_contained_file.spdx_id, second_contained_file.spdx_id]
