@@ -41,7 +41,8 @@ def add_relationship_to_graph(
                 ),
             )
         )
-    graph.add((relationship_node, RDFS.comment, Literal(relationship.comment)))
+    if relationship.comment:
+        graph.add((relationship_node, RDFS.comment, Literal(relationship.comment)))
     relationship_resource = URIRef(
         add_namespace_to_spdx_id(relationship.spdx_element_id, doc_namespace, external_doc_ref_to_namespace)
     )
