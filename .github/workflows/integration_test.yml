@@ -1,0 +1,43 @@
+name: Circle conversion test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  install_and_test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
+      - name: Installation
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade setuptools wheel setuptools_scm build
+          python -m build -nwx .
+          python -m pip install --upgrade ./dist/*.whl
+        shell: bash
+      - name: Install jd
+        uses: jaxxstorm/action-install-gh-release@v1.10.0
+        with: # Grab the latest version
+          repo: josephburnett/jd
+          platform: linux
+          extension-matching: disable
+          rename-to: jd
+          chmod: 0755
+      - name: Run CLI
+        run: |
+          pyspdxtools -i ./tests/spdx/data/circleConversionTestInitialDocument.json -o circleTest.yaml
+          pyspdxtools -i circleTest.yaml -o circleTest.xml
+          pyspdxtools -i circleTest.xml -o circleTest.rdf
+          pyspdxtools -i circleTest.rdf -o circleTest.spdx
+          pyspdxtools -i circleTest.spdx -o circleTest.json
+      - name: Compare initial and final json document of the circle conversion test
+        run: jd -set ./tests/spdx/data/circleConversionTestInitialDocument.json circleTest.json
