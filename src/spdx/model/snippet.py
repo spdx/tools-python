@@ -35,7 +35,7 @@ class Snippet:
         license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
         license_info_in_snippet: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
         license_comment: Optional[str] = None,
-        copyright_text: Optional[str] = None,
+        copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
         comment: Optional[str] = None,
         name: Optional[str] = None,
         attribution_texts: List[str] = None,
