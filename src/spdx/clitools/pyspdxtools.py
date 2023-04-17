@@ -29,7 +29,7 @@ from spdx.writer.write_anything import write_file
 
 
 @click.command()
-@click.option("--infile", "-i", help="The file containing the document to be validated or converted.")
+@click.option("--infile", "-i", required=True, help="The file containing the document to be validated or converted.")
 @click.option(
     "--outfile",
     "-o",
