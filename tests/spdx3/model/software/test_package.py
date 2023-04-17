@@ -20,6 +20,7 @@ def test_correct_initialization(creation_information):
         download_location="https://downloadlocation",
         package_url="https://package.uri",
         homepage="https://homepage",
+        source_info="some info",
     )
 
     assert package.spdx_id == "SPDXRef-Package"
@@ -30,6 +31,7 @@ def test_correct_initialization(creation_information):
     assert package.download_location == "https://downloadlocation"
     assert package.package_url == "https://package.uri"
     assert package.homepage == "https://homepage"
+    assert package.source_info == "some info"
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
@@ -44,6 +46,7 @@ def test_invalid_initialization(creation_information):
             download_location=4,
             package_url=["uris"],
             homepage=True,
+            source_info=["some info"],
         )
 
     assert err.value.args[0] == [
@@ -60,4 +63,6 @@ def test_invalid_initialization(creation_information):
         'SetterError Package: type of argument "package_url" must be one of (str, '
         "NoneType); got list instead: ['uris']",
         'SetterError Package: type of argument "homepage" must be one of (str, ' "NoneType); got bool instead: True",
+        'SetterError Package: type of argument "source_info" must be one of (str, '
+        "NoneType); got list instead: ['some info']",
     ]
