@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-
+import os
 from typing import List, Optional
 
 import pytest
@@ -9,6 +9,7 @@ import pytest
 from spdx.constants import DOCUMENT_SPDX_ID
 from spdx.model.document import CreationInfo, Document
 from spdx.model.relationship import Relationship, RelationshipType
+from spdx.parser.parse_anything import parse_file
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import creation_info_fixture, document_fixture, file_fixture, package_fixture, snippet_fixture
@@ -19,6 +20,12 @@ def test_valid_document():
     validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
 
     assert validation_messages == []
+
+
+def test_spdx_lite_validation():
+    document = parse_file(os.path.join(os.path.dirname(__file__), "../data/SPDXLite.spdx"))
+
+    assert validate_full_spdx_document(document) == []
 
 
 @pytest.mark.parametrize(
