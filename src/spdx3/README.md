@@ -1,1 +1,1 @@
-This implementation is mainly based on the descriptive markdown files and the model.png in the repository https://github.com/spdx/spdx-3-model (latest commit: 01360996d37c1d913f3d15e2d5911ace182ed200).
+This implementation is mainly based on the descriptive markdown files and the model.png in the repository https://github.com/spdx/spdx-3-model (latest commit: 81ce08107ae8b295814dcc631cfa1c48124887aa).
