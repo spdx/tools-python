@@ -1,0 +1,36 @@
+# from https://github.com/OpenChain-Project/OpenChain-JWG/blob/4675d7a61ad552e8f9780419c54dddbdf87f6018/subgroups/sbom-sg/outcomes/SPDX-Lite/sample/SPDX-tools-spdxlite.txt
+## 2 Document Creation Information
+
+SPDXVersion: SPDX-2.2
+DataLicense: CC0-1.0
+SPDXID: SPDXRef-DOCUMENT
+DocumentName: example-v1.0
+DocumentNamespace: https://example.com/example-v1.0
+Creator: Person: someone
+Created: 2021-04-05T01:23:45Z
+
+## 3 Package Information
+
+PackageName: SPDX tools
+SPDXID: SPDXRef-spdxtools
+PackageVersion:	2.0.3
+PackageFileName: spdx-tools-2.0.2-jar-with-dependencies.jar
+PackageDownloadLocation: NONE
+FilesAnalyzed: false
+PackageHomePage: https://spdx.org/tools
+PackageLicenseConcluded: Apache-2.0
+PackageLicenseDeclared: Apache-2.0
+PackageLicenseComments: <text></text>
+PackageCopyrightText: <text>software copyright (c) 2000-2003, BEA Systems, <http://www.bea.com/></text>
+PackageComment: <text>
+ ModificationRecord: NO
+ CompileOptions: --some-option
+ LinkMethodology: Dynamic
+</text>
+
+## 6 Other Licensing Information Detected
+
+LicenseID: LicenseRef-1
+ExtractedText: <text>hoge</text>
+LicenseName: NOASSERTION
+LicenseComment: <text></text>
