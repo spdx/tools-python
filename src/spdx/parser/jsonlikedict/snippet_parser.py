@@ -10,7 +10,10 @@ from spdx.model.snippet import Snippet
 from spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx.model.spdx_none import SpdxNone
 from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.dict_parsing_functions import parse_field_or_log_error
+from spdx.parser.jsonlikedict.dict_parsing_functions import (
+    parse_field_or_log_error,
+    parse_field_or_no_assertion_or_none,
+)
 from spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 from spdx.parser.logger import Logger
 from spdx.parser.parsing_functions import construct_or_raise_parsing_error
@@ -43,7 +46,9 @@ class SnippetParser:
 
         attribution_texts: List[str] = snippet_dict.get("attributionTexts", [])
         comment: Optional[str] = snippet_dict.get("comment")
-        copyright_text: Optional[str] = snippet_dict.get("copyrightText")
+        copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = parse_field_or_no_assertion_or_none(
+            snippet_dict.get("copyrightText")
+        )
         license_comment: Optional[str] = snippet_dict.get("licenseComments")
         license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = parse_field_or_log_error(
             logger, snippet_dict.get("licenseConcluded"), self.license_expression_parser.parse_license_expression

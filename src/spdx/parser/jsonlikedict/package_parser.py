@@ -58,7 +58,9 @@ class PackageParser:
             logger, package_dict.get("checksums"), self.checksum_parser.parse_checksum, field_is_list=True
         )
         comment: Optional[str] = package_dict.get("comment")
-        copyright_text: Optional[str] = package_dict.get("copyrightText")
+        copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = parse_field_or_no_assertion_or_none(
+            package_dict.get("copyrightText")
+        )
         description: Optional[str] = package_dict.get("description")
         download_location: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = parse_field_or_no_assertion_or_none(
             package_dict.get("downloadLocation")
@@ -78,7 +80,9 @@ class PackageParser:
             elif files_analyzed.lower() == "false":
                 files_analyzed = False
 
-        homepage: Optional[str] = package_dict.get("homepage")
+        homepage: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = parse_field_or_no_assertion_or_none(
+            package_dict.get("homepage")
+        )
         license_comments: Optional[str] = package_dict.get("licenseComments")
         license_concluded = parse_field_or_log_error(
             logger, package_dict.get("licenseConcluded"), self.license_expression_parser.parse_license_expression
