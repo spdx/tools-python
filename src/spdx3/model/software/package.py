@@ -21,6 +21,7 @@ class Package(Artifact):
     download_location: Optional[str] = None  # anyURI
     package_url: Optional[str] = None  # anyURI
     homepage: Optional[str] = None  # anyURI
+    source_info: Optional[str] = None
 
     def __init__(
         self,
@@ -41,6 +42,7 @@ class Package(Artifact):
         download_location: Optional[str] = None,
         package_url: Optional[str] = None,
         homepage: Optional[str] = None,
+        source_info: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references

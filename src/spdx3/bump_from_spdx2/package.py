@@ -36,7 +36,7 @@ def bump_package(
     # package.checksums -> package.verified_using
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_package.checksums]
     homepage = spdx2_package.homepage
-    print_missing_conversion("package2.source_info", 0)
+    source_info = spdx2_package.source_info
     print_missing_conversion(
         "package2.license_concluded, package2.license_info_from_files, package2.license_declared, "
         "package2.license_comment, package2.copyright_text",
@@ -88,6 +88,7 @@ def bump_package(
             download_location=download_location,
             package_url=package_url,
             homepage=homepage,
+            source_info=source_info,
         )
     )
 

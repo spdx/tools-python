@@ -39,6 +39,10 @@ def test_bump_package(creation_information):
     assert package.external_identifier == [
         ExternalIdentifier(ExternalIdentifierType.SWHID, "swh_locator", "swh_comment")
     ]
+    assert package.download_location == spdx2_package.download_location
+    assert package.package_version == spdx2_package.version
+    assert package.homepage == spdx2_package.homepage
+    assert package.source_info == spdx2_package.source_info
 
 
 @mock.patch("spdx3.model.creation_information.CreationInformation")
