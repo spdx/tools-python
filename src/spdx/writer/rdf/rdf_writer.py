@@ -6,6 +6,7 @@ from typing import Dict, List
 from rdflib import DOAP, Graph
 from rdflib.compare import to_isomorphic
 
+from spdx.document_utils import create_document_without_duplicates
 from spdx.model.document import Document
 from spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
 from spdx.validation.document_validator import validate_full_spdx_document
@@ -19,12 +20,13 @@ from spdx.writer.rdf.relationship_writer import add_relationship_to_graph
 from spdx.writer.rdf.snippet_writer import add_snippet_to_graph
 
 
-def write_document_to_file(document: Document, file_name: str, validate: bool):
+def write_document_to_file(document: Document, file_name: str, validate: bool, drop_duplicates: bool = True):
     if validate:
         validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
         if validation_messages:
             raise ValueError(f"Document is not valid. The following errors were detected: {validation_messages}")
-
+    if drop_duplicates:
+        document = create_document_without_duplicates(document)
     graph = Graph()
     doc_namespace = document.creation_info.document_namespace
     external_doc_ref_to_namespace: Dict[str, str] = {

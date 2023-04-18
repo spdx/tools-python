@@ -10,6 +10,7 @@
 #  limitations under the License.
 from typing import List, TextIO
 
+from spdx.document_utils import create_document_without_duplicates
 from spdx.model.document import Document
 from spdx.validation.document_validator import validate_full_spdx_document
 from spdx.validation.validation_message import ValidationMessage
@@ -29,11 +30,13 @@ from spdx.writer.tagvalue.tagvalue_writer_helper_functions import (
 )
 
 
-def write_document_to_file(document: Document, file_name: str, validate: bool = True):
+def write_document_to_file(document: Document, file_name: str, validate: bool = True, drop_duplicates: bool = True):
     if validate:
         validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
         if validation_messages:
             raise ValueError(f"Document is not valid. The following errors were detected: {validation_messages}")
+    if drop_duplicates:
+        document = create_document_without_duplicates(document)
 
     with open(file_name, "w") as out:
         write_document(document, out)
