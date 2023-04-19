@@ -5,10 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx3.model.annotation import Annotation, AnnotationType
+from spdx_tools.spdx3.model.annotation import Annotation, AnnotationType
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     annotation = Annotation(
         "SPDXRef-Annotation",
@@ -27,7 +27,7 @@ def test_correct_initialization(creation_information):
     assert annotation.statement == "This is a statement"
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation")
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation")
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Annotation(
@@ -41,7 +41,7 @@ def test_invalid_initialization(creation_information):
 
     assert err.value.args[0] == [
         'SetterError Annotation: type of argument "annotation_type" must be '
-        "spdx3.model.annotation.AnnotationType; got str instead: REVIEW",
+        "spdx_tools.spdx3.model.annotation.AnnotationType; got str instead: REVIEW",
         'SetterError Annotation: type of argument "subject" must be str; got dict ' "instead: {'element': 1}",
         'SetterError Annotation: type of argument "content_type" must be one of (str, '
         "NoneType); got int instead: 4",

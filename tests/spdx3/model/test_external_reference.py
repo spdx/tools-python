@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx3.model.external_reference import ExternalReference, ExternalReferenceType
+from spdx_tools.spdx3.model.external_reference import ExternalReference, ExternalReferenceType
 
 
 def test_correct_initialization():
@@ -22,7 +22,7 @@ def test_invalid_initialization():
 
     assert err.value.args[0] == [
         'SetterError ExternalReference: type of argument "external_reference_type" '
-        "must be one of (spdx3.model.external_reference.ExternalReferenceType, "
+        "must be one of (spdx_tools.spdx3.model.external_reference.ExternalReferenceType, "
         "NoneType); got str instead: OTHER",
         'SetterError ExternalReference: type of argument "locator" must be a list; ' "got str instead: a URI",
         'SetterError ExternalReference: type of argument "content_type" must be one '
