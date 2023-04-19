@@ -6,14 +6,14 @@ from datetime import datetime
 import pytest
 from semantic_version import Version
 
-from spdx3.bump_from_spdx2.actor import bump_actor
-from spdx3.model.creation_information import CreationInformation
-from spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
-from spdx3.model.organization import Organization
-from spdx3.model.person import Person
-from spdx3.model.tool import Tool
-from spdx3.payload import Payload
-from spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
+from spdx_tools.spdx3.model.creation_information import CreationInformation
+from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
+from spdx_tools.spdx3.model.organization import Organization
+from spdx_tools.spdx3.model.person import Person
+from spdx_tools.spdx3.model.tool import Tool
+from spdx_tools.spdx3.payload import Payload
+from spdx_tools.spdx.model.actor import Actor, ActorType
 
 
 @pytest.mark.parametrize(

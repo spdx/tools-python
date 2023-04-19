@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx3.model.namespace_map import NamespaceMap
+from spdx_tools.spdx3.model.namespace_map import NamespaceMap
 
 
 def test_correct_initialization():

@@ -5,11 +5,11 @@ from unittest import mock
 
 import pytest
 
-from spdx3.model.software.package import Package
-from spdx3.model.software.software_purpose import SoftwarePurpose
+from spdx_tools.spdx3.model.software.package import Package
+from spdx_tools.spdx3.model.software.software_purpose import SoftwarePurpose
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     package = Package(
         "SPDXRef-Package",
@@ -34,7 +34,7 @@ def test_correct_initialization(creation_information):
     assert package.source_info == "some info"
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Package(
@@ -53,8 +53,8 @@ def test_invalid_initialization(creation_information):
         'SetterError Package: type of argument "content_identifier" must be one of '
         "(str, NoneType); got int instead: 3",
         'SetterError Package: type of argument "package_purpose" must be one of '
-        "(List[spdx3.model.software.software_purpose.SoftwarePurpose], NoneType); got "
-        "spdx3.model.software.software_purpose.SoftwarePurpose instead: "
+        "(List[spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose], NoneType); got "
+        "spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose instead: "
         "SoftwarePurpose.FILE",
         'SetterError Package: type of argument "package_version" must be one of '
         "(str, NoneType); got int instead: 42",

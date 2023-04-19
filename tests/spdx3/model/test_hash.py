@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx3.model.hash import Hash, HashAlgorithm
+from spdx_tools.spdx3.model.hash import Hash, HashAlgorithm
 
 
 def test_correct_initialization():
@@ -19,6 +19,6 @@ def test_invalid_initialization():
 
     assert err.value.args[0] == [
         'SetterError Hash: type of argument "algorithm" must be '
-        "spdx3.model.hash.HashAlgorithm; got str instead: SHA1",
+        "spdx_tools.spdx3.model.hash.HashAlgorithm; got str instead: SHA1",
         'SetterError Hash: type of argument "hash_value" must be str; got int ' "instead: 345",
     ]
