@@ -7,11 +7,11 @@ from unittest import TestCase
 from license_expression import get_spdx_licensing
 from rdflib import RDF, Graph, URIRef
 
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.file import FileType
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.parser.rdf.file_parser import parse_file
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model.file import FileType
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.parser.rdf.file_parser import parse_file
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 def test_parse_file():

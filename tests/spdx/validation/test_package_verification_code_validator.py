@@ -4,9 +4,9 @@
 
 import pytest
 
-from spdx.model.package import PackageVerificationCode
-from spdx.validation.package_verification_code_validator import validate_verification_code
-from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from spdx_tools.spdx.model.package import PackageVerificationCode
+from spdx_tools.spdx.validation.package_verification_code_validator import validate_verification_code
+from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 def test_valid_package_verification_code():

@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: 2022 spdx contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+from enum import auto
+
+from spdx_tools.spdx.jsonschema.json_property import JsonProperty
+
+
+class RelationshipProperty(JsonProperty):
+    SPDX_ELEMENT_ID = auto()
+    COMMENT = auto()
+    RELATED_SPDX_ELEMENT = auto()
+    RELATIONSHIP_TYPE = auto()

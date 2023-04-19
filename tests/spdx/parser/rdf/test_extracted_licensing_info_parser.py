@@ -6,8 +6,8 @@ import os
 import pytest
 from rdflib import RDF, Graph
 
-from spdx.parser.rdf.extracted_licensing_info_parser import parse_extracted_licensing_info
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.parser.rdf.extracted_licensing_info_parser import parse_extracted_licensing_info
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 @pytest.mark.parametrize(

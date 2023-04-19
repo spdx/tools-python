@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 from rdflib import RDFS, Graph, Literal, URIRef
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
-from spdx.writer.rdf.relationship_writer import add_relationship_to_graph
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.writer.rdf.relationship_writer import add_relationship_to_graph
 from tests.spdx.fixtures import relationship_fixture
 
 

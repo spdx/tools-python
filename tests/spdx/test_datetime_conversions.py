@@ -5,7 +5,7 @@ from datetime import datetime
 
 import pytest
 
-from spdx.datetime_conversions import datetime_from_str, datetime_to_iso_string
+from spdx_tools.spdx.datetime_conversions import datetime_from_str, datetime_to_iso_string
 
 
 def test_datetime_to_iso_string():

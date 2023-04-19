@@ -5,8 +5,8 @@ import pytest
 from license_expression import get_spdx_licensing
 from rdflib import RDF, Graph, Literal, URIRef
 
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
-from spdx.writer.rdf.license_expression_writer import add_license_expression_to_graph
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.writer.rdf.license_expression_writer import add_license_expression_to_graph
 
 
 def test_add_conjunctive_license_set_to_graph():

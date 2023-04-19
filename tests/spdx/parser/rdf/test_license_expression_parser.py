@@ -7,9 +7,9 @@ from unittest import TestCase
 from license_expression import get_spdx_licensing
 from rdflib import RDF, Graph
 
-from spdx.parser.rdf import rdf_parser
-from spdx.parser.rdf.license_expression_parser import parse_license_expression
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.parser.rdf import rdf_parser
+from spdx_tools.spdx.parser.rdf.license_expression_parser import parse_license_expression
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 def test_license_expression_parser():

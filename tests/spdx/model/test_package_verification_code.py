@@ -4,7 +4,7 @@
 
 import pytest
 
-from spdx.model.package import PackageVerificationCode
+from spdx_tools.spdx.model.package import PackageVerificationCode
 
 
 def test_correct_initialization():

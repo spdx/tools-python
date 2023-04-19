@@ -5,8 +5,8 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.extracted_licensing_info_parser import ExtractedLicensingInfoParser
+from spdx_tools.spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.parser.jsonlikedict.extracted_licensing_info_parser import ExtractedLicensingInfoParser
 
 
 def test_parse_extracted_licensing_info():

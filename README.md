@@ -123,12 +123,12 @@ import logging
 
 from license_expression import get_spdx_licensing
 
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.file import File, FileType
-from spdx.model.relationship import Relationship, RelationshipType
-from spdx.parser.parse_anything import parse_file
-from spdx.validation.document_validator import validate_full_spdx_document
-from spdx.writer.write_anything import write_file
+from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model.file import File, FileType
+from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.parser.parse_anything import parse_file
+from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
+from spdx_tools.spdx.writer.write_anything import write_file
 
 # read in an SPDX document from a file
 document = parse_file("spdx_document.json")

@@ -5,10 +5,10 @@ from datetime import datetime
 
 import pytest
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.model.annotation import AnnotationType
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.tagvalue.parser import Parser
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.model.annotation import AnnotationType
+from spdx_tools.spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.parser.tagvalue.parser import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 

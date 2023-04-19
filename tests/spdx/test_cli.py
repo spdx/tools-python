@@ -3,7 +3,7 @@ import os
 import pytest
 from click.testing import CliRunner
 
-from spdx.clitools.pyspdxtools import main
+from spdx_tools.spdx.clitools.pyspdxtools import main
 
 
 @pytest.mark.parametrize(

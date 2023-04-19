@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx.jsonschema.package_verification_code_converter import PackageVerificationCodeConverter
-from spdx.jsonschema.package_verification_code_properties import PackageVerificationCodeProperty
-from spdx.model.package import PackageVerificationCode
+from spdx_tools.spdx.jsonschema.package_verification_code_converter import PackageVerificationCodeConverter
+from spdx_tools.spdx.jsonschema.package_verification_code_properties import PackageVerificationCodeProperty
+from spdx_tools.spdx.model.package import PackageVerificationCode
 
 
 @pytest.fixture

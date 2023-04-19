@@ -4,7 +4,7 @@
 
 import pytest
 
-from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
 
 
 def test_correct_initialization():

@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx.model.checksum import ChecksumAlgorithm
-from spdx.parser.tagvalue.helper_methods import parse_checksum
+from spdx_tools.spdx.model.checksum import ChecksumAlgorithm
+from spdx_tools.spdx.parser.tagvalue.helper_methods import parse_checksum
 
 
 @pytest.mark.parametrize(

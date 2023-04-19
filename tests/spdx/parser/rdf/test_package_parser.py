@@ -8,12 +8,12 @@ import pytest
 from license_expression import get_spdx_licensing
 from rdflib import RDF, BNode, Graph, Literal, URIRef
 
-from spdx.model.actor import Actor, ActorType
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.package import ExternalPackageRefCategory, PackagePurpose, PackageVerificationCode
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.parser.rdf.package_parser import parse_external_package_ref, parse_package
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model.package import ExternalPackageRefCategory, PackagePurpose, PackageVerificationCode
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.parser.rdf.package_parser import parse_external_package_ref, parse_package
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 def test_package_parser():

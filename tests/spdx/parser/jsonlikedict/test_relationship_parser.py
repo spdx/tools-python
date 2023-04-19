@@ -5,11 +5,11 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.model.relationship import Relationship, RelationshipType
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.relationship_parser import RelationshipParser
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.parser.jsonlikedict.relationship_parser import RelationshipParser
 
 
 def test_parse_relationship():
@@ -46,7 +46,7 @@ def test_parse_incomplete_relationship():
         [
             "Error while constructing Relationship: ['SetterError Relationship: type of "
             'argument "relationship_type" must be '
-            "spdx.model.relationship.RelationshipType; got NoneType instead: None']"
+            "spdx_tools.spdx.model.relationship.RelationshipType; got NoneType instead: None']"
         ],
     )
 

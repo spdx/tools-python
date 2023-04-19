@@ -4,7 +4,7 @@ __pycache__/
 /build/
 /dist/
 /tmp/
-src/spdx/parser/tagvalue/parsetab.py
+src/spdx_tools/spdx/parser/tagvalue/parsetab.py
 /.cache/
 
 .tox

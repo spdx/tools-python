@@ -6,9 +6,9 @@ from typing import List
 
 import pytest
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.validation.creation_info_validator import validate_creation_info
-from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.validation.creation_info_validator import validate_creation_info
+from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import creation_info_fixture
 
 

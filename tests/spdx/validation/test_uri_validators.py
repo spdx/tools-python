@@ -4,7 +4,7 @@
 
 import pytest
 
-from spdx.validation.uri_validators import validate_download_location, validate_uri, validate_url
+from spdx_tools.spdx.validation.uri_validators import validate_download_location, validate_uri, validate_url
 
 
 @pytest.mark.parametrize(

@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 from rdflib import RDF, RDFS, Graph, Literal, URIRef
 
-from spdx.datetime_conversions import datetime_to_iso_string
-from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
-from spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
+from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
+from spdx_tools.spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
+from spdx_tools.spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
 from tests.spdx.fixtures import creation_info_fixture
 
 

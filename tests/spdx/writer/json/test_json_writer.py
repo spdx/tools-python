@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from spdx.writer.json.json_writer import write_document_to_file
+from spdx_tools.spdx.writer.json.json_writer import write_document_to_file
 from tests.spdx.fixtures import document_fixture
 
 

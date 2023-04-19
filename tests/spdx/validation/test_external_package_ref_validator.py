@@ -6,8 +6,8 @@ from typing import List
 
 import pytest
 
-from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
-from spdx.validation.external_package_ref_validator import (
+from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
+from spdx_tools.spdx.validation.external_package_ref_validator import (
     BOWER_REGEX,
     CPE22TYPE_REGEX,
     CPE23TYPE_REGEX,
@@ -19,7 +19,7 @@ from spdx.validation.external_package_ref_validator import (
     SWH_REGEX,
     validate_external_package_ref,
 )
-from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
 @pytest.mark.parametrize(

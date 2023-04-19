@@ -6,11 +6,11 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.model.actor import Actor, ActorType
-from spdx.model.annotation import Annotation, AnnotationType
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.annotation_parser import AnnotationParser
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
+from spdx_tools.spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.parser.jsonlikedict.annotation_parser import AnnotationParser
 
 
 def test_parse_annotation():
@@ -128,7 +128,7 @@ def test_parse_all_annotations():
                 "Error while constructing Annotation: ['SetterError Annotation: type of "
                 'argument "spdx_id" must be str; got NoneType instead: None\', '
                 '\'SetterError Annotation: type of argument "annotation_type" must be '
-                "spdx.model.annotation.AnnotationType; got NoneType instead: None', "
+                "spdx_tools.spdx.model.annotation.AnnotationType; got NoneType instead: None', "
                 '\'SetterError Annotation: type of argument "annotation_date" must be '
                 "datetime.datetime; got NoneType instead: None', 'SetterError Annotation: "
                 'type of argument "annotation_comment" must be str; got NoneType instead: '
@@ -141,9 +141,9 @@ def test_parse_all_annotations():
                 "Error while constructing Annotation: ['SetterError Annotation: type of "
                 'argument "spdx_id" must be str; got NoneType instead: None\', '
                 '\'SetterError Annotation: type of argument "annotation_type" must be '
-                "spdx.model.annotation.AnnotationType; got NoneType instead: None', "
+                "spdx_tools.spdx.model.annotation.AnnotationType; got NoneType instead: None', "
                 '\'SetterError Annotation: type of argument "annotator" must be '
-                "spdx.model.actor.Actor; got NoneType instead: None', 'SetterError Annotation: "
+                "spdx_tools.spdx.model.actor.Actor; got NoneType instead: None', 'SetterError Annotation: "
                 'type of argument "annotation_comment" must be str; got NoneType instead: '
                 "None']"
             ],

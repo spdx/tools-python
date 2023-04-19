@@ -5,10 +5,10 @@ from unittest.mock import MagicMock, call, mock_open, patch
 
 import pytest
 
-from spdx.model.actor import ActorType
-from spdx.model.relationship import RelationshipType
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.writer.tagvalue.tagvalue_writer_helper_functions import scan_relationships, write_actor
+from spdx_tools.spdx.model.actor import ActorType
+from spdx_tools.spdx.model.relationship import RelationshipType
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import scan_relationships, write_actor
 from tests.spdx.fixtures import actor_fixture, file_fixture, package_fixture, relationship_fixture
 
 

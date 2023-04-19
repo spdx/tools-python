@@ -7,14 +7,19 @@ from unittest import TestCase
 import pytest
 from license_expression import Licensing
 
-from spdx.model.actor import Actor, ActorType
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose, PackageVerificationCode
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.model.spdx_none import SpdxNone
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
-from spdx.parser.jsonlikedict.package_parser import PackageParser
+from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model.package import (
+    ExternalPackageRef,
+    ExternalPackageRefCategory,
+    PackagePurpose,
+    PackageVerificationCode,
+)
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
+from spdx_tools.spdx.parser.jsonlikedict.package_parser import PackageParser
 
 
 @pytest.mark.parametrize(
@@ -228,8 +233,8 @@ def test_parse_package(
             [
                 "Error while constructing Package: ['SetterError Package: type of "
                 "argument \"name\" must be str; got NoneType instead: None', 'SetterError Package: type of argument "
-                '"download_location" must be one of (str, spdx.model.spdx_no_assertion.SpdxNoAssertion, '
-                "spdx.model.spdx_none.SpdxNone); "
+                '"download_location" must be one of (str, spdx_tools.spdx.model.spdx_no_assertion.SpdxNoAssertion, '
+                "spdx_tools.spdx.model.spdx_none.SpdxNone); "
                 "got NoneType instead: None']"
             ],
         ),
@@ -307,7 +312,7 @@ def test_parse_external_ref():
         [
             "Error while constructing ExternalPackageRef: ['SetterError "
             'ExternalPackageRef: type of argument "category" must be '
-            "spdx.model.package.ExternalPackageRefCategory; got NoneType instead: None', "
+            "spdx_tools.spdx.model.package.ExternalPackageRefCategory; got NoneType instead: None', "
             '\'SetterError ExternalPackageRef: type of argument "locator" must be str; '
             "got NoneType instead: None']"
         ],

@@ -5,16 +5,16 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.document_utils import (
+from spdx_tools.spdx.document_utils import (
     create_document_without_duplicates,
     create_list_without_duplicates,
     get_contained_spdx_element_ids,
     get_contained_spdx_elements,
     get_element_from_spdx_id,
 )
-from spdx.model.file import FileType
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model.file import FileType
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model.spdx_none import SpdxNone
 from tests.spdx.fixtures import (
     actor_fixture,
     checksum_fixture,

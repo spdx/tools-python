@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 from rdflib import RDF, Graph, URIRef
 
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
-from spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
 from tests.spdx.fixtures import external_document_ref_fixture
 
 

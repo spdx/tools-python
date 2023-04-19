@@ -4,7 +4,7 @@
 
 import pytest
 
-from spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model.actor import Actor, ActorType
 
 
 def test_correct_initialization():

@@ -6,10 +6,10 @@ from datetime import datetime
 
 from rdflib import BNode, Graph, URIRef
 
-from spdx.model.actor import Actor, ActorType
-from spdx.model.annotation import AnnotationType
-from spdx.parser.rdf.annotation_parser import parse_annotation
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model.annotation import AnnotationType
+from spdx_tools.spdx.parser.rdf.annotation_parser import parse_annotation
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 def test_parse_annotation():
