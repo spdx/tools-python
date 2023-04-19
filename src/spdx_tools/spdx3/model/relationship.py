@@ -54,8 +54,8 @@ class RelationshipType(Enum):
 
 class RelationshipCompleteness(Enum):
     INCOMPLETE = auto()
-    KNOWN = auto()
-    UNKNOWN = auto()
+    COMPLETE = auto()
+    NOASSERTION = auto()
 
 
 @dataclass_with_properties
