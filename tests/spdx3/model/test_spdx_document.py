@@ -5,10 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx3.model.spdx_document import SpdxDocument
+from spdx_tools.spdx3.model.spdx_document import SpdxDocument
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     spdx_document = SpdxDocument(
         "SPDXRef-DOCUMENT", creation_information, "Test document", elements=["spdx_id1"], root_elements=["spdx_id2"]
@@ -28,13 +28,13 @@ def test_invalid_initialization():
     assert err.value.args[0] == [
         'SetterError SpdxDocument: type of argument "spdx_id" must be str; got int ' "instead: 1",
         'SetterError SpdxDocument: type of argument "creation_info" must be '
-        "spdx3.model.creation_information.CreationInformation; got dict instead: "
+        "spdx_tools.spdx3.model.creation_information.CreationInformation; got dict instead: "
         "{'info': 5}",
         'SetterError SpdxDocument: type of argument "elements"[0] must be ' "str; got int instead: [8]",
     ]
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_incomplete_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         SpdxDocument("SPDXRef-Document", creation_information)
