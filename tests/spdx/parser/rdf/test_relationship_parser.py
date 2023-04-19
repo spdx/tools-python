@@ -6,10 +6,10 @@ import os
 import pytest
 from rdflib import RDF, Graph, URIRef
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.model.relationship import RelationshipType
-from spdx.parser.rdf.relationship_parser import parse_implicit_relationship, parse_relationship
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.model.relationship import RelationshipType
+from spdx_tools.spdx.parser.rdf.relationship_parser import parse_implicit_relationship, parse_relationship
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
 def test_relationship_parser():

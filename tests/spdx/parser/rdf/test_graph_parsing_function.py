@@ -4,7 +4,7 @@
 import pytest
 from rdflib import Graph, Namespace, URIRef
 
-from spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, remove_prefix
+from spdx_tools.spdx.parser.rdf.graph_parsing_functions import parse_spdx_id, remove_prefix
 
 
 @pytest.mark.parametrize(

@@ -9,23 +9,23 @@ from unittest.mock import MagicMock, NonCallableMagicMock
 import pytest
 from license_expression import Licensing
 
-from spdx.jsonschema.annotation_converter import AnnotationConverter
-from spdx.jsonschema.file_converter import FileConverter
-from spdx.jsonschema.file_properties import FileProperty
-from spdx.model.actor import Actor, ActorType
-from spdx.model.annotation import Annotation, AnnotationType
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.document import Document
-from spdx.model.file import File, FileType
-from spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING, SpdxNoAssertion
-from spdx.model.spdx_none import SPDX_NONE_STRING, SpdxNone
+from spdx_tools.spdx.jsonschema.annotation_converter import AnnotationConverter
+from spdx_tools.spdx.jsonschema.file_converter import FileConverter
+from spdx_tools.spdx.jsonschema.file_properties import FileProperty
+from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
+from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model.file import File, FileType
+from spdx_tools.spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING, SpdxNoAssertion
+from spdx_tools.spdx.model.spdx_none import SPDX_NONE_STRING, SpdxNone
 from tests.spdx.fixtures import annotation_fixture, creation_info_fixture, document_fixture, file_fixture
 from tests.spdx.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
-@mock.patch("spdx.jsonschema.checksum_converter.ChecksumConverter", autospec=True)
-@mock.patch("spdx.jsonschema.annotation_converter.AnnotationConverter", autospec=True)
+@mock.patch("spdx_tools.spdx.jsonschema.checksum_converter.ChecksumConverter", autospec=True)
+@mock.patch("spdx_tools.spdx.jsonschema.annotation_converter.AnnotationConverter", autospec=True)
 def converter(annotation_converter_mock: MagicMock, checksum_converter_mock: MagicMock) -> FileConverter:
     converter = FileConverter()
     converter.checksum_converter = checksum_converter_mock()

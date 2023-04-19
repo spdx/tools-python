@@ -34,7 +34,7 @@ graph_generation = ["pygraphviz", "networkx"]
 development = ["black", "flake8", "isort", "networkx", "pytest"]
 
 [project.scripts]
-pyspdxtools = "spdx.clitools.pyspdxtools:main"
+pyspdxtools = "spdx_tools.spdx.clitools.pyspdxtools:main"
 
 [tool.setuptools]
 zip-safe = false  # because of the uses of __file__: https://github.com/spdx/tools-python/issues/257

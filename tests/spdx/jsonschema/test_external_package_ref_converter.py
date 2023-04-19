@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx.jsonschema.external_package_ref_converter import ExternalPackageRefConverter
-from spdx.jsonschema.external_package_ref_properties import ExternalPackageRefProperty
-from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
+from spdx_tools.spdx.jsonschema.external_package_ref_converter import ExternalPackageRefConverter
+from spdx_tools.spdx.jsonschema.external_package_ref_properties import ExternalPackageRefProperty
+from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 
 
 @pytest.fixture

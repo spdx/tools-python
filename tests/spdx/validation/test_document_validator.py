@@ -6,12 +6,12 @@ from typing import List, Optional
 
 import pytest
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.model.document import CreationInfo, Document
-from spdx.model.relationship import Relationship, RelationshipType
-from spdx.parser.parse_anything import parse_file
-from spdx.validation.document_validator import validate_full_spdx_document
-from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.model.document import CreationInfo, Document
+from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.parser.parse_anything import parse_file
+from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
+from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import creation_info_fixture, document_fixture, file_fixture, package_fixture, snippet_fixture
 
 

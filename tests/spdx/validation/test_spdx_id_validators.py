@@ -5,8 +5,8 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.validation.spdx_id_validators import (
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.validation.spdx_id_validators import (
     get_list_of_all_spdx_ids,
     is_external_doc_ref_present_in_document,
     is_spdx_id_present_in_document,

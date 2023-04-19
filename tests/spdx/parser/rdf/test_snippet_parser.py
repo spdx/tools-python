@@ -8,10 +8,10 @@ import pytest
 from license_expression import get_spdx_licensing
 from rdflib import RDF, BNode, Graph, Literal, URIRef
 
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.rdf.snippet_parser import parse_ranges, parse_snippet
-from spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.parser.rdf.snippet_parser import parse_ranges, parse_snippet
+from spdx_tools.spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
 
 
 def test_parse_snippet():

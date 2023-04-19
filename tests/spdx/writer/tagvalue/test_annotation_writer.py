@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from unittest.mock import MagicMock, call, mock_open, patch
 
-from spdx.writer.tagvalue.annotation_writer import write_annotation
+from spdx_tools.spdx.writer.tagvalue.annotation_writer import write_annotation
 from tests.spdx.fixtures import annotation_fixture
 
 

@@ -4,8 +4,8 @@
 
 from typing import List
 
-from spdx.validation.external_document_ref_validator import validate_external_document_ref
-from spdx.validation.validation_message import ValidationMessage
+from spdx_tools.spdx.validation.external_document_ref_validator import validate_external_document_ref
+from spdx_tools.spdx.validation.validation_message import ValidationMessage
 from tests.spdx.fixtures import external_document_ref_fixture
 
 

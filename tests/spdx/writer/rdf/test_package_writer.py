@@ -4,10 +4,10 @@
 import pytest
 from rdflib import DOAP, RDF, RDFS, XSD, Graph, Literal, URIRef
 
-from spdx.datetime_conversions import datetime_to_iso_string
-from spdx.model.package import ExternalPackageRefCategory
-from spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
-from spdx.writer.rdf.package_writer import (
+from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
+from spdx_tools.spdx.model.package import ExternalPackageRefCategory
+from spdx_tools.spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
+from spdx_tools.spdx.writer.rdf.package_writer import (
     add_external_package_ref_to_graph,
     add_package_to_graph,
     add_package_verification_code_to_graph,

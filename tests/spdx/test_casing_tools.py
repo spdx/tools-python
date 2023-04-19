@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx.casing_tools import camel_case_to_snake_case, snake_case_to_camel_case
+from spdx_tools.spdx.casing_tools import camel_case_to_snake_case, snake_case_to_camel_case
 
 
 @pytest.mark.parametrize("snake_case_str,camel_case_str", [("snake_case", "snakeCase")])

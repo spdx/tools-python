@@ -4,9 +4,9 @@
 import pytest
 from rdflib import RDF, Graph, Literal, URIRef
 
-from spdx.model.checksum import ChecksumAlgorithm
-from spdx.rdfschema.namespace import SPDX_NAMESPACE
-from spdx.writer.rdf.checksum_writer import add_checksum_to_graph, algorithm_to_rdf_string
+from spdx_tools.spdx.model.checksum import ChecksumAlgorithm
+from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
+from spdx_tools.spdx.writer.rdf.checksum_writer import add_checksum_to_graph, algorithm_to_rdf_string
 from tests.spdx.fixtures import checksum_fixture
 
 

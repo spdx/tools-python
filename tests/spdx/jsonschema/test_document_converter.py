@@ -8,14 +8,14 @@ from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
 
-from spdx.jsonschema.annotation_converter import AnnotationConverter
-from spdx.jsonschema.document_converter import DocumentConverter
-from spdx.jsonschema.document_properties import DocumentProperty
-from spdx.model.actor import Actor, ActorType
-from spdx.model.annotation import Annotation, AnnotationType
-from spdx.model.document import Document
-from spdx.model.extracted_licensing_info import ExtractedLicensingInfo
-from spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.jsonschema.annotation_converter import AnnotationConverter
+from spdx_tools.spdx.jsonschema.document_converter import DocumentConverter
+from spdx_tools.spdx.jsonschema.document_properties import DocumentProperty
+from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
+from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
 from tests.spdx.fixtures import (
     annotation_fixture,
     creation_info_fixture,
@@ -28,14 +28,16 @@ from tests.spdx.mock_utils import assert_mock_method_called_with_arguments
 
 
 @pytest.fixture
-@mock.patch("spdx.jsonschema.creation_info_converter.CreationInfoConverter", autospec=True)
-@mock.patch("spdx.jsonschema.external_document_ref_converter.ExternalDocumentRefConverter", autospec=True)
-@mock.patch("spdx.jsonschema.package_converter.PackageConverter", autospec=True)
-@mock.patch("spdx.jsonschema.annotation_converter.AnnotationConverter", autospec=True)
-@mock.patch("spdx.jsonschema.extracted_licensing_info_converter.ExtractedLicensingInfoConverter", autospec=True)
-@mock.patch("spdx.jsonschema.file_converter.FileConverter", autospec=True)
-@mock.patch("spdx.jsonschema.snippet_converter.SnippetConverter", autospec=True)
-@mock.patch("spdx.jsonschema.relationship_converter.RelationshipConverter", autospec=True)
+@mock.patch("spdx_tools.spdx.jsonschema.creation_info_converter.CreationInfoConverter", autospec=True)
+@mock.patch("spdx_tools.spdx.jsonschema.external_document_ref_converter.ExternalDocumentRefConverter", autospec=True)
+@mock.patch("spdx_tools.spdx.jsonschema.package_converter.PackageConverter", autospec=True)
+@mock.patch("spdx_tools.spdx.jsonschema.annotation_converter.AnnotationConverter", autospec=True)
+@mock.patch(
+    "spdx_tools.spdx.jsonschema.extracted_licensing_info_converter.ExtractedLicensingInfoConverter", autospec=True
+)
+@mock.patch("spdx_tools.spdx.jsonschema.file_converter.FileConverter", autospec=True)
+@mock.patch("spdx_tools.spdx.jsonschema.snippet_converter.SnippetConverter", autospec=True)
+@mock.patch("spdx_tools.spdx.jsonschema.relationship_converter.RelationshipConverter", autospec=True)
 def converter(
     relationship_converter_mock: MagicMock,
     snippet_converter_mock: MagicMock,

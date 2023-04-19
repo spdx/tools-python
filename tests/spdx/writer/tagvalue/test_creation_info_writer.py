@@ -6,9 +6,9 @@ from unittest.mock import MagicMock, call, mock_open, patch
 
 import pytest
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.model.document import CreationInfo
-from spdx.writer.tagvalue.creation_info_writer import write_creation_info
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.model.document import CreationInfo
+from spdx_tools.spdx.writer.tagvalue.creation_info_writer import write_creation_info
 from tests.spdx.fixtures import actor_fixture, creation_info_fixture
 
 

@@ -5,9 +5,9 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.model.actor import ActorType
-from spdx.parser.actor_parser import ActorParser
-from spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.model.actor import ActorType
+from spdx_tools.spdx.parser.actor_parser import ActorParser
+from spdx_tools.spdx.parser.error import SPDXParsingError
 
 
 @pytest.mark.parametrize(

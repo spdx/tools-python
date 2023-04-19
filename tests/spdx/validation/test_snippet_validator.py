@@ -7,8 +7,8 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.validation.snippet_validator import validate_snippet, validate_snippet_within_document
-from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from spdx_tools.spdx.validation.snippet_validator import validate_snippet, validate_snippet_within_document
+from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import document_fixture, snippet_fixture
 
 

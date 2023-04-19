@@ -4,7 +4,7 @@
 
 import pytest
 
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
 
 
 def test_correct_initialization():

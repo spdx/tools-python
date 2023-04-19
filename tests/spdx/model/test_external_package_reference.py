@@ -4,7 +4,7 @@
 
 import pytest
 
-from spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
+from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 
 
 def test_correct_initialization():

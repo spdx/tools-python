@@ -8,11 +8,14 @@ from unittest import TestCase
 import pytest
 from license_expression import LicenseExpression, get_spdx_licensing
 
-from spdx.model.document import Document
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.model.spdx_none import SpdxNone
-from spdx.validation.license_expression_validator import validate_license_expression, validate_license_expressions
-from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.validation.license_expression_validator import (
+    validate_license_expression,
+    validate_license_expressions,
+)
+from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import document_fixture, extracted_licensing_info_fixture
 
 FIXTURE_LICENSE_ID = extracted_licensing_info_fixture().license_id

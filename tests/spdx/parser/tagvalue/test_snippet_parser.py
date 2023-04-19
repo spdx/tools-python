@@ -6,9 +6,9 @@ from unittest import TestCase
 import pytest
 from license_expression import get_spdx_licensing
 
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.tagvalue.parser import Parser
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.parser.tagvalue.parser import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
 
 

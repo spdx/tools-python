@@ -6,14 +6,14 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from spdx.jsonschema.external_document_ref_converter import ExternalDocumentRefConverter
-from spdx.jsonschema.external_document_ref_properties import ExternalDocumentRefProperty
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.external_document_ref import ExternalDocumentRef
+from spdx_tools.spdx.jsonschema.external_document_ref_converter import ExternalDocumentRefConverter
+from spdx_tools.spdx.jsonschema.external_document_ref_properties import ExternalDocumentRefProperty
+from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
 
 
 @pytest.fixture
-@mock.patch("spdx.jsonschema.checksum_converter.ChecksumConverter", autospec=True)
+@mock.patch("spdx_tools.spdx.jsonschema.checksum_converter.ChecksumConverter", autospec=True)
 def converter(checksum_converter_magic_mock: MagicMock) -> ExternalDocumentRefConverter:
     mocked_checksum_converter = checksum_converter_magic_mock()
     converter = ExternalDocumentRefConverter()

@@ -8,12 +8,12 @@ from unittest import TestCase
 import pytest
 from license_expression import Licensing
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.model.relationship import Relationship, RelationshipType
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.model.spdx_none import SpdxNone
-from spdx.validation.package_validator import validate_package, validate_package_within_document
-from spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.validation.package_validator import validate_package, validate_package_within_document
+from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import document_fixture, file_fixture, package_fixture, package_verification_code_fixture
 
 

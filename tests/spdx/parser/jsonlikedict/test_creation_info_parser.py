@@ -6,13 +6,13 @@ from unittest import TestCase
 
 import pytest
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.model.actor import Actor, ActorType
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx.model.external_document_ref import ExternalDocumentRef
-from spdx.model.version import Version
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.creation_info_parser import CreationInfoParser
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
+from spdx_tools.spdx.model.version import Version
+from spdx_tools.spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.parser.jsonlikedict.creation_info_parser import CreationInfoParser
 
 
 def test_parse_creation_info():

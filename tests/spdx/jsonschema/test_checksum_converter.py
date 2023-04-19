@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx.jsonschema.checksum_converter import ChecksumConverter
-from spdx.jsonschema.checksum_properties import ChecksumProperty
-from spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.jsonschema.checksum_converter import ChecksumConverter
+from spdx_tools.spdx.jsonschema.checksum_properties import ChecksumProperty
+from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
 
 
 @pytest.fixture

@@ -5,11 +5,11 @@ from datetime import datetime
 
 import pytest
 
-from spdx.datetime_conversions import datetime_to_iso_string
-from spdx.jsonschema.annotation_converter import AnnotationConverter
-from spdx.jsonschema.annotation_properties import AnnotationProperty
-from spdx.model.actor import Actor, ActorType
-from spdx.model.annotation import Annotation, AnnotationType
+from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
+from spdx_tools.spdx.jsonschema.annotation_converter import AnnotationConverter
+from spdx_tools.spdx.jsonschema.annotation_properties import AnnotationProperty
+from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
 
 
 @pytest.fixture

@@ -6,12 +6,12 @@ import os
 
 import pytest
 
-from spdx.model.document import Document
-from spdx.parser.json import json_parser
-from spdx.parser.rdf import rdf_parser
-from spdx.parser.tagvalue import tagvalue_parser
-from spdx.parser.xml import xml_parser
-from spdx.parser.yaml import yaml_parser
+from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.parser.json import json_parser
+from spdx_tools.spdx.parser.rdf import rdf_parser
+from spdx_tools.spdx.parser.tagvalue import tagvalue_parser
+from spdx_tools.spdx.parser.xml import xml_parser
+from spdx_tools.spdx.parser.yaml import yaml_parser
 
 
 @pytest.mark.parametrize(

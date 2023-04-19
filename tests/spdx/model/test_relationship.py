@@ -4,8 +4,8 @@
 
 import pytest
 
-from spdx.model.relationship import Relationship, RelationshipType
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
 
 
 def test_correct_initialization():

@@ -4,8 +4,8 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx.constants import DOCUMENT_SPDX_ID
-from spdx.parser.tagvalue.lexer import SPDXLexer
+from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
+from spdx_tools.spdx.parser.tagvalue.lexer import SPDXLexer
 
 
 @pytest.fixture

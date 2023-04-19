@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id
+from spdx_tools.spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id
 
 
 @pytest.mark.parametrize(

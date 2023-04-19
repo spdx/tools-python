@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx.model.checksum import ChecksumAlgorithm
-from spdx.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
+from spdx_tools.spdx.model.checksum import ChecksumAlgorithm
+from spdx_tools.spdx.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 from tests.spdx.fixtures import checksum_fixture
 
 

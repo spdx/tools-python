@@ -6,10 +6,10 @@ from unittest import TestCase
 import pytest
 from license_expression import get_spdx_licensing
 
-from spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx.model.spdx_none import SpdxNone
-from spdx.parser.error import SPDXParsingError
-from spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.parser.error import SPDXParsingError
+from spdx_tools.spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
 
 
 @pytest.mark.parametrize(
