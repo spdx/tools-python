@@ -5,7 +5,7 @@ from typing import Dict, Optional, Tuple
 
 from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
-from spdx_tools.spdx.model.snippet import Snippet
+from spdx_tools.spdx.model import Snippet
 from spdx_tools.spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
 from spdx_tools.spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id, add_optional_literal

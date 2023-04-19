@@ -4,7 +4,7 @@
 
 from typing import List
 
-from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
+from spdx_tools.spdx.model import ExternalDocumentRef
 from spdx_tools.spdx.validation.checksum_validator import validate_checksum
 from spdx_tools.spdx.validation.spdx_id_validators import is_valid_external_doc_ref_id
 from spdx_tools.spdx.validation.uri_validators import validate_uri

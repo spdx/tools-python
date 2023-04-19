@@ -6,7 +6,7 @@ from typing import Dict
 from rdflib import RDF, RDFS, Graph, Literal, URIRef
 
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
-from spdx_tools.spdx.model.file import File
+from spdx_tools.spdx.model import File
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx_tools.spdx.writer.rdf.checksum_writer import add_checksum_to_graph
 from spdx_tools.spdx.writer.rdf.license_expression_writer import add_license_expression_or_none_or_no_assertion

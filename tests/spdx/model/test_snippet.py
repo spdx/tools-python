@@ -4,9 +4,7 @@
 
 import pytest
 
-from spdx_tools.spdx.model.snippet import Snippet
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Snippet, SpdxNoAssertion, SpdxNone
 
 
 def test_correct_initialization():

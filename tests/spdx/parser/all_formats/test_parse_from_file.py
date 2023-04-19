@@ -6,7 +6,7 @@ import os
 
 import pytest
 
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.parser.json import json_parser
 from spdx_tools.spdx.parser.rdf import rdf_parser
 from spdx_tools.spdx.parser.tagvalue import tagvalue_parser

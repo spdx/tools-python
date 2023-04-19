@@ -8,7 +8,7 @@ import pytest
 from license_expression import get_spdx_licensing
 from rdflib import RDF, BNode, Graph, Literal, URIRef
 
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.rdf.snippet_parser import parse_ranges, parse_snippet
 from spdx_tools.spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE

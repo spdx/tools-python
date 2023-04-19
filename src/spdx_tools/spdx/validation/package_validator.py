@@ -4,9 +4,7 @@
 
 from typing import List, Optional
 
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model import Document, Package, Relationship, RelationshipType
 from spdx_tools.spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target
 from spdx_tools.spdx.validation.checksum_validator import validate_checksums
 from spdx_tools.spdx.validation.external_package_ref_validator import validate_external_package_refs

@@ -6,8 +6,7 @@ import re
 from typing import List
 
 from spdx_tools.spdx.document_utils import get_contained_spdx_element_ids
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.file import File
+from spdx_tools.spdx.model import Document, File
 
 
 def is_valid_internal_spdx_id(spdx_id: str) -> bool:

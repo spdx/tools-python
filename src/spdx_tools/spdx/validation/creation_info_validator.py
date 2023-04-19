@@ -5,7 +5,7 @@
 from typing import List
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
-from spdx_tools.spdx.model.document import CreationInfo
+from spdx_tools.spdx.model import CreationInfo
 from spdx_tools.spdx.validation.actor_validator import validate_actors
 from spdx_tools.spdx.validation.external_document_ref_validator import validate_external_document_refs
 from spdx_tools.spdx.validation.uri_validators import validate_uri

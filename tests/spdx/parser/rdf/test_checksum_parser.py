@@ -6,7 +6,7 @@ import os
 import pytest
 from rdflib import BNode, Graph, URIRef
 
-from spdx_tools.spdx.model.checksum import ChecksumAlgorithm
+from spdx_tools.spdx.model import ChecksumAlgorithm
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.rdf.checksum_parser import convert_rdf_to_algorithm, parse_checksum
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE

@@ -6,7 +6,7 @@
 import pytest
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model import Relationship, RelationshipType
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.tagvalue.parser import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR

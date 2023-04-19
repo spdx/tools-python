@@ -3,8 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import Dict, List, Optional, Union
 
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model import ExtractedLicensingInfo, SpdxNoAssertion
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import parse_field_or_no_assertion
 from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.parsing_functions import construct_or_raise_parsing_error

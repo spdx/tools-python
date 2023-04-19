@@ -5,7 +5,7 @@
 import re
 from typing import List, Optional
 
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx_tools.spdx.model import ExtractedLicensingInfo
 from spdx_tools.spdx.validation.uri_validators import validate_url
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 

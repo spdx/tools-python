@@ -9,8 +9,7 @@ from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.file_properties import FileProperty
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 from spdx_tools.spdx.jsonschema.optional_utils import apply_if_present
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.file import File
+from spdx_tools.spdx.model import Document, File
 
 
 class FileConverter(TypedConverter[File]):

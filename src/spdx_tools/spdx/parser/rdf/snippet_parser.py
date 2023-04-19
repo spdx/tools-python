@@ -7,7 +7,7 @@ from rdflib import RDF, RDFS, Graph
 from rdflib.exceptions import UniquenessError
 from rdflib.term import BNode, Node, URIRef
 
-from spdx_tools.spdx.model.snippet import Snippet
+from spdx_tools.spdx.model import Snippet
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.parsing_functions import (

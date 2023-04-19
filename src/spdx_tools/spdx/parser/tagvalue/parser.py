@@ -19,23 +19,27 @@ from ply import yacc
 from ply.yacc import LRParser
 
 from spdx_tools.spdx.datetime_conversions import datetime_from_str
-from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
-from spdx_tools.spdx.model.document import CreationInfo, Document
-from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
-from spdx_tools.spdx.model.file import File, FileType
-from spdx_tools.spdx.model.package import (
+from spdx_tools.spdx.model import (
+    Annotation,
+    AnnotationType,
+    CreationInfo,
+    Document,
+    ExternalDocumentRef,
     ExternalPackageRef,
     ExternalPackageRefCategory,
+    ExtractedLicensingInfo,
+    File,
+    FileType,
     Package,
     PackagePurpose,
     PackageVerificationCode,
+    Relationship,
+    RelationshipType,
+    Snippet,
+    SpdxNoAssertion,
+    SpdxNone,
+    Version,
 )
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
-from spdx_tools.spdx.model.snippet import Snippet
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
-from spdx_tools.spdx.model.version import Version
 from spdx_tools.spdx.parser.actor_parser import ActorParser
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.logger import Logger

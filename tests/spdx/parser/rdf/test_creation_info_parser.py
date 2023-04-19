@@ -10,9 +10,7 @@ from rdflib import RDF, Graph, URIRef
 from rdflib.term import Node
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
-from spdx_tools.spdx.model.actor import Actor, ActorType
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx_tools.spdx.model.version import Version
+from spdx_tools.spdx.model import Actor, ActorType, Checksum, ChecksumAlgorithm, Version
 from spdx_tools.spdx.parser.rdf.creation_info_parser import (
     parse_creation_info,
     parse_external_document_refs,

@@ -7,7 +7,7 @@ from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
-from spdx_tools.spdx.model.annotation import Annotation
+from spdx_tools.spdx.model import Annotation
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx_tools.spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id
 

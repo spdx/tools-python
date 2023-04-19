@@ -5,8 +5,8 @@ import pytest
 
 from spdx_tools.spdx.jsonschema.extracted_licensing_info_converter import ExtractedLicensingInfoConverter
 from spdx_tools.spdx.jsonschema.extracted_licensing_info_properties import ExtractedLicensingInfoProperty
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
-from spdx_tools.spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING, SpdxNoAssertion
+from spdx_tools.spdx.model import ExtractedLicensingInfo, SpdxNoAssertion
+from spdx_tools.spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING
 from tests.spdx.fixtures import extracted_licensing_info_fixture
 
 

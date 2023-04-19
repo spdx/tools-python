@@ -5,7 +5,7 @@ import pytest
 
 from spdx_tools.spdx.jsonschema.package_verification_code_converter import PackageVerificationCodeConverter
 from spdx_tools.spdx.jsonschema.package_verification_code_properties import PackageVerificationCodeProperty
-from spdx_tools.spdx.model.package import PackageVerificationCode
+from spdx_tools.spdx.model import PackageVerificationCode
 
 
 @pytest.fixture

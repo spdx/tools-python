@@ -5,7 +5,7 @@ from typing import Dict
 
 import yaml
 
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.parser.jsonlikedict.json_like_dict_parser import JsonLikeDictParser
 
 

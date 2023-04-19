@@ -4,7 +4,7 @@
 from typing import Dict, List, Optional
 
 from spdx_tools.common.typing.constructor_type_errors import ConstructorTypeErrors
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model import Relationship, RelationshipType
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import (
     delete_duplicates_from_list,

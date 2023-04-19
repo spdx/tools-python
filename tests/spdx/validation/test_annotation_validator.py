@@ -6,8 +6,7 @@ from typing import List
 
 import pytest
 
-from spdx_tools.spdx.model.annotation import Annotation
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Annotation, Document
 from spdx_tools.spdx.validation.annotation_validator import validate_annotation
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import annotation_fixture, document_fixture, file_fixture

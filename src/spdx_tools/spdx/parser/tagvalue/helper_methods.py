@@ -7,13 +7,16 @@ from typing import Any, Callable, Dict, Optional
 from ply.yacc import YaccProduction
 
 from spdx_tools.spdx.casing_tools import camel_case_to_snake_case
-from spdx_tools.spdx.model.annotation import Annotation
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx_tools.spdx.model.document import CreationInfo
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
-from spdx_tools.spdx.model.file import File
-from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.snippet import Snippet
+from spdx_tools.spdx.model import (
+    Annotation,
+    Checksum,
+    ChecksumAlgorithm,
+    CreationInfo,
+    ExtractedLicensingInfo,
+    File,
+    Package,
+    Snippet,
+)
 from spdx_tools.spdx.parser.error import SPDXParsingError
 
 

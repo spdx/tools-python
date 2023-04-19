@@ -4,7 +4,7 @@
 from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
-from spdx_tools.spdx.model.document import CreationInfo
+from spdx_tools.spdx.model import CreationInfo
 from spdx_tools.spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 from spdx_tools.spdx.writer.rdf.external_document_ref_writer import add_external_document_ref_to_graph
 from spdx_tools.spdx.writer.rdf.writer_utils import add_optional_literal

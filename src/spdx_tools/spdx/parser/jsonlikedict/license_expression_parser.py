@@ -5,8 +5,7 @@ from typing import Union
 
 from license_expression import ExpressionError, LicenseExpression, Licensing
 
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 
 

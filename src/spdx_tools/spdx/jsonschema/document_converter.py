@@ -15,7 +15,7 @@ from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 from spdx_tools.spdx.jsonschema.package_converter import PackageConverter
 from spdx_tools.spdx.jsonschema.relationship_converter import RelationshipConverter
 from spdx_tools.spdx.jsonschema.snippet_converter import SnippetConverter
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Document
 
 
 class DocumentConverter(TypedConverter[Document]):

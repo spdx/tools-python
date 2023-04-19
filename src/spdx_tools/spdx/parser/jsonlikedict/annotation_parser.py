@@ -5,8 +5,7 @@ from datetime import datetime
 from typing import Dict, List, Optional
 
 from spdx_tools.spdx.datetime_conversions import datetime_from_str
-from spdx_tools.spdx.model.actor import Actor
-from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
+from spdx_tools.spdx.model import Actor, Annotation, AnnotationType
 from spdx_tools.spdx.parser.actor_parser import ActorParser
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import (

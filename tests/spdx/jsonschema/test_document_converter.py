@@ -11,11 +11,16 @@ import pytest
 from spdx_tools.spdx.jsonschema.annotation_converter import AnnotationConverter
 from spdx_tools.spdx.jsonschema.document_converter import DocumentConverter
 from spdx_tools.spdx.jsonschema.document_properties import DocumentProperty
-from spdx_tools.spdx.model.actor import Actor, ActorType
-from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model import (
+    Actor,
+    ActorType,
+    Annotation,
+    AnnotationType,
+    Document,
+    ExtractedLicensingInfo,
+    Relationship,
+    RelationshipType,
+)
 from tests.spdx.fixtures import (
     annotation_fixture,
     creation_info_fixture,

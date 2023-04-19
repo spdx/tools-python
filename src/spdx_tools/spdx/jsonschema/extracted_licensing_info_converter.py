@@ -7,8 +7,7 @@ from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.extracted_licensing_info_properties import ExtractedLicensingInfoProperty
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 from spdx_tools.spdx.jsonschema.optional_utils import apply_if_present
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx_tools.spdx.model import Document, ExtractedLicensingInfo
 
 
 class ExtractedLicensingInfoConverter(TypedConverter[ExtractedLicensingInfo]):

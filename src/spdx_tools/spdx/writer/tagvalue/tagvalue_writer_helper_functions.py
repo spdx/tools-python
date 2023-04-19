@@ -12,13 +12,16 @@ from typing import Any, Callable, Dict, List, Optional, TextIO, Tuple, Union
 
 from license_expression import LicenseExpression
 
-from spdx_tools.spdx.model.actor import Actor
-from spdx_tools.spdx.model.file import File
-from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
-from spdx_tools.spdx.model.snippet import Snippet
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import (
+    Actor,
+    File,
+    Package,
+    Relationship,
+    RelationshipType,
+    Snippet,
+    SpdxNoAssertion,
+    SpdxNone,
+)
 
 
 def write_separator(out: TextIO):

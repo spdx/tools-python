@@ -12,9 +12,7 @@ from spdx_tools.spdx.document_utils import (
     get_contained_spdx_elements,
     get_element_from_spdx_id,
 )
-from spdx_tools.spdx.model.file import FileType
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import FileType, SpdxNoAssertion, SpdxNone
 from tests.spdx.fixtures import (
     actor_fixture,
     checksum_fixture,

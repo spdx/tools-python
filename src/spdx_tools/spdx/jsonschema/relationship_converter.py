@@ -6,8 +6,7 @@ from typing import Any, Type
 from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 from spdx_tools.spdx.jsonschema.relationship_properties import RelationshipProperty
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.relationship import Relationship
+from spdx_tools.spdx.model import Document, Relationship
 
 
 class RelationshipConverter(TypedConverter[Relationship]):

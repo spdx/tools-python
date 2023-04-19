@@ -6,8 +6,7 @@ from datetime import datetime
 
 from rdflib import BNode, Graph, URIRef
 
-from spdx_tools.spdx.model.actor import Actor, ActorType
-from spdx_tools.spdx.model.annotation import AnnotationType
+from spdx_tools.spdx.model import Actor, ActorType, AnnotationType
 from spdx_tools.spdx.parser.rdf.annotation_parser import parse_annotation
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 

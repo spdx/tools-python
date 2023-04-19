@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from spdx_tools.spdx.formats import FileFormat, file_name_to_format
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.writer.json import json_writer
 from spdx_tools.spdx.writer.rdf import rdf_writer
 from spdx_tools.spdx.writer.tagvalue import tagvalue_writer

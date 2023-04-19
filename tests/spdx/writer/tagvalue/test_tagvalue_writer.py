@@ -7,10 +7,7 @@ from unittest.mock import MagicMock, call, mock_open, patch
 
 import pytest
 
-from spdx_tools.spdx.model.file import File
-from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
-from spdx_tools.spdx.model.snippet import Snippet
+from spdx_tools.spdx.model import File, Package, Relationship, RelationshipType, Snippet
 from spdx_tools.spdx.parser.tagvalue import tagvalue_parser
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer import write_document, write_document_to_file
 from tests.spdx.fixtures import checksum_fixture, document_fixture

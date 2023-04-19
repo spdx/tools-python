@@ -4,10 +4,7 @@
 
 from typing import List
 
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Document, Relationship, RelationshipType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.validation.spdx_id_validators import validate_spdx_id
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 

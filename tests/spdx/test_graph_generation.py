@@ -8,8 +8,7 @@ from unittest import TestCase
 import pytest
 
 from spdx_tools.spdx.graph_generation import generate_relationship_graph_from_spdx
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model import Document, Relationship, RelationshipType
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from tests.spdx.fixtures import document_fixture, file_fixture, package_fixture
 

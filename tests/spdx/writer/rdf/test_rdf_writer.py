@@ -5,7 +5,7 @@ import os
 
 import pytest
 
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.writer.rdf.rdf_writer import write_document_to_file
 from tests.spdx.fixtures import document_fixture
 

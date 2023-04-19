@@ -6,7 +6,7 @@ from typing import Any, Dict, Generic, Type, TypeVar
 
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Document
 
 MISSING_IMPLEMENTATION_MESSAGE = "Must be implemented"
 

@@ -10,7 +10,7 @@
 #  limitations under the License.
 from typing import TextIO
 
-from spdx_tools.spdx.model.file import File
+from spdx_tools.spdx.model import File
 from spdx_tools.spdx.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_text_value, write_value
 

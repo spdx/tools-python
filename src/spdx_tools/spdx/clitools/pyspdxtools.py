@@ -19,7 +19,7 @@ from typing import List
 import click
 
 from spdx_tools.spdx.graph_generation import export_graph_from_document
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document

@@ -5,7 +5,7 @@ from unittest import TestCase
 
 import pytest
 
-from spdx_tools.spdx.model.actor import ActorType
+from spdx_tools.spdx.model import ActorType
 from spdx_tools.spdx.parser.actor_parser import ActorParser
 from spdx_tools.spdx.parser.error import SPDXParsingError
 

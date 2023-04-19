@@ -5,7 +5,7 @@
 import re
 from typing import List
 
-from spdx_tools.spdx.model.package import PackageVerificationCode
+from spdx_tools.spdx.model import PackageVerificationCode
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 

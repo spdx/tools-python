@@ -8,9 +8,7 @@ import pytest
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
 from spdx_tools.spdx.jsonschema.creation_info_converter import CreationInfoConverter
 from spdx_tools.spdx.jsonschema.creation_info_properties import CreationInfoProperty
-from spdx_tools.spdx.model.actor import Actor, ActorType
-from spdx_tools.spdx.model.document import CreationInfo
-from spdx_tools.spdx.model.version import Version
+from spdx_tools.spdx.model import Actor, ActorType, CreationInfo, Version
 from tests.spdx.fixtures import creation_info_fixture
 
 

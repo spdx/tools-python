@@ -4,7 +4,7 @@
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx.model.checksum import Checksum
+from spdx_tools.spdx.model import Checksum
 
 
 @dataclass_with_properties
