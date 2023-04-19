@@ -5,18 +5,26 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model import Relationship, RelationshipCompleteness, RelationshipType
+from spdx_tools.spdx3.model import LifecycleScopeType, RelationshipCompleteness, RelationshipType
+from spdx_tools.spdx3.model.software import (
+    DependencyConditionalityType,
+    SoftwareDependencyLinkType,
+    SoftwareDependencyRelationship,
+)
 
 
 @mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
-    relationship = Relationship(
+    relationship = SoftwareDependencyRelationship(
         "SPDXRef-Relationship",
         creation_information,
         "spdx_id1",
         ["spdx_id2", "spdx_id3"],
         RelationshipType.DESCRIBES,
         completeness=RelationshipCompleteness.NOASSERTION,
+        scope=LifecycleScopeType.DESIGN,
+        software_linkage=SoftwareDependencyLinkType.STATIC,
+        conditionality=DependencyConditionalityType.PROVIDED,
     )
 
     assert relationship.spdx_id == "SPDXRef-Relationship"
@@ -25,19 +33,22 @@ def test_correct_initialization(creation_information):
     assert relationship.to == ["spdx_id2", "spdx_id3"]
     assert relationship.relationship_type == RelationshipType.DESCRIBES
     assert relationship.completeness == RelationshipCompleteness.NOASSERTION
+    assert relationship.scope == LifecycleScopeType.DESIGN
+    assert relationship.software_linkage == SoftwareDependencyLinkType.STATIC
+    assert relationship.conditionality == DependencyConditionalityType.PROVIDED
 
 
 @mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
-        Relationship("SPDXRef-Relationship", creation_information, 42, 5, "Relationshiptype", completeness=True)
+        SoftwareDependencyRelationship(
+            "SPDXRef-Relationship",
+            creation_information,
+            "spdx_id1",
+            42,
+            RelationshipType.DESCRIBES,
+        )
 
     assert err.value.args[0] == [
-        'SetterError Relationship: type of argument "from_element" must be ' "str; got int instead: 42",
-        'SetterError Relationship: type of argument "to" must be a list; got int ' "instead: 5",
-        'SetterError Relationship: type of argument "relationship_type" must be '
-        "spdx_tools.spdx3.model.relationship.RelationshipType; got str instead: Relationshiptype",
-        'SetterError Relationship: type of argument "completeness" must be one of '
-        "(spdx_tools.spdx3.model.relationship.RelationshipCompleteness, NoneType); got bool "
-        "instead: True",
+        'SetterError SoftwareDependencyRelationship: type of argument "to" must be a ' "list; got int instead: 42"
     ]

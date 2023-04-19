@@ -18,4 +18,5 @@ from spdx_tools.spdx3.model.bom import Bom
 from spdx_tools.spdx3.model.spdx_document import SpdxDocument
 from spdx_tools.spdx3.model.annotation import Annotation, AnnotationType
 from spdx_tools.spdx3.model.relationship import Relationship, RelationshipType, RelationshipCompleteness
+from spdx_tools.spdx3.model.lifecycle_scoped_relationship import LifecycleScopedRelationship, LifecycleScopeType
 from spdx_tools.spdx3.model.artifact import Artifact
