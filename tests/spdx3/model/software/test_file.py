@@ -5,11 +5,11 @@ from unittest import mock
 
 import pytest
 
-from spdx3.model.software.file import File
-from spdx3.model.software.software_purpose import SoftwarePurpose
+from spdx_tools.spdx3.model.software.file import File
+from spdx_tools.spdx3.model.software.software_purpose import SoftwarePurpose
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     file = File(
         "SPDXRef-File",
@@ -27,7 +27,7 @@ def test_correct_initialization(creation_information):
     assert file.content_type == "MediaType"
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         File(
@@ -43,10 +43,10 @@ def test_invalid_initialization(creation_information):
         'SetterError File: type of argument "content_identifier" must be one of (str, '
         "NoneType); got int instead: 3",
         'SetterError File: type of argument "file_purpose" must be one of '
-        "(List[spdx3.model.software.software_purpose.SoftwarePurpose], NoneType); got "
-        "spdx3.model.software.software_purpose.SoftwarePurpose instead: "
+        "(List[spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose], NoneType); got "
+        "spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose instead: "
         "SoftwarePurpose.FILE",
         'SetterError File: type of argument "content_type" must be one of (str, '
-        "NoneType); got spdx3.model.software.software_purpose.SoftwarePurpose "
+        "NoneType); got spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose "
         "instead: SoftwarePurpose.ARCHIVE",
     ]

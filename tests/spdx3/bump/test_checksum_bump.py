@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx3.bump_from_spdx2.checksum import bump_checksum, convert_checksum_algorithm_to_hash_algorithm
-from spdx3.model.hash import HashAlgorithm
-from spdx.model.checksum import ChecksumAlgorithm
+from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum, convert_checksum_algorithm_to_hash_algorithm
+from spdx_tools.spdx3.model.hash import HashAlgorithm
+from spdx_tools.spdx.model.checksum import ChecksumAlgorithm
 from tests.spdx.fixtures import checksum_fixture
 
 

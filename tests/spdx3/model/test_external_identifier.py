@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
+from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
 
 
 def test_correct_initialization():
@@ -21,7 +21,7 @@ def test_invalid_initialization():
 
     assert err.value.args[0] == [
         'SetterError ExternalIdentifier: type of argument "external_identifier_type" '
-        "must be spdx3.model.external_identifier.ExternalIdentifierType; got str "
+        "must be spdx_tools.spdx3.model.external_identifier.ExternalIdentifierType; got str "
         "instead: CPE22",
         'SetterError ExternalIdentifier: type of argument "identifier" must be str; '
         "got list instead: ['identifier', 'another_identifier']",

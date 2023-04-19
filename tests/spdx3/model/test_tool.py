@@ -6,8 +6,8 @@ from datetime import datetime
 import pytest
 from semantic_version import Version
 
-from spdx3.model.creation_information import CreationInformation
-from spdx3.model.tool import Tool
+from spdx_tools.spdx3.model.creation_information import CreationInformation
+from spdx_tools.spdx3.model.tool import Tool
 
 
 def test_correct_initialization():
@@ -29,5 +29,5 @@ def test_invalid_initialization():
     assert err.value.args[0] == [
         'SetterError Tool: type of argument "spdx_id" must be str; got int instead: 12',
         'SetterError Tool: type of argument "creation_info" must be '
-        "spdx3.model.creation_information.CreationInformation; got int instead: 345",
+        "spdx_tools.spdx3.model.creation_information.CreationInformation; got int instead: 345",
     ]
