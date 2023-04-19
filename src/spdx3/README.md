@@ -1,1 +1,0 @@
-This implementation is mainly based on the descriptive markdown files and the model.png in the repository https://github.com/spdx/spdx-3-model (latest commit: 81ce08107ae8b295814dcc631cfa1c48124887aa).

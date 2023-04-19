@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import TextIO
 
-from spdx3.model.creation_information import CreationInformation
-from spdx3.writer.console.console import write_value
-from spdx.datetime_conversions import datetime_to_iso_string
+from spdx_tools.spdx3.model.creation_information import CreationInformation
+from spdx_tools.spdx3.writer.console.console import write_value
+from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
 
 
 def write_creation_info(creation_info: CreationInformation, text_output: TextIO, indent: bool = True):
