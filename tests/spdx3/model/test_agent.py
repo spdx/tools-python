@@ -6,12 +6,12 @@ from datetime import datetime
 import pytest
 from semantic_version import Version
 
-from spdx3.model.agent import Agent
-from spdx3.model.creation_information import CreationInformation
-from spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
-from spdx3.model.organization import Organization
-from spdx3.model.person import Person
-from spdx3.model.software_agent import SoftwareAgent
+from spdx_tools.spdx3.model.agent import Agent
+from spdx_tools.spdx3.model.creation_information import CreationInformation
+from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
+from spdx_tools.spdx3.model.organization import Organization
+from spdx_tools.spdx3.model.person import Person
+from spdx_tools.spdx3.model.software_agent import SoftwareAgent
 
 
 @pytest.mark.parametrize("agent_class", [Agent, Person, Organization, SoftwareAgent])
@@ -37,5 +37,5 @@ def test_invalid_initialization(agent_class):
     assert err.value.args[0] == [
         f'SetterError {agent_class.__name__}: type of argument "spdx_id" must be str; got int instead: 12',
         f'SetterError {agent_class.__name__}: type of argument "creation_info" must be '
-        "spdx3.model.creation_information.CreationInformation; got int instead: 345",
+        "spdx_tools.spdx3.model.creation_information.CreationInformation; got int instead: 345",
     ]

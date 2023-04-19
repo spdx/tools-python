@@ -5,11 +5,11 @@ from unittest import mock
 
 import pytest
 
-from spdx3.model.bundle import Bundle
+from spdx_tools.spdx3.model.bundle import Bundle
 
 
-@mock.patch("spdx3.model.namespace_map.NamespaceMap", autospec=True)
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.namespace_map.NamespaceMap", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information, namespace):
     bundle = Bundle(
         "SPDXRef-Bundle",
@@ -28,7 +28,7 @@ def test_correct_initialization(creation_information, namespace):
     assert bundle.namespaces == [namespace]
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Bundle(4, creation_information, elements="spdx_id1", root_elements=[42], namespaces=True, context=["yes"])
@@ -38,6 +38,6 @@ def test_invalid_initialization(creation_information):
         'SetterError Bundle: type of argument "elements" must be a list; got str ' "instead: spdx_id1",
         'SetterError Bundle: type of argument "root_elements"[0] must be str; got int ' "instead: [42]",
         'SetterError Bundle: type of argument "namespaces" must be one of '
-        "(List[spdx3.model.namespace_map.NamespaceMap], NoneType); got bool instead: True",
+        "(List[spdx_tools.spdx3.model.namespace_map.NamespaceMap], NoneType); got bool instead: True",
         'SetterError Bundle: type of argument "context" must be one of (str, ' "NoneType); got list instead: ['yes']",
     ]
