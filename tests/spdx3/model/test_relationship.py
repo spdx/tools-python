@@ -5,10 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx3.model.relationship import Relationship, RelationshipCompleteness, RelationshipType
+from spdx_tools.spdx3.model.relationship import Relationship, RelationshipCompleteness, RelationshipType
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     relationship = Relationship(
         "SPDXRef-Relationship",
@@ -27,7 +27,7 @@ def test_correct_initialization(creation_information):
     assert relationship.completeness == RelationshipCompleteness.UNKNOWN
 
 
-@mock.patch("spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Relationship("SPDXRef-Relationship", creation_information, 42, 5, "Relationshiptype", completeness=True)
@@ -36,8 +36,8 @@ def test_invalid_initialization(creation_information):
         'SetterError Relationship: type of argument "from_element" must be ' "str; got int instead: 42",
         'SetterError Relationship: type of argument "to" must be a list; got int ' "instead: 5",
         'SetterError Relationship: type of argument "relationship_type" must be '
-        "spdx3.model.relationship.RelationshipType; got str instead: Relationshiptype",
+        "spdx_tools.spdx3.model.relationship.RelationshipType; got str instead: Relationshiptype",
         'SetterError Relationship: type of argument "completeness" must be one of '
-        "(spdx3.model.relationship.RelationshipCompleteness, NoneType); got bool "
+        "(spdx_tools.spdx3.model.relationship.RelationshipCompleteness, NoneType); got bool "
         "instead: True",
     ]
