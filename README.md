@@ -94,7 +94,7 @@ instead of `bin`.
 
 ## Library usage
 1. **DATA MODEL**
-  * The `spdx_tools.spdx.model` package constitutes the internal SPDX v2.3 data model (v2.2 is a simply a subset of this). All relevant classes for SPDX document creation are exposed in the [__init__.py](src%2Fspdx_tools%2Fspdx%2Fmodel%2F__init__.py).
+  * The `spdx_tools.spdx.model` package constitutes the internal SPDX v2.3 data model (v2.2 is simply a subset of this). All relevant classes for SPDX document creation are exposed in the `__init__.py` found [here](src%2Fspdx_tools%2Fspdx%2Fmodel%2F__init__.py).
   * SPDX objects are implemented via `@dataclass_with_properties`, a custom extension of `@dataclass`.
     * Each class starts with a list of its properties and their possible types. When no default value is provided, the property is mandatory and must be set during initialization.
     * Using the type hints, type checking is enforced when initializing a new instance or setting/getting a property on an instance
@@ -117,15 +117,15 @@ instead of `bin`.
     Caution: Only valid documents can be serialized reliably; serialization of invalid documents is not supported.
 
 ## Example
-Here are some examples of possible use cases to quickly get you started with the spdx-tools:
+Here are some examples of possible use cases to quickly get you started with the spdx-tools.
+If you want a more comprehensive example about how to create an SPDX document from scratch, have a look [here](examples%2Fspdx2_document_from_scratch.py).
 ```python
 import logging
 
 from license_expression import get_spdx_licensing
 
-from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm
-from spdx_tools.spdx.model import File, FileType
-from spdx_tools.spdx.model import Relationship, RelationshipType
+from spdx_tools.spdx.model import (Checksum, ChecksumAlgorithm, File, 
+                                   FileType, Relationship, RelationshipType)
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 from spdx_tools.spdx.writer.write_anything import write_file
