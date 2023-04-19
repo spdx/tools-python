@@ -7,8 +7,7 @@ from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
 from spdx_tools.spdx.jsonschema.annotation_properties import AnnotationProperty
 from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
-from spdx_tools.spdx.model.annotation import Annotation
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Annotation, Document
 
 
 class AnnotationConverter(TypedConverter[Annotation]):

@@ -4,10 +4,7 @@
 from copy import deepcopy
 from typing import Any, Dict, List, Union
 
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.file import File
-from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.snippet import Snippet
+from spdx_tools.spdx.model import Document, File, Package, Snippet
 
 
 def get_contained_spdx_element_ids(document: Document) -> List[str]:

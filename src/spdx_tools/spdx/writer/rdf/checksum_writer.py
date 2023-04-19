@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from rdflib import RDF, BNode, Graph, Literal, URIRef
 
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 

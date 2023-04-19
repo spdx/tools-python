@@ -8,7 +8,7 @@ from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.creation_info_properties import CreationInfoProperty
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 from spdx_tools.spdx.jsonschema.optional_utils import apply_if_present
-from spdx_tools.spdx.model.document import CreationInfo, Document
+from spdx_tools.spdx.model import CreationInfo, Document
 
 
 class CreationInfoConverter(TypedConverter[CreationInfo]):

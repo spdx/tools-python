@@ -7,16 +7,18 @@ from unittest import TestCase
 import pytest
 from license_expression import Licensing
 
-from spdx_tools.spdx.model.actor import Actor, ActorType
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx_tools.spdx.model.package import (
+from spdx_tools.spdx.model import (
+    Actor,
+    ActorType,
+    Checksum,
+    ChecksumAlgorithm,
     ExternalPackageRef,
     ExternalPackageRefCategory,
     PackagePurpose,
     PackageVerificationCode,
+    SpdxNoAssertion,
+    SpdxNone,
 )
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
 from spdx_tools.spdx.parser.jsonlikedict.package_parser import PackageParser

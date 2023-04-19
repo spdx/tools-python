@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import Dict
 
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.annotation_parser import AnnotationParser
 from spdx_tools.spdx.parser.jsonlikedict.creation_info_parser import CreationInfoParser

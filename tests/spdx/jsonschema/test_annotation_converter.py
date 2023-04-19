@@ -8,8 +8,7 @@ import pytest
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
 from spdx_tools.spdx.jsonschema.annotation_converter import AnnotationConverter
 from spdx_tools.spdx.jsonschema.annotation_properties import AnnotationProperty
-from spdx_tools.spdx.model.actor import Actor, ActorType
-from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
+from spdx_tools.spdx.model import Actor, ActorType, Annotation, AnnotationType
 
 
 @pytest.fixture

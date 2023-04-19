@@ -7,10 +7,7 @@ from typing import List
 import pytest
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Document, Relationship, RelationshipType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.validation.relationship_validator import validate_relationship
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import document_fixture, relationship_fixture

@@ -4,8 +4,7 @@
 
 from typing import List, Optional
 
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.snippet import Snippet
+from spdx_tools.spdx.model import Document, Snippet
 from spdx_tools.spdx.validation.license_expression_validator import (
     validate_license_expression,
     validate_license_expressions,

@@ -6,7 +6,7 @@ from typing import List
 
 import pytest
 
-from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
+from spdx_tools.spdx.model import ExternalPackageRef, ExternalPackageRefCategory
 from spdx_tools.spdx.validation.external_package_ref_validator import (
     BOWER_REGEX,
     CPE22TYPE_REGEX,

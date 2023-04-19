@@ -10,7 +10,7 @@
 #  limitations under the License.
 from typing import TextIO
 
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx_tools.spdx.model import ExtractedLicensingInfo
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_text_value, write_value
 
 

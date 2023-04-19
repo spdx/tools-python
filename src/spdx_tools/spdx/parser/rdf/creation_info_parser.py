@@ -12,9 +12,7 @@ from rdflib.term import URIRef
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
 from spdx_tools.spdx.datetime_conversions import datetime_from_str
-from spdx_tools.spdx.model.document import CreationInfo
-from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
-from spdx_tools.spdx.model.version import Version
+from spdx_tools.spdx.model import CreationInfo, ExternalDocumentRef, Version
 from spdx_tools.spdx.parser.actor_parser import ActorParser
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.logger import Logger

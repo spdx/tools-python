@@ -11,7 +11,7 @@
 from typing import TextIO
 
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
-from spdx_tools.spdx.model.annotation import Annotation
+from spdx_tools.spdx.model import Annotation
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_text_value, write_value
 
 

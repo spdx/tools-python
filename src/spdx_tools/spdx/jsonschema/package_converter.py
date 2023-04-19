@@ -12,9 +12,7 @@ from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 from spdx_tools.spdx.jsonschema.optional_utils import apply_if_present
 from spdx_tools.spdx.jsonschema.package_properties import PackageProperty
 from spdx_tools.spdx.jsonschema.package_verification_code_converter import PackageVerificationCodeConverter
-from spdx_tools.spdx.model.actor import Actor
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.package import Package
+from spdx_tools.spdx.model import Actor, Document, Package
 
 
 class PackageConverter(TypedConverter[Package]):

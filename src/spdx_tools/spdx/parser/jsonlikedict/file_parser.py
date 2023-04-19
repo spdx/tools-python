@@ -5,10 +5,7 @@ from typing import Dict, List, Optional, Union
 
 from license_expression import LicenseExpression
 
-from spdx_tools.spdx.model.checksum import Checksum
-from spdx_tools.spdx.model.file import File, FileType
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Checksum, File, FileType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.jsonlikedict.checksum_parser import ChecksumParser
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import (
     parse_field_or_log_error,

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import Dict, Optional
 
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import json_str_to_enum_name
 from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.parsing_functions import (

@@ -7,7 +7,7 @@ from unittest import TestCase
 
 import pytest
 
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm
 from spdx_tools.spdx.validation.file_validator import validate_file, validate_file_within_document
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import document_fixture, file_fixture

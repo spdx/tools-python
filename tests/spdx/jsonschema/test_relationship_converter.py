@@ -5,9 +5,9 @@ import pytest
 
 from spdx_tools.spdx.jsonschema.relationship_converter import RelationshipConverter
 from spdx_tools.spdx.jsonschema.relationship_properties import RelationshipProperty
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
-from spdx_tools.spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING, SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SPDX_NONE_STRING, SpdxNone
+from spdx_tools.spdx.model import Relationship, RelationshipType, SpdxNoAssertion, SpdxNone
+from spdx_tools.spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING
+from spdx_tools.spdx.model.spdx_none import SPDX_NONE_STRING
 from tests.spdx.fixtures import relationship_fixture
 
 

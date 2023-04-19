@@ -7,7 +7,7 @@ from rdflib import DOAP, RDFS, Graph, URIRef
 from rdflib.term import BNode
 
 from spdx_tools.spdx.datetime_conversions import datetime_from_str
-from spdx_tools.spdx.model.package import (
+from spdx_tools.spdx.model import (
     ExternalPackageRef,
     ExternalPackageRefCategory,
     Package,

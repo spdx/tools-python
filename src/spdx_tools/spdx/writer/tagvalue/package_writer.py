@@ -11,7 +11,7 @@
 from typing import TextIO
 
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
-from spdx_tools.spdx.model.package import Package, PackageVerificationCode
+from spdx_tools.spdx.model import Package, PackageVerificationCode
 from spdx_tools.spdx.writer.tagvalue.checksum_writer import write_checksum_to_tag_value
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import (
     transform_enum_name_to_tv,

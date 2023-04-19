@@ -6,9 +6,7 @@ from typing import List, Optional, Union
 
 from license_expression import ExpressionError, ExpressionParseError, LicenseExpression, get_spdx_licensing
 
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Document, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 

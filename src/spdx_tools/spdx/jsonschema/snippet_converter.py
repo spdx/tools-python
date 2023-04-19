@@ -8,8 +8,7 @@ from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 from spdx_tools.spdx.jsonschema.optional_utils import apply_if_present
 from spdx_tools.spdx.jsonschema.snippet_properties import SnippetProperty
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.snippet import Snippet
+from spdx_tools.spdx.model import Document, Snippet
 
 
 class SnippetConverter(TypedConverter[Snippet]):

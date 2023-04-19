@@ -7,7 +7,7 @@ from typing import List
 import pytest
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
-from spdx_tools.spdx.model.actor import ActorType
+from spdx_tools.spdx.model import ActorType
 from spdx_tools.spdx.validation.actor_validator import validate_actor
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import actor_fixture

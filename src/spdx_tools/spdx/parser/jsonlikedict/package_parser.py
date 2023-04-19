@@ -7,16 +7,16 @@ from typing import Dict, List, Optional, Union
 from license_expression import LicenseExpression
 
 from spdx_tools.spdx.datetime_conversions import datetime_from_str
-from spdx_tools.spdx.model.actor import Actor
-from spdx_tools.spdx.model.package import (
+from spdx_tools.spdx.model import (
+    Actor,
     ExternalPackageRef,
     ExternalPackageRefCategory,
     Package,
     PackagePurpose,
     PackageVerificationCode,
+    SpdxNoAssertion,
+    SpdxNone,
 )
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
 from spdx_tools.spdx.parser.actor_parser import ActorParser
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.checksum_parser import ChecksumParser

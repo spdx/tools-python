@@ -10,7 +10,7 @@
 #  limitations under the License.
 from typing import TextIO
 
-from spdx_tools.spdx.model.snippet import Snippet
+from spdx_tools.spdx.model import Snippet
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_range, write_text_value, write_value
 
 

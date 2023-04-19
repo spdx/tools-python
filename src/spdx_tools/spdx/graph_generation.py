@@ -3,17 +3,14 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import Dict, List, Union
 
-from spdx_tools.spdx.model.file import File
-from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.snippet import Snippet
+from spdx_tools.spdx.model import File, Package, Snippet
 
 try:
     from networkx import DiGraph
 except ImportError:
     DiGraph = None
 from spdx_tools.spdx.document_utils import get_contained_spdx_elements
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.relationship import Relationship
+from spdx_tools.spdx.model import Document, Relationship
 
 
 def export_graph_from_document(document: Document, file_name: str) -> None:

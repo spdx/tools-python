@@ -8,8 +8,7 @@ import pytest
 
 from spdx_tools.spdx.jsonschema.external_document_ref_converter import ExternalDocumentRefConverter
 from spdx_tools.spdx.jsonschema.external_document_ref_properties import ExternalDocumentRefProperty
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, ExternalDocumentRef
 
 
 @pytest.fixture

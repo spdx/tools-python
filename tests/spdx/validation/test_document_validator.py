@@ -7,8 +7,7 @@ from typing import List, Optional
 import pytest
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
-from spdx_tools.spdx.model.document import CreationInfo, Document
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model import CreationInfo, Document, Relationship, RelationshipType
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage

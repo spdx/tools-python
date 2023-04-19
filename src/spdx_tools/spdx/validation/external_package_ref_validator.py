@@ -6,11 +6,8 @@ from typing import Dict, List
 
 import uritools
 
-from spdx_tools.spdx.model.package import (
-    CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES,
-    ExternalPackageRef,
-    ExternalPackageRefCategory,
-)
+from spdx_tools.spdx.model import ExternalPackageRef, ExternalPackageRefCategory
+from spdx_tools.spdx.model.package import CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES
 from spdx_tools.spdx.validation.uri_validators import validate_url
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 

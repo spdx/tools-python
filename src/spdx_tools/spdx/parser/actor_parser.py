@@ -4,7 +4,7 @@
 import re
 from typing import Match, Optional, Pattern
 
-from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model import Actor, ActorType
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.parsing_functions import construct_or_raise_parsing_error
 

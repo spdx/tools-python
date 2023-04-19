@@ -6,9 +6,7 @@ from typing import Dict, List, Optional, Tuple, Union
 
 from license_expression import LicenseExpression
 
-from spdx_tools.spdx.model.snippet import Snippet
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Snippet, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import (
     parse_field_or_log_error,

@@ -6,7 +6,7 @@ from typing import List
 
 import pytest
 
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm
 from spdx_tools.spdx.validation.checksum_validator import validate_checksum
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import checksum_fixture

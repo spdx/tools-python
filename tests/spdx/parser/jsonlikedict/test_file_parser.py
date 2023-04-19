@@ -6,10 +6,7 @@ from unittest import TestCase
 import pytest
 from license_expression import Licensing
 
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx_tools.spdx.model.file import FileType
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, FileType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
 from spdx_tools.spdx.parser.jsonlikedict.file_parser import FileParser

@@ -6,8 +6,7 @@ from typing import Any, Type
 from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 from spdx_tools.spdx.jsonschema.package_verification_code_properties import PackageVerificationCodeProperty
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.package import PackageVerificationCode
+from spdx_tools.spdx.model import Document, PackageVerificationCode
 
 
 class PackageVerificationCodeConverter(TypedConverter[PackageVerificationCode]):

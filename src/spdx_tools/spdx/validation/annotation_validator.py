@@ -4,8 +4,7 @@
 
 from typing import List
 
-from spdx_tools.spdx.model.annotation import Annotation
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Annotation, Document
 from spdx_tools.spdx.validation.actor_validator import validate_actor
 from spdx_tools.spdx.validation.spdx_id_validators import validate_spdx_id
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage

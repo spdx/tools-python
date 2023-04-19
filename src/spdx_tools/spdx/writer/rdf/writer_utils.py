@@ -9,8 +9,7 @@ from rdflib import Graph, Literal
 from rdflib.term import Node
 
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx_tools.spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
 

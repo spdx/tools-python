@@ -6,7 +6,7 @@ from typing import List
 
 from spdx_tools.spdx.document_utils import create_document_without_duplicates
 from spdx_tools.spdx.jsonschema.document_converter import DocumentConverter
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 from spdx_tools.spdx.validation.validation_message import ValidationMessage
 

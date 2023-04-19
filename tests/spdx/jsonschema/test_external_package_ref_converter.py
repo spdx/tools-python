@@ -5,7 +5,7 @@ import pytest
 
 from spdx_tools.spdx.jsonschema.external_package_ref_converter import ExternalPackageRefConverter
 from spdx_tools.spdx.jsonschema.external_package_ref_properties import ExternalPackageRefProperty
-from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
+from spdx_tools.spdx.model import ExternalPackageRef, ExternalPackageRefCategory
 
 
 @pytest.fixture

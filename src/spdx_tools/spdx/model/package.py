@@ -10,10 +10,7 @@ from license_expression import LicenseExpression
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx.model.actor import Actor
-from spdx_tools.spdx.model.checksum import Checksum
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Actor, Checksum, SpdxNoAssertion, SpdxNone
 
 
 class PackagePurpose(Enum):

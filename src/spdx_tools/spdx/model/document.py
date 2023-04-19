@@ -7,15 +7,17 @@ from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx.model.actor import Actor
-from spdx_tools.spdx.model.annotation import Annotation
-from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
-from spdx_tools.spdx.model.file import File
-from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.relationship import Relationship
-from spdx_tools.spdx.model.snippet import Snippet
-from spdx_tools.spdx.model.version import Version
+from spdx_tools.spdx.model import (
+    Actor,
+    Annotation,
+    ExternalDocumentRef,
+    ExtractedLicensingInfo,
+    File,
+    Package,
+    Relationship,
+    Snippet,
+    Version,
+)
 
 
 @dataclass_with_properties

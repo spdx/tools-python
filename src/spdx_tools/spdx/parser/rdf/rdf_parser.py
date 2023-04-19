@@ -5,8 +5,7 @@ from typing import Any, Dict
 
 from rdflib import RDF, Graph
 
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.relationship import RelationshipType
+from spdx_tools.spdx.model import Document, RelationshipType
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.parsing_functions import (

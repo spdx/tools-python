@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from rdflib import RDFS, Graph, URIRef
 
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx_tools.spdx.model import ExtractedLicensingInfo
 from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.parsing_functions import (
     construct_or_raise_parsing_error,

@@ -5,8 +5,7 @@ from unittest.mock import MagicMock, call, mock_open, patch
 
 import pytest
 
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.writer.tagvalue.relationship_writer import write_relationship
 from tests.spdx.fixtures import relationship_fixture
 

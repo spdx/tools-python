@@ -6,8 +6,7 @@ from typing import Any, Type
 from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.external_package_ref_properties import ExternalPackageRefProperty
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.package import ExternalPackageRef
+from spdx_tools.spdx.model import Document, ExternalPackageRef
 
 
 class ExternalPackageRefConverter(TypedConverter[ExternalPackageRef]):

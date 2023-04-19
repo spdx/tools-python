@@ -5,11 +5,7 @@ from datetime import datetime
 from typing import Dict, List, Optional
 
 from spdx_tools.spdx.datetime_conversions import datetime_from_str
-from spdx_tools.spdx.model.actor import Actor
-from spdx_tools.spdx.model.checksum import Checksum
-from spdx_tools.spdx.model.document import CreationInfo
-from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
-from spdx_tools.spdx.model.version import Version
+from spdx_tools.spdx.model import Actor, Checksum, CreationInfo, ExternalDocumentRef, Version
 from spdx_tools.spdx.parser.actor_parser import ActorParser
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.checksum_parser import ChecksumParser

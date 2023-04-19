@@ -4,7 +4,7 @@
 from rdflib import RDFS, BNode, Graph, URIRef
 
 from spdx_tools.spdx.datetime_conversions import datetime_from_str
-from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
+from spdx_tools.spdx.model import Annotation, AnnotationType
 from spdx_tools.spdx.parser.actor_parser import ActorParser
 from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.parsing_functions import (

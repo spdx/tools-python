@@ -6,9 +6,7 @@ from typing import Dict
 from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
-from spdx_tools.spdx.model.relationship import Relationship
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Relationship, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx_tools.spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id
 

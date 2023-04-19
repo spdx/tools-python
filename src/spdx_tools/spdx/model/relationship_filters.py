@@ -3,9 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import List
 
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.package import Package
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model import Document, Package, Relationship, RelationshipType
 
 
 def find_package_contains_file_relationships(document: Document, package: Package) -> List[Relationship]:

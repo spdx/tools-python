@@ -10,8 +10,7 @@ from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_pr
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, Document
 
 
 class TestPropertyType(JsonProperty):

@@ -3,8 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import List
 
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.relationship import RelationshipType
+from spdx_tools.spdx.model import Document, RelationshipType
 from spdx_tools.spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target
 from spdx_tools.spdx.validation.annotation_validator import validate_annotations
 from spdx_tools.spdx.validation.creation_info_validator import validate_creation_info

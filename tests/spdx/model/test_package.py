@@ -8,16 +8,13 @@ from unittest import mock
 import pytest
 from license_expression import LicenseExpression, Licensing
 
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx_tools.spdx.model.package import Package, PackagePurpose
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, Package, PackagePurpose, SpdxNoAssertion, SpdxNone
 
 
-@mock.patch("spdx_tools.spdx.model.package.ExternalPackageRef", autospec=True)
-@mock.patch("spdx_tools.spdx.model.checksum.Checksum", autospec=True)
-@mock.patch("spdx_tools.spdx.model.package.PackageVerificationCode", autospec=True)
-@mock.patch("spdx_tools.spdx.model.actor.Actor", autospec=True)
+@mock.patch("spdx_tools.spdx.model.ExternalPackageRef", autospec=True)
+@mock.patch("spdx_tools.spdx.model.Checksum", autospec=True)
+@mock.patch("spdx_tools.spdx.model.PackageVerificationCode", autospec=True)
+@mock.patch("spdx_tools.spdx.model.Actor", autospec=True)
 def test_correct_initialization(actor, verif_code, checksum, ext_ref):
     package = Package(
         "id",

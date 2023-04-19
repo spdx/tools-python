@@ -7,8 +7,7 @@ from spdx_tools.spdx.jsonschema.checksum_converter import ChecksumConverter
 from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.external_document_ref_properties import ExternalDocumentRefProperty
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
+from spdx_tools.spdx.model import Document, ExternalDocumentRef
 
 
 class ExternalDocumentRefConverter(TypedConverter[ExternalDocumentRef]):

@@ -6,8 +6,7 @@ from typing import Type
 from spdx_tools.spdx.jsonschema.checksum_properties import ChecksumProperty
 from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
-from spdx_tools.spdx.model.checksum import Checksum, ChecksumAlgorithm
-from spdx_tools.spdx.model.document import Document
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, Document
 
 
 class ChecksumConverter(TypedConverter[Checksum]):

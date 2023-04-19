@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
-from spdx_tools.spdx.model.extracted_licensing_info import ExtractedLicensingInfo
+from spdx_tools.spdx.model import ExtractedLicensingInfo
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx_tools.spdx.writer.rdf.writer_utils import add_literal_or_no_assertion, add_optional_literal
 

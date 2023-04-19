@@ -4,7 +4,7 @@
 
 from typing import List
 
-from spdx_tools.spdx.model.actor import Actor, ActorType
+from spdx_tools.spdx.model import Actor, ActorType
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 

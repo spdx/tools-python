@@ -4,7 +4,7 @@
 from rdflib import RDFS, Graph, URIRef
 from rdflib.term import Node
 
-from spdx_tools.spdx.model.relationship import Relationship, RelationshipType
+from spdx_tools.spdx.model import Relationship, RelationshipType
 from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.parsing_functions import (
     construct_or_raise_parsing_error,

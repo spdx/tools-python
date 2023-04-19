@@ -12,12 +12,18 @@ from license_expression import Licensing
 from spdx_tools.spdx.jsonschema.annotation_converter import AnnotationConverter
 from spdx_tools.spdx.jsonschema.snippet_converter import SnippetConverter
 from spdx_tools.spdx.jsonschema.snippet_properties import SnippetProperty
-from spdx_tools.spdx.model.actor import Actor, ActorType
-from spdx_tools.spdx.model.annotation import Annotation, AnnotationType
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.snippet import Snippet
-from spdx_tools.spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING, SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SPDX_NONE_STRING, SpdxNone
+from spdx_tools.spdx.model import (
+    Actor,
+    ActorType,
+    Annotation,
+    AnnotationType,
+    Document,
+    Snippet,
+    SpdxNoAssertion,
+    SpdxNone,
+)
+from spdx_tools.spdx.model.spdx_no_assertion import SPDX_NO_ASSERTION_STRING
+from spdx_tools.spdx.model.spdx_none import SPDX_NONE_STRING
 from tests.spdx.fixtures import annotation_fixture, creation_info_fixture, document_fixture, snippet_fixture
 from tests.spdx.mock_utils import assert_mock_method_called_with_arguments
 

@@ -6,7 +6,7 @@ from enum import Enum, auto
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx.model.actor import Actor
+from spdx_tools.spdx.model import Actor
 
 
 class AnnotationType(Enum):

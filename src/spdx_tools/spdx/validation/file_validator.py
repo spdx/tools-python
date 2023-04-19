@@ -4,9 +4,7 @@
 
 from typing import List, Optional
 
-from spdx_tools.spdx.model.checksum import ChecksumAlgorithm
-from spdx_tools.spdx.model.document import Document
-from spdx_tools.spdx.model.file import File
+from spdx_tools.spdx.model import ChecksumAlgorithm, Document, File
 from spdx_tools.spdx.validation.checksum_validator import validate_checksums
 from spdx_tools.spdx.validation.license_expression_validator import (
     validate_license_expression,
