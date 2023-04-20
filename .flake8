@@ -1,4 +1,4 @@
 [flake8]
 max-line-length = 119
-exclude = src/spdx_tools/spdx/parser/tagvalue/parsetab.py, src/spdx_tools/spdx/model/__init__.py
+exclude = src/spdx_tools/spdx/parser/tagvalue/parsetab.py, __init__.py
 extend-ignore = E203
