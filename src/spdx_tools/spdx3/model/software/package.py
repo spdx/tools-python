@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from dataclasses import field
 from datetime import datetime
 from typing import List, Optional
 
@@ -19,7 +20,7 @@ from spdx_tools.spdx3.model.software import SoftwarePurpose
 @dataclass_with_properties
 class Package(Artifact):
     content_identifier: Optional[str] = None  # anyURI
-    package_purpose: Optional[List[SoftwarePurpose]] = None
+    package_purpose: List[SoftwarePurpose] = field(default_factory=list)
     package_version: Optional[str] = None
     download_location: Optional[str] = None  # anyURI
     package_url: Optional[str] = None  # anyURI
@@ -34,16 +35,16 @@ class Package(Artifact):
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: Optional[List[IntegrityMethod]] = None,
-        external_references: Optional[List[ExternalReference]] = None,
-        external_identifier: Optional[List[ExternalIdentifier]] = None,
+        verified_using: List[IntegrityMethod] = None,
+        external_references: List[ExternalReference] = None,
+        external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
         originated_by: Optional[str] = None,
         content_identifier: Optional[str] = None,
         built_time: Optional[datetime] = None,
         release_time: Optional[datetime] = None,
         valid_until_time: Optional[datetime] = None,
-        package_purpose: Optional[List[SoftwarePurpose]] = None,
+        package_purpose: List[SoftwarePurpose] = None,
         package_version: Optional[str] = None,
         download_location: Optional[str] = None,
         package_url: Optional[str] = None,

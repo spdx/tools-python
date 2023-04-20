@@ -18,9 +18,9 @@ class SoftwareAgent(Agent):
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: Optional[List[IntegrityMethod]] = None,
-        external_references: Optional[List[ExternalReference]] = None,
-        external_identifier: Optional[List[ExternalIdentifier]] = None,
+        verified_using: List[IntegrityMethod] = None,
+        external_references: List[ExternalReference] = None,
+        external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
     ):
         verified_using = [] if verified_using is None else verified_using
