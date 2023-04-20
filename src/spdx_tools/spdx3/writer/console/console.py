@@ -14,3 +14,8 @@ def write_value(tag: str, value: Optional[Union[bool, str]], out: TextIO, indent
         out.write(f"\t{tag}: {value}\n")
     else:
         out.write(f"{tag}: {value}\n")
+
+
+def write_dict(tag: str, dictionary: dict, out: TextIO):
+    for key, value in dictionary:
+        out.write(f'{tag}: "{key}": "{value}"')
