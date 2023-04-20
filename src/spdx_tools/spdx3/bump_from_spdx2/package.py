@@ -24,9 +24,7 @@ def bump_package(
     spdx2_package: Spdx2_Package, payload: Payload, creation_information: CreationInformation, document_namespace: str
 ):
     spdx_id = "#".join([document_namespace, spdx2_package.spdx_id])
-    name = spdx2_package.name
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
-    package_version = spdx2_package.version
     # package.file_name -> ?
     print_missing_conversion("package2.file_name", 0)
     # package.supplier -> Relationship, suppliedBy?
@@ -38,20 +36,12 @@ def bump_package(
     print_missing_conversion("package2.verification_code", 1, "of IntegrityMethod")
     # package.checksums -> package.verified_using
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_package.checksums]
-    homepage = spdx2_package.homepage
-    source_info = spdx2_package.source_info
     print_missing_conversion(
         "package2.license_concluded, package2.license_info_from_files, package2.license_declared, "
         "package2.license_comment, package2.copyright_text",
         0,
         "and missing definition of license profile",
     )
-    summary = spdx2_package.summary
-    description = spdx2_package.description
-    comment = spdx2_package.comment
-    built_time = spdx2_package.built_date
-    release_time = spdx2_package.release_date
-    valid_until_time = spdx2_package.valid_until_date
 
     external_references = []
     external_identifiers = []
@@ -80,23 +70,23 @@ def bump_package(
         Package(
             spdx_id,
             creation_information,
-            name,
-            summary=summary,
-            description=description,
-            comment=comment,
+            spdx2_package.name,
+            summary=spdx2_package.summary,
+            description=spdx2_package.description,
+            comment=spdx2_package.comment,
             verified_using=integrity_methods,
             external_references=external_references,
             external_identifier=external_identifiers,
             originated_by=originated_by_spdx_id,
-            built_time=built_time,
-            release_time=release_time,
-            valid_until_time=valid_until_time,
+            built_time=spdx2_package.built_date,
+            release_time=spdx2_package.release_date,
+            valid_until_time=spdx2_package.valid_until_date,
             package_purpose=package_purpose,
-            package_version=package_version,
+            package_version=spdx2_package.version,
             download_location=download_location,
             package_url=package_url,
-            homepage=homepage,
-            source_info=source_info,
+            homepage=spdx2_package.homepage,
+            source_info=spdx2_package.source_info,
         )
     )
 
