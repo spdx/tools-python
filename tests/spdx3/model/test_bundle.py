@@ -37,7 +37,6 @@ def test_invalid_initialization(creation_information):
         'SetterError Bundle: type of argument "spdx_id" must be str; got int instead: 4',
         'SetterError Bundle: type of argument "elements" must be a list; got str ' "instead: spdx_id1",
         'SetterError Bundle: type of argument "root_elements"[0] must be str; got int ' "instead: [42]",
-        'SetterError Bundle: type of argument "namespaces" must be one of '
-        "(List[spdx_tools.spdx3.model.namespace_map.NamespaceMap], NoneType); got bool instead: True",
+        'SetterError Bundle: type of argument "namespaces" must be a list; ' "got bool instead: True",
         'SetterError Bundle: type of argument "context" must be one of (str, ' "NoneType); got list instead: ['yes']",
     ]

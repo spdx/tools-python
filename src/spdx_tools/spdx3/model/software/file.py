@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from dataclasses import field
 from datetime import datetime
 from typing import List, Optional
 
@@ -19,7 +20,7 @@ from spdx_tools.spdx3.model.software import SoftwarePurpose
 @dataclass_with_properties
 class File(Artifact):
     content_identifier: Optional[str] = None  # should be a valid URI
-    file_purpose: Optional[List[SoftwarePurpose]] = None
+    file_purpose: List[SoftwarePurpose] = field(default_factory=list)
     content_type: Optional[str] = None  # placeholder for MediaType
 
     def __init__(
@@ -30,16 +31,16 @@ class File(Artifact):
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: Optional[List[IntegrityMethod]] = None,
-        external_references: Optional[List[ExternalReference]] = None,
-        external_identifier: Optional[List[ExternalIdentifier]] = None,
+        verified_using: List[IntegrityMethod] = None,
+        external_references: List[ExternalReference] = None,
+        external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
         originated_by: Optional[str] = None,
         built_time: Optional[datetime] = None,
         release_time: Optional[datetime] = None,
         valid_until_time: Optional[datetime] = None,
         content_identifier: Optional[str] = None,
-        file_purpose: Optional[List[SoftwarePurpose]] = None,
+        file_purpose: List[SoftwarePurpose] = None,
         content_type: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
