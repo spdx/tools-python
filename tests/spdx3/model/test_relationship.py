@@ -5,10 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.relationship import Relationship, RelationshipCompleteness, RelationshipType
+from spdx_tools.spdx3.model import Relationship, RelationshipCompleteness, RelationshipType
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     relationship = Relationship(
         "SPDXRef-Relationship",
@@ -27,7 +27,7 @@ def test_correct_initialization(creation_information):
     assert relationship.completeness == RelationshipCompleteness.UNKNOWN
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Relationship("SPDXRef-Relationship", creation_information, 42, 5, "Relationshiptype", completeness=True)

@@ -5,11 +5,11 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.bundle import Bundle
+from spdx_tools.spdx3.model import Bundle
 
 
-@mock.patch("spdx_tools.spdx3.model.namespace_map.NamespaceMap", autospec=True)
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.NamespaceMap", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information, namespace):
     bundle = Bundle(
         "SPDXRef-Bundle",
@@ -28,7 +28,7 @@ def test_correct_initialization(creation_information, namespace):
     assert bundle.namespaces == [namespace]
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Bundle(4, creation_information, elements="spdx_id1", root_elements=[42], namespaces=True, context=["yes"])

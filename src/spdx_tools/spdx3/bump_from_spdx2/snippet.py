@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model.creation_information import CreationInformation
-from spdx_tools.spdx3.model.software.snippet import Snippet
+from spdx_tools.spdx3.model import CreationInformation
+from spdx_tools.spdx3.model.software import Snippet
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.snippet import Snippet as Spdx2_Snippet
 

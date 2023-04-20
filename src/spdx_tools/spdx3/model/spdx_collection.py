@@ -6,9 +6,7 @@ from dataclasses import field
 from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx_tools.spdx3.model.element import Element
-from spdx_tools.spdx3.model.external_map import ExternalMap
-from spdx_tools.spdx3.model.namespace_map import NamespaceMap
+from spdx_tools.spdx3.model import Element, ExternalMap, NamespaceMap
 
 
 @dataclass_with_properties
