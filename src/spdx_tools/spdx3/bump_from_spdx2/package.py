@@ -16,6 +16,7 @@ from spdx_tools.spdx3.model import (
 )
 from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 from spdx_tools.spdx3.payload import Payload
+from spdx_tools.spdx.model import Actor as Spdx2_Actor
 from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
 
@@ -29,7 +30,10 @@ def bump_package(
     print_missing_conversion("package2.file_name", 0)
     # package.supplier -> Relationship, suppliedBy?
     print_missing_conversion("package2.supplier", 1, "of relationships")
-    originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information, document_namespace)
+    if isinstance(spdx2_package.originator, Spdx2_Actor):
+        originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information, document_namespace)
+    else:
+        originated_by_spdx_id = None
     # package.files_analyzed  -> ?
     print_missing_conversion("package2.files_analyzed", 0)
     # package.verification_code -> package.verified_using
