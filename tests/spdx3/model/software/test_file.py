@@ -41,8 +41,7 @@ def test_invalid_initialization(creation_information):
         'SetterError File: type of argument "spdx_id" must be str; got int instead: 1',
         'SetterError File: type of argument "content_identifier" must be one of (str, '
         "NoneType); got int instead: 3",
-        'SetterError File: type of argument "file_purpose" must be one of '
-        "(List[spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose], NoneType); got "
+        'SetterError File: type of argument "file_purpose" must be a list; got '
         "spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose instead: "
         "SoftwarePurpose.FILE",
         'SetterError File: type of argument "content_type" must be one of (str, '
