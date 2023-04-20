@@ -42,6 +42,9 @@ def test_bump_package(creation_information):
     assert package.package_version == spdx2_package.version
     assert package.homepage == spdx2_package.homepage
     assert package.source_info == spdx2_package.source_info
+    assert package.built_time == spdx2_package.built_date
+    assert package.release_time == spdx2_package.release_date
+    assert package.valid_until_time == spdx2_package.valid_until_date
 
 
 @mock.patch("spdx_tools.spdx3.model.CreationInformation")
