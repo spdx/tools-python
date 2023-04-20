@@ -4,14 +4,14 @@
 from unittest import mock
 
 from spdx_tools.spdx3.bump_from_spdx2.file import bump_file
-from spdx_tools.spdx3.model.hash import Hash, HashAlgorithm
-from spdx_tools.spdx3.model.software.file import File
+from spdx_tools.spdx3.model import Hash, HashAlgorithm
+from spdx_tools.spdx3.model.software import File
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.file import File as Spdx2_File
 from tests.spdx.fixtures import file_fixture
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_bump_file(creation_information):
     payload = Payload()
     document_namespace = "https://doc.namespace"

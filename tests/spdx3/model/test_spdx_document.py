@@ -5,10 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.spdx_document import SpdxDocument
+from spdx_tools.spdx3.model import SpdxDocument
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     spdx_document = SpdxDocument(
         "SPDXRef-DOCUMENT", creation_information, "Test document", elements=["spdx_id1"], root_elements=["spdx_id2"]
@@ -34,7 +34,7 @@ def test_invalid_initialization():
     ]
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_incomplete_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         SpdxDocument("SPDXRef-Document", creation_information)

@@ -3,19 +3,18 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import TextIO
 
-from spdx_tools.spdx3.model.annotation import Annotation
-from spdx_tools.spdx3.model.bom import Bom
-from spdx_tools.spdx3.model.bundle import Bundle
-from spdx_tools.spdx3.model.organization import Organization
-from spdx_tools.spdx3.model.person import Person
-from spdx_tools.spdx3.model.relationship import Relationship
-from spdx_tools.spdx3.model.software.file import File
-from spdx_tools.spdx3.model.software.package import Package
-from spdx_tools.spdx3.model.software.sbom import Sbom
-from spdx_tools.spdx3.model.software.snippet import Snippet
-from spdx_tools.spdx3.model.software_agent import SoftwareAgent
-from spdx_tools.spdx3.model.spdx_document import SpdxDocument
-from spdx_tools.spdx3.model.tool import Tool
+from spdx_tools.spdx3.model import (
+    Annotation,
+    Bom,
+    Bundle,
+    Organization,
+    Person,
+    Relationship,
+    SoftwareAgent,
+    SpdxDocument,
+    Tool,
+)
+from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx3.writer.console.agent_writer import write_agent
 from spdx_tools.spdx3.writer.console.annotation_writer import write_annotation

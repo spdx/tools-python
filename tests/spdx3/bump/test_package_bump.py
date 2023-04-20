@@ -4,16 +4,15 @@
 from unittest import TestCase, mock
 
 from spdx_tools.spdx3.bump_from_spdx2.package import bump_package
-from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
-from spdx_tools.spdx3.model.external_reference import ExternalReference, ExternalReferenceType
-from spdx_tools.spdx3.model.software.package import Package
+from spdx_tools.spdx3.model import ExternalIdentifier, ExternalIdentifierType, ExternalReference, ExternalReferenceType
+from spdx_tools.spdx3.model.software import Package
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
 from tests.spdx.fixtures import package_fixture
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation")
+@mock.patch("spdx_tools.spdx3.model.CreationInformation")
 def test_bump_package(creation_information):
     payload = Payload()
     document_namespace = "https://doc.namespace"
@@ -45,7 +44,7 @@ def test_bump_package(creation_information):
     assert package.source_info == spdx2_package.source_info
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation")
+@mock.patch("spdx_tools.spdx3.model.CreationInformation")
 def test_bump_of_single_purl_without_comment(creation_information):
     payload = Payload()
     document_namespace = "https://doc.namespace"
@@ -64,7 +63,7 @@ def test_bump_of_single_purl_without_comment(creation_information):
     assert package.external_identifier == []
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation")
+@mock.patch("spdx_tools.spdx3.model.CreationInformation")
 def test_bump_of_single_purl_with_comment(creation_information):
     payload = Payload()
     document_namespace = "https://doc.namespace"
@@ -85,7 +84,7 @@ def test_bump_of_single_purl_with_comment(creation_information):
     ]
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation")
+@mock.patch("spdx_tools.spdx3.model.CreationInformation")
 def test_bump_of_multiple_purls(creation_information):
     payload = Payload()
     document_namespace = "https://doc.namespace"

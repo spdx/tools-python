@@ -5,10 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.external_map import ExternalMap
+from spdx_tools.spdx3.model import ExternalMap
 
 
-@mock.patch("spdx_tools.spdx3.model.integrity_method.IntegrityMethod", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.IntegrityMethod", autospec=True)
 def test_correct_initialization(integrity_method):
     external_map = ExternalMap("https://external.id", [integrity_method], "https://location.hint")
 

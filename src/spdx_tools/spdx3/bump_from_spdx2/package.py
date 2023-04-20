@@ -7,11 +7,14 @@ from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model.creation_information import CreationInformation
-from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
-from spdx_tools.spdx3.model.external_reference import ExternalReference, ExternalReferenceType
-from spdx_tools.spdx3.model.software.package import Package
-from spdx_tools.spdx3.model.software.software_purpose import SoftwarePurpose
+from spdx_tools.spdx3.model import (
+    CreationInformation,
+    ExternalIdentifier,
+    ExternalIdentifierType,
+    ExternalReference,
+    ExternalReferenceType,
+)
+from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
