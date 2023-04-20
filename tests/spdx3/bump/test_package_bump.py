@@ -3,26 +3,38 @@
 # SPDX-License-Identifier: Apache-2.0
 from unittest import TestCase, mock
 
+import pytest
+
 from spdx_tools.spdx3.bump_from_spdx2.package import bump_package
 from spdx_tools.spdx3.model import ExternalIdentifier, ExternalIdentifierType, ExternalReference, ExternalReferenceType
 from spdx_tools.spdx3.model.software import Package
 from spdx_tools.spdx3.payload import Payload
+from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
-from tests.spdx.fixtures import package_fixture
+from tests.spdx.fixtures import actor_fixture, package_fixture
 
 
+@pytest.mark.parametrize(
+    "originator, expected_originator",
+    [
+        (actor_fixture(name="originatorName"), "https://doc.namespace#SPDXRef-Actor-originatorName-some@mail.com"),
+        (None, None),
+        (SpdxNoAssertion(), None),
+    ],
+)
 @mock.patch("spdx_tools.spdx3.model.CreationInformation")
-def test_bump_package(creation_information):
+def test_bump_package(creation_information, originator, expected_originator):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
+        originator=originator,
         external_references=[
             ExternalPackageRef(
                 ExternalPackageRefCategory.SECURITY, "advisory", "advisory_locator", "advisory_comment"
             ),
             ExternalPackageRef(ExternalPackageRefCategory.PERSISTENT_ID, "swh", "swh_locator", "swh_comment"),
-        ]
+        ],
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
@@ -40,6 +52,7 @@ def test_bump_package(creation_information):
     ]
     assert package.download_location == spdx2_package.download_location
     assert package.package_version == spdx2_package.version
+    assert package.originated_by == expected_originator
     assert package.homepage == spdx2_package.homepage
     assert package.source_info == spdx2_package.source_info
     assert package.built_time == spdx2_package.built_date
