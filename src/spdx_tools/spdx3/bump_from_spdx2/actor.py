@@ -3,11 +3,14 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import List
 
-from spdx_tools.spdx3.model.creation_information import CreationInformation
-from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
-from spdx_tools.spdx3.model.organization import Organization
-from spdx_tools.spdx3.model.person import Person
-from spdx_tools.spdx3.model.tool import Tool
+from spdx_tools.spdx3.model import (
+    CreationInformation,
+    ExternalIdentifier,
+    ExternalIdentifierType,
+    Organization,
+    Person,
+    Tool,
+)
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.actor import Actor as Spdx2_Actor
 from spdx_tools.spdx.model.actor import ActorType

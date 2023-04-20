@@ -6,10 +6,10 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.bom import Bom
+from spdx_tools.spdx3.model import Bom
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     bom = Bom("SPDXRef-Bom", creation_information, elements=["spdx_id1"], root_elements=["spdx_id2"])
 

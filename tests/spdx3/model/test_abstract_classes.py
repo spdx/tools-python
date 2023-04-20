@@ -3,10 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx_tools.spdx3.model.artifact import Artifact
-from spdx_tools.spdx3.model.element import Element
-from spdx_tools.spdx3.model.integrity_method import IntegrityMethod
-from spdx_tools.spdx3.model.spdx_collection import SpdxCollection
+from spdx_tools.spdx3.model import Artifact, Element, IntegrityMethod, SpdxCollection
 
 
 @pytest.mark.parametrize("abstract_class", [Element, Artifact, SpdxCollection, IntegrityMethod])
