@@ -13,7 +13,6 @@ def bump_file(
     spdx2_file: Spdx2_File, payload: Payload, creation_information: CreationInformation, document_namespace: str
 ):
     spdx_id = "#".join([document_namespace, spdx2_file.spdx_id])
-    name = spdx2_file.name
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_file.checksums]
     # file.checksums -> file.verifiedUsing
     # file.file_types -> file.content_type (MediaType with Cardinality 1)
@@ -24,11 +23,16 @@ def bump_file(
         "missing definition for license profile",
     )
 
-    comment = spdx2_file.comment
     print_missing_conversion(
         "file.notice, file.contributors, file.attribution_texts", 0, "missing definition for license profile"
     )
 
     payload.add_element(
-        File(spdx_id, creation_info=creation_information, name=name, comment=comment, verified_using=integrity_methods)
+        File(
+            spdx_id,
+            creation_info=creation_information,
+            name=spdx2_file.name,
+            comment=spdx2_file.comment,
+            verified_using=integrity_methods,
+        )
     )
