@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
+from spdx_tools.spdx3.model import ExternalIdentifier, ExternalIdentifierType
 
 
 def test_correct_initialization():

@@ -3,10 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import TextIO
 
-from spdx_tools.spdx3.model.agent import Agent
-from spdx_tools.spdx3.model.organization import Organization
-from spdx_tools.spdx3.model.person import Person
-from spdx_tools.spdx3.model.software_agent import SoftwareAgent
+from spdx_tools.spdx3.model import Agent, Organization, Person, SoftwareAgent
 from spdx_tools.spdx3.writer.console.element_writer import write_element_properties
 
 

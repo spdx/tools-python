@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import TextIO
 
-from spdx_tools.spdx3.model.bundle import Bundle
+from spdx_tools.spdx3.model import Bundle
 from spdx_tools.spdx3.writer.console.console import write_value
 from spdx_tools.spdx3.writer.console.spdx_collection_writer import write_collection
 

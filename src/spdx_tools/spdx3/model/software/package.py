@@ -5,12 +5,14 @@ from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.artifact import Artifact
-from spdx_tools.spdx3.model.creation_information import CreationInformation
-from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier
-from spdx_tools.spdx3.model.external_reference import ExternalReference
-from spdx_tools.spdx3.model.integrity_method import IntegrityMethod
-from spdx_tools.spdx3.model.software.software_purpose import SoftwarePurpose
+from spdx_tools.spdx3.model import (
+    Artifact,
+    CreationInformation,
+    ExternalIdentifier,
+    ExternalReference,
+    IntegrityMethod,
+)
+from spdx_tools.spdx3.model.software import SoftwarePurpose
 
 
 @dataclass_with_properties

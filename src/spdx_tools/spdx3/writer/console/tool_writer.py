@@ -10,7 +10,7 @@
 #  limitations under the License.
 from typing import TextIO
 
-from spdx_tools.spdx3.model.tool import Tool
+from spdx_tools.spdx3.model import Tool
 from spdx_tools.spdx3.writer.console.element_writer import write_element_properties
 
 
