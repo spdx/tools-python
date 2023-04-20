@@ -6,7 +6,7 @@ from datetime import datetime
 import pytest
 from semantic_version import Version
 
-from spdx_tools.spdx3.model.creation_information import CreationInformation
+from spdx_tools.spdx3.model import CreationInformation
 
 
 def test_correct_initialization():

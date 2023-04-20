@@ -6,10 +6,7 @@ from dataclasses import field
 from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx_tools.spdx3.model.creation_information import CreationInformation
-from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier
-from spdx_tools.spdx3.model.external_reference import ExternalReference
-from spdx_tools.spdx3.model.integrity_method import IntegrityMethod
+from spdx_tools.spdx3.model import CreationInformation, ExternalIdentifier, ExternalReference, IntegrityMethod
 
 
 @dataclass_with_properties

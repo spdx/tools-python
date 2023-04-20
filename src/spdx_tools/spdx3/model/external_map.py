@@ -6,7 +6,7 @@ from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.integrity_method import IntegrityMethod
+from spdx_tools.spdx3.model import IntegrityMethod
 
 
 @dataclass_with_properties

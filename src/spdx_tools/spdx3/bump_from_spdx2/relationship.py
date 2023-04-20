@@ -3,8 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import Optional, Tuple
 
-from spdx_tools.spdx3.model.creation_information import CreationInformation
-from spdx_tools.spdx3.model.relationship import Relationship, RelationshipCompleteness, RelationshipType
+from spdx_tools.spdx3.model import CreationInformation, Relationship, RelationshipCompleteness, RelationshipType
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.relationship import Relationship as Spdx2_Relationship
 from spdx_tools.spdx.model.relationship import RelationshipType as Spdx2_RelationshipType
