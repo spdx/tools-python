@@ -9,8 +9,10 @@ from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
 
 
 def bump_external_document_ref(external_document_ref: ExternalDocumentRef) -> ExternalMap:
-    external_id: str = external_document_ref.document_ref_id
     verified_using: List[Hash] = [bump_checksum(external_document_ref.checksum)]
-    location_hint: str = external_document_ref.document_uri
 
-    return ExternalMap(external_id, verified_using, location_hint)
+    return ExternalMap(
+        external_id=external_document_ref.document_ref_id,
+        verified_using=verified_using,
+        location_hint=external_document_ref.document_uri,
+    )
