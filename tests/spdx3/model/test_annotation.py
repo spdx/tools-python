@@ -5,10 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.annotation import Annotation, AnnotationType
+from spdx_tools.spdx3.model import Annotation, AnnotationType
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     annotation = Annotation(
         "SPDXRef-Annotation",
@@ -27,7 +27,7 @@ def test_correct_initialization(creation_information):
     assert annotation.statement == "This is a statement"
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation")
+@mock.patch("spdx_tools.spdx3.model.CreationInformation")
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Annotation(

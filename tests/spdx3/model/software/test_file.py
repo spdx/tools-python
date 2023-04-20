@@ -5,11 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.software.file import File
-from spdx_tools.spdx3.model.software.software_purpose import SoftwarePurpose
+from spdx_tools.spdx3.model.software import File, SoftwarePurpose
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     file = File(
         "SPDXRef-File",
@@ -27,7 +26,7 @@ def test_correct_initialization(creation_information):
     assert file.content_type == "MediaType"
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         File(

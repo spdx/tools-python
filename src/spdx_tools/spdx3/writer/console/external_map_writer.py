@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import TextIO
 
-from spdx_tools.spdx3.model.external_map import ExternalMap
+from spdx_tools.spdx3.model import ExternalMap
 from spdx_tools.spdx3.writer.console.console import write_value
 from spdx_tools.spdx3.writer.console.hash_writer import write_hash
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_optional_heading

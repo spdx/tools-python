@@ -5,11 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.software.snippet import Snippet
-from spdx_tools.spdx3.model.software.software_purpose import SoftwarePurpose
+from spdx_tools.spdx3.model.software import Snippet, SoftwarePurpose
 
 
-@mock.patch("spdx_tools.spdx3.model.software.snippet.Snippet", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.software.Snippet", autospec=True)
 def test_correct_initialization(creation_information):
     snippet = Snippet(
         "SPDXRef-Snippet",
@@ -28,7 +27,7 @@ def test_correct_initialization(creation_information):
     assert snippet.line_range == (346, 456)
 
 
-@mock.patch("spdx_tools.spdx3.model.software.snippet.Snippet", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.software.Snippet", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Snippet(2, creation_information, originated_by=34, byte_range="34:45")
