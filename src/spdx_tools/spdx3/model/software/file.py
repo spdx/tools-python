@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from dataclasses import field
 from datetime import datetime
 from typing import List, Optional
 
