@@ -9,8 +9,7 @@ from semantic_version import Version
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.external_document_ref import bump_external_document_ref
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model.creation_information import CreationInformation
-from spdx_tools.spdx3.model.spdx_document import SpdxDocument
+from spdx_tools.spdx3.model import CreationInformation, SpdxDocument
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.actor import ActorType
 from spdx_tools.spdx.model.document import CreationInfo as Spdx2_CreationInfo

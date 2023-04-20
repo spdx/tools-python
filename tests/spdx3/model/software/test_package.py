@@ -5,11 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.software.package import Package
-from spdx_tools.spdx3.model.software.software_purpose import SoftwarePurpose
+from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     package = Package(
         "SPDXRef-Package",
@@ -34,7 +33,7 @@ def test_correct_initialization(creation_information):
     assert package.source_info == "some info"
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Package(

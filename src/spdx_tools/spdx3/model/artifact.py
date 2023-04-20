@@ -5,7 +5,7 @@ from abc import abstractmethod
 from typing import Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx_tools.spdx3.model.element import Element
+from spdx_tools.spdx3.model import Element
 
 
 @dataclass_with_properties

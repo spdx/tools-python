@@ -4,8 +4,7 @@
 from copy import deepcopy
 
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
-from spdx_tools.spdx3.model.annotation import Annotation, AnnotationType
-from spdx_tools.spdx3.model.creation_information import CreationInformation
+from spdx_tools.spdx3.model import Annotation, AnnotationType, CreationInformation
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.actor import ActorType
 from spdx_tools.spdx.model.annotation import Annotation as Spdx2_Annotation

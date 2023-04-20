@@ -5,10 +5,10 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.software.sbom import Sbom
+from spdx_tools.spdx3.model.software import Sbom
 
 
-@mock.patch("spdx_tools.spdx3.model.creation_information.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
     sbom = Sbom("SPDXRef-Sbom", creation_information, elements=["spdx_id1", "spdx_id2"], root_elements=["spdx_id3"])
 

@@ -4,8 +4,7 @@
 from typing import List
 
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.model.external_map import ExternalMap
-from spdx_tools.spdx3.model.hash import Hash
+from spdx_tools.spdx3.model import ExternalMap, Hash
 from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
 
 
