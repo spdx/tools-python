@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from datetime import datetime
 from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
@@ -34,6 +35,9 @@ class File(Artifact):
         external_identifier: Optional[List[ExternalIdentifier]] = None,
         extension: None = None,
         originated_by: Optional[str] = None,
+        built_time: Optional[datetime] = None,
+        release_time: Optional[datetime] = None,
+        valid_until_time: Optional[datetime] = None,
         content_identifier: Optional[str] = None,
         file_purpose: Optional[List[SoftwarePurpose]] = None,
         content_type: Optional[str] = None,
