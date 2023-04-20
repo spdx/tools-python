@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from datetime import datetime
 from unittest import mock
 
 import pytest
@@ -14,6 +15,9 @@ def test_correct_initialization(creation_information):
         "SPDXRef-Package",
         creation_information,
         content_identifier="https://any.uri",
+        built_time=datetime(2022, 1, 1),
+        release_time=datetime(2022, 1, 2),
+        valid_until_time=datetime(2022, 1, 3),
         package_purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH],
         package_version="1:23a_bc",
         download_location="https://downloadlocation",
@@ -25,6 +29,9 @@ def test_correct_initialization(creation_information):
     assert package.spdx_id == "SPDXRef-Package"
     assert package.creation_info == creation_information
     assert package.content_identifier == "https://any.uri"
+    assert package.built_time == datetime(2022, 1, 1)
+    assert package.release_time == datetime(2022, 1, 2)
+    assert package.valid_until_time == datetime(2022, 1, 3)
     assert package.package_purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH]
     assert package.package_version == "1:23a_bc"
     assert package.download_location == "https://downloadlocation"
@@ -39,6 +46,7 @@ def test_invalid_initialization(creation_information):
         Package(
             "SPDXRef-Package",
             creation_information,
+            built_time="2022-03-04T00:00:00Z",
             content_identifier=3,
             package_purpose=SoftwarePurpose.FILE,
             package_version=42,
@@ -49,6 +57,8 @@ def test_invalid_initialization(creation_information):
         )
 
     assert err.value.args[0] == [
+        'SetterError Package: type of argument "built_time" must be one of '
+        "(datetime.datetime, NoneType); got str instead: 2022-03-04T00:00:00Z",
         'SetterError Package: type of argument "content_identifier" must be one of '
         "(str, NoneType); got int instead: 3",
         'SetterError Package: type of argument "package_purpose" must be one of '
