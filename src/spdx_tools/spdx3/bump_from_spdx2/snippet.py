@@ -13,16 +13,12 @@ def bump_snippet(
 ):
     spdx_id = "#".join([document_namespace, spdx2_snippet.spdx_id])
     print_missing_conversion("snippet.file_spdx_id", 0)
-    byte_range = spdx2_snippet.byte_range
-    line_range = spdx2_snippet.line_range
     print_missing_conversion(
         "snippet.concluded_license, snippet.license_info_in_snippet, snippet.license_comment,"
         "snippet.copyright_text",
         0,
         "missing definitions for license profile",
     )
-    comment = spdx2_snippet.comment
-    name = spdx2_snippet.name
 
     print_missing_conversion("snippet.attribution_texts", 0, "missing definitions for license profile")
 
@@ -30,9 +26,9 @@ def bump_snippet(
         Snippet(
             spdx_id=spdx_id,
             creation_info=creation_information,
-            name=name,
-            comment=comment,
-            byte_range=byte_range,
-            line_range=line_range,
+            name=spdx2_snippet.name,
+            comment=spdx2_snippet.comment,
+            byte_range=spdx2_snippet.byte_range,
+            line_range=spdx2_snippet.line_range,
         )
     )

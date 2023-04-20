@@ -37,7 +37,6 @@ def bump_relationship(
     else:
         from_element = spdx2_relationship.spdx_element_id
         to = [spdx2_relationship.related_spdx_element_id]
-    comment = spdx2_relationship.comment
 
     payload.add_element(
         Relationship(
@@ -46,7 +45,7 @@ def bump_relationship(
             from_element,
             to,
             relationship_type,
-            comment=comment,
+            comment=spdx2_relationship.comment,
             completeness=completeness,
         )
     )
