@@ -30,9 +30,9 @@ def bump_snippet(
         Snippet(
             spdx_id=spdx_id,
             creation_info=creation_information,
+            name=name,
+            comment=comment,
             byte_range=byte_range,
             line_range=line_range,
-            comment=comment,
-            name=name,
         )
     )
