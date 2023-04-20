@@ -17,9 +17,9 @@ class Element(ABC):
     summary: Optional[str] = None
     description: Optional[str] = None
     comment: Optional[str] = None
-    verified_using: Optional[List[IntegrityMethod]] = field(default_factory=list)
-    external_references: Optional[List[ExternalReference]] = field(default_factory=list)
-    external_identifier: Optional[List[ExternalIdentifier]] = field(default_factory=list)
+    verified_using: List[IntegrityMethod] = field(default_factory=list)
+    external_references: List[ExternalReference] = field(default_factory=list)
+    external_identifier: List[ExternalIdentifier] = field(default_factory=list)
     extension: None = None  # placeholder for extension
 
     @abstractmethod

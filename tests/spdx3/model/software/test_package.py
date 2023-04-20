@@ -61,8 +61,7 @@ def test_invalid_initialization(creation_information):
         "(datetime.datetime, NoneType); got str instead: 2022-03-04T00:00:00Z",
         'SetterError Package: type of argument "content_identifier" must be one of '
         "(str, NoneType); got int instead: 3",
-        'SetterError Package: type of argument "package_purpose" must be one of '
-        "(List[spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose], NoneType); got "
+        'SetterError Package: type of argument "package_purpose" must be a list; got '
         "spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose instead: "
         "SoftwarePurpose.FILE",
         'SetterError Package: type of argument "package_version" must be one of '
