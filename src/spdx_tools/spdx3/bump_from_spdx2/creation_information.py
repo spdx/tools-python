@@ -1,7 +1,6 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from datetime import datetime
 from typing import List
 
 from semantic_version import Version
@@ -20,15 +19,9 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     document_namespace = spdx2_creation_info.document_namespace
     spdx_id = f"{document_namespace}#{spdx2_creation_info.spdx_id}"
 
-    # creation_info.name -> spdx_document.name
-    name = spdx2_creation_info.name
-
     # creation_info.document_namespace -> ?
     print_missing_conversion("creation_info.document_namespace", 0)
 
-    created: datetime = spdx2_creation_info.created
-    comment = spdx2_creation_info.document_comment
-    data_license = spdx2_creation_info.data_license
     # creation_info.external_document_refs -> spdx_document.imports
     imports = [
         bump_external_document_ref(external_document_ref)
@@ -39,7 +32,13 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     # creation_info.document_comment -> spdx_document.comment
     document_comment = spdx2_creation_info.document_comment
     creation_information = CreationInformation(
-        Version("3.0.0"), created, [], [], ["core", "software", "licensing"], data_license, comment
+        spec_version=Version("3.0.0"),
+        created=spdx2_creation_info.created,
+        created_by=[],
+        created_using=[],
+        profile=["core", "software", "licensing"],
+        data_license=spdx2_creation_info.data_license,
+        comment=spdx2_creation_info.document_comment,
     )
 
     # due to creators having a creation_information themselves which inherits from the document's one,
@@ -62,14 +61,12 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     creation_information.created_by = creator_ids
     creation_information.created_using = tool_ids
 
-    spdx_document = SpdxDocument(
+    return SpdxDocument(
         spdx_id=spdx_id,
         creation_info=creation_information,
-        name=name,
+        name=spdx2_creation_info.name,
         comment=document_comment,
         elements=[],
         root_elements=[],
         imports=imports,
     )
-
-    return spdx_document

@@ -33,7 +33,13 @@ def bump_annotation(
             " This case leads to an invalid SPDX3 document and is currently not supported."
         )
     annotation_type: AnnotationType = AnnotationType[spdx2_annotation.annotation_type.name]
-    subject: str = spdx2_annotation.spdx_id
-    statement: str = spdx2_annotation.annotation_comment
 
-    payload.add_element(Annotation(spdx_id, creation_info, annotation_type, subject, statement=statement))
+    payload.add_element(
+        Annotation(
+            spdx_id,
+            creation_info,
+            annotation_type,
+            subject=spdx2_annotation.spdx_id,
+            statement=spdx2_annotation.annotation_comment,
+        )
+    )
