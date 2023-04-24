@@ -1,25 +1,33 @@
 #  SPDX-FileCopyrightText: 2023 spdx contributors
 #
 #  SPDX-License-Identifier: Apache-2.0
-import pytest
+from datetime import datetime
 
+import pytest
+from semantic_version import Version
+
+from spdx_tools.spdx3.model import CreationInformation
 from spdx_tools.spdx3.model.dataset import ConfidentialityLevelType, Dataset, DatasetAvailabilityType
 
 
 def test_correct_initialization():
     dataset = Dataset(
-        "data collection process",
-        "intended use",
-        420000,
-        "dataset noise",
-        "data preprocessing steps",
-        {"sensor1": "some value"},
-        "known biases",
-        True,
-        ["anonymization method"],
-        ConfidentialityLevelType.RED,
-        "update mechanism",
-        DatasetAvailabilityType.QUERY,
+        "some_spdx_id",
+        CreationInformation(
+            Version("3.0.0"), datetime(2023, 1, 11, 16, 21), [], [], ["core", "software"], "CC0", "some comment"
+        ),
+        data_collection_process="data collection process",
+        intended_use="intended use",
+        dataset_size=420000,
+        dataset_noise="dataset noise",
+        data_preprocessing_steps="data preprocessing steps",
+        sensors={"sensor1": "some value"},
+        known_biases="known biases",
+        sensitive_personal_information=True,
+        anonymization_method_used=["anonymization method"],
+        confidentiality_level=ConfidentialityLevelType.RED,
+        dataset_update_mechanism="update mechanism",
+        dataset_availability=DatasetAvailabilityType.QUERY,
     )
 
     assert dataset.data_collection_process == "data collection process"
@@ -38,7 +46,13 @@ def test_correct_initialization():
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        Dataset(sensors={"sensor1": "value", "sensor2": 250})
+        Dataset(
+            "some_spdx_id",
+            CreationInformation(
+                Version("3.0.0"), datetime(2023, 1, 11, 16, 21), [], [], ["core", "software"], "CC0", "some comment"
+            ),
+            sensors={"sensor1": "value", "sensor2": 250},
+        )
 
     assert err.value.args[0] == [
         (
