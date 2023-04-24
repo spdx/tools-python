@@ -58,7 +58,7 @@ def _fix_list_like_fields(data: Any) -> Any:
         new_data = {}
         for key, value in data.items():
             if key in LIST_LIKE_FIELDS and not isinstance(value, list):
-                new_data[key] = [_fix_list_like_fields(value)]
+                new_data[key] = [_fix_list_like_fields(value)] if value else []
             else:
                 new_data[key] = _fix_list_like_fields(value)
         return new_data
