@@ -9,11 +9,7 @@ from spdx_tools.spdx.model import Actor, Checksum, CreationInfo, ExternalDocumen
 from spdx_tools.spdx.parser.actor_parser import ActorParser
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.checksum_parser import ChecksumParser
-from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import (
-    append_parsed_field_or_log_error,
-    parse_field_or_log_error,
-    parse_field_or_no_assertion,
-)
+from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import parse_field_or_log_error
 from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.parsing_functions import (
     construct_or_raise_parsing_error,
@@ -45,7 +41,7 @@ class CreationInfoParser:
             raise SPDXParsingError([f"Error while parsing document {name}: {logger.get_messages()}"])
 
         creators: List[Actor] = parse_field_or_log_error(
-            logger, creation_info_dict.get("creators"), self.parse_creators
+            logger, creation_info_dict.get("creators"), self.actor_parser.parse_actor, field_is_list=True
         )
 
         created: Optional[datetime] = parse_field_or_log_error(
@@ -82,17 +78,6 @@ class CreationInfoParser:
         )
 
         return creation_info
-
-    def parse_creators(self, creators_list_from_dict: List[str]) -> List[Actor]:
-        logger = Logger()
-        creators = []
-        for creator_str in creators_list_from_dict:
-            creators = append_parsed_field_or_log_error(
-                logger, creators, creator_str, lambda x: parse_field_or_no_assertion(x, self.actor_parser.parse_actor)
-            )
-
-        raise_parsing_error_if_logger_has_messages(logger)
-        return creators
 
     @staticmethod
     def parse_version(version_str: str) -> Version:
