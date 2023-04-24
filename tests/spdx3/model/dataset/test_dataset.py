@@ -1,21 +1,18 @@
-#  SPDX-FileCopyrightText: 2023 spdx contributors
+# SPDX-FileCopyrightText: 2023 spdx contributors
 #
-#  SPDX-License-Identifier: Apache-2.0
-from datetime import datetime
+# SPDX-License-Identifier: Apache-2.0
+from unittest import mock
 
 import pytest
-from semantic_version import Version
 
-from spdx_tools.spdx3.model import CreationInformation
 from spdx_tools.spdx3.model.dataset import ConfidentialityLevelType, Dataset, DatasetAvailabilityType
 
 
-def test_correct_initialization():
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
+def test_correct_initialization(creation_information):
     dataset = Dataset(
         "some_spdx_id",
-        CreationInformation(
-            Version("3.0.0"), datetime(2023, 1, 11, 16, 21), [], [], ["core", "software"], "CC0", "some comment"
-        ),
+        creation_information,
         data_collection_process="data collection process",
         intended_use="intended use",
         dataset_size=420000,
@@ -44,13 +41,12 @@ def test_correct_initialization():
     assert dataset.dataset_availability == DatasetAvailabilityType.QUERY
 
 
-def test_invalid_initialization():
+@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
+def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
         Dataset(
             "some_spdx_id",
-            CreationInformation(
-                Version("3.0.0"), datetime(2023, 1, 11, 16, 21), [], [], ["core", "software"], "CC0", "some comment"
-            ),
+            creation_information,
             sensors={"sensor1": "value", "sensor2": 250},
         )
 
