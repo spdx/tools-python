@@ -14,12 +14,18 @@ from spdx_tools.spdx3.model import (
     SpdxDocument,
     Tool,
 )
+from spdx_tools.spdx3.model.ai import AIPackage
+from spdx_tools.spdx3.model.build import Build
+from spdx_tools.spdx3.model.dataset import Dataset
 from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx3.writer.console.agent_writer import write_agent
+from spdx_tools.spdx3.writer.console.ai.ai_package_writer import write_ai_package
 from spdx_tools.spdx3.writer.console.annotation_writer import write_annotation
 from spdx_tools.spdx3.writer.console.bom_writer import write_bom
+from spdx_tools.spdx3.writer.console.build.build_writer import write_build
 from spdx_tools.spdx3.writer.console.bundle_writer import write_bundle
+from spdx_tools.spdx3.writer.console.dataset.dataset_writer import write_dataset
 from spdx_tools.spdx3.writer.console.relationship_writer import write_relationship
 from spdx_tools.spdx3.writer.console.software.file_writer import write_file
 from spdx_tools.spdx3.writer.console.software.package_writer import write_package
@@ -42,6 +48,9 @@ MAP_CLASS_TO_WRITE_METHOD = {
     Organization: write_agent,
     SoftwareAgent: write_agent,
     Tool: write_tool,
+    AIPackage: write_ai_package,
+    Dataset: write_dataset,
+    Build: write_build,
 }
 
 
