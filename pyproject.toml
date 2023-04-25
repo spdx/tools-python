@@ -62,3 +62,6 @@ include = "(^/src/.*.py|^/tests/.*.py)"
 profile = "black"
 line_length = 119
 skip = ["__init__.py"]
+
+[tool.pytest.ini_options]
+norecursedirs = []  # overwrite the default to not skip tests/build folder which is needed in spdx3
