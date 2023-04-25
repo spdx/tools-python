@@ -35,11 +35,7 @@ def parse_from_file(file_name: str) -> Document:
 def translate_graph_to_document(graph: Graph) -> Document:
     parsed_fields: Dict[str, Any] = dict()
     logger = Logger()
-    try:
-        creation_info, doc_node = parse_creation_info(graph)
-    except SPDXParsingError as err:
-        logger.extend(err.get_messages())
-        creation_info = None
+    creation_info, doc_node = parse_creation_info(graph)
 
     parsed_fields["creation_info"] = creation_info
 
