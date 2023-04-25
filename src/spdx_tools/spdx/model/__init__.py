@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023 spdx contributors
+#
+# SPDX-License-Identifier: Apache-2.0
 from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx_tools.spdx.model.spdx_none import SpdxNone
 from spdx_tools.spdx.model.version import Version
