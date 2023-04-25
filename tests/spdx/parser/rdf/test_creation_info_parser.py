@@ -11,11 +11,13 @@ from rdflib.term import Node
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
 from spdx_tools.spdx.model import Actor, ActorType, Checksum, ChecksumAlgorithm, Version
+from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.rdf.creation_info_parser import (
     parse_creation_info,
     parse_external_document_refs,
     parse_namespace_and_spdx_id,
 )
+from spdx_tools.spdx.parser.rdf.rdf_parser import parse_from_file
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
@@ -90,3 +92,20 @@ def test_parse_external_document_refs():
         ChecksumAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c"
     )
     assert external_document_ref.document_uri == "https://namespace.com"
+
+
+@pytest.mark.parametrize(
+    "file, error_message",
+    [
+        (
+            "invalid_creation_info.rdf.xml",
+            "Error while parsing CreationInfo: ['No creators provided.']",
+        ),
+        ("invalid_creation_info_with_snippet.rdf.xml", "Error while parsing CreationInfo: ['No creators provided.']"),
+    ],
+)
+def test_parse_invalid_creation_info(file, error_message):
+    with pytest.raises(SPDXParsingError) as err:
+        parse_from_file(os.path.join(os.path.dirname(__file__), f"data/invalid_documents/{file}"))
+
+    assert err.value.get_messages() == [error_message]

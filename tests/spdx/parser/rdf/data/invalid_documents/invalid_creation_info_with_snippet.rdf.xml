@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+    xmlns:spdx="http://spdx.org/rdf/terms#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:ptr="http://www.w3.org/2009/pointers#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+>
+    <spdx:SpdxDocument rdf:about="https://some.namespace#SPDXRef-DOCUMENT">
+        <spdx:specVersion>SPDX-2.3</spdx:specVersion>
+        <spdx:hasExtractedLicensingInfo>
+            <spdx:ExtractedLicensingInfo rdf:about="https://some.namespace#LicenseRef-1">
+                <rdfs:seeAlso>https://see.also</rdfs:seeAlso>
+                <spdx:extractedText>extractedText</spdx:extractedText>
+                <spdx:licenseId>LicenseRef-1</spdx:licenseId>
+                <rdfs:comment>licenseComment</rdfs:comment>
+                <spdx:name>licenseName</spdx:name>
+            </spdx:ExtractedLicensingInfo>
+        </spdx:hasExtractedLicensingInfo>
+        <rdfs:comment>documentComment</rdfs:comment>
+        <spdx:name>documentName</spdx:name>
+        <spdx:dataLicense rdf:resource="http://spdx.org/licenses/CC0-1.0"/>
+        <spdx:creationInfo>
+            <spdx:CreationInfo rdf:nodeID="N80af30c2c55b44afb3a7cf4124ed9aff">
+                <rdfs:comment>creatorComment</rdfs:comment>
+                <spdx:licenseListVersion>3.19</spdx:licenseListVersion>
+                <spdx:created></spdx:created>
+            </spdx:CreationInfo>
+        </spdx:creationInfo>
+    </spdx:SpdxDocument>
+        <spdx:Snippet rdf:about="https://some.namespace#SPDXRef-Snippet">
+        <spdx:range>
+            <ptr:StartEndPointer rdf:nodeID="N079962c320a64e15bc1b4f2c01ea04b8">
+                <ptr:startPointer>
+                    <ptr:LineCharPointer rdf:nodeID="N42ab092d6b334333b1a457cf9387cbb8">
+                        <ptr:reference rdf:resource="https://some.namespace#SPDXRef-File"/>
+                        <ptr:lineNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">3</ptr:lineNumber>
+                    </ptr:LineCharPointer>
+                </ptr:startPointer>
+                <ptr:endPointer>
+                    <ptr:LineCharPointer rdf:nodeID="Nbb9c38211e154a9b92f2489289580125">
+                        <ptr:reference rdf:resource="https://some.namespace#SPDXRef-File"/>
+                        <ptr:lineNumber rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">4</ptr:lineNumber>
+                    </ptr:LineCharPointer>
+                </ptr:endPointer>
+            </ptr:StartEndPointer>
+        </spdx:range>
+        <spdx:range>
+            <ptr:StartEndPointer rdf:nodeID="N77e7b08564a0412a9413b90ff9b3ddd9">
+                <ptr:startPointer>
+                    <ptr:ByteOffsetPointer rdf:nodeID="N89d93c1292de424f9aa75ee1e297ede9">
+                        <ptr:offset rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">1</ptr:offset>
+                        <ptr:reference rdf:resource="https://some.namespace#SPDXRef-File"/>
+                    </ptr:ByteOffsetPointer>
+                </ptr:startPointer>
+                <ptr:endPointer>
+                    <ptr:ByteOffsetPointer rdf:nodeID="N7099800c04534fcc8a998b551fee34ce">
+                        <ptr:reference rdf:resource="https://some.namespace#SPDXRef-File"/>
+                        <ptr:offset rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</ptr:offset>
+                    </ptr:ByteOffsetPointer>
+                </ptr:endPointer>
+            </ptr:StartEndPointer>
+        </spdx:range>
+        <spdx:snippetFromFile rdf:resource="https://some.namespace#SPDXRef-File"/>
+        <spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/licenses/MIT"/>
+        <spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+        <spdx:licenseInfoInSnippet rdf:resource="http://spdx.org/rdf/terms#noassertion"/>
+        <spdx:attributionText>snippetAttributionText</spdx:attributionText>
+        <spdx:name>snippetName</spdx:name>
+        <spdx:licenseComments>snippetLicenseComment</spdx:licenseComments>
+        <rdfs:comment>snippetComment</rdfs:comment>
+        <spdx:copyrightText>licenseCopyrightText</spdx:copyrightText>
+        <spdx:licenseConcluded>
+            <spdx:ConjunctiveLicenseSet rdf:nodeID="Ndf36ad77a5c244e5af7928009800aed7">
+                <spdx:member rdf:resource="http://spdx.org/licenses/MIT"/>
+                <spdx:member rdf:resource="http://spdx.org/licenses/GPL-2.0-only"/>
+            </spdx:ConjunctiveLicenseSet>
+        </spdx:licenseConcluded>
+    </spdx:Snippet>
+</rdf:RDF>

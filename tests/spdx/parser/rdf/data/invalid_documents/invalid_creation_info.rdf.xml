@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+    xmlns:spdx="http://spdx.org/rdf/terms#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+>
+    <spdx:SpdxDocument rdf:about="https://some.namespace#SPDXRef-DOCUMENT">
+        <rdfs:comment>documentComment</rdfs:comment>
+        <spdx:name>documentName</spdx:name>
+        <spdx:dataLicense rdf:resource="http://spdx.org/licenses/CC0-1.0"/>
+        <spdx:creationInfo>
+            <spdx:CreationInfo rdf:nodeID="N80af30c2c55b44afb3a7cf4124ed9aff">
+                <spdx:licenseListVersion>3.19</spdx:licenseListVersion>
+                <spdx:created></spdx:created>
+            </spdx:CreationInfo>
+        </spdx:creationInfo>
+    </spdx:SpdxDocument>
+</rdf:RDF>
