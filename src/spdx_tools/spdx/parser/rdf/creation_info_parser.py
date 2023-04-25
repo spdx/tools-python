@@ -61,6 +61,8 @@ def parse_creation_info(graph: Graph) -> Tuple[CreationInfo, URIRef]:
         logger, graph, creation_info_node, SPDX_NAMESPACE.creator
     ):
         creators.append(ActorParser.parse_actor(creator_literal.toPython()))
+    if not creators:
+        logger.append("No creators provided.")
     external_document_refs = []
     for _, _, external_document_node in get_correctly_typed_triples(
         logger, graph, doc_node, SPDX_NAMESPACE.externalDocumentRef
