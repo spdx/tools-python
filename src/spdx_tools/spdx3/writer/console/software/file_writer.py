@@ -11,6 +11,11 @@ from spdx_tools.spdx3.writer.console.console import write_value
 def write_file(file: File, text_output: TextIO):
     text_output.write("## File\n")
     write_artifact_properties(file, text_output)
-    write_value("content_identifier", file.content_identifier, text_output)
-    write_value("file_purpose", ", ".join([purpose.name for purpose in file.file_purpose]), text_output)
-    write_value("content_type", file.content_type, text_output)
+
+    for property_name in File.__annotations__.keys():
+        if property_name == "file_purpose":
+            write_value(
+                property_name, ", ".join([purpose.name for purpose in getattr(file, property_name)]), text_output
+            )
+            continue
+        write_value(property_name, getattr(file, property_name), text_output)

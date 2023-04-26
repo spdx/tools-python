@@ -25,9 +25,9 @@ def write_element_properties(element: Element, text_output: TextIO):
         # as soon as there are more inherited classes we need to implement a logic
         # that determines the correct write function for the "integrity_method" object
         write_hash(integrity_method, text_output, heading=False)
-    write_optional_heading(element.external_references, "External References", text_output)
+    write_optional_heading(element.external_references, "External References\n", text_output)
     for external_reference in element.external_references:
         write_external_reference(external_reference, text_output)
-    write_optional_heading(element.external_identifier, "External Identifier", text_output)
+    write_optional_heading(element.external_identifier, "External Identifier\n", text_output)
     for external_identifier in element.external_identifier:
         write_external_identifier(external_identifier, text_output)
