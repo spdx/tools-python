@@ -4,6 +4,7 @@
 from copy import deepcopy
 
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
+from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import Annotation, AnnotationType, CreationInformation
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.actor import ActorType
@@ -28,9 +29,11 @@ def bump_annotation(
     if annotator.actor_type in [ActorType.PERSON, ActorType.ORGANIZATION]:
         creation_info.created_by = [creator_id]
     else:
-        raise NotImplementedError(
+        print_missing_conversion(
+            "Annotator",
+            0,
             "The SPDX2 annotation is not of Type Person or Organization."
-            " This case leads to an invalid SPDX3 document and is currently not supported."
+            " This case leads to an invalid SPDX3 document and is currently not supported.",
         )
     annotation_type: AnnotationType = AnnotationType[spdx2_annotation.annotation_type.name]
 
