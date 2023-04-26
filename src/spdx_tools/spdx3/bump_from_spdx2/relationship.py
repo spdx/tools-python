@@ -187,9 +187,10 @@ def bump_relationships(
                 (relationship.from_element, relationship.relationship_type.name), []
             ).append(relationship)
 
-    for key, relationships in generated_relationships.items():
+    for relationships in generated_relationships.values():
         if len(relationships) > 1:
-            merge_relationships_and_add_to_payload(payload, relationships)
+            merged_relationship = merge_relationships_and_add_to_payload(relationships)
+            payload.add_element(merged_relationship)
         else:
             payload.add_element(relationships[0])
 
@@ -201,7 +202,7 @@ def bump_relationship(
     counter: int,
 ) -> Optional[Union[Relationship, SoftwareDependencyRelationship]]:
     swap_direction = False
-    completeness, to = determine_completeness(spdx2_relationship.related_spdx_element_id)
+    completeness, to = determine_completeness_and_to(spdx2_relationship.related_spdx_element_id)
     spdx_id = "#".join([document_namespace, f"SPDXRef-Relationship-{counter}"])
     parameters_for_bump = relationship_mapping[spdx2_relationship.relationship_type]
     if parameters_for_bump is None:
@@ -210,9 +211,6 @@ def bump_relationship(
     base_relationship = parameters_for_bump[0]
     relationship_type = parameters_for_bump[1]
     if not base_relationship:
-        scope = parameters_for_bump[2]
-        software_linkage = parameters_for_bump[3]
-        conditionality = parameters_for_bump[4]
         from_element = spdx2_relationship.spdx_element_id
 
         return SoftwareDependencyRelationship(
@@ -223,12 +221,12 @@ def bump_relationship(
             relationship_type,
             comment=spdx2_relationship.comment,
             completeness=completeness,
-            scope=scope,
-            software_linkage=software_linkage,
-            conditionality=conditionality,
+            scope=(parameters_for_bump[2]),
+            software_linkage=(parameters_for_bump[3]),
+            conditionality=(parameters_for_bump[4]),
         )
 
-    if base_relationship and (len(parameters_for_bump) == 3):
+    if len(parameters_for_bump) == 3:
         swap_direction = parameters_for_bump[2]
     if swap_direction:
         if not to:
@@ -250,7 +248,7 @@ def bump_relationship(
     )
 
 
-def determine_completeness(
+def determine_completeness_and_to(
     related_spdx_element_id: Union[str, SpdxNone, SpdxNoAssertion]
 ) -> Tuple[Optional[RelationshipCompleteness], List[str]]:
     if isinstance(related_spdx_element_id, SpdxNoAssertion):
@@ -265,7 +263,7 @@ def determine_completeness(
     return completeness, to
 
 
-def merge_relationships_and_add_to_payload(payload: Payload, relationships: List[Relationship]):
+def merge_relationships_and_add_to_payload(relationships: List[Relationship]) -> Relationship:
     merged_relationship = relationships[0]
     for relationship in relationships[1:]:
         merged_relationship.to += relationship.to
@@ -274,4 +272,4 @@ def merge_relationships_and_add_to_payload(payload: Payload, relationships: List
         if not merged_relationship.comment and relationship.comment:
             merged_relationship.comment = relationship.comment
 
-    payload.add_element(merged_relationship)
+    return merged_relationship
