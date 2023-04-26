@@ -20,7 +20,7 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     spdx_id = f"{document_namespace}#{spdx2_creation_info.spdx_id}"
 
     # creation_info.document_namespace -> ?
-    print_missing_conversion("creation_info.document_namespace", 0)
+    print_missing_conversion("creation_info.document_namespace", 0, "https://github.com/spdx/spdx-3-model/issues/87")
 
     # creation_info.external_document_refs -> spdx_document.imports
     imports = [
@@ -28,7 +28,11 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
         for external_document_ref in spdx2_creation_info.external_document_refs
     ]
     # creation_info.license_list_version -> ?
-    print_missing_conversion("creation_info.license_list_version", 0)
+    print_missing_conversion(
+        "creation_info.license_list_version",
+        0,
+        "part of licensing profile, " "https://github.com/spdx/spdx-3-model/issues/131",
+    )
     # creation_info.document_comment -> spdx_document.comment
     document_comment = spdx2_creation_info.document_comment
     creation_information = CreationInformation(
@@ -57,7 +61,8 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
             "Creators",
             0,
             "The SPDX2 creation_info does not contain creators of Type Person or Organization."
-            " This case leads to an invalid SPDX3 document and is currently not supported.",
+            " This case leads to an invalid SPDX3 document and is currently not supported."
+            "https://github.com/spdx/spdx-3-model/issues/180",
         )
 
     creation_information.created_by = creator_ids

@@ -27,17 +27,19 @@ def bump_package(
     spdx_id = "#".join([document_namespace, spdx2_package.spdx_id])
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
     # package.file_name -> ?
-    print_missing_conversion("package2.file_name", 0)
+    print_missing_conversion("package2.file_name", 0, "https://github.com/spdx/spdx-3-model/issues/83")
     # package.supplier -> Relationship, suppliedBy?
-    print_missing_conversion("package2.supplier", 1, "of relationships")
+    print_missing_conversion("package2.supplier", 0, "https://github.com/spdx/spdx-3-model/issues/113")
     if isinstance(spdx2_package.originator, Spdx2_Actor):
         originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information, document_namespace)
     else:
         originated_by_spdx_id = None
     # package.files_analyzed  -> ?
-    print_missing_conversion("package2.files_analyzed", 0)
+    print_missing_conversion("package2.files_analyzed", 0, "https://github.com/spdx/spdx-3-model/issues/84")
     # package.verification_code -> package.verified_using
-    print_missing_conversion("package2.verification_code", 1, "of IntegrityMethod")
+    print_missing_conversion(
+        "package2.verification_code", 1, "of IntegrityMethod, https://github.com/spdx/spdx-3-model/issues/85"
+    )
     # package.checksums -> package.verified_using
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_package.checksums]
     print_missing_conversion(
@@ -65,7 +67,7 @@ def bump_package(
         elif isinstance(id_or_ref, ExternalIdentifier):
             external_identifiers.append(id_or_ref)
 
-    print_missing_conversion("package2.attribution_texts", 0)
+    print_missing_conversion("package2.attribution_texts", 0, "missing definition of license profile")
     package_purpose = (
         [SoftwarePurpose[spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
     )
@@ -121,7 +123,10 @@ def bump_external_package_ref(
 
     if reference_type not in external_ref_type_map:
         print_missing_conversion(
-            reference_type, 0, f"Conversion of ExternalPackageRef of type {reference_type} is currently not supported."
+            reference_type,
+            0,
+            f"Conversion of ExternalPackageRef of type {reference_type} is currently not supported."
+            f"https://github.com/spdx/spdx-3-model/issues/81",
         )
         return None
 
