@@ -8,5 +8,5 @@ from spdx_tools.spdx3.writer.console.console import write_value
 
 
 def write_namespace_map(namespace_map: NamespaceMap, text_output: TextIO):
-    write_value("prefix", namespace_map.prefix, text_output)
-    write_value("namespace", namespace_map.namespace, text_output)
+    for property_name in NamespaceMap.__annotations__.keys():
+        write_value(property_name, getattr(namespace_map, property_name), text_output)
