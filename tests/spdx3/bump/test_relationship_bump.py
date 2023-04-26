@@ -29,18 +29,20 @@ def test_relationship_bump(creation_info):
 
 @mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_relationships_bump(creation_info):
-    relationships = [relationship_fixture(), relationship_fixture(related_spdx_element_id="SPDXRef-Package")]
+    relationships = [
+        relationship_fixture(comment=None),
+        relationship_fixture(related_spdx_element_id="SPDXRef-Package", comment=None),
+    ]
     payload = Payload()
     document_namespace = "https://doc.namespace"
     bump_relationships(relationships, payload, creation_info, document_namespace)
 
-    assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-0") == Relationship(
-        f"{document_namespace}#SPDXRef-Relationship-0",
+    assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-1") == Relationship(
+        f"{document_namespace}#SPDXRef-Relationship-1",
         creation_info,
         relationships[0].spdx_element_id,
         [relationships[0].related_spdx_element_id, relationships[1].related_spdx_element_id],
         RelationshipType.DESCRIBES,
-        comment=relationships[0].comment + ", " + relationships[1].comment,
     )
 
 
@@ -63,10 +65,18 @@ def test_relationships_bump_with_setting_completeness(creation_info):
         f"{document_namespace}#SPDXRef-Relationship-0",
         creation_info,
         relationships[0].spdx_element_id,
+        [],
+        RelationshipType.DESCRIBES,
+        comment=relationships[0].comment,
+        completeness=RelationshipCompleteness.NOASSERTION,
+    )
+    assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-1") == Relationship(
+        f"{document_namespace}#SPDXRef-Relationship-1",
+        creation_info,
+        relationships[1].spdx_element_id,
         [relationships[1].related_spdx_element_id],
         RelationshipType.DESCRIBES,
-        comment=relationships[0].comment + ", " + relationships[1].comment,
-        completeness=RelationshipCompleteness.NOASSERTION,
+        comment=relationships[1].comment,
     )
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-2") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-2",
@@ -92,6 +102,6 @@ def test_undefined_relationship_bump(creation_info, capsys):
 
     captured = capsys.readouterr()
     assert (
-        captured.err == "Swapped Relationship to NoAssertion/ None not converted: missing conversion rule \n"
+        captured.err == "Swapped Relationship to NoAssertion/None not converted: missing conversion rule \n"
         "OPTIONAL_COMPONENT_OF not converted: missing conversion rule \n"
     )
