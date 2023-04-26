@@ -12,9 +12,11 @@ def write_package(package: Package, text_output: TextIO, heading: bool = True):
     if heading:
         text_output.write("## Package\n")
     write_artifact_properties(package, text_output)
-    write_value("content_identifier", package.content_identifier, text_output)
-    write_value("package_purpose", ", ".join([purpose.name for purpose in package.package_purpose]), text_output)
-    write_value("package_version", package.package_version, text_output)
-    write_value("download_location", package.download_location, text_output)
-    write_value("package_uri", package.package_url, text_output)
-    write_value("homepage", package.homepage, text_output)
+
+    for property_name in Package.__annotations__.keys():
+        if property_name == "package_purpose":
+            write_value(
+                property_name, ", ".join([purpose.name for purpose in getattr(package, property_name)]), text_output
+            )
+            continue
+        write_value(property_name, getattr(package, property_name), text_output)
