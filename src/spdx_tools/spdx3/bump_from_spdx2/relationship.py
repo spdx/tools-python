@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+import logging
+import sys
 from typing import Dict, List, Optional, Tuple, Union
 
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
@@ -27,149 +29,128 @@ from spdx_tools.spdx.model.spdx_none import SpdxNone
 relationship_mapping: Dict[
     Spdx2_RelationshipType,
     Tuple[
-        bool,
+        Union[Relationship, SoftwareDependencyRelationship],
         RelationshipType,
-        Union[bool, LifecycleScopeType, None],
-        Optional[SoftwareDependencyLinkType],
-        Optional[DependencyConditionalityType],
+        Dict[str, Union[bool, LifecycleScopeType, SoftwareDependencyLinkType, DependencyConditionalityType]],
     ],
 ] = {
-    Spdx2_RelationshipType.AMENDS: (True, RelationshipType.AMENDS),
-    Spdx2_RelationshipType.ANCESTOR_OF: (True, RelationshipType.ANCESTOR),
+    Spdx2_RelationshipType.AMENDS: (Relationship, RelationshipType.AMENDS, {}),
+    Spdx2_RelationshipType.ANCESTOR_OF: (Relationship, RelationshipType.ANCESTOR, {}),
     Spdx2_RelationshipType.BUILD_DEPENDENCY_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        LifecycleScopeType.BUILD,
-        SoftwareDependencyLinkType.TOOL,
-        None,
+        {
+            "scope": LifecycleScopeType.BUILD,
+            "linkage": SoftwareDependencyLinkType.TOOL,
+        },
     ),
     Spdx2_RelationshipType.BUILD_TOOL_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        LifecycleScopeType.BUILD,
-        SoftwareDependencyLinkType.TOOL,
-        None,
+        {"scope": LifecycleScopeType.BUILD, "linkage": SoftwareDependencyLinkType.TOOL},
     ),
-    Spdx2_RelationshipType.CONTAINED_BY: (True, RelationshipType.CONTAINS, True),
+    Spdx2_RelationshipType.CONTAINED_BY: (Relationship, RelationshipType.CONTAINS, {"swap": True}),
     Spdx2_RelationshipType.CONTAINS: (
-        True,
+        Relationship,
         RelationshipType.CONTAINS,
+        {},
     ),  # might be deleted in favor of depends on
-    Spdx2_RelationshipType.COPY_OF: (True, RelationshipType.COPY),
-    Spdx2_RelationshipType.DATA_FILE_OF: None,  # not defined, probably input/ output
+    Spdx2_RelationshipType.COPY_OF: (Relationship, RelationshipType.COPY, {}),
+    Spdx2_RelationshipType.DATA_FILE_OF: (None, None, {}),  # not defined, probably input/ output
     Spdx2_RelationshipType.DEPENDENCY_MANIFEST_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        None,
-        None,
-        None,
+        {},
     ),  # "expect purpose has been set to manifest"
-    Spdx2_RelationshipType.DEPENDENCY_OF: (False, RelationshipType.DEPENDS_ON, True),
-    Spdx2_RelationshipType.DEPENDS_ON: (
-        False,
+    Spdx2_RelationshipType.DEPENDENCY_OF: (
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
+        {"swap": True},
     ),
-    Spdx2_RelationshipType.DESCENDANT_OF: (True, RelationshipType.ANCESTOR, True),
-    Spdx2_RelationshipType.DESCRIBED_BY: (True, RelationshipType.DESCRIBES, True),
-    Spdx2_RelationshipType.DESCRIBES: (True, RelationshipType.DESCRIBES),  # might be deleted in favor of root
+    Spdx2_RelationshipType.DEPENDS_ON: (SoftwareDependencyRelationship, RelationshipType.DEPENDS_ON, {}),
+    Spdx2_RelationshipType.DESCENDANT_OF: (Relationship, RelationshipType.ANCESTOR, {"swap": True}),
+    Spdx2_RelationshipType.DESCRIBED_BY: (Relationship, RelationshipType.DESCRIBES, {"swap": True}),
+    Spdx2_RelationshipType.DESCRIBES: (
+        Relationship,
+        RelationshipType.DESCRIBES,
+        {},
+    ),  # might be deleted in favor of root
     # property
     Spdx2_RelationshipType.DEV_DEPENDENCY_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        LifecycleScopeType.DEVELOPMENT,
-        None,
-        None,
+        {"scope": LifecycleScopeType.DEVELOPMENT},
     ),
     Spdx2_RelationshipType.DEV_TOOL_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        LifecycleScopeType.DEVELOPMENT,
-        SoftwareDependencyLinkType.TOOL,
-        None,
+        {"scope": LifecycleScopeType.DEVELOPMENT, "linkage": SoftwareDependencyLinkType.TOOL},
     ),
-    Spdx2_RelationshipType.DISTRIBUTION_ARTIFACT: None,  # not defined yet, purpose?
-    Spdx2_RelationshipType.DOCUMENTATION_OF: (True, RelationshipType.DOCUMENTATION),
+    Spdx2_RelationshipType.DISTRIBUTION_ARTIFACT: (None, None, {}),  # not defined yet, purpose?
+    Spdx2_RelationshipType.DOCUMENTATION_OF: (Relationship, RelationshipType.DOCUMENTATION, {}),
     Spdx2_RelationshipType.DYNAMIC_LINK: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        None,
-        SoftwareDependencyLinkType.DYNAMIC,
-        None,
+        {"linkage": SoftwareDependencyLinkType.DYNAMIC},
     ),
-    Spdx2_RelationshipType.EXAMPLE_OF: (True, RelationshipType.EXAMPLE),
-    Spdx2_RelationshipType.EXPANDED_FROM_ARCHIVE: (True, RelationshipType.EXPANDED_FROM_ARCHIVE),
-    Spdx2_RelationshipType.FILE_ADDED: (True, RelationshipType.FILE_ADDED),
-    Spdx2_RelationshipType.FILE_DELETED: (True, RelationshipType.FILE_DELETED),
-    Spdx2_RelationshipType.FILE_MODIFIED: (True, RelationshipType.FILE_MODIFIED),
-    Spdx2_RelationshipType.GENERATED_FROM: (True, RelationshipType.GENERATES, True),
-    Spdx2_RelationshipType.GENERATES: (True, RelationshipType.GENERATES),
+    Spdx2_RelationshipType.EXAMPLE_OF: (Relationship, RelationshipType.EXAMPLE, {}),
+    Spdx2_RelationshipType.EXPANDED_FROM_ARCHIVE: (Relationship, RelationshipType.EXPANDED_FROM_ARCHIVE, {}),
+    Spdx2_RelationshipType.FILE_ADDED: (Relationship, RelationshipType.FILE_ADDED, {}),
+    Spdx2_RelationshipType.FILE_DELETED: (Relationship, RelationshipType.FILE_DELETED, {}),
+    Spdx2_RelationshipType.FILE_MODIFIED: (Relationship, RelationshipType.FILE_MODIFIED, {}),
+    Spdx2_RelationshipType.GENERATED_FROM: (Relationship, RelationshipType.GENERATES, {"swap": True}),
+    Spdx2_RelationshipType.GENERATES: (Relationship, RelationshipType.GENERATES, {}),
     Spdx2_RelationshipType.HAS_PREREQUISITE: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        None,
-        None,
-        DependencyConditionalityType.PREREQUISITE,
+        {"conditionality": DependencyConditionalityType.PREREQUISITE},
     ),
-    Spdx2_RelationshipType.METAFILE_OF: (True, RelationshipType.METAFILE),
-    Spdx2_RelationshipType.OPTIONAL_COMPONENT_OF: None,  # converted to depends on and purpose? not clear
+    Spdx2_RelationshipType.METAFILE_OF: (Relationship, RelationshipType.METAFILE, {}),
+    Spdx2_RelationshipType.OPTIONAL_COMPONENT_OF: (None, None, {}),  # converted to depends on and purpose? not clear
     Spdx2_RelationshipType.OPTIONAL_DEPENDENCY_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        None,
-        None,
-        DependencyConditionalityType.OPTIONAL,
+        {"conditionality": DependencyConditionalityType.OPTIONAL},
     ),
-    Spdx2_RelationshipType.OTHER: (True, RelationshipType.OTHER),
-    Spdx2_RelationshipType.PACKAGE_OF: (False, RelationshipType.DEPENDS_ON),
-    Spdx2_RelationshipType.PATCH_APPLIED: (True, RelationshipType.PATCH, True),
-    Spdx2_RelationshipType.PATCH_FOR: (True, RelationshipType.PATCH),
+    Spdx2_RelationshipType.OTHER: (Relationship, RelationshipType.OTHER, {}),
+    Spdx2_RelationshipType.PACKAGE_OF: (SoftwareDependencyRelationship, RelationshipType.DEPENDS_ON, {}),
+    Spdx2_RelationshipType.PATCH_APPLIED: (Relationship, RelationshipType.PATCH, {"swap": True}),
+    Spdx2_RelationshipType.PATCH_FOR: (Relationship, RelationshipType.PATCH, {}),
     Spdx2_RelationshipType.PREREQUISITE_FOR: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        None,
-        None,
-        DependencyConditionalityType.PREREQUISITE,
+        {"conditionality": DependencyConditionalityType.PREREQUISITE},
     ),
     Spdx2_RelationshipType.PROVIDED_DEPENDENCY_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        LifecycleScopeType.BUILD,
-        None,
-        DependencyConditionalityType.PROVIDED,
+        {"scope": LifecycleScopeType.BUILD, "conditionality": DependencyConditionalityType.PROVIDED},
     ),
     Spdx2_RelationshipType.RUNTIME_DEPENDENCY_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        LifecycleScopeType.RUNTIME,
-        None,
-        None,
+        {"scope": LifecycleScopeType.RUNTIME},
     ),
     Spdx2_RelationshipType.STATIC_LINK: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        None,
-        SoftwareDependencyLinkType.STATIC,
-        None,
+        {"linkage": SoftwareDependencyLinkType.STATIC},
     ),
-    Spdx2_RelationshipType.TEST_CASE_OF: (True, RelationshipType.TEST_CASE),
+    Spdx2_RelationshipType.TEST_CASE_OF: (Relationship, RelationshipType.TEST_CASE, {}),
     Spdx2_RelationshipType.TEST_DEPENDENCY_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        LifecycleScopeType.TEST,
-        None,
-        None,
+        {"scope": LifecycleScopeType.TEST},
     ),
-    Spdx2_RelationshipType.TEST_OF: (True, RelationshipType.TEST),
+    Spdx2_RelationshipType.TEST_OF: (Relationship, RelationshipType.TEST, {}),
     Spdx2_RelationshipType.TEST_TOOL_OF: (
-        False,
+        SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        LifecycleScopeType.TEST,
-        SoftwareDependencyLinkType.TOOL,
-        None,
+        {"scope": LifecycleScopeType.TEST, "linkage": SoftwareDependencyLinkType.TOOL},
     ),
-    Spdx2_RelationshipType.VARIANT_OF: (True, RelationshipType.VARIANT),
-    Spdx2_RelationshipType.REQUIREMENT_DESCRIPTION_FOR: (True, RelationshipType.REQUIREMENT_FOR),
-    Spdx2_RelationshipType.SPECIFICATION_FOR: (True, RelationshipType.SPECIFICATION_FOR),
+    Spdx2_RelationshipType.VARIANT_OF: (Relationship, RelationshipType.VARIANT, {}),
+    Spdx2_RelationshipType.REQUIREMENT_DESCRIPTION_FOR: (Relationship, RelationshipType.REQUIREMENT_FOR, {}),
+    Spdx2_RelationshipType.SPECIFICATION_FOR: (Relationship, RelationshipType.SPECIFICATION_FOR, {}),
 }
 
 
@@ -189,8 +170,7 @@ def bump_relationships(
 
     for relationships in generated_relationships.values():
         if len(relationships) > 1:
-            merged_relationship = merge_relationships_and_add_to_payload(relationships)
-            payload.add_element(merged_relationship)
+            _merge_relationships_and_add_to_payload(relationships, payload)
         else:
             payload.add_element(relationships[0])
 
@@ -201,16 +181,25 @@ def bump_relationship(
     document_namespace: str,
     counter: int,
 ) -> Optional[Union[Relationship, SoftwareDependencyRelationship]]:
-    swap_direction = False
     completeness, to = determine_completeness_and_to(spdx2_relationship.related_spdx_element_id)
     spdx_id = "#".join([document_namespace, f"SPDXRef-Relationship-{counter}"])
-    parameters_for_bump = relationship_mapping[spdx2_relationship.relationship_type]
-    if parameters_for_bump is None:
+    relationship_class, relationship_type, parameters = relationship_mapping[spdx2_relationship.relationship_type]
+    if relationship_class is None:
         print_missing_conversion(spdx2_relationship.relationship_type.name, 0)
         return
-    base_relationship = parameters_for_bump[0]
-    relationship_type = parameters_for_bump[1]
-    if not base_relationship:
+
+    swap_direction = parameters.get("swap", False)
+
+    if swap_direction:
+        if not to:
+            print_missing_conversion("Swapped Relationship to NoAssertion/None", 0)
+            return
+        from_element = to[0]
+        to = [spdx2_relationship.spdx_element_id]
+    else:
+        from_element = spdx2_relationship.spdx_element_id
+
+    if relationship_class == SoftwareDependencyRelationship:
         from_element = spdx2_relationship.spdx_element_id
 
         return SoftwareDependencyRelationship(
@@ -221,21 +210,10 @@ def bump_relationship(
             relationship_type,
             comment=spdx2_relationship.comment,
             completeness=completeness,
-            scope=(parameters_for_bump[2]),
-            software_linkage=(parameters_for_bump[3]),
-            conditionality=(parameters_for_bump[4]),
+            scope=parameters.get("scope"),
+            software_linkage=parameters.get("linkage"),
+            conditionality=parameters.get("conditionality"),
         )
-
-    if len(parameters_for_bump) == 3:
-        swap_direction = parameters_for_bump[2]
-    if swap_direction:
-        if not to:
-            print_missing_conversion("Swapped Relationship to NoAssertion/ None", 0)
-            return
-        from_element = to[0]
-        to = [spdx2_relationship.spdx_element_id]
-    else:
-        from_element = spdx2_relationship.spdx_element_id
 
     return Relationship(
         spdx_id,
@@ -263,13 +241,28 @@ def determine_completeness_and_to(
     return completeness, to
 
 
-def merge_relationships_and_add_to_payload(relationships: List[Relationship]) -> Relationship:
+def _merge_relationships_and_add_to_payload(relationships: List[Relationship], payload: Payload):
+    to = []
+    completeness = None
+    spdx_id = None
     merged_relationship = relationships[0]
-    for relationship in relationships[1:]:
-        merged_relationship.to += relationship.to
-        if merged_relationship.comment and relationship.comment:
-            merged_relationship.comment += ", " + relationship.comment
-        if not merged_relationship.comment and relationship.comment:
-            merged_relationship.comment = relationship.comment
+    for merged_relationship in relationships:
+        if merged_relationship.comment:
+            payload.add_element(merged_relationship)
+            continue
+        if merged_relationship.completeness:
+            if completeness and completeness != merged_relationship.completeness:
+                logging.warning(
+                    f"Contradicting information about completeness of relationship: {merged_relationship}", sys.stderr
+                )
+            else:
+                completeness = merged_relationship.completeness
 
-    return merged_relationship
+        to += merged_relationship.to
+        spdx_id = merged_relationship.spdx_id
+    if to:
+        merged_relationship.spdx_id = spdx_id
+        merged_relationship.to = to
+        merged_relationship.completeness = completeness
+        merged_relationship.comment = None
+        payload.add_element(merged_relationship)
