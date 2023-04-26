@@ -16,7 +16,9 @@ def bump_file(
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_file.checksums]
     # file.checksums -> file.verifiedUsing
     # file.file_types -> file.content_type (MediaType with Cardinality 1)
-    print_missing_conversion("file.file_type", 0, "different cardinalities")
+    print_missing_conversion(
+        "file.file_type", 0, "different cardinalities, " "https://github.com/spdx/spdx-3-model/issues/82"
+    )
     print_missing_conversion(
         "file.concluded_license, file.license_info_in_file, file.license_comment, file.copyright_text",
         0,
