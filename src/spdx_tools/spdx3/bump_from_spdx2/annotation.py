@@ -33,7 +33,8 @@ def bump_annotation(
             "Annotator",
             0,
             "The SPDX2 annotation is not of Type Person or Organization."
-            " This case leads to an invalid SPDX3 document and is currently not supported.",
+            " This case leads to an invalid SPDX3 document and is currently not supported."
+            "https://github.com/spdx/spdx-3-model/issues/180",
         )
     annotation_type: AnnotationType = AnnotationType[spdx2_annotation.annotation_type.name]
 
