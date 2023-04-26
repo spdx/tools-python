@@ -53,9 +53,11 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
             tool_ids.append(bumped_actor_id)
 
     if not creator_ids:
-        raise NotImplementedError(
+        print_missing_conversion(
+            "Creators",
+            0,
             "The SPDX2 creation_info does not contain creators of Type Person or Organization."
-            " This case leads to an invalid SPDX3 document and is currently not supported."
+            " This case leads to an invalid SPDX3 document and is currently not supported.",
         )
 
     creation_information.created_by = creator_ids
