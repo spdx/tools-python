@@ -1,0 +1,238 @@
+{
+    "core": "https://spdx.org/rdf/Core/",
+    "software": "https://spdx.org/rdf/Software/",
+    "xsd": "http://www.w3.org/2001/XMLSchema/",
+    "Annotation": "core:Annotation",
+    "AnonymousPayload": "core:AnonymousPayload",
+    "Hash": "core:Hash",
+    "Organization": "core:Organization",
+    "Person": "core:Person",
+    "Relationship": "core:Relationship",
+    "SpdxDocument": "core:SpdxDocument",
+    "Tool": "core:Tool",
+    "File": "software:File",
+    "Package": "software:Package",
+    "Sbom": "software:Sbom",
+    "Snippet": "software:Snippet",
+    "Bom": "core:Bom",
+    "ElementCollection": "core:ElementCollection",
+    "ExternalIdentifier": "core:ExternalIdentifier",
+    "algorithm": {
+        "@id": "core:algorithm",
+        "@type": "@vocab",
+        "@context": {
+            "@vocab": "core:HashAlgorithm#"
+        }
+    },
+    "annotationType": {
+        "@id": "core:annotationType",
+        "@type": "@vocab",
+        "@context": {
+            "@vocab": "core:AnnotationType#"
+        }
+    },
+    "completeness": {
+        "@id": "core:completeness",
+        "@type": "@vocab",
+        "@context": {
+            "@vocab": "core:RelationshipCompleteness#"
+        }
+    },
+    "context": {
+        "@id": "core:context",
+        "@type": "xsd:string"
+    },
+    "created": {
+        "@id": "core:created",
+        "@type": "xsd:dateTime"
+    },
+    "createdBy": {
+        "@id": "core:createdBy",
+        "@type": "core:Entity"
+    },
+    "dataLicense": {
+        "@id": "core:dataLicense",
+        "@type": "xsd:string"
+    },
+    "description": {
+        "@id": "core:description",
+        "@type": "xsd:string"
+    },
+    "element": {
+        "@id": "core:element",
+        "@type": "core:Element"
+    },
+    "externalId": {
+        "@id": "core:externalId",
+        "@type": "xsd:anyURI"
+    },
+    "externalIdentifier": {
+        "@id": "core:externalIdentifier",
+        "@type": "core:ExternaIdentifier"
+    },
+    "externalReferenceType": {
+        "@id": "core:externalReferenceType",
+        "@type": "@vocab",
+        "@context": {
+            "@vocab": "core:ExternalReferenceType#"
+        }
+    },
+    "externalReference": {
+        "@id": "core:externalReference",
+        "@type": "core:ExternalReference"
+    },
+    "from": {
+        "@id": "core:from",
+        "@type": "core:Element"
+    },
+    "hashValue": {
+        "@id": "core:hashValue",
+        "@type": "xsd:string"
+    },
+    "locationHint": {
+        "@id": "core:locationHint",
+        "@type": "xsd:anyURI"
+    },
+    "locator": {
+        "@id": "core:locator",
+        "@type": "xsd:anyURI"
+    },
+    "namespace": {
+        "@id": "core:namespace",
+        "@type": "xsd:anyURI"
+    },
+    "originatedBy": {
+        "@id": "core:originatedBy",
+        "@type": "core:Identity"
+    },
+    "prefix": {
+        "@id": "core:prefix",
+        "@type": "xsd:string"
+    },
+    "profile": {
+        "@id": "core:profile",
+        "@type": "core:ProfileIdentifier"
+    },
+    "relationshipType": {
+        "@id": "core:relationshipType",
+        "@type": "@vocab",
+        "@context": {
+            "@vocab": "core:RelationshipType#"
+        }
+    },
+    "rootElement": {
+        "@id": "core:rootElement",
+        "@type": "core:Element"
+    },
+    "spdxId": {
+        "@id": "core:spdxId",
+        "@type": "xsd:anyURI"
+    },
+    "specVersion": {
+        "@id": "core:specVersion",
+        "@type": "core:SemVer"
+    },
+    "statement": {
+        "@id": "core:statement",
+        "@type": "xsd:string"
+    },
+    "subject": {
+        "@id": "core:subject",
+        "@type": "core:Element"
+    },
+    "summary": {
+        "@id": "core:summary",
+        "@type": "xsd:string"
+    },
+    "to": {
+        "@id": "core:to",
+        "@type": "core:Element"
+    },
+    "byteRange": {
+        "@id": "software:byteRange",
+        "@type": "software:positiveIntegerRange"
+    },
+    "contentType": {
+        "@id": "core:contentType",
+        "@type": "core:MediaType"
+    },
+    "downloadLocation": {
+        "@id": "software:downloadLocation",
+        "@type": "xsd:anyURI"
+    },
+    "filePurpose": {
+        "@id": "software:filePurpose",
+        "@type": "@vocab",
+        "@context": {
+            "@vocab": "software:SoftwarePurpose#"
+        }
+    },
+    "homePage": {
+        "@id": "software:homePage",
+        "@type": "xsd:anyURI"
+    },
+    "lineRange": {
+        "@id": "software:lineRange",
+        "@type": "software:positiveIntegerRange"
+    },
+    "packagePurpose": {
+        "@id": "software:packagePurpose",
+        "@type": "@vocab",
+        "@context": {
+            "@vocab": "software:SoftwarePurpose#"
+        }
+    },
+    "packageUrl": {
+        "@id": "software:packageUrl",
+        "@type": "xsd:anyURI"
+    },
+    "snippetPurpose": {
+        "@id": "software:snippetPurpose",
+        "@type": "@vocab",
+        "@context": {
+            "@vocab": "software:SoftwarePurpose#"
+        }
+    },
+    "Bundle": "core:Bundle",
+    "ExternalReference": "core:ExternalReference",
+    "Payload": "core:Payload",
+    "ProfileIdentifier": "core:ProfileIdentifier",
+    "SemVer": "core:SemVer",
+    "name": {
+        "@id": "core:name",
+        "@type": "xsd:string"
+    },
+    "verifiedUsing": {
+        "@id": "core:verifiedUsing",
+        "@type": "core:IntegrityMethod"
+    },
+    "Artifact": "core:Artifact",
+    "MediaType": "core:MediaType",
+    "creationInfo": {
+        "@id": "core:creationInfo",
+        "@type": "core:CreationInformation"
+    },
+    "imports": {
+        "@id": "core:imports",
+        "@type": "core:ExternalMap"
+    },
+    "namespaces": {
+        "@id": "core:namespaces",
+        "@type": "core:NamespaceMap"
+    },
+    "contentIdentifier": {
+        "@id": "software:contentIdentifier",
+        "@type": "xsd:anyURI"
+    },
+    "CreationInformation": "core:CreationInformation",
+    "Entity": "core:Entity",
+    "ExternalMap": "core:ExternalMap",
+    "Identity": "core:Identity",
+    "IntegrityMethod": "core:IntegrityMethod",
+    "NamespaceMap": "core:NamespaceMap",
+    "comment": {
+        "@id": "core:comment",
+        "@type": "xsd:string"
+    },
+    "Element": "core:Element"
+}
