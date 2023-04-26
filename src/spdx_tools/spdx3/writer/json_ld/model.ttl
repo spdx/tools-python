@@ -1,0 +1,1654 @@
+@prefix ai: <https://spdx.org/rdf/AI#> .
+@prefix build: <https://spdx.org/rdf/Build#> .
+@prefix core: <https://spdx.org/rdf/Core#> .
+@prefix dataset: <https://spdx.org/rdf/Dataset#> .
+@prefix ns0: <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix software: <https://spdx.org/rdf/Software#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ai:AIPackage a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "Metadata information that can be added to a package to describe an AI application or trained AI model." ;
+    rdfs:subClassOf <https://spdx.org/rdf/AI#/Software/Package> ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:name "standardsCompliance" ;
+            sh:path ai:standardsCompliance ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "dataPreprocessingSteps" ;
+            sh:path ai:dataPreprocessingSteps ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "limitations" ;
+            sh:path ai:limitations ],
+        [ sh:datatype ai:PresenceType ;
+            sh:maxCount 1 ;
+            sh:name "autonomyType" ;
+            sh:path ai:autonomyType ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "energyConsumption" ;
+            sh:path ai:energyConsumption ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "informationAboutApplication" ;
+            sh:path ai:informationAboutApplication ],
+        [ sh:datatype <https://spdx.org/rdf/AI#/Core/DictionaryEntry> ;
+            sh:name "metrics" ;
+            sh:path ai:metrics ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "modelExplainabilityMechanisms" ;
+            sh:path ai:modelExplainabilityMechanisms ],
+        [ sh:datatype ai:PresenceType ;
+            sh:maxCount 1 ;
+            sh:name "sensitivePersonalInformation" ;
+            sh:path ai:sensitivePersonalInformation ],
+        [ sh:datatype xsd:string ;
+            sh:name "typeOfModel" ;
+            sh:path ai:typeOfModel ],
+        [ sh:datatype <https://spdx.org/rdf/AI#/Core/DictionaryEntry> ;
+            sh:name "metricsDecisionThresholds" ;
+            sh:path ai:metricsDecisionThresholds ],
+        [ sh:datatype xsd:string ;
+            sh:name "domain" ;
+            sh:path ai:domain ],
+        [ sh:datatype <https://spdx.org/rdf/AI#/Core/DictionaryEntry> ;
+            sh:name "hyperparameters" ;
+            sh:path ai:hyperparameters ],
+        [ sh:datatype ai:SafetyRiskAssessmentType ;
+            sh:maxCount 1 ;
+            sh:name "safetyRiskAssessment" ;
+            sh:path ai:safetyRiskAssessment ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "informationAboutTraining" ;
+            sh:path ai:informationAboutTraining ] .
+
+ai:high a owl:NamedIndividual,
+        ai:SafetyRiskAssessmentType .
+
+ai:low a owl:NamedIndividual,
+        ai:SafetyRiskAssessmentType .
+
+ai:medium a owl:NamedIndividual,
+        ai:SafetyRiskAssessmentType .
+
+ai:modelDataPreprocessingSteps a owl:DatatypeProperty ;
+    rdfs:comment """ModelDataPreprocessingSteps is a free form text that describes the preprocessing steps
+applied to the training data before training of the model(s) contained in the AI software.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+ai:no a owl:NamedIndividual,
+        ai:PresenceType .
+
+ai:noassertion a owl:NamedIndividual,
+        ai:PresenceType .
+
+ai:serious a owl:NamedIndividual,
+        ai:SafetyRiskAssessmentType .
+
+ai:yes a owl:NamedIndividual,
+        ai:PresenceType .
+
+build:Build a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """A build is a representation of the process in which a piece of software or artifact is built. It encapsulates information related to a build process and
+provides an element from which relationships can be created to describe the build's inputs, outputs, and related entities (e.g. builders, identities, etc.).
+
+Definitions of "BuildType", "ConfigSource", "Parameters" and "Environment" follow
+those defined in [SLSA provenance](https://slsa.dev/provenance/v0.2).
+
+ExternalIdentifier of type "urlScheme" may be used to identify build logs. In this case, the comment of the ExternalIdentifier should be "LogReference".
+
+Note that buildStart and buildEnd are optional, and may be omitted to simplify creating reproducible builds.""" ;
+    rdfs:subClassOf <https://spdx.org/rdf/Build#/Core/Element> ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "buildId" ;
+            sh:path build:buildId ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:name "buildEnd" ;
+            sh:path build:buildEnd ],
+        [ sh:datatype <https://spdx.org/rdf/Build#/Core/DictionaryEntry> ;
+            sh:name "parameters" ;
+            sh:path build:parameters ],
+        [ sh:datatype xsd:anyURI ;
+            sh:name "configSourceUri" ;
+            sh:path build:configSourceUri ],
+        [ sh:datatype xsd:string ;
+            sh:name "configSourceEntrypoint" ;
+            sh:path build:configSourceEntrypoint ],
+        [ sh:datatype <https://spdx.org/rdf/Build#/Core/DictionaryEntry> ;
+            sh:name "environment" ;
+            sh:path build:environment ],
+        [ sh:datatype <https://spdx.org/rdf/Build#/Core/Hash> ;
+            sh:name "configSourceDigest" ;
+            sh:path build:configSourceDigest ],
+        [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "buildType" ;
+            sh:path build:buildType ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:name "buildStart" ;
+            sh:path build:buildStart ] .
+
+core:Annotation a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "An Annotation is an assertion made in relation to one or more elements." ;
+    rdfs:subClassOf core:Element ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype core:MediaType ;
+            sh:name "contentType" ;
+            sh:path core:contentType ],
+        [ sh:datatype core:AnnotationType ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "annotationType" ;
+            sh:path core:annotationType ],
+        [ sh:datatype core:Element ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "subject" ;
+            sh:path core:subject ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "statement" ;
+            sh:path core:statement ] .
+
+core:AnonymousPayload a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "TODO" ;
+    rdfs:subClassOf core:Payload ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype core:ExternalMap ;
+            sh:name "imports" ;
+            sh:path core:imports ],
+        [ sh:datatype core:CreationInfo ;
+            sh:maxCount 1 ;
+            sh:name "creationInfo" ;
+            sh:path core:creationInfo ],
+        [ sh:datatype core:NamespaceMap ;
+            sh:name "namespaces" ;
+            sh:path core:namespaces ] .
+
+core:Artifact a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """An artifact is a distinct article or unit within the digital domain,
+such as an electronic file, a software package, a device or an element of data.""" ;
+    rdfs:subClassOf core:Element ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype core:Identity ;
+            sh:name "originatedBy" ;
+            sh:path core:originatedBy ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:name "builtTime" ;
+            sh:path core:builtTime ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:name "validUntilTime" ;
+            sh:path core:validUntilTime ],
+        [ sh:datatype xsd:dateTime ;
+            sh:maxCount 1 ;
+            sh:name "releaseTime" ;
+            sh:path core:releaseTime ] .
+
+core:Bom a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """A Bill Of Materials (BOM) is a container for a grouping of SPDX-3.0 content
+characterizing details about a product.
+This could include details of the content and composition of the product,
+provenence details of the product and/or
+its composition, licensing information, known quality or security issues, etc.""" ;
+    rdfs:subClassOf core:Bundle ;
+    ns0:term_status "Stable" .
+
+core:DictionaryEntry a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "The class used for implementing a generic string mapping (also known as associative array, dictionary, or hash map) in SPDX.  Each DictionaryEntry contains a key-value pair which maps the key to its associated value.  To implement a dictionary, this class is to be used in a collection with unique keys." ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "key" ;
+            sh:path core:key ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "value" ;
+            sh:path core:value ] .
+
+core:Hash a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """A hash is a grouping of characteristics unique to the result
+of applying a mathematical algorithm
+that maps data of arbitrary size to a bit string (the hash)
+and is a one-way function, that is,
+a function which is practically infeasible to invert.
+This is commonly used for integrity checking of data.""" ;
+    rdfs:subClassOf core:IntegrityMethod ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "hashValue" ;
+            sh:path core:hashValue ],
+        [ sh:datatype core:HashAlgorithm ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "algorithm" ;
+            sh:path core:algorithm ] .
+
+core:Organization a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "An Organization is a group of people who work together in an organized way for a shared purpose." ;
+    rdfs:subClassOf core:Identity ;
+    ns0:term_status "Stable" .
+
+core:Person a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "A Person is an individual human being." ;
+    rdfs:subClassOf core:Identity ;
+    ns0:term_status "Stable" .
+
+core:PositiveIntegerRange a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """PositiveIntegerRange is a tuple of two positive integers that define a range.
+"begin" must be less than or equal to "end".""" ;
+    rdfs:subClassOf core:none ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:positiveInteger ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "begin" ;
+            sh:path core:begin ],
+        [ sh:datatype xsd:positiveInteger ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "end" ;
+            sh:path core:end ] .
+
+core:Relationship a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """A Relationship is a grouping of characteristics unique to an assertion
+that one Element is related to one or more other Elements in some way.""" ;
+    rdfs:subClassOf core:Element ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype core:Element ;
+            sh:minCount 1 ;
+            sh:name "to" ;
+            sh:path core:to ],
+        [ sh:datatype core:Element ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "from" ;
+            sh:path core:from ],
+        [ sh:datatype core:RelationshipCompleteness ;
+            sh:maxCount 1 ;
+            sh:name "completeness" ;
+            sh:path core:completeness ],
+        [ sh:datatype core:RelationshipType ;
+            sh:maxCount 1 ;
+            sh:name "relationshipType" ;
+            sh:path core:relationshipType ] .
+
+core:SpdxDocument a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """An SpdxDocument assembles a collection of Elements under a common string, the name of the document.
+Commonly used when representing a unit of transfer of SPDX Elements.""" ;
+    rdfs:subClassOf core:Bundle ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "name" ;
+            sh:path core:name ] .
+
+core:altDownloadLocation a owl:NamedIndividual,
+        core:ExternalReferenceType .
+
+core:altWebPage a owl:NamedIndividual,
+        core:ExternalReferenceType .
+
+core:amends a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:ancestor a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:blake2b256 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:blake2b384 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:blake2b512 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:blake3 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:buildConfigOf a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:buildDependency a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:buildHostOf a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:buildInputOf a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:buildInvokedBy a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:buildOnBehalfOf a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:buildOutputOf a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:buildTool a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:complete a owl:NamedIndividual,
+        core:RelationshipCompleteness .
+
+core:contains a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:copy a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:cpe22 a owl:NamedIndividual,
+        core:ExternalIdentifierType .
+
+core:cpe23 a owl:NamedIndividual,
+        core:ExternalIdentifierType .
+
+core:dataFile a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:dependencyManifest a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:dependsOn a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:descendant a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:describes a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:devDependency a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:devTool a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:distributionArtifact a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:documentation a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:dynamicLink a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:email a owl:NamedIndividual,
+        core:ExternalIdentifierType .
+
+core:example a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:expandedFromArchive a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:fileAdded a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:fileDeleted a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:fileModified a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:generates a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:gitoid a owl:NamedIndividual,
+        core:ExternalIdentifierType .
+
+core:incomplete a owl:NamedIndividual,
+        core:RelationshipCompleteness .
+
+core:md2 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:md4 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:md5 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:md6 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:metafile a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:optionalComponent a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:optionalDependency a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:other a owl:NamedIndividual,
+        core:AnnotationType,
+        core:ExternalIdentifierType,
+        core:ExternalReferenceType,
+        core:HashAlgorithm,
+        core:RelationshipType .
+
+core:packages a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:patch a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:pkgUrl a owl:NamedIndividual,
+        core:ExternalIdentifierType .
+
+core:prerequisite a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:providedDependency a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:requirementFor a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:review a owl:NamedIndividual,
+        core:AnnotationType .
+
+core:runtimeDependency a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:securityAdvisory a owl:NamedIndividual,
+        core:ExternalReferenceType .
+
+core:securityFix a owl:NamedIndividual,
+        core:ExternalReferenceType .
+
+core:securityOther a owl:NamedIndividual,
+        core:ExternalReferenceType .
+
+core:sha1 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:sha224 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:sha256 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:sha384 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:sha3_224 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:sha3_256 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:sha3_384 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:sha3_512 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:sha512 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:spdxPvcSha1 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:spdxPvcSha256 a owl:NamedIndividual,
+        core:HashAlgorithm .
+
+core:specificationFor a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:staticLink a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:suppliedBy a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:swhid a owl:NamedIndividual,
+        core:ExternalIdentifierType .
+
+core:swid a owl:NamedIndividual,
+        core:ExternalIdentifierType .
+
+core:test a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:testCase a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:testDependency a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:testTool a owl:NamedIndividual,
+        core:RelationshipType .
+
+core:unknown a owl:NamedIndividual,
+        core:RelationshipCompleteness .
+
+core:urlScheme a owl:NamedIndividual,
+        core:ExternalIdentifierType .
+
+core:variant a owl:NamedIndividual,
+        core:RelationshipType .
+
+dataset:Dataset a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "Metadata information that can be added to a dataset that may be used in a software or to train/test an AI package." ;
+    rdfs:subClassOf <https://spdx.org/rdf/Dataset#/Software/Package> ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:nonNegativeInteger ;
+            sh:maxCount 1 ;
+            sh:name "datasetSize" ;
+            sh:path dataset:datasetSize ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "datasetUpdateMechanism" ;
+            sh:path dataset:datasetUpdateMechanism ],
+        [ sh:datatype <https://spdx.org/rdf/Dataset#/Core/DictionaryEntry> ;
+            sh:name "sensor" ;
+            sh:path dataset:sensor ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "dataPreprocessing" ;
+            sh:path dataset:dataPreprocessing ],
+        [ sh:datatype dataset:ConfidentialityLevelType ;
+            sh:name "confidentialityLevelType" ;
+            sh:path dataset:confidentialityLevelType ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "dataCollectionProcess" ;
+            sh:path dataset:dataCollectionProcess ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "knownBias" ;
+            sh:path dataset:knownBias ],
+        [ sh:datatype xsd:string ;
+            sh:name "anonymizationMethodUsed" ;
+            sh:path dataset:anonymizationMethodUsed ],
+        [ sh:datatype dataset:DatasetAvailabilityType ;
+            sh:maxCount 1 ;
+            sh:name "datasetAvailability" ;
+            sh:path dataset:datasetAvailability ],
+        [ sh:datatype dataset:PresenceType ;
+            sh:name "sensitivePersonalInformationType" ;
+            sh:path dataset:sensitivePersonalInformationType ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "datasetNoise" ;
+            sh:path dataset:datasetNoise ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "intendedUse" ;
+            sh:path dataset:intendedUse ] .
+
+dataset:confidentialityLevel a owl:DatatypeProperty ;
+    rdfs:comment "ConfidentialityLevel describes the levels of confidentiality of the data points contained in the dataset." ;
+    rdfs:range dataset:ConfidentialityLevelType ;
+    ns0:term_status "Stable" .
+
+dataset:sensitivePersonalInformation a owl:DatatypeProperty ;
+    rdfs:comment """SensitivePersonalInformation indicates the presence of sensitive personal data
+or information that allows drawing conclusions about a person's identity.""" ;
+    rdfs:range dataset:PresenceType ;
+    ns0:term_status "Stable" .
+
+software:File a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "TODO This is about the File class." ;
+    rdfs:subClassOf <https://spdx.org/rdf/Software#/Core/Artifact> ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:name "contentIdentifier" ;
+            sh:path software:contentIdentifier ],
+        [ sh:datatype software:SoftwarePurpose ;
+            sh:name "filePurpose" ;
+            sh:path software:filePurpose ],
+        [ sh:datatype software:MediaType ;
+            sh:maxCount 1 ;
+            sh:name "contentType" ;
+            sh:path software:contentType ] .
+
+software:Package a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """A package refers to any unit of content that can be associated with a distribution of software.
+Typically, a package is composed of one or more files.  
+Any of the following non-limiting examples may be (but are not required to be) represented in SPDX as a package:
+
+ - a tarball, zip file or other archive
+ - a directory or sub-directory
+ - a separately distributed piece of software which another Package or File uses or depends upon (e.g., a Python package, a Go module, ...)
+ - a container image, and/or each image layer within a container image
+ - a collection of one or more sub-packages
+ - a Git repository snapshot from a particular point in time
+
+Note that some of these could be represented in SPDX as a file as well.""" ;
+    rdfs:subClassOf <https://spdx.org/rdf/Software#/Core/Artifact> ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:name "downloadLocation" ;
+            sh:path software:downloadLocation ],
+        [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:name "packageUrl" ;
+            sh:path software:packageUrl ],
+        [ sh:datatype software:SoftwarePurpose ;
+            sh:name "packagePurpose" ;
+            sh:path software:packagePurpose ],
+        [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:name "contentIdentifier" ;
+            sh:path software:contentIdentifier ],
+        [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:name "homePage" ;
+            sh:path software:homePage ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "packageVersion" ;
+            sh:path software:packageVersion ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "sourceInfo" ;
+            sh:path software:sourceInfo ] .
+
+software:Sbom a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """A Software Bill of Materials (SBOM) is a collection of SPDX Elements describing a single package.
+This could include details of the content and composition of the product,
+provenance details of the product and/or
+its composition, licensing information, known quality or security issues, etc.""" ;
+    rdfs:subClassOf <https://spdx.org/rdf/Software#/Core/Bom> ;
+    ns0:term_status "Stable" .
+
+software:Snippet a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """A Snippet describes a certain part of a file and can be used when the file is known to have some content
+that has been included from another original source. Snippets are useful for denoting when part of a file
+may have been originally created under another license or copied from a place with a known vulnerability.""" ;
+    rdfs:subClassOf <https://spdx.org/rdf/Software#/Core/Artifact> ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype <https://spdx.org/rdf/Software#/Core/PositiveIntegerRange> ;
+            sh:maxCount 1 ;
+            sh:name "lineRange" ;
+            sh:path software:lineRange ],
+        [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:name "contentIdentifier" ;
+            sh:path software:contentIdentifier ],
+        [ sh:datatype <https://spdx.org/rdf/Software#/Core/PositiveIntegerRange> ;
+            sh:maxCount 1 ;
+            sh:name "byteRange" ;
+            sh:path software:byteRange ],
+        [ sh:datatype software:SoftwarePurpose ;
+            sh:name "snippetPurpose" ;
+            sh:path software:snippetPurpose ] .
+
+software:application a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:archive a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:bom a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:configuration a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:container a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:data a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:device a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:documentation a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:executable a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:file a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:firmware a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:framework a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:install a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:library a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:module a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:operatingSystem a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:other a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:patch a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+software:source a owl:NamedIndividual,
+        software:SoftwarePurpose .
+
+ai:autonomyType a owl:DatatypeProperty ;
+    rdfs:comment """AutonomyType indicates if a human is involved in any of the decisions of the AI software
+or if that software is fully automatic.""" ;
+    rdfs:range ai:PresenceType ;
+    ns0:term_status "Stable" .
+
+ai:domain a owl:DatatypeProperty ;
+    rdfs:comment """Domain describes the domain in which the AI model contained in the AI software
+can be expected to operate successfully. Examples include computer vision, natural language etc.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+ai:energyConsumption a owl:DatatypeProperty ;
+    rdfs:comment """EnergyConsumption captures the amount of energy needed to train and operate the AI model. 
+This value is also known as training energy consumption or inference energy consumption.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+ai:hyperparameters a owl:DatatypeProperty ;
+    rdfs:comment """This field records important hyperparameter values.
+These are parameters of the machine learning model that are used to control the learning process,
+for example the optimization and learning rate used during the training of the model.""" ;
+    rdfs:range <https://spdx.org/rdf/AI#/Core/DictionaryEntry> ;
+    ns0:term_status "Stable" .
+
+ai:informationAboutApplication a owl:DatatypeProperty ;
+    rdfs:comment """InformationAboutApplication describes any relevant information in free form text about 
+how the AI model is used inside the software, as well as any relevant pre-processing steps, third party APIs etc.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+ai:informationAboutTraining a owl:DatatypeProperty ;
+    rdfs:comment """InformationAboutTraining describes the specific steps involved in the training of the AI model.
+For example, it can be specified whether supervised fine-tuning 
+or active learning is used as part of training the model.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+ai:limitations a owl:DatatypeProperty ;
+    rdfs:comment """Limitations captures limitations of the AI Package (or of the AI models present in the AI package),
+expressed as free form text. Note that this is not guaranteed to be exhaustive.
+For instance, a limitation might be that the AI package cannot be used on datasets from a certain demography.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+ai:metrics a owl:DatatypeProperty ;
+    rdfs:comment """Metrics records the measurements with which the AI model was evaluated. 
+This makes statements about the prediction quality including uncertainty,
+accuracy, characteristics of the tested population, quality, fairness, explainability, robustness etc.""" ;
+    rdfs:range <https://spdx.org/rdf/AI#/Core/DictionaryEntry> ;
+    ns0:term_status "Stable" .
+
+ai:metricsDecisionThresholds a owl:DatatypeProperty ;
+    rdfs:comment """Each metric might be computed based on a decision threshold. 
+For instance, precision or recall is typically computed by checking
+if the probability of the outcome is larger than 0.5.
+Each decision threshold should match with the metrics field defined in the AI Package.""" ;
+    rdfs:range <https://spdx.org/rdf/AI#/Core/DictionaryEntry> ;
+    ns0:term_status "Stable" .
+
+ai:modelExplainabilityMechanisms a owl:DatatypeProperty ;
+    rdfs:comment """ModelExplainabilityMechanisms is a free form text that lists the different explainability mechanisms
+(such as SHAP, or other model specific explainability mechanisms) that can be used to explain the model.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+ai:safetyRiskAssessment a owl:DatatypeProperty ;
+    rdfs:comment """SafetyRiskAssessment categorizes the safety risk impact of the AI software
+in accordance with Article 20 of [EC Regulation No 765/2008](https://ec.europa.eu/docsroom/documents/17107/attachments/1/translations/en/renditions/pdf).""" ;
+    rdfs:range ai:SafetyRiskAssessmentType ;
+    ns0:term_status "Stable" .
+
+ai:sensitivePersonalInformation a owl:DatatypeProperty ;
+    rdfs:comment """SensitivePersonalInformation notes if sensitive personal information
+is used in the training or inference of the AI models.
+This might include biometric data, addresses or other data that can be used to infer a person's identity.""" ;
+    rdfs:range ai:PresenceType ;
+    ns0:term_status "Stable" .
+
+ai:standardsCompliance a owl:DatatypeProperty ;
+    rdfs:comment """StandardsCompliance captures standards that the AI software complies with. 
+This could include both published and unpublished standards including ISO, IEEE, ETSI etc. 
+These standards could (but not necessarily have to) be used to satisfy a legal or regulatory requirement.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+ai:typeOfModel a owl:DatatypeProperty ;
+    rdfs:comment """TypeOfModel records the type of the AI model(s) used in the software. 
+For instance, if it is a supervised model, unsupervised model, reinforcement learning model or a combination of those.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+build:buildEnd a owl:DatatypeProperty ;
+    rdfs:comment "buildEnd describes the time at which a build stops or finishes. This value is typically recorded by the builder." ;
+    rdfs:range xsd:dateTime ;
+    ns0:term_status "Stable" .
+
+build:buildId a owl:DatatypeProperty ;
+    rdfs:comment "A buildId is a locally unique identifier to identify a unique instance of a build. This identifier differs based on build toolchain, platform, or naming convention used by an organization or standard." ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+build:buildStart a owl:DatatypeProperty ;
+    rdfs:comment "buildStart is the time at which a build is triggered. The builder typically records this value." ;
+    rdfs:range xsd:dateTime ;
+    ns0:term_status "Stable" .
+
+build:buildType a owl:DatatypeProperty ;
+    rdfs:comment "A buildType is a URI expressing the toolchain, platform, or infrastructure that the build was invoked on. For example, if the build was invoked on GitHub's CI platform using github actions, the buildType can be expressed as `https://github.com/actions`. In contrast, if the build was invoked on a local machine, the buildType can be expressed as `file://username@host/path/to/build`." ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+build:configSourceDigest a owl:DatatypeProperty ;
+    rdfs:comment "configSourceDigest is the checksum of the build configuration file used by a builder to execute a build. This Property uses the Core model's [Hash](../../Core/Classes/Hash.md) class." ;
+    rdfs:range <https://spdx.org/rdf/Build#/Core/Hash> ;
+    ns0:term_status "Stable" .
+
+build:configSourceEntrypoint a owl:DatatypeProperty ;
+    rdfs:comment """A build entrypoint is the invoked executable of a build which always runs when the build is triggered. For example, when a build is triggered by running a shell script, the entrypoint is `script.sh`. In terms of a declared build, the entrypoint is the position in a configuration file or a build declaration which is always run when the build is triggered. For example, in the following configuration file, the entrypoint of the build is `publish`.
+
+```
+name: Publish packages to PyPI
+
+on:
+create:
+tags: "*"
+
+jobs:
+publish:
+runs-on: ubuntu-latest
+if: startsWith(github.ref, 'refs/tags/')
+steps:
+
+...
+```""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+build:configSourceUri a owl:DatatypeProperty ;
+    rdfs:comment """If a build configuration exists for the toolchain or platform performing the build, the configSourceUri of a build is the URI of that build configuration. For example, a build triggered by a GitHub action is defined by a build configuration YAML file. In this case, the configSourceUri is the URL of that YAML file. 
+m""" ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+build:environment a owl:DatatypeProperty ;
+    rdfs:comment "environment is a map of environment variables and values that are set during a build session. This is different from the [parameters](parameters.md) property in that it describes the environment variables set before a build is invoked rather than the variables provided to the builder." ;
+    rdfs:range <https://spdx.org/rdf/Build#/Core/DictionaryEntry> ;
+    ns0:term_status "Stable" .
+
+build:parameters a owl:DatatypeProperty ;
+    rdfs:comment "parameters is a key-value map of all build parameters and their values that were provided to the builder for a build instance. This is different from the [environment](environment.md) property in that the keys and values are provided as command line arguments or a configuration file to the builder." ;
+    rdfs:range <https://spdx.org/rdf/Build#/Core/DictionaryEntry> ;
+    ns0:term_status "Stable" .
+
+core:ElementCollection a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "An SpdxCollection is a collection of Elements, not necessarily with unifying context." ;
+    rdfs:subClassOf core:Element ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype core:Element ;
+            sh:minCount 1 ;
+            sh:name "element" ;
+            sh:path core:element ],
+        [ sh:datatype core:Element ;
+            sh:minCount 1 ;
+            sh:name "rootElement" ;
+            sh:path core:rootElement ],
+        [ sh:datatype core:NamespaceMap ;
+            sh:name "namespaces" ;
+            sh:path core:namespaces ],
+        [ sh:datatype core:ExternalMap ;
+            sh:name "imports" ;
+            sh:path core:imports ] .
+
+core:algorithm a owl:DatatypeProperty ;
+    rdfs:comment "An algorithm specifies the algorithm that was used for calculating the hash value." ;
+    rdfs:range core:HashAlgorithm ;
+    ns0:term_status "Stable" .
+
+core:annotationType a owl:DatatypeProperty ;
+    rdfs:comment "An annotationType describes the type of an annotation." ;
+    rdfs:range core:AnnotationType ;
+    ns0:term_status "Stable" .
+
+core:begin a owl:DatatypeProperty ;
+    rdfs:comment "begin is a positive integer that defines the beginning of a range." ;
+    rdfs:range xsd:positiveInteger ;
+    ns0:term_status "Stable" .
+
+core:builtTime a owl:DatatypeProperty ;
+    rdfs:comment "A builtTime specifies the time an artifact was built." ;
+    rdfs:range xsd:dateTime ;
+    ns0:term_status "Stable" .
+
+core:completeness a owl:DatatypeProperty ;
+    rdfs:comment """Completeness gives information about whether the provided relationships are
+complete, known to be incomplete or if no assertion is made either way.""" ;
+    rdfs:range core:RelationshipCompleteness ;
+    ns0:term_status "Stable" .
+
+core:context a owl:DatatypeProperty ;
+    rdfs:comment """A context gives information about the circumstances or unifying properties
+that Elements of the bundle have been assembled under.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:created a owl:DatatypeProperty ;
+    rdfs:comment """Created is a date that identifies when the Element was originally created.
+The time stamp can serve as an indication as to whether the analysis needs to be updated. This is often the date of last change (e.g., a git commit date), not the date when the SPDX data was created, as doing so supports reproducible builds.""" ;
+    rdfs:range xsd:dateTime ;
+    ns0:term_status "Stable" .
+
+core:createdBy a owl:ObjectProperty ;
+    rdfs:comment """CreatedBy identifies who or what created the Element.
+The generation method will assist the recipient of the Element in assessing
+the general reliability/accuracy of the analysis information.""" ;
+    rdfs:range core:Entity ;
+    ns0:term_status "Stable" .
+
+core:createdUsing a owl:ObjectProperty ;
+    rdfs:comment """CreatedUsing identifies the tooling that was used during the creation of the Element.
+The generation method will assist the recipient of the Element in assessing
+the general reliability/accuracy of the analysis information.""" ;
+    rdfs:range core:Tool ;
+    ns0:term_status "Stable" .
+
+core:dataLicense a owl:DatatypeProperty ;
+    rdfs:comment """The data license provides the license under which the SPDX documentation of the Element can be used.
+This is to alleviate any concern that content (the data or database) in an SPDX file
+is subject to any form of intellectual property right that could restrict the re-use
+of the information or the creation of another SPDX file for the same project(s).
+This approach avoids intellectual property and related restrictions over the SPDX file,
+however individuals can still contract with each other to restrict release
+of specific collections of SPDX files (which map to software bill of materials)
+and the identification of the supplier of SPDX files.
+Compliance with this document includes populating the SPDX fields therein
+with data related to such fields ("SPDX-Metadata"). 
+This document contains numerous fields where an SPDX file creator may provide
+relevant explanatory text in SPDX-Metadata. Without opining on the lawfulness
+of "database rights" (in jurisdictions where applicable),
+such explanatory text is copyrightable subject matter in most Berne Convention countries.
+By using the SPDX specification, or any portion hereof,
+you hereby agree that any copyright rights (as determined by your jurisdiction)
+in any SPDX-Metadata, including without limitation explanatory text,
+shall be subject to the terms of the Creative Commons CC0 1.0 Universal license. 
+For SPDX-Metadata not containing any copyright rights, 
+you hereby agree and acknowledge that the SPDX-Metadata is provided to you “as-is”
+and without any representations or warranties of any kind concerning the SPDX-Metadata,
+express, implied, statutory or otherwise, including without limitation warranties
+of title, merchantability, fitness for a particular purpose, non-infringement,
+or the absence of latent or other defects, accuracy, or the presence or absence of errors,
+whether or not discoverable, all to the greatest extent permissible under applicable law.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:description a owl:DatatypeProperty ;
+    rdfs:comment """This field is a detailed description of the Element. It may also be extracted from the Element itself.
+The intent is to provide recipients of the SPDX file with a detailed technical explanation
+of the functionality, anticipated use, and anticipated implementation of the Element.
+This field may also include a description of improvements over prior versions of the Element.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:element a owl:ObjectProperty ;
+    rdfs:comment "This field refers to one or more Elements that are part of an ElementCollection." ;
+    rdfs:range core:Element ;
+    ns0:term_status "Stable" .
+
+core:end a owl:DatatypeProperty ;
+    rdfs:comment "end is a positive integer that defines the end of a range." ;
+    rdfs:range xsd:positiveInteger ;
+    ns0:term_status "Stable" .
+
+core:extension rdfs:comment "TODO" ;
+    ns0:term_status "Stable" .
+
+core:externalId a owl:DatatypeProperty ;
+    rdfs:comment "ExternalId identifies an external Element used within a Document but defined external to that Document." ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+core:externalIdentifier a owl:ObjectProperty ;
+    rdfs:comment """ExternalIdentifier points to a resource outside the scope of SPDX-3.0 content
+that uniquely identifies an Element.""" ;
+    rdfs:range core:ExternalIdentifier ;
+    ns0:term_status "Stable" .
+
+core:externalIdentifierType a owl:DatatypeProperty ;
+    rdfs:comment "An externalIdentifierType specifies the type of the external identifier." ;
+    rdfs:range core:ExternalIdentifierType ;
+    ns0:term_status "Stable" .
+
+core:externalReference a owl:ObjectProperty ;
+    rdfs:comment """This field points to a resource outside the scope of the SPDX-3.0 content
+that provides additional characteristics of an Element.""" ;
+    rdfs:range core:ExternalReference ;
+    ns0:term_status "Stable" .
+
+core:externalReferenceType a owl:DatatypeProperty ;
+    rdfs:comment "An externalReferenceType specifies the type of the external reference." ;
+    rdfs:range core:ExternalReferenceType ;
+    ns0:term_status "Stable" .
+
+core:from a owl:ObjectProperty ;
+    rdfs:comment "This field references the Element on the left-hand side of a relationship." ;
+    rdfs:range core:Element ;
+    ns0:term_status "Stable" .
+
+core:hashValue a owl:DatatypeProperty ;
+    rdfs:comment "HashValue is the result of applying a hash algorithm to an Element." ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:key a owl:DatatypeProperty ;
+    rdfs:comment """A key used in generic a key-value pair.
+A key-value pair can be used to implement a dictionary which associates a key with a value.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:locationHint a owl:DatatypeProperty ;
+    rdfs:comment "A locationHint provides an indication of where to retrieve an external Element." ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+core:locator a owl:DatatypeProperty ;
+    rdfs:comment "A locator provides the location of an external reference." ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+core:namespace a owl:DatatypeProperty ;
+    rdfs:comment "A namespace provides an unambiguous mechanism for other documents to reference Elements within this document." ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+core:originatedBy a owl:ObjectProperty ;
+    rdfs:comment "OriginatedBy identifies from where or whom the Element originally came." ;
+    rdfs:range core:Identity ;
+    ns0:term_status "Stable" .
+
+core:prefix a owl:DatatypeProperty ;
+    rdfs:comment "A prefix is a substitute for a URI." ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:profile a owl:DatatypeProperty ;
+    rdfs:comment "This field provides information about which profiles the Element belongs to." ;
+    rdfs:range core:ProfileIdentifier ;
+    ns0:term_status "Stable" .
+
+core:relationshipType a owl:DatatypeProperty ;
+    rdfs:comment """This field provides information about the relationship between two Elements.
+For example, you can represent a relationship between two different Files,
+between a Package and a File, between two Packages, or between one SPDXDocument and another SPDXDocument.""" ;
+    rdfs:range core:RelationshipType ;
+    ns0:term_status "Stable" .
+
+core:releaseTime a owl:DatatypeProperty ;
+    rdfs:comment "A releaseTime specifies the time an artifact was released." ;
+    rdfs:range xsd:dateTime ;
+    ns0:term_status "Stable" .
+
+core:rootElement a owl:ObjectProperty ;
+    rdfs:comment "A rootElement of a collection is the top level Element from which all other Elements are reached via relationships." ;
+    rdfs:range core:Element ;
+    ns0:term_status "Stable" .
+
+core:spdxId a owl:DatatypeProperty ;
+    rdfs:comment """SpdxId uniquely identifies an Element which may thereby be referenced by other Elements.
+These references may be internal or external.
+While there may be several versions of the same Element, each one needs to be able to be referred to uniquely
+so that relationships between Elements can be clearly articulated.""" ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+core:specVersion a owl:DatatypeProperty ;
+    rdfs:comment """The specVersion provides a reference number that can be used to understand how to parse and interpret an Element.
+It will enable both future changes to the specification and to support backward compatibility.
+The major version number shall be incremented when incompatible changes between versions are made
+(one or more sections are created, modified or deleted).
+The minor version number shall be incremented when backwards compatible changes are made.
+
+Here, parties exchanging information in accordance with the SPDX specification need to provide 
+100% transparency as to which SPDX specification version such information is conforming to.""" ;
+    rdfs:range core:SemVer ;
+    ns0:term_status "Stable" .
+
+core:statement a owl:DatatypeProperty ;
+    rdfs:comment "A statement is a commentary on an assertion that an annotator has made." ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:subject a owl:ObjectProperty ;
+    rdfs:comment "A subject is an Element an annotator has made an assertion about." ;
+    rdfs:range core:Element ;
+    ns0:term_status "Stable" .
+
+core:summary a owl:DatatypeProperty ;
+    rdfs:comment """A summary is a short description of an Element. Here, the intent is to allow the Element creator to 
+provide concise information about the function or use of the Element.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:to a owl:ObjectProperty ;
+    rdfs:comment "This field references an Element on the right-hand side of a relationship." ;
+    rdfs:range core:Element ;
+    ns0:term_status "Stable" .
+
+core:validUntilTime a owl:DatatypeProperty ;
+    rdfs:comment "A validUntilTime specifies until when the artifact can be used before its usage needs to be reassessed." ;
+    rdfs:range xsd:dateTime ;
+    ns0:term_status "Stable" .
+
+core:value a owl:DatatypeProperty ;
+    rdfs:comment """A value used in a generic key-value pair.
+A key-value pair can be used to implement a dictionary which associates a key with a value.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+dataset:anonymizationMethodUsed a owl:DatatypeProperty ;
+    rdfs:comment "AnonymizationMethodUsed describes the methods used to anonymize the dataset (of fields in the dataset)." ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+dataset:dataCollectionProcess a owl:DatatypeProperty ;
+    rdfs:comment """DataCollectionProcess describes how a dataset was collected.
+Examples include the sources from which a dataset was scrapped or
+the interview protocol that was used for data collection.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+dataset:dataPreprocessing a owl:DatatypeProperty ;
+    rdfs:comment """DataPreprocessing describes the various preprocessing steps
+that were applied to the raw data to create the dataset.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+dataset:datasetAvailability a owl:DatatypeProperty ;
+    rdfs:comment "Some datasets are publicly available and can be downloaded directly. Others are only accessible behind a clickthrough, or after filling a registration form. This field will describe the dataset availability from that perspective." ;
+    rdfs:range dataset:DatasetAvailabilityType ;
+    ns0:term_status "Stable" .
+
+dataset:datasetNoise a owl:DatatypeProperty ;
+    rdfs:comment """DatasetNoise describes what kinds of noises a dataset might encompass.
+The field uses free form text to specify the fields or the samples that might be noisy.
+Alternatively, it can also be used to describe various noises that could impact the whole dataset.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+dataset:datasetSize a owl:DatatypeProperty ;
+    rdfs:comment """DatasetSize Captures how large a dataset is.
+The size is to be measured in bytes.""" ;
+    rdfs:range xsd:nonNegativeInteger ;
+    ns0:term_status "Stable" .
+
+dataset:datasetUpdateMechanism a owl:DatatypeProperty ;
+    rdfs:comment "DatasetUpdateMechanism describes a mechanism to update the dataset." ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+dataset:intendedUse a owl:DatatypeProperty ;
+    rdfs:comment """IntendedUse describes what the given dataset should be used for.
+Some datasets are collected to be used only for particular purposes. 
+For example, medical data collected from a specific demography might only be applicable
+for training machine learning models to make predictions for that demography.
+In such a case, the intendedUse field would capture this information.
+Similarly, if a dataset is collected for building a facial recognition model,
+the intendedUse field would specify that.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+dataset:knownBias a owl:DatatypeProperty ;
+    rdfs:comment "KnownBias is a free form text field that describes the different biases that the dataset encompasses." ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+dataset:sensor a owl:DatatypeProperty ;
+    rdfs:comment """Sensor describes a sensor that was used for collecting the data
+and its calibration value as a key-value pair.""" ;
+    rdfs:range <https://spdx.org/rdf/Dataset#/Core/DictionaryEntry> ;
+    ns0:term_status "Stable" .
+
+software:byteRange a owl:DatatypeProperty ;
+    rdfs:comment """This field defines the byte range in the original host file that the snippet information applies to.
+A range of bytes is independent of various formatting concerns, and the most accurate way 
+of referring to the differences. The choice was made to start the numbering of 
+the byte range at 1 to be consistent with the W3C pointer method vocabulary.""" ;
+    rdfs:range software:positiveIntegerRange ;
+    ns0:term_status "Stable" .
+
+software:contentType a owl:DatatypeProperty ;
+    rdfs:comment """This field is a reasonable estimation of the content type of the Element, from a creator perspective.
+Content type is intrinsic to the Element, independent of how the Element is being used.""" ;
+    rdfs:range software:mediaType ;
+    ns0:term_status "Stable" .
+
+software:downloadLocation a owl:DatatypeProperty ;
+    rdfs:comment """DownloadLocation identifies the download Uniform Resource Identifier 
+for the package at the time that the document was created.
+Where and how to download the exact package being referenced 
+is critical for verification and tracking data.""" ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+software:filePurpose a owl:DatatypeProperty ;
+    rdfs:comment "FilePurpose provides information about the primary purpose of the file." ;
+    rdfs:range software:SoftwarePurpose ;
+    ns0:term_status "Stable" .
+
+software:homePage a owl:DatatypeProperty ;
+    rdfs:comment """HomePage is a place for the SPDX document creator to record a website that serves as the package's home page.
+This saves the recipient of the SPDX document who is looking for more info from
+having to search for and verify a match between the package and the associated project home page.
+This link can also be used to reference further information about the package
+referenced by the SPDX document creator.""" ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+software:lineRange a owl:DatatypeProperty ;
+    rdfs:comment """This field defines the line range in the original host file that the snippet information applies to.
+If there is a disagreement between the byte range and line range, the byte range values will take precedence.
+A range of lines is a convenient reference for those files where there is a known line delimiter. 
+The choice was made to start the numbering of the lines at 1 to be consistent with the W3C pointer method vocabulary.""" ;
+    rdfs:range software:positiveIntegerRange ;
+    ns0:term_status "Stable" .
+
+software:packagePurpose a owl:DatatypeProperty ;
+    rdfs:comment "PackagePurpose provides information about the primary purpose of the package." ;
+    rdfs:range software:SoftwarePurpose ;
+    ns0:term_status "Stable" .
+
+software:packageUrl a owl:DatatypeProperty ;
+    rdfs:comment "A packageUrl is TODO" ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+software:packageVersion a owl:DatatypeProperty ;
+    rdfs:comment "A packageVersion is useful for identification purposes and for indicating later changes of the package version." ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+software:snippetPurpose a owl:DatatypeProperty ;
+    rdfs:comment "SnippetPurpose provides information about the primary purpose of the snippet." ;
+    rdfs:range software:SoftwarePurpose ;
+    ns0:term_status "Stable" .
+
+software:sourceInfo a owl:DatatypeProperty ;
+    rdfs:comment """SourceInfo records any relevant background information or additional comments
+about the origin of the package. For example, this field might include comments 
+indicating whether the package was pulled from a source code management system 
+or has been repackaged. The creator can provide additional information to describe
+any anomalies or discoveries in the determination of the origin of the package.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:Bundle a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "A bundle is a collection of Elements that have a shared context." ;
+    rdfs:subClassOf core:ElementCollection ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "context" ;
+            sh:path core:context ] .
+
+core:ExternalIdentifier a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """An ExternalIdentifier is a reference to a resource outside the scope of SPDX-3.0 content
+that uniquely identifies an Element.""" ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype core:ExternalIdentifierType ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "externalIdentifierType" ;
+            sh:path core:externalIdentifierType ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "comment" ;
+            sh:path core:comment ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "identifier" ;
+            sh:path core:identifier ] .
+
+core:ExternalReference a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """An External Reference points to a resource outside the scope of the SPDX-3.0 content
+that provides additional characteristics of an Element.""" ;
+    rdfs:subClassOf core:none ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:anyURI ;
+            sh:name "locator" ;
+            sh:path core:locator ],
+        [ sh:datatype core:MediaType ;
+            sh:maxCount 1 ;
+            sh:name "contentType" ;
+            sh:path core:contentType ],
+        [ sh:datatype core:ExternalReferenceType ;
+            sh:maxCount 1 ;
+            sh:name "externalReferenceType" ;
+            sh:path core:externalReferenceType ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "comment" ;
+            sh:path core:comment ] .
+
+core:Payload a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "TODO" ;
+    rdfs:subClassOf core:none ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype core:CreationInfo ;
+            sh:maxCount 1 ;
+            sh:name "creationInfo" ;
+            sh:path core:creationInfo ],
+        [ sh:datatype core:ExternalMap ;
+            sh:name "imports" ;
+            sh:path core:imports ],
+        [ sh:datatype core:NamespaceMap ;
+            sh:name "namespaces" ;
+            sh:path core:namespaces ] .
+
+core:ProfileIdentifier a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "A profile identifier provides the profile that the Element is specified in." ;
+    rdfs:subClassOf xsd:string ;
+    ns0:term_status "Stable" .
+
+core:SemVer a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "The semantic version is a String constrained to the SemVer 2.0.0 specification." ;
+    rdfs:subClassOf xsd:string ;
+    ns0:term_status "Stable" .
+
+core:Tool a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "A Tool is an element of hardware and/or software utilized to carry out a particular function." ;
+    rdfs:subClassOf core:Entity ;
+    ns0:term_status "Stable" .
+
+core:contentType a owl:DatatypeProperty ;
+    rdfs:comment "ContentType specifies the media type of an Element." ;
+    rdfs:range core:MediaType ;
+    ns0:term_status "Stable" .
+
+core:name a owl:DatatypeProperty ;
+    rdfs:comment """This field identifies the name of an Element as designated by the creator. 
+The name of an Element is an important convention and easier to refer to than the URI.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+core:verifiedUsing a owl:ObjectProperty ;
+    rdfs:comment "VerifiedUsing provides an IntegrityMethod with which the integrity of an Element can be asserted." ;
+    rdfs:range core:IntegrityMethod ;
+    ns0:term_status "Stable" .
+
+core:MediaType a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """The MediaType is a String constrained to the RFC 2046 specification. It provides a standardized
+way of indicating the type of content of an Element.
+A list of all possible media types is available at https://www.iana.org/assignments/media-types/media-types.xhtml.""" ;
+    rdfs:subClassOf xsd:string ;
+    ns0:term_status "Stable" .
+
+core:creationInfo a owl:DatatypeProperty ;
+    rdfs:comment "CreationInfo provides information about the creation of the Element." ;
+    rdfs:range core:CreationInfo ;
+    ns0:term_status "Stable" .
+
+core:imports a owl:DatatypeProperty ;
+    rdfs:comment """Imports provides an ExternalMap of Element identifiers that are used within a document
+but defined external to that document.""" ;
+    rdfs:range core:ExternalMap ;
+    ns0:term_status "Stable" .
+
+core:namespaces a owl:DatatypeProperty ;
+    rdfs:comment "This field provides a NamespaceMap applicable to an ElementCollection." ;
+    rdfs:range core:NamespaceMap ;
+    ns0:term_status "Stable" .
+
+software:contentIdentifier a owl:DatatypeProperty ;
+    rdfs:comment "A contentIdentifier is TODO" ;
+    rdfs:range xsd:anyURI ;
+    ns0:term_status "Stable" .
+
+core:AnnotationType a owl:Class ;
+    rdfs:comment "AnnotationType specifies the type of an annotation." ;
+    ns0:term_status "Stable" .
+
+core:CreationInfo a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """The CreationInfo provides information about who created the Element, and when and how it was created. 
+
+The dateTime created is often the date of last change (e.g., a git commit date), not the date when the SPDX data was created, as doing so supports reproducible builds.""" ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype core:ProfileIdentifier ;
+            sh:minCount 1 ;
+            sh:name "profile" ;
+            sh:path core:profile ],
+        [ sh:datatype core:Entity ;
+            sh:minCount 1 ;
+            sh:name "createdBy" ;
+            sh:path core:createdBy ],
+        [ sh:datatype core:SemVer ;
+            sh:name "specVersion" ;
+            sh:path core:specVersion ],
+        [ sh:datatype core:Tool ;
+            sh:name "createdUsing" ;
+            sh:path core:createdUsing ],
+        [ sh:datatype xsd:string ;
+            sh:name "dataLicense" ;
+            sh:path core:dataLicense ],
+        [ sh:datatype xsd:dateTime ;
+            sh:name "created" ;
+            sh:path core:created ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "comment" ;
+            sh:path core:comment ] .
+
+core:Entity a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "TODO" ;
+    rdfs:subClassOf core:Element ;
+    ns0:term_status "Stable" .
+
+core:ExternalMap a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """An External Map is a map of Element identifiers that are used within a Document
+but defined external to that Document.
+The external map provides details about the externally-defined Element
+such as its provenance, where to retrieve it, and how to verify its integrity.""" ;
+    rdfs:subClassOf core:none ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "externalId" ;
+            sh:path core:externalId ],
+        [ sh:datatype core:IntegrityMethod ;
+            sh:name "verifiedUsing" ;
+            sh:path core:verifiedUsing ],
+        [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:name "locationHint" ;
+            sh:path core:locationHint ] .
+
+core:Identity a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment "An Identity is a grouping of identifying characteristics unique to an individual or organization." ;
+    rdfs:subClassOf core:Entity ;
+    ns0:term_status "Stable" .
+
+core:IntegrityMethod a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """An IntegrityMethod provides an independently reproducible mechanism that permits verification
+of a specific Element that correlates to the data in this SPDX document. This identifier enables
+a recipient to determine if anything in the original Element has been changed and eliminates
+confusion over which version or modification of a specific Element is referenced.""" ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "comment" ;
+            sh:path core:comment ] .
+
+core:NamespaceMap a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """A namespace map allows the creator of a collection of Elements to use
+shorter identifiers ("prefixes") instead of URIs to provide a more
+human-readable and smaller serialized representation of the Elements.""" ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "prefix" ;
+            sh:path core:prefix ],
+        [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:name "namespace" ;
+            sh:path core:namespace ] .
+
+core:RelationshipCompleteness a owl:Class ;
+    rdfs:comment """RelationshipCompleteness indicates whether a relationship is complete or 
+known to be incomplete or if there is made no assertion either way.""" ;
+    ns0:term_status "Stable" .
+
+core:comment a owl:DatatypeProperty ;
+    rdfs:comment """A comment is an optional field for creators of the Element to provide comments
+to the readers/reviewers of the document.""" ;
+    rdfs:range xsd:string ;
+    ns0:term_status "Stable" .
+
+ai:SafetyRiskAssessmentType a owl:Class ;
+    rdfs:comment """Lists the different safety risk type values that can be used to describe the safety risk of AI software
+according to [Article 20 of Regulation 765/2008/EC](https://ec.europa.eu/docsroom/documents/17107/attachments/1/translations/en/renditions/pdf).""" ;
+    ns0:term_status "Stable" .
+
+ai:PresenceType a owl:Class ;
+    rdfs:comment "This type is used to indicate if a given field is present or absent or unknown." ;
+    ns0:term_status "Stable" .
+
+core:ExternalReferenceType a owl:Class ;
+    rdfs:comment "ExteralReferenceType specifies the type of an external reference." ;
+    ns0:term_status "Stable" .
+
+core:ExternalIdentifierType a owl:Class ;
+    rdfs:comment "ExteralIdentifierType specifies the type of an external identifier." ;
+    ns0:term_status "Stable" .
+
+core:Element a owl:Class,
+        sh:NodeShape ;
+    rdfs:comment """An Element is a representation of a fundamental concept either directly inherent
+to the Bill of Materials (BOM) domain or indirectly related to the BOM domain
+and necessary for contextually characterizing BOM concepts and relationships.
+Within SPDX-3.0 structure this is the base class acting as a consistent,
+unifying, and interoperable foundation for all explicit
+and inter-relatable content objects.""" ;
+    rdfs:subClassOf core:Payload ;
+    ns0:term_status "Stable" ;
+    sh:property [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "comment" ;
+            sh:path core:comment ],
+        [ sh:datatype xsd:anyURI ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "spdxId" ;
+            sh:path core:spdxId ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "summary" ;
+            sh:path core:summary ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "description" ;
+            sh:path core:description ],
+        [ sh:datatype xsd:string ;
+            sh:maxCount 1 ;
+            sh:name "name" ;
+            sh:path core:name ],
+        [ sh:datatype core:CreationInfo ;
+            sh:maxCount 1 ;
+            sh:minCount 1 ;
+            sh:name "creationInfo" ;
+            sh:path core:creationInfo ],
+        [ sh:datatype core:Extension ;
+            sh:name "extension" ;
+            sh:path core:extension ],
+        [ sh:datatype core:ExternalIdentifier ;
+            sh:name "externalIdentifier" ;
+            sh:path core:externalIdentifier ],
+        [ sh:datatype core:IntegrityMethod ;
+            sh:name "verifiedUsing" ;
+            sh:path core:verifiedUsing ],
+        [ sh:datatype core:ExternalReference ;
+            sh:name "externalReference" ;
+            sh:path core:externalReference ] .
+
+core:HashAlgorithm a owl:Class ;
+    rdfs:comment """A HashAlgorithm is a mathematical algorithm that maps data of arbitrary size to a bit string (the hash)
+and is a one-way function, that is, a function which is practically infeasible to invert.""" ;
+    ns0:term_status "Stable" .
+
+software:SoftwarePurpose a owl:Class ;
+    rdfs:comment """This field provides information about the primary purpose of an Element.
+Software Purpose is intrinsic to how the Element is being used rather than the content of the Element.
+This field is a reasonable estimate of the most likely usage of the Element
+from the producer and consumer perspective from which both parties can draw conclusions
+about the context in which the Element exists.""" ;
+    ns0:term_status "Stable" .
+
+core:RelationshipType a owl:Class ;
+    rdfs:comment """Provides information about the relationship between two Elements.
+For example, you can represent a relationship between two different Files,
+between a Package and a File, between two Packages, or between one SPDXDocument and another SPDXDocument.
+
+Build Profile specific RelationshipType descriptions can be found [here](https://github.com/spdx/spdx-3-build-profile/blob/main/model/relationships.md)""" ;
+    ns0:term_status "Stable" .
+
