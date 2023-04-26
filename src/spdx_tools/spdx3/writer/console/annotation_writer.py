@@ -11,7 +11,6 @@ from spdx_tools.spdx3.writer.console.element_writer import write_element_propert
 def write_annotation(annotation: Annotation, text_output: TextIO):
     text_output.write("## Annotation\n")
     write_element_properties(annotation, text_output)
-    write_value("annotation_type", annotation.annotation_type.name, text_output)
-    write_value("subject", annotation.subject, text_output)
-    write_value("content_type", annotation.content_type, text_output)
-    write_value("statement", annotation.statement, text_output)
+
+    for property_name in Annotation.__annotations__.keys():
+        write_value(property_name, getattr(annotation, property_name), text_output)

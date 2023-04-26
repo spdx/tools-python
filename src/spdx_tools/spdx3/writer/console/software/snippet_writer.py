@@ -6,13 +6,16 @@ from typing import TextIO
 from spdx_tools.spdx3.model.software import Snippet
 from spdx_tools.spdx3.writer.console.artifact_writer import write_artifact_properties
 from spdx_tools.spdx3.writer.console.console import write_value
-from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_range
 
 
 def write_snippet(snippet: Snippet, text_output: TextIO):
     text_output.write("## Snippet\n")
     write_artifact_properties(snippet, text_output)
-    write_value("content_identifier", snippet.content_identifier, text_output)
-    write_value("snippet_purpose", ", ".join([purpose.name for purpose in snippet.snippet_purpose]), text_output)
-    write_range("byte_range", snippet.byte_range, text_output)
-    write_range("line_range", snippet.line_range, text_output)
+
+    for property_name in Snippet.__annotations__.keys():
+        if property_name == "snippet_purpose":
+            write_value(
+                property_name, ", ".join([purpose.name for purpose in getattr(snippet, property_name)]), text_output
+            )
+            continue
+        write_value(property_name, getattr(snippet, property_name), text_output)

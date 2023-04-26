@@ -8,6 +8,5 @@ from spdx_tools.spdx3.writer.console.console import write_value
 
 
 def write_external_identifier(external_identifier: ExternalIdentifier, text_output: TextIO):
-    write_value("type", external_identifier.external_identifier_type.name, text_output)
-    write_value("identifier", external_identifier.identifier, text_output)
-    write_value("comment", external_identifier.comment, text_output)
+    for property_name in ExternalIdentifier.__annotations__.keys():
+        write_value(property_name, getattr(external_identifier, property_name), text_output)

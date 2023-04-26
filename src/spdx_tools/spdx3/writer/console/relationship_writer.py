@@ -11,7 +11,5 @@ from spdx_tools.spdx3.writer.console.element_writer import write_element_propert
 def write_relationship(relationship: Relationship, text_output: TextIO):
     text_output.write("## Relationship\n")
     write_element_properties(relationship, text_output)
-    write_value("from_element", relationship.from_element, text_output)
-    write_value("to", ", ".join(relationship.to), text_output)
-    write_value("relationship_type", relationship.relationship_type.name, text_output)
-    write_value("completeness", relationship.completeness.name if relationship.completeness else None, text_output)
+    for property_name in relationship.__annotations__.keys():
+        write_value(property_name, getattr(relationship, property_name), text_output)
