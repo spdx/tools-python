@@ -13,6 +13,7 @@ def test_correct_initialization(creation_information):
     file = File(
         "SPDXRef-File",
         creation_information,
+        "Test file",
         verified_using=None,
         content_identifier="https://any.uri",
         file_purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE],
@@ -21,6 +22,7 @@ def test_correct_initialization(creation_information):
 
     assert file.spdx_id == "SPDXRef-File"
     assert file.creation_info == creation_information
+    assert file.name == "Test file"
     assert file.content_identifier == "https://any.uri"
     assert file.file_purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE]
     assert file.content_type == "MediaType"
@@ -32,6 +34,7 @@ def test_invalid_initialization(creation_information):
         File(
             1,
             creation_information,
+            "test file",
             content_identifier=3,
             file_purpose=SoftwarePurpose.FILE,
             content_type=SoftwarePurpose.ARCHIVE,
