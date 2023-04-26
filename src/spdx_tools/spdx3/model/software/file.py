@@ -27,7 +27,7 @@ class File(Artifact):
         self,
         spdx_id: str,
         creation_info: CreationInformation,
-        name: Optional[str] = None,
+        name: str,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,

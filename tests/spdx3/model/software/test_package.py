@@ -14,6 +14,7 @@ def test_correct_initialization(creation_information):
     package = Package(
         "SPDXRef-Package",
         creation_information,
+        "Test package",
         content_identifier="https://any.uri",
         built_time=datetime(2022, 1, 1),
         release_time=datetime(2022, 1, 2),
@@ -28,6 +29,7 @@ def test_correct_initialization(creation_information):
 
     assert package.spdx_id == "SPDXRef-Package"
     assert package.creation_info == creation_information
+    assert package.name == "Test package"
     assert package.content_identifier == "https://any.uri"
     assert package.built_time == datetime(2022, 1, 1)
     assert package.release_time == datetime(2022, 1, 2)
@@ -46,6 +48,7 @@ def test_invalid_initialization(creation_information):
         Package(
             "SPDXRef-Package",
             creation_information,
+            "Test package",
             built_time="2022-03-04T00:00:00Z",
             content_identifier=3,
             package_purpose=SoftwarePurpose.FILE,
