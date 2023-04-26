@@ -12,7 +12,7 @@ def bump_snippet(
     spdx2_snippet: Spdx2_Snippet, payload: Payload, creation_information: CreationInformation, document_namespace: str
 ):
     spdx_id = "#".join([document_namespace, spdx2_snippet.spdx_id])
-    print_missing_conversion("snippet.file_spdx_id", 0)
+    print_missing_conversion("snippet.file_spdx_id", 0, "https://github.com/spdx/spdx-3-model/issues/130")
     print_missing_conversion(
         "snippet.concluded_license, snippet.license_info_in_snippet, snippet.license_comment,"
         "snippet.copyright_text",
