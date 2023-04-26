@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Union
+from typing import Optional, Union
 
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
@@ -112,15 +112,18 @@ external_ref_type_map = {
 }
 
 
-def bump_external_package_ref(spdx2_external_ref: ExternalPackageRef) -> Union[ExternalReference, ExternalIdentifier]:
+def bump_external_package_ref(
+    spdx2_external_ref: ExternalPackageRef,
+) -> Optional[Union[ExternalReference, ExternalIdentifier]]:
     reference_type = spdx2_external_ref.reference_type
     locator = spdx2_external_ref.locator
     comment = spdx2_external_ref.comment
 
     if reference_type not in external_ref_type_map:
-        raise NotImplementedError(
-            f"Conversion of ExternalPackageRef of type {reference_type} is currently not supported."
+        print_missing_conversion(
+            reference_type, 0, f"Conversion of ExternalPackageRef of type {reference_type} is currently not supported."
         )
+        return None
 
     id_or_ref_type = external_ref_type_map[reference_type]
 
