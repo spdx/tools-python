@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 import json
 
-# current workflow: markdown files + spec_parser -> model.ttl -> convert to json_ld: SPDX_OWL.json -> use the function below to generate context.json
+# current workflow: markdown files + spec_parser -> model.ttl -> convert to json_ld: SPDX_OWL.json ->
+# use the function below to generate context.json
 # properties with Enum range should look like this (probably), so that their values are automatically appended with the Enum URI:
 # "annotationType": {
 #     "@id": "core:annotationType",
@@ -34,6 +35,7 @@ PROPERTIES_WITH_ENUM_RANGE = [
     "softwareLinkage",
     "purpose",
 ]
+
 
 def convert_spdx_owl_to_jsonld_context():
     with open("SPDX_OWL.json", "r") as infile:
