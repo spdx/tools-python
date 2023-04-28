@@ -5,7 +5,8 @@ import json
 
 # current workflow: markdown files + spec_parser -> model.ttl -> convert to json_ld: SPDX_OWL.json ->
 # use the function below to generate context.json
-# properties with Enum range should look like this (probably), so that their values are automatically appended with the Enum URI:
+# properties with Enum range should look like this (probably), so that their values are automatically appended
+# with the Enum URI:
 # "annotationType": {
 #     "@id": "core:annotationType",
 #     "@type": "@vocab",
@@ -37,6 +38,7 @@ PROPERTIES_WITH_ENUM_RANGE = [
 ]
 
 
+
 def convert_spdx_owl_to_jsonld_context():
     with open("SPDX_OWL.json", "r") as infile:
         owl_dict = json.load(infile)
@@ -59,9 +61,7 @@ def convert_spdx_owl_to_jsonld_context():
                 context_dict[name]  = {
                     "@id": node["@id"],
                     "@type": "@vocab",
-                    "@context": {
-                        "@vocab": node["rdfs:range"]["@id"] + "/"
-                    }
+                    "@context": {"@vocab": node["rdfs:range"]["@id"] + "/"},
                 }
             else:
                 context_dict[name] = {"@id": node["@id"], "@type": node["rdfs:range"]["@id"]}
