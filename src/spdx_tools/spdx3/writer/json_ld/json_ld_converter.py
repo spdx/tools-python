@@ -3,16 +3,15 @@
 # SPDX-License-Identifier: Apache-2.0
 from datetime import datetime
 from enum import Enum
-from typing import Dict, Any, List
+from typing import Any, List
 
 from semantic_version import Version
 
-from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
-from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
-from spdx_tools.spdx3.model import Element
 from spdx_tools.spdx3.model.creation_information import CreationInformation
 from spdx_tools.spdx3.model.hash import Hash
 from spdx_tools.spdx3.payload import Payload
+from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
+from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
 
 
 def convert_payload_to_json_ld_list_of_elements(payload: Payload) -> List:
@@ -64,7 +63,8 @@ def _convert_to_json_ld_dict(element: Any, alt_creation_info=False, alt_hash=Fal
             for creation_info_attr_name in vars(attribute_value):
                 creation_info_attr_value = getattr(attribute_value, creation_info_attr_name)
                 element_dict[snake_case_to_camel_case(creation_info_attr_name)] = _convert_to_json_ld_dict(
-                    creation_info_attr_value)
+                    creation_info_attr_value
+                )
 
         elif attribute_value:
             if attribute_name == "_spdx_id":
