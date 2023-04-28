@@ -24,8 +24,8 @@ from spdx_tools.spdx.validation.validation_message import ValidationMessage
     "--outfile",
     "-o",
     help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion)."
-    "For now only a prototype serialization to json_ld is available. The provided file will therefore be extended "
-    "with `_jsonld.json`.",
+    "For now only a prototype serialization to json-ld is available. The provided file will therefore be extended "
+    "with `.jsonld`.",
 )
 @click.option(
     "--version",
