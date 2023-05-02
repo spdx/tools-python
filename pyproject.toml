@@ -28,7 +28,7 @@ dependencies = ["click", "pyyaml", "xmltodict", "rdflib", "typeguard==4.0.0", "u
 dynamic = ["version"]
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "pyshacl"]
 code_style = ["isort", "black", "flake8"]
 graph_generation = ["pygraphviz", "networkx"]
 development = ["black", "flake8", "isort", "networkx", "pytest"]
