@@ -14,6 +14,9 @@ class HashAlgorithm(Enum):
     BLAKE2B384 = auto()
     BLAKE2B512 = auto()
     BLAKE3 = auto()
+    CRYSTALS_KYBER = auto()
+    CRYSTALS_DILITHIUM = auto()
+    FALCON = auto()
     MD2 = auto()
     MD4 = auto()
     MD5 = auto()
@@ -30,6 +33,7 @@ class HashAlgorithm(Enum):
     SHA512 = auto()
     SPDXPVCSHA1 = auto()
     SPDXPVCSHA256 = auto()
+    SPHINCS_PLUS = auto()
 
 
 @dataclass_with_properties
