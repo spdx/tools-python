@@ -17,9 +17,9 @@ def test_correct_initialization(creation_information):
         intended_use="intended use",
         dataset_size=420000,
         dataset_noise="dataset noise",
-        data_preprocessing_steps="data preprocessing steps",
-        sensors={"sensor1": "some value"},
-        known_biases="known biases",
+        data_preprocessing="data preprocessing steps",
+        sensor={"sensor1": "some value"},
+        known_bias="known biases",
         sensitive_personal_information=True,
         anonymization_method_used=["anonymization method"],
         confidentiality_level=ConfidentialityLevelType.RED,
@@ -31,9 +31,9 @@ def test_correct_initialization(creation_information):
     assert dataset.intended_use == "intended use"
     assert dataset.dataset_size == 420000
     assert dataset.dataset_noise == "dataset noise"
-    assert dataset.data_preprocessing_steps == "data preprocessing steps"
-    assert dataset.sensors == {"sensor1": "some value"}
-    assert dataset.known_biases == "known biases"
+    assert dataset.data_preprocessing == "data preprocessing steps"
+    assert dataset.sensor == {"sensor1": "some value"}
+    assert dataset.known_bias == "known biases"
     assert dataset.sensitive_personal_information
     assert dataset.anonymization_method_used == ["anonymization method"]
     assert dataset.confidentiality_level == ConfidentialityLevelType.RED
@@ -47,12 +47,12 @@ def test_invalid_initialization(creation_information):
         Dataset(
             "some_spdx_id",
             creation_information,
-            sensors={"sensor1": "value", "sensor2": 250},
+            sensor={"sensor1": "value", "sensor2": 250},
         )
 
     assert err.value.args[0] == [
         (
-            "SetterError Dataset: type of argument \"sensors\"['sensor2'] must be one of "
+            "SetterError Dataset: type of argument \"sensor\"['sensor2'] must be one of "
             "(str, NoneType); got int instead: {'sensor1': 'value', 'sensor2': 250}"
         )
     ]
