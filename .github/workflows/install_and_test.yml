@@ -28,6 +28,7 @@ jobs:
           python -m build -nwx .
           python -m pip install --upgrade ./dist/*.whl
           python -m pip install pytest
+          python -m pip install pyshacl
         shell: bash
       - name: Run tests
         run: pytest

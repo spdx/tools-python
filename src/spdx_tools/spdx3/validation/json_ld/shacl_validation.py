@@ -1,21 +1,21 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from typing import Optional
+
 from pyshacl import validate
 from rdflib import Graph
 
 
-def validate_against_shacl_from_file(data_file: str, shacl_file: str):
+def validate_against_shacl_from_file(
+    data_file: str, shacl_file: str, data_format: Optional[str] = "json-ld", shacl_format: Optional[str] = "ttl"
+):
     data_graph = Graph()
     with open(data_file) as file:
-        data_graph.parse(file, format="json-ld")
+        data_graph.parse(file, format=data_format)
 
     shacl_graph = Graph()
     with open(shacl_file) as file:
-        shacl_graph.parse(file, format="ttl")
+        shacl_graph.parse(file, format=shacl_format)
 
-    return validate_against_shacl(data_graph, shacl_graph)
-
-
-def validate_against_shacl(data_graph: Graph, shacl_graph: Graph):
     return validate(data_graph=data_graph, shacl_graph=shacl_graph)
