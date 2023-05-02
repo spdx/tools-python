@@ -22,17 +22,17 @@ class SafetyRiskAssessmentType(Enum):
 @dataclass_with_properties
 class AIPackage(Package):
     energy_consumption: Optional[str] = None
-    standards_compliance: List[str] = field(default_factory=list)
-    limitations: Optional[str] = None
+    standard_compliance: List[str] = field(default_factory=list)
+    limitation: Optional[str] = None
     type_of_model: List[str] = field(default_factory=list)
     information_about_training: Optional[str] = None
     information_about_application: Optional[str] = None
-    hyperparameters: Dict[str, Optional[str]] = field(default_factory=dict)
-    data_preprocessing_steps: Optional[str] = None
-    model_explainability_mechanisms: Optional[str] = None
+    hyperparameter: Dict[str, Optional[str]] = field(default_factory=dict)
+    model_data_preprocessing: Optional[str] = None
+    model_explainability: Optional[str] = None
     sensitive_personal_information: Optional[bool] = None
-    metrics_decision_thresholds: Dict[str, Optional[str]] = field(default_factory=dict)
-    metrics: Dict[str, Optional[str]] = field(default_factory=dict)
+    metric_decision_threshold: Dict[str, Optional[str]] = field(default_factory=dict)
+    metric: Dict[str, Optional[str]] = field(default_factory=dict)
     domain: List[str] = field(default_factory=list)
     autonomy_type: Optional[bool] = None
     safety_risk_assessment: Optional[SafetyRiskAssessmentType] = None
@@ -61,17 +61,17 @@ class AIPackage(Package):
         homepage: Optional[str] = None,
         source_info: Optional[str] = None,
         energy_consumption: Optional[str] = None,
-        standards_compliance: List[str] = None,
-        limitations: Optional[str] = None,
+        standard_compliance: List[str] = None,
+        limitation: Optional[str] = None,
         type_of_model: List[str] = None,
         information_about_training: Optional[str] = None,
         information_about_application: Optional[str] = None,
-        hyperparameters: Dict[str, Optional[str]] = None,
-        data_preprocessing_steps: Optional[str] = None,
-        model_explainability_mechanisms: Optional[str] = None,
+        hyperparameter: Dict[str, Optional[str]] = None,
+        model_data_preprocessing: Optional[str] = None,
+        model_explainability: Optional[str] = None,
         sensitive_personal_information: Optional[bool] = None,
-        metrics_decision_thresholds: Dict[str, Optional[str]] = None,
-        metrics: Dict[str, Optional[str]] = None,
+        metric_decision_threshold: Dict[str, Optional[str]] = None,
+        metric: Dict[str, Optional[str]] = None,
         domain: List[str] = None,
         autonomy_type: Optional[bool] = None,
         safety_risk_assessment: Optional[SafetyRiskAssessmentType] = None,
@@ -80,10 +80,10 @@ class AIPackage(Package):
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
         package_purpose = [] if package_purpose is None else package_purpose
-        standards_compliance = [] if standards_compliance is None else standards_compliance
+        standard_compliance = [] if standard_compliance is None else standard_compliance
         type_of_model = [] if type_of_model is None else type_of_model
-        hyperparameters = {} if hyperparameters is None else hyperparameters
-        metrics_decision_thresholds = {} if metrics_decision_thresholds is None else metrics_decision_thresholds
-        metrics = {} if metrics is None else metrics
+        hyperparameter = {} if hyperparameter is None else hyperparameter
+        metric_decision_threshold = {} if metric_decision_threshold is None else metric_decision_threshold
+        metric = {} if metric is None else metric
         domain = [] if domain is None else domain
         check_types_and_set_values(self, locals())
