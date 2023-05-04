@@ -15,7 +15,7 @@ def write_payload(payload: Payload, file_name: str):
     with open(os.path.join(os.path.dirname(__file__), "context.json"), "r") as infile:
         context = json.load(infile)
 
-    complete_dict = {"@context": context, "element": element_list}
+    complete_dict = {"@context": context, "@graph": element_list}
 
     with open(file_name + ".jsonld", "w") as out:
         json.dump(complete_dict, out, indent=2)
