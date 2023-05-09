@@ -20,6 +20,7 @@ from spdx_tools.spdx3.model.licensing import (
     WithAdditionOperator,
 )
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
+from tests.spdx.fixtures import extracted_licensing_info_fixture
 
 
 @pytest.mark.parametrize(
@@ -31,55 +32,75 @@ from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
     ],
 )
 def test_license_expression_or_none_or_no_assertion(element, expected_class):
-    license_info = bump_license_expression_or_none_or_no_assertion(element)
+    license_info = bump_license_expression_or_none_or_no_assertion(element, [])
 
     assert isinstance(license_info, expected_class)
 
 
 @pytest.mark.parametrize(
-    "license_expression, expected_element",
+    "license_expression, extracted_licensing_info, expected_element",
     [
-        (get_spdx_licensing().parse("MIT"), ListedLicense("MIT", "MIT", "")),
-        (get_spdx_licensing().parse("LGPL-2.0"), ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "")),
-        (get_spdx_licensing().parse("LicenseRef-1"), CustomLicense("LicenseRef-1", "", "")),
+        (get_spdx_licensing().parse("MIT"), [], ListedLicense("MIT", "MIT", "")),
+        (get_spdx_licensing().parse("LGPL-2.0"), [], ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "")),
+        (
+            get_spdx_licensing().parse("LicenseRef-1"),
+            [extracted_licensing_info_fixture()],
+            CustomLicense("LicenseRef-1", "licenseName", "extractedText"),
+        ),
         (
             get_spdx_licensing().parse("MIT AND LGPL-2.0"),
+            [],
             ConjunctiveLicenseSet(
                 [ListedLicense("MIT", "MIT", ""), ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "")]
             ),
         ),
         (
             get_spdx_licensing().parse("LicenseRef-1 OR LGPL-2.0"),
+            [extracted_licensing_info_fixture()],
             DisjunctiveLicenseSet(
-                [CustomLicense("LicenseRef-1", "", ""), ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "")]
+                [
+                    CustomLicense("LicenseRef-1", "licenseName", "extractedText"),
+                    ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", ""),
+                ]
             ),
         ),
         (
             get_spdx_licensing().parse("LGPL-2.0 WITH 389-exception"),
+            [],
             WithAdditionOperator(
                 ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", ""), ListedLicenseException("389-exception", "", "")
             ),
         ),
         (
             get_spdx_licensing().parse("LicenseRef-1 WITH custom-exception"),
+            [
+                extracted_licensing_info_fixture(),
+                extracted_licensing_info_fixture("custom-exception", "This is a custom exception", "exceptionName"),
+            ],
             WithAdditionOperator(
-                CustomLicense("LicenseRef-1", "", ""), CustomLicenseAddition("custom-exception", "", "")
+                CustomLicense("LicenseRef-1", "licenseName", "extractedText"),
+                CustomLicenseAddition("custom-exception", "exceptionName", "This is a custom exception"),
             ),
         ),
         (
             get_spdx_licensing().parse("MIT AND LicenseRef-1 WITH custom-exception"),
+            [
+                extracted_licensing_info_fixture(),
+                extracted_licensing_info_fixture("custom-exception", "This is a custom exception", "exceptionName"),
+            ],
             ConjunctiveLicenseSet(
                 [
                     ListedLicense("MIT", "MIT", ""),
                     WithAdditionOperator(
-                        CustomLicense("LicenseRef-1", "", ""), CustomLicenseAddition("custom-exception", "", "")
+                        CustomLicense("LicenseRef-1", "licenseName", "extractedText"),
+                        CustomLicenseAddition("custom-exception", "exceptionName", "This is a custom exception"),
                     ),
                 ]
             ),
         ),
     ],
 )
-def test_license_expression_bump(license_expression: LicenseExpression, expected_element):
-    license_info = bump_license_expression(license_expression)
+def test_license_expression_bump(license_expression: LicenseExpression, extracted_licensing_info, expected_element):
+    license_info = bump_license_expression(license_expression, extracted_licensing_info)
 
     assert license_info == expected_element
