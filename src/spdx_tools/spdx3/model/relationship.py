@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from datetime import datetime
 from enum import Enum, auto
 from typing import List, Optional
 
@@ -12,6 +13,7 @@ from spdx_tools.spdx3.model import CreationInformation, Element, ExternalIdentif
 class RelationshipType(Enum):
     AMENDS = auto()
     ANCESTOR = auto()
+    AVAILABLE_FROM = auto()
     BUILD_DEPENDENCY = auto()
     BUILD_TOOL = auto()
     CONTAINS = auto()
@@ -44,12 +46,34 @@ class RelationshipType(Enum):
     RUNTIME_DEPENDENCY = auto()
     SPECIFICATION_FOR = auto()
     STATIC_LINK = auto()
-    SUPPLIED_BY = auto()
     TEST = auto()
     TEST_CASE = auto()
     TEST_DEPENDENCY = auto()
     TEST_TOOL = auto()
     VARIANT = auto()
+    BUILD_INPUT_OF = auto()
+    BUILD_OUTPUT_OF = auto()
+    BUILD_CONFIG_OF = auto()
+    BUILD_INVOKED_BY = auto()
+    BUILD_ON_BEHALF_OF = auto()
+    BUILD_HOST_OF = auto()
+    HAS_ASSOCIATED_VULNERABILITY = auto()
+    COORDINATED_BY = auto()
+    HAS_CVSS_V2_ASSESSMENT_FOR = auto()
+    HAS_CVSS_V3_ASSESSMENT_FOR = auto()
+    HAS_EPSS_ASSESSMENT_FOR = auto()
+    HAS_EXPLOIT_CATALOG_ASSESSMENT_FOR = auto()
+    HAS_SSVC_ASSESSMENT_FOR = auto()
+    EXPLOIT_CREATED_BY = auto()
+    FIXED_BY = auto()
+    FOUND_BY = auto()
+    PUBLISHED_BY = auto()
+    REPORTED_BY = auto()
+    REPUBLISHED_BY = auto()
+    AFFECTS = auto()
+    DOES_NOT_AFFECT = auto()
+    FIXED_IN = auto()
+    UNDER_INVESTIGATION_FOR = auto()
 
 
 class RelationshipCompleteness(Enum):
@@ -66,6 +90,8 @@ class Relationship(Element):
     to: List[str] = None
     relationship_type: RelationshipType = None
     completeness: Optional[RelationshipCompleteness] = None
+    start_time: Optional[datetime] = None
+    end_time: Optional[datetime] = None
 
     def __init__(
         self,
@@ -83,6 +109,8 @@ class Relationship(Element):
         external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
         completeness: Optional[RelationshipCompleteness] = None,
+        start_time: Optional[datetime] = None,
+        end_time: Optional[datetime] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
