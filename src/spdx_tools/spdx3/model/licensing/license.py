@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from abc import ABC, abstractmethod
+from abc import abstractmethod
 from dataclasses import field
 from typing import List, Optional
 
@@ -10,7 +10,7 @@ from spdx_tools.spdx3.model.licensing.any_license_info import AnyLicenseInfo
 
 
 @dataclass_with_properties
-class License(ABC, AnyLicenseInfo):
+class License(AnyLicenseInfo):
     license_id: str
     license_name: str
     license_text: str
