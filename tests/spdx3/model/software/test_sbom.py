@@ -5,17 +5,24 @@ from unittest import mock
 
 import pytest
 
-from spdx_tools.spdx3.model.software import Sbom
+from spdx_tools.spdx3.model.software import Sbom, SBOMType
 
 
 @mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_correct_initialization(creation_information):
-    sbom = Sbom("SPDXRef-Sbom", creation_information, elements=["spdx_id1", "spdx_id2"], root_elements=["spdx_id3"])
+    sbom = Sbom(
+        "SPDXRef-Sbom",
+        creation_information,
+        elements=["spdx_id1", "spdx_id2"],
+        root_elements=["spdx_id3"],
+        sbom_type=[SBOMType.DESIGN],
+    )
 
     assert sbom.spdx_id == "SPDXRef-Sbom"
     assert sbom.creation_info == creation_information
     assert sbom.elements == ["spdx_id1", "spdx_id2"]
     assert sbom.root_elements == ["spdx_id3"]
+    assert sbom.sbom_type == [SBOMType.DESIGN]
 
 
 def test_invalid_initialization():
