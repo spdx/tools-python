@@ -14,6 +14,7 @@ def test_correct_initialization(creation_information):
     ai_package = AIPackage(
         "some_spdx_id",
         creation_information,
+        "AI Package name",
         energy_consumption="energy consumption",
         standard_compliance=["some standard"],
         limitation="limitation",
@@ -54,6 +55,7 @@ def test_invalid_initialization(creation_information):
         AIPackage(
             "some_spdx_id",
             creation_information,
+            "AI Package name",
             metric={"metric1": "value", "metric2": 250},
         )
 

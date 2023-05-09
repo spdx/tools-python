@@ -87,7 +87,7 @@ def bump_package(
             built_time=spdx2_package.built_date,
             release_time=spdx2_package.release_date,
             valid_until_time=spdx2_package.valid_until_date,
-            package_purpose=package_purpose,
+            purpose=package_purpose,
             package_version=spdx2_package.version,
             download_location=download_location,
             package_url=package_url,

@@ -14,7 +14,7 @@ def test_correct_initialization(creation_information):
         "SPDXRef-Snippet",
         creation_information,
         content_identifier="https://content.identifier",
-        snippet_purpose=[SoftwarePurpose.SOURCE],
+        purpose=[SoftwarePurpose.SOURCE],
         byte_range=(3, 4),
         line_range=(346, 456),
     )
@@ -22,7 +22,7 @@ def test_correct_initialization(creation_information):
     assert snippet.spdx_id == "SPDXRef-Snippet"
     assert snippet.creation_info == creation_information
     assert snippet.content_identifier == "https://content.identifier"
-    assert snippet.snippet_purpose == [SoftwarePurpose.SOURCE]
+    assert snippet.purpose == [SoftwarePurpose.SOURCE]
     assert snippet.byte_range == (3, 4)
     assert snippet.line_range == (346, 456)
 
