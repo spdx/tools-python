@@ -16,7 +16,7 @@ def test_correct_initialization(creation_information):
         "Test file",
         verified_using=None,
         content_identifier="https://any.uri",
-        file_purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE],
+        purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE],
         content_type="MediaType",
     )
 
@@ -24,7 +24,7 @@ def test_correct_initialization(creation_information):
     assert file.creation_info == creation_information
     assert file.name == "Test file"
     assert file.content_identifier == "https://any.uri"
-    assert file.file_purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE]
+    assert file.purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE]
     assert file.content_type == "MediaType"
 
 
@@ -36,7 +36,7 @@ def test_invalid_initialization(creation_information):
             creation_information,
             "test file",
             content_identifier=3,
-            file_purpose=SoftwarePurpose.FILE,
+            purpose=SoftwarePurpose.FILE,
             content_type=SoftwarePurpose.ARCHIVE,
         )
 
@@ -44,7 +44,7 @@ def test_invalid_initialization(creation_information):
         'SetterError File: type of argument "spdx_id" must be str; got int instead: 1',
         'SetterError File: type of argument "content_identifier" must be one of (str, '
         "NoneType); got int instead: 3",
-        'SetterError File: type of argument "file_purpose" must be a list; got '
+        'SetterError File: type of argument "purpose" must be a list; got '
         "spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose instead: "
         "SoftwarePurpose.FILE",
         'SetterError File: type of argument "content_type" must be one of (str, '
