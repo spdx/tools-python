@@ -10,7 +10,6 @@ from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx3.model import (
     Agent,
     CreationInformation,
-    Element,
     ExternalIdentifier,
     ExternalReference,
     IntegrityMethod,
@@ -23,7 +22,7 @@ from spdx_tools.spdx.model import RelationshipType
 @dataclass_with_properties
 class VexAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
     action_statement: Optional[str] = None
-    action_statement_time: List[str] = field(default_factory=list)
+    action_statement_time: List[datetime] = field(default_factory=list)
 
     def __init__(
         self,
@@ -43,7 +42,7 @@ class VexAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
-        assessed_element: Optional[Element] = None,
+        assessed_element: Optional[str] = None,
         published_time: Optional[datetime] = None,
         supplied_by: Optional[Agent] = None,
         modified_time: Optional[datetime] = None,
@@ -51,7 +50,7 @@ class VexAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         vex_version: Optional[str] = None,
         status_notes: Optional[str] = None,
         action_statement: Optional[str] = None,
-        action_statement_time: List[str] = None,
+        action_statement_time: List[datetime] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
