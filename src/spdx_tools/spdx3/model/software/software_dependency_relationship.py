@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from datetime import datetime
 from enum import Enum, auto
 from typing import List, Optional
 
@@ -54,6 +55,8 @@ class SoftwareDependencyRelationship(LifecycleScopedRelationship):
         external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
         completeness: Optional[RelationshipCompleteness] = None,
+        start_time: Optional[datetime] = None,
+        end_time: Optional[datetime] = None,
         scope: Optional[LifecycleScopeType] = None,
         software_linkage: Optional[SoftwareDependencyLinkType] = None,
         conditionality: Optional[DependencyConditionalityType] = None,
