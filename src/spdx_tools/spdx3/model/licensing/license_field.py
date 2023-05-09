@@ -3,10 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from abc import ABC, abstractmethod
 
-from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 
-
-@dataclass_with_properties
 class LicenseField(ABC):
     @abstractmethod
     def __init__(self):
