@@ -12,10 +12,26 @@ from spdx_tools.common.typing.type_checks import check_types_and_set_values
 class ExternalReferenceType(Enum):
     ALT_DOWNLOAD_LOCATION = auto()
     ALT_WEB_PAGE = auto()
+    BINARY_ARTIFACT = auto()
+    BUILD_META = auto()
+    BUILD_SYSTEM = auto()
+    CHAT = auto()
+    DOCUMENTATION = auto()
+    FUNDING = auto()
+    ISSUE_TRACKER = auto()
+    MAILING_LIST = auto()
+    METRICS = auto()
+    LICENSE = auto()
     OTHER = auto()
+    RELEASE_NOTES = auto()
+    RELEASE_HISTORY = auto()
     SECURITY_ADVISORY = auto()
     SECURITY_FIX = auto()
     SECURITY_OTHER = auto()
+    SOCIAL_MEDIA = auto()
+    SOURCE_ARTIFACT = auto()
+    SUPPORT = auto()
+    VCS = auto()
 
 
 @dataclass_with_properties
