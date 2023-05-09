@@ -1,26 +1,19 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from dataclasses import field
 from datetime import datetime
 from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model import (
-    Artifact,
-    CreationInformation,
-    ExternalIdentifier,
-    ExternalReference,
-    IntegrityMethod,
-)
+from spdx_tools.spdx3.model import CreationInformation, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model.licensing import LicenseField
 from spdx_tools.spdx3.model.software import SoftwarePurpose
+from spdx_tools.spdx3.model.software.software_artifact import SoftwareArtifact
 
 
 @dataclass_with_properties
-class File(Artifact):
-    content_identifier: Optional[str] = None  # should be a valid URI
-    file_purpose: List[SoftwarePurpose] = field(default_factory=list)
+class File(SoftwareArtifact):
     content_type: Optional[str] = None  # placeholder for MediaType
 
     def __init__(
@@ -40,11 +33,15 @@ class File(Artifact):
         release_time: Optional[datetime] = None,
         valid_until_time: Optional[datetime] = None,
         content_identifier: Optional[str] = None,
-        file_purpose: List[SoftwarePurpose] = None,
+        purpose: List[SoftwarePurpose] = None,
+        concluded_license: Optional[LicenseField] = None,
+        declared_license: Optional[LicenseField] = None,
+        copyright_text: Optional[str] = None,
+        attribution_text: Optional[str] = None,
         content_type: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
-        file_purpose = [] if file_purpose is None else file_purpose
+        purpose = [] if purpose is None else purpose
         check_types_and_set_values(self, locals())

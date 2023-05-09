@@ -13,6 +13,7 @@ def test_correct_initialization(creation_information):
     dataset = Dataset(
         "some_spdx_id",
         creation_information,
+        "Dataset name",
         data_collection_process="data collection process",
         intended_use="intended use",
         dataset_size=420000,
@@ -47,6 +48,7 @@ def test_invalid_initialization(creation_information):
         Dataset(
             "some_spdx_id",
             creation_information,
+            "Dataset name",
             sensor={"sensor1": "value", "sensor2": 250},
         )
 
