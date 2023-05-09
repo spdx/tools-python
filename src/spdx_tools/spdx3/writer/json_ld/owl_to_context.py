@@ -3,15 +3,37 @@
 # SPDX-License-Identifier: Apache-2.0
 import json
 
-# current workflow: markdown files + spec_parser -> model.ttl -> convert to json_ld: SPDX_OWL.json -> use the function below (needs to be fixed) to generate context.json
-# TODO: Enums should look like this:
+# current workflow: markdown files + spec_parser -> model.ttl -> convert to json_ld: SPDX_OWL.json -> use the function below to generate context.json
+# properties with Enum range should look like this (probably), so that their values are automatically appended with the Enum URI:
 # "annotationType": {
 #     "@id": "core:annotationType",
 #     "@type": "@vocab",
 #     "@context": {
-#         "@vocab": "core:AnnotationType#"   <- or "/" at the end, who knows
+#         "@vocab": "core:AnnotationType/"
 #     }
 # },
+
+PROPERTIES_WITH_ENUM_RANGE = [
+    "safetyRiskAssessment",
+    "sensitivePersonalInformation",
+    "annotationType",
+    "externalIdentifierType",
+    "externalReferenceType",
+    "algorithm",
+    "scope",
+    "profile",
+    "completeness",
+    "relationshipType",
+    "confidentialityLevel",
+    "datasetAvailability",
+    "decisionType",
+    "justificationType",
+    "catalogType",
+    "conditionality",
+    "sbomType",
+    "softwareLinkage",
+    "purpose",
+]
 
 def convert_spdx_owl_to_jsonld_context():
     with open("SPDX_OWL.json", "r") as infile:
@@ -31,7 +53,16 @@ def convert_spdx_owl_to_jsonld_context():
             continue
         elif node_type in ["owl:DatatypeProperty", "owl:ObjectProperty"]:
             name = node["@id"].split(":")[-1]
-            context_dict[name] = {"@id": node["@id"], "@type": node["rdfs:range"]["@id"]}
+            if name in PROPERTIES_WITH_ENUM_RANGE:
+                context_dict[name]  = {
+                    "@id": node["@id"],
+                    "@type": "@vocab",
+                    "@context": {
+                        "@vocab": node["rdfs:range"]["@id"] + "/"
+                    }
+                }
+            else:
+                context_dict[name] = {"@id": node["@id"], "@type": node["rdfs:range"]["@id"]}
 
         elif node_type == "owl:Class":
             name = node["@id"].split(":")[-1]
@@ -44,5 +75,9 @@ def convert_spdx_owl_to_jsonld_context():
         else:
             print(f"unknown node_type: {node_type}")
 
-    with open("src/spdx_tools/spdx3/writer/json_ld/context.json", "w") as infile:
+    with open("context.json", "w") as infile:
         json.dump(context_dict, infile)
+
+
+if __name__ == "__main__":
+    convert_spdx_owl_to_jsonld_context()
