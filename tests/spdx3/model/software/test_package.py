@@ -19,7 +19,7 @@ def test_correct_initialization(creation_information):
         built_time=datetime(2022, 1, 1),
         release_time=datetime(2022, 1, 2),
         valid_until_time=datetime(2022, 1, 3),
-        package_purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH],
+        purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH],
         package_version="1:23a_bc",
         download_location="https://downloadlocation",
         package_url="https://package.uri",
@@ -34,7 +34,7 @@ def test_correct_initialization(creation_information):
     assert package.built_time == datetime(2022, 1, 1)
     assert package.release_time == datetime(2022, 1, 2)
     assert package.valid_until_time == datetime(2022, 1, 3)
-    assert package.package_purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH]
+    assert package.purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH]
     assert package.package_version == "1:23a_bc"
     assert package.download_location == "https://downloadlocation"
     assert package.package_url == "https://package.uri"
@@ -51,7 +51,7 @@ def test_invalid_initialization(creation_information):
             "Test package",
             built_time="2022-03-04T00:00:00Z",
             content_identifier=3,
-            package_purpose=SoftwarePurpose.FILE,
+            purpose=SoftwarePurpose.FILE,
             package_version=42,
             download_location=4,
             package_url=["uris"],
@@ -64,7 +64,7 @@ def test_invalid_initialization(creation_information):
         "(datetime.datetime, NoneType); got str instead: 2022-03-04T00:00:00Z",
         'SetterError Package: type of argument "content_identifier" must be one of '
         "(str, NoneType); got int instead: 3",
-        'SetterError Package: type of argument "package_purpose" must be a list; got '
+        'SetterError Package: type of argument "purpose" must be a list; got '
         "spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose instead: "
         "SoftwarePurpose.FILE",
         'SetterError Package: type of argument "package_version" must be one of '
