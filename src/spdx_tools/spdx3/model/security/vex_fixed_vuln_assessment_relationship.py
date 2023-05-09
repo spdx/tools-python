@@ -9,7 +9,6 @@ from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx3.model import (
     Agent,
     CreationInformation,
-    Element,
     ExternalIdentifier,
     ExternalReference,
     IntegrityMethod,
@@ -39,7 +38,7 @@ class VexFixedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
-        assessed_element: Optional[Element] = None,
+        assessed_element: Optional[str] = None,
         published_time: Optional[datetime] = None,
         supplied_by: Optional[Agent] = None,
         modified_time: Optional[datetime] = None,
