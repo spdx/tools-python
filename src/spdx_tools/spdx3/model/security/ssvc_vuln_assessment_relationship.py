@@ -14,8 +14,10 @@ from spdx_tools.spdx3.model import (
     ExternalIdentifier,
     ExternalReference,
     IntegrityMethod,
+    RelationshipCompleteness,
 )
 from spdx_tools.spdx3.model.security.vuln_assessment_relationship import VulnAssessmentRelationship
+from spdx_tools.spdx.model import RelationshipType
 
 
 class SsvcDecisionType:
@@ -27,12 +29,15 @@ class SsvcDecisionType:
 
 @dataclass_with_properties
 class SsvcVulnAssessmentRelationship(VulnAssessmentRelationship):
-    decision: SsvcDecisionType
+    decision: SsvcDecisionType = None
 
     def __init__(
         self,
         spdx_id: str,
         creation_info: CreationInformation,
+        from_element: str,
+        to: List[str],
+        relationship_type: RelationshipType,
         decision: SsvcDecisionType,
         name: Optional[str] = None,
         summary: Optional[str] = None,
@@ -42,6 +47,9 @@ class SsvcVulnAssessmentRelationship(VulnAssessmentRelationship):
         external_references: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
+        completeness: Optional[RelationshipCompleteness] = None,
+        start_time: Optional[datetime] = None,
+        end_time: Optional[datetime] = None,
         assessed_element: Optional[Element] = None,
         published_time: Optional[datetime] = None,
         supplied_by: Optional[Agent] = None,
