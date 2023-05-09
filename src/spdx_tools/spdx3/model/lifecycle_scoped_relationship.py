@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from datetime import datetime
 from enum import Enum, auto
 from typing import List, Optional
 
@@ -46,6 +47,8 @@ class LifecycleScopedRelationship(Relationship):
         external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
         completeness: Optional[RelationshipCompleteness] = None,
+        start_time: Optional[datetime] = None,
+        end_time: Optional[datetime] = None,
         scope: Optional[LifecycleScopeType] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
