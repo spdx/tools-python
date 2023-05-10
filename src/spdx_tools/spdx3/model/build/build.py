@@ -25,8 +25,8 @@ class Build(Element):
     config_source_uri: List[str] = field(default_factory=list)
     config_source_digest: List[Hash] = field(default_factory=list)
     parameters: Dict[str, str] = field(default_factory=dict)
-    build_start: Optional[datetime] = None
-    build_end: Optional[datetime] = None
+    build_start_time: Optional[datetime] = None
+    build_end_time: Optional[datetime] = None
     environment: Dict[str, str] = field(default_factory=dict)
 
     def __init__(
@@ -47,8 +47,8 @@ class Build(Element):
         config_source_uri: List[str] = None,
         config_source_digest: List[Hash] = None,
         parameters: Dict[str, str] = None,
-        build_start: Optional[datetime] = None,
-        build_end: Optional[datetime] = None,
+        build_start_time: Optional[datetime] = None,
+        build_end_time: Optional[datetime] = None,
         environment: Dict[str, str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using

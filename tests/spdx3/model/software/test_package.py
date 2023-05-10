@@ -16,9 +16,12 @@ def test_correct_initialization(creation_information):
         creation_information,
         "Test package",
         content_identifier="https://any.uri",
+        originated_by=["https://namespace.test#originator"],
+        supplied_by=["https://namespace.test#supplier"],
         built_time=datetime(2022, 1, 1),
         release_time=datetime(2022, 1, 2),
         valid_until_time=datetime(2022, 1, 3),
+        standard=["ISO"],
         purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH],
         package_version="1:23a_bc",
         download_location="https://downloadlocation",
@@ -31,9 +34,12 @@ def test_correct_initialization(creation_information):
     assert package.creation_info == creation_information
     assert package.name == "Test package"
     assert package.content_identifier == "https://any.uri"
+    assert package.originated_by == ["https://namespace.test#originator"]
+    assert package.supplied_by == ["https://namespace.test#supplier"]
     assert package.built_time == datetime(2022, 1, 1)
     assert package.release_time == datetime(2022, 1, 2)
     assert package.valid_until_time == datetime(2022, 1, 3)
+    assert package.standard == ["ISO"]
     assert package.purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.PATCH]
     assert package.package_version == "1:23a_bc"
     assert package.download_location == "https://downloadlocation"

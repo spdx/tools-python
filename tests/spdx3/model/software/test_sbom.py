@@ -13,25 +13,25 @@ def test_correct_initialization(creation_information):
     sbom = Sbom(
         "SPDXRef-Sbom",
         creation_information,
-        elements=["spdx_id1", "spdx_id2"],
-        root_elements=["spdx_id3"],
+        element=["spdx_id1", "spdx_id2"],
+        root_element=["spdx_id3"],
         sbom_type=[SBOMType.DESIGN],
     )
 
     assert sbom.spdx_id == "SPDXRef-Sbom"
     assert sbom.creation_info == creation_information
-    assert sbom.elements == ["spdx_id1", "spdx_id2"]
-    assert sbom.root_elements == ["spdx_id3"]
+    assert sbom.element == ["spdx_id1", "spdx_id2"]
+    assert sbom.root_element == ["spdx_id3"]
     assert sbom.sbom_type == [SBOMType.DESIGN]
 
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        Sbom(2, {"creation_info": [3, 4, 5]}, elements=[], root_elements=[])
+        Sbom(2, {"creation_info": [3, 4, 5]}, element=[], root_element=[])
 
     assert err.value.args[0] == [
         'SetterError Sbom: type of argument "spdx_id" must be str; got int instead: 2',
         'SetterError Sbom: type of argument "creation_info" must be '
-        "spdx_tools.spdx3.model.creation_information.CreationInformation; got dict instead: "
-        "{'creation_info': [3, 4, 5]}",
+        "spdx_tools.spdx3.model.creation_information.CreationInformation; got dict "
+        "instead: {'creation_info': [3, 4, 5]}",
     ]

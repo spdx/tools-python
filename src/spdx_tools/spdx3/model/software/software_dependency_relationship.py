@@ -44,8 +44,8 @@ class SoftwareDependencyRelationship(LifecycleScopedRelationship):
         spdx_id: str,
         creation_info: CreationInformation,
         from_element: str,
-        to: List[str],
         relationship_type: RelationshipType,
+        to: List[str] = None,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
@@ -61,6 +61,7 @@ class SoftwareDependencyRelationship(LifecycleScopedRelationship):
         software_linkage: Optional[SoftwareDependencyLinkType] = None,
         conditionality: Optional[DependencyConditionalityType] = None,
     ):
+        to = [] if to is None else to
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
