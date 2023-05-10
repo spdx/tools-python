@@ -15,7 +15,7 @@ def test_correct_initialization(creation_information):
         creation_information,
         AnnotationType.OTHER,
         "spdx_id1",
-        content_type="mediaType",
+        content_type=["mediaType"],
         statement="This is a statement",
     )
 
@@ -23,7 +23,7 @@ def test_correct_initialization(creation_information):
     assert annotation.creation_info == creation_information
     assert annotation.annotation_type == AnnotationType.OTHER
     assert annotation.subject == "spdx_id1"
-    assert annotation.content_type == "mediaType"
+    assert annotation.content_type == ["mediaType"]
     assert annotation.statement == "This is a statement"
 
 
@@ -43,8 +43,7 @@ def test_invalid_initialization(creation_information):
         'SetterError Annotation: type of argument "annotation_type" must be '
         "spdx_tools.spdx3.model.annotation.AnnotationType; got str instead: REVIEW",
         'SetterError Annotation: type of argument "subject" must be str; got dict ' "instead: {'element': 1}",
-        'SetterError Annotation: type of argument "content_type" must be one of (str, '
-        "NoneType); got int instead: 4",
+        'SetterError Annotation: type of argument "content_type" must be a list; got ' "int instead: 4",
         'SetterError Annotation: type of argument "statement" must be one of (str, '
         "NoneType); got list instead: ['some statements']",
     ]

@@ -20,8 +20,8 @@ def test_correct_initialization(creation_information):
         "SPDXRef-Relationship",
         creation_information,
         "spdx_id1",
-        ["spdx_id2", "spdx_id3"],
         RelationshipType.DESCRIBES,
+        ["spdx_id2", "spdx_id3"],
         completeness=RelationshipCompleteness.NOASSERTION,
         start_time=datetime(11, 11, 11),
         end_time=datetime(12, 12, 12),
@@ -46,8 +46,8 @@ def test_invalid_initialization(creation_information):
             "SPDXRef-Relationship",
             creation_information,
             "spdx_id1",
-            42,
             RelationshipType.DESCRIBES,
+            42,
         )
 
     assert err.value.args[0] == [

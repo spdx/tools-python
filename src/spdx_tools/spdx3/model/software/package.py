@@ -32,10 +32,12 @@ class Package(SoftwareArtifact):
         external_references: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
-        originated_by: Optional[str] = None,
+        originated_by: List[str] = None,
+        supplied_by: List[str] = None,
         built_time: Optional[datetime] = None,
         release_time: Optional[datetime] = None,
         valid_until_time: Optional[datetime] = None,
+        standard: List[str] = None,
         content_identifier: Optional[str] = None,
         purpose: List[SoftwarePurpose] = None,
         concluded_license: Optional[LicenseField] = None,
@@ -51,5 +53,8 @@ class Package(SoftwareArtifact):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
+        originated_by = [] if originated_by is None else originated_by
+        supplied_by = [] if supplied_by is None else supplied_by
+        standard = [] if standard is None else standard
         purpose = [] if purpose is None else purpose
         check_types_and_set_values(self, locals())

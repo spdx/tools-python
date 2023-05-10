@@ -37,7 +37,9 @@ def bump_package(
     # package.supplier -> Relationship, suppliedBy?
     print_missing_conversion("package2.supplier", 0, "https://github.com/spdx/spdx-3-model/issues/113")
     if isinstance(spdx2_package.originator, Spdx2_Actor):
-        originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information, document_namespace)
+        originated_by_spdx_id = [
+            bump_actor(spdx2_package.originator, payload, creation_information, document_namespace)
+        ]
     else:
         originated_by_spdx_id = None
     # package.files_analyzed  -> ?

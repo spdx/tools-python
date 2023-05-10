@@ -15,8 +15,8 @@ def test_correct_initialization(creation_information):
         "SPDXRef-Relationship",
         creation_information,
         "spdx_id1",
-        ["spdx_id2", "spdx_id3"],
         RelationshipType.DESCRIBES,
+        ["spdx_id2", "spdx_id3"],
         completeness=RelationshipCompleteness.NOASSERTION,
         start_time=datetime(11, 11, 11),
         end_time=datetime(12, 12, 12),
@@ -35,7 +35,7 @@ def test_correct_initialization(creation_information):
 @mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
 def test_invalid_initialization(creation_information):
     with pytest.raises(TypeError) as err:
-        Relationship("SPDXRef-Relationship", creation_information, 42, 5, "Relationshiptype", completeness=True)
+        Relationship("SPDXRef-Relationship", creation_information, 42, "Relationshiptype", 5, completeness=True)
 
     assert err.value.args[0] == [
         'SetterError Relationship: type of argument "from_element" must be ' "str; got int instead: 42",

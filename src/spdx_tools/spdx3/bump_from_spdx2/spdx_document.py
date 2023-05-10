@@ -38,6 +38,6 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
     for counter, spdx2_annotation in enumerate(document.annotations):
         bump_annotation(spdx2_annotation, payload, creation_info, document_namespace, counter)
 
-    spdx_document.elements = [spdx_id for spdx_id in payload.get_full_map() if spdx_id != spdx_document.spdx_id]
+    spdx_document.element = [spdx_id for spdx_id in payload.get_full_map() if spdx_id != spdx_document.spdx_id]
 
     return payload
