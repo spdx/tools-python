@@ -28,8 +28,7 @@ def test_invalid_initialization():
         Tool(12, 345)
 
     assert err.value.args[0] == [
-        'SetterError Tool: type of argument "spdx_id" must be str; got int instead: ' "12",
+        'SetterError Tool: type of argument "spdx_id" must be str; got int instead: 12',
         'SetterError Tool: type of argument "creation_info" must be '
-        "spdx_tools.spdx3.model.creation_information.CreationInformation; got int "
-        "instead: 345",
+        "spdx_tools.spdx3.model.creation_information.CreationInformation; got int instead: 345",
     ]

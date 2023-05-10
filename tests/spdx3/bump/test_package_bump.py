@@ -17,19 +17,25 @@ from tests.spdx.fixtures import actor_fixture, package_fixture
 
 
 @pytest.mark.parametrize(
-    "originator, expected_originator",
+    "originator, expected_originator, supplier, expected_supplier",
     [
-        (actor_fixture(name="originatorName"), ["https://doc.namespace#SPDXRef-Actor-originatorName-some@mail.com"]),
-        (None, []),
-        (SpdxNoAssertion(), []),
+        (
+            actor_fixture(name="originatorName"),
+            ["https://doc.namespace#SPDXRef-Actor-originatorName-some@mail.com"],
+            actor_fixture(name="supplierName"),
+            ["https://doc.namespace#SPDXRef-Actor-supplierName-some@mail.com"],
+        ),
+        (None, [], None, []),
+        (SpdxNoAssertion(), [], SpdxNoAssertion(), []),
     ],
 )
 @mock.patch("spdx_tools.spdx3.model.CreationInformation")
-def test_bump_package(creation_information, originator, expected_originator):
+def test_bump_package(creation_information, originator, expected_originator, supplier, expected_supplier):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
         originator=originator,
+        supplier=supplier,
         external_references=[
             ExternalPackageRef(
                 ExternalPackageRefCategory.SECURITY, "advisory", "advisory_locator", "advisory_comment"
@@ -54,6 +60,7 @@ def test_bump_package(creation_information, originator, expected_originator):
     assert package.download_location == spdx2_package.download_location
     assert package.package_version == spdx2_package.version
     assert package.originated_by == expected_originator
+    assert package.supplied_by == expected_supplier
     assert package.homepage == spdx2_package.homepage
     assert package.source_info == spdx2_package.source_info
     assert package.built_time == spdx2_package.built_date
