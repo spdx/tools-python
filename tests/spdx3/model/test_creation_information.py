@@ -6,19 +6,25 @@ from datetime import datetime
 import pytest
 from semantic_version import Version
 
-from spdx_tools.spdx3.model import CreationInformation
+from spdx_tools.spdx3.model import CreationInformation, ProfileIdentifier
 
 
 def test_correct_initialization():
     creation_information = CreationInformation(
-        Version("3.0.0"), datetime(2023, 1, 11, 16, 21), [], [], ["core", "software"], "CC0", "some comment"
+        Version("3.0.0"),
+        datetime(2023, 1, 11, 16, 21),
+        [],
+        [],
+        [ProfileIdentifier.CORE, ProfileIdentifier.SOFTWARE],
+        "CC0",
+        "some comment",
     )
 
     assert creation_information.spec_version == Version("3.0.0")
     assert creation_information.created == datetime(2023, 1, 11, 16, 21)
     assert creation_information.created_by == []
     assert creation_information.created_using == []
-    assert creation_information.profile == ["core", "software"]
+    assert creation_information.profile == [ProfileIdentifier.CORE, ProfileIdentifier.SOFTWARE]
     assert creation_information.data_license == "CC0"
     assert creation_information.comment == "some comment"
 

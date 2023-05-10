@@ -21,8 +21,8 @@ def test_relationship_bump(creation_info):
         f"{document_namespace}#SPDXRef-Relationship-1",
         creation_info,
         spdx2_relationship.spdx_element_id,
-        [spdx2_relationship.related_spdx_element_id],
         RelationshipType.DESCRIBES,
+        [spdx2_relationship.related_spdx_element_id],
         comment=spdx2_relationship.comment,
     )
 
@@ -41,8 +41,8 @@ def test_relationships_bump(creation_info):
         f"{document_namespace}#SPDXRef-Relationship-1",
         creation_info,
         relationships[0].spdx_element_id,
-        [relationships[0].related_spdx_element_id, relationships[1].related_spdx_element_id],
         RelationshipType.DESCRIBES,
+        [relationships[0].related_spdx_element_id, relationships[1].related_spdx_element_id],
     )
 
 
@@ -65,8 +65,8 @@ def test_relationships_bump_with_setting_completeness(creation_info):
         f"{document_namespace}#SPDXRef-Relationship-0",
         creation_info,
         relationships[0].spdx_element_id,
-        [],
         RelationshipType.DESCRIBES,
+        [],
         comment=relationships[0].comment,
         completeness=RelationshipCompleteness.NOASSERTION,
     )
@@ -74,16 +74,16 @@ def test_relationships_bump_with_setting_completeness(creation_info):
         f"{document_namespace}#SPDXRef-Relationship-1",
         creation_info,
         relationships[1].spdx_element_id,
-        [relationships[1].related_spdx_element_id],
         RelationshipType.DESCRIBES,
+        [relationships[1].related_spdx_element_id],
         comment=relationships[1].comment,
     )
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-2") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-2",
         creation_info,
         relationships[2].spdx_element_id,
-        [],
         RelationshipType.SPECIFICATION_FOR,
+        [],
         completeness=RelationshipCompleteness.COMPLETE,
     )
 

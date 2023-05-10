@@ -1,12 +1,14 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from datetime import datetime
 from unittest import mock
 
 import pytest
 
 from spdx_tools.spdx3.model.ai import AIPackage
 from spdx_tools.spdx3.model.ai.ai_package import SafetyRiskAssessmentType
+from spdx_tools.spdx3.model.software import SoftwarePurpose
 
 
 @mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
@@ -15,6 +17,11 @@ def test_correct_initialization(creation_information):
         "some_spdx_id",
         creation_information,
         "AI Package name",
+        ["https://namespace.test#supplier"],
+        "https://download.test",
+        "1.2:rc2",
+        [SoftwarePurpose.SOURCE],
+        datetime(12, 5, 23, 11),
         energy_consumption="energy consumption",
         standard_compliance=["some standard"],
         limitation="limitation",
@@ -22,8 +29,8 @@ def test_correct_initialization(creation_information):
         information_about_training="training info",
         information_about_application="app info",
         hyperparameter={"param": "value"},
-        model_data_preprocessing="preprocessing steps",
-        model_explainability="mechanism",
+        model_data_preprocessing=["preprocessing steps"],
+        model_explainability=["mechanism"],
         sensitive_personal_information=True,
         metric_decision_threshold={"metric1": "threshold", "metric2": None},
         metric={"metric1": "value1", "metric2": None},
@@ -32,6 +39,11 @@ def test_correct_initialization(creation_information):
         safety_risk_assessment=SafetyRiskAssessmentType.HIGH,
     )
 
+    assert ai_package.supplied_by == ["https://namespace.test#supplier"]
+    assert ai_package.download_location == "https://download.test"
+    assert ai_package.package_version == "1.2:rc2"
+    assert ai_package.purpose == [SoftwarePurpose.SOURCE]
+    assert ai_package.release_time == datetime(12, 5, 23, 11)
     assert ai_package.energy_consumption == "energy consumption"
     assert ai_package.standard_compliance == ["some standard"]
     assert ai_package.limitation == "limitation"
@@ -39,8 +51,8 @@ def test_correct_initialization(creation_information):
     assert ai_package.information_about_training == "training info"
     assert ai_package.information_about_application == "app info"
     assert ai_package.hyperparameter == {"param": "value"}
-    assert ai_package.model_data_preprocessing == "preprocessing steps"
-    assert ai_package.model_explainability == "mechanism"
+    assert ai_package.model_data_preprocessing == ["preprocessing steps"]
+    assert ai_package.model_explainability == ["mechanism"]
     assert ai_package.sensitive_personal_information
     assert ai_package.metric_decision_threshold == {"metric1": "threshold", "metric2": None}
     assert ai_package.metric == {"metric1": "value1", "metric2": None}
@@ -56,6 +68,11 @@ def test_invalid_initialization(creation_information):
             "some_spdx_id",
             creation_information,
             "AI Package name",
+            ["https://namespace.test#supplier"],
+            "https://download.test",
+            "1.2:rc2",
+            [SoftwarePurpose.SOURCE],
+            datetime(12, 5, 23, 11),
             metric={"metric1": "value", "metric2": 250},
         )
 

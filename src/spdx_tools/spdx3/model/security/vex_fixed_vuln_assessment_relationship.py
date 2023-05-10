@@ -7,7 +7,6 @@ from typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx3.model import (
-    Agent,
     CreationInformation,
     ExternalIdentifier,
     ExternalReference,
@@ -40,7 +39,7 @@ class VexFixedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         end_time: Optional[datetime] = None,
         assessed_element: Optional[str] = None,
         published_time: Optional[datetime] = None,
-        supplied_by: Optional[Agent] = None,
+        supplied_by: Optional[str] = None,
         modified_time: Optional[datetime] = None,
         withdrawn_time: Optional[datetime] = None,
         vex_version: Optional[str] = None,

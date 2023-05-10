@@ -7,25 +7,25 @@ from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_pr
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx3.model import (
     CreationInformation,
+    ElementCollection,
     ExternalIdentifier,
     ExternalMap,
     ExternalReference,
     IntegrityMethod,
     NamespaceMap,
-    SpdxCollection,
 )
 
 
 @dataclass_with_properties
-class Bundle(SpdxCollection):
+class Bundle(ElementCollection):
     context: Optional[str] = None
 
     def __init__(
         self,
         spdx_id: str,
         creation_info: CreationInformation,
-        elements: List[str],
-        root_elements: List[str],
+        element: List[str],
+        root_element: List[str],
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,

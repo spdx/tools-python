@@ -29,8 +29,8 @@ class AIPackage(Package):
     information_about_training: Optional[str] = None
     information_about_application: Optional[str] = None
     hyperparameter: Dict[str, Optional[str]] = field(default_factory=dict)
-    model_data_preprocessing: Optional[str] = None
-    model_explainability: Optional[str] = None
+    model_data_preprocessing: List[str] = field(default_factory=list)
+    model_explainability: List[str] = field(default_factory=list)
     sensitive_personal_information: Optional[bool] = None
     metric_decision_threshold: Dict[str, Optional[str]] = field(default_factory=dict)
     metric: Dict[str, Optional[str]] = field(default_factory=dict)
@@ -43,6 +43,11 @@ class AIPackage(Package):
         spdx_id: str,
         creation_info: CreationInformation,
         name: str,
+        supplied_by: List[str],
+        download_location: str,
+        package_version: str,
+        purpose: List[SoftwarePurpose],
+        release_time: datetime,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
@@ -50,18 +55,15 @@ class AIPackage(Package):
         external_references: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
-        originated_by: Optional[str] = None,
+        originated_by: List[str] = None,
         built_time: Optional[datetime] = None,
-        release_time: Optional[datetime] = None,
         valid_until_time: Optional[datetime] = None,
+        standard: List[str] = None,
         content_identifier: Optional[str] = None,
-        purpose: List[SoftwarePurpose] = None,
         concluded_license: Optional[LicenseField] = None,
         declared_license: Optional[LicenseField] = None,
         copyright_text: Optional[str] = None,
         attribution_text: Optional[str] = None,
-        package_version: Optional[str] = None,
-        download_location: Optional[str] = None,
         package_url: Optional[str] = None,
         homepage: Optional[str] = None,
         source_info: Optional[str] = None,
@@ -72,8 +74,8 @@ class AIPackage(Package):
         information_about_training: Optional[str] = None,
         information_about_application: Optional[str] = None,
         hyperparameter: Dict[str, Optional[str]] = None,
-        model_data_preprocessing: Optional[str] = None,
-        model_explainability: Optional[str] = None,
+        model_data_preprocessing: List[str] = None,
+        model_explainability: List[str] = None,
         sensitive_personal_information: Optional[bool] = None,
         metric_decision_threshold: Dict[str, Optional[str]] = None,
         metric: Dict[str, Optional[str]] = None,
@@ -84,10 +86,13 @@ class AIPackage(Package):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
-        purpose = [] if purpose is None else purpose
+        originated_by = [] if originated_by is None else originated_by
+        standard = [] if standard is None else standard
         standard_compliance = [] if standard_compliance is None else standard_compliance
         type_of_model = [] if type_of_model is None else type_of_model
         hyperparameter = {} if hyperparameter is None else hyperparameter
+        model_data_preprocessing = [] if model_data_preprocessing is None else model_data_preprocessing
+        model_explainability = [] if model_explainability is None else model_explainability
         metric_decision_threshold = {} if metric_decision_threshold is None else metric_decision_threshold
         metric = {} if metric is None else metric
         domain = [] if domain is None else domain
