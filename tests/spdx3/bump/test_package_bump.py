@@ -19,9 +19,9 @@ from tests.spdx.fixtures import actor_fixture, package_fixture
 @pytest.mark.parametrize(
     "originator, expected_originator",
     [
-        (actor_fixture(name="originatorName"), "https://doc.namespace#SPDXRef-Actor-originatorName-some@mail.com"),
-        (None, None),
-        (SpdxNoAssertion(), None),
+        (actor_fixture(name="originatorName"), ["https://doc.namespace#SPDXRef-Actor-originatorName-some@mail.com"]),
+        (None, []),
+        (SpdxNoAssertion(), []),
     ],
 )
 @mock.patch("spdx_tools.spdx3.model.CreationInformation")

@@ -10,11 +10,11 @@ from spdx_tools.spdx3.model import Element, ExternalMap, NamespaceMap
 
 
 @dataclass_with_properties
-class SpdxCollection(Element):
+class ElementCollection(Element):
     # due to the inheritance we need to make all fields non-default in the __annotation__,
     # the __init__ method still raises an error if required fields are not set
-    elements: List[str] = field(default_factory=list)
-    root_elements: List[str] = field(default_factory=list)
+    element: List[str] = field(default_factory=list)
+    root_element: List[str] = field(default_factory=list)
     namespaces: List[NamespaceMap] = field(default_factory=list)
     imports: List[ExternalMap] = field(default_factory=list)
 

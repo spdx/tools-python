@@ -8,6 +8,7 @@ from semantic_version import Version
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
+from spdx_tools.spdx3.model import ProfileIdentifier
 
 
 @dataclass_with_properties
@@ -16,7 +17,7 @@ class CreationInformation:
     created: datetime
     created_by: List[str]  # SPDXID of Agents
     created_using: List[str]  # SPDXID of Tools
-    profile: List[str]  # or create an Enum for ProfileIdentifier?
+    profile: List[ProfileIdentifier]
     data_license: str
     comment: Optional[str] = None
 
@@ -26,7 +27,7 @@ class CreationInformation:
         created: datetime,
         created_by: List[str],
         created_using: List[str],
-        profile: List[str],
+        profile: List[ProfileIdentifier],
         data_license: str = "CC0",
         comment: Optional[str] = None,
     ):
