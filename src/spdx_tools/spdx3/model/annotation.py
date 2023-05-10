@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from dataclasses import field
 from enum import Enum, auto
 from typing import List, Optional
 
@@ -18,7 +19,7 @@ class AnnotationType(Enum):
 class Annotation(Element):
     annotation_type: AnnotationType = None
     subject: str = None
-    content_type: Optional[str] = None  # placeholder for MediaType
+    content_type: List[str] = field(default_factory=list)  # placeholder for MediaType
     statement: Optional[str] = None
 
     def __init__(
@@ -35,10 +36,11 @@ class Annotation(Element):
         external_references: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: None = None,
-        content_type: Optional[str] = None,
+        content_type: List[str] = None,
         statement: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
+        content_type = [] if content_type is None else content_type
         check_types_and_set_values(self, locals())

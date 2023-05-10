@@ -1,6 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from dataclasses import field
 from datetime import datetime
 from enum import Enum, auto
 from typing import List, Optional
@@ -87,7 +88,7 @@ class Relationship(Element):
     # due to the inheritance we need to make all fields non-default in the __annotation__,
     # the __init__ method still raises an error if required fields are not set
     from_element: str = None
-    to: List[str] = None
+    to: List[str] = field(default_factory=list)
     relationship_type: RelationshipType = None
     completeness: Optional[RelationshipCompleteness] = None
     start_time: Optional[datetime] = None
@@ -98,8 +99,8 @@ class Relationship(Element):
         spdx_id: str,
         creation_info: CreationInformation,
         from_element: str,
-        to: List[str],
         relationship_type: RelationshipType,
+        to: List[str] = None,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
@@ -112,6 +113,7 @@ class Relationship(Element):
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
     ):
+        to = [] if to is None else to
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
