@@ -5,22 +5,30 @@ from datetime import datetime
 
 from semantic_version import Version
 
-from spdx_tools.spdx3.model.agent import Agent
-from spdx_tools.spdx3.model.annotation import Annotation, AnnotationType
-from spdx_tools.spdx3.model.bom import Bom
-from spdx_tools.spdx3.model.bundle import Bundle
-from spdx_tools.spdx3.model.creation_information import CreationInformation
-from spdx_tools.spdx3.model.external_identifier import ExternalIdentifier, ExternalIdentifierType
-from spdx_tools.spdx3.model.external_map import ExternalMap
-from spdx_tools.spdx3.model.external_reference import ExternalReference, ExternalReferenceType
-from spdx_tools.spdx3.model.hash import Hash, HashAlgorithm
-from spdx_tools.spdx3.model.namespace_map import NamespaceMap
-from spdx_tools.spdx3.model.organization import Organization
-from spdx_tools.spdx3.model.person import Person
-from spdx_tools.spdx3.model.relationship import Relationship, RelationshipCompleteness, RelationshipType
-from spdx_tools.spdx3.model.software_agent import SoftwareAgent
-from spdx_tools.spdx3.model.spdx_document import SpdxDocument
-from spdx_tools.spdx3.model.tool import Tool
+from spdx_tools.spdx3.model import (
+    Agent,
+    Annotation,
+    AnnotationType,
+    Bom,
+    Bundle,
+    CreationInformation,
+    ExternalIdentifier,
+    ExternalIdentifierType,
+    ExternalMap,
+    ExternalReference,
+    ExternalReferenceType,
+    Hash,
+    HashAlgorithm,
+    NamespaceMap,
+    Organization,
+    Person,
+    Relationship,
+    RelationshipCompleteness,
+    RelationshipType,
+    SoftwareAgent,
+    SpdxDocument,
+    Tool,
+)
 
 """Utility methods to create data model instances. All properties have valid defaults, so they don't need to be
 specified unless relevant for the test."""
@@ -29,12 +37,17 @@ specified unless relevant for the test."""
 def creation_info_fixture(
     spec_version=Version("3.0.0"),
     created=datetime(2022, 12, 1),
-    created_by=["creatorCreationInfo"],
-    created_using=["createdCreationInfo"],
-    profile=["profileCreationInfo"],
+    created_by=None,
+    created_using=None,
+    profile=None,
     data_license="CC0-1.0",
-    comment="commentCreationInfo",
+    comment="creationInfoComment",
 ) -> CreationInformation:
+    created_by = ["https://spdx.test/tools-python/creation_info_created_by"] if created_by is None else created_by
+    created_using = (
+        ["https://spdx.test/tools-python/creation_info_created_using"] if created_using is None else created_using
+    )
+    profile = ["core"] if profile is None else profile  # TODO: this should use the Enum
     return CreationInformation(
         spec_version=spec_version,
         created=created,
@@ -47,53 +60,76 @@ def creation_info_fixture(
 
 
 def external_identifier_fixture(
-    external_identifier_type=ExternalIdentifierType.OTHER, identifier="identifier_ext_iden", comment="comment_ext_iden"
+    external_identifier_type=ExternalIdentifierType.OTHER,
+    identifier="externalIdentifierIdentifier",
+    comment="externalIdentifierComment",
+    identifier_locator=None,
+    issuing_authority="https://spdx.test/tools-python/external_identifier_issuing_authority",
 ) -> ExternalIdentifier:
-    return ExternalIdentifier(external_identifier_type, identifier, comment)
+    identifier_locator = (
+        ["https://spdx.test/tools-python/external_identifier_identifier_locator"]
+        if identifier_locator is None
+        else identifier_locator
+    )
+    return ExternalIdentifier(
+        external_identifier_type=external_identifier_type,
+        identifier=identifier,
+        comment=comment,
+        identifier_locator=identifier_locator,
+        issuing_authority=issuing_authority,
+    )
 
 
 def external_reference_fixture(
     external_reference_type=ExternalReferenceType.OTHER,
     locator=None,
-    content_type="content_type_exter_ref",
-    comment="comment_exter_ref",
+    content_type="externalReferenceContentType",
+    comment="externalReferenceComment",
 ) -> ExternalReference:
-    locator = ["locator for external reference"] if locator is None else locator
-    return ExternalReference(external_reference_type, locator, content_type, comment)
+    locator = ["org.apache.tomcat:tomcat:9.0.0.M4"] if locator is None else locator
+    return ExternalReference(
+        external_reference_type=external_reference_type, locator=locator, content_type=content_type, comment=comment
+    )
 
 
-def hash_fixture(algorithm=HashAlgorithm.SHA1, hash_value="hash_value", comment="comment_hash_algorithm") -> Hash:
+def hash_fixture(
+    algorithm=HashAlgorithm.SHA1,
+    hash_value="71c4025dd9897b364f3ebbb42c484ff43d00791c",
+    comment="hashComment",
+) -> Hash:
     return Hash(algorithm=algorithm, hash_value=hash_value, comment=comment)
 
 
 def external_map_fixture(
-    external_id="https://spdx.test/tools-python/ExternalMapFixture",
+    external_id="https://spdx.test/tools-python/external_map_external_id",
     verified_using=None,
-    location_hint="https://spdx.test/tools-python/location_hint_ExternalMap",
+    location_hint="https://spdx.test/tools-python/external_map_location_hint",
 ) -> ExternalMap:
     verified_using = [hash_fixture()] if verified_using is None else verified_using
     return ExternalMap(external_id=external_id, verified_using=verified_using, location_hint=location_hint)
 
 
-def namespace_map_fixture(prefix="prefix_namespace_map", namespace="namespace_namespace_map") -> NamespaceMap:
+def namespace_map_fixture(
+    prefix="namespaceMapPrefix", namespace="https://spdx.test/tools-python/namespace_map_namespace"
+) -> NamespaceMap:
     return NamespaceMap(prefix=prefix, namespace=namespace)
 
 
 def agent_fixture(
-    spdx_id="https://spdx.test/tools-python/AgentFixture",
+    spdx_id="https://spdx.test/tools-python/agent_fixture",
     creation_info=creation_info_fixture(),
-    name="nameAgent",
-    summary="summaryAgent",
-    description="descriptionAgent",
-    comment="commentAgent",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    name="agentName",
+    summary="agentSummary",
+    description="agentDescription",
+    comment="agentComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
 ) -> Agent:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
     return Agent(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -109,24 +145,24 @@ def agent_fixture(
 
 
 def annotation_fixture(
-    spdx_id="https://spdx.test/tools-python/AnnotationFixture",
+    spdx_id="https://spdx.test/tools-python/annotation_fixture",
     creation_info=creation_info_fixture(),
     annotation_type=AnnotationType.OTHER,
-    subject="subject_annotation",
-    name="name_annotation",
-    summary="summary_annotation",
-    description="description_annotation",
-    comment="comment_annotation",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    subject="https://spdx.test/tools-python/annotation_subject",
+    name="annotationName",
+    summary="annotationSummary",
+    description="annotationDescription",
+    comment="annotationComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
-    content_type="content_type_annotation",
-    statement="statement_annotation",
+    content_type="annotationContentType",
+    statement="annotationStatement",
 ) -> Annotation:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
     return Annotation(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -146,27 +182,29 @@ def annotation_fixture(
 
 
 def bom_fixture(
-    spdx_id="https://spdx.test/tools-python/BomFixture",
+    spdx_id="https://spdx.test/tools-python/bom_fixture",
     creation_info=creation_info_fixture(),
-    elements=["elements_bom"],
-    root_elements=["root_elements_bom"],
-    name="name_bom",
-    summary="summary_bom",
-    description="description_bom",
-    comment="comment_bom",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    elements=None,
+    root_elements=None,
+    name="bomName",
+    summary="bomSummary",
+    description="bomDescription",
+    comment="bomComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
-    namespaces=[namespace_map_fixture()],
-    imports=[external_map_fixture()],
-    context=None,
+    namespaces=None,
+    imports=None,
+    context="bomContext",
 ) -> Bom:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
-    namespaces = [] if namespaces is None else namespaces
-    imports = [] if imports is None else imports
+    elements = ["https://spdx.test/tools-python/bom_element"] if elements is None else elements
+    root_elements = ["https://spdx.test/tools-python/bom_root_element"] if root_elements is None else root_elements
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
+    namespaces = [namespace_map_fixture()] if namespaces is None else namespaces
+    imports = [external_map_fixture()] if imports is None else imports
     return Bom(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -187,27 +225,29 @@ def bom_fixture(
 
 
 def bundle_fixture(
-    spdx_id="https://spdx.test/tools-python/BundleFixture",
+    spdx_id="https://spdx.test/tools-python/bundle_fixture",
     creation_info=creation_info_fixture(),
-    elements=["elements_bundle"],
-    root_elements=["root_elements_bundle"],
-    name="name_bundle",
-    summary="summary_bundle",
-    description="description_bundle",
-    comment="comment_bundle",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    elements=None,
+    root_elements=None,
+    name="bundleName",
+    summary="bundleSummary",
+    description="bundleDescription",
+    comment="bundleComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
-    namespaces=[namespace_map_fixture()],
-    imports=[external_map_fixture()],
-    context="context_bundle",
+    namespaces=None,
+    imports=None,
+    context="bundleContext",
 ) -> Bundle:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
-    namespaces = [] if namespaces is None else namespaces
-    imports = [] if imports is None else imports
+    elements = ["https://spdx.test/tools-python/bundle_element"] if elements is None else elements
+    root_elements = ["https://spdx.test/tools-python/bundle_root_element"] if root_elements is None else root_elements
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
+    namespaces = [namespace_map_fixture()] if namespaces is None else namespaces
+    imports = [external_map_fixture()] if imports is None else imports
     return Bundle(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -228,20 +268,20 @@ def bundle_fixture(
 
 
 def organization_fixture(
-    spdx_id="https://spdx.test/tools-python/OrganizationFixture",
+    spdx_id="https://spdx.test/tools-python/organization_fixture",
     creation_info=creation_info_fixture(),
-    name="name_organization",
-    summary="summary_organization",
-    description="description_organization",
-    comment="comment_organization",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    name="organizationName",
+    summary="organizationSummary",
+    description="organizationDescription",
+    comment="organizationComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
 ) -> Organization:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
     return Organization(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -257,20 +297,20 @@ def organization_fixture(
 
 
 def person_fixture(
-    spdx_id="https://spdx.test/tools-python/PersonFixture",
+    spdx_id="https://spdx.test/tools-python/person_fixture",
     creation_info=creation_info_fixture(),
-    name="name_person",
-    summary="summary_person",
-    description="description_person",
-    comment="comment_person",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    name="personName",
+    summary="personSummary",
+    description="personDescription",
+    comment="personComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
 ) -> Person:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
     return Person(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -286,24 +326,25 @@ def person_fixture(
 
 
 def relationship_fixture(
-    spdx_id="https://spdx.test/tools-python/RelationshipFixture",
+    spdx_id="https://spdx.test/tools-python/relationship_fixture",
     creation_info=creation_info_fixture(),
-    from_element="from_element_relationship",
-    to=["to_relationship"],
+    from_element="https://spdx.test/tools-python/relationship_from_element",
+    to=None,
     relationship_type=RelationshipType.OTHER,
-    name="name_relationship",
-    summary="summary_relationship",
-    description="description_relationship",
-    comment="comment_relationship",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    name="relationshipName",
+    summary="relationshipSummary",
+    description="relationshipDescription",
+    comment="relationshipComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
-    completeness=RelationshipCompleteness.UNKNOWN,
+    completeness=RelationshipCompleteness.COMPLETE,
 ) -> Relationship:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
+    to = ["https://spdx.test/tools-python/relationship_to"] if to is None else to
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
     return Relationship(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -323,20 +364,20 @@ def relationship_fixture(
 
 
 def software_agent_fixture(
-    spdx_id="https://spdx.test/tools-python/SoftwareAgentFixture",
+    spdx_id="https://spdx.test/tools-python/software_agent_fixture",
     creation_info=creation_info_fixture(),
-    name="name_software_agent",
-    summary="summary_software_agent",
-    description="description_software_agent",
-    comment="comment_software_agent",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    name="softwareAgentName",
+    summary="softwareAgentSummary",
+    description="softwareAgentDescription",
+    comment="softwareAgentComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
 ) -> SoftwareAgent:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
     return SoftwareAgent(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -352,27 +393,31 @@ def software_agent_fixture(
 
 
 def spdx_document_fixture(
-    spdx_id="https://spdx.test/tools-python/SpdxDocumentFixture",
+    spdx_id="https://spdx.test/tools-python/spdx_document_fixture",
     creation_info=creation_info_fixture(),
-    name="name_spdx_document",
-    elements=["elements_spdx_document"],
-    root_elements=["root_elements_spdx_document"],
-    summary="summary_spdx_document",
-    description="description_spdx_document",
-    comment="comment_spdx_document",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    name="spdxDocumentName",
+    elements=None,
+    root_elements=None,
+    summary="spdxDocumentSummary",
+    description="spdxDocumentDescription",
+    comment="spdxDocumentComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
-    namespaces=[namespace_map_fixture()],
-    imports=[external_map_fixture()],
+    namespaces=None,
+    imports=None,
     context="context_spdx_document",
 ) -> SpdxDocument:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
-    namespaces = [] if namespaces is None else namespaces
-    imports = [] if imports is None else imports
+    elements = ["https://spdx.test/tools-python/spdx_document_element"] if elements is None else elements
+    root_elements = (
+        ["https://spdx.test/tools-python/spdx_document_root_element"] if root_elements is None else root_elements
+    )
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
+    namespaces = [namespace_map_fixture()] if namespaces is None else namespaces
+    imports = [external_map_fixture()] if imports is None else imports
     return SpdxDocument(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -393,20 +438,20 @@ def spdx_document_fixture(
 
 
 def tool_fixture(
-    spdx_id="https://spdx.test/tools-python/ToolFixture",
+    spdx_id="https://spdx.test/tools-python/tool_fixture",
     creation_info=creation_info_fixture(),
-    name="name_tool",
-    summary="summary_tool",
-    description="description_tool",
-    comment="comment_tool",
-    verified_using=[hash_fixture()],
-    external_references=[external_reference_fixture()],
-    external_identifier=[external_identifier_fixture()],
+    name="toolName",
+    summary="toolSummary",
+    description="toolDescription",
+    comment="toolComment",
+    verified_using=None,
+    external_references=None,
+    external_identifier=None,
     extension=None,
 ) -> Tool:
-    verified_using = [] if verified_using is None else verified_using
-    external_references = [] if external_references is None else external_references
-    external_identifier = [] if external_identifier is None else external_identifier
+    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    external_references = [external_reference_fixture()] if external_references is None else external_references
+    external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
     return Tool(
         spdx_id=spdx_id,
         creation_info=creation_info,
