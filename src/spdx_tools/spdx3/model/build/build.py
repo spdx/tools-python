@@ -41,7 +41,7 @@ class Build(Element):
         verified_using: List[IntegrityMethod] = None,
         external_references: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: None = None,
+        extension: Optional[str] = None,
         build_id: Optional[str] = None,
         config_source_entrypoint: List[str] = None,
         config_source_uri: List[str] = None,
