@@ -20,7 +20,7 @@ class Element(ABC):
     verified_using: List[IntegrityMethod] = field(default_factory=list)
     external_references: List[ExternalReference] = field(default_factory=list)
     external_identifier: List[ExternalIdentifier] = field(default_factory=list)
-    extension: None = None  # placeholder for extension
+    extension: Optional[str] = None  # placeholder for extension
 
     @abstractmethod
     def __init__(self):
