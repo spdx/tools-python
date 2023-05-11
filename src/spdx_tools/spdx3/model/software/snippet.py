@@ -28,7 +28,7 @@ class Snippet(SoftwareArtifact):
         verified_using: List[IntegrityMethod] = None,
         external_references: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: None = None,
+        extension: Optional[str] = None,
         originated_by: List[str] = None,
         supplied_by: List[str] = None,
         built_time: Optional[datetime] = None,
