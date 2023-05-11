@@ -22,6 +22,7 @@ from spdx_tools.spdx3.model import (
     NamespaceMap,
     Organization,
     Person,
+    ProfileIdentifier,
     Relationship,
     RelationshipCompleteness,
     RelationshipType,
@@ -47,7 +48,11 @@ def creation_info_fixture(
     created_using = (
         ["https://spdx.test/tools-python/creation_info_created_using"] if created_using is None else created_using
     )
-    profile = ["core"] if profile is None else profile  # TODO: this should use the Enum
+    profile = (
+        [ProfileIdentifier.CORE, ProfileIdentifier.SOFTWARE, ProfileIdentifier.LICENSING]
+        if profile is None
+        else profile
+    )
     return CreationInformation(
         spec_version=spec_version,
         created=created,
@@ -157,12 +162,13 @@ def annotation_fixture(
     external_references=None,
     external_identifier=None,
     extension=None,
-    content_type="annotationContentType",
+    content_type=None,
     statement="annotationStatement",
 ) -> Annotation:
     verified_using = [hash_fixture()] if verified_using is None else verified_using
     external_references = [external_reference_fixture()] if external_references is None else external_references
     external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
+    content_type = ["annotationContent"] if content_type is None else content_type
     return Annotation(
         spdx_id=spdx_id,
         creation_info=creation_info,
@@ -184,8 +190,8 @@ def annotation_fixture(
 def bom_fixture(
     spdx_id="https://spdx.test/tools-python/bom_fixture",
     creation_info=creation_info_fixture(),
-    elements=None,
-    root_elements=None,
+    element=None,
+    root_element=None,
     name="bomName",
     summary="bomSummary",
     description="bomDescription",
@@ -198,8 +204,8 @@ def bom_fixture(
     imports=None,
     context="bomContext",
 ) -> Bom:
-    elements = ["https://spdx.test/tools-python/bom_element"] if elements is None else elements
-    root_elements = ["https://spdx.test/tools-python/bom_root_element"] if root_elements is None else root_elements
+    element = ["https://spdx.test/tools-python/bom_element"] if element is None else element
+    root_element = ["https://spdx.test/tools-python/bom_root_element"] if root_element is None else root_element
     verified_using = [hash_fixture()] if verified_using is None else verified_using
     external_references = [external_reference_fixture()] if external_references is None else external_references
     external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
@@ -208,8 +214,8 @@ def bom_fixture(
     return Bom(
         spdx_id=spdx_id,
         creation_info=creation_info,
-        element=elements,
-        root_element=root_elements,
+        element=element,
+        root_element=root_element,
         name=name,
         summary=summary,
         description=description,
@@ -227,8 +233,8 @@ def bom_fixture(
 def bundle_fixture(
     spdx_id="https://spdx.test/tools-python/bundle_fixture",
     creation_info=creation_info_fixture(),
-    elements=None,
-    root_elements=None,
+    element=None,
+    root_element=None,
     name="bundleName",
     summary="bundleSummary",
     description="bundleDescription",
@@ -241,8 +247,8 @@ def bundle_fixture(
     imports=None,
     context="bundleContext",
 ) -> Bundle:
-    elements = ["https://spdx.test/tools-python/bundle_element"] if elements is None else elements
-    root_elements = ["https://spdx.test/tools-python/bundle_root_element"] if root_elements is None else root_elements
+    element = ["https://spdx.test/tools-python/bundle_element"] if element is None else element
+    root_element = ["https://spdx.test/tools-python/bundle_root_element"] if root_element is None else root_element
     verified_using = [hash_fixture()] if verified_using is None else verified_using
     external_references = [external_reference_fixture()] if external_references is None else external_references
     external_identifier = [external_identifier_fixture()] if external_identifier is None else external_identifier
@@ -251,8 +257,8 @@ def bundle_fixture(
     return Bundle(
         spdx_id=spdx_id,
         creation_info=creation_info,
-        element=elements,
-        root_element=root_elements,
+        element=element,
+        root_element=root_element,
         name=name,
         summary=summary,
         description=description,
@@ -329,8 +335,8 @@ def relationship_fixture(
     spdx_id="https://spdx.test/tools-python/relationship_fixture",
     creation_info=creation_info_fixture(),
     from_element="https://spdx.test/tools-python/relationship_from_element",
-    to=None,
     relationship_type=RelationshipType.OTHER,
+    to=None,
     name="relationshipName",
     summary="relationshipSummary",
     description="relationshipDescription",
@@ -349,8 +355,8 @@ def relationship_fixture(
         spdx_id=spdx_id,
         creation_info=creation_info,
         from_element=from_element,
-        to=to,
         relationship_type=relationship_type,
+        to=to,
         name=name,
         summary=summary,
         description=description,
@@ -396,8 +402,8 @@ def spdx_document_fixture(
     spdx_id="https://spdx.test/tools-python/spdx_document_fixture",
     creation_info=creation_info_fixture(),
     name="spdxDocumentName",
-    elements=None,
-    root_elements=None,
+    element=None,
+    root_element=None,
     summary="spdxDocumentSummary",
     description="spdxDocumentDescription",
     comment="spdxDocumentComment",
@@ -409,9 +415,9 @@ def spdx_document_fixture(
     imports=None,
     context="context_spdx_document",
 ) -> SpdxDocument:
-    elements = ["https://spdx.test/tools-python/spdx_document_element"] if elements is None else elements
-    root_elements = (
-        ["https://spdx.test/tools-python/spdx_document_root_element"] if root_elements is None else root_elements
+    element = ["https://spdx.test/tools-python/spdx_document_element"] if element is None else element
+    root_element = (
+        ["https://spdx.test/tools-python/spdx_document_root_element"] if root_element is None else root_element
     )
     verified_using = [hash_fixture()] if verified_using is None else verified_using
     external_references = [external_reference_fixture()] if external_references is None else external_references
@@ -422,8 +428,8 @@ def spdx_document_fixture(
         spdx_id=spdx_id,
         creation_info=creation_info,
         name=name,
-        element=elements,
-        root_element=root_elements,
+        element=element,
+        root_element=root_element,
         summary=summary,
         description=description,
         comment=comment,
