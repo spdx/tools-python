@@ -21,7 +21,7 @@ class Person(Agent):
         verified_using: List[IntegrityMethod] = None,
         external_references: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: None = None,
+        extension: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references

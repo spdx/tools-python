@@ -108,7 +108,7 @@ class Relationship(Element):
         verified_using: List[IntegrityMethod] = None,
         external_references: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: None = None,
+        extension: Optional[str] = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,

@@ -61,7 +61,7 @@ class Dataset(Package):
         verified_using: List[IntegrityMethod] = None,
         external_references: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: None = None,
+        extension: Optional[str] = None,
         supplied_by: List[str] = None,
         valid_until_time: Optional[datetime] = None,
         standard: List[str] = None,
