@@ -33,6 +33,21 @@ from spdx_tools.spdx3.model import (
     SpdxDocument,
     Tool,
 )
+from spdx_tools.spdx3.model.security import (
+    CvssV2VulnAssessmentRelationship,
+    CvssV3VulnAssessmentRelationship,
+    EpssVulnAssessmentRelationship,
+    ExploitCatalogType,
+    ExploitCatalogVulnAssessmentRelationship,
+    SsvcDecisionType,
+    SsvcVulnAssessmentRelationship,
+    VexAffectedVulnAssessmentRelationship,
+    VexFixedVulnAssessmentRelationship,
+    VexJustificationType,
+    VexNotAffectedVulnAssessmentRelationship,
+    VexUnderInvestigationVulnAssessmentRelationship,
+    Vulnerability,
+)
 from spdx_tools.spdx3.model.software import Sbom, SBOMType
 
 """Utility methods to create data model instances. All properties have valid defaults, so they don't need to be
@@ -170,6 +185,78 @@ SBOM_DICT = {
     "sbom_type": [SBOMType.BUILD],
 }
 
+VULNERABILITY_DICT = {
+    "published_time": datetime(2010, 1, 1),
+    "modified_time": datetime(2011, 1, 1),
+    "withdrawn_time": datetime(2012, 1, 1),
+}
+
+VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "assessed_element": "https://spdx.test/tools-python/assessed_element",
+    "published_time": datetime(2004, 1, 1),
+    "supplied_by": "https://spdx.test/tools-python/supplied_by",
+    "modified_time": datetime(2005, 1, 1),
+    "withdrawn_time": datetime(2006, 1, 1),
+}
+
+CVSS_V2_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "score": "4.3",
+    "severity": "low",
+    "vector": "(AV:N/AC:M/Au:N/C:P/I:N/A:N)",
+    "relationship_type": RelationshipType.HAS_CVSS_V2_ASSESSMENT_FOR,
+}
+
+CVSS_V3_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "score": "6.8",
+    "severity": "medium",
+    "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N",
+    "relationship_type": RelationshipType.HAS_CVSS_V3_ASSESSMENT_FOR,
+}
+
+EPSS_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "probability": 80,
+    "severity": "high",
+    "relationship_type": RelationshipType.HAS_EPSS_ASSESSMENT_FOR,
+}
+
+SSVC_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "decision": SsvcDecisionType.ACT,
+    "relationship_type": RelationshipType.HAS_SSVC_ASSESSMENT_FOR,
+}
+
+EXPLOIT_CATALOG_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "catalog_type": ExploitCatalogType.KEV,
+    "exploited": True,
+    "locator": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
+    "relationship_type": RelationshipType.HAS_EXPLOIT_CATALOG_ASSESSMENT_FOR,
+}
+
+VEX_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "vex_version": "v4.2",
+    "status_notes": "some status notes",
+}
+
+VEX_AFFECTED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "action_statement": "Upgrade to version 1.4 of ACME application.",
+    "action_statement_time": [datetime(2015, 10, 15)],
+    "relationship_type": RelationshipType.AFFECTS,
+}
+
+VEX_NOT_AFFECTED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "justification": VexJustificationType.COMPONENT_NOT_PRESENT,
+    "impact_statement": "Not using this vulnerable part of this library.",
+    "impact_statement_time": datetime(2015, 10, 15),
+    "relationship_type": RelationshipType.DOES_NOT_AFFECT,
+}
+
+VEX_UNDER_INVESTIGATION_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "relationship_type": RelationshipType.UNDER_INVESTIGATION_FOR,
+}
+
+VEX_FIXED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "relationship_type": RelationshipType.FIXED_IN,
+}
+
 FIXTURE_DICTS = {
     Agent: [ELEMENT_DICT],
     Person: [ELEMENT_DICT],
@@ -183,6 +270,65 @@ FIXTURE_DICTS = {
     SpdxDocument: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT],
     Bom: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT],
     Sbom: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT, SBOM_DICT],
+    CvssV2VulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        CVSS_V2_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    CvssV3VulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        CVSS_V3_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    EpssVulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        EPSS_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    ExploitCatalogVulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        EXPLOIT_CATALOG_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    SsvcVulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        SSVC_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    VexAffectedVulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        VEX_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        VEX_AFFECTED_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    VexFixedVulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        VEX_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        VEX_FIXED_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    VexNotAffectedVulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        VEX_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        VEX_NOT_AFFECTED_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    VexUnderInvestigationVulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        VEX_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        VEX_UNDER_INVESTIGATION_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    Vulnerability: [ELEMENT_DICT, VULNERABILITY_DICT],
 }
 
 
