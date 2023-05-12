@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict, Optional, Tuple
+from typing import Dict, Optional, Tuple, Union
 
 from rdflib import RDF, RDFS, Graph
 from rdflib.exceptions import UniquenessError
@@ -27,7 +27,7 @@ from spdx_tools.spdx.parser.rdf.license_expression_parser import parse_license_e
 from spdx_tools.spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
 
 
-def parse_snippet(snippet_node: URIRef, graph: Graph, doc_namespace: str) -> Snippet:
+def parse_snippet(snippet_node: Union[URIRef, BNode], graph: Graph, doc_namespace: str) -> Snippet:
     logger = Logger()
     spdx_id = parse_spdx_id(snippet_node, doc_namespace, graph)
     file_spdx_id_uri = get_value_from_graph(
