@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from datetime import datetime
-from enum import auto
+from enum import Enum, auto
 from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
@@ -18,7 +18,7 @@ from spdx_tools.spdx3.model.security.vex_vuln_assessment_relationship import Vex
 from spdx_tools.spdx.model import RelationshipType
 
 
-class VexJustificationType:
+class VexJustificationType(Enum):
     COMPONENT_NOT_PRESENT = auto()
     VULNERABLE_CODE_NOT_PRESENT = auto()
     VULNERABLE_CODE_CANNOT_BE_CONTROLLED_BY_ADVERSARY = auto()
