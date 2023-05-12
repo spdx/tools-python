@@ -54,6 +54,31 @@ def test_building_contains_relationship():
     ]
 
 
+def test_build_contains_relationship_with_error():
+    parser = Parser()
+    file_spdx_ids = ["SPDXRef-File-in-Package", "SPDXRef-Second-File-in-Package"]
+    document_str = "\n".join(
+        [
+            DOCUMENT_STR,
+            "PackageName: Package with two files",
+            "PackageDownloadLocation: https://download.com",
+            "FileName: File in package",
+            f"SPDXID: {file_spdx_ids[0]}",
+            "FileChecksum: SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+            "FileName: Second file in package",
+            f"SPDXID: {file_spdx_ids[1]}",
+            "FileChecksum: SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+        ]
+    )
+    with pytest.raises(SPDXParsingError) as err:
+        parser.parse(document_str)
+    for file_spdx_id in file_spdx_ids:
+        assert (
+            f"Error while building contains relationship for file {file_spdx_id}, preceding package was not "
+            "parsed successfully." in err.value.get_messages()
+        )
+
+
 def test_document_with_mixed_values():
     parser = Parser()
     document_str = "\n".join(

@@ -580,6 +580,12 @@ class Parser:
         # information that follows any package information is assigned to the last parsed package by creating a
         # corresponding contains relationship.
         # (see https://spdx.github.io/spdx-spec/v2.3/composition-of-an-SPDX-document/#5.2.2)
+        if not self.elements_built["packages"]:
+            self.logger.append(
+                f"Error while building contains relationship for file {file_spdx_id}, "
+                f"preceding package was not parsed successfully."
+            )
+            return
         package_spdx_id = self.elements_built["packages"][-1].spdx_id
         relationship = Relationship(package_spdx_id, RelationshipType.CONTAINS, file_spdx_id)
         if relationship not in self.elements_built.setdefault("relationships", []):
