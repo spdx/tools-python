@@ -19,7 +19,7 @@ from spdx_tools.spdx.model import RelationshipType
 
 @dataclass_with_properties
 class CvssV3VulnAssessmentRelationship(VulnAssessmentRelationship):
-    score: float = None
+    score: str = None
     severity: Optional[str] = None
     vector: Optional[str] = None
 
@@ -30,7 +30,7 @@ class CvssV3VulnAssessmentRelationship(VulnAssessmentRelationship):
         from_element: str,
         to: List[str],
         relationship_type: RelationshipType,
-        score: float,
+        score: str,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
