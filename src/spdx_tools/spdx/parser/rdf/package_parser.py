@@ -108,7 +108,9 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     )
     homepage = parse_literal(logger, graph, package_node, DOAP.homepage)
     attribution_texts = []
-    for _, _, attribution_text_literal in graph.triples((package_node, SPDX_NAMESPACE.attributionText, None)):
+    for _, _, attribution_text_literal in get_correctly_typed_triples(
+        logger, graph, package_node, SPDX_NAMESPACE.attributionText, None
+    ):
         attribution_texts.append(attribution_text_literal.toPython())
 
     release_date = parse_literal(

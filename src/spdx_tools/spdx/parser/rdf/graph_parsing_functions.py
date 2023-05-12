@@ -140,7 +140,7 @@ def get_value_from_graph(
     # this is a helper method to cast some rdf types from graph.value() to be compatible with the
     # code that follows
     value = graph.value(subject=subject, predicate=predicate, object=_object, default=default, any=_any)
-    if value and not isinstance(value, (URIRef, Literal, BNode)):
+    if value != default and value is not None and not isinstance(value, (URIRef, Literal, BNode)):
         logger.append(
             f"Warning: Node {value} should be of type BNode, Literal or URIRef, but is {type(value).__name__}. "
             f"This might lead to a failure."
