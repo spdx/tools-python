@@ -17,6 +17,18 @@ from spdx_tools.spdx3.model import (
     SoftwareAgent,
     SpdxDocument,
 )
+from spdx_tools.spdx3.model.security import (
+    CvssV2VulnAssessmentRelationship,
+    CvssV3VulnAssessmentRelationship,
+    EpssVulnAssessmentRelationship,
+    ExploitCatalogVulnAssessmentRelationship,
+    SsvcVulnAssessmentRelationship,
+    VexAffectedVulnAssessmentRelationship,
+    VexFixedVulnAssessmentRelationship,
+    VexNotAffectedVulnAssessmentRelationship,
+    VexUnderInvestigationVulnAssessmentRelationship,
+    Vulnerability,
+)
 from tests.spdx3.fixtures import element_fixture_factory, get_fixture_dict
 
 
@@ -39,6 +51,16 @@ CLASS_LIST = [
     Bundle,
     Bom,
     SpdxDocument,
+    CvssV2VulnAssessmentRelationship,
+    CvssV3VulnAssessmentRelationship,
+    EpssVulnAssessmentRelationship,
+    ExploitCatalogVulnAssessmentRelationship,
+    SsvcVulnAssessmentRelationship,
+    VexAffectedVulnAssessmentRelationship,
+    VexFixedVulnAssessmentRelationship,
+    VexNotAffectedVulnAssessmentRelationship,
+    VexUnderInvestigationVulnAssessmentRelationship,
+    Vulnerability,
 ]
 
 
