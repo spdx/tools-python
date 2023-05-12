@@ -159,3 +159,19 @@ def add_range_to_graph_helper(graph, predicate_value_class_member):
         graph.add((pointer_node, RDF.type, pointer_class))
         graph.add((start_end_pointer, predicate, pointer_node))
         graph.add((pointer_node, pointer_member, Literal(value)))
+
+
+def test_parse_invalid_file():
+    graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/invalid_documents/file_without_spdx_ids.xml"))
+    snippet_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.Snippet)
+    doc_namespace = "https://some.namespace"
+
+    assert isinstance(snippet_node, BNode)
+    with pytest.raises(SPDXParsingError) as err:
+        parse_snippet(snippet_node, graph, doc_namespace)
+
+    assert err.value.get_messages() == [
+        "Error while constructing Snippet: ['SetterError Snippet: type of argument "
+        "\"spdx_id\" must be str; got NoneType instead: None', 'SetterError Snippet: "
+        'type of argument "file_spdx_id" must be str; got NoneType instead: None\']'
+    ]

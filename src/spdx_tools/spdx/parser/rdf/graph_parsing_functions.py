@@ -86,8 +86,8 @@ def parse_enum_value(enum_str: str, enum_class: Type[Enum], prefix: str) -> Enum
         raise SPDXParsingError([f"Invalid value for {enum_class}: {enum_str}"])
 
 
-def parse_spdx_id(resource: URIRef, doc_namespace: str, graph: Graph) -> Optional[str]:
-    if not resource:
+def parse_spdx_id(resource: Union[URIRef, BNode], doc_namespace: str, graph: Graph) -> Optional[str]:
+    if not resource or isinstance(resource, BNode):
         return None
     if resource.startswith(f"{doc_namespace}#"):
         return resource.fragment

@@ -1,7 +1,9 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from rdflib import RDFS, Graph, URIRef
+from typing import Union
+
+from rdflib import RDFS, BNode, Graph, URIRef
 
 from spdx_tools.spdx.model import File, FileType
 from spdx_tools.spdx.parser.logger import Logger
@@ -23,7 +25,7 @@ from spdx_tools.spdx.parser.rdf.license_expression_parser import parse_license_e
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
-def parse_file(file_node: URIRef, graph: Graph, doc_namespace: str) -> File:
+def parse_file(file_node: Union[URIRef, BNode], graph: Graph, doc_namespace: str) -> File:
     logger = Logger()
     spdx_id = parse_spdx_id(file_node, doc_namespace, graph)
     name = parse_literal(logger, graph, file_node, SPDX_NAMESPACE.fileName)
