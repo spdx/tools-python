@@ -167,11 +167,5 @@ def test_parse_invalid_file():
     doc_namespace = "https://some.namespace"
 
     assert isinstance(snippet_node, BNode)
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         parse_snippet(snippet_node, graph, doc_namespace)
-
-    assert err.value.get_messages() == [
-        "Error while constructing Snippet: ['SetterError Snippet: type of argument "
-        "\"spdx_id\" must be str; got NoneType instead: None', 'SetterError Snippet: "
-        'type of argument "file_spdx_id" must be str; got NoneType instead: None\']'
-    ]

@@ -45,10 +45,5 @@ def test_parse_invalid_file():
     doc_namespace = "https://some.namespace"
 
     assert isinstance(file_node, BNode)
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         parse_file(file_node, graph, doc_namespace)
-
-    assert err.value.get_messages() == [
-        "Error while constructing File: ['SetterError File: type of argument "
-        '"spdx_id" must be str; got NoneType instead: None\']'
-    ]

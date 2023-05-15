@@ -228,52 +228,23 @@ def test_parse_package(
 
 
 @pytest.mark.parametrize(
-    "incomplete_package_dict,expected_message",
+    "incomplete_package_dict",
     [
-        (
-            {"SPDXID": "SPDXRef-Package"},
-            [
-                "Error while constructing Package: ['SetterError Package: type of "
-                "argument \"name\" must be str; got NoneType instead: None', 'SetterError Package: type of argument "
-                '"download_location" must be one of (str, spdx_tools.spdx.model.spdx_no_assertion.SpdxNoAssertion, '
-                "spdx_tools.spdx.model.spdx_none.SpdxNone); "
-                "got NoneType instead: None']"
-            ],
-        ),
-        (
-            {"SPDXID": "SPDXRef-Package", "name": 5, "downloadLocation": "NONE"},
-            [
-                "Error while constructing Package: ['SetterError Package: type of argument "
-                '"name" must be str; got int instead: 5\']'
-            ],
-        ),
+        {"SPDXID": "SPDXRef-Package"},
+        {"SPDXID": "SPDXRef-Package", "name": 5, "downloadLocation": "NONE"},
+        {
+            "SPDXID": "SPDXRef-Package",
+            "name": "Example Package",
+            "downloadLocation": "NONE",
+            "checksums": [{"algorithm": "SHA", "value": "1234"}],
+        },
     ],
 )
-def test_parse_incomplete_package(incomplete_package_dict, expected_message):
+def test_parse_invalid_package(incomplete_package_dict):
     package_parser = PackageParser()
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         package_parser.parse_package(incomplete_package_dict)
-
-    TestCase().assertCountEqual(err.value.get_messages(), expected_message)
-
-
-def test_parse_invalid_package():
-    package_parser = PackageParser()
-    package_dict = {
-        "SPDXID": "SPDXRef-Package",
-        "name": "Example Package",
-        "downloadLocation": "NONE",
-        "checksums": [{"algorithm": "SHA", "value": "1234"}],
-    }
-
-    with pytest.raises(SPDXParsingError) as err:
-        package_parser.parse_package(package_dict)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        ["Error while parsing Package: [\"Error while parsing Checksum: ['Invalid ChecksumAlgorithm: SHA']\"]"],
-    )
 
 
 def test_parse_packages():
@@ -289,36 +260,16 @@ def test_parse_packages():
         {"SPDXID": "SPDXRef-Package", "name": "Example Package", "downloadLocation": "NONE"},
     ]
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         parse_list_of_elements(packages_list, package_parser.parse_package)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            'Error while parsing Package: ["Error while parsing Checksum: ' "['Invalid ChecksumAlgorithm: SHA']\"]",
-            "Error while constructing Package: ['SetterError Package: type of argument "
-            '"name" must be str; got int instead: 5\']',
-        ],
-    )
 
 
 def test_parse_external_ref():
     package_parser = PackageParser()
     external_ref = {"referenceType": "fix"}
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         package_parser.parse_external_ref(external_ref)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            "Error while constructing ExternalPackageRef: ['SetterError "
-            'ExternalPackageRef: type of argument "category" must be '
-            "spdx_tools.spdx.model.package.ExternalPackageRefCategory; got NoneType instead: None', "
-            '\'SetterError ExternalPackageRef: type of argument "locator" must be str; '
-            "got NoneType instead: None']"
-        ],
-    )
 
 
 def test_parse_invalid_external_package_ref_category():

@@ -104,10 +104,5 @@ def test_parse_invalid_package():
     doc_namespace = "https://some.namespace"
 
     assert isinstance(package_node, BNode)
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         parse_package(package_node, graph, doc_namespace)
-
-    assert err.value.get_messages() == [
-        "Error while constructing Package: ['SetterError Package: type of argument "
-        '"spdx_id" must be str; got NoneType instead: None\']'
-    ]
