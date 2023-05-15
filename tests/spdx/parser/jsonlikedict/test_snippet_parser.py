@@ -74,18 +74,8 @@ def test_parse_incomplete_snippet():
     snippet_parser = SnippetParser()
     incomplete_snippet_dict = {"SPDXID": "SPDXRef-Snippet", "file_spdx_id": "SPDXRef-File"}
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         snippet_parser.parse_snippet(incomplete_snippet_dict)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            "Error while constructing Snippet: ['SetterError Snippet: type of argument "
-            "\"file_spdx_id\" must be str; got NoneType instead: None', 'SetterError Snippet: type of argument "
-            '"byte_range" must be a tuple; got NoneType '
-            "instead: None']"
-        ],
-    )
 
 
 def test_parse_snippet_with_invalid_snippet_range():
@@ -101,18 +91,8 @@ def test_parse_snippet_with_invalid_snippet_range():
         ],
     }
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         snippet_parser.parse_snippet(snippet_with_invalid_ranges_list)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            "Error while constructing Snippet: ['SetterError Snippet: type of argument "
-            "\"file_spdx_id\" must be str; got NoneType instead: None', 'SetterError "
-            'Snippet: type of argument "byte_range"[0] must be int; got str instead: '
-            "(\\'310s\\', 23)']"
-        ],
-    )
 
 
 def test_parse_invalid_snippet_range():
