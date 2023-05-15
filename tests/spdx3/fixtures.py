@@ -33,6 +33,12 @@ from spdx_tools.spdx3.model import (
     SpdxDocument,
     Tool,
 )
+from spdx_tools.spdx3.model.licensing import (
+    CustomLicense,
+    CustomLicenseAddition,
+    ListedLicense,
+    ListedLicenseException,
+)
 from spdx_tools.spdx3.model.security import (
     CvssV2VulnAssessmentRelationship,
     CvssV3VulnAssessmentRelationship,
@@ -185,6 +191,41 @@ SBOM_DICT = {
     "sbom_type": [SBOMType.BUILD],
 }
 
+LICENSE_DICT = {
+    "license_id": "https://spdx.test/tools-python/license_id",
+    "license_name": "license name",
+    "license_text": "license text",
+    "license_comment": "license comment",
+    "see_also": ["https://see.also/license"],
+    "is_osi_approved": True,
+    "is_fsf_libre": True,
+    "standard_license_header": "license header",
+    "standard_license_template": "license template",
+    "is_deprecated_license_id": True,
+    "obsoleted_by": "https://spdx.test/tools-python/obsoleted_by_license_id",
+}
+
+LISTED_LICENSE_DICT = {
+    "list_version_added": "2.1",
+    "deprecated_version": "2.2",
+}
+
+LICENSE_ADDITION_DICT = {
+    "addition_id": "https://spdx.test/tools-python/addition_id",
+    "addition_name": "addition name",
+    "addition_text": "addition text",
+    "addition_comment": "addition comment",
+    "see_also": ["https://see.also/addition"],
+    "standard_addition_template": "addition template",
+    "is_deprecated_addition_id": True,
+    "obsoleted_by": "https://spdx.test/tools-python/obsoleted_by_addition_id",
+}
+
+LISTED_LICENSE_EXCEPTION_DICT = {
+    "list_version_added": "2.1",
+    "deprecated_version": "2.2",
+}
+
 VULNERABILITY_DICT = {
     "published_time": datetime(2010, 1, 1),
     "modified_time": datetime(2011, 1, 1),
@@ -270,6 +311,10 @@ FIXTURE_DICTS = {
     SpdxDocument: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT],
     Bom: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT],
     Sbom: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT, SBOM_DICT],
+    ListedLicense: [LICENSE_DICT, LISTED_LICENSE_DICT],
+    CustomLicense: [LICENSE_DICT],
+    ListedLicenseException: [LICENSE_ADDITION_DICT, LISTED_LICENSE_EXCEPTION_DICT],
+    CustomLicenseAddition: [LICENSE_ADDITION_DICT],
     CvssV2VulnAssessmentRelationship: [
         ELEMENT_DICT,
         RELATIONSHIP_DICT,
@@ -332,7 +377,7 @@ FIXTURE_DICTS = {
 }
 
 
-def element_fixture_factory(clazz: Type[Any], **kwargs) -> Any:
+def fixture_factory(clazz: Type[Any], **kwargs) -> Any:
     fixture_dict = get_fixture_dict(clazz)
 
     for key in kwargs.keys():
@@ -354,6 +399,7 @@ def get_fixture_dict(clazz: Type[Any]) -> Dict[str, Any]:
     for property_dict in FIXTURE_DICTS[clazz]:
         fixture_dict.update(property_dict)
 
-    fixture_dict["spdx_id"] = f"https://spdx.test/tools-python/{clazz.__name__}_fixture"
+    if "spdx_id" in fixture_dict.keys():
+        fixture_dict["spdx_id"] = f"https://spdx.test/tools-python/{clazz.__name__}_fixture"
 
     return fixture_dict
