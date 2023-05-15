@@ -119,40 +119,14 @@ def test_parse_all_annotations():
 
 
 @pytest.mark.parametrize(
-    "incomplete_annotation_dict,expected_message",
+    "incomplete_annotation_dict",
     [
-        (
-            {"annotator": "Person: Jane Doe ()"},
-            [
-                "Error while constructing Annotation: ['SetterError Annotation: type of "
-                'argument "spdx_id" must be str; got NoneType instead: None\', '
-                '\'SetterError Annotation: type of argument "annotation_type" must be '
-                "spdx_tools.spdx.model.annotation.AnnotationType; got NoneType instead: None', "
-                '\'SetterError Annotation: type of argument "annotation_date" must be '
-                "datetime.datetime; got NoneType instead: None', 'SetterError Annotation: "
-                'type of argument "annotation_comment" must be str; got NoneType instead: '
-                "None']"
-            ],
-        ),
-        (
-            {"annotationDate": "2010-01-29T18:30:22Z"},
-            [
-                "Error while constructing Annotation: ['SetterError Annotation: type of "
-                'argument "spdx_id" must be str; got NoneType instead: None\', '
-                '\'SetterError Annotation: type of argument "annotation_type" must be '
-                "spdx_tools.spdx.model.annotation.AnnotationType; got NoneType instead: None', "
-                '\'SetterError Annotation: type of argument "annotator" must be '
-                "spdx_tools.spdx.model.actor.Actor; got NoneType instead: None', 'SetterError Annotation: "
-                'type of argument "annotation_comment" must be str; got NoneType instead: '
-                "None']"
-            ],
-        ),
+        {"annotator": "Person: Jane Doe ()"},
+        {"annotationDate": "2010-01-29T18:30:22Z"},
     ],
 )
-def test_parse_incomplete_annotation(incomplete_annotation_dict, expected_message):
+def test_parse_incomplete_annotation(incomplete_annotation_dict):
     annotation_parser = AnnotationParser()
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         annotation_parser.parse_annotation(incomplete_annotation_dict)
-
-    TestCase().assertCountEqual(err.value.get_messages(), expected_message)

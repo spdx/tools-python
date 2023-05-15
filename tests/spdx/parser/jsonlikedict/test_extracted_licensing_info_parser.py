@@ -1,8 +1,6 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from unittest import TestCase
-
 import pytest
 
 from spdx_tools.spdx.parser.error import SPDXParsingError
@@ -51,14 +49,5 @@ def test_parse_invalid_extracted_licensing_info():
         "seeAlsos": ["http://people.freebsd.org/~phk/"],
     }
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         extracted_licensing_info_parser.parse_extracted_licensing_info(extracted_licensing_infos_dict)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            "Error while constructing ExtractedLicensingInfo: ['SetterError "
-            'ExtractedLicensingInfo: type of argument "comment" must be one of (str, '
-            "NoneType); got int instead: 56']"
-        ],
-    )

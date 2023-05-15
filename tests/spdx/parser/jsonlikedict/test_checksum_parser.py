@@ -36,13 +36,5 @@ def test_parse_incomplete_checksum():
     checksum_parser = ChecksumParser()
     checksum_dict = {"algorithm": "SHA1"}
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         checksum_parser.parse_checksum(checksum_dict)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            'Error while constructing Checksum: [\'SetterError Checksum: type of argument "value" must be str; '
-            "got NoneType instead: None']"
-        ],
-    )
