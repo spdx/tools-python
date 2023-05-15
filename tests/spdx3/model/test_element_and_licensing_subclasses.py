@@ -17,6 +17,12 @@ from spdx_tools.spdx3.model import (
     SoftwareAgent,
     SpdxDocument,
 )
+from spdx_tools.spdx3.model.licensing import (
+    CustomLicense,
+    CustomLicenseAddition,
+    ListedLicense,
+    ListedLicenseException,
+)
 from spdx_tools.spdx3.model.security import (
     CvssV2VulnAssessmentRelationship,
     CvssV3VulnAssessmentRelationship,
@@ -29,7 +35,7 @@ from spdx_tools.spdx3.model.security import (
     VexUnderInvestigationVulnAssessmentRelationship,
     Vulnerability,
 )
-from tests.spdx3.fixtures import element_fixture_factory, get_fixture_dict
+from tests.spdx3.fixtures import fixture_factory, get_fixture_dict
 
 
 def get_property_names(clazz: Type[Any]):
@@ -51,6 +57,10 @@ CLASS_LIST = [
     Bundle,
     Bom,
     SpdxDocument,
+    ListedLicense,
+    CustomLicense,
+    ListedLicenseException,
+    CustomLicenseAddition,
     CvssV2VulnAssessmentRelationship,
     CvssV3VulnAssessmentRelationship,
     EpssVulnAssessmentRelationship,
@@ -69,7 +79,7 @@ CLASS_LIST = [
     CLASS_LIST,
 )
 def test_correct_initialization(clazz):
-    clazz_instance = element_fixture_factory(clazz)
+    clazz_instance = fixture_factory(clazz)
     fixture_dict = get_fixture_dict(clazz)
 
     property_names = get_property_names(clazz)
@@ -90,7 +100,7 @@ def test_invalid_initialization(clazz):
         false_properties_dict[property_name] = InvalidTypeClass()
 
     with pytest.raises(TypeError) as err:
-        element_fixture_factory(clazz, **false_properties_dict)
+        fixture_factory(clazz, **false_properties_dict)
 
     assert len(err.value.args[0]) == len(property_names)
     for error in err.value.args[0]:
