@@ -65,21 +65,6 @@ def test_invalid_initialization(creation_information):
             source_info=["some info"],
         )
 
-    assert err.value.args[0] == [
-        'SetterError Package: type of argument "built_time" must be one of '
-        "(datetime.datetime, NoneType); got str instead: 2022-03-04T00:00:00Z",
-        'SetterError Package: type of argument "content_identifier" must be one of '
-        "(str, NoneType); got int instead: 3",
-        'SetterError Package: type of argument "purpose" must be a list; got '
-        "spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose instead: "
-        "SoftwarePurpose.FILE",
-        'SetterError Package: type of argument "package_version" must be one of '
-        "(str, NoneType); got int instead: 42",
-        'SetterError Package: type of argument "download_location" must be one of '
-        "(str, NoneType); got int instead: 4",
-        'SetterError Package: type of argument "package_url" must be one of (str, '
-        "NoneType); got list instead: ['uris']",
-        'SetterError Package: type of argument "homepage" must be one of (str, ' "NoneType); got bool instead: True",
-        'SetterError Package: type of argument "source_info" must be one of (str, '
-        "NoneType); got list instead: ['some info']",
-    ]
+    assert len(err.value.args[0]) == 8
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError Package:")

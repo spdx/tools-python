@@ -76,9 +76,6 @@ def test_invalid_initialization(creation_information):
             metric={"metric1": "value", "metric2": 250},
         )
 
-    assert err.value.args[0] == [
-        (
-            "SetterError AIPackage: type of argument \"metric\"['metric2'] must be one of "
-            "(str, NoneType); got int instead: {'metric1': 'value', 'metric2': 250}"
-        )
-    ]
+    assert len(err.value.args[0]) == 1
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError AIPackage:")

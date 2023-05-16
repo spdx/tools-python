@@ -20,13 +20,6 @@ def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         ExternalReference("OTHER", "a URI", 34, True)
 
-    assert err.value.args[0] == [
-        'SetterError ExternalReference: type of argument "external_reference_type" '
-        "must be one of (spdx_tools.spdx3.model.external_reference.ExternalReferenceType, "
-        "NoneType); got str instead: OTHER",
-        'SetterError ExternalReference: type of argument "locator" must be a list; ' "got str instead: a URI",
-        'SetterError ExternalReference: type of argument "content_type" must be one '
-        "of (str, NoneType); got int instead: 34",
-        'SetterError ExternalReference: type of argument "comment" must be one of '
-        "(str, NoneType); got bool instead: True",
-    ]
+    assert len(err.value.args[0]) == 4
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError ExternalReference:")

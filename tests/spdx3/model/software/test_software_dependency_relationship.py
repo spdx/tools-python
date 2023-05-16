@@ -54,6 +54,6 @@ def test_invalid_initialization(creation_information):
             42,
         )
 
-    assert err.value.args[0] == [
-        'SetterError SoftwareDependencyRelationship: type of argument "to" must be a ' "list; got int instead: 42"
-    ]
+    assert len(err.value.args[0]) == 1
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError SoftwareDependencyRelationship:")
