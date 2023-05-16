@@ -40,11 +40,11 @@ def make_setter(field_name, field_type):
 
     def simplify_error_message_for_union(error_message: str) -> str:
         # The error message from typeguard is more verbose than we need, so we simplify the message
-        # to provide the user with a compacter error message.
+        # to provide the user with a more compact error message.
         types_in_union = re.compile(r"\n\s*(.*?):", re.UNICODE)
         list_of_types = re.findall(types_in_union, error_message)
         text_to_replace = error_message.split("did not match any element in the union:")[-1]
-        error_message = error_message.replace(text_to_replace, " " + str(list_of_types))
+        error_message = error_message.replace(text_to_replace, " [" + ", ".join(list_of_types) + "]")
         return error_message
 
     return set_field_with_better_error_message
