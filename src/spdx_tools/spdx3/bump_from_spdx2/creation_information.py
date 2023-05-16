@@ -15,14 +15,11 @@ from spdx_tools.spdx.model.document import CreationInfo as Spdx2_CreationInfo
 
 
 def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload) -> SpdxDocument:
-    # creation_info.spdx_id -> spdx_document.spdx_id
     document_namespace = spdx2_creation_info.document_namespace
     spdx_id = f"{document_namespace}#{spdx2_creation_info.spdx_id}"
 
-    # creation_info.document_namespace -> ?
     print_missing_conversion("creation_info.document_namespace", 0, "https://github.com/spdx/spdx-3-model/issues/87")
 
-    # creation_info.external_document_refs -> spdx_document.imports
     namespaces, imports = zip(
         *[
             bump_external_document_ref(external_document_ref)
@@ -31,13 +28,11 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     )
     namespaces = list(namespaces)
     imports = list(imports)
-    # creation_info.license_list_version -> ?
     print_missing_conversion(
         "creation_info.license_list_version",
         0,
         "part of licensing profile, " "https://github.com/spdx/spdx-3-model/issues/131",
     )
-    # creation_info.document_comment -> spdx_document.comment
     document_comment = spdx2_creation_info.document_comment
     creation_information = CreationInformation(
         spec_version=Version("3.0.0"),
