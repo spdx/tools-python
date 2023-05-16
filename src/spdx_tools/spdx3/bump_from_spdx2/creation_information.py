@@ -23,10 +23,14 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
     print_missing_conversion("creation_info.document_namespace", 0, "https://github.com/spdx/spdx-3-model/issues/87")
 
     # creation_info.external_document_refs -> spdx_document.imports
-    imports = [
-        bump_external_document_ref(external_document_ref)
-        for external_document_ref in spdx2_creation_info.external_document_refs
-    ]
+    namespaces, imports = zip(
+        *[
+            bump_external_document_ref(external_document_ref)
+            for external_document_ref in spdx2_creation_info.external_document_refs
+        ]
+    )
+    namespaces = list(namespaces)
+    imports = list(imports)
     # creation_info.license_list_version -> ?
     print_missing_conversion(
         "creation_info.license_list_version",
@@ -76,4 +80,5 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
         element=[],
         root_element=[],
         imports=imports,
+        namespaces=namespaces,
     )
