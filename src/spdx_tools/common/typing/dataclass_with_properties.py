@@ -1,3 +1,4 @@
+import re
 from dataclasses import dataclass
 
 from typeguard import CollectionCheckStrategy, TypeCheckError, config, typechecked
@@ -30,9 +31,21 @@ def make_setter(field_name, field_type):
             set_field(self, value)
         except TypeCheckError as err:
             error_message: str = f"SetterError {self.__class__.__name__}: {err}"
+            if "did not match any element in the union" in error_message:
+                error_message = simplify_error_message_for_union(error_message)
+
             # As setters are created dynamically, their argument name is always "value". We replace it by the
             # actual name so the error message is more helpful.
-            raise TypeError(error_message.replace("value", field_name, 1))
+            raise TypeError(error_message.replace("value", field_name, 1) + f": {value}")
+
+    def simplify_error_message_for_union(error_message: str) -> str:
+        # The error message from typeguard is more verbose than we need, so we simplify the message
+        # to provide the user with a compacter error message.
+        types_in_union = re.compile(r"\n\s*(.*?):", re.UNICODE)
+        list_of_types = re.findall(types_in_union, error_message)
+        text_to_replace = error_message.split("did not match any element in the union:")[-1]
+        error_message = error_message.replace(text_to_replace, " " + str(list_of_types))
+        return error_message
 
     return set_field_with_better_error_message
 
