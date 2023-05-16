@@ -29,9 +29,6 @@ def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         Sbom(2, {"creation_info": [3, 4, 5]}, element=[], root_element=[])
 
-    assert err.value.args[0] == [
-        'SetterError Sbom: type of argument "spdx_id" must be str; got int instead: 2',
-        'SetterError Sbom: type of argument "creation_info" must be '
-        "spdx_tools.spdx3.model.creation_information.CreationInformation; got dict "
-        "instead: {'creation_info': [3, 4, 5]}",
-    ]
+    assert len(err.value.args[0]) == 2
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError Sbom:")

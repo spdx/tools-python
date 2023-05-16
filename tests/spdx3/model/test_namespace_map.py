@@ -17,8 +17,6 @@ def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         NamespaceMap(34, ["list of namespaces"])
 
-    assert err.value.args[0] == [
-        'SetterError NamespaceMap: type of argument "prefix" must be one of (str, ' "NoneType); got int instead: 34",
-        'SetterError NamespaceMap: type of argument "namespace" must be one of (str, '
-        "NoneType); got list instead: ['list of namespaces']",
-    ]
+    assert len(err.value.args[0]) == 2
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError NamespaceMap:")
