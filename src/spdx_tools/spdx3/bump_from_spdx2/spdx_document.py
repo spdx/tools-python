@@ -5,7 +5,7 @@ from spdx_tools.spdx3.bump_from_spdx2.annotation import bump_annotation
 from spdx_tools.spdx3.bump_from_spdx2.creation_information import bump_creation_information
 from spdx_tools.spdx3.bump_from_spdx2.file import bump_file
 from spdx_tools.spdx3.bump_from_spdx2.package import bump_package
-from spdx_tools.spdx3.bump_from_spdx2.relationship import bump_relationship
+from spdx_tools.spdx3.bump_from_spdx2.relationship import bump_relationships
 from spdx_tools.spdx3.bump_from_spdx2.snippet import bump_snippet
 from spdx_tools.spdx3.model import CreationInformation, SpdxDocument
 from spdx_tools.spdx3.payload import Payload
@@ -25,20 +25,19 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
     payload.add_element(spdx_document)
 
     for spdx2_package in document.packages:
-        bump_package(spdx2_package, payload, creation_info, document_namespace)
+        bump_package(spdx2_package, payload, creation_info, document_namespace, document.extracted_licensing_info)
 
     for spdx2_file in document.files:
-        bump_file(spdx2_file, payload, creation_info, document_namespace)
+        bump_file(spdx2_file, payload, creation_info, document_namespace, document.extracted_licensing_info)
 
     for spdx2_snippet in document.snippets:
-        bump_snippet(spdx2_snippet, payload, creation_info, document_namespace)
+        bump_snippet(spdx2_snippet, payload, creation_info, document_namespace, document.extracted_licensing_info)
 
-    for counter, spdx2_relationship in enumerate(document.relationships):
-        bump_relationship(spdx2_relationship, payload, creation_info, document_namespace, counter)
+    bump_relationships(document.relationships, payload, creation_info, document_namespace)
 
     for counter, spdx2_annotation in enumerate(document.annotations):
         bump_annotation(spdx2_annotation, payload, creation_info, document_namespace, counter)
 
-    spdx_document.elements = [spdx_id for spdx_id in payload.get_full_map() if spdx_id != spdx_document.spdx_id]
+    spdx_document.element = [spdx_id for spdx_id in payload.get_full_map() if spdx_id != spdx_document.spdx_id]
 
     return payload

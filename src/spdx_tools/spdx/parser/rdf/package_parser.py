@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Optional
+from typing import Optional, Union
 
 from rdflib import DOAP, RDFS, Graph, URIRef
 from rdflib.term import BNode
@@ -34,7 +34,7 @@ from spdx_tools.spdx.parser.rdf.license_expression_parser import parse_license_e
 from spdx_tools.spdx.rdfschema.namespace import REFERENCE_NAMESPACE, SPDX_NAMESPACE
 
 
-def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Package:
+def parse_package(package_node: Union[URIRef, BNode], graph: Graph, doc_namespace: str) -> Package:
     logger = Logger()
     spdx_id = parse_spdx_id(package_node, doc_namespace, graph)
     name = parse_literal(logger, graph, package_node, SPDX_NAMESPACE.name)
@@ -108,7 +108,9 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     )
     homepage = parse_literal(logger, graph, package_node, DOAP.homepage)
     attribution_texts = []
-    for _, _, attribution_text_literal in graph.triples((package_node, SPDX_NAMESPACE.attributionText, None)):
+    for _, _, attribution_text_literal in get_correctly_typed_triples(
+        logger, graph, package_node, SPDX_NAMESPACE.attributionText, None
+    ):
         attribution_texts.append(attribution_text_literal.toPython())
 
     release_date = parse_literal(
@@ -118,7 +120,6 @@ def parse_package(package_node: URIRef, graph: Graph, doc_namespace: str) -> Pac
     valid_until_date = parse_literal(
         logger, graph, package_node, SPDX_NAMESPACE.validUntilDate, parsing_method=datetime_from_str
     )
-
     raise_parsing_error_if_logger_has_messages(logger, "Package")
     package = construct_or_raise_parsing_error(
         Package,

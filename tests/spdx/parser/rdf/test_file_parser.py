@@ -4,10 +4,12 @@
 import os
 from unittest import TestCase
 
+import pytest
 from license_expression import get_spdx_licensing
-from rdflib import RDF, Graph, URIRef
+from rdflib import RDF, BNode, Graph, URIRef
 
 from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, FileType, SpdxNoAssertion
+from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.rdf.file_parser import parse_file
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
@@ -35,3 +37,13 @@ def test_parse_file():
     assert file.license_comment == "licenseComment"
     assert file.notice == "fileNotice"
     assert file.attribution_texts == ["fileAttributionText"]
+
+
+def test_parse_invalid_file():
+    graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/invalid_documents/file_without_spdx_ids.xml"))
+    file_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.File)
+    doc_namespace = "https://some.namespace"
+
+    assert isinstance(file_node, BNode)
+    with pytest.raises(SPDXParsingError):
+        parse_file(file_node, graph, doc_namespace)

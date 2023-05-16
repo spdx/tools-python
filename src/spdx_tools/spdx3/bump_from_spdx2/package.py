@@ -1,11 +1,12 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Optional, Union
+from typing import List, Optional, Union
 
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
+from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import (
     CreationInformation,
@@ -17,34 +18,49 @@ from spdx_tools.spdx3.model import (
 from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import Actor as Spdx2_Actor
+from spdx_tools.spdx.model import ExtractedLicensingInfo, SpdxNoAssertion
 from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
 
 
 def bump_package(
-    spdx2_package: Spdx2_Package, payload: Payload, creation_information: CreationInformation, document_namespace: str
+    spdx2_package: Spdx2_Package,
+    payload: Payload,
+    creation_information: CreationInformation,
+    document_namespace: str,
+    extracted_licensing_info: List[ExtractedLicensingInfo],
 ):
     spdx_id = "#".join([document_namespace, spdx2_package.spdx_id])
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
-    # package.file_name -> ?
     print_missing_conversion("package2.file_name", 0, "https://github.com/spdx/spdx-3-model/issues/83")
-    # package.supplier -> Relationship, suppliedBy?
-    print_missing_conversion("package2.supplier", 0, "https://github.com/spdx/spdx-3-model/issues/113")
+    if isinstance(spdx2_package.supplier, Spdx2_Actor):
+        supplied_by_spdx_id = [bump_actor(spdx2_package.supplier, payload, creation_information, document_namespace)]
+    else:
+        supplied_by_spdx_id = None
     if isinstance(spdx2_package.originator, Spdx2_Actor):
-        originated_by_spdx_id = bump_actor(spdx2_package.originator, payload, creation_information, document_namespace)
+        originated_by_spdx_id = [
+            bump_actor(spdx2_package.originator, payload, creation_information, document_namespace)
+        ]
     else:
         originated_by_spdx_id = None
-    # package.files_analyzed  -> ?
     print_missing_conversion("package2.files_analyzed", 0, "https://github.com/spdx/spdx-3-model/issues/84")
-    # package.verification_code -> package.verified_using
     print_missing_conversion(
         "package2.verification_code", 1, "of IntegrityMethod, https://github.com/spdx/spdx-3-model/issues/85"
     )
-    # package.checksums -> package.verified_using
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_package.checksums]
+    declared_license = bump_license_expression_or_none_or_no_assertion(
+        spdx2_package.license_declared, extracted_licensing_info
+    )
+    concluded_license = bump_license_expression_or_none_or_no_assertion(
+        spdx2_package.license_concluded, extracted_licensing_info
+    )
+    copyright_text = None
+    if isinstance(spdx2_package.copyright_text, str):
+        copyright_text = spdx2_package.copyright_text
+    elif isinstance(spdx2_package.copyright_text, SpdxNoAssertion):
+        print_missing_conversion("package2.copyright_text", 0)
     print_missing_conversion(
-        "package2.license_concluded, package2.license_info_from_files, package2.license_declared, "
-        "package2.license_comment, package2.copyright_text",
+        "package2.license_info_from_files, package2.license_comment",
         0,
         "and missing definition of license profile",
     )
@@ -67,7 +83,6 @@ def bump_package(
         elif isinstance(id_or_ref, ExternalIdentifier):
             external_identifiers.append(id_or_ref)
 
-    print_missing_conversion("package2.attribution_texts", 0, "missing definition of license profile")
     package_purpose = (
         [SoftwarePurpose[spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
     )
@@ -84,15 +99,20 @@ def bump_package(
             external_references=external_references,
             external_identifier=external_identifiers,
             originated_by=originated_by_spdx_id,
+            supplied_by=supplied_by_spdx_id,
             built_time=spdx2_package.built_date,
             release_time=spdx2_package.release_date,
             valid_until_time=spdx2_package.valid_until_date,
-            package_purpose=package_purpose,
+            purpose=package_purpose,
             package_version=spdx2_package.version,
             download_location=download_location,
             package_url=package_url,
             homepage=spdx2_package.homepage,
             source_info=spdx2_package.source_info,
+            copyright_text=copyright_text,
+            attribution_text=", ".join(spdx2_package.attribution_texts),
+            concluded_license=concluded_license,
+            declared_license=declared_license,
         )
     )
 

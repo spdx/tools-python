@@ -21,7 +21,7 @@ We encourage you to use the new, refactored version (on the main branch) if you
 - want to use the RDF format of SPDX with all v2.3 features.
 
 If you are planning to migrate from v0.7.x of these tools,
-please have a look at the [migration guide](https://github.com/spdx/tools-python/wiki/How-to-migrate-from-0.7-to-1.0).
+please have a look at the [migration guide](https://github.com/spdx/tools-python/wiki/How-to-migrate-from-0.7-to-0.8).
 
 # Information
 

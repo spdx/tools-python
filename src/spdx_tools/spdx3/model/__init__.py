@@ -12,10 +12,11 @@ from spdx_tools.spdx3.model.person import Person
 from spdx_tools.spdx3.model.organization import Organization
 from spdx_tools.spdx3.model.software_agent import SoftwareAgent
 from spdx_tools.spdx3.model.tool import Tool
-from spdx_tools.spdx3.model.spdx_collection import SpdxCollection
+from spdx_tools.spdx3.model.spdx_collection import ElementCollection
 from spdx_tools.spdx3.model.bundle import Bundle
 from spdx_tools.spdx3.model.bom import Bom
 from spdx_tools.spdx3.model.spdx_document import SpdxDocument
 from spdx_tools.spdx3.model.annotation import Annotation, AnnotationType
 from spdx_tools.spdx3.model.relationship import Relationship, RelationshipType, RelationshipCompleteness
+from spdx_tools.spdx3.model.lifecycle_scoped_relationship import LifecycleScopedRelationship, LifecycleScopeType
 from spdx_tools.spdx3.model.artifact import Artifact

@@ -93,22 +93,6 @@ def test_parse_file(copyright_text, expected_copyright_text):
     assert file.attribution_texts == ["Some attribution text."]
 
 
-def test_parse_incomplete_file():
-    file_parser = FileParser()
-    file_dict = {"SPDXID": "SPDXRef-File", "fileName": "Incomplete File"}
-
-    with pytest.raises(SPDXParsingError) as err:
-        file_parser.parse_file(file_dict)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            "Error while constructing File: ['SetterError File: type of argument "
-            '"checksums" must be a list; got NoneType instead: None\']'
-        ],
-    )
-
-
 def test_parse_invalid_files():
     file_parser = FileParser()
     files = [
@@ -129,20 +113,11 @@ def test_parse_invalid_files():
                 {"algorithm": "MD", "checksumValue": "624c1abb3664f4b35547e7c73864ad24"},
             ],
         },
+        {"SPDXID": "SPDXRef-File", "fileName": "Incomplete File"},
     ]
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         parse_list_of_elements(files, file_parser.parse_file)
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            "Error while constructing File: ['SetterError File: type of argument "
-            '"checksums" must be a list; got NoneType instead: None\']',
-            'Error while constructing File: [\'SetterError File: type of argument "name" '
-            "must be str; got NoneType instead: None']",
-            "Error while parsing File: [\"Error while parsing Checksum: ['Invalid ChecksumAlgorithm: MD']\"]",
-        ],
-    )
 
 
 def test_parse_file_types():

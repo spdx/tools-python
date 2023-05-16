@@ -21,8 +21,6 @@ def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         ExternalMap(234, None, ["location  hints"])
 
-    assert err.value.args[0] == [
-        'SetterError ExternalMap: type of argument "external_id" must be str; got int ' "instead: 234",
-        'SetterError ExternalMap: type of argument "location_hint" must be one of '
-        "(str, NoneType); got list instead: ['location  hints']",
-    ]
+    assert len(err.value.args[0]) == 2
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError ExternalMap:")

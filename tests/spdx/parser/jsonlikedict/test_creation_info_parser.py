@@ -60,36 +60,17 @@ def test_parse_creation_info():
 
 
 @pytest.mark.parametrize(
-    "incomplete_dict,expected_message",
+    "incomplete_dict",
     [
-        (
-            {"spdxVersion": "2.3", "SPDXID": DOCUMENT_SPDX_ID, "name": "Example Document"},
-            ["Error while parsing document Example Document: ['CreationInfo does not exist.']"],
-        ),
-        (
-            {"creationInfo": {"created": "2019-02-01T11:30:40Z"}},
-            [
-                "Error while constructing CreationInfo: ['SetterError CreationInfo: type of "
-                'argument "spdx_version" must be str; got NoneType instead: None\', '
-                '\'SetterError CreationInfo: type of argument "spdx_id" must be str; got '
-                "NoneType instead: None', 'SetterError CreationInfo: type of argument "
-                "\"name\" must be str; got NoneType instead: None', 'SetterError "
-                'CreationInfo: type of argument "document_namespace" must be str; got '
-                "NoneType instead: None', 'SetterError CreationInfo: type of argument "
-                "\"creators\" must be a list; got NoneType instead: None', 'SetterError "
-                'CreationInfo: type of argument "data_license" must be str; got NoneType '
-                "instead: None']"
-            ],
-        ),
+        {"spdxVersion": "2.3", "SPDXID": DOCUMENT_SPDX_ID, "name": "Example Document"},
+        {"creationInfo": {"created": "2019-02-01T11:30:40Z"}},
     ],
 )
-def test_parse_incomplete_document_info(incomplete_dict, expected_message):
+def test_parse_incomplete_document_info(incomplete_dict):
     creation_info_parser = CreationInfoParser()
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         creation_info_parser.parse_creation_info(incomplete_dict)
-
-    TestCase().assertCountEqual(err.value.get_messages(), expected_message)
 
 
 def test_parse_invalid_creation_info():
@@ -105,15 +86,5 @@ def test_parse_invalid_creation_info():
         "dataLicense": None,
     }
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         creation_info_parser.parse_creation_info(doc_dict)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            "Error while constructing CreationInfo: ['SetterError CreationInfo: type of "
-            'argument "document_namespace" must be str; got NoneType instead: None\', '
-            '\'SetterError CreationInfo: type of argument "data_license" must be str; got '
-            "NoneType instead: None']"
-        ],
-    )

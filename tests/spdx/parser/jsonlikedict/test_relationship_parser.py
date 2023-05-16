@@ -37,17 +37,8 @@ def test_parse_incomplete_relationship():
         "comment": "Comment.",
     }
 
-    with pytest.raises(SPDXParsingError) as err:
+    with pytest.raises(SPDXParsingError):
         relationship_parser.parse_relationship(relationship_dict)
-
-    TestCase().assertCountEqual(
-        err.value.get_messages(),
-        [
-            "Error while constructing Relationship: ['SetterError Relationship: type of "
-            'argument "relationship_type" must be '
-            "spdx_tools.spdx.model.relationship.RelationshipType; got NoneType instead: None']"
-        ],
-    )
 
 
 def test_parse_relationship_type():

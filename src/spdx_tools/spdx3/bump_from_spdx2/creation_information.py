@@ -8,39 +8,38 @@ from semantic_version import Version
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.external_document_ref import bump_external_document_ref
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import CreationInformation, SpdxDocument
+from spdx_tools.spdx3.model import CreationInformation, ProfileIdentifier, SpdxDocument
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.actor import ActorType
 from spdx_tools.spdx.model.document import CreationInfo as Spdx2_CreationInfo
 
 
 def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload) -> SpdxDocument:
-    # creation_info.spdx_id -> spdx_document.spdx_id
     document_namespace = spdx2_creation_info.document_namespace
     spdx_id = f"{document_namespace}#{spdx2_creation_info.spdx_id}"
 
-    # creation_info.document_namespace -> ?
     print_missing_conversion("creation_info.document_namespace", 0, "https://github.com/spdx/spdx-3-model/issues/87")
 
-    # creation_info.external_document_refs -> spdx_document.imports
-    imports = [
-        bump_external_document_ref(external_document_ref)
-        for external_document_ref in spdx2_creation_info.external_document_refs
-    ]
-    # creation_info.license_list_version -> ?
+    namespaces, imports = zip(
+        *[
+            bump_external_document_ref(external_document_ref)
+            for external_document_ref in spdx2_creation_info.external_document_refs
+        ]
+    )
+    namespaces = list(namespaces)
+    imports = list(imports)
     print_missing_conversion(
         "creation_info.license_list_version",
         0,
         "part of licensing profile, " "https://github.com/spdx/spdx-3-model/issues/131",
     )
-    # creation_info.document_comment -> spdx_document.comment
     document_comment = spdx2_creation_info.document_comment
     creation_information = CreationInformation(
         spec_version=Version("3.0.0"),
         created=spdx2_creation_info.created,
         created_by=[],
         created_using=[],
-        profile=["core", "software", "licensing"],
+        profile=[ProfileIdentifier.CORE, ProfileIdentifier.SOFTWARE, ProfileIdentifier.LICENSING],
         data_license=spdx2_creation_info.data_license,
         comment=spdx2_creation_info.document_comment,
     )
@@ -73,7 +72,8 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
         creation_info=creation_information,
         name=spdx2_creation_info.name,
         comment=document_comment,
-        elements=[],
-        root_elements=[],
+        element=[],
+        root_element=[],
         imports=imports,
+        namespaces=namespaces,
     )
