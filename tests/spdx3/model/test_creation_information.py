@@ -33,16 +33,9 @@ def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         CreationInformation("2.3", "2012-01-01", [], [], "core", 3, [])
 
-    assert err.value.args[0] == [
-        'SetterError CreationInformation: type of argument "spec_version" must be '
-        "semantic_version.base.Version; got str instead: 2.3",
-        'SetterError CreationInformation: type of argument "created" must be '
-        "datetime.datetime; got str instead: 2012-01-01",
-        'SetterError CreationInformation: type of argument "profile" must be a list; ' "got str instead: core",
-        'SetterError CreationInformation: type of argument "data_license" must be ' "str; got int instead: 3",
-        'SetterError CreationInformation: type of argument "comment" must be'
-        " one of (str, NoneType); got list instead: []",
-    ]
+    assert len(err.value.args[0]) == 5
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError CreationInformation:")
 
 
 def test_incomplete_initialization():

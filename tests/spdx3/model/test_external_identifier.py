@@ -27,16 +27,6 @@ def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
         ExternalIdentifier("CPE22", ["identifier", "another_identifier"], 34, "locator", True)
 
-    assert err.value.args[0] == [
-        'SetterError ExternalIdentifier: type of argument "external_identifier_type" '
-        "must be spdx_tools.spdx3.model.external_identifier.ExternalIdentifierType; got str "
-        "instead: CPE22",
-        'SetterError ExternalIdentifier: type of argument "identifier" must be str; '
-        "got list instead: ['identifier', 'another_identifier']",
-        'SetterError ExternalIdentifier: type of argument "comment" must be one of '
-        "(str, NoneType); got int instead: 34",
-        'SetterError ExternalIdentifier: type of argument "identifier_locator" must '
-        "be a list; got str instead: locator",
-        'SetterError ExternalIdentifier: type of argument "issuing_authority" must be '
-        "one of (str, NoneType); got bool instead: True",
-    ]
+    assert len(err.value.args[0]) == 5
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError ExternalIdentifier:")

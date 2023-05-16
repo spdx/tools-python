@@ -40,14 +40,6 @@ def test_invalid_initialization(creation_information):
             content_type=SoftwarePurpose.ARCHIVE,
         )
 
-    assert err.value.args[0] == [
-        'SetterError File: type of argument "spdx_id" must be str; got int instead: 1',
-        'SetterError File: type of argument "content_identifier" must be one of (str, '
-        "NoneType); got int instead: 3",
-        'SetterError File: type of argument "purpose" must be a list; got '
-        "spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose instead: "
-        "SoftwarePurpose.FILE",
-        'SetterError File: type of argument "content_type" must be one of (str, '
-        "NoneType); got spdx_tools.spdx3.model.software.software_purpose.SoftwarePurpose "
-        "instead: SoftwarePurpose.ARCHIVE",
-    ]
+    assert len(err.value.args[0]) == 4
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError File:")

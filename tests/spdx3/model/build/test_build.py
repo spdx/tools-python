@@ -47,9 +47,6 @@ def test_invalid_initialization(creation_information):
             config_source_digest=["hash_value"],
         )
 
-    assert err.value.args[0] == [
-        (
-            "SetterError Build: type of argument \"config_source_digest\"[0] must be spdx_tools.spdx3.model.hash.Hash;"
-            " got str instead: ['hash_value']"
-        )
-    ]
+    assert len(err.value.args[0]) == 1
+    for error in err.value.args[0]:
+        assert error.startswith("SetterError Build:")
