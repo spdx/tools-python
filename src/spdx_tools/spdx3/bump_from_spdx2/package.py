@@ -32,7 +32,6 @@ def bump_package(
 ):
     spdx_id = "#".join([document_namespace, spdx2_package.spdx_id])
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
-    # package.file_name -> ?
     print_missing_conversion("package2.file_name", 0, "https://github.com/spdx/spdx-3-model/issues/83")
     if isinstance(spdx2_package.supplier, Spdx2_Actor):
         supplied_by_spdx_id = [bump_actor(spdx2_package.supplier, payload, creation_information, document_namespace)]
@@ -44,13 +43,10 @@ def bump_package(
         ]
     else:
         originated_by_spdx_id = None
-    # package.files_analyzed  -> ?
     print_missing_conversion("package2.files_analyzed", 0, "https://github.com/spdx/spdx-3-model/issues/84")
-    # package.verification_code -> package.verified_using
     print_missing_conversion(
         "package2.verification_code", 1, "of IntegrityMethod, https://github.com/spdx/spdx-3-model/issues/85"
     )
-    # package.checksums -> package.verified_using
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_package.checksums]
     declared_license = bump_license_expression_or_none_or_no_assertion(
         spdx2_package.license_declared, extracted_licensing_info

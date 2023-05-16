@@ -20,8 +20,6 @@ def bump_file(
 ):
     spdx_id = "#".join([document_namespace, spdx2_file.spdx_id])
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_file.checksums]
-    # file.checksums -> file.verifiedUsing
-    # file.file_types -> file.content_type (MediaType with Cardinality 1)
     print_missing_conversion(
         "file.file_type", 0, "different cardinalities, " "https://github.com/spdx/spdx-3-model/issues/82"
     )
