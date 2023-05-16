@@ -26,10 +26,10 @@ def test_error_message():
             'Error while constructing Package: [\'SetterError Package: argument "name" '
             "(None) is not an instance of str: None', 'SetterError Package: argument "
             '"download_location" (int) did not match any element in the union: '
-            "[\\'str\\', \\'spdx_tools.spdx.model.spdx_no_assertion.SpdxNoAssertion\\', "
-            "\\'spdx_tools.spdx.model.spdx_none.SpdxNone\\']: 5', 'SetterError Package: "
+            "[str, spdx_tools.spdx.model.spdx_no_assertion.SpdxNoAssertion, "
+            "spdx_tools.spdx.model.spdx_none.SpdxNone]: 5', 'SetterError Package: "
             'argument "file_name" (int) did not match any element in the union: '
-            "[\\'str\\', \\'NoneType\\']: 10', 'SetterError Package: item 1 of argument "
+            "[str, NoneType]: 10', 'SetterError Package: item 1 of argument "
             "\"attribution_texts\" (list) is not an instance of str: [\\'text\\', 5, "
             "{\\'test\\': \\'data\\'}]']"
         ],
