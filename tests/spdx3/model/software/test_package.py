@@ -13,8 +13,8 @@ from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 def test_correct_initialization(creation_info):
     package = Package(
         "SPDXRef-Package",
-        creation_info,
         "Test package",
+        creation_info=creation_info,
         content_identifier="https://any.uri",
         originated_by=["https://namespace.test#originator"],
         supplied_by=["https://namespace.test#supplier"],
@@ -53,8 +53,8 @@ def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         Package(
             "SPDXRef-Package",
-            creation_info,
             "Test package",
+            creation_info=creation_info,
             built_time="2022-03-04T00:00:00Z",
             content_identifier=3,
             purpose=SoftwarePurpose.FILE,

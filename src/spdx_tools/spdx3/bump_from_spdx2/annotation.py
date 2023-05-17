@@ -41,8 +41,8 @@ def bump_annotation(
     payload.add_element(
         Annotation(
             spdx_id,
-            creation_info,
             annotation_type,
+            creation_info=creation_info,
             subject=spdx2_annotation.spdx_id,
             statement=spdx2_annotation.annotation_comment,
         )

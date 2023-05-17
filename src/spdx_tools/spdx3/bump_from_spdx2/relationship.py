@@ -204,10 +204,10 @@ def bump_relationship(
 
         return SoftwareDependencyRelationship(
             spdx_id,
-            creation_info,
             from_element,
             relationship_type,
             to,
+            creation_info=creation_info,
             comment=spdx2_relationship.comment,
             completeness=completeness,
             scope=parameters.get("scope"),
@@ -217,10 +217,10 @@ def bump_relationship(
 
     return Relationship(
         spdx_id,
-        creation_info,
         from_element,
         relationship_type,
         to,
+        creation_info=creation_info,
         comment=spdx2_relationship.comment,
         completeness=completeness,
     )

@@ -14,7 +14,7 @@ from spdx_tools.spdx3.model.build import Build
 def test_correct_initialization(creation_info):
     build = Build(
         "some_spdx_id",
-        creation_info,
+        creation_info=creation_info,
         build_type="build type",
         build_id="build id",
         config_source_entrypoint=["entrypoint"],
@@ -42,7 +42,7 @@ def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         Build(
             "some_spdx_id",
-            creation_info,
+            creation_info=creation_info,
             build_type="build type",
             config_source_digest=["hash_value"],
         )

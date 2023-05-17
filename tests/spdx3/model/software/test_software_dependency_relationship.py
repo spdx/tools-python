@@ -18,10 +18,10 @@ from spdx_tools.spdx3.model.software import (
 def test_correct_initialization(creation_info):
     relationship = SoftwareDependencyRelationship(
         "SPDXRef-Relationship",
-        creation_info,
         "spdx_id1",
         RelationshipType.DESCRIBES,
         ["spdx_id2", "spdx_id3"],
+        creation_info=creation_info,
         completeness=RelationshipCompleteness.NOASSERTION,
         start_time=datetime(11, 11, 11),
         end_time=datetime(12, 12, 12),
@@ -48,10 +48,10 @@ def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         SoftwareDependencyRelationship(
             "SPDXRef-Relationship",
-            creation_info,
             "spdx_id1",
             RelationshipType.DESCRIBES,
-            42,
+            to=42,
+            creation_info=creation_info,
         )
 
     assert len(err.value.args[0]) == 1
