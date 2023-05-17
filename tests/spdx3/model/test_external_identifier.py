@@ -1,26 +1,28 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from unittest import TestCase
-
 import pytest
 
 from spdx_tools.spdx3.model import ExternalIdentifier, ExternalIdentifierType
+from tests.spdx3.fixtures import external_identifier_fixture
+from tests.spdx3.model.model_test_utils import get_property_names
 
 
 def test_correct_initialization():
-    external_identifier = ExternalIdentifier(
-        ExternalIdentifierType.CPE22,
-        "cpe:/o:canonical:ubuntu_linux:10.04:-:lts",
-        "This is a comment",
-        ["first locator", "second locator"],
-        "authority",
+    external_identifier = external_identifier_fixture()
+
+    for property_name in get_property_names(ExternalIdentifier):
+        assert getattr(external_identifier, property_name) is not None
+
+    assert external_identifier.external_identifier_type == ExternalIdentifierType.OTHER
+    assert external_identifier.identifier == "externalIdentifierIdentifier"
+    assert external_identifier.comment == "externalIdentifierComment"
+    assert external_identifier.identifier_locator == [
+        "https://spdx.test/tools-python/external_identifier_identifier_locator"
+    ]
+    assert (
+        external_identifier.issuing_authority == "https://spdx.test/tools-python/external_identifier_issuing_authority"
     )
-    assert external_identifier.external_identifier_type == ExternalIdentifierType.CPE22
-    assert external_identifier.identifier == "cpe:/o:canonical:ubuntu_linux:10.04:-:lts"
-    assert external_identifier.comment == "This is a comment"
-    TestCase().assertCountEqual(external_identifier.identifier_locator, ["first locator", "second locator"])
-    assert external_identifier.issuing_authority == "authority"
 
 
 def test_invalid_initialization():
