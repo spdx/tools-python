@@ -12,7 +12,7 @@ from spdx_tools.spdx3.model import (
     AnnotationType,
     Bom,
     Bundle,
-    CreationInformation,
+    CreationInfo,
     ExternalIdentifier,
     ExternalIdentifierType,
     ExternalMap,
@@ -79,7 +79,7 @@ def creation_info_fixture(
     profile=None,
     data_license="CC0-1.0",
     comment="creationInfoComment",
-) -> CreationInformation:
+) -> CreationInfo:
     created_by = ["https://spdx.test/tools-python/creation_info_created_by"] if created_by is None else created_by
     created_using = (
         ["https://spdx.test/tools-python/creation_info_created_using"] if created_using is None else created_using
@@ -89,7 +89,7 @@ def creation_info_fixture(
         if profile is None
         else profile
     )
-    return CreationInformation(
+    return CreationInfo(
         spec_version=spec_version,
         created=created,
         created_by=created_by,

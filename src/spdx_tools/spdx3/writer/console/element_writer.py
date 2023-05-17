@@ -5,7 +5,7 @@ from typing import TextIO
 
 from spdx_tools.spdx3.model import Element
 from spdx_tools.spdx3.writer.console.console import write_value
-from spdx_tools.spdx3.writer.console.creation_information_writer import write_creation_info
+from spdx_tools.spdx3.writer.console.creation_info_writer import write_creation_info
 from spdx_tools.spdx3.writer.console.external_identifier_writer import write_external_identifier
 from spdx_tools.spdx3.writer.console.external_reference_writer import write_external_reference
 from spdx_tools.spdx3.writer.console.hash_writer import write_hash

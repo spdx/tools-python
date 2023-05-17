@@ -12,15 +12,15 @@ from spdx_tools.spdx.model.file import File as Spdx2_File
 from tests.spdx.fixtures import file_fixture
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_bump_file(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_bump_file(creation_info):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_file: Spdx2_File = file_fixture()
     integrity_method: Hash = Hash(HashAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c")
     expected_new_file_id = f"{document_namespace}#{spdx2_file.spdx_id}"
 
-    bump_file(spdx2_file, payload, creation_information, document_namespace, None)
+    bump_file(spdx2_file, payload, creation_info, document_namespace, None)
     file = payload.get_element(expected_new_file_id)
 
     assert isinstance(file, File)

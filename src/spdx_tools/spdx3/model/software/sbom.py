@@ -9,7 +9,7 @@ from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_pr
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx3.model import (
     Bom,
-    CreationInformation,
+    CreationInfo,
     ExternalIdentifier,
     ExternalMap,
     ExternalReference,
@@ -36,7 +36,7 @@ class Sbom(Bom):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInformation,
+        creation_info: CreationInfo,
         element: List[str],
         root_element: List[str],
         name: Optional[str] = None,

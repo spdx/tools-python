@@ -7,7 +7,7 @@ from typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx3.model import (
-    CreationInformation,
+    CreationInfo,
     ExternalIdentifier,
     ExternalReference,
     IntegrityMethod,
@@ -22,7 +22,7 @@ class VexFixedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInformation,
+        creation_info: CreationInfo,
         from_element: str,
         to: List[str],
         relationship_type: RelationshipType,

@@ -8,18 +8,18 @@ import pytest
 from spdx_tools.spdx3.model.software import Sbom, SBOMType
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_correct_initialization(creation_info):
     sbom = Sbom(
         "SPDXRef-Sbom",
-        creation_information,
+        creation_info,
         element=["spdx_id1", "spdx_id2"],
         root_element=["spdx_id3"],
         sbom_type=[SBOMType.DESIGN],
     )
 
     assert sbom.spdx_id == "SPDXRef-Sbom"
-    assert sbom.creation_info == creation_information
+    assert sbom.creation_info == creation_info
     assert sbom.element == ["spdx_id1", "spdx_id2"]
     assert sbom.root_element == ["spdx_id3"]
     assert sbom.sbom_type == [SBOMType.DESIGN]

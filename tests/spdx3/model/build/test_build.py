@@ -10,11 +10,11 @@ from spdx_tools.spdx3.model import Hash, HashAlgorithm
 from spdx_tools.spdx3.model.build import Build
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_correct_initialization(creation_info):
     build = Build(
         "some_spdx_id",
-        creation_information,
+        creation_info,
         build_type="build type",
         build_id="build id",
         config_source_entrypoint=["entrypoint"],
@@ -37,12 +37,12 @@ def test_correct_initialization(creation_information):
     assert build.environment == {"param2": "value2"}
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_invalid_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         Build(
             "some_spdx_id",
-            creation_information,
+            creation_info,
             build_type="build type",
             config_source_digest=["hash_value"],
         )

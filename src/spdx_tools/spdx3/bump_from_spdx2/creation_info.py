@@ -8,13 +8,13 @@ from semantic_version import Version
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.external_document_ref import bump_external_document_ref
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import CreationInformation, ProfileIdentifier, SpdxDocument
+from spdx_tools.spdx3.model import CreationInfo, ProfileIdentifier, SpdxDocument
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.actor import ActorType
 from spdx_tools.spdx.model.document import CreationInfo as Spdx2_CreationInfo
 
 
-def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload) -> SpdxDocument:
+def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload) -> SpdxDocument:
     document_namespace = spdx2_creation_info.document_namespace
     spdx_id = f"{document_namespace}#{spdx2_creation_info.spdx_id}"
 
@@ -34,7 +34,7 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
         "part of licensing profile, " "https://github.com/spdx/spdx-3-model/issues/131",
     )
     document_comment = spdx2_creation_info.document_comment
-    creation_information = CreationInformation(
+    creation_info = CreationInfo(
         spec_version=Version("3.0.0"),
         created=spdx2_creation_info.created,
         created_by=[],
@@ -44,12 +44,12 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
         comment=spdx2_creation_info.document_comment,
     )
 
-    # due to creators having a creation_information themselves which inherits from the document's one,
-    # we have to add them after the creation_information has been initialized
+    # due to creators having a creation_info themselves which inherits from the document's one,
+    # we have to add them after the creation_info has been initialized
     creator_ids: List[str] = []
     tool_ids: List[str] = []
     for creator in spdx2_creation_info.creators:
-        bumped_actor_id = bump_actor(creator, payload, creation_information, document_namespace)
+        bumped_actor_id = bump_actor(creator, payload, creation_info, document_namespace)
         if creator.actor_type in [ActorType.PERSON, ActorType.ORGANIZATION]:
             creator_ids.append(bumped_actor_id)
         else:
@@ -64,12 +64,12 @@ def bump_creation_information(spdx2_creation_info: Spdx2_CreationInfo, payload: 
             "https://github.com/spdx/spdx-3-model/issues/180",
         )
 
-    creation_information.created_by = creator_ids
-    creation_information.created_using = tool_ids
+    creation_info.created_by = creator_ids
+    creation_info.created_using = tool_ids
 
     return SpdxDocument(
         spdx_id=spdx_id,
-        creation_info=creation_information,
+        creation_info=creation_info,
         name=spdx2_creation_info.name,
         comment=document_comment,
         element=[],

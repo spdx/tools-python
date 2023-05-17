@@ -8,7 +8,7 @@ from typing import Dict, List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model import CreationInformation, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
 from spdx_tools.spdx3.model.licensing import LicenseField
 from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 
@@ -47,7 +47,7 @@ class Dataset(Package):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInformation,
+        creation_info: CreationInfo,
         name: str,
         originated_by: List[str],
         download_location: str,

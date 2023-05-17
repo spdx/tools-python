@@ -2,12 +2,12 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from spdx_tools.spdx3.bump_from_spdx2.annotation import bump_annotation
-from spdx_tools.spdx3.bump_from_spdx2.creation_information import bump_creation_information
+from spdx_tools.spdx3.bump_from_spdx2.creation_info import bump_creation_info
 from spdx_tools.spdx3.bump_from_spdx2.file import bump_file
 from spdx_tools.spdx3.bump_from_spdx2.package import bump_package
 from spdx_tools.spdx3.bump_from_spdx2.relationship import bump_relationships
 from spdx_tools.spdx3.bump_from_spdx2.snippet import bump_snippet
-from spdx_tools.spdx3.model import CreationInformation, SpdxDocument
+from spdx_tools.spdx3.model import CreationInfo, SpdxDocument
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.document import Document as Spdx2_Document
 
@@ -19,8 +19,8 @@ from spdx_tools.spdx.model.document import Document as Spdx2_Document
 def bump_spdx_document(document: Spdx2_Document) -> Payload:
     payload = Payload()
     document_namespace: str = document.creation_info.document_namespace
-    spdx_document: SpdxDocument = bump_creation_information(document.creation_info, payload)
-    creation_info: CreationInformation = spdx_document.creation_info
+    spdx_document: SpdxDocument = bump_creation_info(document.creation_info, payload)
+    creation_info: CreationInfo = spdx_document.creation_info
 
     payload.add_element(spdx_document)
 
