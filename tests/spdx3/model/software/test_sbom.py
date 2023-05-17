@@ -12,7 +12,7 @@ from spdx_tools.spdx3.model.software import Sbom, SBOMType
 def test_correct_initialization(creation_info):
     sbom = Sbom(
         "SPDXRef-Sbom",
-        creation_info,
+        creation_info=creation_info,
         element=["spdx_id1", "spdx_id2"],
         root_element=["spdx_id3"],
         sbom_type=[SBOMType.DESIGN],
@@ -27,7 +27,7 @@ def test_correct_initialization(creation_info):
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        Sbom(2, {"creation_info": [3, 4, 5]}, element=[], root_element=[])
+        Sbom(2, creation_info={"creation_info": [3, 4, 5]}, element=[], root_element=[])
 
     assert len(err.value.args[0]) == 2
     for error in err.value.args[0]:

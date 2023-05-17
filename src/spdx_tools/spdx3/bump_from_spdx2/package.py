@@ -100,8 +100,8 @@ def bump_package(
     payload.add_element(
         Package(
             spdx_id,
-            creation_info,
             spdx2_package.name,
+            creation_info=creation_info,
             summary=spdx2_package.summary,
             description=spdx2_package.description,
             comment=spdx2_package.comment,

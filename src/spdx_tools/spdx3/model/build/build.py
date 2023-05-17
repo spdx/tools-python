@@ -25,8 +25,8 @@ class Build(Element):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInfo,
         build_type: str,
+        creation_info: Optional[CreationInfo] = None,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,

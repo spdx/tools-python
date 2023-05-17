@@ -26,11 +26,11 @@ class CvssV2VulnAssessmentRelationship(VulnAssessmentRelationship):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInfo,
         from_element: str,
-        to: List[str],
         relationship_type: RelationshipType,
+        to: List[str],
         score: str,
+        creation_info: Optional[CreationInfo] = None,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
