@@ -8,7 +8,7 @@ from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model import CreationInformation, Element, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model import CreationInfo, Element, ExternalIdentifier, ExternalReference, IntegrityMethod
 
 
 class RelationshipType(Enum):
@@ -97,7 +97,7 @@ class Relationship(Element):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInformation,
+        creation_info: CreationInfo,
         from_element: str,
         relationship_type: RelationshipType,
         to: List[str] = None,

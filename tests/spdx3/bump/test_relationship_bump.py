@@ -11,7 +11,7 @@ from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
 from tests.spdx.fixtures import relationship_fixture
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
 def test_relationship_bump(creation_info):
     spdx2_relationship = relationship_fixture()
     document_namespace = "https://doc.namespace"
@@ -27,7 +27,7 @@ def test_relationship_bump(creation_info):
     )
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
 def test_relationships_bump(creation_info):
     relationships = [
         relationship_fixture(comment=None),
@@ -46,7 +46,7 @@ def test_relationships_bump(creation_info):
     )
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
 def test_relationships_bump_with_setting_completeness(creation_info):
     relationships = [
         relationship_fixture(related_spdx_element_id=SpdxNoAssertion()),
@@ -88,7 +88,7 @@ def test_relationships_bump_with_setting_completeness(creation_info):
     )
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
 def test_undefined_relationship_bump(creation_info, capsys):
     relationships = [
         relationship_fixture(

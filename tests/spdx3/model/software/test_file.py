@@ -8,11 +8,11 @@ import pytest
 from spdx_tools.spdx3.model.software import File, SoftwarePurpose
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_correct_initialization(creation_info):
     file = File(
         "SPDXRef-File",
-        creation_information,
+        creation_info,
         "Test file",
         verified_using=None,
         content_identifier="https://any.uri",
@@ -21,19 +21,19 @@ def test_correct_initialization(creation_information):
     )
 
     assert file.spdx_id == "SPDXRef-File"
-    assert file.creation_info == creation_information
+    assert file.creation_info == creation_info
     assert file.name == "Test file"
     assert file.content_identifier == "https://any.uri"
     assert file.purpose == [SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE]
     assert file.content_type == "MediaType"
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_invalid_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         File(
             1,
-            creation_information,
+            creation_info,
             "test file",
             content_identifier=3,
             purpose=SoftwarePurpose.FILE,

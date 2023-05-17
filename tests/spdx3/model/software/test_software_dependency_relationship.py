@@ -14,11 +14,11 @@ from spdx_tools.spdx3.model.software import (
 )
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_correct_initialization(creation_info):
     relationship = SoftwareDependencyRelationship(
         "SPDXRef-Relationship",
-        creation_information,
+        creation_info,
         "spdx_id1",
         RelationshipType.DESCRIBES,
         ["spdx_id2", "spdx_id3"],
@@ -31,7 +31,7 @@ def test_correct_initialization(creation_information):
     )
 
     assert relationship.spdx_id == "SPDXRef-Relationship"
-    assert relationship.creation_info == creation_information
+    assert relationship.creation_info == creation_info
     assert relationship.from_element == "spdx_id1"
     assert relationship.to == ["spdx_id2", "spdx_id3"]
     assert relationship.relationship_type == RelationshipType.DESCRIBES
@@ -43,12 +43,12 @@ def test_correct_initialization(creation_information):
     assert relationship.conditionality == DependencyConditionalityType.PROVIDED
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_invalid_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         SoftwareDependencyRelationship(
             "SPDXRef-Relationship",
-            creation_information,
+            creation_info,
             "spdx_id1",
             RelationshipType.DESCRIBES,
             42,
