@@ -34,10 +34,10 @@ class LifecycleScopedRelationship(Relationship):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInfo,
         from_element: str,
         relationship_type: RelationshipType,
         to: List[str] = None,
+        creation_info: Optional[CreationInfo] = None,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
