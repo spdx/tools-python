@@ -11,11 +11,11 @@ from spdx_tools.spdx3.model.ai.ai_package import SafetyRiskAssessmentType
 from spdx_tools.spdx3.model.software import SoftwarePurpose
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_correct_initialization(creation_info):
     ai_package = AIPackage(
         "some_spdx_id",
-        creation_information,
+        creation_info,
         "AI Package name",
         ["https://namespace.test#supplier"],
         "https://download.test",
@@ -61,12 +61,12 @@ def test_correct_initialization(creation_information):
     assert ai_package.safety_risk_assessment == SafetyRiskAssessmentType.HIGH
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_invalid_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         AIPackage(
             "some_spdx_id",
-            creation_information,
+            creation_info,
             "AI Package name",
             ["https://namespace.test#supplier"],
             "https://download.test",

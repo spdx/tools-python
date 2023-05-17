@@ -29,8 +29,8 @@ from tests.spdx.fixtures import actor_fixture, package_fixture
         (SpdxNoAssertion(), [], SpdxNoAssertion(), []),
     ],
 )
-@mock.patch("spdx_tools.spdx3.model.CreationInformation")
-def test_bump_package(creation_information, originator, expected_originator, supplier, expected_supplier):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo")
+def test_bump_package(creation_info, originator, expected_originator, supplier, expected_supplier):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
@@ -45,7 +45,7 @@ def test_bump_package(creation_information, originator, expected_originator, sup
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_information, document_namespace, [])
+    bump_package(spdx2_package, payload, creation_info, document_namespace, [])
     package = payload.get_element(expected_new_package_id)
 
     assert isinstance(package, Package)
@@ -76,8 +76,8 @@ def test_bump_package(creation_information, originator, expected_originator, sup
     )
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation")
-def test_bump_of_single_purl_without_comment(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo")
+def test_bump_of_single_purl_without_comment(creation_info):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
@@ -87,7 +87,7 @@ def test_bump_of_single_purl_without_comment(creation_information):
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_information, document_namespace, [])
+    bump_package(spdx2_package, payload, creation_info, document_namespace, [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url == "purl_locator"
@@ -95,8 +95,8 @@ def test_bump_of_single_purl_without_comment(creation_information):
     assert package.external_identifier == []
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation")
-def test_bump_of_single_purl_with_comment(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo")
+def test_bump_of_single_purl_with_comment(creation_info):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
@@ -106,7 +106,7 @@ def test_bump_of_single_purl_with_comment(creation_information):
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_information, document_namespace, [])
+    bump_package(spdx2_package, payload, creation_info, document_namespace, [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
@@ -116,8 +116,8 @@ def test_bump_of_single_purl_with_comment(creation_information):
     ]
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation")
-def test_bump_of_multiple_purls(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo")
+def test_bump_of_multiple_purls(creation_info):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
@@ -128,7 +128,7 @@ def test_bump_of_multiple_purls(creation_information):
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_information, document_namespace, [])
+    bump_package(spdx2_package, payload, creation_info, document_namespace, [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None

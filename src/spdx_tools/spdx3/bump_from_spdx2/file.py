@@ -4,7 +4,7 @@
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import CreationInformation
+from spdx_tools.spdx3.model import CreationInfo
 from spdx_tools.spdx3.model.software import File
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import SpdxNoAssertion
@@ -14,7 +14,7 @@ from spdx_tools.spdx.model.file import File as Spdx2_File
 def bump_file(
     spdx2_file: Spdx2_File,
     payload: Payload,
-    creation_information: CreationInformation,
+    creation_info: CreationInfo,
     document_namespace: str,
     extracted_licensing_info,
 ):
@@ -40,7 +40,7 @@ def bump_file(
     payload.add_element(
         File(
             spdx_id,
-            creation_info=creation_information,
+            creation_info=creation_info,
             name=spdx2_file.name,
             comment=spdx2_file.comment,
             verified_using=integrity_methods,

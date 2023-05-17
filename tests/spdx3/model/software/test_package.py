@@ -9,11 +9,11 @@ import pytest
 from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_correct_initialization(creation_info):
     package = Package(
         "SPDXRef-Package",
-        creation_information,
+        creation_info,
         "Test package",
         content_identifier="https://any.uri",
         originated_by=["https://namespace.test#originator"],
@@ -31,7 +31,7 @@ def test_correct_initialization(creation_information):
     )
 
     assert package.spdx_id == "SPDXRef-Package"
-    assert package.creation_info == creation_information
+    assert package.creation_info == creation_info
     assert package.name == "Test package"
     assert package.content_identifier == "https://any.uri"
     assert package.originated_by == ["https://namespace.test#originator"]
@@ -48,12 +48,12 @@ def test_correct_initialization(creation_information):
     assert package.source_info == "some info"
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_invalid_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         Package(
             "SPDXRef-Package",
-            creation_information,
+            creation_info,
             "Test package",
             built_time="2022-03-04T00:00:00Z",
             content_identifier=3,
