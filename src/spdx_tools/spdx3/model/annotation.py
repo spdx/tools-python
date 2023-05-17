@@ -25,9 +25,9 @@ class Annotation(Element):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInfo,
         annotation_type: AnnotationType,
         subject: str,
+        creation_info: Optional[CreationInfo] = None,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,

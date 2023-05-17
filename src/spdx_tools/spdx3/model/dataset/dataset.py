@@ -47,7 +47,6 @@ class Dataset(Package):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInfo,
         name: str,
         originated_by: List[str],
         download_location: str,
@@ -55,6 +54,7 @@ class Dataset(Package):
         built_time: datetime,
         release_time: datetime,
         dataset_type: str,
+        creation_info: Optional[CreationInfo] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,

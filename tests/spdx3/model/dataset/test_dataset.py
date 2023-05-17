@@ -14,7 +14,6 @@ from spdx_tools.spdx3.model.software import SoftwarePurpose
 def test_correct_initialization(creation_info):
     dataset = Dataset(
         "some_spdx_id",
-        creation_info,
         "Dataset name",
         ["https://namespace.test#originator"],
         "https://download.test",
@@ -22,6 +21,7 @@ def test_correct_initialization(creation_info):
         datetime(10, 5, 23, 11),
         datetime(11, 5, 24, 12),
         "training data",
+        creation_info=creation_info,
         data_collection_process="data collection process",
         intended_use="intended use",
         dataset_size=420000,
@@ -61,7 +61,6 @@ def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         Dataset(
             "some_spdx_id",
-            creation_info,
             "Dataset name",
             ["https://namespace.test#originator"],
             "https://download.test",
@@ -69,6 +68,7 @@ def test_invalid_initialization(creation_info):
             datetime(10, 5, 23, 11),
             datetime(11, 5, 24, 12),
             "training data",
+            creation_info=creation_info,
             sensor={"sensor1": "value", "sensor2": 250},
         )
 

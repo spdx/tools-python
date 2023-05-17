@@ -23,8 +23,8 @@ class Package(SoftwareArtifact):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInfo,
         name: str,
+        creation_info: Optional[CreationInfo] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
