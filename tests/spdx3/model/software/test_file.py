@@ -12,8 +12,8 @@ from spdx_tools.spdx3.model.software import File, SoftwarePurpose
 def test_correct_initialization(creation_info):
     file = File(
         "SPDXRef-File",
-        creation_info,
         "Test file",
+        creation_info=creation_info,
         verified_using=None,
         content_identifier="https://any.uri",
         purpose=[SoftwarePurpose.ARCHIVE, SoftwarePurpose.FILE],
@@ -33,8 +33,8 @@ def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         File(
             1,
-            creation_info,
             "test file",
+            creation_info=creation_info,
             content_identifier=3,
             purpose=SoftwarePurpose.FILE,
             content_type=SoftwarePurpose.ARCHIVE,

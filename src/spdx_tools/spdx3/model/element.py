@@ -12,7 +12,7 @@ from spdx_tools.spdx3.model import CreationInfo, ExternalIdentifier, ExternalRef
 @dataclass_with_properties
 class Element(ABC):
     spdx_id: str  # IRI
-    creation_info: CreationInfo
+    creation_info: Optional[CreationInfo] = None
     name: Optional[str] = None
     summary: Optional[str] = None
     description: Optional[str] = None

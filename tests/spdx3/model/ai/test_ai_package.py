@@ -15,13 +15,13 @@ from spdx_tools.spdx3.model.software import SoftwarePurpose
 def test_correct_initialization(creation_info):
     ai_package = AIPackage(
         "some_spdx_id",
-        creation_info,
         "AI Package name",
         ["https://namespace.test#supplier"],
         "https://download.test",
         "1.2:rc2",
         [SoftwarePurpose.SOURCE],
         datetime(12, 5, 23, 11),
+        creation_info=creation_info,
         energy_consumption="energy consumption",
         standard_compliance=["some standard"],
         limitation="limitation",
@@ -66,13 +66,13 @@ def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         AIPackage(
             "some_spdx_id",
-            creation_info,
             "AI Package name",
             ["https://namespace.test#supplier"],
             "https://download.test",
             "1.2:rc2",
             [SoftwarePurpose.SOURCE],
             datetime(12, 5, 23, 11),
+            creation_info,
             metric={"metric1": "value", "metric2": 250},
         )
 
