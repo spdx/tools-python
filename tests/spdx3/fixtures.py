@@ -36,6 +36,7 @@ from spdx_tools.spdx3.model import (
 from spdx_tools.spdx3.model.licensing import (
     CustomLicense,
     CustomLicenseAddition,
+    LicenseField,
     ListedLicense,
     ListedLicenseException,
 )
@@ -54,7 +55,17 @@ from spdx_tools.spdx3.model.security import (
     VexUnderInvestigationVulnAssessmentRelationship,
     Vulnerability,
 )
-from spdx_tools.spdx3.model.software import Sbom, SBOMType
+from spdx_tools.spdx3.model.software import (
+    DependencyConditionalityType,
+    File,
+    Package,
+    Sbom,
+    SBOMType,
+    Snippet,
+    SoftwareDependencyLinkType,
+    SoftwareDependencyRelationship,
+    SoftwarePurpose,
+)
 
 """Utility methods to create data model instances. All properties have valid defaults, so they don't need to be
 specified unless relevant for the test."""
@@ -298,6 +309,42 @@ VEX_FIXED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "relationship_type": RelationshipType.FIXED_IN,
 }
 
+ARTIFACT_DICT = {
+    "originated_by": ["https://spdx.test/tools-python/originatedBy"],
+    "supplied_by": ["https://spdx.test/tools-python/suppliedBy"],
+    "built_time": datetime(2004, 1, 1),
+    "release_time": datetime(2005, 1, 1),
+    "valid_until_time": datetime(2006, 1, 1),
+    "standard": ["https://spdx.test/tools-python/standard"],
+}
+
+SOFTWARE_ARTIFACT_DICT = {
+    "content_identifier": "https://spdx.test/tools-python/contentIdentifier",
+    "purpose": SoftwarePurpose.OTHER,
+    "concluded_license": LicenseField,
+    "declared_license": LicenseField,
+    "copyright_text": "copyrightText",
+    "attribution_text": "attributionText",
+}
+
+FILE_DICT = {"content_type": "fileContentType"}
+
+PACKAGE_DICT = {
+    "package_version": "packageVersion",
+    "download_location": "https://spdx.test/tools-python/downloadPackage",
+    "package_url": "https://spdx.test/tools-python/package",
+    "homepage": "https://spdx.test/tools-python/homepage",
+    "source_info": "sourceInfo",
+}
+
+SNIPPET_DICT = {"byte_range": (1024, 2048), "line_range": (1, 4)}
+
+SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT = {
+    "software_linkage": SoftwareDependencyLinkType.OTHER,
+    "conditionality": DependencyConditionalityType.OTHER,
+}
+
+
 FIXTURE_DICTS = {
     Agent: [ELEMENT_DICT],
     Person: [ELEMENT_DICT],
@@ -374,6 +421,15 @@ FIXTURE_DICTS = {
         VEX_UNDER_INVESTIGATION_VULN_ASSESSMENT_RELATIONSHIP_DICT,
     ],
     Vulnerability: [ELEMENT_DICT, VULNERABILITY_DICT],
+    File: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, FILE_DICT],
+    Package: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT],
+    Snippet: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, SNIPPET_DICT],
+    SoftwareDependencyRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        LIFECYCLE_SCOPED_RELATIONSHIP_DICT,
+        SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT,
+    ],
 }
 
 
