@@ -6,13 +6,13 @@ from dataclasses import field
 from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx_tools.spdx3.model import CreationInformation, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
 
 
 @dataclass_with_properties
 class Element(ABC):
     spdx_id: str  # IRI
-    creation_info: CreationInformation
+    creation_info: CreationInfo
     name: Optional[str] = None
     summary: Optional[str] = None
     description: Optional[str] = None

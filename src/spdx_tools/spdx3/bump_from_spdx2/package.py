@@ -9,7 +9,7 @@ from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import (
-    CreationInformation,
+    CreationInfo,
     ExternalIdentifier,
     ExternalIdentifierType,
     ExternalReference,
@@ -26,7 +26,7 @@ from spdx_tools.spdx.model.package import Package as Spdx2_Package
 def bump_package(
     spdx2_package: Spdx2_Package,
     payload: Payload,
-    creation_information: CreationInformation,
+    creation_info: CreationInfo,
     document_namespace: str,
     extracted_licensing_info: List[ExtractedLicensingInfo],
 ):
@@ -34,13 +34,11 @@ def bump_package(
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
     print_missing_conversion("package2.file_name", 0, "https://github.com/spdx/spdx-3-model/issues/83")
     if isinstance(spdx2_package.supplier, Spdx2_Actor):
-        supplied_by_spdx_id = [bump_actor(spdx2_package.supplier, payload, creation_information, document_namespace)]
+        supplied_by_spdx_id = [bump_actor(spdx2_package.supplier, payload, creation_info, document_namespace)]
     else:
         supplied_by_spdx_id = None
     if isinstance(spdx2_package.originator, Spdx2_Actor):
-        originated_by_spdx_id = [
-            bump_actor(spdx2_package.originator, payload, creation_information, document_namespace)
-        ]
+        originated_by_spdx_id = [bump_actor(spdx2_package.originator, payload, creation_info, document_namespace)]
     else:
         originated_by_spdx_id = None
     print_missing_conversion("package2.files_analyzed", 0, "https://github.com/spdx/spdx-3-model/issues/84")
@@ -90,7 +88,7 @@ def bump_package(
     payload.add_element(
         Package(
             spdx_id,
-            creation_information,
+            creation_info,
             spdx2_package.name,
             summary=spdx2_package.summary,
             description=spdx2_package.description,

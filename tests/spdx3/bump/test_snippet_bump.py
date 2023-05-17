@@ -11,14 +11,14 @@ from spdx_tools.spdx.model.snippet import Snippet as Spdx2_Snippet
 from tests.spdx.fixtures import snippet_fixture
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_bump_snippet(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_bump_snippet(creation_info):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_snippet: Spdx2_Snippet = snippet_fixture()
     expected_new_snippet_id = f"{document_namespace}#{spdx2_snippet.spdx_id}"
 
-    bump_snippet(spdx2_snippet, payload, creation_information, document_namespace, [])
+    bump_snippet(spdx2_snippet, payload, creation_info, document_namespace, [])
     snippet = payload.get_element(expected_new_snippet_id)
 
     assert isinstance(snippet, Snippet)

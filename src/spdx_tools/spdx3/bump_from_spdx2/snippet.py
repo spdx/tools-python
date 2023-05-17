@@ -5,7 +5,7 @@ from typing import List
 
 from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import CreationInformation
+from spdx_tools.spdx3.model import CreationInfo
 from spdx_tools.spdx3.model.software import Snippet
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import ExtractedLicensingInfo, SpdxNoAssertion
@@ -15,7 +15,7 @@ from spdx_tools.spdx.model.snippet import Snippet as Spdx2_Snippet
 def bump_snippet(
     spdx2_snippet: Spdx2_Snippet,
     payload: Payload,
-    creation_information: CreationInformation,
+    creation_info: CreationInfo,
     document_namespace: str,
     extracted_licensing_info: List[ExtractedLicensingInfo],
 ):
@@ -38,7 +38,7 @@ def bump_snippet(
     payload.add_element(
         Snippet(
             spdx_id=spdx_id,
-            creation_info=creation_information,
+            creation_info=creation_info,
             name=spdx2_snippet.name,
             comment=spdx2_snippet.comment,
             byte_range=spdx2_snippet.byte_range,

@@ -1,5 +1,5 @@
 from spdx_tools.spdx3.model.profile_identifier import ProfileIdentifier
-from spdx_tools.spdx3.model.creation_information import CreationInformation
+from spdx_tools.spdx3.model.creation_info import CreationInfo
 from spdx_tools.spdx3.model.integrity_method import IntegrityMethod
 from spdx_tools.spdx3.model.hash import Hash, HashAlgorithm
 from spdx_tools.spdx3.model.external_reference import ExternalReference, ExternalReferenceType

@@ -12,7 +12,7 @@ from spdx_tools.spdx3.model import ProfileIdentifier
 
 
 @dataclass_with_properties
-class CreationInformation:
+class CreationInfo:
     spec_version: Version
     created: datetime
     created_by: List[str]  # SPDXID of Agents
