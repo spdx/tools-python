@@ -10,11 +10,11 @@ from spdx_tools.spdx3.model.dataset import ConfidentialityLevelType, Dataset, Da
 from spdx_tools.spdx3.model.software import SoftwarePurpose
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_correct_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_correct_initialization(creation_info):
     dataset = Dataset(
         "some_spdx_id",
-        creation_information,
+        creation_info,
         "Dataset name",
         ["https://namespace.test#originator"],
         "https://download.test",
@@ -56,12 +56,12 @@ def test_correct_initialization(creation_information):
     assert dataset.dataset_availability == DatasetAvailabilityType.QUERY
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInformation", autospec=True)
-def test_invalid_initialization(creation_information):
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
+def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         Dataset(
             "some_spdx_id",
-            creation_information,
+            creation_info,
             "Dataset name",
             ["https://namespace.test#originator"],
             "https://download.test",

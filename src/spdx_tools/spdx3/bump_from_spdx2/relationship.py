@@ -7,7 +7,7 @@ from typing import Dict, List, Optional, Tuple, Union
 
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import (
-    CreationInformation,
+    CreationInfo,
     LifecycleScopeType,
     Relationship,
     RelationshipCompleteness,
@@ -157,12 +157,12 @@ relationship_mapping: Dict[
 def bump_relationships(
     spdx2_relationships: List[Spdx2_Relationship],
     payload: Payload,
-    creation_information: CreationInformation,
+    creation_info: CreationInfo,
     document_namespace: str,
 ):
     generated_relationships: Dict[Tuple[str, str], List[Relationship]] = {}
     for counter, spdx2_relationship in enumerate(spdx2_relationships):
-        relationship = bump_relationship(spdx2_relationship, creation_information, document_namespace, counter)
+        relationship = bump_relationship(spdx2_relationship, creation_info, document_namespace, counter)
         if relationship:
             generated_relationships.setdefault(
                 (relationship.from_element, relationship.relationship_type.name), []
@@ -177,7 +177,7 @@ def bump_relationships(
 
 def bump_relationship(
     spdx2_relationship: Spdx2_Relationship,
-    creation_information: CreationInformation,
+    creation_info: CreationInfo,
     document_namespace: str,
     counter: int,
 ) -> Optional[Union[Relationship, SoftwareDependencyRelationship]]:
@@ -204,7 +204,7 @@ def bump_relationship(
 
         return SoftwareDependencyRelationship(
             spdx_id,
-            creation_information,
+            creation_info,
             from_element,
             relationship_type,
             to,
@@ -217,7 +217,7 @@ def bump_relationship(
 
     return Relationship(
         spdx_id,
-        creation_information,
+        creation_info,
         from_element,
         relationship_type,
         to,

@@ -5,7 +5,7 @@ from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model import Agent, CreationInformation, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model import Agent, CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
 
 
 @dataclass_with_properties
@@ -13,7 +13,7 @@ class Person(Agent):
     def __init__(
         self,
         spdx_id: str,
-        creation_info: CreationInformation,
+        creation_info: CreationInfo,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
