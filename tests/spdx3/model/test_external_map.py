@@ -18,6 +18,7 @@ def test_correct_initialization():
     assert external_map.external_id == "https://spdx.test/tools-python/external_map_external_id"
     assert external_map.verified_using == [hash_fixture()]
     assert external_map.location_hint == "https://spdx.test/tools-python/external_map_location_hint"
+    assert external_map.defining_document == "https://spdx.test/tools-python/defining_document"
 
 
 def test_invalid_initialization():

@@ -45,7 +45,7 @@ def test_bump_package(creation_info, originator, expected_originator, supplier, 
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info, document_namespace, [])
+    bump_package(spdx2_package, payload, creation_info, document_namespace, [], [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert isinstance(package, Package)
@@ -87,7 +87,7 @@ def test_bump_of_single_purl_without_comment(creation_info):
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info, document_namespace, [])
+    bump_package(spdx2_package, payload, creation_info, document_namespace, [], [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url == "purl_locator"
@@ -106,7 +106,7 @@ def test_bump_of_single_purl_with_comment(creation_info):
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info, document_namespace, [])
+    bump_package(spdx2_package, payload, creation_info, document_namespace, [], [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
@@ -128,7 +128,7 @@ def test_bump_of_multiple_purls(creation_info):
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info, document_namespace, [])
+    bump_package(spdx2_package, payload, creation_info, document_namespace, [], [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
