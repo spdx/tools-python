@@ -14,12 +14,14 @@ class ExternalMap:
     external_id: str  # anyURI
     verified_using: List[IntegrityMethod] = field(default_factory=list)
     location_hint: Optional[str] = None  # anyURI
+    defining_document: Optional[str] = None
 
     def __init__(
         self,
         external_id: str,
         verified_using: List[IntegrityMethod] = None,
         location_hint: Optional[str] = None,
+        defining_document: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         check_types_and_set_values(self, locals())

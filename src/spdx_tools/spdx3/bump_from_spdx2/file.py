@@ -1,13 +1,16 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from typing import List
+
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
+from spdx_tools.spdx3.bump_from_spdx2.external_element_utils import get_full_element_spdx_id_and_set_imports
 from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import CreationInfo
+from spdx_tools.spdx3.model import CreationInfo, ExternalMap
 from spdx_tools.spdx3.model.software import File
 from spdx_tools.spdx3.payload import Payload
-from spdx_tools.spdx.model import SpdxNoAssertion
+from spdx_tools.spdx.model import ExternalDocumentRef, ExtractedLicensingInfo, SpdxNoAssertion
 from spdx_tools.spdx.model.file import File as Spdx2_File
 
 
@@ -16,9 +19,12 @@ def bump_file(
     payload: Payload,
     creation_info: CreationInfo,
     document_namespace: str,
-    extracted_licensing_info,
+    extracted_licensing_info: List[ExtractedLicensingInfo],
+    external_document_refs: List[ExternalDocumentRef],
+    imports: List[ExternalMap],
 ):
-    spdx_id = "#".join([document_namespace, spdx2_file.spdx_id])
+    spdx_id = get_full_element_spdx_id_and_set_imports(spdx2_file, document_namespace, external_document_refs, imports)
+
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_file.checksums]
     print_missing_conversion(
         "file.file_type", 0, "different cardinalities, " "https://github.com/spdx/spdx-3-model/issues/82"
