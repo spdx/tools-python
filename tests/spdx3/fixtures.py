@@ -146,9 +146,15 @@ def external_map_fixture(
     external_id="https://spdx.test/tools-python/external_map_external_id",
     verified_using=None,
     location_hint="https://spdx.test/tools-python/external_map_location_hint",
+    defining_document="https://spdx.test/tools-python/defining_document",
 ) -> ExternalMap:
     verified_using = [hash_fixture()] if verified_using is None else verified_using
-    return ExternalMap(external_id=external_id, verified_using=verified_using, location_hint=location_hint)
+    return ExternalMap(
+        external_id=external_id,
+        verified_using=verified_using,
+        location_hint=location_hint,
+        defining_document=defining_document,
+    )
 
 
 def namespace_map_fixture(
