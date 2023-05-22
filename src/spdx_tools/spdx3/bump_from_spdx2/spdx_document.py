@@ -25,13 +25,37 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
     payload.add_element(spdx_document)
 
     for spdx2_package in document.packages:
-        bump_package(spdx2_package, payload, creation_info, document_namespace, document.extracted_licensing_info)
+        bump_package(
+            spdx2_package,
+            payload,
+            creation_info,
+            document_namespace,
+            document.extracted_licensing_info,
+            document.creation_info.external_document_refs,
+            spdx_document.imports,
+        )
 
     for spdx2_file in document.files:
-        bump_file(spdx2_file, payload, creation_info, document_namespace, document.extracted_licensing_info)
+        bump_file(
+            spdx2_file,
+            payload,
+            creation_info,
+            document_namespace,
+            document.extracted_licensing_info,
+            document.creation_info.external_document_refs,
+            spdx_document.imports,
+        )
 
     for spdx2_snippet in document.snippets:
-        bump_snippet(spdx2_snippet, payload, creation_info, document_namespace, document.extracted_licensing_info)
+        bump_snippet(
+            spdx2_snippet,
+            payload,
+            creation_info,
+            document_namespace,
+            document.extracted_licensing_info,
+            document.creation_info.external_document_refs,
+            spdx_document.imports,
+        )
 
     bump_relationships(document.relationships, payload, creation_info, document_namespace)
 
