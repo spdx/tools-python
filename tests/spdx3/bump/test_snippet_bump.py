@@ -18,7 +18,7 @@ def test_bump_snippet(creation_info):
     spdx2_snippet: Spdx2_Snippet = snippet_fixture()
     expected_new_snippet_id = f"{document_namespace}#{spdx2_snippet.spdx_id}"
 
-    bump_snippet(spdx2_snippet, payload, creation_info, document_namespace, [])
+    bump_snippet(spdx2_snippet, payload, creation_info, document_namespace, [], [], [])
     snippet = payload.get_element(expected_new_snippet_id)
 
     assert isinstance(snippet, Snippet)

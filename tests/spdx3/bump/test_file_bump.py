@@ -20,7 +20,7 @@ def test_bump_file(creation_info):
     integrity_method: Hash = Hash(HashAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c")
     expected_new_file_id = f"{document_namespace}#{spdx2_file.spdx_id}"
 
-    bump_file(spdx2_file, payload, creation_info, document_namespace, None)
+    bump_file(spdx2_file, payload, creation_info, document_namespace, [], [], [])
     file = payload.get_element(expected_new_file_id)
 
     assert isinstance(file, File)
