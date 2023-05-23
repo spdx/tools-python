@@ -14,4 +14,4 @@ def test_json_writer():
     payload: Payload = bump_spdx_document(spdx2_document)
 
     # this currently generates an actual file to look at, this should be changed to a temp file later
-    write_payload(payload, "SPDX3_jsonld_test.json")
+    write_payload(payload, "../../../SPDX3_jsonld_test")
