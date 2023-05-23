@@ -12,7 +12,7 @@ from spdx_tools.spdx3.validation.json_ld.shacl_validation import validate_agains
 def test_shacl_validation():
     # insert path to example json ld
     conforms, results_graph, results_text = validate_against_shacl_from_file(
-        data_file=os.path.join(os.path.dirname(__file__), "../../../SPDX3_jsonld_test.json"),
+        data_file=os.path.join(os.path.dirname(__file__), "../../../SPDX3_jsonld_test.jsonld"),
         shacl_file=os.path.join(
             os.path.dirname(__file__), "../../../../src/spdx_tools/spdx3/writer/json_ld/model.ttl"
         ),
