@@ -1,7 +1,7 @@
 {
     "core": "https://spdx.org/rdf/Core/",
     "software": "https://spdx.org/rdf/Software/",
-    "xsd": "http://www.w3.org/2001/XMLSchema/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
     "AIPackage": "ai:AIPackage",
     "Build": "build:Build",
     "Annotation": "core:Annotation",
