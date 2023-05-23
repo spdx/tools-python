@@ -38,7 +38,7 @@ def _convert_to_json_ld_dict(element: Any, alt_creation_info=False, alt_hash=Fal
         return datetime_to_iso_string(element)
 
     if isinstance(element, Enum):
-        return element.name
+        return snake_case_to_camel_case(element.name)
 
     if isinstance(element, list):
         return [_convert_to_json_ld_dict(item) for item in element if item]
