@@ -3,7 +3,6 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import List
 
-from spdx_tools.spdx3.bump_from_spdx2.external_element_utils import get_full_element_spdx_id_and_set_imports
 from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import CreationInfo, ExternalMap
@@ -11,6 +10,7 @@ from spdx_tools.spdx3.model.software import Snippet
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import ExternalDocumentRef, ExtractedLicensingInfo, SpdxNoAssertion
 from spdx_tools.spdx.model.snippet import Snippet as Spdx2_Snippet
+from spdx_tools.spdx.spdx_element_utils import get_full_element_spdx_id
 
 
 def bump_snippet(
@@ -22,9 +22,14 @@ def bump_snippet(
     external_document_refs: List[ExternalDocumentRef],
     imports: List[ExternalMap],
 ):
-    spdx_id = get_full_element_spdx_id_and_set_imports(
-        spdx2_snippet, document_namespace, external_document_refs, imports
-    )
+    spdx_id = get_full_element_spdx_id(spdx2_snippet, document_namespace, external_document_refs)
+    if ":" in spdx2_snippet.spdx_id:
+        imports.append(
+            ExternalMap(
+                external_id=spdx2_snippet.spdx_id,
+                defining_document=f"{spdx2_snippet.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",
+            )
+        )
 
     print_missing_conversion("snippet.file_spdx_id", 0, "https://github.com/spdx/spdx-3-model/issues/130")
     concluded_license = bump_license_expression_or_none_or_no_assertion(

@@ -4,7 +4,6 @@
 from typing import List
 
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.bump_from_spdx2.external_element_utils import get_full_element_spdx_id_and_set_imports
 from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import CreationInfo, ExternalMap
@@ -12,6 +11,7 @@ from spdx_tools.spdx3.model.software import File
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import ExternalDocumentRef, ExtractedLicensingInfo, SpdxNoAssertion
 from spdx_tools.spdx.model.file import File as Spdx2_File
+from spdx_tools.spdx.spdx_element_utils import get_full_element_spdx_id
 
 
 def bump_file(
@@ -23,7 +23,14 @@ def bump_file(
     external_document_refs: List[ExternalDocumentRef],
     imports: List[ExternalMap],
 ):
-    spdx_id = get_full_element_spdx_id_and_set_imports(spdx2_file, document_namespace, external_document_refs, imports)
+    spdx_id = get_full_element_spdx_id(spdx2_file, document_namespace, external_document_refs)
+    if ":" in spdx2_file.spdx_id:
+        imports.append(
+            ExternalMap(
+                external_id=spdx2_file.spdx_id,
+                defining_document=f"{spdx2_file.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",
+            )
+        )
 
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_file.checksums]
     print_missing_conversion(
