@@ -33,6 +33,7 @@ from spdx_tools.spdx3.model import (
     SpdxDocument,
     Tool,
 )
+from spdx_tools.spdx3.model.ai.ai_package import AIPackage, SafetyRiskAssessmentType
 from spdx_tools.spdx3.model.licensing import (
     CustomLicense,
     CustomLicenseAddition,
@@ -309,6 +310,24 @@ VEX_FIXED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "relationship_type": RelationshipType.FIXED_IN,
 }
 
+AIPACKAGE_DICT = {
+    "energy_consumption": "energyConsumption",
+    "standard_compliance": ["standardCompliance"],
+    "limitation": "aIPackageLimitation",
+    "type_of_model": ["typeOfModel"],
+    "information_about_training": "informationAboutTraining",
+    "information_about_application": "informationAboutApplication",
+    "hyperparameter": {"aIPackageHypParaKey": "aIPackageHypParaValue"},
+    "model_data_preprocessing": ["aImodelDataPreprocessing"],
+    "model_explainability": ["aImodelExplainability"],
+    "sensitive_personal_information": True,
+    "metric_decision_threshold": {"metricDecisionThresholdKey": "metricDecisionThresholdValue"},
+    "metric": {"aIMetricKey": "aIMetricValue"},
+    "domain": ["aIDomain"],
+    "autonomy_type": True,
+    "safety_risk_assessment": SafetyRiskAssessmentType.LOW,
+}
+
 ARTIFACT_DICT = {
     "originated_by": ["https://spdx.test/tools-python/originatedBy"],
     "supplied_by": ["https://spdx.test/tools-python/suppliedBy"],
@@ -421,6 +440,7 @@ FIXTURE_DICTS = {
         VEX_UNDER_INVESTIGATION_VULN_ASSESSMENT_RELATIONSHIP_DICT,
     ],
     Vulnerability: [ELEMENT_DICT, VULNERABILITY_DICT],
+    AIPackage: [AIPACKAGE_DICT, PACKAGE_DICT, ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT],
     File: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, FILE_DICT],
     Package: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT],
     Snippet: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, SNIPPET_DICT],
