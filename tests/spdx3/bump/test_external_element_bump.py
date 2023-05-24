@@ -52,6 +52,4 @@ def test_bump_external_elements():
     assert f"{external_doc_uri}#SPDXRef-File" in payload.get_full_map()
     assert f"{external_doc_uri}#SPDXRef-Snippet" in payload.get_full_map()
 
-    test_case = TestCase()
-    test_case.maxDiff = None
-    test_case.assertCountEqual(spdx_document.imports, expected_imports)
+    TestCase().assertCountEqual(spdx_document.imports, expected_imports)
