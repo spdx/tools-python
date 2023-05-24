@@ -6,7 +6,6 @@ from typing import List, Optional, Union
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.bump_from_spdx2.external_element_utils import get_full_element_spdx_id_and_set_imports
 from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import (
@@ -23,6 +22,7 @@ from spdx_tools.spdx.model import Actor as Spdx2_Actor
 from spdx_tools.spdx.model import ExternalDocumentRef, ExtractedLicensingInfo, SpdxNoAssertion
 from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
+from spdx_tools.spdx.spdx_element_utils import get_full_element_spdx_id
 
 
 def bump_package(
@@ -34,9 +34,14 @@ def bump_package(
     external_document_refs: List[ExternalDocumentRef],
     imports: List[ExternalMap],
 ):
-    spdx_id = get_full_element_spdx_id_and_set_imports(
-        spdx2_package, document_namespace, external_document_refs, imports
-    )
+    spdx_id = get_full_element_spdx_id(spdx2_package, document_namespace, external_document_refs)
+    if ":" in spdx2_package.spdx_id:
+        imports.append(
+            ExternalMap(
+                external_id=spdx2_package.spdx_id,
+                defining_document=f"{spdx2_package.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",
+            )
+        )
 
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
     print_missing_conversion("package2.file_name", 0, "https://github.com/spdx/spdx-3-model/issues/83")
