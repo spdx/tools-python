@@ -1,17 +1,15 @@
-# SPDX-FileCopyrightText: 2023 spdx contributors
+# SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
 from typing import List, Union
 
-from spdx_tools.spdx3.model import ExternalMap
 from spdx_tools.spdx.model import ExternalDocumentRef, File, Package, Snippet
 
 
-def get_full_element_spdx_id_and_set_imports(
+def get_full_element_spdx_id(
     element: Union[Package, File, Snippet],
     document_namespace: str,
     external_document_refs: List[ExternalDocumentRef],
-    imports: List[ExternalMap],
 ) -> str:
     """
     Returns the spdx_id of the element prefixed with the correct document namespace and,
@@ -27,8 +25,7 @@ def get_full_element_spdx_id_and_set_imports(
             external_uri = entry.document_uri
             break
 
-    if external_uri:
-        imports.append(ExternalMap(external_id=element.spdx_id, defining_document=f"{external_id}:SPDXRef-DOCUMENT"))
-        return external_uri + "#" + local_id
+    if not external_uri:
+        raise ValueError(f"external id {external_id} not found in external document references")
 
-    raise ValueError(f"external id {external_id} not found in external document references")
+    return external_uri + "#" + local_id
