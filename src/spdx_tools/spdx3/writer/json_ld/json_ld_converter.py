@@ -69,7 +69,7 @@ def _convert_to_json_ld_dict(element: Any, alt_creation_info=False, alt_hash=Fal
         elif attribute_value:
             if attribute_name == "_spdx_id":
                 attribute_name = "@id"
-            if attribute_name == "_from_element":
+            elif attribute_name == "_from_element":
                 attribute_name = "from"
             else:
                 attribute_name = snake_case_to_camel_case(attribute_name)
