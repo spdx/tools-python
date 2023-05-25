@@ -7,7 +7,7 @@ from typing import Any, List
 
 from semantic_version import Version
 
-from spdx_tools.spdx3.model.creation_information import CreationInformation
+from spdx_tools.spdx3.model.creation_info import CreationInfo
 from spdx_tools.spdx3.model.hash import Hash
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
@@ -59,7 +59,7 @@ def _convert_to_json_ld_dict(element: Any, alt_creation_info=False, alt_hash=Fal
     for attribute_name in vars(element):
         attribute_value = getattr(element, attribute_name)
 
-        if alt_creation_info and isinstance(attribute_value, CreationInformation):
+        if alt_creation_info and isinstance(attribute_value, CreationInfo):
             for creation_info_attr_name in vars(attribute_value):
                 creation_info_attr_value = getattr(attribute_value, creation_info_attr_name)
                 element_dict[snake_case_to_camel_case(creation_info_attr_name)] = _convert_to_json_ld_dict(
