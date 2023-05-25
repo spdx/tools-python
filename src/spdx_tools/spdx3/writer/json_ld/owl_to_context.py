@@ -38,6 +38,11 @@ PROPERTIES_WITH_ENUM_RANGE = [
     "purpose",
 ]
 
+REFERENCE_PROPERTY_TYPES = [
+    "core:Element",
+    "core:Agent",
+]
+
 
 def convert_spdx_owl_to_jsonld_context(spdx_owl: str = "SPDX_OWL.json"):
     with open(spdx_owl, "r") as infile:
@@ -60,14 +65,36 @@ def convert_spdx_owl_to_jsonld_context(spdx_owl: str = "SPDX_OWL.json"):
             continue
         elif node_type in ["owl:DatatypeProperty", "owl:ObjectProperty"]:
             name = node["@id"].split(":")[-1]
+            type_id = node["rdfs:range"]["@id"]
             if name in PROPERTIES_WITH_ENUM_RANGE:
-                context_dict[name] = {
-                    "@id": node["@id"],
-                    "@type": "@vocab",
-                    "@context": {"@vocab": node["rdfs:range"]["@id"] + "/"},
-                }
+                if name == "profile":
+                    # FIXME: since the allowed values for the profile enum collide with
+                    # our namespaces, we need to explicitly remap their meaning in the context
+                    context_dict[name] = {
+                        "@id": node["@id"],
+                        "@type": "@vocab",
+                        "@context": {
+                            "core": "https://spdx.org/rdf/Core/ProfileIdentifierType/core",
+                            "software": "https://spdx.org/rdf/Core/ProfileIdentifierType/software",
+                            "licensing": "https://spdx.org/rdf/Core/ProfileIdentifierType/licensing",
+                            "security": "https://spdx.org/rdf/Core/ProfileIdentifierType/security",
+                            "build": "https://spdx.org/rdf/Core/ProfileIdentifierType/build",
+                            "ai": "https://spdx.org/rdf/Core/ProfileIdentifierType/ai",
+                            "dataset": "https://spdx.org/rdf/Core/ProfileIdentifierType/dataset",
+                            "usage": "https://spdx.org/rdf/Core/ProfileIdentifierType/usage",
+                            "extension": "https://spdx.org/rdf/Core/ProfileIdentifierType/extension",
+                        },
+                    }
+                else:
+                    context_dict[name] = {
+                        "@id": node["@id"],
+                        "@type": "@vocab",
+                        "@context": {"@vocab": type_id + "/"},
+                    }
+            elif node_type == "owl:ObjectProperty" and type_id in REFERENCE_PROPERTY_TYPES:
+                context_dict[name] = {"@id": node["@id"], "@type": "@id"}
             else:
-                context_dict[name] = {"@id": node["@id"], "@type": node["rdfs:range"]["@id"]}
+                context_dict[name] = {"@id": node["@id"], "@type": type_id}
 
         elif node_type == "owl:Class":
             name = node["@id"].split(":")[-1]
