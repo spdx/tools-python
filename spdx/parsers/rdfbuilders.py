@@ -493,8 +493,6 @@ class FileBuilder(tagvaluebuilders.FileBuilder):
         file_type = file.file_type_from_rdf(filetype)
 
         spdx_file = self.file(doc)
-        if file_type in spdx_file.file_types:
-            raise CardinalityError("File::FileType")
 
         spdx_file.file_types.append(file_type)
 
