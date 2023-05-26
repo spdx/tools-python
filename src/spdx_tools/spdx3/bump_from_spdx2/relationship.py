@@ -204,9 +204,9 @@ def bump_relationship(
 
         return SoftwareDependencyRelationship(
             spdx_id,
-            from_element,
+            f"{document_namespace}#{from_element}",
             relationship_type,
-            to,
+            [f"{document_namespace}#{t}" for t in to],
             creation_info=creation_info,
             comment=spdx2_relationship.comment,
             completeness=completeness,
@@ -217,9 +217,9 @@ def bump_relationship(
 
     return Relationship(
         spdx_id,
-        from_element,
+        f"{document_namespace}#{from_element}",
         relationship_type,
-        to,
+        [f"{document_namespace}#{t}" for t in to],
         creation_info=creation_info,
         comment=spdx2_relationship.comment,
         completeness=completeness,
