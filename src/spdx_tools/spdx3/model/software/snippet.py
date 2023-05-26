@@ -2,20 +2,21 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from datetime import datetime
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx3.model import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
 from spdx_tools.spdx3.model.licensing import LicenseField
+from spdx_tools.spdx3.model.positive_integer_range import PositiveIntegerRange
 from spdx_tools.spdx3.model.software import SoftwarePurpose
 from spdx_tools.spdx3.model.software.software_artifact import SoftwareArtifact
 
 
 @dataclass_with_properties
 class Snippet(SoftwareArtifact):
-    byte_range: Optional[Tuple[int, int]] = None
-    line_range: Optional[Tuple[int, int]] = None
+    byte_range: Optional[PositiveIntegerRange] = None
+    line_range: Optional[PositiveIntegerRange] = None
 
     def __init__(
         self,
@@ -41,8 +42,8 @@ class Snippet(SoftwareArtifact):
         declared_license: Optional[LicenseField] = None,
         copyright_text: Optional[str] = None,
         attribution_text: Optional[str] = None,
-        byte_range: Optional[Tuple[int, int]] = None,
-        line_range: Optional[Tuple[int, int]] = None,
+        byte_range: Optional[PositiveIntegerRange] = None,
+        line_range: Optional[PositiveIntegerRange] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_references = [] if external_references is None else external_references
