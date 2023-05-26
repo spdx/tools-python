@@ -33,6 +33,7 @@ from spdx_tools.spdx3.model import (
     SpdxDocument,
     Tool,
 )
+from spdx_tools.spdx3.model.dataset.dataset import ConfidentialityLevelType, Dataset, DatasetAvailabilityType
 from spdx_tools.spdx3.model.licensing import (
     CustomLicense,
     CustomLicenseAddition,
@@ -350,6 +351,21 @@ SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT = {
     "conditionality": DependencyConditionalityType.OTHER,
 }
 
+DATASET_DICT = {
+    "data_collection_process": "DatasetDataCollectionProcess",
+    "intended_use": "DatasetIntendedUse",
+    "dataset_size": 10,
+    "dataset_noise": "DatasetNoise",
+    "data_preprocessing": ["DataPreprocessing"],
+    "sensor": {"SensorKey": "SensorValue"},
+    "known_bias": ["DatasetKnownBias"],
+    "sensitive_personal_information": True,
+    "anonymization_method_used": ["DatasetAnonymizationMethodUsed"],
+    "confidentiality_level": ConfidentialityLevelType.CLEAR,
+    "dataset_update_mechanism": "DatasetUpdateMechanism",
+    "dataset_availability": DatasetAvailabilityType.QUERY,
+}
+
 
 FIXTURE_DICTS = {
     Agent: [ELEMENT_DICT],
@@ -436,6 +452,7 @@ FIXTURE_DICTS = {
         LIFECYCLE_SCOPED_RELATIONSHIP_DICT,
         SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT,
     ],
+    Dataset: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT, DATASET_DICT],
 }
 
 
