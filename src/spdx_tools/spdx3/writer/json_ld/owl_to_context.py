@@ -48,11 +48,7 @@ def convert_spdx_owl_to_jsonld_context(spdx_owl: str = "SPDX_OWL.json"):
     with open(spdx_owl, "r") as infile:
         owl_dict = json.load(infile)
 
-    context_dict = {
-        "core": "https://spdx.org/rdf/Core/",
-        "software": "https://spdx.org/rdf/Software/",
-        "xsd": "http://www.w3.org/2001/XMLSchema#",
-    }
+    context_dict = owl_dict["@context"]
 
     for node in owl_dict["@graph"]:
         # print(node)
