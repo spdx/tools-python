@@ -43,7 +43,7 @@ def bump_annotation(
             spdx_id,
             annotation_type,
             creation_info=creation_info,
-            subject=spdx2_annotation.spdx_id,
+            subject=f"{document_namespace}#{spdx2_annotation.spdx_id}",
             statement=spdx2_annotation.annotation_comment,
         )
     )
