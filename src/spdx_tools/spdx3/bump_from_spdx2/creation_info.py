@@ -73,7 +73,7 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         name=spdx2_creation_info.name,
         comment=document_comment,
         element=[],
-        root_element=[],
+        root_element=[spdx_id],
         imports=imports,
         namespaces=namespaces,
     )
