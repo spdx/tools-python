@@ -63,7 +63,7 @@ def bump_license_expression(
         )
     if isinstance(license_expression, LicenseSymbol):
         if not get_spdx_licensing().validate(license_expression).invalid_symbols:
-            return ListedLicense(license_expression.key, license_expression.obj, "")
+            return ListedLicense(license_expression.key, license_expression.obj, "blank")
         else:
             for licensing_info in extracted_licensing_info:
                 if licensing_info.license_id == license_expression.key:
