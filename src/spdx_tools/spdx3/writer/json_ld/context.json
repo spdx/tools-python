@@ -274,7 +274,7 @@
         "@type": "xsd:anyURI"
     },
     "locator": {
-        "@id": "security:locator",
+        "@id": "core:locator",
         "@type": "xsd:anyURI"
     },
     "namespace": {
@@ -351,7 +351,7 @@
         "@type": "xsd:string"
     },
     "suppliedBy": {
-        "@id": "security:suppliedBy",
+        "@id": "core:suppliedBy",
         "@type": "@id"
     },
     "to": {
