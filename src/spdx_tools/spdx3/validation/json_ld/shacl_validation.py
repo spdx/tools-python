@@ -3,9 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import Optional
 
-import owlrl
 from pyshacl import validate
-from rdflib import Graph, RDF
+from rdflib import Graph
 
 
 def validate_against_shacl_from_file(
