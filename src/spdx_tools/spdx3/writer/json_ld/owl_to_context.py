@@ -62,6 +62,11 @@ def convert_spdx_owl_to_jsonld_context(spdx_owl: str = "SPDX_OWL.json"):
         elif node_type in ["owl:DatatypeProperty", "owl:ObjectProperty"]:
             name = node["@id"].split(":")[-1]
             type_id = node["rdfs:range"]["@id"]
+
+            if name in context_dict and context_dict[name]["@id"].startswith('core'):
+                # if in doubt, prioritize core properties
+                continue
+
             if name in PROPERTIES_WITH_ENUM_RANGE:
                 if name == "profile":
                     # FIXME: since the allowed values for the profile enum collide with
