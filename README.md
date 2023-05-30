@@ -56,8 +56,9 @@ The implementation is based on the descriptive markdown files in the repository 
 # Installation
 
 As always you should work in a virtualenv (venv). You can install a local clone
-of this repo with `yourenv/bin/pip install .` or install it from PyPI with
-`yourenv/bin/pip install spdx-tools`. Note that on Windows it would be `Scripts`
+of this repo with `yourenv/bin/pip install .` or install it from PyPI 
+(check for the [newest release](https://pypi.org/project/spdx-tools/#history) and install it like
+`yourenv/bin/pip install spdx-tools==0.8.0a2`). Note that on Windows it would be `Scripts`
 instead of `bin`.
 
 # How to use
