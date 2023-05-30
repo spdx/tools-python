@@ -19,10 +19,6 @@
     "Person": "core:Person",
     "SoftwareAgent": "core:SoftwareAgent",
     "SpdxDocument": "core:SpdxDocument",
-    "spdxId": {
-        "@id": "core:spdxId",
-        "@type": "xsd:anyURI"
-    },
     "Dataset": "dataset:Dataset",
     "ConjunctiveLicenseSet": "licensing:ConjunctiveLicenseSet",
     "CustomLicense": "licensing:CustomLicense",
