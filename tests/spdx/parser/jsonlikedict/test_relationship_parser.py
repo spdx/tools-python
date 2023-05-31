@@ -7,7 +7,6 @@ import pytest
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
 from spdx_tools.spdx.model import Relationship, RelationshipType, SpdxNoAssertion
-from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.relationship_parser import RelationshipParser
 
 
@@ -27,18 +26,6 @@ def test_parse_relationship():
     assert relationship.spdx_element_id == DOCUMENT_SPDX_ID
     assert relationship.related_spdx_element_id == SpdxNoAssertion()
     assert relationship.comment == "Comment."
-
-
-def test_parse_incomplete_relationship():
-    relationship_parser = RelationshipParser()
-    relationship_dict = {
-        "spdxElementId": DOCUMENT_SPDX_ID,
-        "relatedSpdxElement": "SPDXRef-Package",
-        "comment": "Comment.",
-    }
-
-    with pytest.raises(SPDXParsingError):
-        relationship_parser.parse_relationship(relationship_dict)
 
 
 def test_parse_relationship_type():

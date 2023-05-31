@@ -1,12 +1,12 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from dataclasses import dataclass
 from enum import auto
 from typing import Any, Type
 
 import pytest
 
-from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx.jsonschema.converter import TypedConverter
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
@@ -18,7 +18,7 @@ class TestPropertyType(JsonProperty):
     SECOND_NAME = auto()
 
 
-@dataclass_with_properties
+@dataclass
 class TestDataModelType:
     first_property: str
     second_property: int

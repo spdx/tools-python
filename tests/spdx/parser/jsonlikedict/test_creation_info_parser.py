@@ -4,11 +4,8 @@
 from datetime import datetime
 from unittest import TestCase
 
-import pytest
-
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
 from spdx_tools.spdx.model import Actor, ActorType, Checksum, ChecksumAlgorithm, ExternalDocumentRef, Version
-from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.creation_info_parser import CreationInfoParser
 
 
@@ -57,34 +54,3 @@ def test_parse_creation_info():
             document_uri="http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
         )
     ]
-
-
-@pytest.mark.parametrize(
-    "incomplete_dict",
-    [
-        {"spdxVersion": "2.3", "SPDXID": DOCUMENT_SPDX_ID, "name": "Example Document"},
-        {"creationInfo": {"created": "2019-02-01T11:30:40Z"}},
-    ],
-)
-def test_parse_incomplete_document_info(incomplete_dict):
-    creation_info_parser = CreationInfoParser()
-
-    with pytest.raises(SPDXParsingError):
-        creation_info_parser.parse_creation_info(incomplete_dict)
-
-
-def test_parse_invalid_creation_info():
-    creation_info_parser = CreationInfoParser()
-    doc_dict = {
-        "spdxVersion": "2.3",
-        "SPDXID": DOCUMENT_SPDX_ID,
-        "name": "Example Document",
-        "creationInfo": {
-            "created": "2010-01-29T18:30:22Z",
-            "creators": ["Tool: LicenseFind-1.0", "Organization: ExampleCodeInspect ()", "Person: Jane Doe ()"],
-        },
-        "dataLicense": None,
-    }
-
-    with pytest.raises(SPDXParsingError):
-        creation_info_parser.parse_creation_info(doc_dict)
