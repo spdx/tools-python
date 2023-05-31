@@ -5,6 +5,7 @@ from unittest import mock
 
 import pytest
 
+from spdx_tools.spdx3.model.positive_integer_range import PositiveIntegerRange
 from spdx_tools.spdx3.model.software import Snippet, SoftwarePurpose
 
 
@@ -15,16 +16,16 @@ def test_correct_initialization(creation_info):
         creation_info=creation_info,
         content_identifier="https://content.identifier",
         purpose=[SoftwarePurpose.SOURCE],
-        byte_range=(3, 4),
-        line_range=(346, 456),
+        byte_range=PositiveIntegerRange(3, 4),
+        line_range=PositiveIntegerRange(346, 456),
     )
 
     assert snippet.spdx_id == "SPDXRef-Snippet"
     assert snippet.creation_info == creation_info
     assert snippet.content_identifier == "https://content.identifier"
     assert snippet.purpose == [SoftwarePurpose.SOURCE]
-    assert snippet.byte_range == (3, 4)
-    assert snippet.line_range == (346, 456)
+    assert snippet.byte_range == PositiveIntegerRange(3, 4)
+    assert snippet.line_range == PositiveIntegerRange(346, 456)
 
 
 @mock.patch("spdx_tools.spdx3.model.software.Snippet", autospec=True)

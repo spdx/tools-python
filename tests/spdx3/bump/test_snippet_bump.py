@@ -26,5 +26,5 @@ def test_bump_snippet(creation_info):
     assert snippet.copyright_text == spdx2_snippet.copyright_text
     assert snippet.attribution_text == spdx2_snippet.attribution_texts[0]
     assert snippet.concluded_license == ConjunctiveLicenseSet(
-        [ListedLicense("MIT", "MIT", ""), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "")]
+        [ListedLicense("MIT", "MIT", "blank"), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "blank")]
     )

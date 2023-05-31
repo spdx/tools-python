@@ -69,10 +69,10 @@ def test_bump_package(creation_info, originator, expected_originator, supplier, 
     assert package.copyright_text == spdx2_package.copyright_text
     assert package.attribution_text == spdx2_package.attribution_texts[0]
     assert package.concluded_license == ConjunctiveLicenseSet(
-        [ListedLicense("MIT", "MIT", ""), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "")]
+        [ListedLicense("MIT", "MIT", "blank"), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "blank")]
     )
     assert package.declared_license == ConjunctiveLicenseSet(
-        [ListedLicense("MIT", "MIT", ""), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "")]
+        [ListedLicense("MIT", "MIT", "blank"), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "blank")]
     )
 
 
