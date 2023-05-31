@@ -27,7 +27,7 @@ def test_bump_file(creation_info):
     assert file.spdx_id == expected_new_file_id
     assert file.verified_using == [integrity_method]
     assert file.concluded_license == ConjunctiveLicenseSet(
-        [ListedLicense("MIT", "MIT", ""), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "")]
+        [ListedLicense("MIT", "MIT", "blank"), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "blank")]
     )
     assert file.copyright_text == spdx2_file.copyright_text
     assert file.attribution_text == spdx2_file.attribution_texts[0]

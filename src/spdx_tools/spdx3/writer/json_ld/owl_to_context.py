@@ -63,7 +63,7 @@ def convert_spdx_owl_to_jsonld_context(spdx_owl: str = "SPDX_OWL.json"):
             name = node["@id"].split(":")[-1]
             type_id = node["rdfs:range"]["@id"]
 
-            if name in context_dict and context_dict[name]["@id"].startswith('core'):
+            if name in context_dict and context_dict[name]["@id"].startswith("core"):
                 # if in doubt, prioritize core properties
                 continue
 
