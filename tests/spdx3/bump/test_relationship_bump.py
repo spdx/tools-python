@@ -19,9 +19,9 @@ def test_relationship_bump(creation_info):
 
     assert relationship == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-1",
-        spdx2_relationship.spdx_element_id,
+        f"{document_namespace}#{spdx2_relationship.spdx_element_id}",
         RelationshipType.DESCRIBES,
-        [spdx2_relationship.related_spdx_element_id],
+        [f"{document_namespace}#{spdx2_relationship.related_spdx_element_id}"],
         creation_info=creation_info,
         comment=spdx2_relationship.comment,
     )
@@ -39,9 +39,12 @@ def test_relationships_bump(creation_info):
 
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-1") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-1",
-        relationships[0].spdx_element_id,
+        f"{document_namespace}#{relationships[0].spdx_element_id}",
         RelationshipType.DESCRIBES,
-        [relationships[0].related_spdx_element_id, relationships[1].related_spdx_element_id],
+        [
+            f"{document_namespace}#{relationships[0].related_spdx_element_id}",
+            f"{document_namespace}#{relationships[1].related_spdx_element_id}",
+        ],
         creation_info=creation_info,
     )
 
@@ -63,7 +66,7 @@ def test_relationships_bump_with_setting_completeness(creation_info):
 
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-0") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-0",
-        relationships[0].spdx_element_id,
+        f"{document_namespace}#{relationships[0].spdx_element_id}",
         RelationshipType.DESCRIBES,
         [],
         creation_info=creation_info,
@@ -72,15 +75,15 @@ def test_relationships_bump_with_setting_completeness(creation_info):
     )
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-1") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-1",
-        relationships[1].spdx_element_id,
+        f"{document_namespace}#{relationships[1].spdx_element_id}",
         RelationshipType.DESCRIBES,
-        [relationships[1].related_spdx_element_id],
+        [f"{document_namespace}#{relationships[1].related_spdx_element_id}"],
         creation_info=creation_info,
         comment=relationships[1].comment,
     )
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-2") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-2",
-        relationships[2].spdx_element_id,
+        f"{document_namespace}#{relationships[2].spdx_element_id}",
         RelationshipType.SPECIFICATION_FOR,
         [],
         creation_info=creation_info,
