@@ -40,8 +40,8 @@ def test_license_expression_or_none_or_no_assertion(element, expected_class):
 @pytest.mark.parametrize(
     "license_expression, extracted_licensing_info, expected_element",
     [
-        (get_spdx_licensing().parse("MIT"), [], ListedLicense("MIT", "MIT", "")),
-        (get_spdx_licensing().parse("LGPL-2.0"), [], ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "")),
+        (get_spdx_licensing().parse("MIT"), [], ListedLicense("MIT", "MIT", "blank")),
+        (get_spdx_licensing().parse("LGPL-2.0"), [], ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "blank")),
         (
             get_spdx_licensing().parse("LicenseRef-1"),
             [extracted_licensing_info_fixture()],
@@ -51,7 +51,7 @@ def test_license_expression_or_none_or_no_assertion(element, expected_class):
             get_spdx_licensing().parse("MIT AND LGPL-2.0"),
             [],
             ConjunctiveLicenseSet(
-                [ListedLicense("MIT", "MIT", ""), ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "")]
+                [ListedLicense("MIT", "MIT", "blank"), ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "blank")]
             ),
         ),
         (
@@ -60,7 +60,7 @@ def test_license_expression_or_none_or_no_assertion(element, expected_class):
             DisjunctiveLicenseSet(
                 [
                     CustomLicense("LicenseRef-1", "licenseName", "extractedText"),
-                    ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", ""),
+                    ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "blank"),
                 ]
             ),
         ),
@@ -68,7 +68,8 @@ def test_license_expression_or_none_or_no_assertion(element, expected_class):
             get_spdx_licensing().parse("LGPL-2.0 WITH 389-exception"),
             [],
             WithAdditionOperator(
-                ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", ""), ListedLicenseException("389-exception", "", "")
+                ListedLicense("LGPL-2.0-only", "LGPL-2.0-only", "blank"),
+                ListedLicenseException("389-exception", "", ""),
             ),
         ),
         (
@@ -90,7 +91,7 @@ def test_license_expression_or_none_or_no_assertion(element, expected_class):
             ],
             ConjunctiveLicenseSet(
                 [
-                    ListedLicense("MIT", "MIT", ""),
+                    ListedLicense("MIT", "MIT", "blank"),
                     WithAdditionOperator(
                         CustomLicense("LicenseRef-1", "licenseName", "extractedText"),
                         CustomLicenseAddition("custom-exception", "exceptionName", "This is a custom exception"),
