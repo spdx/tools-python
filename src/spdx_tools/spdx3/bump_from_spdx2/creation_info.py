@@ -33,7 +33,6 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         0,
         "part of licensing profile, " "https://github.com/spdx/spdx-3-model/issues/131",
     )
-    document_comment = spdx2_creation_info.document_comment
     creation_info = CreationInfo(
         spec_version=Version("3.0.0"),
         created=spdx2_creation_info.created,
@@ -41,7 +40,6 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         created_using=[],
         profile=[ProfileIdentifier.CORE, ProfileIdentifier.SOFTWARE, ProfileIdentifier.LICENSING],
         data_license=spdx2_creation_info.data_license,
-        comment=spdx2_creation_info.document_comment,
     )
 
     # due to creators having a creation_info themselves which inherits from the document's one,
@@ -71,7 +69,7 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         spdx_id=spdx_id,
         creation_info=creation_info,
         name=spdx2_creation_info.name,
-        comment=document_comment,
+        comment=spdx2_creation_info.document_comment,
         element=[],
         root_element=[spdx_id],
         imports=imports,
