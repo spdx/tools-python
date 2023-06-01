@@ -170,7 +170,7 @@ if not validation_messages:
 * rdflib: https://pypi.python.org/pypi/rdflib/ for handling RDF.
 * ply: https://pypi.org/project/ply/ for handling tag-value.
 * click: https://pypi.org/project/click/ for creating the CLI interface.
-* typeguard: https://pypi.org/project/typeguard/ for type checking.
+* beartype: https://pypi.org/project/beartype/ for type checking.
 * uritools: https://pypi.org/project/uritools/ for validation of URIs.
 * license-expression: https://pypi.org/project/license-expression/ for handling SPDX license expressions.
 
