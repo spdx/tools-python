@@ -125,4 +125,4 @@ def test_wrong_type_in_contributors(checksum):
 @mock.patch("spdx_tools.spdx.model.Checksum", autospec=True)
 def test_wrong_type_in_attribution_texts(checksum):
     with pytest.raises(TypeError):
-        File("name", "id", [checksum], attribution_texts=["attribution", 42])
+        File("name", "id", [checksum], attribution_texts=[41, 42])
