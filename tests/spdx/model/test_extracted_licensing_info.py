@@ -33,7 +33,7 @@ def test_wrong_type_in_license_name():
 
 def test_wrong_type_in_cross_references():
     with pytest.raises(TypeError):
-        ExtractedLicensingInfo(cross_references=["ref", 42])
+        ExtractedLicensingInfo(cross_references=[41, 42])
 
 
 def test_wrong_type_in_comment():
