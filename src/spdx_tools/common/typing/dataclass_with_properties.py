@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2022 spdx contributors
+#
+# SPDX-License-Identifier: Apache-2.0
 from dataclasses import dataclass
 
 from beartype import beartype
