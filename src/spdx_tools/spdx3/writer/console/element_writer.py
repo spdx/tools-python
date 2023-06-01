@@ -15,7 +15,8 @@ from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import wri
 def write_element_properties(element: Element, text_output: TextIO):
     write_value("SPDXID", element.spdx_id, text_output)
     write_value("name", element.name, text_output)
-    write_creation_info(element.creation_info, text_output, True)
+    if element.creation_info:
+        write_creation_info(element.creation_info, text_output, True)
     write_value("summary", element.summary, text_output)
     write_value("description", element.description, text_output)
     write_value("comment", element.comment, text_output)
