@@ -9,7 +9,7 @@ from spdx_tools.spdx3.writer.console.software.package_writer import write_packag
 
 
 def write_dataset(dataset: Dataset, text_output: TextIO):
-    text_output.write("## AI Package\n")
+    text_output.write("## Dataset\n")
     write_package(dataset, text_output, False)
 
     for property_name in Dataset.__annotations__.keys():
