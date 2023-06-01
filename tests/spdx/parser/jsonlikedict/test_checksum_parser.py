@@ -30,3 +30,11 @@ def test_parse_invalid_checksum():
     TestCase().assertCountEqual(
         err.value.get_messages(), ["Error while parsing Checksum: ['Invalid ChecksumAlgorithm: SHA']"]
     )
+
+
+def test_parse_incomplete_checksum():
+    checksum_parser = ChecksumParser()
+    checksum_dict = {"algorithm": "SHA1"}
+
+    with pytest.raises(SPDXParsingError):
+        checksum_parser.parse_checksum(checksum_dict)

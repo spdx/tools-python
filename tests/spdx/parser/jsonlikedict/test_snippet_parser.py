@@ -70,6 +70,31 @@ def test_parse_snippet(copyright_text, expected_copyright_text):
     assert snippet.attribution_texts == ["Some example attibution text."]
 
 
+def test_parse_incomplete_snippet():
+    snippet_parser = SnippetParser()
+    incomplete_snippet_dict = {"SPDXID": "SPDXRef-Snippet", "file_spdx_id": "SPDXRef-File"}
+
+    with pytest.raises(SPDXParsingError):
+        snippet_parser.parse_snippet(incomplete_snippet_dict)
+
+
+def test_parse_snippet_with_invalid_snippet_range():
+    snippet_parser = SnippetParser()
+    snippet_with_invalid_ranges_list = {
+        "SPDXID": "SPDXRef-Snippet",
+        "file_spdx_id": "SPDXRef-File",
+        "ranges": [
+            {
+                "endPointer": {"offset": 23, "reference": "SPDXRef-DoapSource"},
+                "startPointer": {"offset": "310s", "reference": "SPDXRef-DoapSource"},
+            }
+        ],
+    }
+
+    with pytest.raises(SPDXParsingError):
+        snippet_parser.parse_snippet(snippet_with_invalid_ranges_list)
+
+
 def test_parse_invalid_snippet_range():
     snippet_parser = SnippetParser()
 
