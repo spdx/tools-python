@@ -94,7 +94,7 @@ class Dataset(Package):
         supplied_by = [] if supplied_by is None else supplied_by
         standard = [] if standard is None else standard
         data_preprocessing = [] if data_preprocessing is None else data_preprocessing
-        sensors = {} if sensor is None else sensor
+        sensor = {} if sensor is None else sensor
         known_bias = [] if known_bias is None else known_bias
         anonymization_method_used = [] if anonymization_method_used is None else anonymization_method_used
         check_types_and_set_values(self, locals())
