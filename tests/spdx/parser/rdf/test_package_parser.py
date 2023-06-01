@@ -18,6 +18,7 @@ from spdx_tools.spdx.model import (
     PackageVerificationCode,
     SpdxNoAssertion,
 )
+from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.rdf.package_parser import parse_external_package_ref, parse_package
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
@@ -95,3 +96,13 @@ def test_external_package_ref_parser(download_location, category, locator, type,
     assert external_package_ref.locator == locator
     assert external_package_ref.reference_type == type
     assert external_package_ref.comment == comment
+
+
+def test_parse_invalid_package():
+    graph = Graph().parse(os.path.join(os.path.dirname(__file__), "data/invalid_documents/file_without_spdx_ids.xml"))
+    package_node = graph.value(predicate=RDF.type, object=SPDX_NAMESPACE.Package)
+    doc_namespace = "https://some.namespace"
+
+    assert isinstance(package_node, BNode)
+    with pytest.raises(SPDXParsingError):
+        parse_package(package_node, graph, doc_namespace)

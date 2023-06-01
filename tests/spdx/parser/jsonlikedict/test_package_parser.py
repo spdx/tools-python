@@ -227,6 +227,26 @@ def test_parse_package(
     assert package.valid_until_date == datetime(2014, 1, 29, 18, 30, 22)
 
 
+@pytest.mark.parametrize(
+    "incomplete_package_dict",
+    [
+        {"SPDXID": "SPDXRef-Package"},
+        {"SPDXID": "SPDXRef-Package", "name": 5, "downloadLocation": "NONE"},
+        {
+            "SPDXID": "SPDXRef-Package",
+            "name": "Example Package",
+            "downloadLocation": "NONE",
+            "checksums": [{"algorithm": "SHA", "value": "1234"}],
+        },
+    ],
+)
+def test_parse_invalid_package(incomplete_package_dict):
+    package_parser = PackageParser()
+
+    with pytest.raises(SPDXParsingError):
+        package_parser.parse_package(incomplete_package_dict)
+
+
 def test_parse_packages():
     package_parser = PackageParser()
     packages_list = [
@@ -242,6 +262,14 @@ def test_parse_packages():
 
     with pytest.raises(SPDXParsingError):
         parse_list_of_elements(packages_list, package_parser.parse_package)
+
+
+def test_parse_external_ref():
+    package_parser = PackageParser()
+    external_ref = {"referenceType": "fix"}
+
+    with pytest.raises(SPDXParsingError):
+        package_parser.parse_external_ref(external_ref)
 
 
 def test_parse_invalid_external_package_ref_category():

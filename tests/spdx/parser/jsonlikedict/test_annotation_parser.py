@@ -4,8 +4,11 @@
 import datetime
 from unittest import TestCase
 
+import pytest
+
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
 from spdx_tools.spdx.model import Actor, ActorType, Annotation, AnnotationType
+from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.annotation_parser import AnnotationParser
 
 
@@ -113,3 +116,17 @@ def test_parse_all_annotations():
             ),
         ],
     )
+
+
+@pytest.mark.parametrize(
+    "incomplete_annotation_dict",
+    [
+        {"annotator": "Person: Jane Doe ()"},
+        {"annotationDate": "2010-01-29T18:30:22Z"},
+    ],
+)
+def test_parse_incomplete_annotation(incomplete_annotation_dict):
+    annotation_parser = AnnotationParser()
+
+    with pytest.raises(SPDXParsingError):
+        annotation_parser.parse_annotation(incomplete_annotation_dict)
