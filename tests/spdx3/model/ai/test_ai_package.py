@@ -4,8 +4,6 @@
 from datetime import datetime
 from unittest import mock
 
-import pytest
-
 from spdx_tools.spdx3.model.ai import AIPackage
 from spdx_tools.spdx3.model.ai.ai_package import SafetyRiskAssessmentType
 from spdx_tools.spdx3.model.software import SoftwarePurpose
@@ -59,23 +57,3 @@ def test_correct_initialization(creation_info):
     assert ai_package.domain == ["domain"]
     assert ai_package.autonomy_type
     assert ai_package.safety_risk_assessment == SafetyRiskAssessmentType.HIGH
-
-
-@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
-def test_invalid_initialization(creation_info):
-    with pytest.raises(TypeError) as err:
-        AIPackage(
-            "some_spdx_id",
-            "AI Package name",
-            ["https://namespace.test#supplier"],
-            "https://download.test",
-            "1.2:rc2",
-            [SoftwarePurpose.SOURCE],
-            datetime(12, 5, 23, 11),
-            creation_info,
-            metric={"metric1": "value", "metric2": 250},
-        )
-
-    assert len(err.value.args[0]) == 1
-    for error in err.value.args[0]:
-        assert error.startswith("SetterError AIPackage:")

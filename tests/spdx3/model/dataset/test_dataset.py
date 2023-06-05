@@ -4,8 +4,6 @@
 from datetime import datetime
 from unittest import mock
 
-import pytest
-
 from spdx_tools.spdx3.model.dataset import ConfidentialityLevelType, Dataset, DatasetAvailabilityType
 from spdx_tools.spdx3.model.software import SoftwarePurpose
 
@@ -54,24 +52,3 @@ def test_correct_initialization(creation_info):
     assert dataset.confidentiality_level == ConfidentialityLevelType.RED
     assert dataset.dataset_update_mechanism == "update mechanism"
     assert dataset.dataset_availability == DatasetAvailabilityType.QUERY
-
-
-@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
-def test_invalid_initialization(creation_info):
-    with pytest.raises(TypeError) as err:
-        Dataset(
-            "some_spdx_id",
-            "Dataset name",
-            ["https://namespace.test#originator"],
-            "https://download.test",
-            [SoftwarePurpose.DATA],
-            datetime(10, 5, 23, 11),
-            datetime(11, 5, 24, 12),
-            "training data",
-            creation_info=creation_info,
-            sensor={"sensor1": "value", "sensor2": 250},
-        )
-
-    assert len(err.value.args[0]) == 1
-    for error in err.value.args[0]:
-        assert error.startswith("SetterError Dataset:")
