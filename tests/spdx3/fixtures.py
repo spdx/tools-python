@@ -38,10 +38,10 @@ from spdx_tools.spdx3.model.dataset.dataset import ConfidentialityLevelType, Dat
 from spdx_tools.spdx3.model.licensing import (
     CustomLicense,
     CustomLicenseAddition,
-    LicenseField,
     ListedLicense,
     ListedLicenseException,
 )
+from spdx_tools.spdx3.model.positive_integer_range import PositiveIntegerRange
 from spdx_tools.spdx3.model.security import (
     CvssV2VulnAssessmentRelationship,
     CvssV3VulnAssessmentRelationship,
@@ -162,6 +162,39 @@ def namespace_map_fixture(
     prefix="namespaceMapPrefix", namespace="https://spdx.test/tools-python/namespace_map_namespace"
 ) -> NamespaceMap:
     return NamespaceMap(prefix=prefix, namespace=namespace)
+
+
+def listed_license_fixture(
+    license_id="https://spdx.test/tools-python/license_id",
+    license_name="license name",
+    license_text="license text",
+    license_comment="license comment",
+    see_also=None,
+    is_osi_approved=True,
+    is_fsf_libre=True,
+    standard_license_header="license header",
+    standard_license_template="license template",
+    is_deprecated_license_id=True,
+    obsoleted_by="https://spdx.test/tools-python/obsoleted_by_license_id",
+    list_version_added="2.1",
+    deprecated_version="2.2",
+):
+    see_also = ["https://see.also/license"] if see_also is None else see_also
+    return ListedLicense(
+        license_id=license_id,
+        license_name=license_name,
+        license_text=license_text,
+        license_comment=license_comment,
+        see_also=see_also,
+        is_osi_approved=is_osi_approved,
+        is_fsf_libre=is_fsf_libre,
+        standard_license_header=standard_license_header,
+        standard_license_template=standard_license_template,
+        is_deprecated_license_id=is_deprecated_license_id,
+        obsoleted_by=obsoleted_by,
+        list_version_added=list_version_added,
+        deprecated_version=deprecated_version,
+    )
 
 
 ELEMENT_DICT = {
@@ -346,9 +379,9 @@ ARTIFACT_DICT = {
 
 SOFTWARE_ARTIFACT_DICT = {
     "content_identifier": "https://spdx.test/tools-python/contentIdentifier",
-    "purpose": SoftwarePurpose.OTHER,
-    "concluded_license": LicenseField,
-    "declared_license": LicenseField,
+    "purpose": [SoftwarePurpose.OTHER],
+    "concluded_license": listed_license_fixture(),
+    "declared_license": listed_license_fixture(),
     "copyright_text": "copyrightText",
     "attribution_text": "attributionText",
 }
@@ -363,7 +396,7 @@ PACKAGE_DICT = {
     "source_info": "sourceInfo",
 }
 
-SNIPPET_DICT = {"byte_range": (1024, 2048), "line_range": (1, 4)}
+SNIPPET_DICT = {"byte_range": PositiveIntegerRange(1024, 2048), "line_range": PositiveIntegerRange(1, 4)}
 
 SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT = {
     "software_linkage": SoftwareDependencyLinkType.OTHER,
@@ -384,7 +417,6 @@ DATASET_DICT = {
     "dataset_update_mechanism": "DatasetUpdateMechanism",
     "dataset_availability": DatasetAvailabilityType.QUERY,
 }
-
 
 FIXTURE_DICTS = {
     Agent: [ELEMENT_DICT],
