@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from unittest import TestCase, mock
+from unittest import TestCase
 
 import pytest
 
@@ -13,6 +13,7 @@ from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
+from tests.spdx3.fixtures import creation_info_fixture
 from tests.spdx.fixtures import actor_fixture, package_fixture
 
 
@@ -29,8 +30,7 @@ from tests.spdx.fixtures import actor_fixture, package_fixture
         (SpdxNoAssertion(), [], SpdxNoAssertion(), []),
     ],
 )
-@mock.patch("spdx_tools.spdx3.model.CreationInfo")
-def test_bump_package(creation_info, originator, expected_originator, supplier, expected_supplier):
+def test_bump_package(originator, expected_originator, supplier, expected_supplier):
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
@@ -45,7 +45,7 @@ def test_bump_package(creation_info, originator, expected_originator, supplier, 
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info, document_namespace, [], [], [])
+    bump_package(spdx2_package, payload, creation_info_fixture(), document_namespace, [], [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert isinstance(package, Package)
@@ -76,8 +76,7 @@ def test_bump_package(creation_info, originator, expected_originator, supplier, 
     )
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInfo")
-def test_bump_of_single_purl_without_comment(creation_info):
+def test_bump_of_single_purl_without_comment():
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
@@ -87,7 +86,7 @@ def test_bump_of_single_purl_without_comment(creation_info):
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info, document_namespace, [], [], [])
+    bump_package(spdx2_package, payload, creation_info_fixture(), document_namespace, [], [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url == "purl_locator"
@@ -95,8 +94,7 @@ def test_bump_of_single_purl_without_comment(creation_info):
     assert package.external_identifier == []
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInfo")
-def test_bump_of_single_purl_with_comment(creation_info):
+def test_bump_of_single_purl_with_comment():
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
@@ -106,7 +104,7 @@ def test_bump_of_single_purl_with_comment(creation_info):
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info, document_namespace, [], [], [])
+    bump_package(spdx2_package, payload, creation_info_fixture(), document_namespace, [], [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
@@ -116,8 +114,7 @@ def test_bump_of_single_purl_with_comment(creation_info):
     ]
 
 
-@mock.patch("spdx_tools.spdx3.model.CreationInfo")
-def test_bump_of_multiple_purls(creation_info):
+def test_bump_of_multiple_purls():
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
@@ -128,7 +125,7 @@ def test_bump_of_multiple_purls(creation_info):
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info, document_namespace, [], [], [])
+    bump_package(spdx2_package, payload, creation_info_fixture(), document_namespace, [], [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None

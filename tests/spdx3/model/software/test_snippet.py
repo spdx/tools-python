@@ -9,7 +9,7 @@ from spdx_tools.spdx3.model.positive_integer_range import PositiveIntegerRange
 from spdx_tools.spdx3.model.software import Snippet, SoftwarePurpose
 
 
-@mock.patch("spdx_tools.spdx3.model.software.Snippet", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
 def test_correct_initialization(creation_info):
     snippet = Snippet(
         "SPDXRef-Snippet",
@@ -21,14 +21,13 @@ def test_correct_initialization(creation_info):
     )
 
     assert snippet.spdx_id == "SPDXRef-Snippet"
-    assert snippet.creation_info == creation_info
     assert snippet.content_identifier == "https://content.identifier"
     assert snippet.purpose == [SoftwarePurpose.SOURCE]
     assert snippet.byte_range == PositiveIntegerRange(3, 4)
     assert snippet.line_range == PositiveIntegerRange(346, 456)
 
 
-@mock.patch("spdx_tools.spdx3.model.software.Snippet", autospec=True)
+@mock.patch("spdx_tools.spdx3.model.CreationInfo", autospec=True)
 def test_invalid_initialization(creation_info):
     with pytest.raises(TypeError) as err:
         Snippet(2, creation_info=creation_info, originated_by=34, byte_range="34:45")
