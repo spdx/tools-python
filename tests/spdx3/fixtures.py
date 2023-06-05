@@ -34,6 +34,7 @@ from spdx_tools.spdx3.model import (
     Tool,
 )
 from spdx_tools.spdx3.model.ai.ai_package import AIPackage, SafetyRiskAssessmentType
+from spdx_tools.spdx3.model.build import Build
 from spdx_tools.spdx3.model.dataset.dataset import ConfidentialityLevelType, Dataset, DatasetAvailabilityType
 from spdx_tools.spdx3.model.licensing import (
     CustomLicense,
@@ -404,6 +405,7 @@ SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT = {
 }
 
 DATASET_DICT = {
+    "dataset_type": "DatasetType",
     "data_collection_process": "DatasetDataCollectionProcess",
     "intended_use": "DatasetIntendedUse",
     "dataset_size": 10,
@@ -416,6 +418,18 @@ DATASET_DICT = {
     "confidentiality_level": ConfidentialityLevelType.CLEAR,
     "dataset_update_mechanism": "DatasetUpdateMechanism",
     "dataset_availability": DatasetAvailabilityType.QUERY,
+}
+
+BUILD_DICT = {
+    "build_type": "BuildType",
+    "build_id": "BuildId",
+    "config_source_entrypoint": ["ConfigSourceEntrypoint"],
+    "config_source_uri": ["ConfigSourceURI"],
+    "config_source_digest": [hash_fixture()],
+    "parameters": {"parameter": "value"},
+    "build_start_time": datetime(2015, 4, 4),
+    "build_end_time": datetime(2015, 4, 5),
+    "environment": {"environment_param": "environment_value"},
 }
 
 FIXTURE_DICTS = {
@@ -505,6 +519,7 @@ FIXTURE_DICTS = {
         SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT,
     ],
     Dataset: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT, DATASET_DICT],
+    Build: [ELEMENT_DICT, BUILD_DICT],
 }
 
 
