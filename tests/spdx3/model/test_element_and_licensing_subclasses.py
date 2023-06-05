@@ -33,6 +33,7 @@ from spdx_tools.spdx3.model.security import (
     VexUnderInvestigationVulnAssessmentRelationship,
     Vulnerability,
 )
+from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet, SoftwareDependencyRelationship
 from tests.spdx3.fixtures import fixture_factory, get_fixture_dict
 from tests.spdx3.model.model_test_utils import InvalidTypeClass, get_property_names
 
@@ -61,6 +62,11 @@ CLASS_LIST = [
     VexNotAffectedVulnAssessmentRelationship,
     VexUnderInvestigationVulnAssessmentRelationship,
     Vulnerability,
+    File,
+    Package,
+    Snippet,
+    Sbom,
+    SoftwareDependencyRelationship,
 ]
 
 
