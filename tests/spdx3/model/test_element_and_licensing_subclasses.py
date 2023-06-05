@@ -15,6 +15,9 @@ from spdx_tools.spdx3.model import (
     SoftwareAgent,
     SpdxDocument,
 )
+from spdx_tools.spdx3.model.ai import AIPackage
+from spdx_tools.spdx3.model.build import Build
+from spdx_tools.spdx3.model.dataset import Dataset
 from spdx_tools.spdx3.model.licensing import (
     CustomLicense,
     CustomLicenseAddition,
@@ -67,6 +70,9 @@ CLASS_LIST = [
     Snippet,
     Sbom,
     SoftwareDependencyRelationship,
+    Dataset,
+    AIPackage,
+    Build,
 ]
 
 
