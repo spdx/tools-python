@@ -88,7 +88,7 @@ package = Package(
 document.packages = [package]
 
 # A DESCRIBES relationship asserts that the document indeed describes the package.
-describes_relationship = Relationship("SPDXRef-Document", RelationshipType.DESCRIBES, "SPDXRef-Package")
+describes_relationship = Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-Package")
 document.relationships = [describes_relationship]
 
 # Let's add two files. Have a look at the file class for all possible properties a file can have.
@@ -120,6 +120,7 @@ contains_relationship2 = Relationship("SPDXRef-Package", RelationshipType.CONTAI
 # This library uses run-time type checks when assigning properties.
 # Because in-place alterations like .append() circumvent these checks, we don't use them here.
 document.relationships += [contains_relationship1, contains_relationship2]
+document.files += [file1, file2]
 
 # We now have created a document with basic creation information, describing a package that contains two files.
 # You can also add Annotations, Snippets and ExtractedLicensingInfo to the document in an analogous manner to the above.
