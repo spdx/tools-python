@@ -44,9 +44,14 @@ This library implements SPDX parsers, convertors, validators and handlers in Pyt
 * visualize the structure of a SPDX document by creating an `AGraph`. Note: This is an optional feature and requires 
 additional installation of optional dependencies
 
-# Planned features
+## Experimental support for SPDX 3.0
+* Create v3.0 elements and payloads
+* Convert v2.2/v2.3 documents to v3.0
+* Serialize to JSON-LD
 
-* up-to-date support of SPDX v3.0 as soon as it is released
+See [Quickstart to SPDX 3.0](#quickstart-to-spdx-30) below.  
+The implementation is based on the descriptive markdown files in the repository https://github.com/spdx/spdx-3-model (latest commit: ea2e1446ae937c6722b3f599f95813f8747d54b4).
+
 
 # Installation
 
@@ -162,6 +167,20 @@ for validation_message in validation_messages:
 if not validation_messages:
     write_file(document, "new_spdx_document.rdf", validate=False)
 ```
+
+# Quickstart to SPDX 3.0
+In contrast to SPDX v2, all elements are now subclasses of the central `Element` class.
+This includes packages, files, snippets, relationships, annotations, but also SBOMs, SpdxDocuments, and more.  
+For serialization purposes, all Elements that are to be serialized into the same file are collected in a `Payload`.
+This is just a dictionary that maps each Element's SpdxId to itself.
+Use the `write_payload()` functions to serialize a payload.
+There currently are two options:  
+* The `spdx_tools.spdx3.writer.json_ld.json_ld_writer` module generates a JSON-LD file of the payload.
+* The `spdx_tools.spdx3.writer.console.payload_writer` module prints a debug output to console. Note that this is not an official part of the SPDX specification and will probably be dropped as soon as a better standard emerges.
+
+You can convert an SPDX v2 document to v3 via the `spdx_tools.spdx3.bump_from_spdx2.spdx_document` module.
+The `bump_spdx_document()` function will return a payload containing an `SpdxDocument` Element and one Element for each package, file, snippet, relationship, or annotation contained in the v2 document.
+
 
 # Dependencies
 
