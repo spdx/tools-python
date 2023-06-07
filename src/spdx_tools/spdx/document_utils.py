@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from copy import deepcopy
-from typing import Any, Dict, List, Union
+
+from beartype.typing import Any, Dict, List, Union
 
 from spdx_tools.spdx.model import Document, File, Package, Snippet
 

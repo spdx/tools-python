@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Any, Dict
+from beartype.typing import Any, Dict
 
 from spdx_tools.common.typing.constructor_type_errors import ConstructorTypeErrors
 from spdx_tools.spdx.parser.error import SPDXParsingError

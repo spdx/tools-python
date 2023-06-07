@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import List
+from beartype.typing import List
 
 from spdx_tools.spdx3.model import CreationInfo, ExternalIdentifier, ExternalIdentifierType, Organization, Person, Tool
 from spdx_tools.spdx3.payload import Payload

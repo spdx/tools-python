@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Any, Callable, Dict, List, Optional
+from beartype.typing import Any, Callable, Dict, List, Optional
 
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError

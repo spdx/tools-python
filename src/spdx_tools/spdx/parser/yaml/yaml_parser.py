@@ -1,9 +1,8 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict
-
 import yaml
+from beartype.typing import Dict
 
 from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.parser.jsonlikedict.json_like_dict_parser import JsonLikeDictParser

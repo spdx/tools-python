@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import List, Optional, Tuple
+from beartype.typing import List, Optional, Tuple
 
 from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion

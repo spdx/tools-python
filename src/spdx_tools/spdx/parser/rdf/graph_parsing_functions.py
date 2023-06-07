@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from enum import Enum
-from typing import Any, Callable, Optional, Tuple, Type, Union
 
+from beartype.typing import Any, Callable, Optional, Tuple, Type, Union
 from rdflib import RDF, Graph, URIRef
 from rdflib.exceptions import UniquenessError
 from rdflib.namespace import NamespaceManager

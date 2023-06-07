@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict, List
-
+from beartype.typing import Dict, List
 from rdflib import DOAP, Graph
 from rdflib.compare import to_isomorphic
 

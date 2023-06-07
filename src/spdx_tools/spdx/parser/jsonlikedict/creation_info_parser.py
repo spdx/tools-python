@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from datetime import datetime
-from typing import Dict, List, Optional
+
+from beartype.typing import Dict, List, Optional
 
 from spdx_tools.spdx.datetime_conversions import datetime_from_str
 from spdx_tools.spdx.model import Actor, Checksum, CreationInfo, ExternalDocumentRef, Version

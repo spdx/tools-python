@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import List, Union
-
+from beartype.typing import List, Union
 from boolean import Expression
 from license_expression import (
     AND,

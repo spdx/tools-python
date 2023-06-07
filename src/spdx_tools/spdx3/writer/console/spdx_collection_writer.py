@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import TextIO
+from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model import ElementCollection
 from spdx_tools.spdx3.writer.console.element_writer import write_element_properties

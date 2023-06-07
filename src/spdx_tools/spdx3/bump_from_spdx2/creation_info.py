@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import List
-
+from beartype.typing import List
 from semantic_version import Version
 
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor

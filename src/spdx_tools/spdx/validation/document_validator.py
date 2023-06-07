@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import List
+from beartype.typing import List
 
 from spdx_tools.spdx.model import Document, RelationshipType
 from spdx_tools.spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target

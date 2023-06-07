@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 import logging
 import sys
-from typing import Dict, List, Optional, Tuple, Union
+
+from beartype.typing import Dict, List, Optional, Tuple, Union
 
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import (

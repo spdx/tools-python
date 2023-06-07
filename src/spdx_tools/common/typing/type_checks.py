@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from dataclasses import fields
-from typing import Any, Dict
+
+from beartype.typing import Any, Dict
 
 from spdx_tools.common.typing.constructor_type_errors import ConstructorTypeErrors
 

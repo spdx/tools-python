@@ -2,9 +2,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import sys
-from typing import List
 
 import click
+from beartype.typing import List
 
 from spdx_tools.spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
 from spdx_tools.spdx3.payload import Payload

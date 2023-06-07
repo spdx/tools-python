@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import re
-from typing import List, Optional
+
+from beartype.typing import List, Optional
 
 from spdx_tools.spdx.model import ExtractedLicensingInfo
 from spdx_tools.spdx.validation.uri_validators import validate_url

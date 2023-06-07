@@ -2,8 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from typing import List, Optional, Union
-
+from beartype.typing import List, Optional, Union
 from license_expression import ExpressionError, ExpressionParseError, LicenseExpression, get_spdx_licensing
 
 from spdx_tools.spdx.model import Document, SpdxNoAssertion, SpdxNone

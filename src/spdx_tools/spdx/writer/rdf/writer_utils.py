@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 import logging
 from datetime import datetime
-from typing import Any, Dict, Optional
 
+from beartype.typing import Any, Dict, Optional
 from rdflib import Graph, Literal
 from rdflib.term import Node
 

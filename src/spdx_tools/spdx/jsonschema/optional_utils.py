@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Callable, Optional, TypeVar
+from beartype.typing import Callable, Optional, TypeVar
 
 T = TypeVar("T")
 S = TypeVar("S")

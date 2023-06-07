@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Optional
-
+from beartype.typing import Optional
 from pyshacl import validate
 from rdflib import Graph
 
