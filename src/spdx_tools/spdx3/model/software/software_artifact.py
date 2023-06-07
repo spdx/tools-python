@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from abc import abstractmethod
-from typing import List, Optional
+
+from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.spdx3.model import Artifact

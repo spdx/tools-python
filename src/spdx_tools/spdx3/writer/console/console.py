@@ -2,7 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from enum import Enum
-from typing import Optional, TextIO, Union
+
+from beartype.typing import Optional, TextIO, Union
 
 
 def write_value(tag: str, value: Optional[Union[bool, str, dict, list, Enum]], out: TextIO, indent: bool = False):

@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Any, Type
+from beartype.typing import Any, Type
 
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
 from spdx_tools.spdx.jsonschema.annotation_properties import AnnotationProperty

@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Union
-
+from beartype.typing import Union
 from rdflib import RDFS, BNode, Graph, URIRef
 
 from spdx_tools.spdx.model import File, FileType

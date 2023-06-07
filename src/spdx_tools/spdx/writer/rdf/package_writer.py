@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict
-
+from beartype.typing import Dict
 from rdflib import DOAP, RDF, RDFS, XSD, BNode, Graph, Literal, URIRef
 
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case

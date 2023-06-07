@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict, List, Optional, Union
+from beartype.typing import Dict, List, Optional, Union
 
 from spdx_tools.spdx.model import ExtractedLicensingInfo, SpdxNoAssertion
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import parse_field_or_no_assertion

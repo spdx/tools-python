@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict, Optional, Tuple, Union
-
+from beartype.typing import Dict, Optional, Tuple, Union
 from rdflib import RDF, RDFS, Graph
 from rdflib.exceptions import UniquenessError
 from rdflib.term import BNode, Node, URIRef

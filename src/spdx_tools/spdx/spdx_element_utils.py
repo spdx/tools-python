@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import List, Union
+from beartype.typing import List, Union
 
 from spdx_tools.spdx.model import ExternalDocumentRef, File, Package, Snippet
 

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from typing import List, Optional
+from beartype.typing import List, Optional
 
 from spdx_tools.spdx.model import Document, Snippet
 from spdx_tools.spdx.validation.license_expression_validator import (

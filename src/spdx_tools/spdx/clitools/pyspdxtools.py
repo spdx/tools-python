@@ -14,9 +14,9 @@
 # limitations under the License.
 import logging
 import sys
-from typing import List
 
 import click
+from beartype.typing import List
 
 from spdx_tools.spdx.graph_generation import export_graph_from_document
 from spdx_tools.spdx.model import Document

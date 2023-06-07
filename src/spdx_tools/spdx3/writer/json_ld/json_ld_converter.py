@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 from datetime import datetime
 from enum import Enum
-from typing import Any, List
 
+from beartype.typing import Any, List
 from semantic_version import Version
 
 from spdx_tools.spdx3.model.creation_info import CreationInfo

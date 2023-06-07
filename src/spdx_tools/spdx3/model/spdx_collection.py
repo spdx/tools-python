@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 from abc import abstractmethod
 from dataclasses import field
-from typing import List
+
+from beartype.typing import List
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.spdx3.model import Element, ExternalMap, NamespaceMap

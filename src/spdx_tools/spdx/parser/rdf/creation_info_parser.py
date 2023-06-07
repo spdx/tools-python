@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 import logging
 import sys
-from typing import Tuple
 from urllib.parse import urldefrag
 
+from beartype.typing import Tuple
 from rdflib import RDF, RDFS, Graph, Namespace
 from rdflib.exceptions import UniquenessError
 from rdflib.term import URIRef

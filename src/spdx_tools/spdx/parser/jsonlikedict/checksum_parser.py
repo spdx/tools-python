@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict, Optional
+from beartype.typing import Dict, Optional
 
 from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import json_str_to_enum_name

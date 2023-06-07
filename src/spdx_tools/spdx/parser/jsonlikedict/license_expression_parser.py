@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Union
-
+from beartype.typing import Union
 from license_expression import ExpressionError, LicenseExpression, Licensing
 
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone

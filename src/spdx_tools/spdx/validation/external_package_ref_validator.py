@@ -2,9 +2,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import re
-from typing import Dict, List
 
 import uritools
+from beartype.typing import Dict, List
 
 from spdx_tools.spdx.model import ExternalPackageRef, ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import CATEGORY_TO_EXTERNAL_PACKAGE_REF_TYPES

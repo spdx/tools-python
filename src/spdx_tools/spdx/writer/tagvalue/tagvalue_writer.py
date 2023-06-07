@@ -8,7 +8,7 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from typing import List, TextIO
+from beartype.typing import List, TextIO
 
 from spdx_tools.spdx.document_utils import create_document_without_duplicates
 from spdx_tools.spdx.model import Document

@@ -4,7 +4,8 @@
 from abc import abstractmethod
 from dataclasses import field
 from datetime import datetime
-from typing import List, Optional
+
+from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.spdx3.model import Element
