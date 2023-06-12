@@ -3,11 +3,24 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import os
+from datetime import datetime
 from unittest.mock import MagicMock, call, mock_open, patch
 
 import pytest
 
-from spdx_tools.spdx.model import File, Package, Relationship, RelationshipType, Snippet
+from spdx_tools.spdx.model import (
+    Actor,
+    ActorType,
+    Checksum,
+    ChecksumAlgorithm,
+    CreationInfo,
+    Document,
+    File,
+    Package,
+    Relationship,
+    RelationshipType,
+    Snippet,
+)
 from spdx_tools.spdx.parser.tagvalue import tagvalue_parser
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer import write_document, write_document_to_file
 from tests.spdx.fixtures import checksum_fixture, document_fixture
@@ -119,6 +132,90 @@ def test_correct_order_of_elements():
             call("PackageDownloadLocation: \n"),
             call("FilesAnalyzed: True\n"),
             call("\n"),
+            call("\n"),
+        ]
+    )
+
+
+def test_same_file_in_multiple_packages():
+    creation_info = CreationInfo(
+        spdx_version="SPDX-2.3",
+        spdx_id="SPDXRef-DOCUMENT",
+        data_license="CC0-1.0",
+        name="SPDX Lite Document",
+        document_namespace="https://test.namespace.com",
+        creators=[Actor(ActorType.PERSON, "John Doe")],
+        created=datetime(2023, 3, 14, 8, 49),
+    )
+    package_a = Package(
+        name="Example package A",
+        spdx_id="SPDXRef-Package-A",
+        download_location="https://download.com",
+    )
+    package_b = Package(
+        name="Example package B",
+        spdx_id="SPDXRef-Package-B",
+        download_location="https://download.com",
+    )
+    file = File(
+        name="Example file",
+        spdx_id="SPDXRef-File",
+        checksums=[Checksum(ChecksumAlgorithm.SHA1, "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12")],
+    )
+
+    relationships = [
+        Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-Package-A"),
+        Relationship("SPDXRef-DOCUMENT", RelationshipType.DESCRIBES, "SPDXRef-Package-B"),
+        Relationship("SPDXRef-Package-A", RelationshipType.CONTAINS, "SPDXRef-File"),
+        Relationship("SPDXRef-Package-B", RelationshipType.CONTAINS, "SPDXRef-File"),
+    ]
+    document = Document(
+        creation_info=creation_info,
+        packages=[package_a, package_b],
+        files=[file],
+        relationships=relationships,
+    )
+    mock: MagicMock = mock_open()
+    with patch(f"{__name__}.open", mock, create=True):
+        with open("foo", "w") as file:
+            write_document(document, file)
+
+    mock.assert_called_once_with("foo", "w")
+    handle = mock()
+    handle.write.assert_has_calls(
+        [
+            call("## Document Information\n"),
+            call("SPDXVersion: SPDX-2.3\n"),
+            call("DataLicense: CC0-1.0\n"),
+            call("SPDXID: SPDXRef-DOCUMENT\n"),
+            call("DocumentName: SPDX Lite Document\n"),
+            call("DocumentNamespace: https://test.namespace.com\n"),
+            call("\n"),
+            call("## Creation Information\n"),
+            call("Creator: Person: John Doe\n"),
+            call("Created: 2023-03-14T08:49:00Z\n"),
+            call("\n"),
+            call("## Package Information\n"),
+            call("PackageName: Example package A\n"),
+            call("SPDXID: SPDXRef-Package-A\n"),
+            call("PackageDownloadLocation: https://download.com\n"),
+            call("FilesAnalyzed: True\n"),
+            call("\n"),
+            call("## File Information\n"),
+            call("FileName: Example file\n"),
+            call("SPDXID: SPDXRef-File\n"),
+            call("FileChecksum: SHA1: 2fd4e1c67a2d28fced849ee1bb76e7391b93eb12\n"),
+            call("\n"),
+            call("## Package Information\n"),
+            call("PackageName: Example package B\n"),
+            call("SPDXID: SPDXRef-Package-B\n"),
+            call("PackageDownloadLocation: https://download.com\n"),
+            call("FilesAnalyzed: True\n"),
+            call("\n"),
+            call("## Relationships\n"),
+            call("Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package-A\n"),
+            call("Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package-B\n"),
+            call("Relationship: SPDXRef-Package-B CONTAINS SPDXRef-File\n"),
             call("\n"),
         ]
     )

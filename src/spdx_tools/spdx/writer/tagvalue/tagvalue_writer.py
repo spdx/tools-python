@@ -11,7 +11,7 @@
 from beartype.typing import List, TextIO
 
 from spdx_tools.spdx.document_utils import create_document_without_duplicates
-from spdx_tools.spdx.model import Document
+from spdx_tools.spdx.model import Document, Relationship, RelationshipType
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 from spdx_tools.spdx.validation.validation_message import ValidationMessage
 from spdx_tools.spdx.writer.tagvalue.annotation_writer import write_annotation
@@ -70,17 +70,27 @@ def write_document(document: Document, text_output: TextIO):
                     file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output, with_separator=True
                 )
 
+    already_written_file_ids = []  # a file can belong to multiple packages but must appear only once
     for package in document.packages:
         write_package(package, text_output)
         write_separator(text_output)
         if package.spdx_id in contained_files_by_package_id:
             for file in contained_files_by_package_id[package.spdx_id]:
-                write_file(file, text_output)
-                write_separator(text_output)
-                if file.spdx_id in file_ids_with_contained_snippets:
-                    write_list_of_elements(
-                        file_ids_with_contained_snippets[file.spdx_id], write_snippet, text_output, with_separator=True
+                if file.spdx_id in already_written_file_ids:
+                    relationships_to_write.append(
+                        Relationship(package.spdx_id, RelationshipType.CONTAINS, file.spdx_id)
                     )
+                else:
+                    write_file(file, text_output)
+                    write_separator(text_output)
+                    if file.spdx_id in file_ids_with_contained_snippets:
+                        write_list_of_elements(
+                            file_ids_with_contained_snippets[file.spdx_id],
+                            write_snippet,
+                            text_output,
+                            with_separator=True,
+                        )
+                    already_written_file_ids.append(file.spdx_id)
 
     write_optional_heading(document.extracted_licensing_info, "## License Information\n", text_output)
     write_list_of_elements(
