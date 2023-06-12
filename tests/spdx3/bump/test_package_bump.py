@@ -7,13 +7,11 @@ import pytest
 
 from spdx_tools.spdx3.bump_from_spdx2.package import bump_package
 from spdx_tools.spdx3.model import ExternalIdentifier, ExternalIdentifierType, ExternalReference, ExternalReferenceType
-from spdx_tools.spdx3.model.licensing import ConjunctiveLicenseSet, ListedLicense
 from spdx_tools.spdx3.model.software import Package
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
-from tests.spdx3.fixtures import creation_info_fixture
 from tests.spdx.fixtures import actor_fixture, package_fixture
 
 
@@ -45,7 +43,7 @@ def test_bump_package(originator, expected_originator, supplier, expected_suppli
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info_fixture(), document_namespace, [], [], [])
+    bump_package(spdx2_package, payload, document_namespace, [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert isinstance(package, Package)
@@ -68,12 +66,6 @@ def test_bump_package(originator, expected_originator, supplier, expected_suppli
     assert package.valid_until_time == spdx2_package.valid_until_date
     assert package.copyright_text == spdx2_package.copyright_text
     assert package.attribution_text == spdx2_package.attribution_texts[0]
-    assert package.concluded_license == ConjunctiveLicenseSet(
-        [ListedLicense("MIT", "MIT", "blank"), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "blank")]
-    )
-    assert package.declared_license == ConjunctiveLicenseSet(
-        [ListedLicense("MIT", "MIT", "blank"), ListedLicense("GPL-2.0-only", "GPL-2.0-only", "blank")]
-    )
 
 
 def test_bump_of_single_purl_without_comment():
@@ -86,7 +78,7 @@ def test_bump_of_single_purl_without_comment():
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info_fixture(), document_namespace, [], [], [])
+    bump_package(spdx2_package, payload, document_namespace, [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url == "purl_locator"
@@ -104,7 +96,7 @@ def test_bump_of_single_purl_with_comment():
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info_fixture(), document_namespace, [], [], [])
+    bump_package(spdx2_package, payload, document_namespace, [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
@@ -125,7 +117,7 @@ def test_bump_of_multiple_purls():
     )
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, creation_info_fixture(), document_namespace, [], [], [])
+    bump_package(spdx2_package, payload, document_namespace, [], [])
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None

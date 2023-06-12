@@ -37,9 +37,7 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
         bump_package(
             spdx2_package,
             payload,
-            creation_info,
             document_namespace,
-            document.extracted_licensing_info,
             document.creation_info.external_document_refs,
             spdx_document.imports,
         )
@@ -48,9 +46,7 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
         bump_file(
             spdx2_file,
             payload,
-            creation_info,
             document_namespace,
-            document.extracted_licensing_info,
             document.creation_info.external_document_refs,
             spdx_document.imports,
         )
@@ -59,14 +55,12 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
         bump_snippet(
             spdx2_snippet,
             payload,
-            creation_info,
             document_namespace,
-            document.extracted_licensing_info,
             document.creation_info.external_document_refs,
             spdx_document.imports,
         )
 
-    bump_relationships(document.relationships, payload, creation_info, document_namespace)
+    bump_relationships(document.relationships, payload, document_namespace)
 
     for counter, spdx2_annotation in enumerate(document.annotations):
         bump_annotation(spdx2_annotation, payload, creation_info, document_namespace, counter)
