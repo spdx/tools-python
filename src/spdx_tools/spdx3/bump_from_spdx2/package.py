@@ -6,10 +6,8 @@ from beartype.typing import List, Optional, Union
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.bump_from_spdx2.license_expression import bump_license_expression_or_none_or_no_assertion
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import (
-    CreationInfo,
     ExternalIdentifier,
     ExternalIdentifierType,
     ExternalMap,
@@ -19,7 +17,7 @@ from spdx_tools.spdx3.model import (
 from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import Actor as Spdx2_Actor
-from spdx_tools.spdx.model import ExternalDocumentRef, ExtractedLicensingInfo, SpdxNoAssertion
+from spdx_tools.spdx.model import ExternalDocumentRef, SpdxNoAssertion
 from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
 from spdx_tools.spdx.spdx_element_utils import get_full_element_spdx_id
@@ -28,9 +26,7 @@ from spdx_tools.spdx.spdx_element_utils import get_full_element_spdx_id
 def bump_package(
     spdx2_package: Spdx2_Package,
     payload: Payload,
-    creation_info: CreationInfo,
     document_namespace: str,
-    extracted_licensing_info: List[ExtractedLicensingInfo],
     external_document_refs: List[ExternalDocumentRef],
     imports: List[ExternalMap],
 ):
@@ -46,11 +42,11 @@ def bump_package(
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
     print_missing_conversion("package2.file_name", 0, "https://github.com/spdx/spdx-3-model/issues/83")
     if isinstance(spdx2_package.supplier, Spdx2_Actor):
-        supplied_by_spdx_id = [bump_actor(spdx2_package.supplier, payload, creation_info, document_namespace)]
+        supplied_by_spdx_id = [bump_actor(spdx2_package.supplier, payload, document_namespace)]
     else:
         supplied_by_spdx_id = None
     if isinstance(spdx2_package.originator, Spdx2_Actor):
-        originated_by_spdx_id = [bump_actor(spdx2_package.originator, payload, creation_info, document_namespace)]
+        originated_by_spdx_id = [bump_actor(spdx2_package.originator, payload, document_namespace)]
     else:
         originated_by_spdx_id = None
     print_missing_conversion("package2.files_analyzed", 0, "https://github.com/spdx/spdx-3-model/issues/84")
@@ -58,12 +54,6 @@ def bump_package(
         "package2.verification_code", 1, "of IntegrityMethod, https://github.com/spdx/spdx-3-model/issues/85"
     )
     integrity_methods = [bump_checksum(checksum) for checksum in spdx2_package.checksums]
-    declared_license = bump_license_expression_or_none_or_no_assertion(
-        spdx2_package.license_declared, extracted_licensing_info
-    )
-    concluded_license = bump_license_expression_or_none_or_no_assertion(
-        spdx2_package.license_concluded, extracted_licensing_info
-    )
     copyright_text = None
     if isinstance(spdx2_package.copyright_text, str):
         copyright_text = spdx2_package.copyright_text
@@ -99,7 +89,6 @@ def bump_package(
         Package(
             spdx_id,
             spdx2_package.name,
-            creation_info=creation_info,
             summary=spdx2_package.summary,
             description=spdx2_package.description,
             comment=spdx2_package.comment,
@@ -119,8 +108,6 @@ def bump_package(
             source_info=spdx2_package.source_info,
             copyright_text=copyright_text,
             attribution_text=", ".join(spdx2_package.attribution_texts),
-            concluded_license=concluded_license,
-            declared_license=declared_license,
         )
     )
 

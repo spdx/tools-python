@@ -25,7 +25,7 @@ def bump_annotation(
     # caution: the annotator and the annotation will only share the same creation_info if the actor
     #          has not been previously defined
     annotator = spdx2_annotation.annotator
-    creator_id: str = bump_actor(annotator, payload, creation_info, document_namespace)
+    creator_id: str = bump_actor(annotator, payload, document_namespace, creation_info)
     if annotator.actor_type in [ActorType.PERSON, ActorType.ORGANIZATION]:
         creation_info.created_by = [creator_id]
     else:

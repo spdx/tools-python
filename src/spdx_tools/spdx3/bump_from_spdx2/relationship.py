@@ -7,13 +7,7 @@ import sys
 from beartype.typing import Dict, List, Optional, Tuple, Union
 
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import (
-    CreationInfo,
-    LifecycleScopeType,
-    Relationship,
-    RelationshipCompleteness,
-    RelationshipType,
-)
+from spdx_tools.spdx3.model import LifecycleScopeType, Relationship, RelationshipCompleteness, RelationshipType
 from spdx_tools.spdx3.model.software import (
     DependencyConditionalityType,
     SoftwareDependencyLinkType,
@@ -158,12 +152,11 @@ relationship_mapping: Dict[
 def bump_relationships(
     spdx2_relationships: List[Spdx2_Relationship],
     payload: Payload,
-    creation_info: CreationInfo,
     document_namespace: str,
 ):
     generated_relationships: Dict[Tuple[str, str], List[Relationship]] = {}
     for counter, spdx2_relationship in enumerate(spdx2_relationships):
-        relationship = bump_relationship(spdx2_relationship, creation_info, document_namespace, counter)
+        relationship = bump_relationship(spdx2_relationship, document_namespace, counter)
         if relationship:
             generated_relationships.setdefault(
                 (relationship.from_element, relationship.relationship_type.name), []
@@ -178,7 +171,6 @@ def bump_relationships(
 
 def bump_relationship(
     spdx2_relationship: Spdx2_Relationship,
-    creation_info: CreationInfo,
     document_namespace: str,
     counter: int,
 ) -> Optional[Union[Relationship, SoftwareDependencyRelationship]]:
@@ -208,7 +200,6 @@ def bump_relationship(
             f"{document_namespace}#{from_element}",
             relationship_type,
             [f"{document_namespace}#{t}" for t in to],
-            creation_info=creation_info,
             comment=spdx2_relationship.comment,
             completeness=completeness,
             scope=parameters.get("scope"),
@@ -221,7 +212,6 @@ def bump_relationship(
         f"{document_namespace}#{from_element}",
         relationship_type,
         [f"{document_namespace}#{t}" for t in to],
-        creation_info=creation_info,
         comment=spdx2_relationship.comment,
         completeness=completeness,
     )

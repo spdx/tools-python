@@ -46,7 +46,7 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
     creator_ids: List[str] = []
     tool_ids: List[str] = []
     for creator in spdx2_creation_info.creators:
-        bumped_actor_id = bump_actor(creator, payload, creation_info, document_namespace)
+        bumped_actor_id = bump_actor(creator, payload, document_namespace, creation_info)
         if creator.actor_type in [ActorType.PERSON, ActorType.ORGANIZATION]:
             creator_ids.append(bumped_actor_id)
         else:
