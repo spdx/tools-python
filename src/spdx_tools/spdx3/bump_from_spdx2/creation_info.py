@@ -38,7 +38,7 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         created_by=[],
         created_using=[],
         profile=[ProfileIdentifier.CORE, ProfileIdentifier.SOFTWARE, ProfileIdentifier.LICENSING],
-        data_license=spdx2_creation_info.data_license,
+        data_license="https://spdx.org/licenses/" + spdx2_creation_info.data_license,
     )
 
     # due to creators having a creation_info themselves which inherits from the document's one,
