@@ -9,7 +9,9 @@ from spdx_tools.spdx3.bump_from_spdx2.relationship import bump_relationships
 from spdx_tools.spdx3.bump_from_spdx2.snippet import bump_snippet
 from spdx_tools.spdx3.model import CreationInfo, SpdxDocument
 from spdx_tools.spdx3.payload import Payload
+from spdx_tools.spdx.model import RelationshipType
 from spdx_tools.spdx.model.document import Document as Spdx2_Document
+from spdx_tools.spdx.model.relationship_filters import filter_by_type_and_origin
 
 """ We want to implement a bump_from_spdx2 from the data model in src.spdx to the data model in src.spdx3.
     As there are many fundamental differences between these version we want each bump_from_spdx2 method to take
@@ -20,6 +22,13 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
     payload = Payload()
     document_namespace: str = document.creation_info.document_namespace
     spdx_document: SpdxDocument = bump_creation_info(document.creation_info, payload)
+    spdx_document.root_element = [
+        f"{document_namespace}#{relationship.related_spdx_element_id}"
+        for relationship in filter_by_type_and_origin(
+            document.relationships, RelationshipType.DESCRIBES, "SPDXRef-DOCUMENT"
+        )
+    ]
+
     creation_info: CreationInfo = spdx_document.creation_info
 
     payload.add_element(spdx_document)
