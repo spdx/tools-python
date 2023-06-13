@@ -4,6 +4,7 @@
     "build": "https://spdx.org/rdf/Build/",
     "core": "https://spdx.org/rdf/Core/",
     "dataset": "https://spdx.org/rdf/Dataset/",
+    "expandedlicense": "https://spdx.org/rdf/ExpandedLicense/",
     "licensing": "https://spdx.org/rdf/Licensing/",
     "ns0": "http://www.w3.org/2003/06/sw-vocab-status/ns#",
     "owl": "http://www.w3.org/2002/07/owl#",
@@ -27,21 +28,32 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
-            "@id": "core:DictionaryEntry"
+          "sh:datatype": {
+            "@id": "xsd:string"
           },
-          "sh:name": "metric",
+          "sh:maxCount": 1,
+          "sh:name": "limitation",
           "sh:path": {
-            "@id": "ai:metric"
+            "@id": "ai:limitation"
           }
         },
         {
           "sh:datatype": {
             "@id": "xsd:string"
           },
-          "sh:name": "modelExplainability",
+          "sh:name": "typeOfModel",
           "sh:path": {
-            "@id": "ai:modelExplainability"
+            "@id": "ai:typeOfModel"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "informationAboutApplication",
+          "sh:path": {
+            "@id": "ai:informationAboutApplication"
           }
         },
         {
@@ -57,18 +69,74 @@
           "sh:datatype": {
             "@id": "xsd:string"
           },
-          "sh:name": "standardCompliance",
+          "sh:name": "modelExplainability",
           "sh:path": {
-            "@id": "ai:standardCompliance"
+            "@id": "ai:modelExplainability"
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
+            "@id": "ai:SafetyRiskAssessmentType"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "safetyRiskAssessment",
+          "sh:path": {
+            "@id": "ai:safetyRiskAssessment"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:DictionaryEntry"
+          },
+          "sh:name": "metricDecisionThreshold",
+          "sh:path": {
+            "@id": "ai:metricDecisionThreshold"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:name": "modelDataPreprocessing",
+          "sh:path": {
+            "@id": "ai:modelDataPreprocessing"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "core:DictionaryEntry"
           },
           "sh:name": "hyperparameter",
           "sh:path": {
             "@id": "ai:hyperparameter"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "ai:PresenceType"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "autonomyType",
+          "sh:path": {
+            "@id": "ai:autonomyType"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:DictionaryEntry"
+          },
+          "sh:name": "metric",
+          "sh:path": {
+            "@id": "ai:metric"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:name": "standardCompliance",
+          "sh:path": {
+            "@id": "ai:standardCompliance"
           }
         },
         {
@@ -86,45 +154,6 @@
             "@id": "xsd:string"
           },
           "sh:maxCount": 1,
-          "sh:name": "limitation",
-          "sh:path": {
-            "@id": "ai:limitation"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "ai:SafetyRiskAssessmentType"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "safetyRiskAssessment",
-          "sh:path": {
-            "@id": "ai:safetyRiskAssessment"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:name": "modelDataPreprocessing",
-          "sh:path": {
-            "@id": "ai:modelDataPreprocessing"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "ai:PresenceType"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "sensitivePersonalInformation",
-          "sh:path": {
-            "@id": "ai:sensitivePersonalInformation"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
           "sh:name": "informationAboutTraining",
           "sh:path": {
             "@id": "ai:informationAboutTraining"
@@ -132,91 +161,63 @@
         },
         {
           "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "informationAboutApplication",
-          "sh:path": {
-            "@id": "ai:informationAboutApplication"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:name": "typeOfModel",
-          "sh:path": {
-            "@id": "ai:typeOfModel"
-          }
-        },
-        {
-          "sh:class": {
             "@id": "ai:PresenceType"
           },
           "sh:maxCount": 1,
-          "sh:name": "autonomyType",
+          "sh:name": "sensitivePersonalInformation",
           "sh:path": {
-            "@id": "ai:autonomyType"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "core:DictionaryEntry"
-          },
-          "sh:name": "metricDecisionThreshold",
-          "sh:path": {
-            "@id": "ai:metricDecisionThreshold"
+            "@id": "ai:sensitivePersonalInformation"
           }
         }
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/AI/PresenceType/no",
+      "@id": "ai:high",
+      "@type": [
+        "owl:NamedIndividual",
+        "ai:SafetyRiskAssessmentType"
+      ]
+    },
+    {
+      "@id": "ai:low",
+      "@type": [
+        "owl:NamedIndividual",
+        "ai:SafetyRiskAssessmentType"
+      ]
+    },
+    {
+      "@id": "ai:medium",
+      "@type": [
+        "owl:NamedIndividual",
+        "ai:SafetyRiskAssessmentType"
+      ]
+    },
+    {
+      "@id": "ai:no",
       "@type": [
         "owl:NamedIndividual",
         "ai:PresenceType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/AI/PresenceType/noAssertion",
+      "@id": "ai:noAssertion",
       "@type": [
         "owl:NamedIndividual",
         "ai:PresenceType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/AI/PresenceType/yes",
+      "@id": "ai:serious",
+      "@type": [
+        "owl:NamedIndividual",
+        "ai:SafetyRiskAssessmentType"
+      ]
+    },
+    {
+      "@id": "ai:yes",
       "@type": [
         "owl:NamedIndividual",
         "ai:PresenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/AI/SafetyRiskAssessmentType/high",
-      "@type": [
-        "owl:NamedIndividual",
-        "ai:SafetyRiskAssessmentType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/AI/SafetyRiskAssessmentType/low",
-      "@type": [
-        "owl:NamedIndividual",
-        "ai:SafetyRiskAssessmentType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/AI/SafetyRiskAssessmentType/medium",
-      "@type": [
-        "owl:NamedIndividual",
-        "ai:SafetyRiskAssessmentType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/AI/SafetyRiskAssessmentType/serious",
-      "@type": [
-        "owl:NamedIndividual",
-        "ai:SafetyRiskAssessmentType"
       ]
     },
     {
@@ -232,7 +233,7 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:Hash"
           },
           "sh:name": "configSourceDigest",
@@ -242,11 +243,11 @@
         },
         {
           "sh:datatype": {
-            "@id": "xsd:anyURI"
+            "@id": "xsd:string"
           },
-          "sh:name": "configSourceUri",
+          "sh:name": "configSourceEntrypoint",
           "sh:path": {
-            "@id": "build:configSourceUri"
+            "@id": "build:configSourceEntrypoint"
           }
         },
         {
@@ -257,15 +258,6 @@
           "sh:name": "buildId",
           "sh:path": {
             "@id": "build:buildId"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "core:DictionaryEntry"
-          },
-          "sh:name": "parameters",
-          "sh:path": {
-            "@id": "build:parameters"
           }
         },
         {
@@ -280,21 +272,29 @@
         },
         {
           "sh:datatype": {
-            "@id": "core:DateTime"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "buildStartTime",
-          "sh:path": {
-            "@id": "build:buildStartTime"
-          }
-        },
-        {
-          "sh:class": {
             "@id": "core:DictionaryEntry"
           },
           "sh:name": "environment",
           "sh:path": {
             "@id": "build:environment"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:DictionaryEntry"
+          },
+          "sh:name": "parameters",
+          "sh:path": {
+            "@id": "build:parameters"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:anyURI"
+          },
+          "sh:name": "configSourceUri",
+          "sh:path": {
+            "@id": "build:configSourceUri"
           }
         },
         {
@@ -310,11 +310,12 @@
         },
         {
           "sh:datatype": {
-            "@id": "xsd:string"
+            "@id": "core:DateTime"
           },
-          "sh:name": "configSourceEntrypoint",
+          "sh:maxCount": 1,
+          "sh:name": "buildStartTime",
           "sh:path": {
-            "@id": "build:configSourceEntrypoint"
+            "@id": "build:buildStartTime"
           }
         }
       ]
@@ -333,16 +334,17 @@
       "sh:property": [
         {
           "sh:datatype": {
-            "@id": "xsd:string"
+            "@id": "core:AnnotationType"
           },
           "sh:maxCount": 1,
-          "sh:name": "statement",
+          "sh:minCount": 1,
+          "sh:name": "annotationType",
           "sh:path": {
-            "@id": "core:statement"
+            "@id": "core:annotationType"
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:Element"
           },
           "sh:maxCount": 1,
@@ -362,30 +364,15 @@
           }
         },
         {
-          "sh:class": {
-            "@id": "core:AnnotationType"
+          "sh:datatype": {
+            "@id": "xsd:string"
           },
           "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "annotationType",
+          "sh:name": "statement",
           "sh:path": {
-            "@id": "core:annotationType"
+            "@id": "core:statement"
           }
         }
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/AnnotationType/other",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:AnnotationType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/AnnotationType/review",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:AnnotationType"
       ]
     },
     {
@@ -401,7 +388,16 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
+          "sh:datatype": {
+            "@id": "core:NamespaceMap"
+          },
+          "sh:name": "namespaces",
+          "sh:path": {
+            "@id": "core:namespaces"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "core:CreationInfo"
           },
           "sh:maxCount": 1,
@@ -411,16 +407,7 @@
           }
         },
         {
-          "sh:class": {
-            "@id": "core:NamespaceMap"
-          },
-          "sh:name": "namespaces",
-          "sh:path": {
-            "@id": "core:namespaces"
-          }
-        },
-        {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:ExternalMap"
           },
           "sh:name": "imports",
@@ -428,447 +415,6 @@
             "@id": "core:imports"
           }
         }
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/cpe22",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/cpe23",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/cve",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/email",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/gitoid",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/other",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/pkgUrl",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/securityOther",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/swhid",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/swid",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalIdentifierType/urlScheme",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/altDownloadLocation",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/altWebPage",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/binaryArtifact",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/buildMeta",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/buildSystem",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/chat",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/documentation",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/funding",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/issueTracker",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/license",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/mailingList",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/metrics",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/other",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/releaseHistory",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/releaseNotes",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/securityAdvisory",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/securityFix",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/securityOther",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/socialMedia",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/sourceArtifact",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/support",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/vcs",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ExternalReferenceType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/blake2b256",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/blake2b384",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/blake2b512",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/blake3",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/crystalsDilithium",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/crystalsKyber",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/falcon",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/md2",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/md4",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/md5",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/md6",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/other",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sha1",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sha224",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sha256",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sha384",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sha3_224",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sha3_256",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sha3_384",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sha3_512",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sha512",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/spdxPvcSha1",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/spdxPvcSha256",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/HashAlgorithm/sphincsPlus",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:HashAlgorithm"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/LifecycleScopeType/build",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:LifecycleScopeType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/LifecycleScopeType/design",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:LifecycleScopeType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/LifecycleScopeType/development",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:LifecycleScopeType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/LifecycleScopeType/other",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:LifecycleScopeType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/LifecycleScopeType/runtime",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:LifecycleScopeType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/LifecycleScopeType/test",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:LifecycleScopeType"
       ]
     },
     {
@@ -894,503 +440,6 @@
         "@id": "core:Agent"
       },
       "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ProfileIdentifierType/ai",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ProfileIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ProfileIdentifierType/build",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ProfileIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ProfileIdentifierType/core",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ProfileIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ProfileIdentifierType/dataset",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ProfileIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ProfileIdentifierType/extension",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ProfileIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ProfileIdentifierType/licensing",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ProfileIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ProfileIdentifierType/security",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ProfileIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ProfileIdentifierType/software",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ProfileIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/ProfileIdentifierType/usage",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:ProfileIdentifierType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipCompleteness/complete",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipCompleteness"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipCompleteness/incomplete",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipCompleteness"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipCompleteness/noAssertion",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipCompleteness"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/affects",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/amends",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/ancestor",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/availableFrom",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/buildConfigOf",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/buildDependency",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/buildHostOf",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/buildInputOf",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/buildInvokedBy",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/buildOnBehalfOf",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/buildOutputOf",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/buildTool",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/contains",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/coordinatedBy",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/copy",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/dataFile",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/dependencyManifest",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/dependsOn",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/descendant",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/describes",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/devDependency",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/devTool",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/distributionArtifact",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/documentation",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/doesNotAffect",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/dynamicLink",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/example",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/expandedFromArchive",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/exploitCreatedBy",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/fileAdded",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/fileDeleted",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/fileModified",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/fixedBy",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/fixedIn",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/foundBy",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/generates",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/hasAssessmentFor",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/hasAssociatedVulnerability",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/metafile",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/optionalComponent",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/optionalDependency",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/other",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/packages",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/patch",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/prerequisite",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/providedDependency",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/publishedBy",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/reportedBy",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/republishedBy",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/requirementFor",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/runtimeDependency",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/specificationFor",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/staticLink",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/test",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/testCase",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/testDependency",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/testTool",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/underInvestigationFor",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Core/RelationshipType/variant",
-      "@type": [
-        "owl:NamedIndividual",
-        "core:RelationshipType"
-      ]
     },
     {
       "@id": "core:SoftwareAgent",
@@ -1428,31 +477,1048 @@
       }
     },
     {
-      "@id": "https://spdx.org/rdf/Dataset/ConfidentialityLevelType/Amber",
+      "@id": "core:affects",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:ai",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ProfileIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:altDownloadLocation",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:altWebPage",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:amends",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:ancestor",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:availableFrom",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:binaryArtifact",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:blake2b256",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:blake2b384",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:blake2b512",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:blake3",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:build",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:LifecycleScopeType",
+        "core:ProfileIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:buildDependency",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:buildMeta",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:buildSystem",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:buildTool",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:certificationReport",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:chat",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:complete",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipCompleteness"
+      ]
+    },
+    {
+      "@id": "core:componentAnalysisReport",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:configOf",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:contains",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:coordinatedBy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:copy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:core",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ProfileIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:cpe22",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:cpe23",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:crystalsDilithium",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:crystalsKyber",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:cve",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:dataFile",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:dataset",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ProfileIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:dependencyManifest",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:dependsOn",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:descendant",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:describes",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:design",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:LifecycleScopeType"
+      ]
+    },
+    {
+      "@id": "core:devDependency",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:devTool",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:development",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:LifecycleScopeType"
+      ]
+    },
+    {
+      "@id": "core:distributionArtifact",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:documentation",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:doesNotAffect",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:dynamicAnalysisReport",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:dynamicLink",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:email",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:eolNotice",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:evidenceFor",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:example",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:expandedFromArchive",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:exploitCreatedBy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:falcon",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:fileAdded",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:fileDeleted",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:fileModified",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:fixedBy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:fixedIn",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:foundBy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:funding",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:generates",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:gitoid",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:hasAssessmentFor",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:hasAssociatedVulnerability",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:hostOf",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:incomplete",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipCompleteness"
+      ]
+    },
+    {
+      "@id": "core:inputOf",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:invokedBy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:issueTracker",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:license",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:licensing",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ProfileIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:mailingList",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:md2",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:md4",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:md5",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:md6",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:metafile",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:metrics",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:noAssertion",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipCompleteness"
+      ]
+    },
+    {
+      "@id": "core:onBehalfOf",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:optionalComponent",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:optionalDependency",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:other",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:AnnotationType",
+        "core:ExternalIdentifierType",
+        "core:ExternalReferenceType",
+        "core:HashAlgorithm",
+        "core:LifecycleScopeType",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:outputOf",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:packages",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:patch",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:pkgUrl",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:prerequisite",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:productMetadata",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:providedDependency",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:publishedBy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:qualityAssessmentReport",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:releaseHistory",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:releaseNotes",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:reportedBy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:republishedBy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:requirementFor",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:review",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:AnnotationType"
+      ]
+    },
+    {
+      "@id": "core:riskAssessment",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:runtime",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:LifecycleScopeType"
+      ]
+    },
+    {
+      "@id": "core:runtimeAnalysisReport",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:runtimeDependency",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:secureSoftwareAttestation",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:security",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ProfileIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:securityAdversaryModel",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:securityAdvisory",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:securityFix",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:securityOther",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:securityPenTestReport",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:securityPolicy",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:securityThreatModel",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:sha1",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:sha224",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:sha256",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:sha384",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:sha3_224",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:sha3_256",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:sha3_384",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:sha3_512",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:sha512",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:socialMedia",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:software",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ProfileIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:sourceArtifact",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:spdxPvcSha1",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:spdxPvcSha256",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:specificationFor",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:sphincsPlus",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:HashAlgorithm"
+      ]
+    },
+    {
+      "@id": "core:staticAnalysisReport",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:staticLink",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:support",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:swhid",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:swid",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:test",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:LifecycleScopeType",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:testCase",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:testDependency",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:testTool",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:testedOn",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:trainedOn",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:underInvestigationFor",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:urlScheme",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:usage",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ProfileIdentifierType"
+      ]
+    },
+    {
+      "@id": "core:variant",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:RelationshipType"
+      ]
+    },
+    {
+      "@id": "core:vcs",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:vulnerabilityDisclosureReport",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "core:vulnerabilityExploitabilityAssessment",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ExternalReferenceType"
+      ]
+    },
+    {
+      "@id": "dataset:Amber",
       "@type": [
         "owl:NamedIndividual",
         "dataset:ConfidentialityLevelType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Dataset/ConfidentialityLevelType/Clear",
+      "@id": "dataset:Clear",
       "@type": [
         "owl:NamedIndividual",
         "dataset:ConfidentialityLevelType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Dataset/ConfidentialityLevelType/Green",
+      "@id": "dataset:Clickthrough",
       "@type": [
         "owl:NamedIndividual",
-        "dataset:ConfidentialityLevelType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Dataset/ConfidentialityLevelType/Red",
-      "@type": [
-        "owl:NamedIndividual",
-        "dataset:ConfidentialityLevelType"
+        "dataset:DatasetAvailabilityType"
       ]
     },
     {
@@ -1468,17 +1534,17 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
-            "@id": "dataset:DatasetAvailabilityType"
+          "sh:datatype": {
+            "@id": "xsd:nonNegativeInteger"
           },
           "sh:maxCount": 1,
-          "sh:name": "datasetAvailability",
+          "sh:name": "datasetSize",
           "sh:path": {
-            "@id": "dataset:datasetAvailability"
+            "@id": "dataset:datasetSize"
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "dataset:ConfidentialityLevelType"
           },
           "sh:maxCount": 1,
@@ -1491,10 +1557,39 @@
           "sh:datatype": {
             "@id": "xsd:string"
           },
-          "sh:maxCount": 1,
-          "sh:name": "dataCollectionProcess",
+          "sh:name": "knownBias",
           "sh:path": {
-            "@id": "dataset:dataCollectionProcess"
+            "@id": "dataset:knownBias"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "intendedUse",
+          "sh:path": {
+            "@id": "dataset:intendedUse"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "dataset:DatasetType"
+          },
+          "sh:minCount": 1,
+          "sh:name": "datasetType",
+          "sh:path": {
+            "@id": "dataset:datasetType"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "dataset:DatasetAvailabilityType"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "datasetAvailability",
+          "sh:path": {
+            "@id": "dataset:datasetAvailability"
           }
         },
         {
@@ -1511,19 +1606,18 @@
           "sh:datatype": {
             "@id": "xsd:string"
           },
-          "sh:name": "knownBias",
+          "sh:name": "dataPreprocessing",
           "sh:path": {
-            "@id": "dataset:knownBias"
+            "@id": "dataset:dataPreprocessing"
           }
         },
         {
           "sh:datatype": {
-            "@id": "xsd:nonNegativeInteger"
+            "@id": "core:DictionaryEntry"
           },
-          "sh:maxCount": 1,
-          "sh:name": "datasetSize",
+          "sh:name": "sensor",
           "sh:path": {
-            "@id": "dataset:datasetSize"
+            "@id": "dataset:sensor"
           }
         },
         {
@@ -1531,9 +1625,9 @@
             "@id": "xsd:string"
           },
           "sh:maxCount": 1,
-          "sh:name": "intendedUse",
+          "sh:name": "dataCollectionProcess",
           "sh:path": {
-            "@id": "dataset:intendedUse"
+            "@id": "dataset:dataCollectionProcess"
           }
         },
         {
@@ -1550,9 +1644,9 @@
           "sh:datatype": {
             "@id": "xsd:string"
           },
-          "sh:name": "dataPreprocessing",
+          "sh:name": "anonymizationMethodUsed",
           "sh:path": {
-            "@id": "dataset:dataPreprocessing"
+            "@id": "dataset:anonymizationMethodUsed"
           }
         },
         {
@@ -1564,75 +1658,144 @@
           "sh:path": {
             "@id": "dataset:datasetNoise"
           }
-        },
-        {
-          "sh:class": {
-            "@id": "core:DictionaryEntry"
-          },
-          "sh:name": "sensor",
-          "sh:path": {
-            "@id": "dataset:sensor"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "datasetType",
-          "sh:path": {
-            "@id": "dataset:datasetType"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:name": "anonymizationMethodUsed",
-          "sh:path": {
-            "@id": "dataset:anonymizationMethodUsed"
-          }
         }
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Dataset/DatasetAvailabilityType/Clickthrough",
+      "@id": "dataset:Direct-Download",
       "@type": [
         "owl:NamedIndividual",
         "dataset:DatasetAvailabilityType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Dataset/DatasetAvailabilityType/Direct-Download",
+      "@id": "dataset:Green",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:ConfidentialityLevelType"
+      ]
+    },
+    {
+      "@id": "dataset:Query",
       "@type": [
         "owl:NamedIndividual",
         "dataset:DatasetAvailabilityType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Dataset/DatasetAvailabilityType/Query",
+      "@id": "dataset:Red",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:ConfidentialityLevelType"
+      ]
+    },
+    {
+      "@id": "dataset:Registration",
       "@type": [
         "owl:NamedIndividual",
         "dataset:DatasetAvailabilityType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Dataset/DatasetAvailabilityType/Registration",
+      "@id": "dataset:Scraping-Script",
       "@type": [
         "owl:NamedIndividual",
         "dataset:DatasetAvailabilityType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Dataset/DatasetAvailabilityType/Scraping-Script",
+      "@id": "dataset:audio",
       "@type": [
         "owl:NamedIndividual",
-        "dataset:DatasetAvailabilityType"
+        "dataset:DatasetType"
       ]
     },
     {
-      "@id": "licensing:ConjunctiveLicenseSet",
+      "@id": "dataset:categorical",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:graph",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:image",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:noAssertion",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:numeric",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:other",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:structured",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:syntactic",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:text",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:timeseries",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:timestamp",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "dataset:video",
+      "@type": [
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ]
+    },
+    {
+      "@id": "expandedlicense:ConjunctiveLicenseSet",
       "@type": [
         "owl:Class",
         "sh:NodeShape"
@@ -1643,15 +1806,67 @@
       },
       "ns0:term_status": "Stable",
       "sh:property": {
-        "sh:class": {
+        "sh:datatype": {
           "@id": "licensing:AnyLicenseInfo"
         },
         "sh:minCount": 2,
         "sh:name": "member",
         "sh:path": {
-          "@id": "licensing:member"
+          "@id": "expandedlicense:member"
         }
       }
+    },
+    {
+      "@id": "expandedlicense:DisjunctiveLicenseSet",
+      "@type": [
+        "owl:Class",
+        "sh:NodeShape"
+      ],
+      "rdfs:comment": "A DisjunctiveLicenseSet indicates that _only one_ of its subsidiary\nAnyLicenseInfos is required to apply. In other words, a\nDisjunctiveLicenseSet of two or more licenses represents a licensing\nsituation where _only one_ of the specified licenses are to be complied with.\nA consumer of SPDX data would typically understand this to permit the recipient\nof the licensed content to choose which of the corresponding license they\nwould prefer to use. It is represented in the SPDX License Expression Syntax\nby the `OR` operator.",
+      "rdfs:subClassOf": {
+        "@id": "licensing:AnyLicenseInfo"
+      },
+      "ns0:term_status": "Stable",
+      "sh:property": {
+        "sh:datatype": {
+          "@id": "licensing:AnyLicenseInfo"
+        },
+        "sh:minCount": 2,
+        "sh:name": "member",
+        "sh:path": {
+          "@id": "expandedlicense:member"
+        }
+      }
+    },
+    {
+      "@id": "expandedlicense:ExtendableLicense",
+      "@type": [
+        "owl:Class",
+        "sh:NodeShape"
+      ],
+      "rdfs:comment": "The WithAdditionOperator can have a License or an OrLaterOperator as the license property value.  This class is used for the value.",
+      "rdfs:subClassOf": {
+        "@id": "licensing:AnyLicenseInfo"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "expandedlicense:subjectAddition",
+      "@type": "owl:ObjectProperty",
+      "rdfs:comment": "A subjectAddition is a LicenseAddition which is subject to a 'with additional\ntext' effect (WithAdditionOperator).",
+      "rdfs:range": {
+        "@id": "expandedlicense:LicenseAddition"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "expandedlicense:subjectLicense",
+      "@type": "owl:ObjectProperty",
+      "rdfs:comment": "A subjectLicense is a License which is subject to either an 'or later' effect\n(OrLaterOperator) or a 'with additional text' effect (WithAdditionOperator).",
+      "rdfs:range": {
+        "@id": "licensing:License"
+      },
+      "ns0:term_status": "Stable"
     },
     {
       "@id": "licensing:CustomLicense",
@@ -1678,24 +1893,25 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "licensing:DisjunctiveLicenseSet",
+      "@id": "licensing:LicenseExpression",
       "@type": [
         "owl:Class",
         "sh:NodeShape"
       ],
-      "rdfs:comment": "A DisjunctiveLicenseSet indicates that _only one_ of its subsidiary\nAnyLicenseInfos is required to apply. In other words, a\nDisjunctiveLicenseSet of two or more licenses represents a licensing\nsituation where _only one_ of the specified licenses are to be complied with.\nA consumer of SPDX data would typically understand this to permit the recipient\nof the licensed content to choose which of the corresponding license they\nwould prefer to use. It is represented in the SPDX License Expression Syntax\nby the `OR` operator.",
+      "rdfs:comment": "Often a single license can be used to represent the licensing terms of a source code or binary file, but there are situations where a single license identifier is not sufficient. A common example is when software is offered under a choice of one or more licenses (e.g., GPL-2.0-only OR BSD-3-Clause). Another example is when a set of licenses is needed to represent a binary program constructed by compiling and linking two (or more) different source files each governed by different licenses (e.g., LGPL-2.1-only AND BSD-3-Clause).\n\nSPDX License Expressions provide a way for one to construct expressions that more accurately represent the licensing terms typically found in open source software source code. A license expression could be a single license identifier found on the SPDX License List; a user defined license reference denoted by the LicenseRef-idString; a license identifier combined with an SPDX exception; or some combination of license identifiers, license references and exceptions constructed using a small set of defined operators (e.g., AND, OR, WITH and +). We provide the definition of what constitutes a valid an SPDX License Expression in this section.",
       "rdfs:subClassOf": {
         "@id": "licensing:AnyLicenseInfo"
       },
       "ns0:term_status": "Stable",
       "sh:property": {
-        "sh:class": {
-          "@id": "licensing:AnyLicenseInfo"
+        "sh:datatype": {
+          "@id": "xsd:string"
         },
-        "sh:minCount": 2,
-        "sh:name": "member",
+        "sh:maxCount": 1,
+        "sh:minCount": 1,
+        "sh:name": "licenseExpression",
         "sh:path": {
-          "@id": "licensing:member"
+          "@id": "licensing:licenseExpression"
         }
       }
     },
@@ -1716,9 +1932,9 @@
             "@id": "xsd:string"
           },
           "sh:maxCount": 1,
-          "sh:name": "deprecatedVersion",
+          "sh:name": "listVersionAdded",
           "sh:path": {
-            "@id": "licensing:deprecatedVersion"
+            "@id": "licensing:listVersionAdded"
           }
         },
         {
@@ -1726,9 +1942,9 @@
             "@id": "xsd:string"
           },
           "sh:maxCount": 1,
-          "sh:name": "listVersionAdded",
+          "sh:name": "deprecatedVersion",
           "sh:path": {
-            "@id": "licensing:listVersionAdded"
+            "@id": "licensing:deprecatedVersion"
           }
         }
       ]
@@ -1750,9 +1966,9 @@
             "@id": "xsd:string"
           },
           "sh:maxCount": 1,
-          "sh:name": "deprecatedVersion",
+          "sh:name": "listVersionAdded",
           "sh:path": {
-            "@id": "licensing:deprecatedVersion"
+            "@id": "licensing:listVersionAdded"
           }
         },
         {
@@ -1760,36 +1976,12 @@
             "@id": "xsd:string"
           },
           "sh:maxCount": 1,
-          "sh:name": "listVersionAdded",
+          "sh:name": "deprecatedVersion",
           "sh:path": {
-            "@id": "licensing:listVersionAdded"
+            "@id": "licensing:deprecatedVersion"
           }
         }
       ]
-    },
-    {
-      "@id": "licensing:NoAssertionLicense",
-      "@type": [
-        "owl:Class",
-        "sh:NodeShape"
-      ],
-      "rdfs:comment": "A NoAssertionLicense is the primary value that is used by a concludedLicense\nor declaredLicense field that indicates that the SPDX data creator is making\nno assertion about the license information for the corresponding software\nPackage, File or Snippet.\n\nThe specific meaning of NoAssertionLicense in the context of a\nconcludedLicense or declaredLicense field is more fully set forth in the\nProperty definitions for those fields.",
-      "rdfs:subClassOf": {
-        "@id": "licensing:LicenseField"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "licensing:NoneLicense",
-      "@type": [
-        "owl:Class",
-        "sh:NodeShape"
-      ],
-      "rdfs:comment": "A NoneLicense is the primary value that is used by a concludedLicense or\ndeclaredLicense field that indicates the absence of license information from\nthe corresponding software Package, File or Snippet.\n\nThe specific meaning of NoneLicense in the context of a concludedLicense or\ndeclaredLicense field is more fully set forth in the Property definitions for\nthose fields.",
-      "rdfs:subClassOf": {
-        "@id": "licensing:LicenseField"
-      },
-      "ns0:term_status": "Stable"
     },
     {
       "@id": "licensing:OrLaterOperator",
@@ -1799,11 +1991,11 @@
       ],
       "rdfs:comment": "An OrLaterOperator indicates that this portion of the AnyLicenseInfo\nrepresents either (1) the specified version of the corresponding License, or\n(2) any later version of that License. It is represented in the SPDX License\nExpression Syntax by the `+` operator.\n\nIt is context-dependent, and unspecified by SPDX, as to what constitutes a\n\"later version\" of any particular License. Some Licenses may not be versioned,\nor may not have clearly-defined ordering for versions. The consumer of SPDX\ndata will need to determine for themselves what meaning to attribute to a\n\"later version\" operator for a particular License.",
       "rdfs:subClassOf": {
-        "@id": "licensing:AnyLicenseInfo"
+        "@id": "licensing:ExtendableLicense"
       },
       "ns0:term_status": "Stable",
       "sh:property": {
-        "sh:class": {
+        "sh:datatype": {
           "@id": "licensing:License"
         },
         "sh:maxCount": 1,
@@ -1827,18 +2019,7 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
-            "@id": "licensing:License"
-          },
-          "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "subjectLicense",
-          "sh:path": {
-            "@id": "licensing:subjectLicense"
-          }
-        },
-        {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "licensing:LicenseAddition"
           },
           "sh:maxCount": 1,
@@ -1847,8 +2028,82 @@
           "sh:path": {
             "@id": "licensing:subjectAddition"
           }
+        },
+        {
+          "sh:datatype": {
+            "@id": "licensing:ExtendableLicense"
+          },
+          "sh:maxCount": 1,
+          "sh:minCount": 1,
+          "sh:name": "subjectLicense",
+          "sh:path": {
+            "@id": "licensing:subjectLicense"
+          }
         }
       ]
+    },
+    {
+      "@id": "licensing:additionComment",
+      "@type": "owl:DatatypeProperty",
+      "rdfs:comment": "An additionComment for a LicenseAddition describes general factual information\nabout the LicenseAddition. It should not contain information (or links to\ninformation) that includes any kind of interpretation about the meaning or\neffect of the License, even if written by the license addition's author.\n\nExamples of information for an additionComment may include the following:\n\n* If the LicenseAddition's identifier is deprecated, it may briefly explain the\n  reason for deprecation.\n* It may include the date of release, if identified, for LicenseAdditions with\n  multiple versions.\n* It may include links to other official language translations for the\n  LicenseAddition.\n* It may include a reference to the License(s) with which this LicenseAddition\n  is typically used.",
+      "rdfs:range": {
+        "@id": "xsd:string"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "licensing:additionId",
+      "@type": "owl:DatatypeProperty",
+      "rdfs:comment": "An additionId contains a human-readable, short-form identifier for a\nLicenseAddition. It may only include letters, numbers, period (\".\") and\nhyphen (\"-\") characters.\n\nFor a ListedLicenseException, the licenseId will be as specified on the\n[SPDX Exceptions List](https://spdx.org/licenses/exceptions-index.html) for the\nparticular exception.\n\nFor a CustomLicenseAddition, the short-form identifier must begin with the\nprefix `AdditionRef-` and must be unique within the applicable SPDX namespace.\nThe short-form identifier may be preceded by an SPDX namespace or a\nfully-qualified URI prefix.",
+      "rdfs:range": {
+        "@id": "xsd:string"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "licensing:additionName",
+      "@type": "owl:DatatypeProperty",
+      "rdfs:comment": "An additionName contains the full name of a LicenseAddition, preferably using\nthe title found in the applicable license addition text or file, or as\notherwise specified by the LicenseAddition's author or steward.\n\nWhen no such title is specified, using a name from another well-known source or list\nof licenses additions (such as OSI or Fedora) is suggested.\n\nIf no official or common name is known, any name may be used to aid in\ndistinguishing the LicenseAddition from other LicenseAdditions.",
+      "rdfs:range": {
+        "@id": "xsd:string"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "licensing:licenseComment",
+      "@type": "owl:DatatypeProperty",
+      "rdfs:comment": "A licenseComment describes general factual information about the License. It\nshould not contain information (or links to information) that includes any kind\nof interpretation about the meaning or effect of the License, even if written\nby the license's author.\n\nExamples of information for a licenseComment may include the following:\n\n* If the License's identifier is deprecated, it may briefly explain the reason\n  for deprecation.\n* It may include the date of release, if identified, for Licenses with multiple\n  versions.\n* It may include links to other official language translations for the License.\n* For LicenseAdditions, it may include a reference to the License(s) with\n  which this additional text is typically used.",
+      "rdfs:range": {
+        "@id": "xsd:string"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "licensing:licenseId",
+      "@type": "owl:DatatypeProperty",
+      "rdfs:comment": "A licenseId contains a human-readable, short-form license identifier for a\nLicense. It may only include letters, numbers, period (\".\") and hyphen (\"-\")\ncharacters.\n\nFor a ListedLicense, the licenseId will be as specified on the\n[SPDX License List](https://spdx.org/licenses) for the particular license.\n\nFor a CustomLicense, the short-form license identifer must begin with the\nprefix `LicenseRef-` and must be unique within the applicable SPDX namespace.\nThe short-form license ID may be preceded by an SPDX namespace or a\nfully-qualified URI prefix.",
+      "rdfs:range": {
+        "@id": "xsd:string"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "licensing:licenseName",
+      "@type": "owl:DatatypeProperty",
+      "rdfs:comment": "A licenseName contains the full name of a License, preferably using the title found\nin the applicable license text or file, or as otherwise specified by the\nLicense's author or steward.\n\nWhen no such title is specified, using a name from another well-known source or list\nof licenses (such as OSI or Fedora) is suggested.\n\nIf no official or common name is known, any name may be used to aid in\ndistinguishing the License from other Licenses.",
+      "rdfs:range": {
+        "@id": "xsd:string"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "licensing:seeAlso",
+      "@type": "owl:DatatypeProperty",
+      "rdfs:comment": "A seeAlso defines a cross-reference with a URL where the License or\nLicenseAddition can be found in use by one or a few projects.\n\nIf applicable, it should include a URL where the license text is posted by\nthe license steward, particularly if the license steward has made available a\n\"canonical\" primary URL for the license text.\n\nIf the license is OSI approved, a seeAlso should be included with the URL for\nthe license's listing on the OSI website.\n\nThe seeAlso URL may refer to a previously-available URL for the License or\nLicenseAddition which is no longer active.\n\nWhere applicable, the seeAlso URL should include the license text in its\nnative language. seeAlso URLs to English or other translations may be included\nwhere multiple, equivalent official translations exist.",
+      "rdfs:range": {
+        "@id": "xsd:anyURI"
+      },
+      "ns0:term_status": "Stable"
     },
     {
       "@id": "security:CvssV2VulnAssessmentRelationship",
@@ -1864,6 +2119,16 @@
       "sh:property": [
         {
           "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "severity",
+          "sh:path": {
+            "@id": "security:severity"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "xsd:decimal"
           },
           "sh:maxCount": 1,
@@ -1871,16 +2136,6 @@
           "sh:name": "score",
           "sh:path": {
             "@id": "security:score"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "severity",
-          "sh:path": {
-            "@id": "security:severity"
           }
         },
         {
@@ -1976,20 +2231,6 @@
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Security/ExploitCatalogType/kev",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:ExploitCatalogType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Security/ExploitCatalogType/other",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:ExploitCatalogType"
-      ]
-    },
-    {
       "@id": "security:ExploitCatalogVulnAssessmentRelationship",
       "@type": [
         "owl:Class",
@@ -2003,6 +2244,17 @@
       "sh:property": [
         {
           "sh:datatype": {
+            "@id": "xsd:boolean"
+          },
+          "sh:maxCount": 1,
+          "sh:minCount": 1,
+          "sh:name": "exploited",
+          "sh:path": {
+            "@id": "security:exploited"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "xsd:anyURI"
           },
           "sh:maxCount": 1,
@@ -2013,7 +2265,7 @@
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "security:ExploitCatalogType"
           },
           "sh:maxCount": 1,
@@ -2022,46 +2274,7 @@
           "sh:path": {
             "@id": "security:catalogType"
           }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:boolean"
-          },
-          "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "exploited",
-          "sh:path": {
-            "@id": "security:exploited"
-          }
         }
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Security/SsvcDecisionType/act",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:SsvcDecisionType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Security/SsvcDecisionType/attend",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:SsvcDecisionType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Security/SsvcDecisionType/track",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:SsvcDecisionType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Security/SsvcDecisionType/trackStar",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:SsvcDecisionType"
       ]
     },
     {
@@ -2076,7 +2289,7 @@
       },
       "ns0:term_status": "Stable",
       "sh:property": {
-        "sh:class": {
+        "sh:datatype": {
           "@id": "security:SsvcDecisionType"
         },
         "sh:maxCount": 1,
@@ -2133,41 +2346,6 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "https://spdx.org/rdf/Security/VexJustificationType/componentNotPresent",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:VexJustificationType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Security/VexJustificationType/inlineMitigationsAlreadyExist",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:VexJustificationType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Security/VexJustificationType/vulnerableCodeCannotBeControlledByAdversary",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:VexJustificationType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Security/VexJustificationType/vulnerableCodeNotInExecutePath",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:VexJustificationType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Security/VexJustificationType/vulnerableCodeNotPresent",
-      "@type": [
-        "owl:NamedIndividual",
-        "security:VexJustificationType"
-      ]
-    },
-    {
       "@id": "security:VexNotAffectedVulnAssessmentRelationship",
       "@type": [
         "owl:Class",
@@ -2190,16 +2368,6 @@
           }
         },
         {
-          "sh:class": {
-            "@id": "security:VexJustificationType"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "justificationType",
-          "sh:path": {
-            "@id": "security:justificationType"
-          }
-        },
-        {
           "sh:datatype": {
             "@id": "xsd:string"
           },
@@ -2207,6 +2375,16 @@
           "sh:name": "impactStatement",
           "sh:path": {
             "@id": "security:impactStatement"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "security:VexJustificationType"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "justificationType",
+          "sh:path": {
+            "@id": "security:justificationType"
           }
         }
       ]
@@ -2240,16 +2418,6 @@
             "@id": "core:DateTime"
           },
           "sh:maxCount": 1,
-          "sh:name": "publishedTime",
-          "sh:path": {
-            "@id": "security:publishedTime"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "core:DateTime"
-          },
-          "sh:maxCount": 1,
           "sh:name": "modifiedTime",
           "sh:path": {
             "@id": "security:modifiedTime"
@@ -2264,42 +2432,94 @@
           "sh:path": {
             "@id": "security:withdrawnTime"
           }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:DateTime"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "publishedTime",
+          "sh:path": {
+            "@id": "security:publishedTime"
+          }
         }
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/DependencyConditionalityType/optional",
+      "@id": "security:act",
       "@type": [
         "owl:NamedIndividual",
-        "software:DependencyConditionalityType"
+        "security:SsvcDecisionType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/DependencyConditionalityType/other",
+      "@id": "security:attend",
       "@type": [
         "owl:NamedIndividual",
-        "software:DependencyConditionalityType"
+        "security:SsvcDecisionType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/DependencyConditionalityType/prerequisite",
+      "@id": "security:componentNotPresent",
       "@type": [
         "owl:NamedIndividual",
-        "software:DependencyConditionalityType"
+        "security:VexJustificationType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/DependencyConditionalityType/provided",
+      "@id": "security:inlineMitigationsAlreadyExist",
       "@type": [
         "owl:NamedIndividual",
-        "software:DependencyConditionalityType"
+        "security:VexJustificationType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/DependencyConditionalityType/required",
+      "@id": "security:kev",
       "@type": [
         "owl:NamedIndividual",
-        "software:DependencyConditionalityType"
+        "security:ExploitCatalogType"
+      ]
+    },
+    {
+      "@id": "security:other",
+      "@type": [
+        "owl:NamedIndividual",
+        "security:ExploitCatalogType"
+      ]
+    },
+    {
+      "@id": "security:track",
+      "@type": [
+        "owl:NamedIndividual",
+        "security:SsvcDecisionType"
+      ]
+    },
+    {
+      "@id": "security:trackStar",
+      "@type": [
+        "owl:NamedIndividual",
+        "security:SsvcDecisionType"
+      ]
+    },
+    {
+      "@id": "security:vulnerableCodeCannotBeControlledByAdversary",
+      "@type": [
+        "owl:NamedIndividual",
+        "security:VexJustificationType"
+      ]
+    },
+    {
+      "@id": "security:vulnerableCodeNotInExecutePath",
+      "@type": [
+        "owl:NamedIndividual",
+        "security:VexJustificationType"
+      ]
+    },
+    {
+      "@id": "security:vulnerableCodeNotPresent",
+      "@type": [
+        "owl:NamedIndividual",
+        "security:VexJustificationType"
       ]
     },
     {
@@ -2325,48 +2545,6 @@
       }
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SBOMType/analyzed",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SBOMType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Software/SBOMType/build",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SBOMType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Software/SBOMType/deployed",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SBOMType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Software/SBOMType/design",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SBOMType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Software/SBOMType/runtime",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SBOMType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Software/SBOMType/source",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SBOMType"
-      ]
-    },
-    {
       "@id": "software:Sbom",
       "@type": [
         "owl:Class",
@@ -2378,7 +2556,7 @@
       },
       "ns0:term_status": "Stable",
       "sh:property": {
-        "sh:class": {
+        "sh:datatype": {
           "@id": "software:SBOMType"
         },
         "sh:name": "sbomType",
@@ -2400,17 +2578,7 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
-            "@id": "core:PositiveIntegerRange"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "byteRange",
-          "sh:path": {
-            "@id": "software:byteRange"
-          }
-        },
-        {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:PositiveIntegerRange"
           },
           "sh:maxCount": 1,
@@ -2418,35 +2586,17 @@
           "sh:path": {
             "@id": "software:lineRange"
           }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:PositiveIntegerRange"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "byteRange",
+          "sh:path": {
+            "@id": "software:byteRange"
+          }
         }
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Software/SoftwareDependencyLinkType/dynamic",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SoftwareDependencyLinkType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Software/SoftwareDependencyLinkType/other",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SoftwareDependencyLinkType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Software/SoftwareDependencyLinkType/static",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SoftwareDependencyLinkType"
-      ]
-    },
-    {
-      "@id": "https://spdx.org/rdf/Software/SoftwareDependencyLinkType/tool",
-      "@type": [
-        "owl:NamedIndividual",
-        "software:SoftwareDependencyLinkType"
       ]
     },
     {
@@ -2462,17 +2612,7 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
-            "@id": "software:SoftwareDependencyLinkType"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "softwareLinkage",
-          "sh:path": {
-            "@id": "software:softwareLinkage"
-          }
-        },
-        {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "software:DependencyConditionalityType"
           },
           "sh:maxCount": 1,
@@ -2480,168 +2620,279 @@
           "sh:path": {
             "@id": "software:conditionality"
           }
+        },
+        {
+          "sh:datatype": {
+            "@id": "software:SoftwareDependencyLinkType"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "softwareLinkage",
+          "sh:path": {
+            "@id": "software:softwareLinkage"
+          }
         }
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/application",
+      "@id": "software:analyzed",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:SBOMType"
+      ]
+    },
+    {
+      "@id": "software:application",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/archive",
+      "@id": "software:archive",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/bom",
+      "@id": "software:bom",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/configuration",
+      "@id": "software:build",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:SBOMType"
+      ]
+    },
+    {
+      "@id": "software:configuration",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/container",
+      "@id": "software:container",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/data",
+      "@id": "software:data",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/device",
+      "@id": "software:deployed",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:SBOMType"
+      ]
+    },
+    {
+      "@id": "software:design",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:SBOMType"
+      ]
+    },
+    {
+      "@id": "software:device",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/documentation",
+      "@id": "software:documentation",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/evidence",
+      "@id": "software:dynamic",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:SoftwareDependencyLinkType"
+      ]
+    },
+    {
+      "@id": "software:evidence",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/executable",
+      "@id": "software:executable",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/file",
+      "@id": "software:file",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/firmware",
+      "@id": "software:firmware",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/framework",
+      "@id": "software:framework",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/install",
+      "@id": "software:install",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/library",
+      "@id": "software:library",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/manifest",
+      "@id": "software:manifest",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/module",
+      "@id": "software:model",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/operatingSystem",
+      "@id": "software:module",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/other",
+      "@id": "software:operatingSystem",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/patch",
+      "@id": "software:optional",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:DependencyConditionalityType"
+      ]
+    },
+    {
+      "@id": "software:other",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:DependencyConditionalityType",
+        "software:SoftwareDependencyLinkType",
+        "software:SoftwarePurpose"
+      ]
+    },
+    {
+      "@id": "software:patch",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/requirement",
+      "@id": "software:prerequisite",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:DependencyConditionalityType"
+      ]
+    },
+    {
+      "@id": "software:provided",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:DependencyConditionalityType"
+      ]
+    },
+    {
+      "@id": "software:required",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:DependencyConditionalityType"
+      ]
+    },
+    {
+      "@id": "software:requirement",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/source",
+      "@id": "software:runtime",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:SBOMType"
+      ]
+    },
+    {
+      "@id": "software:source",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:SBOMType",
+        "software:SoftwarePurpose"
+      ]
+    },
+    {
+      "@id": "software:specification",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Software/SoftwarePurpose/specification",
+      "@id": "software:static",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:SoftwareDependencyLinkType"
+      ]
+    },
+    {
+      "@id": "software:test",
       "@type": [
         "owl:NamedIndividual",
         "software:SoftwarePurpose"
+      ]
+    },
+    {
+      "@id": "software:tool",
+      "@type": [
+        "owl:NamedIndividual",
+        "software:SoftwareDependencyLinkType"
       ]
     },
     {
@@ -2874,6 +3125,15 @@
       "sh:property": [
         {
           "sh:datatype": {
+            "@id": "core:Agent"
+          },
+          "sh:name": "suppliedBy",
+          "sh:path": {
+            "@id": "core:suppliedBy"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "core:DateTime"
           },
           "sh:maxCount": 1,
@@ -2883,21 +3143,21 @@
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:name": "standard",
+          "sh:path": {
+            "@id": "core:standard"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "core:Agent"
           },
           "sh:name": "originatedBy",
           "sh:path": {
             "@id": "core:originatedBy"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "core:Agent"
-          },
-          "sh:name": "suppliedBy",
-          "sh:path": {
-            "@id": "core:suppliedBy"
           }
         },
         {
@@ -2918,15 +3178,6 @@
           "sh:name": "releaseTime",
           "sh:path": {
             "@id": "core:releaseTime"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:name": "standard",
-          "sh:path": {
-            "@id": "core:standard"
           }
         }
       ]
@@ -2956,7 +3207,7 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:ExternalMap"
           },
           "sh:name": "imports",
@@ -2965,17 +3216,7 @@
           }
         },
         {
-          "sh:class": {
-            "@id": "core:Element"
-          },
-          "sh:minCount": 1,
-          "sh:name": "rootElement",
-          "sh:path": {
-            "@id": "core:rootElement"
-          }
-        },
-        {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:NamespaceMap"
           },
           "sh:name": "namespaces",
@@ -2984,13 +3225,23 @@
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:Element"
           },
           "sh:minCount": 1,
           "sh:name": "element",
           "sh:path": {
             "@id": "core:element"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:Element"
+          },
+          "sh:minCount": 1,
+          "sh:name": "rootElement",
+          "sh:path": {
+            "@id": "core:rootElement"
           }
         }
       ]
@@ -3007,7 +3258,7 @@
       },
       "ns0:term_status": "Stable",
       "sh:property": {
-        "sh:class": {
+        "sh:datatype": {
           "@id": "core:LifecycleScopeType"
         },
         "sh:maxCount": 1,
@@ -3154,6 +3405,10 @@
     },
     {
       "@id": "core:extension",
+      "@type": [
+        "owl:NamedIndividual",
+        "core:ProfileIdentifierType"
+      ],
       "rdfs:comment": "TODO",
       "ns0:term_status": "Stable"
     },
@@ -3347,6 +3602,15 @@
       "ns0:term_status": "Stable"
     },
     {
+      "@id": "core:spdxId",
+      "@type": "owl:DatatypeProperty",
+      "rdfs:comment": "SpdxId uniquely identifies an Element which may thereby be referenced by other Elements.\nThese references may be internal or external.\nWhile there may be several versions of the same Element, each one needs to be able to be referred to uniquely\nso that relationships between Elements can be clearly articulated.",
+      "rdfs:range": {
+        "@id": "xsd:anyURI"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
       "@id": "core:specVersion",
       "@type": "owl:DatatypeProperty",
       "rdfs:comment": "The specVersion provides a reference number that can be used to understand how to parse and interpret an Element.\nIt will enable both future changes to the specification and to support backward compatibility.\nThe major version number shall be incremented when incompatible changes between versions are made\n(one or more sections are created, modified or deleted).\nThe minor version number shall be incremented when backwards compatible changes are made.\n\nHere, parties exchanging information in accordance with the SPDX specification need to provide \n100% transparency as to which SPDX specification version such information is conforming to.",
@@ -3502,9 +3766,9 @@
     {
       "@id": "dataset:datasetType",
       "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "Type describes the datatype contained in the dataset. For example a dataset can be a image dataset or a text dataset or sometimes a multimodal dataset that contains multiple types of data",
+      "rdfs:comment": "Type describes the datatype contained in the dataset. For example a dataset can be an image dataset for computer vision applications, a text dataset such as the contents of a book or Wikipedia article, or sometimes a multimodal dataset that contains multiple types of data.",
       "rdfs:range": {
-        "@id": "xsd:string"
+        "@id": "dataset:DatasetType"
       },
       "ns0:term_status": "Stable"
     },
@@ -3546,37 +3810,14 @@
     },
     {
       "@id": "dataset:sensor",
-      "@type": "owl:DatatypeProperty",
+      "@type": [
+        "owl:DatatypeProperty",
+        "owl:NamedIndividual",
+        "dataset:DatasetType"
+      ],
       "rdfs:comment": "Sensor describes a sensor that was used for collecting the data\nand its calibration value as a key-value pair.",
       "rdfs:range": {
         "@id": "core:DictionaryEntry"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "licensing:additionComment",
-      "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "An additionComment for a LicenseAddition describes general factual information\nabout the LicenseAddition. It should not contain information (or links to\ninformation) that includes any kind of interpretation about the meaning or\neffect of the License, even if written by the license addition's author.\n\nExamples of information for an additionComment may include the following:\n\n* If the LicenseAddition's identifier is deprecated, it may briefly explain the\n  reason for deprecation.\n* It may include the date of release, if identified, for LicenseAdditions with\n  multiple versions.\n* It may include links to other official language translations for the\n  LicenseAddition.\n* It may include a reference to the License(s) with which this LicenseAddition\n  is typically used.",
-      "rdfs:range": {
-        "@id": "xsd:string"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "licensing:additionId",
-      "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "An additionId contains a human-readable, short-form identifier for a\nLicenseAddition. It may only include letters, numbers, period (\".\") and\nhyphen (\"-\") characters.\n\nFor a ListedLicenseException, the licenseId will be as specified on the\n[SPDX Exceptions List](https://spdx.org/licenses/exceptions-index.html) for the\nparticular exception.\n\nFor a CustomLicenseAddition, the short-form identifier must begin with the\nprefix `AdditionRef-` and must be unique within the applicable SPDX namespace.\nThe short-form identifier may be preceded by an SPDX namespace or a\nfully-qualified URI prefix.",
-      "rdfs:range": {
-        "@id": "xsd:string"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "licensing:additionName",
-      "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "An additionName contains the full name of a LicenseAddition, preferably using\nthe title found in the applicable license addition text or file, or as\notherwise specified by the LicenseAddition's author or steward.\n\nWhen no such title is specified, using a name from another well-known source or list\nof licenses additions (such as OSI or Fedora) is suggested.\n\nIf no official or common name is known, any name may be used to aid in\ndistinguishing the LicenseAddition from other LicenseAdditions.",
-      "rdfs:range": {
-        "@id": "xsd:string"
       },
       "ns0:term_status": "Stable"
     },
@@ -3626,27 +3867,9 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "licensing:licenseComment",
+      "@id": "licensing:licenseExpression",
       "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "A licenseComment describes general factual information about the License. It\nshould not contain information (or links to information) that includes any kind\nof interpretation about the meaning or effect of the License, even if written\nby the license's author.\n\nExamples of information for a licenseComment may include the following:\n\n* If the License's identifier is deprecated, it may briefly explain the reason\n  for deprecation.\n* It may include the date of release, if identified, for Licenses with multiple\n  versions.\n* It may include links to other official language translations for the License.\n* For LicenseAdditions, it may include a reference to the License(s) with\n  which this additional text is typically used.",
-      "rdfs:range": {
-        "@id": "xsd:string"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "licensing:licenseId",
-      "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "A licenseId contains a human-readable, short-form license identifier for a\nLicense. It may only include letters, numbers, period (\".\") and hyphen (\"-\")\ncharacters.\n\nFor a ListedLicense, the licenseId will be as specified on the\n[SPDX License List](https://spdx.org/licenses) for the particular license.\n\nFor a CustomLicense, the short-form license identifer must begin with the\nprefix `LicenseRef-` and must be unique within the applicable SPDX namespace.\nThe short-form license ID may be preceded by an SPDX namespace or a\nfully-qualified URI prefix.",
-      "rdfs:range": {
-        "@id": "xsd:string"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "licensing:licenseName",
-      "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "A licenseName contains the full name of a License, preferably using the title found\nin the applicable license text or file, or as otherwise specified by the\nLicense's author or steward.\n\nWhen no such title is specified, using a name from another well-known source or list\nof licenses (such as OSI or Fedora) is suggested.\n\nIf no official or common name is known, any name may be used to aid in\ndistinguishing the License from other Licenses.",
+      "rdfs:comment": "Often a single license can be used to represent the licensing terms of a source code or binary file, but there are situations where a single license identifier is not sufficient. A common example is when software is offered under a choice of one or more licenses (e.g., GPL-2.0-only OR BSD-3-Clause). Another example is when a set of licenses is needed to represent a binary program constructed by compiling and linking two (or more) different source files each governed by different licenses (e.g., LGPL-2.1-only AND BSD-3-Clause).\n\nSPDX License Expressions provide a way for one to construct expressions that more accurately represent the licensing terms typically found in open source software source code. A license expression could be a single license identifier found on the SPDX License List; a user defined license reference denoted by the LicenseRef-idString; a license identifier combined with an SPDX exception; or some combination of license identifiers, license references and exceptions constructed using a small set of defined operators (e.g., AND, OR, WITH and +). We provide the definition of what constitutes a valid an SPDX License Expression in this section.",
       "rdfs:range": {
         "@id": "xsd:string"
       },
@@ -3689,15 +3912,6 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "licensing:subjectAddition",
-      "@type": "owl:ObjectProperty",
-      "rdfs:comment": "A subjectAddition is a LicenseAddition which is subject to a 'with additional\ntext' effect (WithAdditionOperator).",
-      "rdfs:range": {
-        "@id": "licensing:LicenseAddition"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
       "@id": "security:actionStatement",
       "@type": "owl:DatatypeProperty",
       "rdfs:comment": "When an element is referenced with a VexAffectedVulnAssessmentRelationship,\nthe relationship MUST include one actionStatement that SHOULD describe actions\nto remediate or mitigate the vulnerability.",
@@ -3709,7 +3923,7 @@
     {
       "@id": "security:actionStatementTime",
       "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "TODO",
+      "rdfs:comment": "When a VEX statement communicates an affected status, the author MUST\ninclude an action statement with a recommended action to help mitigate the\nvulnerability's impact. The actionStatementTime property records the time\nwhen the action statement was first communicated.",
       "rdfs:range": {
         "@id": "core:DateTime"
       },
@@ -3855,7 +4069,7 @@
       "@type": "owl:ObjectProperty",
       "rdfs:comment": "A concludedLicense is the license identified by the SPDX data creator,\nbased on analyzing the license information in the software Package, File\nor Snippet and other information to arrive at a reasonably objective\nconclusion as to what license governs it.\n\nIf a concludedLicense has a NONE value (NoneLicense), this indicates that the\nSPDX data creator has looked and did not find any license information for this\nsoftware Package, File or Snippet.\n\nIf a concludedLicense has a NOASSERTION value (NoAssertionLicense), this\nindicates that one of the following applies:\n* the SPDX data creator has attempted to but cannot reach a reasonable\n  objective determination;\n* the SPDX data creator has made no attempt to determine this field; or\n* the SPDX data creator has intentionally provided no information (no\n  meaning should be implied by doing so).\n\nA written explanation of a NOASSERTION value (NoAssertionLicense) MAY be\nprovided in the licenseComment field.\n\nIf the concludedLicense for a software Package, File or Snippet is not the\nsame as its declaredLicense, a written explanation SHOULD be provided in\nthe licenseComment field.\n\nIf the declaredLicense for a software Package, File or Snippet is a choice\nof more than one license (e.g. a license expression combining two licenses\nthrough use of the `OR` operator), then the concludedLicense may either\nretain the license choice or identify which license was chosen.",
       "rdfs:range": {
-        "@id": "licensing:LicenseField"
+        "@id": "licensing:AnyLicenseInfo"
       },
       "ns0:term_status": "Stable"
     },
@@ -3871,7 +4085,7 @@
     {
       "@id": "software:contentIdentifier",
       "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "A contentIdentifier is TODO",
+      "rdfs:comment": "The contentIdentifier provides a canonical, unique, immutable artifact identifier for each software artifact. SPDX 3.0 describes software artifacts as Snippet, File, or Package Elements. The ContentIdentifier can be calculated for any software artifact and can be recorded for any of these SPDX 3.0 Elements using Omnibor, an attempt to standardize how software artifacts are identified independent of which programming language, version control system, build tool, package manager, or software distribution mechanism is in use.  \n\nThe contentIdentifier is defined as the [Git Object Identifier](https://git-scm.com/book/en/v2/Git-Internals-Git-Objects) (gitoid) of type `blob` of the software artifact. The use of a git-based version control system is not necessary to calculate a contentIdentifier for any software artifact.\n\nThe gitoid is expressed in the ContentIdentifier property by using the IANA [gitoid URI scheme](https://www.iana.org/assignments/uri-schemes/prov/gitoid).\n\n```\nScheme syntax: gitoid\":\"<git object type>\":\"<hash algorithm>\":\"<hash value>\n```\n\nThe OmniBOR ID for the OmniBOR Document associated with a software artifact should not be recorded in this field. Rather, OmniBOR IDs should be recorded in the SPDX Element's ExternalIdentifier property. See [https://omnibor.io](https://omnibor.io) for more details.",
       "rdfs:range": {
         "@id": "xsd:anyURI"
       },
@@ -3900,7 +4114,7 @@
       "@type": "owl:ObjectProperty",
       "rdfs:comment": "A declaredLicense is the license identified in text in the software package,\nfile or snippet as the license declared by its authors.\n\nThis field is not intended to capture license information obtained from an\nexternal source, such as a package's website. Such information can be\nincluded, as needed, in a concludedLicense field.\n\nA declaredLicense may be expressed differently in practice for different\ntypes of artifacts. For example:\n\n* for Packages:\n  * would include license info describing the license of the Package as a\n    whole, when it is found in the Package itself (e.g., LICENSE file,\n    README file, metadata in the repository, etc.)\n  * would not include any license information that is not in the Package\n    itself (e.g., license information from the project’s website or from a\n    third party repository or website)\n* for Files:\n  * would include license info found in the File itself (e.g., license\n    header or notice, comments, SPDX-License-Identifier expression)\n  * would not include license info found in a different file (e.g., LICENSE\n    file in the top directory of a repository)\n* for Snippets:\n  * would include license info found in the Snippet itself (e.g., license\n    notice, comments, SPDX-License-Identifier expression)\n  * would not include license info found elsewhere in the File or in a\n    different File (e.g., comment at top of File if it is not within the\n    Snippet, LICENSE file in the top directory of a repository)\n\nIf a declaredLicense has a NONE value (NoneLicense), this indicates that the\ncorresponding Package, File or Snippet contains no license information\nwhatsoever.\n\nIf a declaredLicense has a NOASSERTION value (NoAssertionLicense), this\nindicates that one of the following applies:\n* the SPDX data creator has attempted to but cannot reach a reasonable\n  objective determination;\n* the SPDX data creator has made no attempt to determine this field; or\n* the SPDX data creator has intentionally provided no information (no meaning\n  should be implied by doing so).",
       "rdfs:range": {
-        "@id": "licensing:LicenseField"
+        "@id": "licensing:AnyLicenseInfo"
       },
       "ns0:term_status": "Stable"
     },
@@ -3934,7 +4148,7 @@
     {
       "@id": "software:packageUrl",
       "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "A packageUrl is TODO",
+      "rdfs:comment": "A packageUrl (commonly pronounced and referred to as \"purl\") is an attempt to standardize package representations in order to reliably identify and locate software packages. A purl is a URL string which represents a package in a mostly universal and uniform way across programming languages, package managers, packaging conventions, tools, APIs and databases.\n\nthe purl URL string is defined by seven components:\n```\nscheme:type/namespace/name@version?qualifiers#subpath\n```\n\nThe definition for each component can be found in the [purl specification](https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst). Components are designed such that they form a hierarchy from the most significant on the left to the least significant components on the right. \n\nParsing a purl string into its components works from left to right. Some extra type-specific normalizations are required. For more information, see [How to parse a purl string in its components](https://github.com/package-url/purl-spec/blob/master/PURL-SPECIFICATION.rst#how-to-parse-a-purl-string-in-its-components).",
       "rdfs:range": {
         "@id": "xsd:anyURI"
       },
@@ -4018,23 +4232,13 @@
       "sh:property": [
         {
           "sh:datatype": {
-            "@id": "xsd:string"
+            "@id": "core:ExternalIdentifierType"
           },
           "sh:maxCount": 1,
           "sh:minCount": 1,
-          "sh:name": "identifier",
+          "sh:name": "externalIdentifierType",
           "sh:path": {
-            "@id": "core:identifier"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "comment",
-          "sh:path": {
-            "@id": "core:comment"
+            "@id": "core:externalIdentifierType"
           }
         },
         {
@@ -4057,14 +4261,24 @@
           }
         },
         {
-          "sh:class": {
-            "@id": "core:ExternalIdentifierType"
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "comment",
+          "sh:path": {
+            "@id": "core:comment"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
           },
           "sh:maxCount": 1,
           "sh:minCount": 1,
-          "sh:name": "externalIdentifierType",
+          "sh:name": "identifier",
           "sh:path": {
-            "@id": "core:externalIdentifierType"
+            "@id": "core:identifier"
           }
         }
       ]
@@ -4079,13 +4293,13 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
-            "@id": "core:ExternalReferenceType"
+          "sh:datatype": {
+            "@id": "xsd:string"
           },
           "sh:maxCount": 1,
-          "sh:name": "externalReferenceType",
+          "sh:name": "comment",
           "sh:path": {
-            "@id": "core:externalReferenceType"
+            "@id": "core:comment"
           }
         },
         {
@@ -4099,12 +4313,12 @@
         },
         {
           "sh:datatype": {
-            "@id": "xsd:string"
+            "@id": "core:ExternalReferenceType"
           },
           "sh:maxCount": 1,
-          "sh:name": "comment",
+          "sh:name": "externalReferenceType",
           "sh:path": {
-            "@id": "core:comment"
+            "@id": "core:externalReferenceType"
           }
         },
         {
@@ -4132,7 +4346,7 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:HashAlgorithm"
           },
           "sh:maxCount": 1,
@@ -4165,16 +4379,17 @@
       "ns0:term_status": "Stable",
       "sh:property": [
         {
-          "sh:class": {
-            "@id": "core:NamespaceMap"
+          "sh:datatype": {
+            "@id": "core:CreationInfo"
           },
-          "sh:name": "namespaces",
+          "sh:maxCount": 1,
+          "sh:name": "creationInfo",
           "sh:path": {
-            "@id": "core:namespaces"
+            "@id": "core:creationInfo"
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:ExternalMap"
           },
           "sh:name": "imports",
@@ -4183,13 +4398,12 @@
           }
         },
         {
-          "sh:class": {
-            "@id": "core:CreationInfo"
+          "sh:datatype": {
+            "@id": "core:NamespaceMap"
           },
-          "sh:maxCount": 1,
-          "sh:name": "creationInfo",
+          "sh:name": "namespaces",
           "sh:path": {
-            "@id": "core:creationInfo"
+            "@id": "core:namespaces"
           }
         }
       ]
@@ -4211,9 +4425,18 @@
             "@id": "core:DateTime"
           },
           "sh:maxCount": 1,
-          "sh:name": "endTime",
+          "sh:name": "startTime",
           "sh:path": {
-            "@id": "core:endTime"
+            "@id": "core:startTime"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:Element"
+          },
+          "sh:name": "to",
+          "sh:path": {
+            "@id": "core:to"
           }
         },
         {
@@ -4221,13 +4444,13 @@
             "@id": "core:DateTime"
           },
           "sh:maxCount": 1,
-          "sh:name": "startTime",
+          "sh:name": "endTime",
           "sh:path": {
-            "@id": "core:startTime"
+            "@id": "core:endTime"
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:Element"
           },
           "sh:maxCount": 1,
@@ -4238,16 +4461,7 @@
           }
         },
         {
-          "sh:class": {
-            "@id": "core:Element"
-          },
-          "sh:name": "to",
-          "sh:path": {
-            "@id": "core:to"
-          }
-        },
-        {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:RelationshipCompleteness"
           },
           "sh:maxCount": 1,
@@ -4257,7 +4471,7 @@
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:RelationshipType"
           },
           "sh:maxCount": 1,
@@ -4321,6 +4535,15 @@
       "ns0:term_status": "Stable"
     },
     {
+      "@id": "expandedlicense:member",
+      "@type": "owl:ObjectProperty",
+      "rdfs:comment": "A member is a license expression participating in a conjuctive (of type\nConjunctiveLicenseSet) or a disjunctive (of type DisjunctiveLicenseSet)\nlicense set.",
+      "rdfs:range": {
+        "@id": "licensing:AnyLicenseInfo"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
       "@id": "licensing:deprecatedVersion",
       "@type": "owl:DatatypeProperty",
       "rdfs:comment": "A deprecatedVersion for a ListedLicense or ListedLicenseException on the SPDX\nLicense List specifies which version release of the License List was the first\none in which it was marked as deprecated.",
@@ -4339,38 +4562,11 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "licensing:member",
-      "@type": "owl:ObjectProperty",
-      "rdfs:comment": "A member is a license expression participating in a conjuctive (of type\nConjunctiveLicenseSet) or a disjunctive (of type DisjunctiveLicenseSet)\nlicense set.",
-      "rdfs:range": {
-        "@id": "licensing:AnyLicenseInfo"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
       "@id": "licensing:obsoletedBy",
       "@type": "owl:DatatypeProperty",
       "rdfs:comment": "An obsoletedBy value for a deprecated License or LicenseAddition specifies\nthe licenseId of the replacement License or LicenseAddition that is preferred\nto be used in its place. It should use the same format as specified for a\nlicenseId.\n\nThe License's or LicenseAddition's comment value may include more information\nabout the reason why the licenseId specified in the obsoletedBy value is\npreferred.",
       "rdfs:range": {
         "@id": "xsd:string"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "licensing:seeAlso",
-      "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "A seeAlso defines a cross-reference with a URL where the License or\nLicenseAddition can be found in use by one or a few projects.\n\nIf applicable, it should include a URL where the license text is posted by\nthe license steward, particularly if the license steward has made available a\n\"canonical\" primary URL for the license text.\n\nIf the license is OSI approved, a seeAlso should be included with the URL for\nthe license's listing on the OSI website.\n\nThe seeAlso URL may refer to a previously-available URL for the License or\nLicenseAddition which is no longer active.\n\nWhere applicable, the seeAlso URL should include the license text in its\nnative language. seeAlso URLs to English or other translations may be included\nwhere multiple, equivalent official translations exist.",
-      "rdfs:range": {
-        "@id": "xsd:anyURI"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "licensing:subjectLicense",
-      "@type": "owl:ObjectProperty",
-      "rdfs:comment": "A subjectLicense is a License which is subject to either an 'or later' effect\n(OrLaterOperator) or a 'with additional text' effect (WithAdditionOperator).",
-      "rdfs:range": {
-        "@id": "licensing:License"
       },
       "ns0:term_status": "Stable"
     },
@@ -4433,6 +4629,26 @@
       "sh:property": [
         {
           "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "sourceInfo",
+          "sh:path": {
+            "@id": "software:sourceInfo"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:anyURI"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "packageUrl",
+          "sh:path": {
+            "@id": "software:packageUrl"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "xsd:anyURI"
           },
           "sh:maxCount": 1,
@@ -4449,26 +4665,6 @@
           "sh:name": "packageVersion",
           "sh:path": {
             "@id": "software:packageVersion"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:anyURI"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "packageUrl",
-          "sh:path": {
-            "@id": "software:packageUrl"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "sourceInfo",
-          "sh:path": {
-            "@id": "software:sourceInfo"
           }
         },
         {
@@ -4511,6 +4707,61 @@
       "ns0:term_status": "Stable"
     },
     {
+      "@id": "licensing:LicenseAddition",
+      "@type": [
+        "owl:Class",
+        "sh:NodeShape"
+      ],
+      "rdfs:comment": "A LicenseAddition represents text which is intended to be added to a License\nas additional text, but which is not itself intended to be a standalone\nLicense.\n\nIt may be an exception which is listed on the SPDX Exceptions List\n(ListedLicenseException), or may be any other additional text (as an exception\nor otherwise) which is defined by an SPDX data creator (CustomLicenseAddition).",
+      "rdfs:subClassOf": {
+        "@id": "core:Element"
+      },
+      "ns0:term_status": "Stable",
+      "sh:property": [
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:minCount": 1,
+          "sh:name": "additionText",
+          "sh:path": {
+            "@id": "licensing:additionText"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "standardAdditionTemplate",
+          "sh:path": {
+            "@id": "licensing:standardAdditionTemplate"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:boolean"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "isDeprecatedAdditionId",
+          "sh:path": {
+            "@id": "licensing:isDeprecatedAdditionId"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "obsoletedBy",
+          "sh:path": {
+            "@id": "licensing:obsoletedBy"
+          }
+        }
+      ]
+    },
+    {
       "@id": "security:severity",
       "@type": "owl:DatatypeProperty",
       "rdfs:comment": "The severity field provides a human readable string, a label that can be used\nas an English adjective that qualifies its numerical score.",
@@ -4533,6 +4784,45 @@
       "sh:property": [
         {
           "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "copyrightText",
+          "sh:path": {
+            "@id": "software:copyrightText"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "software:SoftwarePurpose"
+          },
+          "sh:name": "additionalPurpose",
+          "sh:path": {
+            "@id": "software:additionalPurpose"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "licensing:AnyLicenseInfo"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "concludedLicense",
+          "sh:path": {
+            "@id": "software:concludedLicense"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "licensing:AnyLicenseInfo"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "declaredLicense",
+          "sh:path": {
+            "@id": "software:declaredLicense"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "xsd:anyURI"
           },
           "sh:maxCount": 1,
@@ -4552,52 +4842,13 @@
           }
         },
         {
-          "sh:class": {
-            "@id": "licensing:LicenseField"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "declaredLicense",
-          "sh:path": {
-            "@id": "software:declaredLicense"
-          }
-        },
-        {
           "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "copyrightText",
-          "sh:path": {
-            "@id": "software:copyrightText"
-          }
-        },
-        {
-          "sh:class": {
             "@id": "software:SoftwarePurpose"
           },
           "sh:maxCount": 1,
           "sh:name": "primaryPurpose",
           "sh:path": {
             "@id": "software:primaryPurpose"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "licensing:LicenseField"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "concludedLicense",
-          "sh:path": {
-            "@id": "software:concludedLicense"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "software:SoftwarePurpose"
-          },
-          "sh:name": "additionalPurpose",
-          "sh:path": {
-            "@id": "software:additionalPurpose"
           }
         }
       ]
@@ -4619,35 +4870,6 @@
       "sh:property": [
         {
           "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "comment",
-          "sh:path": {
-            "@id": "core:comment"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "core:Tool"
-          },
-          "sh:name": "createdUsing",
-          "sh:path": {
-            "@id": "core:createdUsing"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "core:Agent"
-          },
-          "sh:minCount": 1,
-          "sh:name": "createdBy",
-          "sh:path": {
-            "@id": "core:createdBy"
-          }
-        },
-        {
-          "sh:datatype": {
             "@id": "core:DateTime"
           },
           "sh:name": "created",
@@ -4665,7 +4887,7 @@
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:ProfileIdentifierType"
           },
           "sh:minCount": 1,
@@ -4676,11 +4898,40 @@
         },
         {
           "sh:datatype": {
+            "@id": "core:Tool"
+          },
+          "sh:name": "createdUsing",
+          "sh:path": {
+            "@id": "core:createdUsing"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:Agent"
+          },
+          "sh:minCount": 1,
+          "sh:name": "createdBy",
+          "sh:path": {
+            "@id": "core:createdBy"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "xsd:string"
           },
           "sh:name": "dataLicense",
           "sh:path": {
             "@id": "core:dataLicense"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "comment",
+          "sh:path": {
+            "@id": "core:comment"
           }
         }
       ]
@@ -4694,15 +4945,6 @@
       "rdfs:comment": "An External Map is a map of Element identifiers that are used within a Document\nbut defined external to that Document.\nThe external map provides details about the externally-defined Element\nsuch as its provenance, where to retrieve it, and how to verify its integrity.",
       "ns0:term_status": "Stable",
       "sh:property": [
-        {
-          "sh:class": {
-            "@id": "core:IntegrityMethod"
-          },
-          "sh:name": "verifiedUsing",
-          "sh:path": {
-            "@id": "core:verifiedUsing"
-          }
-        },
         {
           "sh:datatype": {
             "@id": "xsd:anyURI"
@@ -4732,6 +4974,15 @@
           "sh:name": "externalId",
           "sh:path": {
             "@id": "core:externalId"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:IntegrityMethod"
+          },
+          "sh:name": "verifiedUsing",
+          "sh:path": {
+            "@id": "core:verifiedUsing"
           }
         }
       ]
@@ -4766,17 +5017,6 @@
       "sh:property": [
         {
           "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "prefix",
-          "sh:path": {
-            "@id": "core:prefix"
-          }
-        },
-        {
-          "sh:datatype": {
             "@id": "xsd:anyURI"
           },
           "sh:maxCount": 1,
@@ -4784,6 +5024,17 @@
           "sh:name": "namespace",
           "sh:path": {
             "@id": "core:namespace"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:minCount": 1,
+          "sh:name": "prefix",
+          "sh:path": {
+            "@id": "core:prefix"
           }
         }
       ]
@@ -4803,9 +5054,9 @@
           },
           "sh:maxCount": 1,
           "sh:minCount": 1,
-          "sh:name": "begin",
+          "sh:name": "end",
           "sh:path": {
-            "@id": "core:begin"
+            "@id": "core:end"
           }
         },
         {
@@ -4814,20 +5065,23 @@
           },
           "sh:maxCount": 1,
           "sh:minCount": 1,
-          "sh:name": "end",
+          "sh:name": "begin",
           "sh:path": {
-            "@id": "core:end"
+            "@id": "core:begin"
           }
         }
       ]
     },
     {
-      "@id": "licensing:LicenseAddition",
+      "@id": "licensing:License",
       "@type": [
         "owl:Class",
         "sh:NodeShape"
       ],
-      "rdfs:comment": "A LicenseAddition represents text which is intended to be added to a License\nas additional text, but which is not itself intended to be a standalone\nLicense.\n\nIt may be an exception which is listed on the SPDX Exceptions List\n(ListedLicenseException), or may be any other additional text (as an exception\nor otherwise) which is defined by an SPDX data creator (CustomLicenseAddition).",
+      "rdfs:comment": "A License represents a license text, whether listed on the SPDX License List\n(ListedLicense) or defined by an SPDX data creator (CustomLicense).",
+      "rdfs:subClassOf": {
+        "@id": "licensing:ExtendableLicense"
+      },
       "ns0:term_status": "Stable",
       "sh:property": [
         {
@@ -4835,40 +5089,9 @@
             "@id": "xsd:boolean"
           },
           "sh:maxCount": 1,
-          "sh:name": "isDeprecatedAdditionId",
+          "sh:name": "isOsiApproved",
           "sh:path": {
-            "@id": "licensing:isDeprecatedAdditionId"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "additionText",
-          "sh:path": {
-            "@id": "licensing:additionText"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "additionId",
-          "sh:path": {
-            "@id": "licensing:additionId"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:anyURI"
-          },
-          "sh:name": "seeAlso",
-          "sh:path": {
-            "@id": "licensing:seeAlso"
+            "@id": "licensing:isOsiApproved"
           }
         },
         {
@@ -4883,12 +5106,22 @@
         },
         {
           "sh:datatype": {
-            "@id": "xsd:string"
+            "@id": "xsd:boolean"
           },
           "sh:maxCount": 1,
-          "sh:name": "standardAdditionTemplate",
+          "sh:name": "isDeprecatedLicenseId",
           "sh:path": {
-            "@id": "licensing:standardAdditionTemplate"
+            "@id": "licensing:isDeprecatedLicenseId"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:boolean"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "isFsfLibre",
+          "sh:path": {
+            "@id": "licensing:isFsfLibre"
           }
         },
         {
@@ -4897,9 +5130,9 @@
           },
           "sh:maxCount": 1,
           "sh:minCount": 1,
-          "sh:name": "additionName",
+          "sh:name": "licenseText",
           "sh:path": {
-            "@id": "licensing:additionName"
+            "@id": "licensing:licenseText"
           }
         },
         {
@@ -4907,9 +5140,19 @@
             "@id": "xsd:string"
           },
           "sh:maxCount": 1,
-          "sh:name": "additionComment",
+          "sh:name": "standardLicenseTemplate",
           "sh:path": {
-            "@id": "licensing:additionComment"
+            "@id": "licensing:standardLicenseTemplate"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:string"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "standardLicenseHeader",
+          "sh:path": {
+            "@id": "licensing:standardLicenseHeader"
           }
         }
       ]
@@ -4982,132 +5225,6 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "licensing:License",
-      "@type": [
-        "owl:Class",
-        "sh:NodeShape"
-      ],
-      "rdfs:comment": "A License represents a license text, whether listed on the SPDX License List\n(ListedLicense) or defined by an SPDX data creator (CustomLicense).",
-      "rdfs:subClassOf": {
-        "@id": "licensing:AnyLicenseInfo"
-      },
-      "ns0:term_status": "Stable",
-      "sh:property": [
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "obsoletedBy",
-          "sh:path": {
-            "@id": "licensing:obsoletedBy"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "standardLicenseTemplate",
-          "sh:path": {
-            "@id": "licensing:standardLicenseTemplate"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "licenseText",
-          "sh:path": {
-            "@id": "licensing:licenseText"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:boolean"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "isDeprecatedLicenseId",
-          "sh:path": {
-            "@id": "licensing:isDeprecatedLicenseId"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:boolean"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "isFsfLibre",
-          "sh:path": {
-            "@id": "licensing:isFsfLibre"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "standardLicenseHeader",
-          "sh:path": {
-            "@id": "licensing:standardLicenseHeader"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "licenseId",
-          "sh:path": {
-            "@id": "licensing:licenseId"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:minCount": 1,
-          "sh:name": "licenseName",
-          "sh:path": {
-            "@id": "licensing:licenseName"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:boolean"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "isOsiApproved",
-          "sh:path": {
-            "@id": "licensing:isOsiApproved"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:string"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "licenseComment",
-          "sh:path": {
-            "@id": "licensing:licenseComment"
-          }
-        },
-        {
-          "sh:datatype": {
-            "@id": "xsd:anyURI"
-          },
-          "sh:name": "seeAlso",
-          "sh:path": {
-            "@id": "licensing:seeAlso"
-          }
-        }
-      ]
-    },
-    {
       "@id": "ai:SafetyRiskAssessmentType",
       "@type": "owl:Class",
       "rdfs:comment": "Lists the different safety risk type values that can be used to describe the safety risk of AI software\naccording to [Article 20 of Regulation 765/2008/EC](https://ec.europa.eu/docsroom/documents/17107/attachments/1/translations/en/renditions/pdf).",
@@ -5139,32 +5256,22 @@
       "sh:property": [
         {
           "sh:datatype": {
-            "@id": "core:DateTime"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "withdrawnTime",
-          "sh:path": {
-            "@id": "security:withdrawnTime"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "core:Element"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "assessedElement",
-          "sh:path": {
-            "@id": "security:assessedElement"
-          }
-        },
-        {
-          "sh:class": {
             "@id": "core:Agent"
           },
           "sh:maxCount": 1,
           "sh:name": "suppliedBy",
           "sh:path": {
             "@id": "security:suppliedBy"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:DateTime"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "modifiedTime",
+          "sh:path": {
+            "@id": "security:modifiedTime"
           }
         },
         {
@@ -5182,9 +5289,19 @@
             "@id": "core:DateTime"
           },
           "sh:maxCount": 1,
-          "sh:name": "modifiedTime",
+          "sh:name": "withdrawnTime",
           "sh:path": {
-            "@id": "security:modifiedTime"
+            "@id": "security:withdrawnTime"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:Element"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "assessedElement",
+          "sh:path": {
+            "@id": "security:assessedElement"
           }
         }
       ]
@@ -5208,15 +5325,6 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "licensing:LicenseField",
-      "@type": [
-        "owl:Class",
-        "sh:NodeShape"
-      ],
-      "rdfs:comment": "A LicenseField is the primary value that is used by a licensing field for a\nsoftware Package, File or Snippet. It represents either a license expression,\nor the values NOASSERTION or NONE. The specific meanings of NOASSERTION or\nNONE for the particular licensing field are defined in the corresponding\nproperty description.",
-      "ns0:term_status": "Stable"
-    },
-    {
       "@id": "security:VexJustificationType",
       "@type": "owl:Class",
       "rdfs:comment": "VexJustificationType specifies the type of Vulnerability Exploitability eXchange (VEX) justification.",
@@ -5232,18 +5340,6 @@
       "@id": "core:LifecycleScopeType",
       "@type": "owl:Class",
       "rdfs:comment": "TODO",
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "licensing:AnyLicenseInfo",
-      "@type": [
-        "owl:Class",
-        "sh:NodeShape"
-      ],
-      "rdfs:comment": "An AnyLicenseInfo is used by a licensing field for a software package,\nfile or snippet when its value is not NOASSERTION or NONE. It can be a\nsingle license (either on the SPDX License List or a custom-defined license);\na single license with an \"or later\" operator applied; the foregoing with\nadditional text applied; or a set of licenses combined by applying \"AND\" and\n\"OR\" operators recursively.",
-      "rdfs:subClassOf": {
-        "@id": "licensing:LicenseField"
-      },
       "ns0:term_status": "Stable"
     },
     {
@@ -5303,9 +5399,27 @@
       ]
     },
     {
+      "@id": "licensing:AnyLicenseInfo",
+      "@type": [
+        "owl:Class",
+        "sh:NodeShape"
+      ],
+      "rdfs:comment": "An AnyLicenseInfo is used by licensing properties of software artifacts.\nIt can be a NoneLicense, a NoAssertionLicense,\nsingle license (either on the SPDX License List or a custom-defined license);\na single license with an \"or later\" operator applied; the foregoing with\nadditional text applied; or a set of licenses combined by applying \"AND\" and\n\"OR\" operators recursively.",
+      "rdfs:subClassOf": {
+        "@id": "core:Element"
+      },
+      "ns0:term_status": "Stable"
+    },
+    {
       "@id": "core:ExternalIdentifierType",
       "@type": "owl:Class",
       "rdfs:comment": "ExteralIdentifierType specifies the type of an external identifier.",
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "dataset:DatasetType",
+      "@type": "owl:Class",
+      "rdfs:comment": "Describes the different structures of data within a given dataset. A dataset can have multiple types of data, or even a single type of data but still match multiple types, for example sensor data could also be timeseries or labeled image data could also be considered categorical.",
       "ns0:term_status": "Stable"
     },
     {
@@ -5322,12 +5436,49 @@
       "sh:property": [
         {
           "sh:datatype": {
+            "@id": "core:IntegrityMethod"
+          },
+          "sh:name": "verifiedUsing",
+          "sh:path": {
+            "@id": "core:verifiedUsing"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:CreationInfo"
+          },
+          "sh:maxCount": 1,
+          "sh:name": "creationInfo",
+          "sh:path": {
+            "@id": "core:creationInfo"
+          }
+        },
+        {
+          "sh:datatype": {
             "@id": "xsd:string"
           },
           "sh:maxCount": 1,
           "sh:name": "summary",
           "sh:path": {
             "@id": "core:summary"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:Extension"
+          },
+          "sh:name": "extension",
+          "sh:path": {
+            "@id": "core:extension"
+          }
+        },
+        {
+          "sh:datatype": {
+            "@id": "core:ExternalIdentifier"
+          },
+          "sh:name": "externalIdentifier",
+          "sh:path": {
+            "@id": "core:externalIdentifier"
           }
         },
         {
@@ -5342,24 +5493,6 @@
         },
         {
           "sh:datatype": {
-            "@id": "core:Extension"
-          },
-          "sh:name": "extension",
-          "sh:path": {
-            "@id": "core:extension"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "core:ExternalIdentifier"
-          },
-          "sh:name": "externalIdentifier",
-          "sh:path": {
-            "@id": "core:externalIdentifier"
-          }
-        },
-        {
-          "sh:datatype": {
             "@id": "xsd:string"
           },
           "sh:maxCount": 1,
@@ -5369,31 +5502,12 @@
           }
         },
         {
-          "sh:class": {
+          "sh:datatype": {
             "@id": "core:ExternalReference"
           },
           "sh:name": "externalReference",
           "sh:path": {
             "@id": "core:externalReference"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "core:IntegrityMethod"
-          },
-          "sh:name": "verifiedUsing",
-          "sh:path": {
-            "@id": "core:verifiedUsing"
-          }
-        },
-        {
-          "sh:class": {
-            "@id": "core:CreationInfo"
-          },
-          "sh:maxCount": 1,
-          "sh:name": "creationInfo",
-          "sh:path": {
-            "@id": "core:creationInfo"
           }
         },
         {
@@ -5405,25 +5519,24 @@
           "sh:path": {
             "@id": "core:comment"
           }
+        },
+        {
+          "sh:datatype": {
+            "@id": "xsd:anyURI"
+          },
+          "sh:maxCount": 1,
+          "sh:minCount": 1,
+          "sh:name": "spdxId",
+          "sh:path": {
+            "@id": "core:spdxId"
+          }
         }
       ]
-    },
-    {
-      "@id": "core:ExternalReferenceType",
-      "@type": "owl:Class",
-      "rdfs:comment": "ExteralReferenceType specifies the type of an external reference.",
-      "ns0:term_status": "Stable"
     },
     {
       "@id": "core:HashAlgorithm",
       "@type": "owl:Class",
       "rdfs:comment": "A HashAlgorithm is a mathematical algorithm that maps data of arbitrary size to a bit string (the hash)\nand is a one-way function, that is, a function which is practically infeasible to invert.",
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "software:SoftwarePurpose",
-      "@type": "owl:Class",
-      "rdfs:comment": "This field provides information about the primary purpose of an Element.\nSoftware Purpose is intrinsic to how the Element is being used rather than the content of the Element.\nThis field is a reasonable estimate of the most likely usage of the Element\nfrom the producer and consumer perspective from which both parties can draw conclusions\nabout the context in which the Element exists.",
       "ns0:term_status": "Stable"
     },
     {
@@ -5439,9 +5552,21 @@
       "ns0:term_status": "Stable"
     },
     {
+      "@id": "software:SoftwarePurpose",
+      "@type": "owl:Class",
+      "rdfs:comment": "This field provides information about the primary purpose of an Element.\nSoftware Purpose is intrinsic to how the Element is being used rather than the content of the Element.\nThis field is a reasonable estimate of the most likely usage of the Element\nfrom the producer and consumer perspective from which both parties can draw conclusions\nabout the context in which the Element exists.",
+      "ns0:term_status": "Stable"
+    },
+    {
+      "@id": "core:ExternalReferenceType",
+      "@type": "owl:Class",
+      "rdfs:comment": "ExteralReferenceType specifies the type of an external reference.",
+      "ns0:term_status": "Stable"
+    },
+    {
       "@id": "core:RelationshipType",
       "@type": "owl:Class",
-      "rdfs:comment": "Provides information about the relationship between two Elements.\nFor example, you can represent a relationship between two different Files,\nbetween a Package and a File, between two Packages, or between one SPDXDocument and another SPDXDocument.\n\nBuild Profile specific RelationshipType descriptions can be found [here](https://github.com/spdx/spdx-3-build-profile/blob/main/model/relationships.md)",
+      "rdfs:comment": "Provides information about the relationship between two Elements.\nFor example, you can represent a relationship between two different Files,\nbetween a Package and a File, between two Packages, or between one SPDXDocument and another SPDXDocument.",
       "ns0:term_status": "Stable"
     }
   ]

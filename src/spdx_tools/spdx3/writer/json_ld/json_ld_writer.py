@@ -17,5 +17,5 @@ def write_payload(payload: Payload, file_name: str):
 
     complete_dict = {"@context": context, "@graph": element_list}
 
-    with open(file_name + ".jsonld", "w") as out:
+    with open(file_name, "w") as out:
         json.dump(complete_dict, out, indent=2)

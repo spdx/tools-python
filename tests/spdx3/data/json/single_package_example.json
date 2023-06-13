@@ -1,0 +1,45 @@
+{
+    "@context": "https://spdx.github.io/spdx-3-model/rdf/context.json",
+    "type": "Package",
+    "spdxId": "https://some.namespace#SPDXRef-Package",
+    "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2022-12-01T00:00:00Z",
+        "createdBy": ["https://spdx.dev/elements/3F26391C#spdx-dev"],
+        "createdUsing": ["https://spdx.dev/elements/3F26391C#spdx-dev"],
+        "profile": ["core", "software"],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+    },
+    "name": "packageName",
+    "summary": "packageSummary",
+    "description": "packageDescription",
+    "comment": "packageComment",
+    "packageVersion": "12.2",
+    "downloadLocation": "https://download.com",
+    "packageUrl": "https://some.purl",
+    "homepage": "https://homepage.com",
+    "primaryPurpose": "source",
+    "contentIdentifier": "urn:spdx.dev:pkg:123456789",
+    "originatedBy": ["https://some.namespace#SPDXRef-Agent-creatorName-some@mail.com"],
+    "suppliedBy": ["https://some.namespace#john_smith"],
+    "verifiedUsing": [
+        {
+            "type": "Hash",
+            "algorithm": "sha1",
+            "hashValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
+        },
+        {
+            "type": "Hash",
+            "algorithm": "sha256",
+            "hashValue": "fbea580d286bbbbb41314430d58ba887716a74d7134119c5307cdc9f0c7a4299"
+        }
+    ],
+    "externalReference": [
+        {
+            "type": "ExternalReference",
+            "externalReferenceType": "securityFix",
+            "locator": ["https://support.com"]
+        }
+    ]
+}

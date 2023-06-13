@@ -32,8 +32,8 @@ class HashAlgorithm(Enum):
     SHA3_512 = auto()
     SHA384 = auto()
     SHA512 = auto()
-    SPDXPVCSHA1 = auto()
-    SPDXPVCSHA256 = auto()
+    SPDX_PVC_SHA1 = auto()
+    SPDX_PVC_SHA256 = auto()
     SPHINCS_PLUS = auto()
 
 

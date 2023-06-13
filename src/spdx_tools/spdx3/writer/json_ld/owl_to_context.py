@@ -108,6 +108,9 @@ def convert_spdx_owl_to_jsonld_context(spdx_owl: str = "SPDX_OWL.json"):
         else:
             print(f"unknown node_type: {node_type}")
 
+    context_dict["type"] = "@type"
+    context_dict["spdxId"] = "@id"
+
     with open(os.path.join(os.path.dirname(__file__), "context.json"), "w") as infile:
         json.dump(context_dict, infile)
 

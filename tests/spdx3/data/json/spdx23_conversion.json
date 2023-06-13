@@ -1,0 +1,644 @@
+{
+  "@context": [
+    "https://spdx.github.io/spdx-3-model/rdf/context.json",
+    {
+      "spdx-example": "http://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301#"
+    }
+  ],
+  "@graph": [
+    {
+      "type": "Tool",
+      "spdxId": "spdx-example:SPDXRef-Actor-LicenseFind-1.0",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2010-01-29T18:30:22Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-ExampleCodeInspect",
+          "spdx-example:SPDXRef-Actor-JaneDoe"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "LicenseFind-1.0"
+    },
+    {
+      "type": "Organization",
+      "spdxId": "spdx-example:SPDXRef-Actor-ExampleCodeInspect",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2010-01-29T18:30:22Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-ExampleCodeInspect",
+          "spdx-example:SPDXRef-Actor-JaneDoe"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "ExampleCodeInspect"
+    },
+    {
+      "type": "Person",
+      "spdxId": "spdx-example:SPDXRef-Actor-JaneDoe",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2010-01-29T18:30:22Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-ExampleCodeInspect",
+          "spdx-example:SPDXRef-Actor-JaneDoe"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "Jane Doe"
+    },
+    {
+      "type": "SpdxDocument",
+      "spdxId": "spdx-example:SPDXRef-DOCUMENT",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2010-01-29T18:30:22Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-ExampleCodeInspect",
+          "spdx-example:SPDXRef-Actor-JaneDoe"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "SPDX-Tools-v2.0",
+      "comment": "This document was created using SPDX 2.0 using licenses from the web site.",
+      "element": [
+        "spdx-example:SPDXRef-Actor-LicenseFind-1.0",
+        "spdx-example:SPDXRef-Actor-ExampleCodeInspect",
+        "spdx-example:SPDXRef-Actor-JaneDoe",
+        "spdx-example:SPDXRef-Actor-JaneDoe-jane.doe@example.com",
+        "spdx-example:SPDXRef-Actor-ExampleCodeInspect-contact@example.com",
+        "spdx-example:SPDXRef-Package",
+        "spdx-example:SPDXRef-fromDoap-1",
+        "spdx-example:SPDXRef-fromDoap-0",
+        "spdx-example:SPDXRef-Saxon",
+        "spdx-example:SPDXRef-DoapSource",
+        "spdx-example:SPDXRef-CommonsLangSrc",
+        "spdx-example:SPDXRef-JenaLib",
+        "spdx-example:SPDXRef-Specification",
+        "spdx-example:SPDXRef-File",
+        "spdx-example:SPDXRef-Snippet",
+        "spdx-example:SPDXRef-Relationship-0",
+        "spdx-example:SPDXRef-Relationship-1",
+        "spdx-example:SPDXRef-Relationship-2",
+        "spdx-example:SPDXRef-Relationship-4",
+        "spdx-example:SPDXRef-Relationship-5",
+        "spdx-example:SPDXRef-Relationship-6",
+        "spdx-example:SPDXRef-Relationship-8",
+        "spdx-example:SPDXRef-Relationship-12",
+        "spdx-example:SPDXRef-Annotation-0",
+        "spdx-example:SPDXRef-Actor-JoeReviewer",
+        "spdx-example:SPDXRef-Annotation-1",
+        "spdx-example:SPDXRef-Actor-SuzanneReviewer",
+        "spdx-example:SPDXRef-Annotation-2",
+        "spdx-example:SPDXRef-Actor-PackageCommenter",
+        "spdx-example:SPDXRef-Annotation-3",
+        "spdx-example:SPDXRef-Actor-FileCommenter",
+        "spdx-example:SPDXRef-Annotation-4"
+      ],
+      "rootElement": [
+        "spdx-example:SPDXRef-File",
+        "spdx-example:SPDXRef-Package"
+      ],
+      "namespaces": [
+        {
+          "type": "NamespaceMap",
+          "prefix": "DocumentRef-spdx-tool-1.2",
+          "namespace": "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301#"
+        }
+      ],
+      "imports": [
+        {
+          "type": "ExternalMap",
+          "externalId": "DocumentRef-spdx-tool-1.2:SPDXRef-DOCUMENT",
+          "verifiedUsing": [
+            {
+              "type": "Hash",
+              "algorithm": "sha1",
+              "hashValue": "d6a770ba38583ed4bb4525bd96e50461655d2759"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Person",
+      "spdxId": "spdx-example:SPDXRef-Actor-JaneDoe-jane.doe@example.com",
+      "name": "Jane Doe",
+      "externalIdentifier": [
+        {
+          "type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "jane.doe@example.com"
+        }
+      ]
+    },
+    {
+      "type": "Organization",
+      "spdxId": "spdx-example:SPDXRef-Actor-ExampleCodeInspect-contact@example.com",
+      "name": "ExampleCodeInspect",
+      "externalIdentifier": [
+        {
+          "type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "contact@example.com"
+        }
+      ]
+    },
+    {
+      "type": "Package",
+      "spdxId": "spdx-example:SPDXRef-Package",
+      "name": "glibc",
+      "summary": "GNU C library.",
+      "description": "The GNU C Library defines functions that are specified by the ISO C standard, as well as additional features specific to POSIX and other derivatives of the Unix operating system, and extensions specific to GNU systems.",
+      "verifiedUsing": [
+        {
+          "type": "Hash",
+          "algorithm": "md5",
+          "hashValue": "624c1abb3664f4b35547e7c73864ad24"
+        },
+        {
+          "type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "85ed0817af83a24ad8da68c2b5094de69833983c"
+        },
+        {
+          "type": "Hash",
+          "algorithm": "sha256",
+          "hashValue": "11b6d3ee554eedf79299905a98f9b9a04e498210b59f15094c916c91d150efcd"
+        },
+        {
+          "type": "Hash",
+          "algorithm": "blake2B384",
+          "hashValue": "aaabd89c926ab525c242e6621f2f5fa73aa4afe3d9e24aed727faaadd6af38b620bdb623dd2b4788b1c8086984af8706"
+        }
+      ],
+      "externalIdentifier": [
+        {
+          "type": "ExternalIdentifier",
+          "externalIdentifierType": "cpe23",
+          "identifier": "cpe:2.3:a:pivotal_software:spring_framework:4.1.0:*:*:*:*:*:*:*"
+        }
+      ],
+      "originatedBy": [
+        "spdx-example:SPDXRef-Actor-ExampleCodeInspect-contact@example.com"
+      ],
+      "suppliedBy": [
+        "spdx-example:SPDXRef-Actor-JaneDoe-jane.doe@example.com"
+      ],
+      "builtTime": "2011-01-29T18:30:22Z",
+      "releaseTime": "2012-01-29T18:30:22Z",
+      "validUntilTime": "2014-01-29T18:30:22Z",
+      "primaryPurpose": "source",
+      "copyrightText": "Copyright 2008-2010 John Smith",
+      "attributionText": "The GNU C Library is free software.  See the file COPYING.LIB for copying conditions, and LICENSES for notices about a few contributions that require these additional notices to be distributed.  License copyright years may be listed using range notation, e.g., 1996-2015, indicating that every year in the range, inclusive, is a copyrightable year that would otherwise be listed individually.",
+      "packageVersion": "2.11.1",
+      "downloadLocation": "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
+      "homepage": "http://ftp.gnu.org/gnu/glibc",
+      "sourceInfo": "uses glibc-2_11-branch from git://sourceware.org/git/glibc.git."
+    },
+    {
+      "type": "Package",
+      "spdxId": "spdx-example:SPDXRef-fromDoap-1",
+      "name": "Apache Commons Lang",
+      "homepage": "http://commons.apache.org/proper/commons-lang/"
+    },
+    {
+      "type": "Package",
+      "spdxId": "spdx-example:SPDXRef-fromDoap-0",
+      "name": "Jena",
+      "packageVersion": "3.12.0",
+      "downloadLocation": "https://search.maven.org/remotecontent?filepath=org/apache/jena/apache-jena/3.12.0/apache-jena-3.12.0.tar.gz",
+      "packageUrl": "pkg:maven/org.apache.jena/apache-jena@3.12.0",
+      "homepage": "http://www.openjena.org/"
+    },
+    {
+      "type": "Package",
+      "spdxId": "spdx-example:SPDXRef-Saxon",
+      "name": "Saxon",
+      "description": "The Saxon package is a collection of tools for processing XML documents.",
+      "verifiedUsing": [
+        {
+          "type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "85ed0817af83a24ad8da68c2b5094de69833983c"
+        }
+      ],
+      "copyrightText": "Copyright Saxonica Ltd",
+      "packageVersion": "8.8",
+      "downloadLocation": "https://sourceforge.net/projects/saxon/files/Saxon-B/8.8.0.7/saxonb8-8-0-7j.zip/download",
+      "homepage": "http://saxon.sourceforge.net/"
+    },
+    {
+      "type": "File",
+      "spdxId": "spdx-example:SPDXRef-DoapSource",
+      "name": "./src/org/spdx/parser/DOAPProject.java",
+      "verifiedUsing": [
+        {
+          "type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "2fd4e1c67a2d28fced849ee1bb76e7391b93eb12"
+        }
+      ],
+      "copyrightText": "Copyright 2010, 2011 Source Auditor Inc."
+    },
+    {
+      "type": "File",
+      "spdxId": "spdx-example:SPDXRef-CommonsLangSrc",
+      "name": "./lib-source/commons-lang3-3.1-sources.jar",
+      "comment": "This file is used by Jena",
+      "verifiedUsing": [
+        {
+          "type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "c2b4e1c67a2d28fced849ee1bb76e7391b93f125"
+        }
+      ],
+      "copyrightText": "Copyright 2001-2011 The Apache Software Foundation"
+    },
+    {
+      "type": "File",
+      "spdxId": "spdx-example:SPDXRef-JenaLib",
+      "name": "./lib-source/jena-2.6.3-sources.jar",
+      "comment": "This file belongs to Jena",
+      "verifiedUsing": [
+        {
+          "type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "3ab4e1c67a2d28fced849ee1bb76e7391b93f125"
+        }
+      ],
+      "copyrightText": "(c) Copyright 2000, 2001, 2002, 2003, 2004, 2005, 2006, 2007, 2008, 2009 Hewlett-Packard Development Company, LP"
+    },
+    {
+      "type": "File",
+      "spdxId": "spdx-example:SPDXRef-Specification",
+      "name": "./docs/myspec.pdf",
+      "comment": "Specification Documentation",
+      "verifiedUsing": [
+        {
+          "type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "fff4e1c67a2d28fced849ee1bb76e7391b93f125"
+        }
+      ]
+    },
+    {
+      "type": "File",
+      "spdxId": "spdx-example:SPDXRef-File",
+      "name": "./package/foo.c",
+      "comment": "The concluded license was taken from the package level that the file was included in.\nThis information was found in the COPYING.txt file in the xyz directory.",
+      "verifiedUsing": [
+        {
+          "type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "d6a770ba38583ed4bb4525bd96e50461655d2758"
+        },
+        {
+          "type": "Hash",
+          "algorithm": "md5",
+          "hashValue": "624c1abb3664f4b35547e7c73864ad24"
+        }
+      ],
+      "copyrightText": "Copyright 2008-2010 John Smith"
+    },
+    {
+      "type": "Snippet",
+      "spdxId": "spdx-example:SPDXRef-Snippet",
+      "name": "from linux kernel",
+      "comment": "This snippet was identified as significant and highlighted in this Apache-2.0 file, when a commercial scanner identified it as being derived from file foo.c in package xyz which is licensed under GPL-2.0.",
+      "copyrightText": "Copyright 2008-2010 John Smith",
+      "byteRange": {
+        "type": "PositiveIntegerRange",
+        "begin": 310,
+        "end": 420
+      },
+      "lineRange": {
+        "type": "PositiveIntegerRange",
+        "begin": 5,
+        "end": 23
+      }
+    },
+    {
+      "type": "Relationship",
+      "spdxId": "spdx-example:SPDXRef-Relationship-0",
+      "from": "spdx-example:SPDXRef-DOCUMENT",
+      "to": [
+        "spdx-example:SPDXRef-Package"
+      ],
+      "relationshipType": "contains"
+    },
+    {
+      "type": "Relationship",
+      "spdxId": "spdx-example:SPDXRef-Relationship-1",
+      "from": "spdx-example:SPDXRef-DOCUMENT",
+      "to": [
+        "spdx-example:DocumentRef-spdx-tool-1.2:SPDXRef-ToolsElement"
+      ],
+      "relationshipType": "copy"
+    },
+    {
+      "type": "SoftwareDependencyRelationship",
+      "spdxId": "spdx-example:SPDXRef-Relationship-2",
+      "from": "spdx-example:SPDXRef-Package",
+      "to": [
+        "spdx-example:SPDXRef-Saxon"
+      ],
+      "relationshipType": "dependsOn",
+      "softwareLinkage": "dynamic"
+    },
+    {
+      "type": "Relationship",
+      "spdxId": "spdx-example:SPDXRef-Relationship-4",
+      "from": "spdx-example:SPDXRef-JenaLib",
+      "to": [
+        "spdx-example:SPDXRef-Package"
+      ],
+      "relationshipType": "contains"
+    },
+    {
+      "type": "Relationship",
+      "spdxId": "spdx-example:SPDXRef-Relationship-5",
+      "from": "spdx-example:SPDXRef-Specification",
+      "to": [
+        "spdx-example:SPDXRef-fromDoap-0"
+      ],
+      "relationshipType": "specificationFor"
+    },
+    {
+      "type": "Relationship",
+      "spdxId": "spdx-example:SPDXRef-Relationship-6",
+      "from": "spdx-example:SPDXRef-fromDoap-0",
+      "to": [
+        "spdx-example:SPDXRef-File"
+      ],
+      "relationshipType": "generates"
+    },
+    {
+      "type": "Relationship",
+      "spdxId": "spdx-example:SPDXRef-Relationship-8",
+      "from": "spdx-example:SPDXRef-DOCUMENT",
+      "to": [
+        "spdx-example:SPDXRef-File",
+        "spdx-example:SPDXRef-Package"
+      ],
+      "relationshipType": "describes"
+    },
+    {
+      "type": "Relationship",
+      "spdxId": "spdx-example:SPDXRef-Relationship-12",
+      "from": "spdx-example:SPDXRef-Package",
+      "to": [
+        "spdx-example:SPDXRef-Specification",
+        "spdx-example:SPDXRef-CommonsLangSrc",
+        "spdx-example:SPDXRef-JenaLib",
+        "spdx-example:SPDXRef-DoapSource"
+      ],
+      "relationshipType": "contains"
+    },
+    {
+      "type": "Annotation",
+      "spdxId": "spdx-example:SPDXRef-Annotation-0",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2010-01-29T18:30:22Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-JaneDoe"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "annotationType": "other",
+      "subject": "spdx-example:SPDXRef-DOCUMENT",
+      "statement": "Document level annotation"
+    },
+    {
+      "type": "Person",
+      "spdxId": "spdx-example:SPDXRef-Actor-JoeReviewer",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2010-02-10T00:00:00Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-JoeReviewer"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "Joe Reviewer"
+    },
+    {
+      "type": "Annotation",
+      "spdxId": "spdx-example:SPDXRef-Annotation-1",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2010-02-10T00:00:00Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-JoeReviewer"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "annotationType": "review",
+      "subject": "spdx-example:SPDXRef-DOCUMENT",
+      "statement": "This is just an example.  Some of the non-standard licenses look like they are actually BSD 3 clause licenses"
+    },
+    {
+      "type": "Person",
+      "spdxId": "spdx-example:SPDXRef-Actor-SuzanneReviewer",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2011-03-13T00:00:00Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-SuzanneReviewer"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "Suzanne Reviewer"
+    },
+    {
+      "type": "Annotation",
+      "spdxId": "spdx-example:SPDXRef-Annotation-2",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2011-03-13T00:00:00Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-SuzanneReviewer"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "annotationType": "review",
+      "subject": "spdx-example:SPDXRef-DOCUMENT",
+      "statement": "Another example reviewer."
+    },
+    {
+      "type": "Person",
+      "spdxId": "spdx-example:SPDXRef-Actor-PackageCommenter",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2011-01-29T18:30:22Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-PackageCommenter"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "Package Commenter"
+    },
+    {
+      "type": "Annotation",
+      "spdxId": "spdx-example:SPDXRef-Annotation-3",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2011-01-29T18:30:22Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-PackageCommenter"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "annotationType": "other",
+      "subject": "spdx-example:SPDXRef-Package",
+      "statement": "Package level annotation"
+    },
+    {
+      "type": "Person",
+      "spdxId": "spdx-example:SPDXRef-Actor-FileCommenter",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2011-01-29T18:30:22Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-FileCommenter"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "File Commenter"
+    },
+    {
+      "type": "Annotation",
+      "spdxId": "spdx-example:SPDXRef-Annotation-4",
+      "creationInfo": {
+        "type": "CreationInfo",
+        "specVersion": "3.0.0",
+        "created": "2011-01-29T18:30:22Z",
+        "createdBy": [
+          "spdx-example:SPDXRef-Actor-FileCommenter"
+        ],
+        "createdUsing": [
+          "spdx-example:SPDXRef-Actor-LicenseFind-1.0"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "annotationType": "other",
+      "subject": "spdx-example:SPDXRef-File",
+      "statement": "File level annotation"
+    }
+  ]
+}
