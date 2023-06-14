@@ -35,7 +35,12 @@ from spdx_tools.spdx3.model import (
 )
 from spdx_tools.spdx3.model.ai.ai_package import AIPackage, SafetyRiskAssessmentType
 from spdx_tools.spdx3.model.build import Build
-from spdx_tools.spdx3.model.dataset.dataset import ConfidentialityLevelType, Dataset, DatasetAvailabilityType
+from spdx_tools.spdx3.model.dataset.dataset import (
+    ConfidentialityLevelType,
+    Dataset,
+    DatasetAvailabilityType,
+    DatasetType,
+)
 from spdx_tools.spdx3.model.licensing import (
     CustomLicense,
     CustomLicenseAddition,
@@ -406,7 +411,7 @@ SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT = {
 }
 
 DATASET_DICT = {
-    "dataset_type": "DatasetType",
+    "dataset_type": [DatasetType.OTHER],
     "data_collection_process": "DatasetDataCollectionProcess",
     "intended_use": "DatasetIntendedUse",
     "dataset_size": 10,
