@@ -19,6 +19,7 @@ class SoftwarePurpose(Enum):
     FRAMEWORK = auto()
     INSTALL = auto()
     LIBRARY = auto()
+    ML_MODEL = auto()
     MODULE = auto()
     OPERATING_SYSTEM = auto()
     OTHER = auto()
