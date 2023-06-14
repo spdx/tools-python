@@ -297,32 +297,32 @@ CVSS_V2_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "score": "4.3",
     "severity": "low",
     "vector": "(AV:N/AC:M/Au:N/C:P/I:N/A:N)",
-    "relationship_type": RelationshipType.HAS_CVSS_V2_ASSESSMENT_FOR,
+    "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
 }
 
 CVSS_V3_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "score": "6.8",
     "severity": "medium",
     "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N",
-    "relationship_type": RelationshipType.HAS_CVSS_V3_ASSESSMENT_FOR,
+    "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
 }
 
 EPSS_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "probability": 80,
     "severity": "high",
-    "relationship_type": RelationshipType.HAS_EPSS_ASSESSMENT_FOR,
+    "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
 }
 
 SSVC_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "decision_type": SsvcDecisionType.ACT,
-    "relationship_type": RelationshipType.HAS_SSVC_ASSESSMENT_FOR,
+    "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
 }
 
 EXPLOIT_CATALOG_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "catalog_type": ExploitCatalogType.KEV,
     "exploited": True,
     "locator": "https://www.cisa.gov/known-exploited-vulnerabilities-catalog",
-    "relationship_type": RelationshipType.HAS_EXPLOIT_CATALOG_ASSESSMENT_FOR,
+    "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
 }
 
 VEX_VULN_ASSESSMENT_RELATIONSHIP_DICT = {

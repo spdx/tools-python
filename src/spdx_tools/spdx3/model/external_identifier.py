@@ -13,9 +13,11 @@ from spdx_tools.common.typing.type_checks import check_types_and_set_values
 class ExternalIdentifierType(Enum):
     CPE22 = auto()
     CPE23 = auto()
+    CVE = auto()
     EMAIL = auto()
     GITOID = auto()
     PURL = auto()
+    SECURITY_OTHER = auto()
     SWHID = auto()
     SWID = auto()
     URL_SCHEME = auto()
