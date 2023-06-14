@@ -77,7 +77,7 @@ class Dataset(Package):
         description: Optional[str] = None,
         comment: Optional[str] = None,
         verified_using: List[IntegrityMethod] = None,
-        external_references: List[ExternalReference] = None,
+        external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: Optional[str] = None,
         supplied_by: List[str] = None,
@@ -107,7 +107,7 @@ class Dataset(Package):
         dataset_availability: Optional[DatasetAvailabilityType] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
-        external_references = [] if external_references is None else external_references
+        external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
         originated_by = [] if originated_by is None else originated_by
         additional_purpose = [] if additional_purpose is None else additional_purpose

@@ -43,7 +43,7 @@ class SsvcVulnAssessmentRelationship(VulnAssessmentRelationship):
         description: Optional[str] = None,
         comment: Optional[str] = None,
         verified_using: List[IntegrityMethod] = None,
-        external_references: List[ExternalReference] = None,
+        external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: Optional[str] = None,
         completeness: Optional[RelationshipCompleteness] = None,
@@ -56,6 +56,6 @@ class SsvcVulnAssessmentRelationship(VulnAssessmentRelationship):
         withdrawn_time: Optional[datetime] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
-        external_references = [] if external_references is None else external_references
+        external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
         check_types_and_set_values(self, locals())

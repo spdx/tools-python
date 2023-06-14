@@ -19,7 +19,7 @@ class Element(ABC):
     description: Optional[str] = None
     comment: Optional[str] = None
     verified_using: List[IntegrityMethod] = field(default_factory=list)
-    external_references: List[ExternalReference] = field(default_factory=list)
+    external_reference: List[ExternalReference] = field(default_factory=list)
     external_identifier: List[ExternalIdentifier] = field(default_factory=list)
     extension: Optional[str] = None  # placeholder for extension
 

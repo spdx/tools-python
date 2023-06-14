@@ -75,8 +75,8 @@ def bump_package(
         "and missing definition of license profile",
     )
 
-    external_references = []
-    external_identifiers = []
+    external_reference = []
+    external_identifier = []
     purl_refs = [
         external_ref for external_ref in spdx2_package.external_references if external_ref.reference_type == "purl"
     ]
@@ -89,9 +89,9 @@ def bump_package(
             continue
         id_or_ref = bump_external_package_ref(spdx2_external_ref)
         if isinstance(id_or_ref, ExternalReference):
-            external_references.append(id_or_ref)
+            external_reference.append(id_or_ref)
         elif isinstance(id_or_ref, ExternalIdentifier):
-            external_identifiers.append(id_or_ref)
+            external_identifier.append(id_or_ref)
 
     package_purpose = SoftwarePurpose[spdx2_package.primary_package_purpose.name]
 
@@ -104,8 +104,8 @@ def bump_package(
             description=spdx2_package.description,
             comment=spdx2_package.comment,
             verified_using=integrity_methods,
-            external_references=external_references,
-            external_identifier=external_identifiers,
+            external_reference=external_reference,
+            external_identifier=external_identifier,
             originated_by=originated_by_spdx_id,
             supplied_by=supplied_by_spdx_id,
             built_time=spdx2_package.built_date,
