@@ -51,7 +51,7 @@ def test_bump_package(originator, expected_originator, supplier, expected_suppli
     assert isinstance(package, Package)
     assert package.spdx_id == expected_new_package_id
     assert package.package_version == spdx2_package.version
-    assert package.external_references == [
+    assert package.external_reference == [
         ExternalReference(ExternalReferenceType.SECURITY_ADVISORY, ["advisory_locator"], None, "advisory_comment")
     ]
     assert package.external_identifier == [
@@ -90,7 +90,7 @@ def test_bump_of_single_purl_without_comment():
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url == "purl_locator"
-    assert package.external_references == []
+    assert package.external_reference == []
     assert package.external_identifier == []
 
 
@@ -108,7 +108,7 @@ def test_bump_of_single_purl_with_comment():
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
-    assert package.external_references == []
+    assert package.external_reference == []
     assert package.external_identifier == [
         ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "purl_comment")
     ]
@@ -129,7 +129,7 @@ def test_bump_of_multiple_purls():
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
-    assert package.external_references == []
+    assert package.external_reference == []
     TestCase().assertCountEqual(
         package.external_identifier,
         [

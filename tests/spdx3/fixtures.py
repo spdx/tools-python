@@ -211,7 +211,7 @@ ELEMENT_DICT = {
     "description": "elementDescription",
     "comment": "elementComment",
     "verified_using": [hash_fixture()],
-    "external_references": [external_reference_fixture()],
+    "external_reference": [external_reference_fixture()],
     "external_identifier": [external_identifier_fixture()],
     "extension": "extensionPlaceholder",
 }
