@@ -50,7 +50,7 @@ additional installation of optional dependencies
 * Serialize to JSON-LD
 
 See [Quickstart to SPDX 3.0](#quickstart-to-spdx-30) below.  
-The implementation is based on the descriptive markdown files in the repository https://github.com/spdx/spdx-3-model (latest commit: 58b356c7fb046d90f8e0ddd49460246912a949c2).
+The implementation is based on the descriptive markdown files in the repository https://github.com/spdx/spdx-3-model (latest commit: 96d516e846c4911bf28c690fe2d925aa854991b4).
 
 
 # Installation
