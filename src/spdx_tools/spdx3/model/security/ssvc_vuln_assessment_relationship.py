@@ -28,7 +28,7 @@ class SsvcDecisionType(Enum):
 
 @dataclass_with_properties
 class SsvcVulnAssessmentRelationship(VulnAssessmentRelationship):
-    decision: SsvcDecisionType = None
+    decision_type: SsvcDecisionType = None
 
     def __init__(
         self,
@@ -36,7 +36,7 @@ class SsvcVulnAssessmentRelationship(VulnAssessmentRelationship):
         from_element: str,
         relationship_type: RelationshipType,
         to: List[str],
-        decision: SsvcDecisionType,
+        decision_type: SsvcDecisionType,
         creation_info: Optional[CreationInfo] = None,
         name: Optional[str] = None,
         summary: Optional[str] = None,
