@@ -380,7 +380,8 @@ ARTIFACT_DICT = {
 
 SOFTWARE_ARTIFACT_DICT = {
     "content_identifier": "https://spdx.test/tools-python/contentIdentifier",
-    "purpose": [SoftwarePurpose.OTHER],
+    "primary_purpose": SoftwarePurpose.SOURCE,
+    "additional_purpose": [SoftwarePurpose.OTHER],
     "concluded_license": listed_license_fixture(),
     "declared_license": listed_license_fixture(),
     "copyright_text": "copyrightText",
