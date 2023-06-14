@@ -51,7 +51,7 @@ class Dataset(Package):
         name: str,
         originated_by: List[str],
         download_location: str,
-        purpose: List[SoftwarePurpose],
+        primary_purpose: SoftwarePurpose,
         built_time: datetime,
         release_time: datetime,
         dataset_type: str,
@@ -67,6 +67,7 @@ class Dataset(Package):
         valid_until_time: Optional[datetime] = None,
         standard: List[str] = None,
         content_identifier: Optional[str] = None,
+        additional_purpose: List[SoftwarePurpose] = None,
         concluded_license: Optional[LicenseField] = None,
         declared_license: Optional[LicenseField] = None,
         copyright_text: Optional[str] = None,
@@ -92,6 +93,7 @@ class Dataset(Package):
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
         originated_by = [] if originated_by is None else originated_by
+        additional_purpose = [] if additional_purpose is None else additional_purpose
         supplied_by = [] if supplied_by is None else supplied_by
         standard = [] if standard is None else standard
         data_preprocessing = [] if data_preprocessing is None else data_preprocessing

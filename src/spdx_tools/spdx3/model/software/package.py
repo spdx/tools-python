@@ -40,7 +40,8 @@ class Package(SoftwareArtifact):
         valid_until_time: Optional[datetime] = None,
         standard: List[str] = None,
         content_identifier: Optional[str] = None,
-        purpose: List[SoftwarePurpose] = None,
+        primary_purpose: Optional[SoftwarePurpose] = None,
+        additional_purpose: List[SoftwarePurpose] = None,
         concluded_license: Optional[LicenseField] = None,
         declared_license: Optional[LicenseField] = None,
         copyright_text: Optional[str] = None,
@@ -57,5 +58,5 @@ class Package(SoftwareArtifact):
         originated_by = [] if originated_by is None else originated_by
         supplied_by = [] if supplied_by is None else supplied_by
         standard = [] if standard is None else standard
-        purpose = [] if purpose is None else purpose
+        additional_purpose = [] if additional_purpose is None else additional_purpose
         check_types_and_set_values(self, locals())

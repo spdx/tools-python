@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from abc import abstractmethod
+from dataclasses import field
 
 from beartype.typing import List, Optional
 
@@ -14,7 +15,8 @@ from spdx_tools.spdx3.model.software import SoftwarePurpose
 @dataclass_with_properties
 class SoftwareArtifact(Artifact):
     content_identifier: Optional[str] = None
-    purpose: List[SoftwarePurpose] = None
+    primary_purpose: Optional[SoftwarePurpose] = None
+    additional_purpose: List[SoftwarePurpose] = field(default_factory=list)
     concluded_license: Optional[LicenseField] = None
     declared_license: Optional[LicenseField] = None
     copyright_text: Optional[str] = None

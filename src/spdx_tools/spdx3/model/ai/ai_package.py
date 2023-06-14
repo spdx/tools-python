@@ -46,7 +46,7 @@ class AIPackage(Package):
         supplied_by: List[str],
         download_location: str,
         package_version: str,
-        purpose: List[SoftwarePurpose],
+        primary_purpose: SoftwarePurpose,
         release_time: datetime,
         creation_info: Optional[CreationInfo] = None,
         summary: Optional[str] = None,
@@ -61,6 +61,7 @@ class AIPackage(Package):
         valid_until_time: Optional[datetime] = None,
         standard: List[str] = None,
         content_identifier: Optional[str] = None,
+        additional_purpose: List[SoftwarePurpose] = None,
         concluded_license: Optional[LicenseField] = None,
         declared_license: Optional[LicenseField] = None,
         copyright_text: Optional[str] = None,
@@ -88,6 +89,7 @@ class AIPackage(Package):
         external_references = [] if external_references is None else external_references
         external_identifier = [] if external_identifier is None else external_identifier
         originated_by = [] if originated_by is None else originated_by
+        additional_purpose = [] if additional_purpose is None else additional_purpose
         standard = [] if standard is None else standard
         standard_compliance = [] if standard_compliance is None else standard_compliance
         type_of_model = [] if type_of_model is None else type_of_model

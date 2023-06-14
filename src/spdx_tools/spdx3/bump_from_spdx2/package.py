@@ -93,9 +93,7 @@ def bump_package(
         elif isinstance(id_or_ref, ExternalIdentifier):
             external_identifiers.append(id_or_ref)
 
-    package_purpose = (
-        [SoftwarePurpose[spdx2_package.primary_package_purpose.name]] if spdx2_package.primary_package_purpose else []
-    )
+    package_purpose = SoftwarePurpose[spdx2_package.primary_package_purpose.name]
 
     payload.add_element(
         Package(
@@ -113,7 +111,7 @@ def bump_package(
             built_time=spdx2_package.built_date,
             release_time=spdx2_package.release_date,
             valid_until_time=spdx2_package.valid_until_date,
-            purpose=package_purpose,
+            primary_purpose=package_purpose,
             package_version=spdx2_package.version,
             download_location=download_location,
             package_url=package_url,
