@@ -14,6 +14,23 @@ from spdx_tools.spdx3.model.licensing import LicenseField
 from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 
 
+class DatasetType(Enum):
+    STRUCTURED = auto()
+    NUMERIC = auto()
+    TEXT = auto()
+    CATEGORICAL = auto()
+    GRAPH = auto()
+    TIMESERIES = auto()
+    TIMESTAMP = auto()
+    SENSOR = auto()
+    IMAGE = auto()
+    SYNTACTIC = auto()
+    AUDIO = auto()
+    VIDEO = auto()
+    OTHER = auto()
+    NO_ASSERTION = auto()
+
+
 class ConfidentialityLevelType(Enum):
     RED = auto()
     AMBER = auto()
@@ -31,7 +48,7 @@ class DatasetAvailabilityType(Enum):
 
 @dataclass_with_properties
 class Dataset(Package):
-    dataset_type: str = None
+    dataset_type: List[DatasetType] = None
     data_collection_process: Optional[str] = None
     intended_use: Optional[str] = None
     dataset_size: Optional[int] = None
@@ -54,7 +71,7 @@ class Dataset(Package):
         primary_purpose: SoftwarePurpose,
         built_time: datetime,
         release_time: datetime,
-        dataset_type: str,
+        dataset_type: List[DatasetType],
         creation_info: Optional[CreationInfo] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
