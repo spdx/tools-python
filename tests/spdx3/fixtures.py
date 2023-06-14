@@ -314,7 +314,7 @@ EPSS_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
 }
 
 SSVC_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
-    "decision": SsvcDecisionType.ACT,
+    "decision_type": SsvcDecisionType.ACT,
     "relationship_type": RelationshipType.HAS_SSVC_ASSESSMENT_FOR,
 }
 
@@ -337,7 +337,7 @@ VEX_AFFECTED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
 }
 
 VEX_NOT_AFFECTED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
-    "justification": VexJustificationType.COMPONENT_NOT_PRESENT,
+    "justification_type": VexJustificationType.COMPONENT_NOT_PRESENT,
     "impact_statement": "Not using this vulnerable part of this library.",
     "impact_statement_time": datetime(2015, 10, 15),
     "relationship_type": RelationshipType.DOES_NOT_AFFECT,

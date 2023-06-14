@@ -29,7 +29,7 @@ class VexJustificationType(Enum):
 
 @dataclass_with_properties
 class VexNotAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
-    justification: Optional[VexJustificationType] = None
+    justification_type: Optional[VexJustificationType] = None
     impact_statement: Optional[str] = None
     impact_statement_time: Optional[datetime] = None
 
@@ -58,7 +58,7 @@ class VexNotAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         withdrawn_time: Optional[datetime] = None,
         vex_version: Optional[str] = None,
         status_notes: Optional[str] = None,
-        justification: Optional[VexJustificationType] = None,
+        justification_type: Optional[VexJustificationType] = None,
         impact_statement: Optional[str] = None,
         impact_statement_time: Optional[datetime] = None,
     ):
