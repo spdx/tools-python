@@ -36,7 +36,6 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         spec_version=Version("3.0.0"),
         created=spdx2_creation_info.created,
         created_by=[],
-        created_using=[],
         profile=[ProfileIdentifier.CORE, ProfileIdentifier.SOFTWARE, ProfileIdentifier.LICENSING],
         data_license="https://spdx.org/licenses/" + spdx2_creation_info.data_license,
     )

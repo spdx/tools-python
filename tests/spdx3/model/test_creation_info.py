@@ -32,7 +32,7 @@ def test_correct_initialization():
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        CreationInfo("2.3", "2012-01-01", [], [], "core", 3, [])
+        CreationInfo("2.3", "2012-01-01", [], "core", 3, [], [])
 
     assert len(err.value.args[0]) == 5
     for error in err.value.args[0]:
@@ -44,6 +44,6 @@ def test_incomplete_initialization():
         CreationInfo("2.3")
 
     assert (
-        "__init__() missing 4 required positional arguments: 'created', 'created_by', 'created_using', and 'profile'"
+        "__init__() missing 3 required positional arguments: 'created', 'created_by', and 'profile'"
         in err.value.args[0]
     )
