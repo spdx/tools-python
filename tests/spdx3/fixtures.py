@@ -101,9 +101,9 @@ def creation_info_fixture(
         spec_version=spec_version,
         created=created,
         created_by=created_by,
-        created_using=created_using,
         profile=profile,
         data_license=data_license,
+        created_using=created_using,
         comment=comment,
     )
 
