@@ -8,12 +8,9 @@
 #  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
-from beartype.typing import List, TextIO
+from beartype.typing import TextIO
 
-from spdx_tools.spdx.document_utils import create_document_without_duplicates
 from spdx_tools.spdx.model import Document, Relationship, RelationshipType
-from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
-from spdx_tools.spdx.validation.validation_message import ValidationMessage
 from spdx_tools.spdx.writer.tagvalue.annotation_writer import write_annotation
 from spdx_tools.spdx.writer.tagvalue.creation_info_writer import write_creation_info
 from spdx_tools.spdx.writer.tagvalue.extracted_licensing_info_writer import write_extracted_licensing_info
@@ -28,16 +25,11 @@ from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import (
     write_optional_heading,
     write_separator,
 )
+from spdx_tools.spdx.writer.write_utils import validate_and_deduplicate
 
 
 def write_document_to_stream(document: Document, stream: TextIO, validate: bool = True, drop_duplicates: bool = True):
-    if validate:
-        validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
-        if validation_messages:
-            raise ValueError(f"Document is not valid. The following errors were detected: {validation_messages}")
-    if drop_duplicates:
-        document = create_document_without_duplicates(document)
-
+    document = validate_and_deduplicate(document, validate, drop_duplicates)
     write_document(document, stream)
 
 
