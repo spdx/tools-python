@@ -29,13 +29,9 @@ jobs:
           python -m pip install --upgrade ./dist/*.whl
           python -m pip install pytest
           python -m pip install pyshacl
+          python -m pip install networkx
         shell: bash
       - name: Run tests
         run: pytest
       - name: Run CLI
         run: pyspdxtools -i ./tests/spdx/data/SPDXJSONExample-v2.3.spdx.json
-
-      - name: Install optional dependencies
-        run: python -m pip install networkx
-      - name: Run tests for graph generation
-        run: pytest tests/spdx/test_graph_generation.py
