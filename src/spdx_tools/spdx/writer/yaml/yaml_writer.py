@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import yaml
-from beartype.typing import List
+from beartype.typing import List, IO
 
 from spdx_tools.spdx.document_utils import create_document_without_duplicates
 from spdx_tools.spdx.jsonschema.document_converter import DocumentConverter
@@ -11,9 +11,9 @@ from spdx_tools.spdx.validation.document_validator import validate_full_spdx_doc
 from spdx_tools.spdx.validation.validation_message import ValidationMessage
 
 
-def write_document_to_file(
+def write_document_to_stream(
     document: Document,
-    file_name: str,
+    stream: IO[str],
     validate: bool = True,
     converter: DocumentConverter = None,
     drop_duplicates: bool = True,
@@ -32,5 +32,15 @@ def write_document_to_file(
     if converter is None:
         converter = DocumentConverter()
     document_dict = converter.convert(document)
+    yaml.safe_dump(document_dict, stream, indent=2)
+
+
+def write_document_to_file(
+    document: Document,
+    file_name: str,
+    validate: bool = True,
+    converter: DocumentConverter = None,
+    drop_duplicates: bool = True,
+):
     with open(file_name, "w") as out:
-        yaml.safe_dump(document_dict, out, indent=2)
+        write_document_to_stream(document, out, validate, converter, drop_duplicates)

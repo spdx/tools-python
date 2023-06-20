@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from beartype.typing import Dict, List
+from beartype.typing import Dict, List, IO
 from rdflib import DOAP, Graph
 from rdflib.compare import to_isomorphic
 
@@ -19,7 +19,7 @@ from spdx_tools.spdx.writer.rdf.relationship_writer import add_relationship_to_g
 from spdx_tools.spdx.writer.rdf.snippet_writer import add_snippet_to_graph
 
 
-def write_document_to_file(document: Document, file_name: str, validate: bool, drop_duplicates: bool = True):
+def write_document_to_stream(document: Document, stream: IO[bytes], validate: bool, drop_duplicates: bool = True):
     if validate:
         validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
         if validation_messages:
@@ -55,4 +55,9 @@ def write_document_to_file(document: Document, file_name: str, validate: bool, d
     graph.bind("spdx", SPDX_NAMESPACE)
     graph.bind("doap", DOAP)
     graph.bind("ptr", POINTER_NAMESPACE)
-    graph.serialize(file_name, "pretty-xml", encoding="UTF-8", max_depth=100)
+    graph.serialize(stream, "pretty-xml", encoding="UTF-8", max_depth=100)
+
+
+def write_document_to_file(document: Document, file_name: str, validate: bool, drop_duplicates: bool = True):
+    with open(file_name, "wb") as out:
+        write_document_to_stream(document, out, validate, drop_duplicates)

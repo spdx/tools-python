@@ -30,7 +30,7 @@ from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import (
 )
 
 
-def write_document_to_file(document: Document, file_name: str, validate: bool = True, drop_duplicates: bool = True):
+def write_document_to_stream(document: Document, stream: TextIO, validate: bool = True, drop_duplicates: bool = True):
     if validate:
         validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
         if validation_messages:
@@ -38,8 +38,12 @@ def write_document_to_file(document: Document, file_name: str, validate: bool = 
     if drop_duplicates:
         document = create_document_without_duplicates(document)
 
+    write_document(document, stream)
+
+
+def write_document_to_file(document: Document, file_name: str, validate: bool = True, drop_duplicates: bool = True):
     with open(file_name, "w") as out:
-        write_document(document, out)
+        write_document_to_stream(document, out, validate, drop_duplicates)
 
 
 def write_document(document: Document, text_output: TextIO):
