@@ -1,0 +1,40 @@
+name: Prepare release
+
+on:
+  push:
+    tags: [ 'v*.*.*']
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.7'
+      - name: Set up dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade setuptools wheel setuptools_scm build twine
+          python -m pip install -e .
+        shell: bash
+      - name: Build wheel
+        run: python -m build
+      - name: Verify build
+        run: twine check dist/*
+      - name: Create build archive
+        uses: a7ul/tar-action@v1.1.0
+        with:
+          command: c
+          files: dist
+          outPath: spdx_tools_dist.tar.gz
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: spdx_tools_dist.tar.gz
+          generate_release_notes: true
+          draft: true
