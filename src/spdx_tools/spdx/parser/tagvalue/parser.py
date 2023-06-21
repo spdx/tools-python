@@ -12,8 +12,8 @@
 # limitations under the License.
 
 import re
-from typing import Any, Dict, List
 
+from beartype.typing import Any, Dict, List
 from license_expression import get_spdx_licensing
 from ply import yacc
 from ply.yacc import LRParser

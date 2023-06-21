@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict, Optional, Tuple
-
+from beartype.typing import Dict, Optional, Tuple
 from rdflib import RDF, RDFS, BNode, Graph, Literal, URIRef
 
 from spdx_tools.spdx.model import Snippet

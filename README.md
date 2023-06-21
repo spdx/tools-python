@@ -44,15 +44,21 @@ This library implements SPDX parsers, convertors, validators and handlers in Pyt
 * visualize the structure of a SPDX document by creating an `AGraph`. Note: This is an optional feature and requires 
 additional installation of optional dependencies
 
-# Planned features
+## Experimental support for SPDX 3.0
+* Create v3.0 elements and payloads
+* Convert v2.2/v2.3 documents to v3.0
+* Serialize to JSON-LD
 
-* up-to-date support of SPDX v3.0 as soon as it is released
+See [Quickstart to SPDX 3.0](#quickstart-to-spdx-30) below.  
+The implementation is based on the descriptive markdown files in the repository https://github.com/spdx/spdx-3-model (latest commit: a5372a3c145dbdfc1381fc1f791c68889aafc7ff).
+
 
 # Installation
 
 As always you should work in a virtualenv (venv). You can install a local clone
-of this repo with `yourenv/bin/pip install .` or install it from PyPI with
-`yourenv/bin/pip install spdx-tools`. Note that on Windows it would be `Scripts`
+of this repo with `yourenv/bin/pip install .` or install it from PyPI 
+(check for the [newest release](https://pypi.org/project/spdx-tools/#history) and install it like
+`yourenv/bin/pip install spdx-tools==0.8.0a2`). Note that on Windows it would be `Scripts`
 instead of `bin`.
 
 # How to use
@@ -163,6 +169,20 @@ if not validation_messages:
     write_file(document, "new_spdx_document.rdf", validate=False)
 ```
 
+# Quickstart to SPDX 3.0
+In contrast to SPDX v2, all elements are now subclasses of the central `Element` class.
+This includes packages, files, snippets, relationships, annotations, but also SBOMs, SpdxDocuments, and more.  
+For serialization purposes, all Elements that are to be serialized into the same file are collected in a `Payload`.
+This is just a dictionary that maps each Element's SpdxId to itself.
+Use the `write_payload()` functions to serialize a payload.
+There currently are two options:  
+* The `spdx_tools.spdx3.writer.json_ld.json_ld_writer` module generates a JSON-LD file of the payload.
+* The `spdx_tools.spdx3.writer.console.payload_writer` module prints a debug output to console. Note that this is not an official part of the SPDX specification and will probably be dropped as soon as a better standard emerges.
+
+You can convert an SPDX v2 document to v3 via the `spdx_tools.spdx3.bump_from_spdx2.spdx_document` module.
+The `bump_spdx_document()` function will return a payload containing an `SpdxDocument` Element and one Element for each package, file, snippet, relationship, or annotation contained in the v2 document.
+
+
 # Dependencies
 
 * PyYAML: https://pypi.org/project/PyYAML/ for handling YAML.
@@ -170,7 +190,7 @@ if not validation_messages:
 * rdflib: https://pypi.python.org/pypi/rdflib/ for handling RDF.
 * ply: https://pypi.org/project/ply/ for handling tag-value.
 * click: https://pypi.org/project/click/ for creating the CLI interface.
-* typeguard: https://pypi.org/project/typeguard/ for type checking.
+* beartype: https://pypi.org/project/beartype/ for type checking.
 * uritools: https://pypi.org/project/uritools/ for validation of URIs.
 * license-expression: https://pypi.org/project/license-expression/ for handling SPDX license expressions.
 

@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Any, Dict
-
+from beartype.typing import Any, Dict
 from rdflib import RDF, Graph
 
 from spdx_tools.spdx.model import Document, RelationshipType

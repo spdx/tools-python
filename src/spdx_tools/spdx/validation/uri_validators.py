@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import re
-from typing import List
 
+from beartype.typing import List
 from uritools import isabsuri, urisplit
 
 url_pattern = (

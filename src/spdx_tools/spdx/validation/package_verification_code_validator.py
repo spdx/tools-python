@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import re
-from typing import List
+
+from beartype.typing import List
 
 from spdx_tools.spdx.model import PackageVerificationCode
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage

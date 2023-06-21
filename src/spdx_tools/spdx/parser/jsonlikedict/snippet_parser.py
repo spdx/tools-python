@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from enum import Enum, auto
-from typing import Dict, List, Optional, Tuple, Union
 
+from beartype.typing import Dict, List, Optional, Tuple, Union
 from license_expression import LicenseExpression
 
 from spdx_tools.spdx.model import Snippet, SpdxNoAssertion, SpdxNone

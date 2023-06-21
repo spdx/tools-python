@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Any, Type
+from beartype.typing import Any, Type
 
 from spdx_tools.spdx.document_utils import get_contained_spdx_element_ids
 from spdx_tools.spdx.jsonschema.annotation_converter import AnnotationConverter

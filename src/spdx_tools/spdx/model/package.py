@@ -4,8 +4,8 @@
 from dataclasses import field
 from datetime import datetime
 from enum import Enum, auto
-from typing import Dict, List, Optional, Union
 
+from beartype.typing import Dict, List, Optional, Union
 from license_expression import LicenseExpression
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties

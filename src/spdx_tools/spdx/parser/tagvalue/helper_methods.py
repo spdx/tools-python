@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import re
-from typing import Any, Callable, Dict, Optional
 
+from beartype.typing import Any, Callable, Dict, Optional
 from ply.yacc import YaccProduction
 
 from spdx_tools.spdx.casing_tools import camel_case_to_snake_case

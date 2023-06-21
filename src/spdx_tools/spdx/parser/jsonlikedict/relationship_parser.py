@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict, List, Optional
+from beartype.typing import Dict, List, Optional
 
 from spdx_tools.common.typing.constructor_type_errors import ConstructorTypeErrors
 from spdx_tools.spdx.model import Relationship, RelationshipType

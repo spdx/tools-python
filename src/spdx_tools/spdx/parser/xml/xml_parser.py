@@ -1,9 +1,8 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Any, Dict
-
 import xmltodict
+from beartype.typing import Any, Dict
 
 from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.parser.error import SPDXParsingError

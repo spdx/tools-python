@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 
 import re
-from typing import Dict, List
+
+from beartype.typing import Dict, List
 
 from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage

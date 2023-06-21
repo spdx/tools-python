@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from typing import List, Optional
+from beartype.typing import List, Optional
 
 from spdx_tools.spdx.model import Document, Package, Relationship, RelationshipType
 from spdx_tools.spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target

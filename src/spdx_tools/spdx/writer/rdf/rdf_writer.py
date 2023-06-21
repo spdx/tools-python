@@ -1,16 +1,12 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Dict, List
-
+from beartype.typing import IO, Dict
 from rdflib import DOAP, Graph
 from rdflib.compare import to_isomorphic
 
-from spdx_tools.spdx.document_utils import create_document_without_duplicates
 from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.rdfschema.namespace import POINTER_NAMESPACE, SPDX_NAMESPACE
-from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
-from spdx_tools.spdx.validation.validation_message import ValidationMessage
 from spdx_tools.spdx.writer.rdf.annotation_writer import add_annotation_to_graph
 from spdx_tools.spdx.writer.rdf.creation_info_writer import add_creation_info_to_graph
 from spdx_tools.spdx.writer.rdf.extracted_licensing_info_writer import add_extracted_licensing_info_to_graph
@@ -18,15 +14,11 @@ from spdx_tools.spdx.writer.rdf.file_writer import add_file_to_graph
 from spdx_tools.spdx.writer.rdf.package_writer import add_package_to_graph
 from spdx_tools.spdx.writer.rdf.relationship_writer import add_relationship_to_graph
 from spdx_tools.spdx.writer.rdf.snippet_writer import add_snippet_to_graph
+from spdx_tools.spdx.writer.write_utils import validate_and_deduplicate
 
 
-def write_document_to_file(document: Document, file_name: str, validate: bool, drop_duplicates: bool = True):
-    if validate:
-        validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
-        if validation_messages:
-            raise ValueError(f"Document is not valid. The following errors were detected: {validation_messages}")
-    if drop_duplicates:
-        document = create_document_without_duplicates(document)
+def write_document_to_stream(document: Document, stream: IO[bytes], validate: bool, drop_duplicates: bool = True):
+    document = validate_and_deduplicate(document, validate, drop_duplicates)
     graph = Graph()
     doc_namespace = document.creation_info.document_namespace
     external_doc_ref_to_namespace: Dict[str, str] = {
@@ -56,4 +48,9 @@ def write_document_to_file(document: Document, file_name: str, validate: bool, d
     graph.bind("spdx", SPDX_NAMESPACE)
     graph.bind("doap", DOAP)
     graph.bind("ptr", POINTER_NAMESPACE)
-    graph.serialize(file_name, "pretty-xml", encoding="UTF-8", max_depth=100)
+    graph.serialize(stream, "pretty-xml", encoding="UTF-8", max_depth=100)
+
+
+def write_document_to_file(document: Document, file_name: str, validate: bool, drop_duplicates: bool = True):
+    with open(file_name, "wb") as out:
+        write_document_to_stream(document, out, validate, drop_duplicates)

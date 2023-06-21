@@ -24,17 +24,18 @@ classifiers = [
 ]
 urls = { Homepage = "https://github.com/spdx/tools-python" }
 requires-python = ">=3.7"
-dependencies = ["click", "pyyaml", "xmltodict", "rdflib", "typeguard==4.0.0", "uritools", "license_expression", "ply"]
+dependencies = ["click", "pyyaml", "xmltodict", "rdflib", "beartype", "uritools", "license_expression", "ply", "semantic_version"]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-test = ["pytest"]
+test = ["pytest", "pyshacl"]
 code_style = ["isort", "black", "flake8"]
 graph_generation = ["pygraphviz", "networkx"]
 development = ["black", "flake8", "isort", "networkx", "pytest"]
 
 [project.scripts]
 pyspdxtools = "spdx_tools.spdx.clitools.pyspdxtools:main"
+pyspdxtools3 = "spdx_tools.spdx3.clitools.pyspdxtools3:main"
 
 [tool.setuptools]
 zip-safe = false  # because of the uses of __file__: https://github.com/spdx/tools-python/issues/257

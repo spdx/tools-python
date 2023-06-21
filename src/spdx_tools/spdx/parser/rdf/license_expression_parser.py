@@ -1,8 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Optional, Union
-
+from beartype.typing import Optional, Union
 from license_expression import LicenseExpression, get_spdx_licensing
 from rdflib import RDF, Graph
 from rdflib.term import BNode, Identifier, Node, URIRef
