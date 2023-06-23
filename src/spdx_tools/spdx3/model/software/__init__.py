@@ -1,3 +1,6 @@
+# SPDX-FileCopyrightText: 2023 spdx contributors
+#
+# SPDX-License-Identifier: Apache-2.0
 from spdx_tools.spdx3.model.software.software_purpose import SoftwarePurpose
 from spdx_tools.spdx3.model.software.file import File
 from spdx_tools.spdx3.model.software.package import Package
