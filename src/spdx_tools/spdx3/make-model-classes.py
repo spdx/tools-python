@@ -7,7 +7,7 @@ from urllib.request import urlopen, Request
 from urllib.parse import urlparse
 
 SPDX_MODEL = 'https://api.github.com/repos/spdx/spdx-3-model/contents/model'
-TOOLS_MODEL = 'tools-generated'
+TOOLS_MODEL = 'model-generated'
 
 AUTH = {'Authorization': f'token {os.environ["GitHubToken"]}'}  # Prevent rate limiting
 
