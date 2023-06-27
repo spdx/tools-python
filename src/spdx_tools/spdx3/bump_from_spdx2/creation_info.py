@@ -19,11 +19,15 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
 
     print_missing_conversion("creation_info.document_namespace", 0, "https://github.com/spdx/spdx-3-model/issues/87")
 
-    namespaces, imports = zip(
-        *[
-            bump_external_document_ref(external_document_ref)
-            for external_document_ref in spdx2_creation_info.external_document_refs
-        ]
+    namespaces, imports = (
+        zip(
+            *[
+                bump_external_document_ref(external_document_ref)
+                for external_document_ref in spdx2_creation_info.external_document_refs
+            ]
+        )
+        if spdx2_creation_info.external_document_refs
+        else ([], [])
     )
     namespaces = list(namespaces)
     imports = list(imports)
