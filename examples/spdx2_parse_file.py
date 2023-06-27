@@ -12,10 +12,9 @@ from spdx_tools.spdx.parser.parse_anything import parse_file
 
 # Provide a path to the input file
 input_path = path.join(path.dirname(__file__), "..", "tests", "spdx", "data", "SPDXLite.spdx")
-document: Document
 try:
     # Try to parse the input file. If successful, returns a Document, otherwise raises an SPDXParsingError
-    document = parse_file(input_path)
+    document: Document = parse_file(input_path)
 except SPDXParsingError:
     logging.exception("Failed to parse spdx file")
 
