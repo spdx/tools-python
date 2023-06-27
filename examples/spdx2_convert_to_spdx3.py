@@ -18,4 +18,4 @@ spdx2_document = parse_file(input_path)
 # Convert original document to an SPDX3 payload
 spdx3_payload = bump_spdx_document(spdx2_document)
 # Write SPDX3 payload in json-ld format
-write_payload(spdx3_payload, "spdx2_to_3.json")
+write_payload(spdx3_payload, "spdx2_to_3")
