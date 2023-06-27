@@ -11,7 +11,7 @@ import pytest
 def cleanup_output_files():
     yield
 
-    files_to_delete = ["spdx2_to_3.jsonld", "my_spdx_document.spdx.json"]
+    files_to_delete = ["spdx2_to_3.jsonld", "my_spdx_document.spdx.json", "converted_format.xml"]
     for file in files_to_delete:
         output_file = os.path.join(os.path.dirname(__file__), file)
         if os.path.exists(output_file):
@@ -40,4 +40,12 @@ def test_spdx2_document_from_scratch():
     run_example("spdx2_document_from_scratch.py")
 
     output_file = os.path.join(os.path.dirname(__file__), "my_spdx_document.spdx.json")
+    assert os.path.exists(output_file)
+
+
+@pytest.mark.usefixtures('cleanup_output_files')
+def test_spdx2_convert_format():
+    run_example("spdx2_convert_format.py")
+
+    output_file = os.path.join(os.path.dirname(__file__), "converted_format.xml")
     assert os.path.exists(output_file)
