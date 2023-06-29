@@ -1,0 +1,47 @@
+# SPDX-FileCopyrightText: 2023 spdx contributors
+#
+# SPDX-License-Identifier: Apache-2.0
+name: Generate API docs
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          sudo apt-get install graphviz-dev
+          pip install -e ".[test,graph_generation]"
+          pip install pdoc
+      - name: Generate docs
+        run: pdoc spdx_tools -o docs/
+      - name: Upload docs as artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          path: docs/
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        name: Deploy docs to GitHub pages
+        uses: actions/deploy-pages@v2
