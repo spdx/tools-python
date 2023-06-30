@@ -7,21 +7,20 @@ CI status (Linux, macOS and Windows): [![Install and Test][1]][2]
 [2]: https://github.com/spdx/tools-python/actions/workflows/install_and_test.yml
 
 
-# Current state, please read!
+# Breaking changes v0.7 -> v0.8
 
-This repository was subject to a major refactoring recently to get ready for the upcoming SPDX v3.0 release.
-Therefore, we'd like to encourage you to post any and all issues you find at https://github.com/spdx/tools-python/issues.  
-If you are looking for the source code of the [current PyPI release](https://pypi.python.org/pypi/spdx-tools), check out
-the [v0.7 branch](https://github.com/spdx/tools-python/tree/version/v0.7).
-Note, though, that this will only receive bug fixes but no new features.
+Please be aware that the upcoming 0.8 release has undergone a significant refactoring in preparation for the upcoming
+SPDX v3.0 release, leading to breaking changes in the API.
+Please refer to the [migration guide](https://github.com/spdx/tools-python/wiki/How-to-migrate-from-0.7-to-0.8)
+to update your existing code.
 
-We encourage you to use the new, refactored version (on the main branch) if you
-- want to use the soon-to-be released SPDX v3.0 in the future
-- want to perform full validation of your SPDX documents against the v2.2 and v2.3 specification
-- want to use the RDF format of SPDX with all v2.3 features.
+We encourage new users to work with v0.8.0rc1 directly as the older v0.7 release is in maintenance mode.
 
-If you are planning to migrate from v0.7.x of these tools,
-please have a look at the [migration guide](https://github.com/spdx/tools-python/wiki/How-to-migrate-from-0.7-to-0.8).
+The main features of v0.8 are:
+- experimental support for the upcoming SPDX v3 specification (note, however, that support is neither complete nor 
+  stable at this point, as the spec is still evolving)
+- full validation of SPDX documents against the v2.2 and v2.3 specification
+- support for SPDX's RDF format with all v2.3 features.
 
 # Information
 
