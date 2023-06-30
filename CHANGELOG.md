@@ -1,5 +1,37 @@
 # Changelog
 
+## v0.8.0rc1 (2023-06-30)
+
+### New features and changes
+
+* major refactoring of the library
+  * new and improved data model
+  * type hints and type checks have been added to the model classes
+  * license expressions and SPDX license list are now handled by the `license-expression` package
+  * to update your existing code, refer to the [migration guide](https://github.com/spdx/tools-python/wiki/How-to-migrate-from-0.7-to-0.8)
+* experimental support for the upcoming SPDX v3 specification (note, however, that support is neither complete nor
+  stable at this point, as the spec is still evolving)
+* full validation of SPDX documents against the v2.2 and v2.3 specification
+* support for SPDX's RDF format with all v2.3 features
+* unified `pysdpxtools` CLI tool replaces separate `pyspdxtools_parser` and `pyspdxtools_convertor`
+
+### Contributors
+
+This release was made possible by the following contributors. Thank you very much!
+
+* Armin Tänzer @armintaenzertng
+* Gary O'Neall @goneall
+* Gaurav Mishra @GMishx
+* HarshvMahawar @HarshvMahawar
+* Holger Frydrych @fholger
+* Jeff Licquia @licquia
+* Kate Stewart @kestewart
+* Maximilian Huber @maxhbr
+* Meret Behrens @meretp
+* Nicolaus Weidner @nicoweidner
+* William Armiros @willarmiros
+
+
 ## v0.7.1 (2023-03-14)
 
 ### New features and changes
