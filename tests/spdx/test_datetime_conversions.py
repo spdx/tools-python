@@ -12,6 +12,10 @@ def test_datetime_to_iso_string():
     assert datetime_to_iso_string(datetime(2022, 12, 13, 1, 2, 3)) == "2022-12-13T01:02:03Z"
 
 
+def test_datetime_to_iso_string_with_microseconds():
+    assert datetime_to_iso_string(datetime(2022, 12, 13, 1, 2, 3, 666666)) == "2022-12-13T01:02:03Z"
+
+
 def test_datetime_from_str():
     date_str = "2010-03-04T05:45:11Z"
 

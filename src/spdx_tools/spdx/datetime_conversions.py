@@ -16,4 +16,7 @@ def datetime_to_iso_string(date: datetime) -> str:
     """
     Return an ISO-8601 representation of a datetime object.
     """
+    if date.microsecond != 0:
+        date = date.replace(microsecond=0)  # SPDX does not support microseconds
+
     return date.isoformat() + "Z"
