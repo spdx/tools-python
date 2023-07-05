@@ -57,7 +57,7 @@ def test_parse_annotation():
             "not match specified grammar rule. Line: 1', 'Error while parsing "
             "AnnotationDate: Token did not match specified grammar rule. Line: 2']",
         ),
-        ("Annotator: Person: ()", "Error while parsing Annotation: [['No name for Person provided: Person: ().']]"),
+        ("Annotator: Person: ()", "Error while parsing Annotation: [['No name for Actor provided: Person: ().']]"),
         (
             "AnnotationType: REVIEW",
             "Element Annotation is not the current element in scope, probably the "

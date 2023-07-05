@@ -21,7 +21,16 @@ from spdx_tools.spdx.parser.error import SPDXParsingError
             "organization@example.com",
         ),
         ("Organization: Example organization ( )", ActorType.ORGANIZATION, "Example organization", None),
+        ("Person: Example person ()", ActorType.PERSON, "Example person", None),
+        ("Person: Example person ", ActorType.PERSON, "Example person", None),
         ("Tool: Example tool ", ActorType.TOOL, "Example tool", None),
+        ("Tool: Example tool (email@mail.com)", ActorType.TOOL, "Example tool (email@mail.com)", None),
+        (
+            "Organization: (c) Chris Sainty (chris@sainty.com)",
+            ActorType.ORGANIZATION,
+            "(c) Chris Sainty",
+            "chris@sainty.com",
+        ),
     ],
 )
 def test_parse_actor(actor_string, expected_type, expected_name, expected_mail):
@@ -42,6 +51,8 @@ def test_parse_actor(actor_string, expected_type, expected_name, expected_mail):
             ["Actor Perso: Jane Doe (jane.doe@example.com) doesn't match any of person, organization or tool."],
         ),
         ("Toole Example Tool ()", ["Actor Toole Example Tool () doesn't match any of person, organization or tool."]),
+        ("Organization:", ["No name for Actor provided: Organization:."]),
+        ("Person: ( )", ["No name for Actor provided: Person: ( )."]),
     ],
 )
 def test_parse_invalid_actor(actor_string, expected_message):
