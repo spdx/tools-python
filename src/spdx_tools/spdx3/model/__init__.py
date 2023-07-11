@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from spdx_tools.spdx3.model.profile_identifier import ProfileIdentifier
+from spdx_tools.spdx3.model.profile_identifier import ProfileIdentifierType
 from spdx_tools.spdx3.model.creation_info import CreationInfo
 from spdx_tools.spdx3.model.integrity_method import IntegrityMethod
 from spdx_tools.spdx3.model.hash import Hash, HashAlgorithm

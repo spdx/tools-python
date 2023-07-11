@@ -4,7 +4,7 @@
 from enum import Enum, auto
 
 
-class ProfileIdentifier(Enum):
+class ProfileIdentifierType(Enum):
     CORE = auto()
     SOFTWARE = auto()
     LICENSING = auto()
