@@ -5,7 +5,14 @@ import hashlib
 
 from beartype.typing import List, Union
 
-from spdx_tools.spdx.model import ChecksumAlgorithm, ExternalDocumentRef, File, Package, Snippet
+from spdx_tools.spdx.model import (
+    ChecksumAlgorithm,
+    ExternalDocumentRef,
+    File,
+    Package,
+    PackageVerificationCode,
+    Snippet,
+)
 
 
 def get_full_element_spdx_id(
@@ -33,7 +40,7 @@ def get_full_element_spdx_id(
     return external_uri + "#" + local_id
 
 
-def calculate_package_verification_code(files: List[File]) -> str:
+def calculate_package_verification_code(files: List[File]) -> PackageVerificationCode:
     list_of_file_hashes = []
     for file in files:
         file_checksum_value = None
@@ -53,7 +60,8 @@ def calculate_package_verification_code(files: List[File]) -> str:
     list_of_file_hashes.sort()
     hasher = hashlib.new("sha1")
     hasher.update("".join(list_of_file_hashes).encode("utf-8"))
-    return hasher.hexdigest()
+    value = hasher.hexdigest()
+    return PackageVerificationCode(value)
 
 
 def calculate_file_checksum(file_name: str, hash_algorithm=ChecksumAlgorithm.SHA1) -> str:
