@@ -6,7 +6,7 @@
 # fmt: off
 # isort:skip_file
 
-from typing import Callable, Optional
+from beartype.typing import List, Optional, Dict, Callable
 from rdflib import Graph, Literal
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
@@ -14,7 +14,7 @@ from spdx_tools.spdx3.model import HashAlgorithm
 from . import expanded_license, core, dataset, licensing, ai, security, build, software
 
 
-_CONVERTER_FUNCTIONS: dict[str, Callable[[any, Graph], Identifier]] = {
+_CONVERTER_FUNCTIONS: Dict[str, Callable[[any, Graph], Identifier]] = {
     "ExpandedLicense/ConjunctiveLicenseSet": expanded_license.conjunctive_license_set_to_rdf,
     "ExpandedLicense/DisjunctiveLicenseSet": expanded_license.disjunctive_license_set_to_rdf,
     "ExpandedLicense/ExtendableLicense": expanded_license.extendable_license_to_rdf,

@@ -86,7 +86,7 @@ MAIN_FILE_HEADER = """# SPDX-License-Identifier: Apache-2.0
 # fmt: off
 # isort:skip_file
 
-from typing import Callable, Optional
+from beartype.typing import List, Optional, Dict, Callable
 from rdflib import Graph, Literal
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
@@ -96,7 +96,7 @@ from spdx_tools.spdx3.model import HashAlgorithm
 """
 
 MAIN_CONVERTER_MAP = """
-_CONVERTER_FUNCTIONS: dict[str, Callable[[any, Graph], Identifier]] = {{
+_CONVERTER_FUNCTIONS: Dict[str, Callable[[any, Graph], Identifier]] = {{
 {converters}
 }}
 
@@ -202,7 +202,6 @@ class GenModelToRdf:
         if parent_class == "xsd:string":
             return
 
-        print(f"{namespace_name}::{clazz['metadata']['name']}")
         type_name = camel_case_to_snake_case(clazz["metadata"]["name"])
         self.class_to_converter_func[
             f"{namespace_name}/{clazz['metadata']['name']}"
