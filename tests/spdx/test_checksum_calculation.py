@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, File
+from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, File, PackageVerificationCode
 from spdx_tools.spdx.spdx_element_utils import calculate_file_checksum, calculate_package_verification_code
 
 
@@ -42,7 +42,7 @@ def test_verification_code_calculation_with_predefined_checksums(generate_test_f
     )
     verification_code = calculate_package_verification_code([file1, file2])
 
-    assert verification_code == "c6cb0949d7cd7439fce8690262a0946374824639"
+    assert verification_code == PackageVerificationCode("c6cb0949d7cd7439fce8690262a0946374824639")
 
 
 def test_verification_code_calculation_with_calculated_checksums(generate_test_files):
@@ -59,7 +59,7 @@ def test_verification_code_calculation_with_calculated_checksums(generate_test_f
     )
     verification_code = calculate_package_verification_code([file1, file2])
 
-    assert verification_code == "6f29d813abb63ee52a47dbcb691ea2e70f956328"
+    assert verification_code == PackageVerificationCode("6f29d813abb63ee52a47dbcb691ea2e70f956328")
 
 
 def test_verification_code_calculation_with_wrong_file_location():
