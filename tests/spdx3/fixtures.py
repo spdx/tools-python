@@ -25,7 +25,7 @@ from spdx_tools.spdx3.model import (
     NamespaceMap,
     Organization,
     Person,
-    ProfileIdentifier,
+    ProfileIdentifierType,
     Relationship,
     RelationshipCompleteness,
     RelationshipType,
@@ -93,7 +93,7 @@ def creation_info_fixture(
         ["https://spdx.test/tools-python/creation_info_created_using"] if created_using is None else created_using
     )
     profile = (
-        [ProfileIdentifier.CORE, ProfileIdentifier.SOFTWARE, ProfileIdentifier.LICENSING]
+        [ProfileIdentifierType.CORE, ProfileIdentifierType.SOFTWARE, ProfileIdentifierType.LICENSING]
         if profile is None
         else profile
     )

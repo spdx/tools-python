@@ -6,7 +6,7 @@ from datetime import datetime
 import pytest
 from semantic_version import Version
 
-from spdx_tools.spdx3.model import CreationInfo, ProfileIdentifier
+from spdx_tools.spdx3.model import CreationInfo, ProfileIdentifierType
 from tests.spdx3.fixtures import creation_info_fixture
 from tests.spdx3.model.model_test_utils import get_property_names
 
@@ -22,9 +22,9 @@ def test_correct_initialization():
     assert creation_info.created_by == ["https://spdx.test/tools-python/creation_info_created_by"]
     assert creation_info.created_using == ["https://spdx.test/tools-python/creation_info_created_using"]
     assert creation_info.profile == [
-        ProfileIdentifier.CORE,
-        ProfileIdentifier.SOFTWARE,
-        ProfileIdentifier.LICENSING,
+        ProfileIdentifierType.CORE,
+        ProfileIdentifierType.SOFTWARE,
+        ProfileIdentifierType.LICENSING,
     ]
     assert creation_info.data_license == "CC0-1.0"
     assert creation_info.comment == "creationInfoComment"

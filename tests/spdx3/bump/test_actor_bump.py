@@ -13,7 +13,7 @@ from spdx_tools.spdx3.model import (
     ExternalIdentifierType,
     Organization,
     Person,
-    ProfileIdentifier,
+    ProfileIdentifierType,
     Tool,
 )
 from spdx_tools.spdx3.payload import Payload
@@ -37,7 +37,7 @@ from spdx_tools.spdx.model.actor import Actor, ActorType
 def test_bump_actor(actor_type, actor_name, actor_mail, element_type, new_spdx_id):
     payload = Payload()
     document_namespace = "https://doc.namespace"
-    creation_info = CreationInfo(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], [ProfileIdentifier.CORE])
+    creation_info = CreationInfo(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], [ProfileIdentifierType.CORE])
     actor = Actor(actor_type, actor_name, actor_mail)
 
     agent_or_tool_id = bump_actor(actor, payload, document_namespace, creation_info)
@@ -54,8 +54,8 @@ def test_bump_actor(actor_type, actor_name, actor_mail, element_type, new_spdx_i
 
 
 def test_bump_actor_that_already_exists():
-    creation_info_old = CreationInfo(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], [ProfileIdentifier.CORE])
-    creation_info_new = CreationInfo(Version("3.0.0"), datetime(2023, 2, 2), ["Creator"], [ProfileIdentifier.CORE])
+    creation_info_old = CreationInfo(Version("3.0.0"), datetime(2022, 1, 1), ["Creator"], [ProfileIdentifierType.CORE])
+    creation_info_new = CreationInfo(Version("3.0.0"), datetime(2023, 2, 2), ["Creator"], [ProfileIdentifierType.CORE])
 
     name = "some name"
     document_namespace = "https://doc.namespace"
