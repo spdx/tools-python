@@ -1,9 +1,11 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+import hashlib
+
 from beartype.typing import List, Union
 
-from spdx_tools.spdx.model import ExternalDocumentRef, File, Package, Snippet
+from spdx_tools.spdx.model import ChecksumAlgorithm, ExternalDocumentRef, File, Package, Snippet
 
 
 def get_full_element_spdx_id(
@@ -29,3 +31,40 @@ def get_full_element_spdx_id(
         raise ValueError(f"external id {external_id} not found in external document references")
 
     return external_uri + "#" + local_id
+
+
+def calculate_package_verification_code(files: List[File]) -> str:
+    list_of_file_hashes = []
+    for file in files:
+        file_checksum_value = None
+        for checksum in file.checksums:
+            if checksum.algorithm == ChecksumAlgorithm.SHA1:
+                file_checksum_value = checksum.value
+        if not file_checksum_value:
+            try:
+                file_checksum_value = calculate_file_checksum(file.name, ChecksumAlgorithm.SHA1)
+            except FileNotFoundError:
+                raise FileNotFoundError(
+                    f"Cannot calculate package verification code because the file '{file.name}' "
+                    f"provides no SHA1 checksum and can't be found at the specified location."
+                )
+        list_of_file_hashes.append(file_checksum_value)
+
+    list_of_file_hashes.sort()
+    hasher = hashlib.new("sha1")
+    hasher.update("".join(list_of_file_hashes).encode("utf-8"))
+    return hasher.hexdigest()
+
+
+def calculate_file_checksum(file_name: str, hash_algorithm=ChecksumAlgorithm.SHA1) -> str:
+    BUFFER_SIZE = 65536
+
+    file_hash = hashlib.new(hash_algorithm.name.lower())
+    with open(file_name, "rb") as file_handle:
+        while True:
+            data = file_handle.read(BUFFER_SIZE)
+            if not data:
+                break
+            file_hash.update(data)
+
+    return file_hash.hexdigest()
