@@ -19,7 +19,7 @@ from spdx_tools.spdx3.rdfschema.namespace import (
 from spdx_tools.spdx3.writer.rdf.converters.converter import model_to_rdf
 
 
-def write_payload_to_stream(payload: Payload, stream: IO[bytes]):
+def write_payload_to_graph(payload: Payload) -> Graph:
     graph = Graph()
     for element in payload.get_full_map().values():
         model_to_rdf(element, graph)
@@ -32,9 +32,14 @@ def write_payload_to_stream(payload: Payload, stream: IO[bytes]):
     graph.bind("licensing", LICENSING_NS)
     graph.bind("security", SECURITY_NS)
     graph.bind("software", SOFTWARE_NS)
-    graph.serialize(stream, "pretty-xml", encoding="UTF-8", max_depth=100)
+    return graph
 
 
-def write_payload_to_file(payload: Payload, file_name: str):
+def write_payload_to_stream(payload: Payload, stream: IO[bytes], file_format: str = "pretty-xml"):
+    graph = write_payload_to_graph(payload)
+    graph.serialize(stream, file_format, encoding="UTF-8", max_depth=100)
+
+
+def write_payload_to_file(payload: Payload, file_name: str, file_format: str = "pretty-xml"):
     with open(file_name, "wb") as file:
-        write_payload_to_stream(payload, file)
+        write_payload_to_stream(payload, file, file_format)
