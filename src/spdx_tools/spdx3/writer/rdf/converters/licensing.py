@@ -28,10 +28,12 @@ def listed_license_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.list_version_added is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/listVersionAdded")
-        graph.add((node, prop_node, model_to_rdf(obj.list_version_added, graph)))
+        value = obj.list_version_added
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.deprecated_version is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/deprecatedVersion")
-        graph.add((node, prop_node, model_to_rdf(obj.deprecated_version, graph)))
+        value = obj.deprecated_version
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     licensing.license_properties_to_rdf(node, obj, graph)
 
 
@@ -50,10 +52,12 @@ def with_addition_operator_properties_to_rdf(node: Identifier, obj, graph: Graph
     from .converter import model_to_rdf
     if obj.subject_license is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/ExpandedLicense/subjectLicense")
-        graph.add((node, prop_node, model_to_rdf(obj.subject_license, graph)))
+        value = obj.subject_license
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Licensing/ExtendableLicense")))
     if obj.subject_addition is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/ExpandedLicense/subjectAddition")
-        graph.add((node, prop_node, model_to_rdf(obj.subject_addition, graph)))
+        value = obj.subject_addition
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     licensing.any_license_info_properties_to_rdf(node, obj, graph)
 
 
@@ -72,25 +76,32 @@ def license_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.license_text is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/licenseText")
-        graph.add((node, prop_node, model_to_rdf(obj.license_text, graph)))
+        value = obj.license_text
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.is_osi_approved is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/isOsiApproved")
-        graph.add((node, prop_node, model_to_rdf(obj.is_osi_approved, graph)))
+        value = obj.is_osi_approved
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#boolean")))
     if obj.is_fsf_libre is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/isFsfLibre")
-        graph.add((node, prop_node, model_to_rdf(obj.is_fsf_libre, graph)))
+        value = obj.is_fsf_libre
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#boolean")))
     if obj.standard_license_header is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/standardLicenseHeader")
-        graph.add((node, prop_node, model_to_rdf(obj.standard_license_header, graph)))
+        value = obj.standard_license_header
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.standard_license_template is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/standardLicenseTemplate")
-        graph.add((node, prop_node, model_to_rdf(obj.standard_license_template, graph)))
+        value = obj.standard_license_template
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.is_deprecated_license_id is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/isDeprecatedLicenseId")
-        graph.add((node, prop_node, model_to_rdf(obj.is_deprecated_license_id, graph)))
+        value = obj.is_deprecated_license_id
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#boolean")))
     if obj.obsoleted_by is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/obsoletedBy")
-        graph.add((node, prop_node, model_to_rdf(obj.obsoleted_by, graph)))
+        value = obj.obsoleted_by
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     licensing.extendable_license_properties_to_rdf(node, obj, graph)
 
 
@@ -125,16 +136,20 @@ def license_addition_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.addition_text is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/additionText")
-        graph.add((node, prop_node, model_to_rdf(obj.addition_text, graph)))
+        value = obj.addition_text
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.standard_addition_template is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/standardAdditionTemplate")
-        graph.add((node, prop_node, model_to_rdf(obj.standard_addition_template, graph)))
+        value = obj.standard_addition_template
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.is_deprecated_addition_id is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/isDeprecatedAdditionId")
-        graph.add((node, prop_node, model_to_rdf(obj.is_deprecated_addition_id, graph)))
+        value = obj.is_deprecated_addition_id
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#boolean")))
     if obj.obsoleted_by is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/obsoletedBy")
-        graph.add((node, prop_node, model_to_rdf(obj.obsoleted_by, graph)))
+        value = obj.obsoleted_by
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     core.element_properties_to_rdf(node, obj, graph)
 
 
@@ -153,7 +168,8 @@ def or_later_operator_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.subject_license is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/ExpandedLicense/subjectLicense")
-        graph.add((node, prop_node, model_to_rdf(obj.subject_license, graph)))
+        value = obj.subject_license
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     licensing.extendable_license_properties_to_rdf(node, obj, graph)
 
 
@@ -188,7 +204,8 @@ def license_expression_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.license_expression is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/licenseExpression")
-        graph.add((node, prop_node, model_to_rdf(obj.license_expression, graph)))
+        value = obj.license_expression
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     licensing.any_license_info_properties_to_rdf(node, obj, graph)
 
 
@@ -207,10 +224,12 @@ def listed_license_exception_properties_to_rdf(node: Identifier, obj, graph: Gra
     from .converter import model_to_rdf
     if obj.list_version_added is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/listVersionAdded")
-        graph.add((node, prop_node, model_to_rdf(obj.list_version_added, graph)))
+        value = obj.list_version_added
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.deprecated_version is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Licensing/deprecatedVersion")
-        graph.add((node, prop_node, model_to_rdf(obj.deprecated_version, graph)))
+        value = obj.deprecated_version
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     licensing.license_addition_properties_to_rdf(node, obj, graph)
 
 

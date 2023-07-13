@@ -28,19 +28,24 @@ def package_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.package_version is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/packageVersion")
-        graph.add((node, prop_node, model_to_rdf(obj.package_version, graph)))
+        value = obj.package_version
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.download_location is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/downloadLocation")
-        graph.add((node, prop_node, model_to_rdf(obj.download_location, graph)))
+        value = obj.download_location
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     if obj.package_url is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/packageUrl")
-        graph.add((node, prop_node, model_to_rdf(obj.package_url, graph)))
+        value = obj.package_url
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     if obj.homepage is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/homePage")
-        graph.add((node, prop_node, model_to_rdf(obj.homepage, graph)))
+        value = obj.homepage
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     if obj.source_info is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/sourceInfo")
-        graph.add((node, prop_node, model_to_rdf(obj.source_info, graph)))
+        value = obj.source_info
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     software.software_artifact_properties_to_rdf(node, obj, graph)
 
 
@@ -59,7 +64,8 @@ def file_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.content_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/contentType")
-        graph.add((node, prop_node, model_to_rdf(obj.content_type, graph)))
+        value = obj.content_type
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/MediaType")))
     software.software_artifact_properties_to_rdf(node, obj, graph)
 
 
@@ -78,10 +84,12 @@ def snippet_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.byte_range is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/byteRange")
-        graph.add((node, prop_node, model_to_rdf(obj.byte_range, graph)))
+        value = obj.byte_range
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/PositiveIntegerRange")))
     if obj.line_range is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/lineRange")
-        graph.add((node, prop_node, model_to_rdf(obj.line_range, graph)))
+        value = obj.line_range
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/PositiveIntegerRange")))
     software.software_artifact_properties_to_rdf(node, obj, graph)
 
 
@@ -119,25 +127,31 @@ def software_artifact_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.content_identifier is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/contentIdentifier")
-        graph.add((node, prop_node, model_to_rdf(obj.content_identifier, graph)))
+        value = obj.content_identifier
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     if obj.primary_purpose is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/primaryPurpose")
-        graph.add((node, prop_node, model_to_rdf(obj.primary_purpose, graph)))
+        value = obj.primary_purpose
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.additional_purpose:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/additionalPurpose")
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.concluded_license is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/concludedLicense")
-        graph.add((node, prop_node, model_to_rdf(obj.concluded_license, graph)))
+        value = obj.concluded_license
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Licensing/AnyLicenseInfo")))
     if obj.declared_license is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/declaredLicense")
-        graph.add((node, prop_node, model_to_rdf(obj.declared_license, graph)))
+        value = obj.declared_license
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Licensing/AnyLicenseInfo")))
     if obj.copyright_text is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/copyrightText")
-        graph.add((node, prop_node, model_to_rdf(obj.copyright_text, graph)))
+        value = obj.copyright_text
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.attribution_text is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/attributionText")
-        graph.add((node, prop_node, model_to_rdf(obj.attribution_text, graph)))
+        value = obj.attribution_text
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     core.artifact_properties_to_rdf(node, obj, graph)
 
 
@@ -156,10 +170,12 @@ def software_dependency_relationship_properties_to_rdf(node: Identifier, obj, gr
     from .converter import model_to_rdf
     if obj.software_linkage is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/softwareLinkage")
-        graph.add((node, prop_node, model_to_rdf(obj.software_linkage, graph)))
+        value = obj.software_linkage
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.conditionality is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/conditionality")
-        graph.add((node, prop_node, model_to_rdf(obj.conditionality, graph)))
+        value = obj.conditionality
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     core.lifecycle_scoped_relationship_properties_to_rdf(node, obj, graph)
 
 

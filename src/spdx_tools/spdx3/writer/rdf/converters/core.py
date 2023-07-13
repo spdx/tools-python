@@ -28,10 +28,12 @@ def positive_integer_range_properties_to_rdf(node: Identifier, obj, graph: Graph
     from .converter import model_to_rdf
     if obj.begin is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/begin")
-        graph.add((node, prop_node, model_to_rdf(obj.begin, graph)))
+        value = obj.begin
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#positiveInteger")))
     if obj.end is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/end")
-        graph.add((node, prop_node, model_to_rdf(obj.end, graph)))
+        value = obj.end
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#positiveInteger")))
 
 
 def element_collection_to_rdf(obj, graph: Graph) -> Identifier:
@@ -77,16 +79,19 @@ def external_reference_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.external_reference_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/externalReferenceType")
-        graph.add((node, prop_node, model_to_rdf(obj.external_reference_type, graph)))
+        value = obj.external_reference_type
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.locator:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/locator")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     if obj.content_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/contentType")
-        graph.add((node, prop_node, model_to_rdf(obj.content_type, graph)))
+        value = obj.content_type
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/MediaType")))
     if obj.comment is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/comment")
-        graph.add((node, prop_node, model_to_rdf(obj.comment, graph)))
+        value = obj.comment
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
 
 
 def external_identifier_to_rdf(obj, graph: Graph) -> Identifier:
@@ -104,19 +109,23 @@ def external_identifier_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.external_identifier_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/externalIdentifierType")
-        graph.add((node, prop_node, model_to_rdf(obj.external_identifier_type, graph)))
+        value = obj.external_identifier_type
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.identifier is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/identifier")
-        graph.add((node, prop_node, model_to_rdf(obj.identifier, graph)))
+        value = obj.identifier
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.comment is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/comment")
-        graph.add((node, prop_node, model_to_rdf(obj.comment, graph)))
+        value = obj.comment
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.identifier_locator:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/identifierLocator")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     if obj.issuing_authority is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/issuingAuthority")
-        graph.add((node, prop_node, model_to_rdf(obj.issuing_authority, graph)))
+        value = obj.issuing_authority
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
 
 
 def bom_to_rdf(obj, graph: Graph) -> Identifier:
@@ -150,7 +159,8 @@ def spdx_document_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.name is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/name")
-        graph.add((node, prop_node, model_to_rdf(obj.name, graph)))
+        value = obj.name
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     core.bundle_properties_to_rdf(node, obj, graph)
 
 
@@ -185,10 +195,12 @@ def namespace_map_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.prefix is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/prefix")
-        graph.add((node, prop_node, model_to_rdf(obj.prefix, graph)))
+        value = obj.prefix
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.namespace is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/namespace")
-        graph.add((node, prop_node, model_to_rdf(obj.namespace, graph)))
+        value = obj.namespace
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
 
 
 def creation_info_to_rdf(obj, graph: Graph) -> Identifier:
@@ -206,13 +218,16 @@ def creation_info_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.spec_version is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/specVersion")
-        graph.add((node, prop_node, model_to_rdf(obj.spec_version, graph)))
+        value = obj.spec_version
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/SemVer")))
     if obj.comment is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/comment")
-        graph.add((node, prop_node, model_to_rdf(obj.comment, graph)))
+        value = obj.comment
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.created is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/created")
-        graph.add((node, prop_node, model_to_rdf(obj.created, graph)))
+        value = obj.created
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     for value in obj.created_by:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/createdBy")
         graph.add((node, prop_node, model_to_rdf(value, graph)))
@@ -224,7 +239,8 @@ def creation_info_properties_to_rdf(node: Identifier, obj, graph: Graph):
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.data_license is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/dataLicense")
-        graph.add((node, prop_node, model_to_rdf(obj.data_license, graph)))
+        value = obj.data_license
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
 
 
 def organization_to_rdf(obj, graph: Graph) -> Identifier:
@@ -258,7 +274,8 @@ def lifecycle_scoped_relationship_properties_to_rdf(node: Identifier, obj, graph
     from .converter import model_to_rdf
     if obj.scope is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/scope")
-        graph.add((node, prop_node, model_to_rdf(obj.scope, graph)))
+        value = obj.scope
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     core.relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -293,7 +310,8 @@ def integrity_method_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.comment is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/comment")
-        graph.add((node, prop_node, model_to_rdf(obj.comment, graph)))
+        value = obj.comment
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
 
 
 def relationship_to_rdf(obj, graph: Graph) -> Identifier:
@@ -311,22 +329,27 @@ def relationship_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.from_element is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/from")
-        graph.add((node, prop_node, model_to_rdf(obj.from_element, graph)))
+        value = obj.from_element
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.to:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/to")
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.relationship_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/relationshipType")
-        graph.add((node, prop_node, model_to_rdf(obj.relationship_type, graph)))
+        value = obj.relationship_type
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.completeness is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/completeness")
-        graph.add((node, prop_node, model_to_rdf(obj.completeness, graph)))
+        value = obj.completeness
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.start_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/startTime")
-        graph.add((node, prop_node, model_to_rdf(obj.start_time, graph)))
+        value = obj.start_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     if obj.end_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/endTime")
-        graph.add((node, prop_node, model_to_rdf(obj.end_time, graph)))
+        value = obj.end_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     core.element_properties_to_rdf(node, obj, graph)
 
 
@@ -345,19 +368,24 @@ def element_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.name is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/name")
-        graph.add((node, prop_node, model_to_rdf(obj.name, graph)))
+        value = obj.name
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.summary is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/summary")
-        graph.add((node, prop_node, model_to_rdf(obj.summary, graph)))
+        value = obj.summary
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.description is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/description")
-        graph.add((node, prop_node, model_to_rdf(obj.description, graph)))
+        value = obj.description
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.comment is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/comment")
-        graph.add((node, prop_node, model_to_rdf(obj.comment, graph)))
+        value = obj.comment
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.creation_info is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/creationInfo")
-        graph.add((node, prop_node, model_to_rdf(obj.creation_info, graph)))
+        value = obj.creation_info
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.verified_using:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/verifiedUsing")
         graph.add((node, prop_node, model_to_rdf(value, graph)))
@@ -369,7 +397,8 @@ def element_properties_to_rdf(node: Identifier, obj, graph: Graph):
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.extension is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/extension")
-        graph.add((node, prop_node, model_to_rdf(obj.extension, graph)))
+        value = obj.extension
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/Extension")))
 
 
 def agent_to_rdf(obj, graph: Graph) -> Identifier:
@@ -403,10 +432,12 @@ def hash_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.algorithm is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/algorithm")
-        graph.add((node, prop_node, model_to_rdf(obj.algorithm, graph)))
+        value = obj.algorithm
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.hash_value is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/hashValue")
-        graph.add((node, prop_node, model_to_rdf(obj.hash_value, graph)))
+        value = obj.hash_value
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     core.integrity_method_properties_to_rdf(node, obj, graph)
 
 
@@ -425,10 +456,12 @@ def dictionary_entry_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.key is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/key")
-        graph.add((node, prop_node, model_to_rdf(obj.key, graph)))
+        value = obj.key
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.value is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/value")
-        graph.add((node, prop_node, model_to_rdf(obj.value, graph)))
+        value = obj.value
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
 
 
 def person_to_rdf(obj, graph: Graph) -> Identifier:
@@ -462,7 +495,8 @@ def bundle_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.context is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/context")
-        graph.add((node, prop_node, model_to_rdf(obj.context, graph)))
+        value = obj.context
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     core.element_collection_properties_to_rdf(node, obj, graph)
 
 
@@ -487,16 +521,19 @@ def artifact_properties_to_rdf(node: Identifier, obj, graph: Graph):
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.built_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/builtTime")
-        graph.add((node, prop_node, model_to_rdf(obj.built_time, graph)))
+        value = obj.built_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     if obj.release_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/releaseTime")
-        graph.add((node, prop_node, model_to_rdf(obj.release_time, graph)))
+        value = obj.release_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     if obj.valid_until_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/validUntilTime")
-        graph.add((node, prop_node, model_to_rdf(obj.valid_until_time, graph)))
+        value = obj.valid_until_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     for value in obj.standard:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/standard")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     core.element_properties_to_rdf(node, obj, graph)
 
 
@@ -515,16 +552,19 @@ def annotation_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.annotation_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/annotationType")
-        graph.add((node, prop_node, model_to_rdf(obj.annotation_type, graph)))
+        value = obj.annotation_type
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.content_type:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/contentType")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/MediaType")))
     if obj.statement is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/statement")
-        graph.add((node, prop_node, model_to_rdf(obj.statement, graph)))
+        value = obj.statement
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.subject is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/subject")
-        graph.add((node, prop_node, model_to_rdf(obj.subject, graph)))
+        value = obj.subject
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     core.element_properties_to_rdf(node, obj, graph)
 
 
@@ -543,16 +583,19 @@ def external_map_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.external_id is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/externalId")
-        graph.add((node, prop_node, model_to_rdf(obj.external_id, graph)))
+        value = obj.external_id
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     for value in obj.verified_using:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/verifiedUsing")
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.location_hint is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/locationHint")
-        graph.add((node, prop_node, model_to_rdf(obj.location_hint, graph)))
+        value = obj.location_hint
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     if obj.defining_document is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/definingDocument")
-        graph.add((node, prop_node, model_to_rdf(obj.defining_document, graph)))
+        value = obj.defining_document
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
 
 
 def relationship_completeness_to_rdf(obj, graph: Graph) -> Identifier:

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import IO
 
-from rdflib import Graph
+from rdflib import Graph, XSD
 from rdflib.compare import to_isomorphic
 
 from spdx_tools.spdx3.payload import Payload
@@ -32,6 +32,7 @@ def write_payload_to_graph(payload: Payload) -> Graph:
     graph.bind("licensing", LICENSING_NS)
     graph.bind("security", SECURITY_NS)
     graph.bind("software", SOFTWARE_NS)
+    graph.bind("xsd", XSD)
     return graph
 
 

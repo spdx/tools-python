@@ -7,7 +7,7 @@
 # isort:skip_file
 
 from beartype.typing import List, Optional, Dict, Callable
-from rdflib import Graph, Literal
+from rdflib import Graph, Literal, URIRef
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
 from spdx_tools.spdx3.model import HashAlgorithm
@@ -140,6 +140,8 @@ def enum_value_to_str(obj) -> str:
 
 
 def model_to_rdf(obj, graph: Graph) -> Identifier:
+    if isinstance(obj, str):
+        return URIRef(obj)
     type_name = obj.__class__.__qualname__
     module_name = obj.__class__.__module__
     namespace = module_to_namespace(module_name)

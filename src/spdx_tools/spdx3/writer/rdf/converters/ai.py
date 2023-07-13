@@ -28,49 +28,56 @@ def a_ipackage_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.energy_consumption is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/energyConsumption")
-        graph.add((node, prop_node, model_to_rdf(obj.energy_consumption, graph)))
+        value = obj.energy_consumption
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.standard_compliance:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/standardCompliance")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.limitation is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/limitation")
-        graph.add((node, prop_node, model_to_rdf(obj.limitation, graph)))
+        value = obj.limitation
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.type_of_model:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/typeOfModel")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.information_about_training is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/informationAboutTraining")
-        graph.add((node, prop_node, model_to_rdf(obj.information_about_training, graph)))
+        value = obj.information_about_training
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.information_about_application is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/informationAboutApplication")
-        graph.add((node, prop_node, model_to_rdf(obj.information_about_application, graph)))
+        value = obj.information_about_application
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.hyperparameter:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/hyperparameter")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
     for value in obj.model_data_preprocessing:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/modelDataPreprocessing")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.model_explainability:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/modelExplainability")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.sensitive_personal_information is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/sensitivePersonalInformation")
-        graph.add((node, prop_node, model_to_rdf(obj.sensitive_personal_information, graph)))
+        value = obj.sensitive_personal_information
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.metric_decision_threshold:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/metricDecisionThreshold")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
     for value in obj.metric:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/metric")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
     for value in obj.domain:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/domain")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.autonomy_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/autonomyType")
-        graph.add((node, prop_node, model_to_rdf(obj.autonomy_type, graph)))
+        value = obj.autonomy_type
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.safety_risk_assessment is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/safetyRiskAssessment")
-        graph.add((node, prop_node, model_to_rdf(obj.safety_risk_assessment, graph)))
+        value = obj.safety_risk_assessment
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     software.package_properties_to_rdf(node, obj, graph)
 
 

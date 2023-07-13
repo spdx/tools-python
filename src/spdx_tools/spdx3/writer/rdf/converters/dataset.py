@@ -31,40 +31,48 @@ def dataset_properties_to_rdf(node: Identifier, obj, graph: Graph):
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.data_collection_process is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/dataCollectionProcess")
-        graph.add((node, prop_node, model_to_rdf(obj.data_collection_process, graph)))
+        value = obj.data_collection_process
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.intended_use is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/intendedUse")
-        graph.add((node, prop_node, model_to_rdf(obj.intended_use, graph)))
+        value = obj.intended_use
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.dataset_size is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/datasetSize")
-        graph.add((node, prop_node, model_to_rdf(obj.dataset_size, graph)))
+        value = obj.dataset_size
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger")))
     if obj.dataset_noise is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/datasetNoise")
-        graph.add((node, prop_node, model_to_rdf(obj.dataset_noise, graph)))
+        value = obj.dataset_noise
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.data_preprocessing:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/dataPreprocessing")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.sensor:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/sensor")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
     for value in obj.known_bias:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/knownBias")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.sensitive_personal_information is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/sensitivePersonalInformation")
-        graph.add((node, prop_node, model_to_rdf(obj.sensitive_personal_information, graph)))
+        value = obj.sensitive_personal_information
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Dataset/PresenceType")))
     for value in obj.anonymization_method_used:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/anonymizationMethodUsed")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.confidentiality_level is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/confidentialityLevel")
-        graph.add((node, prop_node, model_to_rdf(obj.confidentiality_level, graph)))
+        value = obj.confidentiality_level
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.dataset_update_mechanism is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/datasetUpdateMechanism")
-        graph.add((node, prop_node, model_to_rdf(obj.dataset_update_mechanism, graph)))
+        value = obj.dataset_update_mechanism
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.dataset_availability is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/datasetAvailability")
-        graph.add((node, prop_node, model_to_rdf(obj.dataset_availability, graph)))
+        value = obj.dataset_availability
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     software.package_properties_to_rdf(node, obj, graph)
 
 

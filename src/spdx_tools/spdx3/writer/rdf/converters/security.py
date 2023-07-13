@@ -28,13 +28,16 @@ def vex_not_affected_vuln_assessment_relationship_properties_to_rdf(node: Identi
     from .converter import model_to_rdf
     if obj.justification_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/justificationType")
-        graph.add((node, prop_node, model_to_rdf(obj.justification_type, graph)))
+        value = obj.justification_type
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.impact_statement is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/impactStatement")
-        graph.add((node, prop_node, model_to_rdf(obj.impact_statement, graph)))
+        value = obj.impact_statement
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.impact_statement_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/impactStatementTime")
-        graph.add((node, prop_node, model_to_rdf(obj.impact_statement_time, graph)))
+        value = obj.impact_statement_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
     security.vex_vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -53,7 +56,8 @@ def ssvc_vuln_assessment_relationship_properties_to_rdf(node: Identifier, obj, g
     from .converter import model_to_rdf
     if obj.decision_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/decisionType")
-        graph.add((node, prop_node, model_to_rdf(obj.decision_type, graph)))
+        value = obj.decision_type
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     security.vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -88,10 +92,12 @@ def vex_vuln_assessment_relationship_properties_to_rdf(node: Identifier, obj, gr
     from .converter import model_to_rdf
     if obj.vex_version is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/vexVersion")
-        graph.add((node, prop_node, model_to_rdf(obj.vex_version, graph)))
+        value = obj.vex_version
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.status_notes is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/statusNotes")
-        graph.add((node, prop_node, model_to_rdf(obj.status_notes, graph)))
+        value = obj.status_notes
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     security.vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -110,13 +116,16 @@ def cvss_v3_vuln_assessment_relationship_properties_to_rdf(node: Identifier, obj
     from .converter import model_to_rdf
     if obj.score is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/score")
-        graph.add((node, prop_node, model_to_rdf(obj.score, graph)))
+        value = obj.score
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#decimal")))
     if obj.severity is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/severity")
-        graph.add((node, prop_node, model_to_rdf(obj.severity, graph)))
+        value = obj.severity
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.vector is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/vector")
-        graph.add((node, prop_node, model_to_rdf(obj.vector, graph)))
+        value = obj.vector
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     security.vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -135,19 +144,24 @@ def vuln_assessment_relationship_properties_to_rdf(node: Identifier, obj, graph:
     from .converter import model_to_rdf
     if obj.assessed_element is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/assessedElement")
-        graph.add((node, prop_node, model_to_rdf(obj.assessed_element, graph)))
+        value = obj.assessed_element
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/Element")))
     if obj.published_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/publishedTime")
-        graph.add((node, prop_node, model_to_rdf(obj.published_time, graph)))
+        value = obj.published_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
     if obj.supplied_by is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/suppliedBy")
-        graph.add((node, prop_node, model_to_rdf(obj.supplied_by, graph)))
+        value = obj.supplied_by
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/Agent")))
     if obj.modified_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/modifiedTime")
-        graph.add((node, prop_node, model_to_rdf(obj.modified_time, graph)))
+        value = obj.modified_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
     if obj.withdrawn_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/withdrawnTime")
-        graph.add((node, prop_node, model_to_rdf(obj.withdrawn_time, graph)))
+        value = obj.withdrawn_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
     core.relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -166,13 +180,16 @@ def vulnerability_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     if obj.published_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/publishedTime")
-        graph.add((node, prop_node, model_to_rdf(obj.published_time, graph)))
+        value = obj.published_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
     if obj.modified_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/modifiedTime")
-        graph.add((node, prop_node, model_to_rdf(obj.modified_time, graph)))
+        value = obj.modified_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
     if obj.withdrawn_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/withdrawnTime")
-        graph.add((node, prop_node, model_to_rdf(obj.withdrawn_time, graph)))
+        value = obj.withdrawn_time
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
     core.element_properties_to_rdf(node, obj, graph)
 
 
@@ -191,13 +208,16 @@ def cvss_v2_vuln_assessment_relationship_properties_to_rdf(node: Identifier, obj
     from .converter import model_to_rdf
     if obj.score is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/score")
-        graph.add((node, prop_node, model_to_rdf(obj.score, graph)))
+        value = obj.score
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#decimal")))
     if obj.severity is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/severity")
-        graph.add((node, prop_node, model_to_rdf(obj.severity, graph)))
+        value = obj.severity
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     if obj.vector is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/vector")
-        graph.add((node, prop_node, model_to_rdf(obj.vector, graph)))
+        value = obj.vector
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     security.vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -216,10 +236,11 @@ def vex_affected_vuln_assessment_relationship_properties_to_rdf(node: Identifier
     from .converter import model_to_rdf
     if obj.action_statement is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/actionStatement")
-        graph.add((node, prop_node, model_to_rdf(obj.action_statement, graph)))
+        value = obj.action_statement
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.action_statement_time:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/actionStatementTime")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
     security.vex_vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -238,13 +259,16 @@ def exploit_catalog_vuln_assessment_relationship_properties_to_rdf(node: Identif
     from .converter import model_to_rdf
     if obj.catalog_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/catalogType")
-        graph.add((node, prop_node, model_to_rdf(obj.catalog_type, graph)))
+        value = obj.catalog_type
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.exploited is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/exploited")
-        graph.add((node, prop_node, model_to_rdf(obj.exploited, graph)))
+        value = obj.exploited
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#boolean")))
     if obj.locator is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/locator")
-        graph.add((node, prop_node, model_to_rdf(obj.locator, graph)))
+        value = obj.locator
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     security.vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -263,10 +287,12 @@ def epss_vuln_assessment_relationship_properties_to_rdf(node: Identifier, obj, g
     from .converter import model_to_rdf
     if obj.probability is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/probability")
-        graph.add((node, prop_node, model_to_rdf(obj.probability, graph)))
+        value = obj.probability
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#nonNegativeInteger")))
     if obj.severity is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/severity")
-        graph.add((node, prop_node, model_to_rdf(obj.severity, graph)))
+        value = obj.severity
+        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     security.vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 
