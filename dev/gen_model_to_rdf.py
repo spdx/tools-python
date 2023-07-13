@@ -63,12 +63,13 @@ CLS_CONVERTER_PROPERTIES_FUNC_BODY = """def {type_name}_properties_to_rdf(node: 
 PROP_CONVERTER_BODY = """
     if obj.{prop_name} is not None:
         prop_node = URIRef("{prop_id}")
-        graph.add((node, prop_node, model_to_rdf(obj.{prop_name}, graph)))"""
+        value = obj.{prop_name}
+        graph.add((node, prop_node, {prop_conversion_code}))"""
 
 PROP_LIST_CONVERTER_BODY = """
     for value in obj.{prop_name}:
         prop_node = URIRef("{prop_id}")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))"""
+        graph.add((node, prop_node, {prop_conversion_code}))"""
 
 VOCAB_CONVERTER_FUNC_BODY = """def {type_name}_to_rdf(obj, graph: Graph) -> Identifier:
     from .converter import enum_value_to_str
@@ -87,7 +88,7 @@ MAIN_FILE_HEADER = """# SPDX-License-Identifier: Apache-2.0
 # isort:skip_file
 
 from beartype.typing import List, Optional, Dict, Callable
-from rdflib import Graph, Literal
+from rdflib import Graph, Literal, URIRef
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
 from spdx_tools.spdx3.model import HashAlgorithm
@@ -138,6 +139,8 @@ def enum_value_to_str(obj) -> str:
 
 
 def model_to_rdf(obj, graph: Graph) -> Identifier:
+    if isinstance(obj, str):
+        return URIRef(obj)
     type_name = obj.__class__.__qualname__
     module_name = obj.__class__.__module__
     namespace = module_to_namespace(module_name)
@@ -192,7 +195,34 @@ class GenModelToRdf:
                 prop_id = prop["metadata"]["id"]
                 self.prop_name_to_id[full_prop_name] = prop_id
 
-    def handle_class(self, output_file: IO[str], clazz: dict, namespace_name: str):
+    def is_literal_type(self, typename: str, namespace_name: str, model: dict) -> bool:
+        if typename.startswith("xsd:"):
+            return True
+        if '/' in typename:
+            namespace_name, _, typename = typename.partition('/')
+        namespace = model[namespace_name] if namespace_name in model else None
+        if namespace and typename in namespace["vocabs"]:
+            return False
+        clazz = namespace["classes"][typename] if namespace and typename in namespace["classes"] else None
+        if not clazz:
+            return True
+        if "SubclassOf" not in clazz["metadata"] or clazz["metadata"]["SubclassOf"] == "none" or clazz["metadata"]["SubclassOf"].startswith("xsd:"):
+            return not clazz["properties"]
+        return False
+
+    def get_type_uri(self, typename: str, namespace_name: str) -> str:
+        if typename.startswith("xsd:"):
+            return typename.replace("xsd:", "http://www.w3.org/2001/XMLSchema#")
+        if '/' in typename:
+            namespace_name, _, typename = typename.partition('/')
+        return f"https://spdx.org/rdf/v3/{namespace_name}/{typename}"
+
+    def prop_conversion_code(self, typename: str, namespace_name: str, model: dict) -> str:
+        if self.is_literal_type(typename, namespace_name, model):
+            return f"Literal(value, datatype=\"{self.get_type_uri(typename, namespace_name)}\")"
+        return "model_to_rdf(value, graph)"
+
+    def handle_class(self, output_file: IO[str], clazz: dict, namespace_name: str, model: dict):
         parent_class = (
             clazz["metadata"]["SubclassOf"]
             if "SubclassOf" in clazz["metadata"] and clazz["metadata"]["SubclassOf"] != "none"
@@ -215,13 +245,14 @@ class GenModelToRdf:
             full_prop_name = f"{namespace_name}/{prop_name}" if "/" not in prop_name else prop_name
             _, _, prop_name = full_prop_name.partition("/")
             is_list = not ("maxCount" in prop and prop["maxCount"] == "1")
+            prop_conversion_code = self.prop_conversion_code(prop["type"], namespace_name, model)
             if is_list:
                 prop_code += PROP_LIST_CONVERTER_BODY.format(
-                    prop_name=prop_name_to_python(prop_name), prop_id=self.prop_name_to_id[full_prop_name]
+                    prop_name=prop_name_to_python(prop_name), prop_id=self.prop_name_to_id[full_prop_name], prop_conversion_code=prop_conversion_code
                 )
             else:
                 prop_code += PROP_CONVERTER_BODY.format(
-                    prop_name=prop_name_to_python(prop_name), prop_id=self.prop_name_to_id[full_prop_name]
+                    prop_name=prop_name_to_python(prop_name), prop_id=self.prop_name_to_id[full_prop_name], prop_conversion_code=prop_conversion_code
                 )
 
         parent_call = ""
@@ -245,10 +276,10 @@ class GenModelToRdf:
         ] = f"{namespace_name_to_python(namespace_name)}.{type_name}_to_rdf"
         output_file.write(VOCAB_CONVERTER_FUNC_BODY.format(type_name=type_name, vocab_id=vocab["metadata"]["id"]))
 
-    def handle_namespace(self, output_file: IO[str], namespace: dict):
+    def handle_namespace(self, output_file: IO[str], namespace: dict, model: dict):
         namespace_name = namespace["name"]
         for clazz in namespace["classes"].values():
-            self.handle_class(output_file, clazz, namespace_name)
+            self.handle_class(output_file, clazz, namespace_name, model)
         for vocab in namespace["vocabs"].values():
             self.handle_vocab(output_file, vocab, namespace_name)
 
@@ -289,7 +320,7 @@ class GenModelToRdf:
             module_name = namespace_name_to_python(namespace["name"])
             with open(os.path.join(output_dir, f"{module_name}.py"), "w") as output_file:
                 output_file.write(FILE_HEADER.format(namespace_imports=self.namespace_imports))
-                self.handle_namespace(output_file, namespace)
+                self.handle_namespace(output_file, namespace, model)
                 output_file.write(FINAL_LINE)
 
         self.create_main_converter(model)
