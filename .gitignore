@@ -2,7 +2,7 @@ __pycache__/
 *.py[cod]
 *.out
 /build/
-/dist/
+/dist*/
 /tmp/
 src/spdx_tools/spdx/parser/tagvalue/parsetab.py
 /.cache/
