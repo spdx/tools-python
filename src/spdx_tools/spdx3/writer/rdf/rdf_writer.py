@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from typing import IO
 
-from rdflib import Graph, XSD
+from rdflib import XSD, Graph
 from rdflib.compare import to_isomorphic
 
 from spdx_tools.spdx3.payload import Payload

@@ -196,6 +196,8 @@ class GenModelToRdf:
                 self.prop_name_to_id[full_prop_name] = prop_id
 
     def is_literal_type(self, typename: str, namespace_name: str, model: dict) -> bool:
+        if typename.startswith('/'):
+            typename = typename[1:]
         if typename.startswith("xsd:"):
             return True
         if '/' in typename:
@@ -211,6 +213,8 @@ class GenModelToRdf:
         return False
 
     def get_type_uri(self, typename: str, namespace_name: str) -> str:
+        if typename.startswith('/'):
+            typename = typename[1:]
         if typename.startswith("xsd:"):
             return typename.replace("xsd:", "http://www.w3.org/2001/XMLSchema#")
         if '/' in typename:

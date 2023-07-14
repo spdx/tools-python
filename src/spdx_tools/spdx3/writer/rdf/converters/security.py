@@ -37,7 +37,7 @@ def vex_not_affected_vuln_assessment_relationship_properties_to_rdf(node: Identi
     if obj.impact_statement_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/impactStatementTime")
         value = obj.impact_statement_time
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     security.vex_vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -145,23 +145,23 @@ def vuln_assessment_relationship_properties_to_rdf(node: Identifier, obj, graph:
     if obj.assessed_element is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/assessedElement")
         value = obj.assessed_element
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/Element")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.published_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/publishedTime")
         value = obj.published_time
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     if obj.supplied_by is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/suppliedBy")
         value = obj.supplied_by
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/Agent")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.modified_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/modifiedTime")
         value = obj.modified_time
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     if obj.withdrawn_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/withdrawnTime")
         value = obj.withdrawn_time
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     core.relationship_properties_to_rdf(node, obj, graph)
 
 
@@ -181,15 +181,15 @@ def vulnerability_properties_to_rdf(node: Identifier, obj, graph: Graph):
     if obj.published_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/publishedTime")
         value = obj.published_time
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     if obj.modified_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/modifiedTime")
         value = obj.modified_time
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     if obj.withdrawn_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/withdrawnTime")
         value = obj.withdrawn_time
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     core.element_properties_to_rdf(node, obj, graph)
 
 
@@ -240,7 +240,7 @@ def vex_affected_vuln_assessment_relationship_properties_to_rdf(node: Identifier
         graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.action_statement_time:
         prop_node = URIRef("https://spdx.org/rdf/v3/Security/actionStatementTime")
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     security.vex_vuln_assessment_relationship_properties_to_rdf(node, obj, graph)
 
 

@@ -50,7 +50,7 @@ def a_ipackage_properties_to_rdf(node: Identifier, obj, graph: Graph):
         graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.hyperparameter:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/hyperparameter")
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.model_data_preprocessing:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/modelDataPreprocessing")
         graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
@@ -63,10 +63,10 @@ def a_ipackage_properties_to_rdf(node: Identifier, obj, graph: Graph):
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.metric_decision_threshold:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/metricDecisionThreshold")
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.metric:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/metric")
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.domain:
         prop_node = URIRef("https://spdx.org/rdf/v3/AI/domain")
         graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))

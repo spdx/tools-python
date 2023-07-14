@@ -42,21 +42,21 @@ def build_properties_to_rdf(node: Identifier, obj, graph: Graph):
         graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
     for value in obj.config_source_digest:
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/configSourceDigest")
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/Hash")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.parameters:
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/parameters")
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.build_start_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/buildStartTime")
         value = obj.build_start_time
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     if obj.build_end_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/buildEndTime")
         value = obj.build_end_time
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DateTime")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
     for value in obj.environment:
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/environment")
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     core.element_properties_to_rdf(node, obj, graph)
 
 

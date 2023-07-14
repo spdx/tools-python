@@ -50,7 +50,7 @@ def dataset_properties_to_rdf(node: Identifier, obj, graph: Graph):
         graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     for value in obj.sensor:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/sensor")
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/DictionaryEntry")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.known_bias:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/knownBias")
         graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))

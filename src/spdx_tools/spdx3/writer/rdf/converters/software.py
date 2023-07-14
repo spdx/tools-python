@@ -65,7 +65,7 @@ def file_properties_to_rdf(node: Identifier, obj, graph: Graph):
     if obj.content_type is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/contentType")
         value = obj.content_type
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/MediaType")))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/MediaType")))
     software.software_artifact_properties_to_rdf(node, obj, graph)
 
 
@@ -85,11 +85,11 @@ def snippet_properties_to_rdf(node: Identifier, obj, graph: Graph):
     if obj.byte_range is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/byteRange")
         value = obj.byte_range
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/PositiveIntegerRange")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.line_range is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/lineRange")
         value = obj.line_range
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Core/PositiveIntegerRange")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     software.software_artifact_properties_to_rdf(node, obj, graph)
 
 
@@ -139,11 +139,11 @@ def software_artifact_properties_to_rdf(node: Identifier, obj, graph: Graph):
     if obj.concluded_license is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/concludedLicense")
         value = obj.concluded_license
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Licensing/AnyLicenseInfo")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.declared_license is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/declaredLicense")
         value = obj.declared_license
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3//Licensing/AnyLicenseInfo")))
+        graph.add((node, prop_node, model_to_rdf(value, graph)))
     if obj.copyright_text is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/copyrightText")
         value = obj.copyright_text
