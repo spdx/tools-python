@@ -19,8 +19,9 @@ Commit resulting changes.
 
 import json
 import os.path
+import textwrap
 from pathlib import Path
-from typing import IO
+from typing import IO, Optional
 
 from spdx_tools.spdx.casing_tools import camel_case_to_snake_case
 
@@ -35,7 +36,8 @@ VOCAB_FILE = FILE_HEADER + """from beartype.typing import Optional
 from enum import Enum, auto
 
 
-class {typename}(Enum):
+class {typename}(Enum):{docstring}
+
 {values}
 
     def __str__(self) -> str:
@@ -48,7 +50,7 @@ def {python_typename}_from_str(value: str) -> Optional[{typename}]:
     return None
 """
 
-VOCAB_ENTRY = "    {value} = auto()"
+VOCAB_ENTRY = "    {value} = auto(){docstring}"
 
 VOCAB_VALUE_TO_STR = "        if self == {typename}.{python_value}:\n            return \"{str_value}\""
 
@@ -191,6 +193,16 @@ def get_file_path(typename: str, namespace: str) -> str:
     return os.path.join(output_dir, namespace, f"{typename}.py")
 
 
+def get_python_docstring(description: Optional[str], indent: int) -> str:
+    if not description:
+        return ""
+
+    line_length = 79 - indent
+    text = textwrap.fill(description, line_length)
+    text = '\n"""\n' + text + '\n"""'
+    return textwrap.indent(text, ' ' * indent)
+
+
 class GenPythonModelFromSpec:
     prop_name_to_id: dict[str, str]
     class_to_converter_func: dict[str, str]
@@ -297,12 +309,13 @@ class GenPythonModelFromSpec:
     def handle_vocab(self, vocab: dict, namespace_name: str):
         typename = vocab["metadata"]["name"]
         python_typename = camel_case_to_snake_case(typename)
-        values_text = "\n".join([VOCAB_ENTRY.format(value=camel_case_to_snake_case(value).upper()) for value in vocab["entries"]])
+        values_text = "\n".join([VOCAB_ENTRY.format(value=camel_case_to_snake_case(value).upper(), docstring=get_python_docstring(description, 4)) for value, description in vocab["entries"].items()])
         values_to_str_text = "\n".join([VOCAB_VALUE_TO_STR.format(python_value=camel_case_to_snake_case(value).upper(), str_value=value, typename=typename) for value in vocab["entries"]])
         str_to_values_text = "\n".join([VOCAB_STR_TO_VALUE.format(python_value=camel_case_to_snake_case(value).upper(), str_value=value, typename=typename) for value in vocab["entries"]])
+        docstring = get_python_docstring(vocab["description"], 4)
         file_path = get_file_path(typename, namespace_name)
         with open(file_path, "w") as output_file:
-            output_file.write(VOCAB_FILE.format(typename=typename, values=values_text, values_to_str=values_to_str_text, str_to_values=str_to_values_text, python_typename=python_typename))
+            output_file.write(VOCAB_FILE.format(typename=typename, values=values_text, values_to_str=values_to_str_text, str_to_values=str_to_values_text, python_typename=python_typename, docstring=docstring))
 
         if not namespace_name in self.init_imports:
             self.init_imports[namespace_name] = dict()
