@@ -3,16 +3,29 @@
 # SPDX-License-Identifier: Apache-2.0
 import hashlib
 
-from beartype.typing import List, Union
+from beartype.typing import List, Optional, Type, Union
 
 from spdx_tools.spdx.model import (
     ChecksumAlgorithm,
+    Document,
     ExternalDocumentRef,
     File,
     Package,
     PackageVerificationCode,
     Snippet,
 )
+
+
+def get_element_type_from_spdx_id(
+    spdx_id: str, document: Document
+) -> Optional[Union[Type[Package], Type[File], Type[Snippet]]]:
+    if spdx_id in [package.spdx_id for package in document.packages]:
+        return Package
+    if spdx_id in [file.spdx_id for file in document.files]:
+        return File
+    if spdx_id in [snippet.spdx_id for snippet in document.snippets]:
+        return Snippet
+    return None
 
 
 def get_full_element_spdx_id(

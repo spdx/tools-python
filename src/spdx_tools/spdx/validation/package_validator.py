@@ -4,8 +4,9 @@
 
 from beartype.typing import List, Optional
 
-from spdx_tools.spdx.model import Document, Package, Relationship, RelationshipType
+from spdx_tools.spdx.model import Document, File, Package, Relationship, RelationshipType
 from spdx_tools.spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target
+from spdx_tools.spdx.spdx_element_utils import get_element_type_from_spdx_id
 from spdx_tools.spdx.validation.checksum_validator import validate_checksums
 from spdx_tools.spdx.validation.external_package_ref_validator import validate_external_package_refs
 from spdx_tools.spdx.validation.license_expression_validator import (
@@ -50,12 +51,23 @@ def validate_package_within_document(
         package_contains_relationships = filter_by_type_and_origin(
             document.relationships, RelationshipType.CONTAINS, package.spdx_id
         )
+        package_contains_file_relationships = [
+            relationship
+            for relationship in package_contains_relationships
+            if get_element_type_from_spdx_id(relationship.related_spdx_element_id, document) == File
+        ]
+
         contained_in_package_relationships = filter_by_type_and_target(
             document.relationships, RelationshipType.CONTAINED_BY, package.spdx_id
         )
+        file_contained_in_package_relationships = [
+            relationship
+            for relationship in contained_in_package_relationships
+            if get_element_type_from_spdx_id(relationship.spdx_element_id, document) == File
+        ]
 
         combined_relationships: List[Relationship] = (
-            package_contains_relationships + contained_in_package_relationships
+            package_contains_file_relationships + file_contained_in_package_relationships
         )
 
         if combined_relationships:
