@@ -74,10 +74,27 @@ def test_invalid_package(package_input, expected_message):
 @pytest.mark.parametrize(
     "relationships",
     [
-        [Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "SPDXRef-File1")],
         [Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "DocumentRef-external:SPDXRef-File")],
-        [Relationship("SPDXRef-File2", RelationshipType.CONTAINED_BY, "SPDXRef-Package")],
         [Relationship("DocumentRef-external:SPDXRef-File", RelationshipType.CONTAINED_BY, "SPDXRef-Package")],
+    ],
+)
+def test_valid_package_with_contains(relationships):
+    document = document_fixture(
+        relationships=relationships,
+        files=[file_fixture(spdx_id="SPDXRef-File1"), file_fixture(spdx_id="SPDXRef-File2")],
+    )
+    package = package_fixture(files_analyzed=False, verification_code=None, license_info_from_files=[])
+
+    validation_messages: List[ValidationMessage] = validate_package_within_document(package, "SPDX-2.3", document)
+
+    assert validation_messages == []
+
+
+@pytest.mark.parametrize(
+    "relationships",
+    [
+        [Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "SPDXRef-File1")],
+        [Relationship("SPDXRef-File2", RelationshipType.CONTAINED_BY, "SPDXRef-Package")],
         [
             Relationship("SPDXRef-Package", RelationshipType.CONTAINS, "SPDXRef-File2"),
             Relationship("SPDXRef-File1", RelationshipType.CONTAINED_BY, "SPDXRef-Package"),
