@@ -17,7 +17,9 @@ from spdx_tools.spdx.writer.rdf.snippet_writer import add_snippet_to_graph
 from spdx_tools.spdx.writer.write_utils import validate_and_deduplicate
 
 
-def write_document_to_stream(document: Document, stream: IO[bytes], validate: bool, drop_duplicates: bool = True):
+def write_document_to_stream(
+    document: Document, stream: IO[bytes], validate: bool = True, drop_duplicates: bool = True
+):
     document = validate_and_deduplicate(document, validate, drop_duplicates)
     graph = Graph()
     doc_namespace = document.creation_info.document_namespace
@@ -51,6 +53,6 @@ def write_document_to_stream(document: Document, stream: IO[bytes], validate: bo
     graph.serialize(stream, "pretty-xml", encoding="UTF-8", max_depth=100)
 
 
-def write_document_to_file(document: Document, file_name: str, validate: bool, drop_duplicates: bool = True):
+def write_document_to_file(document: Document, file_name: str, validate: bool = True, drop_duplicates: bool = True):
     with open(file_name, "wb") as out:
         write_document_to_stream(document, out, validate, drop_duplicates)
