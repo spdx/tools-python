@@ -14,13 +14,13 @@ SPDX v3.0 release, leading to breaking changes in the API.
 Please refer to the [migration guide](https://github.com/spdx/tools-python/wiki/How-to-migrate-from-0.7-to-0.8)
 to update your existing code.
 
-We encourage new users to work with v0.8.0rc1 directly as the older v0.7 release is in maintenance mode.
-
 The main features of v0.8 are:
-- experimental support for the upcoming SPDX v3 specification (note, however, that support is neither complete nor 
-  stable at this point, as the spec is still evolving)
 - full validation of SPDX documents against the v2.2 and v2.3 specification
-- support for SPDX's RDF format with all v2.3 features.
+- support for SPDX's RDF format with all v2.3 features
+- experimental support for the upcoming SPDX v3 specification. Note, however, that support is neither complete nor 
+  stable at this point, as the spec is still evolving. SPDX3-related code is contained in a separate subpackage "spdx3" 
+  and its use is optional. We do not recommend using it in production code yet.
+
 
 # Information
 
@@ -124,7 +124,7 @@ instead of `bin`.
 
 ## Example
 Here are some examples of possible use cases to quickly get you started with the spdx-tools.
-If you want a more comprehensive example about how to create an SPDX document from scratch, have a look [here](examples%2Fspdx2_document_from_scratch.py).
+If you want more examples, like how to create an SPDX document from scratch, have a look [at the examples folder](examples).
 ```python
 import logging
 
@@ -210,4 +210,4 @@ codebase.
 
 This is the result of an initial GSoC contribution by @[ah450](https://github.com/ah450)
 (or https://github.com/a-h-i) and is maintained by a community of SPDX adopters and enthusiasts.
-In order to prepare for the release of SPDX v3.0, the repository has undergone a major refactoring during the time from 11/2022 to 03/2023.
+In order to prepare for the release of SPDX v3.0, the repository has undergone a major refactoring during the time from 11/2022 to 07/2023.

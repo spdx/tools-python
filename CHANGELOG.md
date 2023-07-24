@@ -1,6 +1,6 @@
 # Changelog
 
-## v0.8.0rc1 (2023-06-30)
+## v0.8.0 (2023-07-25)
 
 ### New features and changes
 
@@ -14,6 +14,8 @@
 * full validation of SPDX documents against the v2.2 and v2.3 specification
 * support for SPDX's RDF format with all v2.3 features
 * unified `pysdpxtools` CLI tool replaces separate `pyspdxtools_parser` and `pyspdxtools_convertor`
+* [online API documentation](https://spdx.github.io/tools-python)
+* replaced CircleCI with GitHub Actions
 
 ### Contributors
 
