@@ -15,6 +15,10 @@ Copy the generated `model_dump.json` in `md_generated` next to this file, then r
     python gen_python_model_from_spec.py
 
 Commit resulting changes.
+
+Note: needs an additional dependency for proper formatting of docstrings:
+
+    pip install mistletoe
 """
 
 import json
@@ -22,7 +26,10 @@ import os.path
 import textwrap
 from dataclasses import dataclass
 from pathlib import Path
-from typing import IO, Optional
+from typing import Optional
+
+import mistletoe
+from mistletoe.markdown_renderer import MarkdownRenderer
 
 from spdx_tools.spdx.casing_tools import camel_case_to_snake_case
 
@@ -113,8 +120,9 @@ def get_python_docstring(description: Optional[str], indent: int) -> str:
         return ""
 
     line_length = 120 - indent
-    text = textwrap.fill(description, line_length, replace_whitespace=False)
-    text = '\n"""\n' + text + '\n"""'
+    with MarkdownRenderer(max_line_length=line_length) as renderer:
+        text = renderer.render(mistletoe.Document(description))
+    text = '\n"""\n' + text + '"""'
     return textwrap.indent(text, ' ' * indent)
 
 
