@@ -78,6 +78,7 @@ output_dir = os.path.join(os.path.dirname(__file__), "../src/spdx_tools/spdx3/ne
 
 def prop_name_to_python(prop_name: str):
     special_cases = {"from": "from_element", "homePage": "homepage"}
+    _, prop_name = split_qualified_name(prop_name)
     if prop_name in special_cases:
         return special_cases[prop_name]
     return camel_case_to_snake_case(prop_name)
@@ -106,17 +107,17 @@ def get_python_docstring(description: Optional[str], indent: int) -> str:
     return textwrap.indent(text, ' ' * indent)
 
 
-def full_type_name(typename: str, namespace: str):
-    if typename.startswith('/'):
-        typename = typename[1:]
-    if typename.startswith("xsd:"):
-        return typename
-    if '/' in typename:
-        return typename
-    return f"{namespace}/{typename}"
+def get_qualified_name(name: str, namespace: str):
+    if name.startswith('/'):
+        name = name[1:]
+    if name.startswith("xsd:"):
+        return name
+    if '/' in name:
+        return name
+    return f"{namespace}/{name}"
 
 
-def split_full_type(typename: str) -> tuple[str, str]:
+def split_qualified_name(typename: str) -> tuple[str, str]:
     if '/' not in typename:
         return "", typename
     namespace, _, typename = typename.partition('/')
@@ -128,7 +129,7 @@ def to_python_type(typename: str) -> str:
         return "datetime"
     if typename.startswith("xsd:"):
         return "str"
-    _, typename = split_full_type(typename)
+    _, typename = split_qualified_name(typename)
     return typename
 
 
@@ -168,7 +169,7 @@ class GenClassFromSpec:
             self.parent_class = "ABC"
             self._add_import("abc", "ABC")
         else:
-            parent_class = full_type_name(parent_class, namespace)
+            parent_class = get_qualified_name(parent_class, namespace)
             self.parent_class = to_python_type(parent_class)
             self._import_spdx_type(parent_class)
         self.docstring = get_python_docstring(cls["description"], 4)
@@ -187,13 +188,14 @@ class GenClassFromSpec:
             return
         if typename.startswith("xsd:"):
             return
-        namespace, typename = split_full_type(typename)
+        namespace, typename = split_qualified_name(typename)
         namespace = f"..{namespace_name_to_python(namespace)}"
         self._add_import(namespace, typename)
 
     def _collect_props(self):
         for propname, propinfo in self.cls["properties"].items():
-            proptype = full_type_name(propinfo["type"], self.namespace)
+            propname = get_qualified_name(propname, self.namespace)
+            proptype = get_qualified_name(propinfo["type"], self.namespace)
             optional = "minCount" not in propinfo or propinfo["minCount"] == "0"
             is_list = "maxCount" not in propinfo or propinfo["maxCount"] != "1"
             prop = Property(propname, proptype, optional, is_list)
@@ -220,6 +222,7 @@ class GenClassFromSpec:
             default = ""
             name = prop_name_to_python(prop.name)
             proptype = to_python_type(prop.type)
+            docstring = self._get_prop_docstring(prop.name)
             if prop.is_list:
                 proptype = f"List[{proptype}]"
                 default = " = field(default_factory=list)"
@@ -229,8 +232,17 @@ class GenClassFromSpec:
                 proptype = f"Optional[{proptype}]"
                 default = " = None"
                 self._add_import("beartype.typing", "Optional")
-            code += CLS_PROP.format(prop_name=name, prop_type=proptype, default=default, docstring="")
+            code += CLS_PROP.format(prop_name=name, prop_type=proptype, default=default, docstring=docstring)
         return code
+
+    def _get_prop_docstring(self, name: str) -> str:
+        namespace, propname = split_qualified_name(name)
+        if namespace not in self.model or "properties" not in self.model[namespace]:
+            return ""
+        prop = self.model[namespace]["properties"].get(propname)
+        if not prop:
+            return ""
+        return get_python_docstring(prop["description"], 4)
 
 
 class GenPythonModelFromSpec:
