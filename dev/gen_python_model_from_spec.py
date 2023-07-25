@@ -138,7 +138,7 @@ def split_qualified_name(typename: str) -> tuple[str, str]:
 def to_python_type(typename: str) -> str:
     if typename == "xsd:datetime" or typename == "Core/DateTime":
         return "datetime"
-    if typename == "Core/SemVer":
+    if typename == "Core/SemVer" or typename == "Core/Extension":
         return "str"
     if typename.startswith("xsd:"):
         return "str"
@@ -214,7 +214,7 @@ class GenClassFromSpec:
         if typename == "Core/DateTime":
             self._add_import("datetime", "datetime")
             return
-        if typename == "Core/SemVer":
+        if typename == "Core/SemVer" or typename == "Core/Extension":
             return
         if typename.startswith("xsd:"):
             return
