@@ -84,9 +84,6 @@ CLS_INIT_ABSTRACT = """    @abstractmethod
         pass
 """
 
-FINAL_LINE = """# fmt: on
-"""
-
 output_dir = os.path.join(os.path.dirname(__file__), "../src/spdx_tools/spdx3/new_model")
 
 
@@ -303,14 +300,10 @@ class GenClassFromSpec:
 
 
 class GenPythonModelFromSpec:
-    prop_name_to_id: dict[str, str]
-    class_to_converter_func: dict[str, str]
     namespace_imports: str
     init_imports: dict[str, dict[str, str]]
 
     def __init__(self):
-        self.prop_name_to_id = {}
-        self.class_to_converter_func = {}
         self.namespace_imports = ""
         self.init_imports = {}
 
@@ -318,45 +311,6 @@ class GenPythonModelFromSpec:
         namespaces = [namespace_name_to_python(namespace["name"]) for namespace in model.values()]
         if namespaces:
             self.namespace_imports = "from . import " + ", ".join(namespaces)
-
-    def map_prop_names_to_ids(self, model: dict):
-        for namespace in model.values():
-            namespace_name = namespace["name"]
-            for prop_name, prop in namespace["properties"].items():
-                full_prop_name = f"{namespace_name}/{prop_name}"
-                prop_id = prop["metadata"]["id"]
-                self.prop_name_to_id[full_prop_name] = prop_id
-
-    def is_literal_type(self, typename: str, namespace_name: str, model: dict) -> bool:
-        if typename.startswith('/'):
-            typename = typename[1:]
-        if typename.startswith("xsd:"):
-            return True
-        if '/' in typename:
-            namespace_name, _, typename = typename.partition('/')
-        namespace = model[namespace_name] if namespace_name in model else None
-        if namespace and typename in namespace["vocabs"]:
-            return False
-        clazz = namespace["classes"][typename] if namespace and typename in namespace["classes"] else None
-        if not clazz:
-            return True
-        if "SubclassOf" not in clazz["metadata"] or clazz["metadata"]["SubclassOf"] == "none" or clazz["metadata"]["SubclassOf"].startswith("xsd:"):
-            return not clazz["properties"]
-        return False
-
-    def get_type_uri(self, typename: str, namespace_name: str) -> str:
-        if typename.startswith('/'):
-            typename = typename[1:]
-        if typename.startswith("xsd:"):
-            return typename.replace("xsd:", "http://www.w3.org/2001/XMLSchema#")
-        if '/' in typename:
-            namespace_name, _, typename = typename.partition('/')
-        return f"https://spdx.org/rdf/v3/{namespace_name}/{typename}"
-
-    def prop_conversion_code(self, typename: str, namespace_name: str, model: dict) -> str:
-        if self.is_literal_type(typename, namespace_name, model):
-            return f"Literal(value, datatype=\"{self.get_type_uri(typename, namespace_name)}\")"
-        return "model_to_rdf(value, graph)"
 
     def handle_class(self, clazz: dict, namespace_name: str, model: dict):
         clsinfo = GenClassFromSpec(clazz, namespace_name, model)
@@ -404,7 +358,6 @@ class GenPythonModelFromSpec:
             model = json.load(model_file)
 
         self.create_namespace_import(model)
-        self.map_prop_names_to_ids(model)
 
         for namespace in model.values():
             self.handle_namespace(namespace, model)
