@@ -63,12 +63,26 @@ from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_pr
 
 @dataclass_with_properties
 class {typename}({parent}):{docstring}
-
 {properties}
-"""
+{constructor}"""
 
 CLS_IMPORTS = "from {module} import {types}\n"
+
 CLS_PROP = "    {prop_name}: {prop_type}{default}{docstring}\n"
+
+CLS_INIT = """    def __init__(
+        self,{arguments}
+    ):{remaps}
+        check_types_and_set_values(self, locals())
+"""
+CLS_INIT_ARG = "\n        {prop_name}: {prop_type},"
+CLS_INIT_ARG_OPT = "\n        {prop_name}: {prop_type} = None,"
+CLS_INIT_REMAP = "\n        {prop_name} = [] if {prop_name} is None else {prop_name}"
+
+CLS_INIT_ABSTRACT = """    @abstractmethod
+    def __init__(self):
+        pass
+"""
 
 FINAL_LINE = """# fmt: on
 """
@@ -150,6 +164,14 @@ class Property:
     is_list: bool
     inherited: bool
 
+    def get_python_type(self) -> str:
+        prop_type = to_python_type(self.type)
+        if self.is_list:
+            prop_type = f"List[{prop_type}]"
+        elif self.optional:
+            prop_type = f"Optional[{prop_type}]"
+        return prop_type
+
 
 class GenClassFromSpec:
     cls: dict
@@ -219,12 +241,18 @@ class GenClassFromSpec:
             self.props.append(prop)
             self._import_spdx_type(proptype)
 
+            if is_list:
+                self._add_import("beartype.typing", "List")
+            elif optional:
+                self._add_import("beartype.typing", "Optional")
+
     def gen_file(self):
         properties = self._gen_props()
+        constructor = self._gen_constructor()
         # imports should be last, as we may add additional types to import during generation
         imports = self._gen_imports()
         with open(self.file_path, "w") as output_file:
-            output_file.write(CLS_FILE.format(typename=self.typename, parent=self.parent_class, docstring=self.docstring, properties=properties, imports=imports))
+            output_file.write(CLS_FILE.format(typename=self.typename, parent=self.parent_class, docstring=self.docstring, properties=properties, imports=imports, constructor=constructor))
 
     def _gen_imports(self) -> str:
         imports = ""
@@ -239,17 +267,13 @@ class GenClassFromSpec:
         for prop in own_props:
             default = ""
             name = prop_name_to_python(prop.name)
-            proptype = to_python_type(prop.type)
+            proptype = prop.get_python_type()
             docstring = self._get_prop_docstring(prop.name)
             if prop.is_list:
-                proptype = f"List[{proptype}]"
                 default = " = field(default_factory=list)"
-                self._add_import("beartype.typing", "List")
                 self._add_import("dataclasses", "field")
             elif prop.optional:
-                proptype = f"Optional[{proptype}]"
                 default = " = None"
-                self._add_import("beartype.typing", "Optional")
             code += CLS_PROP.format(prop_name=name, prop_type=proptype, default=default, docstring=docstring)
         return code
 
@@ -261,6 +285,21 @@ class GenClassFromSpec:
         if not prop:
             return ""
         return get_python_docstring(prop["description"], 4)
+
+    def _gen_constructor(self) -> str:
+        self._add_import("spdx_tools.common.typing.type_checks", "check_types_and_set_values")
+        args = ""
+        remaps = ""
+        required_props = (prop for prop in self.props if not prop.optional)
+        optional_props = (prop for prop in self.props if prop.optional)
+        for prop in required_props:
+            args += CLS_INIT_ARG.format(prop_name=prop_name_to_python(prop.name), prop_type=prop.get_python_type())
+        for prop in optional_props:
+            prop_name = prop_name_to_python(prop.name)
+            args += CLS_INIT_ARG_OPT.format(prop_name=prop_name, prop_type=prop.get_python_type())
+            if prop.is_list:
+                remaps += CLS_INIT_REMAP.format(prop_name=prop_name)
+        return CLS_INIT.format(arguments=args, remaps=remaps)
 
 
 class GenPythonModelFromSpec:
