@@ -163,13 +163,14 @@ class GenClassFromSpec:
 
         self.typename = cls["metadata"]["name"]
         self.filename = camel_case_to_snake_case(self.typename)
-        parent_class = (
-            cls["metadata"]["SubclassOf"]
-            if "SubclassOf" in cls["metadata"] and cls["metadata"]["SubclassOf"] != "none"
-            else None
-        )
-        parent_namespace = namespace
-        self.parent_class = "ABC"
+        parent_class = cls["metadata"].get("SubclassOf") or "none"
+        if parent_class == "none":
+            self.parent_class = "ABC"
+            self._add_import("abc", "ABC")
+        else:
+            parent_class = full_type_name(parent_class, namespace)
+            self.parent_class = to_python_type(parent_class)
+            self._import_spdx_type(parent_class)
         self.docstring = get_python_docstring(cls["description"], 4)
         self.file_path = get_file_path(self.typename, namespace)
 
