@@ -31,6 +31,8 @@ This library implements SPDX parsers, convertors, validators and handlers in Pyt
 - PyPI: https://pypi.python.org/pypi/spdx-tools
 - Browse the API: https://spdx.github.io/tools-python
 
+Important updates regarding this library are shared via the SPDX tech mailing list: https://lists.spdx.org/g/Spdx-tech.
+
 
 # License
 
