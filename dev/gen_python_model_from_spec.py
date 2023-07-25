@@ -284,6 +284,10 @@ class GenClassFromSpec:
         return get_python_docstring(prop["description"], 4)
 
     def _gen_constructor(self) -> str:
+        if self.cls["metadata"].get("Instantiability") == "Abstract":
+            self._add_import("abc", "abstractmethod")
+            return CLS_INIT_ABSTRACT
+
         self._add_import("spdx_tools.common.typing.type_checks", "check_types_and_set_values")
         args = ""
         remaps = ""
