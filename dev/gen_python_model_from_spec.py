@@ -127,10 +127,19 @@ def split_qualified_name(typename: str) -> tuple[str, str]:
 def to_python_type(typename: str) -> str:
     if typename == "xsd:datetime" or typename == "Core/DateTime":
         return "datetime"
+    if typename == "Core/SemVer":
+        return "str"
     if typename.startswith("xsd:"):
         return "str"
     _, typename = split_qualified_name(typename)
     return typename
+
+
+def extract_parent_type(cls: dict, namespace: str) -> Optional[str]:
+    parent_class = cls["metadata"].get("SubclassOf") or "none"
+    if parent_class == "none":
+        return None
+    return get_qualified_name(parent_class, namespace)
 
 
 @dataclass
@@ -139,6 +148,7 @@ class Property:
     type: str
     optional: bool
     is_list: bool
+    inherited: bool
 
 
 class GenClassFromSpec:
@@ -164,18 +174,17 @@ class GenClassFromSpec:
 
         self.typename = cls["metadata"]["name"]
         self.filename = camel_case_to_snake_case(self.typename)
-        parent_class = cls["metadata"].get("SubclassOf") or "none"
-        if parent_class == "none":
+        parent_class = extract_parent_type(cls, namespace)
+        if not parent_class:
             self.parent_class = "ABC"
             self._add_import("abc", "ABC")
         else:
-            parent_class = get_qualified_name(parent_class, namespace)
             self.parent_class = to_python_type(parent_class)
             self._import_spdx_type(parent_class)
         self.docstring = get_python_docstring(cls["description"], 4)
         self.file_path = get_file_path(self.typename, namespace)
 
-        self._collect_props()
+        self._collect_props(self.cls, self.namespace, False)
 
     def _add_import(self, module: str, typename: str):
         if module not in self.imports:
@@ -186,19 +195,27 @@ class GenClassFromSpec:
         if typename == "Core/DateTime":
             self._add_import("datetime", "datetime")
             return
+        if typename == "Core/SemVer":
+            return
         if typename.startswith("xsd:"):
             return
         namespace, typename = split_qualified_name(typename)
         namespace = f"..{namespace_name_to_python(namespace)}"
         self._add_import(namespace, typename)
 
-    def _collect_props(self):
-        for propname, propinfo in self.cls["properties"].items():
-            propname = get_qualified_name(propname, self.namespace)
-            proptype = get_qualified_name(propinfo["type"], self.namespace)
+    def _collect_props(self, cls: dict, namespace: str, is_parent: bool):
+        parent = extract_parent_type(cls, namespace)
+        if parent:
+            parent_namespace, parent_class = split_qualified_name(parent)
+            if parent_namespace in self.model and parent_class in self.model[parent_namespace]["classes"]:
+                self._collect_props(self.model[parent_namespace]["classes"][parent_class], parent_namespace, True)
+
+        for propname, propinfo in cls["properties"].items():
+            propname = get_qualified_name(propname, namespace)
+            proptype = get_qualified_name(propinfo["type"], namespace)
             optional = "minCount" not in propinfo or propinfo["minCount"] == "0"
             is_list = "maxCount" not in propinfo or propinfo["maxCount"] != "1"
-            prop = Property(propname, proptype, optional, is_list)
+            prop = Property(propname, proptype, optional, is_list, is_parent)
             self.props.append(prop)
             self._import_spdx_type(proptype)
 
@@ -218,7 +235,8 @@ class GenClassFromSpec:
 
     def _gen_props(self) -> str:
         code = ""
-        for prop in self.props:
+        own_props = (prop for prop in self.props if not prop.inherited)
+        for prop in own_props:
             default = ""
             name = prop_name_to_python(prop.name)
             proptype = to_python_type(prop.type)
