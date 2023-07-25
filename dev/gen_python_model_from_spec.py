@@ -91,6 +91,7 @@ CLS_INIT_ABSTRACT = """    @abstractmethod
         pass
 """
 
+# TODO: use the actual model package path rather than a separate path
 output_dir = os.path.join(os.path.dirname(__file__), "../src/spdx_tools/spdx3/new_model")
 
 
@@ -111,7 +112,7 @@ def namespace_name_to_python(namespace_name: str):
 
 def get_file_path(typename: str, namespace: str) -> str:
     namespace = namespace_name_to_python(namespace)
-    typename = camel_case_to_snake_case(typename)
+    typename = camel_case_to_snake_case(typename) if typename != "AIPackage" else "ai_package"
     return os.path.join(output_dir, namespace, f"{typename}.py")
 
 
