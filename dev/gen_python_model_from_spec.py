@@ -45,17 +45,17 @@ class {typename}(Enum):{docstring}
 {values_to_str}
         return "unknown"
 
-
-def {python_typename}_from_str(value: str) -> Optional[{typename}]:
+    @staticmethod
+    def from_str(value: str) -> Optional['{typename}']:
 {str_to_values}
-    return None
+        return None
 """
 
 VOCAB_ENTRY = "    {value} = auto(){docstring}"
 
 VOCAB_VALUE_TO_STR = "        if self == {typename}.{python_value}:\n            return \"{str_value}\""
 
-VOCAB_STR_TO_VALUE = "    if value == \"{str_value}\":\n        return {typename}.{python_value}"
+VOCAB_STR_TO_VALUE = "        if value == \"{str_value}\":\n            return {typename}.{python_value}"
 
 CLS_FILE = FILE_HEADER + """{imports}
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
