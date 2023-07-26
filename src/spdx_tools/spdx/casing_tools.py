@@ -10,5 +10,5 @@ def snake_case_to_camel_case(snake_case_string: str) -> str:
 
 
 def camel_case_to_snake_case(camel_case_string: str) -> str:
-    snake_case_string = sub("(?!^)([A-Z]+)", r"_\1", camel_case_string).lower()
+    snake_case_string = sub("(?!^)-?([A-Z]+)", r"_\1", camel_case_string).lower()
     return snake_case_string
