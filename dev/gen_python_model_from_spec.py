@@ -91,6 +91,33 @@ CLS_INIT_ABSTRACT = """    @abstractmethod
         pass
 """
 
+SPECIAL_TYPE_MAPPINGS: dict[str, tuple[str, Optional[str]]] = {
+    "Core/DateTime": ("datetime", "datetime"),
+    "Core/Extension": ("str", None),
+    "Core/MediaType": ("str", None),
+    "Core/SemVer": ("Version", "semantic_version"),
+    "xsd:anyURI": ("str", None),
+    "xsd:boolean": ("bool", None),
+    "xsd:datetime": ("datetime", "datetime"),
+    "xsd:decimal": ("float", None),
+    "xsd:double": ("float", None),
+    "xsd:float": ("float", None),
+    "xsd:int": ("int", None),
+    "xsd:integer": ("int", None),
+    "xsd:negativeInteger": ("int", None),
+    "xsd:nonNegativeInteger": ("int", None),
+    "xsd:nonPositiveInteger": ("int", None),
+    "xsd:positiveInteger": ("int", None),
+    "xsd:string": ("str", None),
+}
+
+SPECIAL_PROPTYPE_MAPPINGS: dict[str, tuple[str, Optional[str]]] = {
+    # for the moment, we replace Element and Agent references with string references to their ID
+    # otherwise, there is a cyclic dependency between CreationInfo and Agent that is problematic to deal with
+    "Core/Agent": ("str", None),
+    "Core/Element": ("str", None),
+}
+
 # TODO: use the actual model package path rather than a separate path
 output_dir = os.path.join(os.path.dirname(__file__), "../src/spdx_tools/spdx3/new_model")
 
@@ -145,10 +172,8 @@ def split_qualified_name(typename: str) -> tuple[str, str]:
 
 
 def to_python_type(typename: str) -> str:
-    if typename == "xsd:datetime" or typename == "Core/DateTime":
-        return "datetime"
-    if typename == "Core/SemVer" or typename == "Core/Extension":
-        return "str"
+    if typename in SPECIAL_TYPE_MAPPINGS:
+        return SPECIAL_TYPE_MAPPINGS[typename][0]
     if typename.startswith("xsd:"):
         return "str"
     _, typename = split_qualified_name(typename)
@@ -171,7 +196,10 @@ class Property:
     inherited: bool
 
     def get_python_type(self) -> str:
-        prop_type = to_python_type(self.type)
+        if self.type in SPECIAL_PROPTYPE_MAPPINGS:
+            prop_type = SPECIAL_PROPTYPE_MAPPINGS[self.type][0]
+        else:
+            prop_type = to_python_type(self.type)
         if self.is_list:
             prop_type = f"List[{prop_type}]"
         elif self.optional:
@@ -220,10 +248,10 @@ class GenClassFromSpec:
         self.imports[module].add(typename)
 
     def _import_spdx_type(self, typename: str):
-        if typename == "Core/DateTime":
-            self._add_import("datetime", "datetime")
-            return
-        if typename == "Core/SemVer" or typename == "Core/Extension":
+        if typename in SPECIAL_TYPE_MAPPINGS:
+            import_type, import_module = SPECIAL_TYPE_MAPPINGS[typename]
+            if import_module:
+                self._add_import(import_module, import_type)
             return
         if typename.startswith("xsd:"):
             return
