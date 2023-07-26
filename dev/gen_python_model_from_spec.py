@@ -84,7 +84,7 @@ CLS_INIT = """    def __init__(
 """
 CLS_INIT_ARG = "\n        {prop_name}: {prop_type},"
 CLS_INIT_ARG_OPT = "\n        {prop_name}: {prop_type} = None,"
-CLS_INIT_REMAP = "\n        {prop_name} = [] if {prop_name} is None else {prop_name}"
+CLS_INIT_REMAP = "\n        {prop_name} = {default} if {prop_name} is None else {prop_name}"
 
 CLS_INIT_ABSTRACT = """    @abstractmethod
     def __init__(self):
@@ -196,6 +196,8 @@ class Property:
     inherited: bool
 
     def get_python_type(self) -> str:
+        if self.type == "Core/DictionaryEntry":
+            return "Dict[str, Optional[str]]"
         if self.type in SPECIAL_PROPTYPE_MAPPINGS:
             prop_type = SPECIAL_PROPTYPE_MAPPINGS[self.type][0]
         else:
@@ -275,7 +277,10 @@ class GenClassFromSpec:
             self.props.append(prop)
             self._import_spdx_type(proptype)
 
-            if is_list:
+            if proptype == "Core/DictionaryEntry":
+                self._add_import("beartype.typing", "Dict")
+                self._add_import("beartype.typing", "Optional")
+            elif is_list:
                 self._add_import("beartype.typing", "List")
             elif optional:
                 self._add_import("beartype.typing", "Optional")
@@ -303,7 +308,10 @@ class GenClassFromSpec:
             name = prop_name_to_python(prop.name)
             proptype = prop.get_python_type()
             docstring = self._get_prop_docstring(prop.name)
-            if prop.is_list:
+            if prop.type == "Core/DictionaryType":
+                default = " = field(default_factory=dict)"
+                self._add_import("dataclasses", "field")
+            elif prop.is_list:
                 default = " = field(default_factory=list)"
                 self._add_import("dataclasses", "field")
             elif prop.optional:
@@ -335,8 +343,10 @@ class GenClassFromSpec:
         for prop in optional_props:
             prop_name = prop_name_to_python(prop.name)
             args += CLS_INIT_ARG_OPT.format(prop_name=prop_name, prop_type=prop.get_python_type())
-            if prop.is_list:
-                remaps += CLS_INIT_REMAP.format(prop_name=prop_name)
+            if prop.type == "Core/DictionaryEntry":
+                remaps += CLS_INIT_REMAP.format(prop_name=prop_name, default="{}")
+            elif prop.is_list:
+                remaps += CLS_INIT_REMAP.format(prop_name=prop_name, default="[]")
         return CLS_INIT.format(arguments=args, remaps=remaps)
 
 
