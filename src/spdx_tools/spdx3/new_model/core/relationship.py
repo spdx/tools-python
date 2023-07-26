@@ -18,11 +18,11 @@ class Relationship(Element):
     A Relationship is a grouping of characteristics unique to an assertion that one Element is related to one or more
     other Elements in some way.
     """
-    from_element: Element
+    from_element: str
     """
     This field references the Element on the left-hand side of a relationship.
     """
-    to: List[Element] = field(default_factory=list)
+    to: List[str] = field(default_factory=list)
     """
     This field references an Element on the right-hand side of a relationship.
     """
@@ -50,7 +50,7 @@ class Relationship(Element):
         self,
         spdx_id: str,
         creation_info: CreationInfo,
-        from_element: Element,
+        from_element: str,
         relationship_type: RelationshipType,
         name: Optional[str] = None,
         summary: Optional[str] = None,
@@ -59,8 +59,8 @@ class Relationship(Element):
         verified_using: List[IntegrityMethod] = None,
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: Optional[str] = None,
-        to: List[Element] = None,
+        extension: List[str] = None,
+        to: List[str] = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
@@ -68,5 +68,6 @@ class Relationship(Element):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
+        extension = [] if extension is None else extension
         to = [] if to is None else to
         check_types_and_set_values(self, locals())

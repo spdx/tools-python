@@ -18,11 +18,11 @@ class Artifact(Element):
     An artifact is a distinct article or unit within the digital domain, such as an electronic file, a software package,
     a device or an element of data.
     """
-    originated_by: List[Agent] = field(default_factory=list)
+    originated_by: List[str] = field(default_factory=list)
     """
     OriginatedBy identifies from where or whom the Element originally came.
     """
-    supplied_by: List[Agent] = field(default_factory=list)
+    supplied_by: List[str] = field(default_factory=list)
     """
     Identify the actual distribution source for the Artifact being referenced. This might or might not be different from
     the originating distribution source for the artifact.

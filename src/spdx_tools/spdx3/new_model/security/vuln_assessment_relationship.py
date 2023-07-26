@@ -17,7 +17,7 @@ class VulnAssessmentRelationship(Relationship):
     VulnAssessmentRelationship is the ancestor class common to all vulnerability assessment relationships. It factors
     out the common properties shared by them. External property restriction on /Core/Relationship/to: minCount: 1
     """
-    assessed_element: Optional[Element] = None
+    assessed_element: Optional[str] = None
     """
     Specifies subpackages, files or snippets referenced by a security assessment to specify the precise location where a
     vulnerability was found.
@@ -26,7 +26,7 @@ class VulnAssessmentRelationship(Relationship):
     """
     Specifies the time when a vulnerability was first published.
     """
-    supplied_by: Optional[Agent] = None
+    supplied_by: Optional[str] = None
     """
     Identify the actual distribution source for the vulnerability assessment relationship being referenced.
     """

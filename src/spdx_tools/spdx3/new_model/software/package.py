@@ -88,9 +88,9 @@ class Package(SoftwareArtifact):
         verified_using: List[IntegrityMethod] = None,
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: Optional[str] = None,
-        originated_by: List[Agent] = None,
-        supplied_by: List[Agent] = None,
+        extension: List[str] = None,
+        originated_by: List[str] = None,
+        supplied_by: List[str] = None,
         built_time: Optional[datetime] = None,
         release_time: Optional[datetime] = None,
         valid_until_time: Optional[datetime] = None,
@@ -111,6 +111,7 @@ class Package(SoftwareArtifact):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
+        extension = [] if extension is None else extension
         originated_by = [] if originated_by is None else originated_by
         supplied_by = [] if supplied_by is None else supplied_by
         standard = [] if standard is None else standard

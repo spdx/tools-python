@@ -20,11 +20,11 @@ class CustomLicense(License):
     def __init__(
         self,
         license_text: str,
-        is_osi_approved: Optional[str] = None,
-        is_fsf_libre: Optional[str] = None,
+        is_osi_approved: Optional[bool] = None,
+        is_fsf_libre: Optional[bool] = None,
         standard_license_header: Optional[str] = None,
         standard_license_template: Optional[str] = None,
-        is_deprecated_license_id: Optional[str] = None,
+        is_deprecated_license_id: Optional[bool] = None,
         obsoleted_by: Optional[str] = None,
     ):
         check_types_and_set_values(self, locals())

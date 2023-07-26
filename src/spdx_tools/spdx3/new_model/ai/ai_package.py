@@ -4,10 +4,10 @@
 # Do not manually edit!
 
 from ..ai import PresenceType, SafetyRiskAssessmentType
-from ..core import Agent, CreationInfo, DictionaryEntry, ExternalIdentifier, ExternalReference, IntegrityMethod
+from ..core import Agent, CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
 from ..licensing import AnyLicenseInfo
 from ..software import Package, SoftwarePurpose
-from beartype.typing import List, Optional
+from beartype.typing import Dict, List, Optional
 from dataclasses import field
 from datetime import datetime
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
@@ -56,7 +56,7 @@ class AIPackage(Package):
     InformationAboutApplication describes any relevant information in free form text about how the AI model is used
     inside the software, as well as any relevant pre-processing steps, third party APIs etc.
     """
-    hyperparameter: List[DictionaryEntry] = field(default_factory=list)
+    hyperparameter: Dict[str, Optional[str]] = field(default_factory=list)
     """
     This field records a hyperparameter value. Hyperparameters are parameters of the machine learning model that are
     used to control the learning process, for example the optimization and learning rate used during the training of the
@@ -77,13 +77,13 @@ class AIPackage(Package):
     SensitivePersonalInformation notes if sensitive personal information is used in the training or inference of the AI
     models. This might include biometric data, addresses or other data that can be used to infer a person's identity.
     """
-    metric_decision_threshold: List[DictionaryEntry] = field(default_factory=list)
+    metric_decision_threshold: Dict[str, Optional[str]] = field(default_factory=list)
     """
     Each metric might be computed based on a decision threshold. For instance, precision or recall is typically computed
     by checking if the probability of the outcome is larger than 0.5. Each decision threshold should match with a metric
     field defined in the AI Package.
     """
-    metric: List[DictionaryEntry] = field(default_factory=list)
+    metric: Dict[str, Optional[str]] = field(default_factory=list)
     """
     Metric records the measurement with which the AI model was evaluated. This makes statements about the prediction
     quality including uncertainty, accuracy, characteristics of the tested population, quality, fairness,
@@ -116,9 +116,9 @@ class AIPackage(Package):
         verified_using: List[IntegrityMethod] = None,
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: Optional[str] = None,
-        originated_by: List[Agent] = None,
-        supplied_by: List[Agent] = None,
+        extension: List[str] = None,
+        originated_by: List[str] = None,
+        supplied_by: List[str] = None,
         built_time: Optional[datetime] = None,
         release_time: Optional[datetime] = None,
         valid_until_time: Optional[datetime] = None,
@@ -141,12 +141,12 @@ class AIPackage(Package):
         type_of_model: List[str] = None,
         information_about_training: Optional[str] = None,
         information_about_application: Optional[str] = None,
-        hyperparameter: List[DictionaryEntry] = None,
+        hyperparameter: Dict[str, Optional[str]] = None,
         model_data_preprocessing: List[str] = None,
         model_explainability: List[str] = None,
         sensitive_personal_information: Optional[PresenceType] = None,
-        metric_decision_threshold: List[DictionaryEntry] = None,
-        metric: List[DictionaryEntry] = None,
+        metric_decision_threshold: Dict[str, Optional[str]] = None,
+        metric: Dict[str, Optional[str]] = None,
         domain: List[str] = None,
         autonomy_type: Optional[PresenceType] = None,
         safety_risk_assessment: Optional[SafetyRiskAssessmentType] = None,
@@ -154,16 +154,17 @@ class AIPackage(Package):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
+        extension = [] if extension is None else extension
         originated_by = [] if originated_by is None else originated_by
         supplied_by = [] if supplied_by is None else supplied_by
         standard = [] if standard is None else standard
         additional_purpose = [] if additional_purpose is None else additional_purpose
         standard_compliance = [] if standard_compliance is None else standard_compliance
         type_of_model = [] if type_of_model is None else type_of_model
-        hyperparameter = [] if hyperparameter is None else hyperparameter
+        hyperparameter = {} if hyperparameter is None else hyperparameter
         model_data_preprocessing = [] if model_data_preprocessing is None else model_data_preprocessing
         model_explainability = [] if model_explainability is None else model_explainability
-        metric_decision_threshold = [] if metric_decision_threshold is None else metric_decision_threshold
-        metric = [] if metric is None else metric
+        metric_decision_threshold = {} if metric_decision_threshold is None else metric_decision_threshold
+        metric = {} if metric is None else metric
         domain = [] if domain is None else domain
         check_types_and_set_values(self, locals())

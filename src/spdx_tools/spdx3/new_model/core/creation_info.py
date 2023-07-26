@@ -8,6 +8,7 @@ from abc import ABC
 from beartype.typing import List, Optional
 from dataclasses import field
 from datetime import datetime
+from semantic_version import Version
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
@@ -21,7 +22,7 @@ class CreationInfo(ABC):
     The dateTime created is often the date of last change (e.g., a git commit date), not the date when the SPDX data was
     created, as doing so supports reproducible builds.
     """
-    spec_version: Optional[str] = None
+    spec_version: Version
     """
     The specVersion provides a reference number that can be used to understand how to parse and interpret an Element. It
     will enable both future changes to the specification and to support backward compatibility. The major version number
@@ -42,7 +43,7 @@ class CreationInfo(ABC):
     as to whether the analysis needs to be updated. This is often the date of last change (e.g., a git commit date), not
     the date when the SPDX data was created, as doing so supports reproducible builds.
     """
-    created_by: List[Agent] = field(default_factory=list)
+    created_by: List[str] = field(default_factory=list)
     """
     CreatedBy identifies who or what created the Element. The generation method will assist the recipient of the Element
     in assessing the general reliability/accuracy of the analysis information.
@@ -80,9 +81,9 @@ class CreationInfo(ABC):
 
     def __init__(
         self,
-        created_by: List[Agent],
+        spec_version: Version,
+        created_by: List[str],
         profile: List[ProfileIdentifierType],
-        spec_version: Optional[str] = None,
         comment: Optional[str] = None,
         created: Optional[datetime] = None,
         created_using: List[Tool] = None,

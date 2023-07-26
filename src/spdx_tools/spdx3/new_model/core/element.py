@@ -64,7 +64,7 @@ class Element(ABC):
     """
     ExternalIdentifier points to a resource outside the scope of SPDX-3.0 content that uniquely identifies an Element.
     """
-    extension: Optional[str] = None
+    extension: List[str] = field(default_factory=list)
     """
     TODO
     """

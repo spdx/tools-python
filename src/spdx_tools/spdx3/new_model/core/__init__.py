@@ -10,8 +10,6 @@ from .artifact import Artifact
 from .bom import Bom
 from .bundle import Bundle
 from .creation_info import CreationInfo
-from .date_time import DateTime
-from .dictionary_entry import DictionaryEntry
 from .element import Element
 from .element_collection import ElementCollection
 from .external_identifier import ExternalIdentifier
@@ -24,8 +22,6 @@ from .hash_algorithm import HashAlgorithm
 from .integrity_method import IntegrityMethod
 from .lifecycle_scope_type import LifecycleScopeType
 from .lifecycle_scoped_relationship import LifecycleScopedRelationship
-from .media_type import MediaType
-from .namespace_map import NamespaceMap
 from .organization import Organization
 from .person import Person
 from .positive_integer_range import PositiveIntegerRange
@@ -33,7 +29,6 @@ from .profile_identifier_type import ProfileIdentifierType
 from .relationship import Relationship
 from .relationship_completeness import RelationshipCompleteness
 from .relationship_type import RelationshipType
-from .sem_ver import SemVer
 from .software_agent import SoftwareAgent
 from .spdx_document import SpdxDocument
 from .tool import Tool

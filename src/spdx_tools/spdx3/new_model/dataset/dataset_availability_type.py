@@ -14,11 +14,11 @@ class DatasetAvailabilityType(Enum):
     registration form.
     """
 
-    DIRECT-_DOWNLOAD = auto()
+    DIRECT_DOWNLOAD = auto()
     """
     the dataset is publicly available and can be downloaded directly.
     """
-    SCRAPING-_SCRIPT = auto()
+    SCRAPING_SCRIPT = auto()
     """
     the dataset provider is not making available the underlying data and the dataset must be reassembled, typically
     using the provided script for scraping the data.
@@ -40,9 +40,9 @@ class DatasetAvailabilityType(Enum):
     """
 
     def __str__(self) -> str:
-        if self == DatasetAvailabilityType.DIRECT-_DOWNLOAD:
+        if self == DatasetAvailabilityType.DIRECT_DOWNLOAD:
             return "Direct-Download"
-        if self == DatasetAvailabilityType.SCRAPING-_SCRIPT:
+        if self == DatasetAvailabilityType.SCRAPING_SCRIPT:
             return "Scraping-Script"
         if self == DatasetAvailabilityType.QUERY:
             return "Query"
@@ -55,9 +55,9 @@ class DatasetAvailabilityType(Enum):
     @staticmethod
     def from_str(value: str) -> Optional['DatasetAvailabilityType']:
         if value == "Direct-Download":
-            return DatasetAvailabilityType.DIRECT-_DOWNLOAD
+            return DatasetAvailabilityType.DIRECT_DOWNLOAD
         if value == "Scraping-Script":
-            return DatasetAvailabilityType.SCRAPING-_SCRIPT
+            return DatasetAvailabilityType.SCRAPING_SCRIPT
         if value == "Query":
             return DatasetAvailabilityType.QUERY
         if value == "Clickthrough":

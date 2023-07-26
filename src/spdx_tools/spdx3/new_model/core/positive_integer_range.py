@@ -15,18 +15,18 @@ class PositiveIntegerRange(ABC):
     PositiveIntegerRange is a tuple of two positive integers that define a range. "begin" must be less than or equal to
     "end".
     """
-    begin: str
+    begin: int
     """
     begin is a positive integer that defines the beginning of a range.
     """
-    end: str
+    end: int
     """
     end is a positive integer that defines the end of a range.
     """
 
     def __init__(
         self,
-        begin: str,
-        end: str,
+        begin: int,
+        end: int,
     ):
         check_types_and_set_values(self, locals())

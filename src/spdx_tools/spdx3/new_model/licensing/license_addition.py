@@ -31,7 +31,7 @@ class LicenseAddition(Element):
     A standardAdditionTemplate contains a license addition template which describes sections of the LicenseAddition text
     which can be varied. See the Legacy Text Template format section of the SPDX specification for format information.
     """
-    is_deprecated_addition_id: Optional[str] = None
+    is_deprecated_addition_id: Optional[bool] = None
     """
     The isDeprecatedAdditionId property specifies whether an identifier for a LicenseAddition has been marked as
     deprecated. If the property is not defined, then it is presumed to be false (i.e., not deprecated).

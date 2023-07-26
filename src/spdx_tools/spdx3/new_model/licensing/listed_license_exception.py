@@ -41,9 +41,9 @@ class ListedLicenseException(LicenseAddition):
         verified_using: List[IntegrityMethod] = None,
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: Optional[str] = None,
+        extension: List[str] = None,
         standard_addition_template: Optional[str] = None,
-        is_deprecated_addition_id: Optional[str] = None,
+        is_deprecated_addition_id: Optional[bool] = None,
         obsoleted_by: Optional[str] = None,
         list_version_added: Optional[str] = None,
         deprecated_version: Optional[str] = None,
@@ -51,4 +51,5 @@ class ListedLicenseException(LicenseAddition):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
+        extension = [] if extension is None else extension
         check_types_and_set_values(self, locals())

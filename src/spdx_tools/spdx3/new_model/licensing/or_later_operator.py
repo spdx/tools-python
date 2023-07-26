@@ -22,10 +22,6 @@ class OrLaterOperator(ExtendableLicense):
     particular License.
     """
     subject_license: License
-    """
-    A subjectLicense is a License which is subject to either an 'or later' effect (OrLaterOperator) or a 'with
-    additional text' effect (WithAdditionOperator).
-    """
 
     def __init__(
         self,

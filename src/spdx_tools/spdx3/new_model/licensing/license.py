@@ -23,7 +23,7 @@ class License(ExtendableLicense):
     Users of the licenseText for a License can apply the SPDX Matching Guidelines when comparing it to another text for
     matching purposes.
     """
-    is_osi_approved: Optional[str] = None
+    is_osi_approved: Optional[bool] = None
     """
     isOsiApproved specifies whether the [Open Source Initiative (OSI)](https://opensource.org) has listed this License
     as "approved" in their list of OSI Approved Licenses, located at the time of this writing at
@@ -36,7 +36,7 @@ class License(ExtendableLicense):
     If the isOsiApproved field is not specified, the SPDX data creator makes no assertions about whether the License is
     approved by the OSI.
     """
-    is_fsf_libre: Optional[str] = None
+    is_fsf_libre: Optional[bool] = None
     """
     isFsfLibre specifies whether the [Free Software Foundation FSF](https://fsf.org) has listed this License as "free"
     in their commentary on licenses, located at the time of this writing at
@@ -60,7 +60,7 @@ class License(ExtendableLicense):
     A standardLicenseTemplate contains a license template which describes sections of the License text which can be
     varied. See the Legacy Text Template format section of the SPDX specification for format information.
     """
-    is_deprecated_license_id: Optional[str] = None
+    is_deprecated_license_id: Optional[bool] = None
     """
     The isDeprecatedLicenseId property specifies whether an identifier for a License or LicenseAddition has been marked
     as deprecated. If the property is not defined, then it is presumed to be false (i.e., not deprecated).

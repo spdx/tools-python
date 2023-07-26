@@ -19,14 +19,7 @@ class WithAdditionOperator(AnyLicenseInfo):
     (CustomLicenseAddition). It is represented in the SPDX License Expression Syntax by the `WITH` operator.
     """
     subject_license: ExtendableLicense
-    """
-    A subjectLicense is a License which is subject to either an 'or later' effect (OrLaterOperator) or a 'with
-    additional text' effect (WithAdditionOperator).
-    """
     subject_addition: LicenseAddition
-    """
-    A subjectAddition is a LicenseAddition which is subject to a 'with additional text' effect (WithAdditionOperator).
-    """
 
     def __init__(
         self,
@@ -41,9 +34,10 @@ class WithAdditionOperator(AnyLicenseInfo):
         verified_using: List[IntegrityMethod] = None,
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
-        extension: Optional[str] = None,
+        extension: List[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
+        extension = [] if extension is None else extension
         check_types_and_set_values(self, locals())
