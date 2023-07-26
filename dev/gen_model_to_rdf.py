@@ -202,13 +202,18 @@ class GenModelToRdf:
             return True
         if '/' in typename:
             namespace_name, _, typename = typename.partition('/')
-        namespace = model[namespace_name] if namespace_name in model else None
-        if namespace and typename in namespace["vocabs"]:
-            return False
-        clazz = namespace["classes"][typename] if namespace and typename in namespace["classes"] else None
+
+        namespace = model.get(namespace_name)
+        clazz = None
+        if namespace:
+            if typename in namespace["vocabs"]:
+                return False
+            clazz = namespace["classes"].get(typename)
+
         if not clazz:
             return True
-        if "SubclassOf" not in clazz["metadata"] or clazz["metadata"]["SubclassOf"] == "none" or clazz["metadata"]["SubclassOf"].startswith("xsd:"):
+        parent_class = clazz["metadata"].get("SubclassOf") or "none"
+        if parent_class == "none" or parent_class.startswith("xsd:"):
             return not clazz["properties"]
         return False
 
@@ -227,12 +232,9 @@ class GenModelToRdf:
         return "model_to_rdf(value, graph)"
 
     def handle_class(self, output_file: IO[str], clazz: dict, namespace_name: str, model: dict):
-        parent_class = (
-            clazz["metadata"]["SubclassOf"]
-            if "SubclassOf" in clazz["metadata"] and clazz["metadata"]["SubclassOf"] != "none"
-            else None
-        )
-        parent_namespace = namespace_name
+        parent_class = clazz["metadata"].get("SubclassOf")
+        if parent_class == "none":
+            parent_class = None
         if parent_class == "xsd:string":
             return
 
@@ -246,17 +248,23 @@ class GenModelToRdf:
         for prop_name, prop in clazz["properties"].items():
             if prop_name == "spdxId":
                 continue
+            if prop_name.startswith('/'):
+                prop_name = prop_name[1:]
             full_prop_name = f"{namespace_name}/{prop_name}" if "/" not in prop_name else prop_name
             _, _, prop_name = full_prop_name.partition("/")
-            is_list = not ("maxCount" in prop and prop["maxCount"] == "1")
+            is_list = prop.get("maxCount") != "1"
             prop_conversion_code = self.prop_conversion_code(prop["type"], namespace_name, model)
             if is_list:
                 prop_code += PROP_LIST_CONVERTER_BODY.format(
-                    prop_name=prop_name_to_python(prop_name), prop_id=self.prop_name_to_id[full_prop_name], prop_conversion_code=prop_conversion_code
+                    prop_name=prop_name_to_python(prop_name),
+                    prop_id=self.prop_name_to_id[full_prop_name],
+                    prop_conversion_code=prop_conversion_code
                 )
             else:
                 prop_code += PROP_CONVERTER_BODY.format(
-                    prop_name=prop_name_to_python(prop_name), prop_id=self.prop_name_to_id[full_prop_name], prop_conversion_code=prop_conversion_code
+                    prop_name=prop_name_to_python(prop_name),
+                    prop_id=self.prop_name_to_id[full_prop_name],
+                    prop_conversion_code=prop_conversion_code
                 )
 
         parent_call = ""
@@ -265,6 +273,8 @@ class GenModelToRdf:
                 parent_class = parent_class[1:]
             if "/" in parent_class:
                 parent_namespace, _, parent_class = parent_class.partition("/")
+            else:
+                parent_namespace = namespace_name
             parent_call = f"\n    {namespace_name_to_python(parent_namespace)}.{camel_case_to_snake_case(parent_class)}_properties_to_rdf(node, obj, graph)"
 
         output_file.write(
