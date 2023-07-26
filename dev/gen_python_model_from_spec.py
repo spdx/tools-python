@@ -93,6 +93,7 @@ CLS_INIT_ABSTRACT = """    @abstractmethod
 
 SPECIAL_TYPE_MAPPINGS: dict[str, tuple[str, Optional[str]]] = {
     "Core/DateTime": ("datetime", "datetime"),
+    "Core/DictionaryEntry": ("Dict[str, Optional[str]]", None),
     "Core/Extension": ("str", None),
     "Core/MediaType": ("str", None),
     "Core/SemVer": ("Version", "semantic_version"),
@@ -364,6 +365,11 @@ class GenPythonModelFromSpec:
             self.namespace_imports = "from . import " + ", ".join(namespaces)
 
     def handle_class(self, clazz: dict, namespace_name: str, model: dict):
+        qualified_name = get_qualified_name(clazz["metadata"]["name"], namespace_name)
+        if qualified_name in SPECIAL_TYPE_MAPPINGS:
+            # do not generate Python classes for types we are mapping differently
+            return
+
         clsinfo = GenClassFromSpec(clazz, namespace_name, model)
         clsinfo.gen_file()
 
