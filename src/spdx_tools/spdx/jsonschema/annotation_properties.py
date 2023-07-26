@@ -8,6 +8,6 @@ from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 
 class AnnotationProperty(JsonProperty):
     ANNOTATION_DATE = auto()
-    ANNOTATION_TYPE = auto()
     ANNOTATOR = auto()
+    ANNOTATION_TYPE = auto()
     COMMENT = auto()

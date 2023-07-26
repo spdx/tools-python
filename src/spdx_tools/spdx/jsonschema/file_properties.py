@@ -8,15 +8,15 @@ from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 
 class FileProperty(JsonProperty):
     SPDX_ID = auto()
+    FILE_NAME = auto()
+    CHECKSUMS = auto()
     ANNOTATIONS = auto()
     ARTIFACT_OFS = auto()
     ATTRIBUTION_TEXTS = auto()
-    CHECKSUMS = auto()
     COMMENT = auto()
     COPYRIGHT_TEXT = auto()
     FILE_CONTRIBUTORS = auto()
     FILE_DEPENDENCIES = auto()
-    FILE_NAME = auto()
     FILE_TYPES = auto()
     LICENSE_COMMENTS = auto()
     LICENSE_CONCLUDED = auto()

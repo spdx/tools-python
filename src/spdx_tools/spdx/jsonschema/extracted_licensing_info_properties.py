@@ -7,8 +7,8 @@ from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 
 
 class ExtractedLicensingInfoProperty(JsonProperty):
-    COMMENT = auto()
-    EXTRACTED_TEXT = auto()
     LICENSE_ID = auto()
     NAME = auto()
+    EXTRACTED_TEXT = auto()
     SEE_ALSOS = auto()
+    COMMENT = auto()

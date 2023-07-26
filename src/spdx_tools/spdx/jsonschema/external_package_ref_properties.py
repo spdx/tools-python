@@ -7,7 +7,7 @@ from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 
 
 class ExternalPackageRefProperty(JsonProperty):
-    COMMENT = auto()
     REFERENCE_CATEGORY = auto()
-    REFERENCE_LOCATOR = auto()
     REFERENCE_TYPE = auto()
+    REFERENCE_LOCATOR = auto()
+    COMMENT = auto()

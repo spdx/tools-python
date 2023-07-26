@@ -8,6 +8,6 @@ from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 
 class RelationshipProperty(JsonProperty):
     SPDX_ELEMENT_ID = auto()
-    COMMENT = auto()
-    RELATED_SPDX_ELEMENT = auto()
     RELATIONSHIP_TYPE = auto()
+    RELATED_SPDX_ELEMENT = auto()
+    COMMENT = auto()
