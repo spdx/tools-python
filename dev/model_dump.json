@@ -1811,7 +1811,7 @@
             "maxCount": "*"
           },
           "sensitivePersonalInformation": {
-            "type": "PresenceType",
+            "type": "/AI/PresenceType",
             "minCount": "0",
             "maxCount": "1"
           },
