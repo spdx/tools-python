@@ -148,7 +148,7 @@ def get_python_docstring(description: Optional[str], indent: int) -> str:
     if not description:
         return ""
 
-    line_length = 120 - indent
+    line_length = 119 - indent
     with MarkdownRenderer(max_line_length=line_length) as renderer:
         text = renderer.render(mistletoe.Document(description))
     text = '\n"""\n' + text + '"""'
@@ -442,6 +442,9 @@ class GenPythonModelFromSpec:
             namespace_imports = ", ".join([namespace_name_to_python(namespace) for namespace in self.init_imports.keys()])
             init_file.write(f"from . import {namespace_imports}\n")
             init_file.write("from .core import *\n")
+
+        os.system(f'black "{output_dir}"')
+        os.system(f'isort "{output_dir}"')
 
 
 if __name__ == "__main__":
