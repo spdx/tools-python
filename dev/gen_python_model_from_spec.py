@@ -188,6 +188,12 @@ def extract_parent_type(cls: dict, namespace: str) -> Optional[str]:
     return get_qualified_name(parent_class, namespace)
 
 
+def get_short_prop_name(qualified_name: str) -> str:
+    if '/' not in qualified_name:
+        return qualified_name
+    return qualified_name[qualified_name.rindex('/')+1:]
+
+
 @dataclass
 class Property:
     name: str
@@ -285,6 +291,18 @@ class GenClassFromSpec:
                 self._add_import("beartype.typing", "List")
             elif optional:
                 self._add_import("beartype.typing", "Optional")
+
+        if "externalPropertyRestrictions" not in cls:
+            return
+        for propname, propinfo in cls["externalPropertyRestrictions"].items():
+            propname = get_short_prop_name(propname)
+            prop = next(filter(lambda p: get_short_prop_name(p.name) == propname, self.props), None)
+            if not prop:
+                continue
+            if "minCount" in propinfo:
+                prop.optional = prop.optional and propinfo["minCount"] == "0"
+            if "maxCount" in propinfo:
+                prop.is_list = prop.is_list and propinfo["maxCount"] != "1"
 
     def gen_file(self):
         properties = self._gen_props()
