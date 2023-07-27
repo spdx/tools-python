@@ -22,6 +22,7 @@ Note: needs an additional dependency for proper formatting of docstrings:
 """
 
 import json
+import logging
 import os.path
 import textwrap
 from dataclasses import dataclass
@@ -125,7 +126,7 @@ output_dir = os.path.join(os.path.dirname(__file__), "../src/spdx_tools/spdx3/ne
 
 def prop_name_to_python(prop_name: str):
     special_cases = {"from": "from_element", "homePage": "homepage"}
-    _, prop_name = split_qualified_name(prop_name)
+    prop_name = get_short_prop_name(prop_name)
     if prop_name in special_cases:
         return special_cases[prop_name]
     return camel_case_to_snake_case(prop_name)
@@ -268,6 +269,10 @@ class GenClassFromSpec:
         namespace = f"..{namespace_name_to_python(namespace)}"
         self._add_import(namespace, typename)
 
+    def _find_prop(self, propname: str) -> Optional[Property]:
+        propname = prop_name_to_python(propname)
+        return next(filter(lambda p: prop_name_to_python(p.name) == propname, self.props), None)
+
     def _collect_props(self, cls: dict, namespace: str, is_parent: bool):
         parent = extract_parent_type(cls, namespace)
         if parent:
@@ -276,6 +281,9 @@ class GenClassFromSpec:
                 self._collect_props(self.model[parent_namespace]["classes"][parent_class], parent_namespace, True)
 
         for propname, propinfo in cls["properties"].items():
+            if self._find_prop(propname):
+                logging.warning("Class %s is redefining property %s from a parent class, ignoring", cls["metadata"]["name"], propname)
+                continue
             propname = get_qualified_name(propname, namespace)
             proptype = get_qualified_name(propinfo["type"], namespace)
             optional = "minCount" not in propinfo or propinfo["minCount"] == "0"
@@ -295,8 +303,7 @@ class GenClassFromSpec:
         if "externalPropertyRestrictions" not in cls:
             return
         for propname, propinfo in cls["externalPropertyRestrictions"].items():
-            propname = get_short_prop_name(propname)
-            prop = next(filter(lambda p: get_short_prop_name(p.name) == propname, self.props), None)
+            prop = self._find_prop(propname)
             if not prop:
                 continue
             if "minCount" in propinfo:
