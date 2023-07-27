@@ -11,7 +11,7 @@ from beartype.typing import Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 
-from ..core import Relationship
+from ..core.relationship import Relationship
 
 
 @dataclass_with_properties

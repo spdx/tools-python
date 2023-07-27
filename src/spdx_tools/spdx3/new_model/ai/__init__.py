@@ -4,6 +4,6 @@
 # Do not manually edit!
 # flake8: noqa
 
-from .a_ipackage import AIPackage
+from .ai_package import AIPackage
 from .presence_type import PresenceType
 from .safety_risk_assessment_type import SafetyRiskAssessmentType

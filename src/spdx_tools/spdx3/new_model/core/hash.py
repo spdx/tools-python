@@ -9,7 +9,8 @@ from beartype.typing import Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import HashAlgorithm, IntegrityMethod
+from ..core.hash_algorithm import HashAlgorithm
+from ..core.integrity_method import IntegrityMethod
 
 
 @dataclass_with_properties
@@ -20,11 +21,11 @@ class Hash(IntegrityMethod):
     infeasible to invert. This is commonly used for integrity checking of data.
     """
 
-    algorithm: HashAlgorithm
+    algorithm: HashAlgorithm = None
     """
     An algorithm specifies the algorithm that was used for calculating the hash value.
     """
-    hash_value: str
+    hash_value: str = None
     """
     HashValue is the result of applying a hash algorithm to an Element.
     """

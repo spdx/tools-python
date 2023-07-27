@@ -9,8 +9,13 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
-from ..licensing import AnyLicenseInfo, ExtendableLicense, LicenseAddition
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
+from ..expanded_license.extendable_license import ExtendableLicense
+from ..licensing.any_license_info import AnyLicenseInfo
+from ..licensing.license_addition import LicenseAddition
 
 
 @dataclass_with_properties
@@ -21,8 +26,8 @@ class WithAdditionOperator(AnyLicenseInfo):
     (CustomLicenseAddition). It is represented in the SPDX License Expression Syntax by the `WITH` operator.
     """
 
-    subject_license: ExtendableLicense
-    subject_addition: LicenseAddition
+    subject_license: ExtendableLicense = None
+    subject_addition: LicenseAddition = None
 
     def __init__(
         self,

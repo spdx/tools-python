@@ -8,7 +8,7 @@ from abc import abstractmethod
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 
-from ..core import Element
+from ..core.element import Element
 
 
 @dataclass_with_properties

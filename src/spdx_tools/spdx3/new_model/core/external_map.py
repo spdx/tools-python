@@ -12,7 +12,7 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import IntegrityMethod
+from ..core.integrity_method import IntegrityMethod
 
 
 @dataclass_with_properties
@@ -23,7 +23,7 @@ class ExternalMap(ABC):
     retrieve it, and how to verify its integrity.
     """
 
-    external_id: str
+    external_id: str = None
     """
     ExternalId identifies an external Element used within a Document but defined external to that Document.
     """

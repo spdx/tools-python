@@ -12,11 +12,17 @@ from beartype.typing import Dict, List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..ai import PresenceType
-from ..core import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
-from ..dataset import ConfidentialityLevelType, DatasetAvailabilityType, DatasetType
-from ..licensing import AnyLicenseInfo
-from ..software import Package, SoftwarePurpose
+from ..ai.presence_type import PresenceType
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
+from ..dataset.confidentiality_level_type import ConfidentialityLevelType
+from ..dataset.dataset_availability_type import DatasetAvailabilityType
+from ..dataset.dataset_type import DatasetType
+from ..licensing.any_license_info import AnyLicenseInfo
+from ..software.package import Package
+from ..software.software_purpose import SoftwarePurpose
 
 
 @dataclass_with_properties

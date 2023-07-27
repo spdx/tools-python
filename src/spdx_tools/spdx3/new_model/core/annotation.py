@@ -11,7 +11,12 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import AnnotationType, CreationInfo, Element, ExternalIdentifier, ExternalReference, IntegrityMethod
+from ..core.annotation_type import AnnotationType
+from ..core.creation_info import CreationInfo
+from ..core.element import Element
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
 
 
 @dataclass_with_properties
@@ -20,7 +25,7 @@ class Annotation(Element):
     An Annotation is an assertion made in relation to one or more elements.
     """
 
-    annotation_type: AnnotationType
+    annotation_type: AnnotationType = None
     """
     An annotationType describes the type of an annotation.
     """
@@ -32,7 +37,7 @@ class Annotation(Element):
     """
     A statement is a commentary on an assertion that an annotator has made.
     """
-    subject: str
+    subject: str = None
     """
     A subject is an Element an annotator has made an assertion about.
     """

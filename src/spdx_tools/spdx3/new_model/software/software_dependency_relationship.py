@@ -11,17 +11,16 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import (
-    CreationInfo,
-    ExternalIdentifier,
-    ExternalReference,
-    IntegrityMethod,
-    LifecycleScopedRelationship,
-    LifecycleScopeType,
-    RelationshipCompleteness,
-    RelationshipType,
-)
-from ..software import DependencyConditionalityType, SoftwareDependencyLinkType
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
+from ..core.lifecycle_scope_type import LifecycleScopeType
+from ..core.lifecycle_scoped_relationship import LifecycleScopedRelationship
+from ..core.relationship_completeness import RelationshipCompleteness
+from ..core.relationship_type import RelationshipType
+from ..software.dependency_conditionality_type import DependencyConditionalityType
+from ..software.software_dependency_link_type import SoftwareDependencyLinkType
 
 
 @dataclass_with_properties

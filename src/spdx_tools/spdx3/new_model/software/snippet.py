@@ -11,9 +11,14 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod, PositiveIntegerRange
-from ..licensing import AnyLicenseInfo
-from ..software import SoftwareArtifact, SoftwarePurpose
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
+from ..core.positive_integer_range import PositiveIntegerRange
+from ..licensing.any_license_info import AnyLicenseInfo
+from ..software.software_artifact import SoftwareArtifact
+from ..software.software_purpose import SoftwarePurpose
 
 
 @dataclass_with_properties

@@ -11,15 +11,13 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import (
-    CreationInfo,
-    ExternalIdentifier,
-    ExternalReference,
-    IntegrityMethod,
-    RelationshipCompleteness,
-    RelationshipType,
-)
-from ..security import VulnAssessmentRelationship
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
+from ..core.relationship_completeness import RelationshipCompleteness
+from ..core.relationship_type import RelationshipType
+from ..security.vuln_assessment_relationship import VulnAssessmentRelationship
 
 
 @dataclass_with_properties
@@ -49,7 +47,7 @@ class EpssVulnAssessmentRelationship(VulnAssessmentRelationship):
     ```
     """
 
-    probability: int
+    probability: int = None
     """
     The probability score between 0 and 1 (0 and 100%) estimating the likelihood that a vulnerability will be exploited
     in the next 12 months.

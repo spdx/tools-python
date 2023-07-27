@@ -10,7 +10,7 @@ from beartype.typing import Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 
-from ..security import VulnAssessmentRelationship
+from ..security.vuln_assessment_relationship import VulnAssessmentRelationship
 
 
 @dataclass_with_properties

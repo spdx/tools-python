@@ -17,11 +17,11 @@ class PositiveIntegerRange(ABC):
     "end".
     """
 
-    begin: int
+    begin: int = None
     """
     begin is a positive integer that defines the beginning of a range.
     """
-    end: int
+    end: int = None
     """
     end is a positive integer that defines the end of a range.
     """

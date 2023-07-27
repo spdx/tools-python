@@ -14,7 +14,7 @@ from semantic_version import Version
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import ProfileIdentifierType, Tool
+from ..core.profile_identifier_type import ProfileIdentifierType
 
 
 @dataclass_with_properties
@@ -26,7 +26,7 @@ class CreationInfo(ABC):
     was created, as doing so supports reproducible builds.
     """
 
-    spec_version: Version
+    spec_version: Version = None
     """
     The specVersion provides a reference number that can be used to understand how to parse and interpret an Element.
     It will enable both future changes to the specification and to support backward compatibility. The major version
@@ -52,7 +52,7 @@ class CreationInfo(ABC):
     CreatedBy identifies who or what created the Element. The generation method will assist the recipient of the
     Element in assessing the general reliability/accuracy of the analysis information.
     """
-    created_using: List[Tool] = field(default_factory=list)
+    created_using: List[str] = field(default_factory=list)
     """
     CreatedUsing identifies the tooling that was used during the creation of the Element. The generation method will
     assist the recipient of the Element in assessing the general reliability/accuracy of the analysis information.
@@ -90,7 +90,7 @@ class CreationInfo(ABC):
         profile: List[ProfileIdentifierType],
         comment: Optional[str] = None,
         created: Optional[datetime] = None,
-        created_using: List[Tool] = None,
+        created_using: List[str] = None,
         data_license: Optional[str] = None,
     ):
         created_using = [] if created_using is None else created_using

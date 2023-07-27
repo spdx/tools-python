@@ -11,9 +11,9 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 
-from ..core import Artifact
-from ..licensing import AnyLicenseInfo
-from ..software import SoftwarePurpose
+from ..core.artifact import Artifact
+from ..licensing.any_license_info import AnyLicenseInfo
+from ..software.software_purpose import SoftwarePurpose
 
 
 @dataclass_with_properties

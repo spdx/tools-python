@@ -2158,7 +2158,7 @@
         },
         "properties": {
           "subjectLicense": {
-            "type": "ExtendableLicense",
+            "type": "ExpandedLicense/ExtendableLicense",
             "minCount": "1",
             "maxCount": "1"
           },
@@ -2175,7 +2175,7 @@
         "description": "A License represents a license text, whether listed on the SPDX License List\n(ListedLicense) or defined by an SPDX data creator (CustomLicense).",
         "metadata": {
           "name": "License",
-          "SubclassOf": "ExtendableLicense",
+          "SubclassOf": "ExpandedLicense/ExtendableLicense",
           "Instantiability": "Abstract",
           "Status": "Stable",
           "id": "https://spdx.org/rdf/v3/Licensing/License"
@@ -2271,7 +2271,7 @@
         "description": "An OrLaterOperator indicates that this portion of the AnyLicenseInfo\nrepresents either (1) the specified version of the corresponding License, or\n(2) any later version of that License. It is represented in the SPDX License\nExpression Syntax by the `+` operator.\n\nIt is context-dependent, and unspecified by SPDX, as to what constitutes a\n\"later version\" of any particular License. Some Licenses may not be versioned,\nor may not have clearly-defined ordering for versions. The consumer of SPDX\ndata will need to determine for themselves what meaning to attribute to a\n\"later version\" operator for a particular License.",
         "metadata": {
           "name": "OrLaterOperator",
-          "SubclassOf": "ExtendableLicense",
+          "SubclassOf": "ExpandedLicense/ExtendableLicense",
           "Instantiability": "Concrete",
           "Status": "Stable",
           "id": "https://spdx.org/rdf/v3/Licensing/OrLaterOperator"

@@ -10,7 +10,7 @@ from beartype.typing import Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 
-from ..core import Element
+from ..core.element import Element
 
 
 @dataclass_with_properties
@@ -23,7 +23,7 @@ class LicenseAddition(Element):
     additional text (as an exception or otherwise) which is defined by an SPDX data creator (CustomLicenseAddition).
     """
 
-    addition_text: str
+    addition_text: str = None
     """
     An additionText contains the plain text of the LicenseAddition, without templating or other similar markup.
 

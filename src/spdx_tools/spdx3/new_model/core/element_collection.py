@@ -11,7 +11,8 @@ from beartype.typing import List
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 
-from ..core import Element, ExternalMap
+from ..core.element import Element
+from ..core.external_map import ExternalMap
 
 
 @dataclass_with_properties

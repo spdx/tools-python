@@ -12,7 +12,12 @@ from beartype.typing import Dict, List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import CreationInfo, Element, ExternalIdentifier, ExternalReference, Hash, IntegrityMethod
+from ..core.creation_info import CreationInfo
+from ..core.element import Element
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.hash import Hash
+from ..core.integrity_method import IntegrityMethod
 
 
 @dataclass_with_properties
@@ -30,7 +35,7 @@ class Build(Element):
 
     Note that buildStart and buildEnd are optional, and may be omitted to simplify creating reproducible builds.
     """
-    build_type: str
+    build_type: str = None
     """
     A buildType is a URI expressing the toolchain, platform, or infrastructure that the build was invoked on. For
     example, if the build was invoked on GitHub's CI platform using github actions, the buildType can be expressed as

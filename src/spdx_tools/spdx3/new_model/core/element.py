@@ -11,7 +11,10 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 
-from ..core import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
 
 
 @dataclass_with_properties
@@ -23,7 +26,7 @@ class Element(ABC):
     foundation for all explicit and inter-relatable content objects.
     """
 
-    spdx_id: str
+    spdx_id: str = None
     """
     SpdxId uniquely identifies an Element which may thereby be referenced by other Elements. These references may be
     internal or external. While there may be several versions of the same Element, each one needs to be able to be
@@ -51,7 +54,7 @@ class Element(ABC):
     A comment is an optional field for creators of the Element to provide comments to the readers/reviewers of the
     document.
     """
-    creation_info: CreationInfo
+    creation_info: CreationInfo = None
     """
     CreationInfo provides information about the creation of the Element.
     """

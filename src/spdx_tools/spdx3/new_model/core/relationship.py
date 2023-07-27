@@ -12,15 +12,13 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import (
-    CreationInfo,
-    Element,
-    ExternalIdentifier,
-    ExternalReference,
-    IntegrityMethod,
-    RelationshipCompleteness,
-    RelationshipType,
-)
+from ..core.creation_info import CreationInfo
+from ..core.element import Element
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
+from ..core.relationship_completeness import RelationshipCompleteness
+from ..core.relationship_type import RelationshipType
 
 
 @dataclass_with_properties
@@ -30,7 +28,7 @@ class Relationship(Element):
     other Elements in some way.
     """
 
-    from_element: str
+    from_element: str = None
     """
     This field references the Element on the left-hand side of a relationship.
     """
@@ -38,7 +36,7 @@ class Relationship(Element):
     """
     This field references an Element on the right-hand side of a relationship.
     """
-    relationship_type: RelationshipType
+    relationship_type: RelationshipType = None
     """
     This field provides information about the relationship between two Elements. For example, you can represent a
     relationship between two different Files, between a Package and a File, between two Packages, or between one

@@ -9,8 +9,11 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
-from ..licensing import AnyLicenseInfo
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
+from ..licensing.any_license_info import AnyLicenseInfo
 
 
 @dataclass_with_properties
@@ -30,7 +33,7 @@ class LicenseExpression(AnyLicenseInfo):
     definition of what constitutes a valid an SPDX License Expression in this section.
     """
 
-    license_expression: str
+    license_expression: str = None
     """
     Often a single license can be used to represent the licensing terms of a source code or binary file, but there are
     situations where a single license identifier is not sufficient. A common example is when software is offered under

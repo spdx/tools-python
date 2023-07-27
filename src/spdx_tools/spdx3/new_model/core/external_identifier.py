@@ -12,7 +12,7 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import ExternalIdentifierType
+from ..core.external_identifier_type import ExternalIdentifierType
 
 
 @dataclass_with_properties
@@ -22,11 +22,11 @@ class ExternalIdentifier(ABC):
     an Element.
     """
 
-    external_identifier_type: ExternalIdentifierType
+    external_identifier_type: ExternalIdentifierType = None
     """
     An externalIdentifierType specifies the type of the external identifier.
     """
-    identifier: str
+    identifier: str = None
     """
     An identifier uniquely identifies an external element.
     """

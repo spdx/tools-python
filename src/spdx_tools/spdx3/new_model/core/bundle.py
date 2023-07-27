@@ -9,7 +9,12 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
-from ..core import CreationInfo, ElementCollection, ExternalIdentifier, ExternalMap, ExternalReference, IntegrityMethod
+from ..core.creation_info import CreationInfo
+from ..core.element_collection import ElementCollection
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_map import ExternalMap
+from ..core.external_reference import ExternalReference
+from ..core.integrity_method import IntegrityMethod
 
 
 @dataclass_with_properties
