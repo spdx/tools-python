@@ -290,15 +290,6 @@ class GenClassFromSpec:
             is_list = "maxCount" not in propinfo or propinfo["maxCount"] != "1"
             prop = Property(propname, proptype, optional, is_list, is_parent)
             self.props.append(prop)
-            self._import_spdx_type(proptype)
-
-            if proptype == "Core/DictionaryEntry":
-                self._add_import("beartype.typing", "Dict")
-                self._add_import("beartype.typing", "Optional")
-            elif is_list:
-                self._add_import("beartype.typing", "List")
-            elif optional:
-                self._add_import("beartype.typing", "Optional")
 
         if "externalPropertyRestrictions" not in cls:
             return
@@ -326,6 +317,22 @@ class GenClassFromSpec:
             imports += CLS_IMPORTS.format(module=module, types=types)
         return imports
 
+    def _import_prop_type(self, prop: Property):
+        if prop.type in SPECIAL_PROPTYPE_MAPPINGS:
+            import_type, import_module = SPECIAL_PROPTYPE_MAPPINGS[prop.type]
+            if import_module:
+                self._add_import(import_module, import_type)
+        else:
+            self._import_spdx_type(prop.type)
+
+        if prop.type == "Core/DictionaryEntry":
+            self._add_import("beartype.typing", "Dict")
+            self._add_import("beartype.typing", "Optional")
+        elif prop.is_list:
+            self._add_import("beartype.typing", "List")
+        elif prop.optional:
+            self._add_import("beartype.typing", "Optional")
+
     def _gen_props(self) -> str:
         code = ""
         own_props = (prop for prop in self.props if not prop.inherited)
@@ -334,6 +341,7 @@ class GenClassFromSpec:
             name = prop_name_to_python(prop.name)
             proptype = prop.get_python_type()
             docstring = self._get_prop_docstring(prop.name)
+            self._import_prop_type(prop)
             if prop.type == "Core/DictionaryType":
                 default = " = field(default_factory=dict)"
                 self._add_import("dataclasses", "field")
@@ -365,8 +373,10 @@ class GenClassFromSpec:
         required_props = (prop for prop in self.props if not prop.optional)
         optional_props = (prop for prop in self.props if prop.optional)
         for prop in required_props:
+            self._import_prop_type(prop)
             args += CLS_INIT_ARG.format(prop_name=prop_name_to_python(prop.name), prop_type=prop.get_python_type())
         for prop in optional_props:
+            self._import_prop_type(prop)
             prop_name = prop_name_to_python(prop.name)
             args += CLS_INIT_ARG_OPT.format(prop_name=prop_name, prop_type=prop.get_python_type())
             if prop.type == "Core/DictionaryEntry":
