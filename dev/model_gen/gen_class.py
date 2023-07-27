@@ -32,9 +32,10 @@ from .utils import (
 
 SPECIAL_PROPTYPE_MAPPINGS: dict[str, tuple[str, Optional[str]]] = {
     # for the moment, we replace Element and Agent references with string references to their ID
-    # otherwise, there is a cyclic dependency between CreationInfo and Agent that is problematic to deal with
+    # otherwise, there is a cyclic dependency between CreationInfo and Agent/Tool that is problematic to deal with
     "Core/Agent": ("str", None),
     "Core/Element": ("str", None),
+    "Core/Tool": ("str", None),
 }
 
 
@@ -82,7 +83,7 @@ class GenClassFromSpec:
         self.props = list()
 
         self.typename = cls["metadata"]["name"]
-        self.filename = camel_case_to_snake_case(self.typename)
+        self.filename = camel_case_to_snake_case(self.typename) if self.typename != "AIPackage" else "ai_package"
         parent_class = extract_parent_type(cls, namespace)
         if not parent_class:
             self.parent_class = "ABC"
@@ -109,8 +110,9 @@ class GenClassFromSpec:
         if typename.startswith("xsd:"):
             return
         namespace, typename = split_qualified_name(typename)
-        namespace = f"..{namespace_name_to_python(namespace)}"
-        self._add_import(namespace, typename)
+        module = camel_case_to_snake_case(typename) if typename != "AIPackage" else "ai_package"
+        python_path = f"..{namespace_name_to_python(namespace)}.{module}"
+        self._add_import(python_path, typename)
 
     def _find_prop(self, propname: str) -> Optional[Property]:
         propname = prop_name_to_python(propname)
@@ -183,7 +185,6 @@ class GenClassFromSpec:
         code = ""
         own_props = (prop for prop in self.props if not prop.inherited)
         for prop in own_props:
-            default = ""
             name = prop_name_to_python(prop.name)
             proptype = prop.get_python_type()
             docstring = self._get_prop_docstring(prop.name)
@@ -194,7 +195,7 @@ class GenClassFromSpec:
             elif prop.is_list:
                 default = " = field(default_factory=list)"
                 self._add_import("dataclasses", "field")
-            elif prop.optional:
+            else:
                 default = " = None"
             code += CLS_PROP.format(prop_name=name, prop_type=proptype, default=default, docstring=docstring)
         return code
