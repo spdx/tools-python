@@ -26,11 +26,11 @@ class SpdxDocument(Bundle):
     def __init__(
         self,
         spdx_id: str,
+        name: str,
         creation_info: CreationInfo,
         element: List[str],
         root_element: List[str],
         name: str,
-        name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,

@@ -80,8 +80,8 @@ class Package(SoftwareArtifact):
     def __init__(
         self,
         spdx_id: str,
+        name: str,
         creation_info: CreationInfo,
-        name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,

@@ -89,6 +89,7 @@ class CvssV3VulnAssessmentRelationship(VulnAssessmentRelationship):
         spdx_id: str,
         creation_info: CreationInfo,
         from_element: str,
+        to: List[str],
         relationship_type: RelationshipType,
         score: float,
         name: Optional[str] = None,
@@ -99,7 +100,6 @@ class CvssV3VulnAssessmentRelationship(VulnAssessmentRelationship):
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: List[str] = None,
-        to: List[str] = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
@@ -115,5 +115,4 @@ class CvssV3VulnAssessmentRelationship(VulnAssessmentRelationship):
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
         extension = [] if extension is None else extension
-        to = [] if to is None else to
         check_types_and_set_values(self, locals())

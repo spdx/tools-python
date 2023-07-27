@@ -92,9 +92,14 @@ class Dataset(Package):
     def __init__(
         self,
         spdx_id: str,
+        name: str,
         creation_info: CreationInfo,
+        originated_by: List[str],
+        built_time: datetime,
+        release_time: datetime,
+        primary_purpose: SoftwarePurpose,
+        download_location: str,
         dataset_type: List[DatasetType],
-        name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
@@ -102,21 +107,16 @@ class Dataset(Package):
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: List[str] = None,
-        originated_by: List[str] = None,
         supplied_by: List[str] = None,
-        built_time: Optional[datetime] = None,
-        release_time: Optional[datetime] = None,
         valid_until_time: Optional[datetime] = None,
         standard: List[str] = None,
         content_identifier: Optional[str] = None,
-        primary_purpose: Optional[SoftwarePurpose] = None,
         additional_purpose: List[SoftwarePurpose] = None,
         concluded_license: Optional[AnyLicenseInfo] = None,
         declared_license: Optional[AnyLicenseInfo] = None,
         copyright_text: Optional[str] = None,
         attribution_text: Optional[str] = None,
         package_version: Optional[str] = None,
-        download_location: Optional[str] = None,
         package_url: Optional[str] = None,
         homepage: Optional[str] = None,
         source_info: Optional[str] = None,
@@ -137,7 +137,6 @@ class Dataset(Package):
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
         extension = [] if extension is None else extension
-        originated_by = [] if originated_by is None else originated_by
         supplied_by = [] if supplied_by is None else supplied_by
         standard = [] if standard is None else standard
         additional_purpose = [] if additional_purpose is None else additional_purpose
