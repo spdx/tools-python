@@ -4,6 +4,8 @@
 # Do not manually edit!
 # flake8: noqa
 
+from dataclasses import field
+
 from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
@@ -13,33 +15,30 @@ from ..core.creation_info import CreationInfo
 from ..core.external_identifier import ExternalIdentifier
 from ..core.external_reference import ExternalReference
 from ..core.integrity_method import IntegrityMethod
-from ..licensing.license_addition import LicenseAddition
+from ..simple_licensing.any_license_info import AnyLicenseInfo
 
 
 @dataclass_with_properties
-class ListedLicenseException(LicenseAddition):
+class DisjunctiveLicenseSet(AnyLicenseInfo):
     """
-    A ListedLicenseException represents an exception to a License (in other words, an exception to a license condition
-    or an additional permission beyond those granted in a License) which is listed on the SPDX Exceptions List at
-    https://spdx.org/licenses/exceptions-index.html.
+    A DisjunctiveLicenseSet indicates that _only one_ of its subsidiary AnyLicenseInfos is required to apply. In other
+    words, a DisjunctiveLicenseSet of two or more licenses represents a licensing situation where _only one_ of the
+    specified licenses are to be complied with. A consumer of SPDX data would typically understand this to permit the
+    recipient of the licensed content to choose which of the corresponding license they would prefer to use. It is
+    represented in the SPDX License Expression Syntax by the `OR` operator.
     """
 
-    list_version_added: Optional[str] = None
+    member: List[AnyLicenseInfo] = field(default_factory=list)
     """
-    A listVersionAdded for a ListedLicense or ListedLicenseException on the SPDX License List specifies which version
-    release of the License List was the first one in which it was included.
-    """
-    deprecated_version: Optional[str] = None
-    """
-    A deprecatedVersion for a ListedLicense or ListedLicenseException on the SPDX License List specifies which version
-    release of the License List was the first one in which it was marked as deprecated.
+    A member is a license expression participating in a conjunctive (of type ConjunctiveLicenseSet) or a disjunctive
+    (of type DisjunctiveLicenseSet) license set.
     """
 
     def __init__(
         self,
         spdx_id: str,
         creation_info: CreationInfo,
-        addition_text: str,
+        member: List[AnyLicenseInfo],
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
@@ -48,11 +47,6 @@ class ListedLicenseException(LicenseAddition):
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: List[str] = None,
-        standard_addition_template: Optional[str] = None,
-        is_deprecated_addition_id: Optional[bool] = None,
-        obsoleted_by: Optional[str] = None,
-        list_version_added: Optional[str] = None,
-        deprecated_version: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference

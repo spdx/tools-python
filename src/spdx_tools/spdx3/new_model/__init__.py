@@ -4,5 +4,5 @@
 # Do not manually edit!
 # flake8: noqa
 
-from . import expanded_license, core, dataset, licensing, ai, security, build, software
+from . import expanded_licensing, core, dataset, ai, security, build, software, simple_licensing
 from .core import *

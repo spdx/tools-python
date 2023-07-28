@@ -13,7 +13,7 @@ from ..core.creation_info import CreationInfo
 from ..core.external_identifier import ExternalIdentifier
 from ..core.external_reference import ExternalReference
 from ..core.integrity_method import IntegrityMethod
-from ..licensing.any_license_info import AnyLicenseInfo
+from ..simple_licensing.any_license_info import AnyLicenseInfo
 
 
 @dataclass_with_properties

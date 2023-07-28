@@ -13,21 +13,33 @@ from ..core.creation_info import CreationInfo
 from ..core.external_identifier import ExternalIdentifier
 from ..core.external_reference import ExternalReference
 from ..core.integrity_method import IntegrityMethod
-from ..licensing.license import License
+from ..expanded_licensing.license_addition import LicenseAddition
 
 
 @dataclass_with_properties
-class CustomLicense(License):
+class ListedLicenseException(LicenseAddition):
     """
-    A CustomLicense represents a License that is not listed on the SPDX License List at https://spdx.org/licenses, and
-    is therefore defined by an SPDX data creator.
+    A ListedLicenseException represents an exception to a License (in other words, an exception to a license condition
+    or an additional permission beyond those granted in a License) which is listed on the SPDX Exceptions List at
+    https://spdx.org/licenses/exceptions-index.html.
+    """
+
+    list_version_added: Optional[str] = None
+    """
+    A listVersionAdded for a ListedLicense or ListedLicenseException on the SPDX License List specifies which version
+    release of the License List was the first one in which it was included.
+    """
+    deprecated_version: Optional[str] = None
+    """
+    A deprecatedVersion for a ListedLicense or ListedLicenseException on the SPDX License List specifies which version
+    release of the License List was the first one in which it was marked as deprecated.
     """
 
     def __init__(
         self,
         spdx_id: str,
         creation_info: CreationInfo,
-        license_text: str,
+        addition_text: str,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
@@ -36,12 +48,11 @@ class CustomLicense(License):
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: List[str] = None,
-        is_osi_approved: Optional[bool] = None,
-        is_fsf_libre: Optional[bool] = None,
-        standard_license_header: Optional[str] = None,
-        standard_license_template: Optional[str] = None,
-        is_deprecated_license_id: Optional[bool] = None,
+        standard_addition_template: Optional[str] = None,
+        is_deprecated_addition_id: Optional[bool] = None,
         obsoleted_by: Optional[str] = None,
+        list_version_added: Optional[str] = None,
+        deprecated_version: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference

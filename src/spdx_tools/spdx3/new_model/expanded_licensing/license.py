@@ -10,7 +10,7 @@ from beartype.typing import Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 
-from ..expanded_license.extendable_license import ExtendableLicense
+from ..expanded_licensing.extendable_license import ExtendableLicense
 
 
 @dataclass_with_properties
@@ -22,7 +22,7 @@ class License(ExtendableLicense):
 
     license_text: str = None
     """
-    A licenseText contains the plain text of the License, without templating or other similar markup.
+    A licenseText contains the plain text of the License or Addition, without templating or other similar markup.
 
     Users of the licenseText for a License can apply the SPDX Matching Guidelines when comparing it to another text for
     matching purposes.

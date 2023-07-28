@@ -13,28 +13,24 @@ from ..core.creation_info import CreationInfo
 from ..core.external_identifier import ExternalIdentifier
 from ..core.external_reference import ExternalReference
 from ..core.integrity_method import IntegrityMethod
-from ..expanded_license.extendable_license import ExtendableLicense
-from ..licensing.any_license_info import AnyLicenseInfo
-from ..licensing.license_addition import LicenseAddition
+from ..expanded_licensing.license_addition import LicenseAddition
 
 
 @dataclass_with_properties
-class WithAdditionOperator(AnyLicenseInfo):
+class CustomLicenseAddition(LicenseAddition):
     """
-    A WithAdditionOperator indicates that the designated License is subject to the designated LicenseAddition, which
-    might be a license exception on the SPDX Exceptions List (ListedLicenseException) or may be other additional text
-    (CustomLicenseAddition). It is represented in the SPDX License Expression Syntax by the `WITH` operator.
-    """
+    A CustomLicenseAddition represents an addition to a License that is not listed on the SPDX Exceptions List at
+    https://spdx.org/licenses/exceptions-index.html, and is therefore defined by an SPDX data creator.
 
-    subject_license: ExtendableLicense = None
-    subject_addition: LicenseAddition = None
+    It is intended to represent additional language which is meant to be added to a License, but which is not itself a
+    standalone License.
+    """
 
     def __init__(
         self,
         spdx_id: str,
         creation_info: CreationInfo,
-        subject_license: ExtendableLicense,
-        subject_addition: LicenseAddition,
+        addition_text: str,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
@@ -43,6 +39,9 @@ class WithAdditionOperator(AnyLicenseInfo):
         external_reference: List[ExternalReference] = None,
         external_identifier: List[ExternalIdentifier] = None,
         extension: List[str] = None,
+        standard_addition_template: Optional[str] = None,
+        is_deprecated_addition_id: Optional[bool] = None,
+        obsoleted_by: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference

@@ -4,8 +4,6 @@
 # Do not manually edit!
 # flake8: noqa
 
-from dataclasses import field
-
 from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
@@ -15,30 +13,35 @@ from ..core.creation_info import CreationInfo
 from ..core.external_identifier import ExternalIdentifier
 from ..core.external_reference import ExternalReference
 from ..core.integrity_method import IntegrityMethod
-from ..licensing.any_license_info import AnyLicenseInfo
+from ..expanded_licensing.extendable_license import ExtendableLicense
+from ..expanded_licensing.license_addition import LicenseAddition
+from ..simple_licensing.any_license_info import AnyLicenseInfo
 
 
 @dataclass_with_properties
-class DisjunctiveLicenseSet(AnyLicenseInfo):
+class WithAdditionOperator(AnyLicenseInfo):
     """
-    A DisjunctiveLicenseSet indicates that _only one_ of its subsidiary AnyLicenseInfos is required to apply. In other
-    words, a DisjunctiveLicenseSet of two or more licenses represents a licensing situation where _only one_ of the
-    specified licenses are to be complied with. A consumer of SPDX data would typically understand this to permit the
-    recipient of the licensed content to choose which of the corresponding license they would prefer to use. It is
-    represented in the SPDX License Expression Syntax by the `OR` operator.
+    A WithAdditionOperator indicates that the designated License is subject to the designated LicenseAddition, which
+    might be a license exception on the SPDX Exceptions List (ListedLicenseException) or may be other additional text
+    (CustomLicenseAddition). It is represented in the SPDX License Expression Syntax by the `WITH` operator.
     """
 
-    member: List[AnyLicenseInfo] = field(default_factory=list)
+    subject_license: ExtendableLicense = None
     """
-    A member is a license expression participating in a conjuctive (of type ConjunctiveLicenseSet) or a disjunctive (of
-    type DisjunctiveLicenseSet) license set.
+    A subjectLicense is a License which is subject to either an 'or later' effect (OrLaterOperator) or a 'with
+    additional text' effect (WithAdditionOperator).
+    """
+    subject_addition: LicenseAddition = None
+    """
+    A subjectAddition is a LicenseAddition which is subject to a 'with additional text' effect (WithAdditionOperator).
     """
 
     def __init__(
         self,
         spdx_id: str,
         creation_info: CreationInfo,
-        member: List[AnyLicenseInfo],
+        subject_license: ExtendableLicense,
+        subject_addition: LicenseAddition,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,

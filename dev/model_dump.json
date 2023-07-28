@@ -1,22 +1,185 @@
 {
-  "ExpandedLicense": {
-    "name": "ExpandedLicense",
+  "ExpandedLicensing": {
+    "name": "ExpandedLicensing",
     "classes": {
+      "ListedLicense": {
+        "summary": "A license that is listed on the SPDX License List.",
+        "description": "A ListedLicense represents a License that is listed on the SPDX License List\nat https://spdx.org/licenses.",
+        "metadata": {
+          "name": "ListedLicense",
+          "SubclassOf": "License",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/ListedLicense"
+        },
+        "properties": {
+          "listVersionAdded": {
+            "type": "xsd:string",
+            "minCount": "0",
+            "maxCount": "1"
+          },
+          "deprecatedVersion": {
+            "type": "xsd:string",
+            "minCount": "0",
+            "maxCount": "1"
+          }
+        },
+        "externalPropertyRestrictions": {}
+      },
+      "WithAdditionOperator": {
+        "summary": "Portion of an AnyLicenseInfo representing a License which has additional\ntext applied to it.",
+        "description": "A WithAdditionOperator indicates that the designated License is subject to the\ndesignated LicenseAddition, which might be a license exception on the SPDX\nExceptions List (ListedLicenseException) or may be other additional text\n(CustomLicenseAddition). It is represented in the SPDX License Expression\nSyntax by the `WITH` operator.",
+        "metadata": {
+          "name": "WithAdditionOperator",
+          "SubclassOf": "/SimpleLicensing/AnyLicenseInfo",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/WithAdditionOperator"
+        },
+        "properties": {
+          "subjectLicense": {
+            "type": "ExtendableLicense",
+            "minCount": "1",
+            "maxCount": "1"
+          },
+          "subjectAddition": {
+            "type": "LicenseAddition",
+            "minCount": "1",
+            "maxCount": "1"
+          }
+        },
+        "externalPropertyRestrictions": {}
+      },
+      "License": {
+        "summary": "Abstract class for the portion of an AnyLicenseInfo representing a license.",
+        "description": "A License represents a license text, whether listed on the SPDX License List\n(ListedLicense) or defined by an SPDX data creator (CustomLicense).",
+        "metadata": {
+          "name": "License",
+          "SubclassOf": "ExtendableLicense",
+          "Instantiability": "Abstract",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/License"
+        },
+        "properties": {
+          "/SimpleLicensing/licenseText": {
+            "type": "xsd:string",
+            "minCount": "1",
+            "maxCount": "1"
+          },
+          "isOsiApproved": {
+            "type": "xsd:boolean",
+            "minCount": "0",
+            "maxCount": "1"
+          },
+          "isFsfLibre": {
+            "type": "xsd:boolean",
+            "minCount": "0",
+            "maxCount": "1"
+          },
+          "standardLicenseHeader": {
+            "type": "xsd:string",
+            "minCount": "0",
+            "maxCount": "1"
+          },
+          "standardLicenseTemplate": {
+            "type": "xsd:string",
+            "minCount": "0",
+            "maxCount": "1"
+          },
+          "isDeprecatedLicenseId": {
+            "type": "xsd:boolean",
+            "minCount": "0",
+            "maxCount": "1"
+          },
+          "obsoletedBy": {
+            "type": "xsd:string",
+            "minCount": "0",
+            "maxCount": "1"
+          }
+        },
+        "externalPropertyRestrictions": {}
+      },
+      "CustomLicenseAddition": {
+        "summary": "A license addition that is not listed on the SPDX Exceptions List.",
+        "description": "A CustomLicenseAddition represents an addition to a License that is not listed\non the SPDX Exceptions List at https://spdx.org/licenses/exceptions-index.html,\nand is therefore defined by an SPDX data creator.\n\nIt is intended to represent additional language which is meant to be added to\na License, but which is not itself a standalone License.",
+        "metadata": {
+          "name": "CustomLicenseAddition",
+          "SubclassOf": "LicenseAddition",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/CustomLicenseAddition"
+        },
+        "properties": {},
+        "externalPropertyRestrictions": {}
+      },
       "ConjunctiveLicenseSet": {
         "summary": "Portion of an AnyLicenseInfo representing a set of licensing information\nwhere all elements apply.",
         "description": "A ConjunctiveLicenseSet indicates that _each_ of its subsidiary\nAnyLicenseInfos apply. In other words, a ConjunctiveLicenseSet of two or\nmore licenses represents a licensing situation where _all_ of the specified\nlicenses are to be complied with. It is represented in the SPDX License\nExpression Syntax by the `AND` operator.\n\nIt is syntactically correct to specify a ConjunctiveLicenseSet where the\nsubsidiary AnyLicenseInfos may be \"incompatible\" according to a particular\ninterpretation of the corresponding Licenses. The SPDX License Expression\nSyntax does not take into account interpretation of license texts, which is\nleft to the consumer of SPDX data to determine for themselves.",
         "metadata": {
           "name": "ConjunctiveLicenseSet",
-          "SubclassOf": "Licensing/AnyLicenseInfo",
+          "SubclassOf": "/SimpleLicensing/AnyLicenseInfo",
           "Instantiability": "Concrete",
           "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/ExpandedLicense/ConjunctiveLicenseSet"
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/ConjunctiveLicenseSet"
         },
         "properties": {
           "member": {
-            "type": "Licensing/AnyLicenseInfo",
+            "type": "/SimpleLicensing/AnyLicenseInfo",
             "minCount": "2",
             "maxCount": "*"
+          }
+        },
+        "externalPropertyRestrictions": {}
+      },
+      "LicenseAddition": {
+        "summary": "Abstract class for additional text intended to be added to a License, but\nwhich is not itself a standalone License.",
+        "description": "A LicenseAddition represents text which is intended to be added to a License\nas additional text, but which is not itself intended to be a standalone\nLicense.\n\nIt may be an exception which is listed on the SPDX Exceptions List\n(ListedLicenseException), or may be any other additional text (as an exception\nor otherwise) which is defined by an SPDX data creator (CustomLicenseAddition).",
+        "metadata": {
+          "name": "LicenseAddition",
+          "SubclassOf": "/Core/Element",
+          "Instantiability": "Abstract",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/LicenseAddition"
+        },
+        "properties": {
+          "additionText": {
+            "type": "xsd:string",
+            "minCount": "1",
+            "maxCount": "1"
+          },
+          "standardAdditionTemplate": {
+            "type": "xsd:string",
+            "minCount": "0",
+            "maxCount": "1"
+          },
+          "isDeprecatedAdditionId": {
+            "type": "xsd:boolean",
+            "minCount": "0",
+            "maxCount": "1"
+          },
+          "obsoletedBy": {
+            "type": "xsd:string",
+            "minCount": "0",
+            "maxCount": "1"
+          }
+        },
+        "externalPropertyRestrictions": {}
+      },
+      "OrLaterOperator": {
+        "summary": "Portion of an AnyLicenseInfo representing this version, or any later version,\nof the indicated License.",
+        "description": "An OrLaterOperator indicates that this portion of the AnyLicenseInfo\nrepresents either (1) the specified version of the corresponding License, or\n(2) any later version of that License. It is represented in the SPDX License\nExpression Syntax by the `+` operator.\n\nIt is context-dependent, and unspecified by SPDX, as to what constitutes a\n\"later version\" of any particular License. Some Licenses may not be versioned,\nor may not have clearly-defined ordering for versions. The consumer of SPDX\ndata will need to determine for themselves what meaning to attribute to a\n\"later version\" operator for a particular License.",
+        "metadata": {
+          "name": "OrLaterOperator",
+          "SubclassOf": "ExtendableLicense",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/OrLaterOperator"
+        },
+        "properties": {
+          "subjectLicense": {
+            "type": "License",
+            "minCount": "1",
+            "maxCount": "1"
           }
         },
         "externalPropertyRestrictions": {}
@@ -26,16 +189,53 @@
         "description": "A DisjunctiveLicenseSet indicates that _only one_ of its subsidiary\nAnyLicenseInfos is required to apply. In other words, a\nDisjunctiveLicenseSet of two or more licenses represents a licensing\nsituation where _only one_ of the specified licenses are to be complied with.\nA consumer of SPDX data would typically understand this to permit the recipient\nof the licensed content to choose which of the corresponding license they\nwould prefer to use. It is represented in the SPDX License Expression Syntax\nby the `OR` operator.",
         "metadata": {
           "name": "DisjunctiveLicenseSet",
-          "SubclassOf": "Licensing/AnyLicenseInfo",
+          "SubclassOf": "/SimpleLicensing/AnyLicenseInfo",
           "Instantiability": "Concrete",
           "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/ExpandedLicense/DisjunctiveLicenseSet"
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/DisjunctiveLicenseSet"
         },
         "properties": {
           "member": {
-            "type": "Licensing/AnyLicenseInfo",
+            "type": "/SimpleLicensing/AnyLicenseInfo",
             "minCount": "2",
             "maxCount": "*"
+          }
+        },
+        "externalPropertyRestrictions": {}
+      },
+      "CustomLicense": {
+        "summary": "A license that is not listed on the SPDX License List.",
+        "description": "A CustomLicense represents a License that is not listed on the SPDX License\nList at https://spdx.org/licenses, and is therefore defined by an SPDX data\ncreator.",
+        "metadata": {
+          "name": "CustomLicense",
+          "SubclassOf": "License",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/CustomLicense"
+        },
+        "properties": {},
+        "externalPropertyRestrictions": {}
+      },
+      "ListedLicenseException": {
+        "summary": "A license exception that is listed on the SPDX Exceptions list.",
+        "description": "A ListedLicenseException represents an exception to a License (in other words,\nan exception to a license condition or an additional permission beyond those\ngranted in a License) which is listed on the SPDX Exceptions List at\nhttps://spdx.org/licenses/exceptions-index.html.",
+        "metadata": {
+          "name": "ListedLicenseException",
+          "SubclassOf": "LicenseAddition",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/ListedLicenseException"
+        },
+        "properties": {
+          "listVersionAdded": {
+            "type": "xsd:string",
+            "minCount": "0",
+            "maxCount": "1"
+          },
+          "deprecatedVersion": {
+            "type": "xsd:string",
+            "minCount": "0",
+            "maxCount": "1"
           }
         },
         "externalPropertyRestrictions": {}
@@ -45,26 +245,145 @@
         "description": "The WithAdditionOperator can have a License or an OrLaterOperator as the license property value.  This class is used for the value.",
         "metadata": {
           "name": "ExtendableLicense",
-          "SubclassOf": "Licensing/AnyLicenseInfo",
+          "SubclassOf": "/Licensing/AnyLicenseInfo",
           "Instantiability": "Abstract",
           "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/ExpandedLicense/ExtendableLicense"
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/ExtendableLicense"
         },
         "properties": {},
         "externalPropertyRestrictions": {}
       }
     },
     "properties": {
+      "seeAlso": {
+        "summary": "Contains a URL where the License or LicenseAddition can be found in use.",
+        "description": "A seeAlso defines a cross-reference with a URL where the License or\nLicenseAddition can be found in use by one or a few projects.\n\nIf applicable, it should include a URL where the license text is posted by\nthe license steward, particularly if the license steward has made available a\n\"canonical\" primary URL for the license text.\n\nIf the license is OSI approved, a seeAlso should be included with the URL for\nthe license's listing on the OSI website.\n\nThe seeAlso URL may refer to a previously-available URL for the License or\nLicenseAddition which is no longer active.\n\nWhere applicable, the seeAlso URL should include the license text in its\nnative language. seeAlso URLs to English or other translations may be included\nwhere multiple, equivalent official translations exist.",
+        "metadata": {
+          "name": "seeAlso",
+          "Nature": "DataProperty",
+          "Range": "xsd:anyURI",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/seeAlso"
+        }
+      },
+      "standardLicenseHeader": {
+        "summary": "Provides a License author's preferred text to indicate that a file is covered\nby the License.",
+        "description": "A standardLicenseHeader contains the plain text of the License author's\npreferred wording to be used, typically in a source code file's header\ncomments or similar location, to indicate that the file is subject to\nthe specified License.",
+        "metadata": {
+          "name": "standardLicenseHeader",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/standardLicenseHeader",
+          "Domain": [
+            "License"
+          ]
+        }
+      },
+      "licenseName": {
+        "summary": "Identifies the full name of a License.",
+        "description": "A licenseName contains the full name of a License, preferably using the title found\nin the applicable license text or file, or as otherwise specified by the\nLicense's author or steward.\n\nWhen no such title is specified, using a name from another well-known source or list\nof licenses (such as OSI or Fedora) is suggested.\n\nIf no official or common name is known, any name may be used to aid in\ndistinguishing the License from other Licenses.",
+        "metadata": {
+          "name": "licenseName",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/licenseName"
+        }
+      },
+      "isDeprecatedLicenseId": {
+        "summary": "Specifies whether a license or additional text identifier has been marked as\ndeprecated.",
+        "description": "The isDeprecatedLicenseId property specifies whether an identifier for a\nLicense or LicenseAddition has been marked as deprecated. If the property\nis not defined, then it is presumed to be false (i.e., not deprecated).\n\nIf the License or LicenseAddition is included on the SPDX License List, then\nthe `deprecatedVersion` property indicates on which version release of the\nLicense List it was first marked as deprecated.\n\n\"Deprecated\" in this context refers to deprecating the use of the\n_identifier_, not the underlying license. In other words, even if a License's\nauthor or steward has stated that a particular License generally should not be\nused, that would _not_ mean that the License's identifier is \"deprecated.\"\nRather, a License or LicenseAddition operator is typically marked as\n\"deprecated\" when it is determined that use of another identifier is\npreferable.",
+        "metadata": {
+          "name": "isDeprecatedLicenseId",
+          "Nature": "DataProperty",
+          "Range": "xsd:boolean",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/isDeprecatedLicenseId",
+          "Domain": [
+            "License"
+          ]
+        }
+      },
+      "isDeprecatedAdditionId": {
+        "summary": "Specifies whether an additional text identifier has been marked as deprecated.",
+        "description": "The isDeprecatedAdditionId property specifies whether an identifier for a\nLicenseAddition has been marked as deprecated. If the property is not defined,\nthen it is presumed to be false (i.e., not deprecated).\n\nIf the LicenseAddition is included on the SPDX Exceptions List, then\nthe `deprecatedVersion` property indicates on which version release of the\nExceptions List it was first marked as deprecated.\n\n\"Deprecated\" in this context refers to deprecating the use of the\n_identifier_, not the underlying license addition. In other words, even if a\nLicenseAddition's author or steward has stated that a particular\nLicenseAddition generally should not be used, that would _not_ mean that the\nLicenseAddition's identifier is \"deprecated.\" Rather, a LicenseAddition\noperator is typically marked as \"deprecated\" when it is determined that use of\nanother identifier is preferable.",
+        "metadata": {
+          "name": "isDeprecatedAdditionId",
+          "Nature": "DataProperty",
+          "Range": "xsd:boolean",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/isDeprecatedAdditionId",
+          "Domain": [
+            "LicenseAddition"
+          ]
+        }
+      },
       "subjectLicense": {
         "summary": "A License participating in a 'with addition' or 'or later' model.",
         "description": "A subjectLicense is a License which is subject to either an 'or later' effect\n(OrLaterOperator) or a 'with additional text' effect (WithAdditionOperator).",
         "metadata": {
           "name": "subjectLicense",
           "Nature": "ObjectProperty",
-          "Range": "Licensing/License",
+          "Range": "License",
           "Instantiability": "Concrete",
           "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/ExpandedLicense/subjectLicense"
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/subjectLicense",
+          "Domain": [
+            "WithAdditionOperator",
+            "OrLaterOperator"
+          ]
+        }
+      },
+      "additionText": {
+        "summary": "Identifies the full text of a LicenseAddition.",
+        "description": "An additionText contains the plain text of the LicenseAddition, without\ntemplating or other similar markup.\n\nUsers of the additionText for a License can apply the SPDX Matching Guidelines\nwhen comparing it to another text for matching purposes.",
+        "metadata": {
+          "name": "additionText",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/additionText",
+          "Domain": [
+            "LicenseAddition"
+          ]
+        }
+      },
+      "isFsfLibre": {
+        "summary": "Specifies whether the License is listed as free by the\n[Free Software Foundation (FSF)](https://fsf.org).",
+        "description": "isFsfLibre specifies whether the [Free Software Foundation FSF](https://fsf.org)\nhas listed this License as \"free\" in their commentary on licenses, located at\nthe time of this writing at https://www.gnu.org/licenses/license-list.en.html.\n\nA value of \"true\" indicates that the FSF has listed this License as _free_.\n\nA value of \"false\" indicates that the FSF has listed this License as _not free_.\n\nIf the isFsfLibre field is not specified, the SPDX data creator makes no\nassertions about whether the License is listed in the FSF's commentary.",
+        "metadata": {
+          "name": "isFsfLibre",
+          "Nature": "DataProperty",
+          "Range": "xsd:boolean",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/isFsfLibre",
+          "Domain": [
+            "License"
+          ]
+        }
+      },
+      "listVersionAdded": {
+        "summary": "Specifies the SPDX License List version in which this ListedLicense or\nListedLicenseException identifier was first added.",
+        "description": "A listVersionAdded for a ListedLicense or ListedLicenseException on the SPDX\nLicense List specifies which version release of the License List was the first\none in which it was included.",
+        "metadata": {
+          "name": "listVersionAdded",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/listVersionAdded",
+          "Domain": [
+            "ListedLicense",
+            "ListedLicenseException"
+          ]
         }
       },
       "subjectAddition": {
@@ -76,23 +395,163 @@
           "Range": "LicenseAddition",
           "Instantiability": "Concrete",
           "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/ExpandedLicense/subjectAddition"
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/subjectAddition",
+          "Domain": [
+            "WithAdditionOperator"
+          ]
+        }
+      },
+      "obsoletedBy": {
+        "summary": "Specifies the licenseId that is preferred to be used in place of a deprecated\nLicense or LicenseAddition.",
+        "description": "An obsoletedBy value for a deprecated License or LicenseAddition specifies\nthe licenseId of the replacement License or LicenseAddition that is preferred\nto be used in its place. It should use the same format as specified for a\nlicenseId.\n\nThe License's or LicenseAddition's comment value may include more information\nabout the reason why the licenseId specified in the obsoletedBy value is\npreferred.",
+        "metadata": {
+          "name": "obsoletedBy",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/obsoletedBy",
+          "Domain": [
+            "License",
+            "LicenseAddition"
+          ]
+        }
+      },
+      "standardLicenseTemplate": {
+        "summary": "Identifies the full text of a License, in SPDX templating format.",
+        "description": "A standardLicenseTemplate contains a license template which describes\nsections of the License text which can be varied. See the Legacy Text Template\nformat section of the SPDX specification for format information.",
+        "metadata": {
+          "name": "standardLicenseTemplate",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/standardLicenseTemplate",
+          "Domain": [
+            "License"
+          ]
+        }
+      },
+      "additionName": {
+        "summary": "Identifies the full name of a LicenseAddition.",
+        "description": "An additionName contains the full name of a LicenseAddition, preferably using\nthe title found in the applicable license addition text or file, or as\notherwise specified by the LicenseAddition's author or steward.\n\nWhen no such title is specified, using a name from another well-known source or list\nof licenses additions (such as OSI or Fedora) is suggested.\n\nIf no official or common name is known, any name may be used to aid in\ndistinguishing the LicenseAddition from other LicenseAdditions.",
+        "metadata": {
+          "name": "additionName",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/additionName"
+        }
+      },
+      "standardAdditionTemplate": {
+        "summary": "Identifies the full text of a LicenseAddition, in SPDX templating format.",
+        "description": "A standardAdditionTemplate contains a license addition template which describes\nsections of the LicenseAddition text which can be varied. See the Legacy Text\nTemplate format section of the SPDX specification for format information.",
+        "metadata": {
+          "name": "standardAdditionTemplate",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/standardAdditionTemplate",
+          "Domain": [
+            "LicenseAddition"
+          ]
+        }
+      },
+      "licenseComment": {
+        "summary": "Identifies general comments about the License.",
+        "description": "A licenseComment describes general factual information about the License. It\nshould not contain information (or links to information) that includes any kind\nof interpretation about the meaning or effect of the License, even if written\nby the license's author.\n\nExamples of information for a licenseComment may include the following:\n\n* If the License's identifier is deprecated, it may briefly explain the reason\n  for deprecation.\n* It may include the date of release, if identified, for Licenses with multiple\n  versions.\n* It may include links to other official language translations for the License.\n* For LicenseAdditions, it may include a reference to the License(s) with\n  which this additional text is typically used.",
+        "metadata": {
+          "name": "licenseComment",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/licenseComment"
+        }
+      },
+      "deprecatedVersion": {
+        "summary": "Specifies the SPDX License List version in which this license or exception\nidentifier was deprecated.",
+        "description": "A deprecatedVersion for a ListedLicense or ListedLicenseException on the SPDX\nLicense List specifies which version release of the License List was the first\none in which it was marked as deprecated.",
+        "metadata": {
+          "name": "deprecatedVersion",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/deprecatedVersion",
+          "Domain": [
+            "ListedLicense",
+            "ListedLicenseException"
+          ]
         }
       },
       "member": {
         "summary": "A license expression participating in a license set.",
-        "description": "A member is a license expression participating in a conjuctive (of type\nConjunctiveLicenseSet) or a disjunctive (of type DisjunctiveLicenseSet)\nlicense set.",
+        "description": "A member is a license expression participating in a conjunctive (of type\nConjunctiveLicenseSet) or a disjunctive (of type DisjunctiveLicenseSet)\nlicense set.",
         "metadata": {
           "name": "member",
           "Nature": "ObjectProperty",
-          "Range": "Licensing/AnyLicenseInfo",
+          "Range": "/SimpleLicensing/AnyLicenseInfo",
           "Instantiability": "Concrete",
           "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/ExpandedLicense/member",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/member",
           "Domain": [
             "ConjunctiveLicenseSet",
             "DisjunctiveLicenseSet"
           ]
+        }
+      },
+      "licenseId": {
+        "summary": "Provides a short, unique identifier to refer to a License.",
+        "description": "A licenseId contains a human-readable, short-form license identifier for a\nLicense. It may only include letters, numbers, period (\".\") and hyphen (\"-\")\ncharacters.\n\nFor a ListedLicense, the licenseId will be as specified on the\n[SPDX License List](https://spdx.org/licenses) for the particular license.\n\nFor a CustomLicense, the short-form license identifier must begin with the\nprefix `LicenseRef-` and must be unique within the applicable SPDX namespace.\nThe short-form license ID may be preceded by an SPDX namespace or a\nfully-qualified URI prefix.",
+        "metadata": {
+          "name": "licenseId",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/licenseId"
+        }
+      },
+      "additionId": {
+        "summary": "Provides a short, unique identifier to refer to a LicenseAddition.",
+        "description": "An additionId contains a human-readable, short-form identifier for a\nLicenseAddition. It may only include letters, numbers, period (\".\") and\nhyphen (\"-\") characters.\n\nFor a ListedLicenseException, the licenseId will be as specified on the\n[SPDX Exceptions List](https://spdx.org/licenses/exceptions-index.html) for the\nparticular exception.\n\nFor a CustomLicenseAddition, the short-form identifier must begin with the\nprefix `AdditionRef-` and must be unique within the applicable SPDX namespace.\nThe short-form identifier may be preceded by an SPDX namespace or a\nfully-qualified URI prefix.",
+        "metadata": {
+          "name": "additionId",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/additionId"
+        }
+      },
+      "isOsiApproved": {
+        "summary": "Specifies whether the License is listed as approved by the\n[Open Source Initiative (OSI)](https://opensource.org).",
+        "description": "isOsiApproved specifies whether the [Open Source Initiative (OSI)](https://opensource.org)\nhas listed this License as \"approved\" in their list of OSI Approved Licenses,\nlocated at the time of this writing at https://opensource.org/licenses/.\n\nA value of \"true\" indicates that the OSI has listed this License as approved.\n\nA value of \"false\" indicates that the OSI has not listed this License as\napproved.\n\nIf the isOsiApproved field is not specified, the SPDX data creator makes no\nassertions about whether the License is approved by the OSI.",
+        "metadata": {
+          "name": "isOsiApproved",
+          "Nature": "DataProperty",
+          "Range": "xsd:boolean",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/isOsiApproved",
+          "Domain": [
+            "License"
+          ]
+        }
+      },
+      "additionComment": {
+        "summary": "Identifies general comments about the LicenseAddition.",
+        "description": "An additionComment for a LicenseAddition describes general factual information\nabout the LicenseAddition. It should not contain information (or links to\ninformation) that includes any kind of interpretation about the meaning or\neffect of the License, even if written by the license addition's author.\n\nExamples of information for an additionComment may include the following:\n\n* If the LicenseAddition's identifier is deprecated, it may briefly explain the\n  reason for deprecation.\n* It may include the date of release, if identified, for LicenseAdditions with\n  multiple versions.\n* It may include links to other official language translations for the\n  LicenseAddition.\n* It may include a reference to the License(s) with which this LicenseAddition\n  is typically used.",
+        "metadata": {
+          "name": "additionComment",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/ExpandedLicensing/additionComment"
         }
       }
     },
@@ -249,13 +708,7 @@
           "Status": "Stable",
           "id": "https://spdx.org/rdf/v3/Core/SpdxDocument"
         },
-        "properties": {
-          "name": {
-            "type": "xsd:string",
-            "minCount": "1",
-            "maxCount": "1"
-          }
-        },
+        "properties": {},
         "externalPropertyRestrictions": {
           "/Core/Element/name": {
             "minCount": "1",
@@ -1373,7 +1826,6 @@
           "Status": "Stable",
           "id": "https://spdx.org/rdf/v3/Core/name",
           "Domain": [
-            "SpdxDocument",
             "Element"
           ]
         }
@@ -1527,7 +1979,8 @@
         "entries": {
           "core": "the element follows the Core profile specification",
           "software": "the element follows the Software profile specification",
-          "licensing": "the element follows the Licensing profile specification",
+          "simpleLicensing": "the element follows the simple Licensing profile specification",
+          "expandedLicensing": "the element follows the expanded Licensing profile specification",
           "security": "the element follows the Security profile specification",
           "build": "the element follows the Build profile specification",
           "ai": "the element follows the AI profile specification",
@@ -1811,7 +2264,7 @@
             "maxCount": "*"
           },
           "sensitivePersonalInformation": {
-            "type": "/AI/PresenceType",
+            "type": "PresenceType",
             "minCount": "0",
             "maxCount": "1"
           },
@@ -2118,528 +2571,6 @@
         }
       }
     }
-  },
-  "Licensing": {
-    "name": "Licensing",
-    "classes": {
-      "ListedLicense": {
-        "summary": "A license that is listed on the SPDX License List.",
-        "description": "A ListedLicense represents a License that is listed on the SPDX License List\nat https://spdx.org/licenses.",
-        "metadata": {
-          "name": "ListedLicense",
-          "SubclassOf": "License",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/ListedLicense"
-        },
-        "properties": {
-          "listVersionAdded": {
-            "type": "xsd:string",
-            "minCount": "0",
-            "maxCount": "1"
-          },
-          "deprecatedVersion": {
-            "type": "xsd:string",
-            "minCount": "0",
-            "maxCount": "1"
-          }
-        },
-        "externalPropertyRestrictions": {}
-      },
-      "WithAdditionOperator": {
-        "summary": "Portion of an AnyLicenseInfo representing a License which has additional\ntext applied to it",
-        "description": "A WithAdditionOperator indicates that the designated License is subject to the\ndesignated LicenseAddition, which might be a license exception on the SPDX\nExceptions List (ListedLicenseException) or may be other additional text\n(CustomLicenseAddition). It is represented in the SPDX License Expression\nSyntax by the `WITH` operator.",
-        "metadata": {
-          "name": "WithAdditionOperator",
-          "SubclassOf": "AnyLicenseInfo",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/WithAdditionOperator"
-        },
-        "properties": {
-          "subjectLicense": {
-            "type": "ExpandedLicense/ExtendableLicense",
-            "minCount": "1",
-            "maxCount": "1"
-          },
-          "subjectAddition": {
-            "type": "LicenseAddition",
-            "minCount": "1",
-            "maxCount": "1"
-          }
-        },
-        "externalPropertyRestrictions": {}
-      },
-      "License": {
-        "summary": "Abstract class for the portion of an AnyLicenseInfo representing a license.",
-        "description": "A License represents a license text, whether listed on the SPDX License List\n(ListedLicense) or defined by an SPDX data creator (CustomLicense).",
-        "metadata": {
-          "name": "License",
-          "SubclassOf": "ExpandedLicense/ExtendableLicense",
-          "Instantiability": "Abstract",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/License"
-        },
-        "properties": {
-          "licenseText": {
-            "type": "xsd:string",
-            "minCount": "1",
-            "maxCount": "1"
-          },
-          "isOsiApproved": {
-            "type": "xsd:boolean",
-            "minCount": "0",
-            "maxCount": "1"
-          },
-          "isFsfLibre": {
-            "type": "xsd:boolean",
-            "minCount": "0",
-            "maxCount": "1"
-          },
-          "standardLicenseHeader": {
-            "type": "xsd:string",
-            "minCount": "0",
-            "maxCount": "1"
-          },
-          "standardLicenseTemplate": {
-            "type": "xsd:string",
-            "minCount": "0",
-            "maxCount": "1"
-          },
-          "isDeprecatedLicenseId": {
-            "type": "xsd:boolean",
-            "minCount": "0",
-            "maxCount": "1"
-          },
-          "obsoletedBy": {
-            "type": "xsd:string",
-            "minCount": "0",
-            "maxCount": "1"
-          }
-        },
-        "externalPropertyRestrictions": {}
-      },
-      "CustomLicenseAddition": {
-        "summary": "A license addition that is not listed on the SPDX Exceptions List.",
-        "description": "A CustomLicenseAddition represents an addition to a License that is not listed\non the SPDX Exceptions List at https://spdx.org/licenses/exceptions-index.html,\nand is therefore defined by an SPDX data creator.\n\nIt is intended to represent additional language which is meant to be added to\na License, but which is not itself a standalone License.",
-        "metadata": {
-          "name": "CustomLicenseAddition",
-          "SubclassOf": "LicenseAddition",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/CustomLicenseAddition"
-        },
-        "properties": {},
-        "externalPropertyRestrictions": {}
-      },
-      "LicenseAddition": {
-        "summary": "Abstract class for additional text intended to be added to a License, but\nwhich is not itself a standalone License.",
-        "description": "A LicenseAddition represents text which is intended to be added to a License\nas additional text, but which is not itself intended to be a standalone\nLicense.\n\nIt may be an exception which is listed on the SPDX Exceptions List\n(ListedLicenseException), or may be any other additional text (as an exception\nor otherwise) which is defined by an SPDX data creator (CustomLicenseAddition).",
-        "metadata": {
-          "name": "LicenseAddition",
-          "SubclassOf": "/Core/Element",
-          "Instantiability": "Abstract",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/LicenseAddition"
-        },
-        "properties": {
-          "additionText": {
-            "type": "xsd:string",
-            "minCount": "1",
-            "maxCount": "1"
-          },
-          "standardAdditionTemplate": {
-            "type": "xsd:string",
-            "minCount": "0",
-            "maxCount": "1"
-          },
-          "isDeprecatedAdditionId": {
-            "type": "xsd:boolean",
-            "minCount": "0",
-            "maxCount": "1"
-          },
-          "obsoletedBy": {
-            "type": "xsd:string",
-            "minCount": "0",
-            "maxCount": "1"
-          }
-        },
-        "externalPropertyRestrictions": {}
-      },
-      "OrLaterOperator": {
-        "summary": "Portion of an AnyLicenseInfo representing this version, or any later version,\nof the indicated License.",
-        "description": "An OrLaterOperator indicates that this portion of the AnyLicenseInfo\nrepresents either (1) the specified version of the corresponding License, or\n(2) any later version of that License. It is represented in the SPDX License\nExpression Syntax by the `+` operator.\n\nIt is context-dependent, and unspecified by SPDX, as to what constitutes a\n\"later version\" of any particular License. Some Licenses may not be versioned,\nor may not have clearly-defined ordering for versions. The consumer of SPDX\ndata will need to determine for themselves what meaning to attribute to a\n\"later version\" operator for a particular License.",
-        "metadata": {
-          "name": "OrLaterOperator",
-          "SubclassOf": "ExpandedLicense/ExtendableLicense",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/OrLaterOperator"
-        },
-        "properties": {
-          "subjectLicense": {
-            "type": "License",
-            "minCount": "1",
-            "maxCount": "1"
-          }
-        },
-        "externalPropertyRestrictions": {}
-      },
-      "CustomLicense": {
-        "summary": "A license that is not listed on the SPDX License List.",
-        "description": "A CustomLicense represents a License that is not listed on the SPDX License\nList at https://spdx.org/licenses, and is therefore defined by an SPDX data\ncreator.",
-        "metadata": {
-          "name": "CustomLicense",
-          "SubclassOf": "License",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/CustomLicense"
-        },
-        "properties": {},
-        "externalPropertyRestrictions": {}
-      },
-      "LicenseExpression": {
-        "summary": "An SPDX Element containing an SPDX license expression string.",
-        "description": "Often a single license can be used to represent the licensing terms of a source code or binary file, but there are situations where a single license identifier is not sufficient. A common example is when software is offered under a choice of one or more licenses (e.g., GPL-2.0-only OR BSD-3-Clause). Another example is when a set of licenses is needed to represent a binary program constructed by compiling and linking two (or more) different source files each governed by different licenses (e.g., LGPL-2.1-only AND BSD-3-Clause).\n\nSPDX License Expressions provide a way for one to construct expressions that more accurately represent the licensing terms typically found in open source software source code. A license expression could be a single license identifier found on the SPDX License List; a user defined license reference denoted by the LicenseRef-idString; a license identifier combined with an SPDX exception; or some combination of license identifiers, license references and exceptions constructed using a small set of defined operators (e.g., AND, OR, WITH and +). We provide the definition of what constitutes a valid an SPDX License Expression in this section.",
-        "metadata": {
-          "name": "LicenseExpression",
-          "SubclassOf": "AnyLicenseInfo",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/LicenseExpression"
-        },
-        "properties": {
-          "licenseExpression": {
-            "type": "xsd:string",
-            "minCount": "1",
-            "maxCount": "1"
-          }
-        },
-        "externalPropertyRestrictions": {}
-      },
-      "ListedLicenseException": {
-        "summary": "A license exception that is listed on the SPDX Exceptions list.",
-        "description": "A ListedLicenseException represents an exception to a License (in other words,\nan exception to a license condition or an additional permission beyond those\ngranted in a License) which is listed on the SPDX Exceptions List at\nhttps://spdx.org/licenses/exceptions-index.html.",
-        "metadata": {
-          "name": "ListedLicenseException",
-          "SubclassOf": "LicenseAddition",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/ListedLicenseException"
-        },
-        "properties": {
-          "listVersionAdded": {
-            "type": "xsd:string",
-            "minCount": "0",
-            "maxCount": "1"
-          },
-          "deprecatedVersion": {
-            "type": "xsd:string",
-            "minCount": "0",
-            "maxCount": "1"
-          }
-        },
-        "externalPropertyRestrictions": {}
-      },
-      "AnyLicenseInfo": {
-        "summary": "Abstract class representing a license combination consisting of one or more\nlicenses (optionally including additional text), which may be combined\naccording to the SPDX license expression syntax.",
-        "description": "An AnyLicenseInfo is used by licensing properties of software artifacts.\nIt can be a NoneLicense, a NoAssertionLicense,\nsingle license (either on the SPDX License List or a custom-defined license);\na single license with an \"or later\" operator applied; the foregoing with\nadditional text applied; or a set of licenses combined by applying \"AND\" and\n\"OR\" operators recursively.",
-        "metadata": {
-          "name": "AnyLicenseInfo",
-          "SubclassOf": "/Core/Element",
-          "Instantiability": "Abstract",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/AnyLicenseInfo"
-        },
-        "properties": {},
-        "externalPropertyRestrictions": {}
-      }
-    },
-    "properties": {
-      "seeAlso": {
-        "summary": "Contains a URL where the License or LicenseAddition can be found in use.",
-        "description": "A seeAlso defines a cross-reference with a URL where the License or\nLicenseAddition can be found in use by one or a few projects.\n\nIf applicable, it should include a URL where the license text is posted by\nthe license steward, particularly if the license steward has made available a\n\"canonical\" primary URL for the license text.\n\nIf the license is OSI approved, a seeAlso should be included with the URL for\nthe license's listing on the OSI website.\n\nThe seeAlso URL may refer to a previously-available URL for the License or\nLicenseAddition which is no longer active.\n\nWhere applicable, the seeAlso URL should include the license text in its\nnative language. seeAlso URLs to English or other translations may be included\nwhere multiple, equivalent official translations exist.",
-        "metadata": {
-          "name": "seeAlso",
-          "Nature": "DataProperty",
-          "Range": "xsd:anyURI",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/seeAlso"
-        }
-      },
-      "standardLicenseHeader": {
-        "summary": "Provides a License author's preferred text to indicate that a file is covered\nby the License.",
-        "description": "A standardLicenseHeader contains the plain text of the License author's\npreferred wording to be used, typically in a source code file's header\ncomments or similar location, to indicate that the file is subject to\nthe specified License.",
-        "metadata": {
-          "name": "standardLicenseHeader",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/standardLicenseHeader",
-          "Domain": [
-            "License"
-          ]
-        }
-      },
-      "licenseName": {
-        "summary": "Identifies the full name of a License.",
-        "description": "A licenseName contains the full name of a License, preferably using the title found\nin the applicable license text or file, or as otherwise specified by the\nLicense's author or steward.\n\nWhen no such title is specified, using a name from another well-known source or list\nof licenses (such as OSI or Fedora) is suggested.\n\nIf no official or common name is known, any name may be used to aid in\ndistinguishing the License from other Licenses.",
-        "metadata": {
-          "name": "licenseName",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/licenseName"
-        }
-      },
-      "licenseText": {
-        "summary": "Identifies the full text of a License.",
-        "description": "A licenseText contains the plain text of the License, without templating\nor other similar markup.\n\nUsers of the licenseText for a License can apply the SPDX Matching Guidelines\nwhen comparing it to another text for matching purposes.",
-        "metadata": {
-          "name": "licenseText",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/licenseText",
-          "Domain": [
-            "License"
-          ]
-        }
-      },
-      "isDeprecatedLicenseId": {
-        "summary": "Specifies whether a license or additional text identifier has been marked as\ndeprecated.",
-        "description": "The isDeprecatedLicenseId property specifies whether an identifier for a\nLicense or LicenseAddition has been marked as deprecated. If the property\nis not defined, then it is presumed to be false (i.e., not deprecated).\n\nIf the License or LicenseAddition is included on the SPDX License List, then\nthe `deprecatedVersion` property indicates on which version release of the\nLicense List it was first marked as deprecated.\n\n\"Deprecated\" in this context refers to deprecating the use of the\n_identifier_, not the underlying license. In other words, even if a License's\nauthor or steward has stated that a particular License generally should not be\nused, that would _not_ mean that the License's identifier is \"deprecated.\"\nRather, a License or LicenseAddition operator is typically marked as\n\"deprecated\" when it is determined that use of another identifier is\npreferable.",
-        "metadata": {
-          "name": "isDeprecatedLicenseId",
-          "Nature": "DataProperty",
-          "Range": "xsd:boolean",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/isDeprecatedLicenseId",
-          "Domain": [
-            "License"
-          ]
-        }
-      },
-      "isDeprecatedAdditionId": {
-        "summary": "Specifies whether an additional text identifier has been marked as deprecated.",
-        "description": "The isDeprecatedAdditionId property specifies whether an identifier for a\nLicenseAddition has been marked as deprecated. If the property is not defined,\nthen it is presumed to be false (i.e., not deprecated).\n\nIf the LicenseAddition is included on the SPDX Exceptions List, then\nthe `deprecatedVersion` property indicates on which version release of the\nExceptions List it was first marked as deprecated.\n\n\"Deprecated\" in this context refers to deprecating the use of the\n_identifier_, not the underlying license addition. In other words, even if a\nLicenseAddition's author or steward has stated that a particular\nLicenseAddition generally should not be used, that would _not_ mean that the\nLicenseAddition's identifier is \"deprecated.\" Rather, a LicenseAddition\noperator is typically marked as \"deprecated\" when it is determined that use of\nanother identifier is preferable.",
-        "metadata": {
-          "name": "isDeprecatedAdditionId",
-          "Nature": "DataProperty",
-          "Range": "xsd:boolean",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/isDeprecatedAdditionId",
-          "Domain": [
-            "LicenseAddition"
-          ]
-        }
-      },
-      "additionText": {
-        "summary": "Identifies the full text of a LicenseAddition.",
-        "description": "An additionText contains the plain text of the LicenseAddition, without\ntemplating or other similar markup.\n\nUsers of the additionText for a License can apply the SPDX Matching Guidelines\nwhen comparing it to another text for matching purposes.",
-        "metadata": {
-          "name": "additionText",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/additionText",
-          "Domain": [
-            "LicenseAddition"
-          ]
-        }
-      },
-      "isFsfLibre": {
-        "summary": "Specifies whether the License is listed as free by the\n[Free Software Foundation (FSF)](https://fsf.org).",
-        "description": "isFsfLibre specifies whether the [Free Software Foundation FSF](https://fsf.org)\nhas listed this License as \"free\" in their commentary on licenses, located at\nthe time of this writing at https://www.gnu.org/licenses/license-list.en.html.\n\nA value of \"true\" indicates that the FSF has listed this License as _free_.\n\nA value of \"false\" indicates that the FSF has listed this License as _not free_.\n\nIf the isFsfLibre field is not specified, the SPDX data creator makes no\nassertions about whether the License is listed in the FSF's commentary.",
-        "metadata": {
-          "name": "isFsfLibre",
-          "Nature": "DataProperty",
-          "Range": "xsd:boolean",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/isFsfLibre",
-          "Domain": [
-            "License"
-          ]
-        }
-      },
-      "listVersionAdded": {
-        "summary": "Specifies the SPDX License List version in which this ListedLicense or\nListedLicenseException identifier was first added.",
-        "description": "A listVersionAdded for a ListedLicense or ListedLicenseException on the SPDX\nLicense List specifies which version release of the License List was the first\none in which it was included.",
-        "metadata": {
-          "name": "listVersionAdded",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/listVersionAdded",
-          "Domain": [
-            "ListedLicense",
-            "ListedLicenseException"
-          ]
-        }
-      },
-      "licenseExpression": {
-        "summary": "A string in the license expression format.",
-        "description": "Often a single license can be used to represent the licensing terms of a source code or binary file, but there are situations where a single license identifier is not sufficient. A common example is when software is offered under a choice of one or more licenses (e.g., GPL-2.0-only OR BSD-3-Clause). Another example is when a set of licenses is needed to represent a binary program constructed by compiling and linking two (or more) different source files each governed by different licenses (e.g., LGPL-2.1-only AND BSD-3-Clause).\n\nSPDX License Expressions provide a way for one to construct expressions that more accurately represent the licensing terms typically found in open source software source code. A license expression could be a single license identifier found on the SPDX License List; a user defined license reference denoted by the LicenseRef-idString; a license identifier combined with an SPDX exception; or some combination of license identifiers, license references and exceptions constructed using a small set of defined operators (e.g., AND, OR, WITH and +). We provide the definition of what constitutes a valid an SPDX License Expression in this section.",
-        "metadata": {
-          "name": "licenseExpression",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/licenseExpression",
-          "Domain": [
-            "LicenseExpression"
-          ]
-        }
-      },
-      "obsoletedBy": {
-        "summary": "Specifies the licenseId that is preferred to be used in place of a deprecated\nLicense or LicenseAddition.",
-        "description": "An obsoletedBy value for a deprecated License or LicenseAddition specifies\nthe licenseId of the replacement License or LicenseAddition that is preferred\nto be used in its place. It should use the same format as specified for a\nlicenseId.\n\nThe License's or LicenseAddition's comment value may include more information\nabout the reason why the licenseId specified in the obsoletedBy value is\npreferred.",
-        "metadata": {
-          "name": "obsoletedBy",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/obsoletedBy",
-          "Domain": [
-            "License",
-            "LicenseAddition"
-          ]
-        }
-      },
-      "standardLicenseTemplate": {
-        "summary": "Identifies the full text of a License, in SPDX templating format.",
-        "description": "A standardLicenseTemplate contains a license template which describes\nsections of the License text which can be varied. See the Legacy Text Template\nformat section of the SPDX specification for format information.",
-        "metadata": {
-          "name": "standardLicenseTemplate",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/standardLicenseTemplate",
-          "Domain": [
-            "License"
-          ]
-        }
-      },
-      "additionName": {
-        "summary": "Identifies the full name of a LicenseAddition.",
-        "description": "An additionName contains the full name of a LicenseAddition, preferably using\nthe title found in the applicable license addition text or file, or as\notherwise specified by the LicenseAddition's author or steward.\n\nWhen no such title is specified, using a name from another well-known source or list\nof licenses additions (such as OSI or Fedora) is suggested.\n\nIf no official or common name is known, any name may be used to aid in\ndistinguishing the LicenseAddition from other LicenseAdditions.",
-        "metadata": {
-          "name": "additionName",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/additionName"
-        }
-      },
-      "standardAdditionTemplate": {
-        "summary": "Identifies the full text of a LicenseAddition, in SPDX templating format.",
-        "description": "A standardAdditionTemplate contains a license addition template which describes\nsections of the LicenseAddition text which can be varied. See the Legacy Text\nTemplate format section of the SPDX specification for format information.",
-        "metadata": {
-          "name": "standardAdditionTemplate",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/standardAdditionTemplate",
-          "Domain": [
-            "LicenseAddition"
-          ]
-        }
-      },
-      "licenseComment": {
-        "summary": "Identifies general comments about the License.",
-        "description": "A licenseComment describes general factual information about the License. It\nshould not contain information (or links to information) that includes any kind\nof interpretation about the meaning or effect of the License, even if written\nby the license's author.\n\nExamples of information for a licenseComment may include the following:\n\n* If the License's identifier is deprecated, it may briefly explain the reason\n  for deprecation.\n* It may include the date of release, if identified, for Licenses with multiple\n  versions.\n* It may include links to other official language translations for the License.\n* For LicenseAdditions, it may include a reference to the License(s) with\n  which this additional text is typically used.",
-        "metadata": {
-          "name": "licenseComment",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/licenseComment"
-        }
-      },
-      "deprecatedVersion": {
-        "summary": "Specifies the SPDX License List version in which this license or exception\nidentifier was deprecated.",
-        "description": "A deprecatedVersion for a ListedLicense or ListedLicenseException on the SPDX\nLicense List specifies which version release of the License List was the first\none in which it was marked as deprecated.",
-        "metadata": {
-          "name": "deprecatedVersion",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/deprecatedVersion",
-          "Domain": [
-            "ListedLicense",
-            "ListedLicenseException"
-          ]
-        }
-      },
-      "licenseId": {
-        "summary": "Provides a short, unique identifier to refer to a License.",
-        "description": "A licenseId contains a human-readable, short-form license identifier for a\nLicense. It may only include letters, numbers, period (\".\") and hyphen (\"-\")\ncharacters.\n\nFor a ListedLicense, the licenseId will be as specified on the\n[SPDX License List](https://spdx.org/licenses) for the particular license.\n\nFor a CustomLicense, the short-form license identifer must begin with the\nprefix `LicenseRef-` and must be unique within the applicable SPDX namespace.\nThe short-form license ID may be preceded by an SPDX namespace or a\nfully-qualified URI prefix.",
-        "metadata": {
-          "name": "licenseId",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/licenseId"
-        }
-      },
-      "additionId": {
-        "summary": "Provides a short, unique identifier to refer to a LicenseAddition.",
-        "description": "An additionId contains a human-readable, short-form identifier for a\nLicenseAddition. It may only include letters, numbers, period (\".\") and\nhyphen (\"-\") characters.\n\nFor a ListedLicenseException, the licenseId will be as specified on the\n[SPDX Exceptions List](https://spdx.org/licenses/exceptions-index.html) for the\nparticular exception.\n\nFor a CustomLicenseAddition, the short-form identifier must begin with the\nprefix `AdditionRef-` and must be unique within the applicable SPDX namespace.\nThe short-form identifier may be preceded by an SPDX namespace or a\nfully-qualified URI prefix.",
-        "metadata": {
-          "name": "additionId",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/additionId"
-        }
-      },
-      "isOsiApproved": {
-        "summary": "Specifies whether the License is listed as approved by the\n[Open Source Initiative (OSI)](https://opensource.org).",
-        "description": "isOsiApproved specifies whether the [Open Source Initiative (OSI)](https://opensource.org)\nhas listed this License as \"approved\" in their list of OSI Approved Licenses,\nlocated at the time of this writing at https://opensource.org/licenses/.\n\nA value of \"true\" indicates that the OSI has listed this License as approved.\n\nA value of \"false\" indicates that the OSI has not listed this License as\napproved.\n\nIf the isOsiApproved field is not specified, the SPDX data creator makes no\nassertions about whether the License is approved by the OSI.",
-        "metadata": {
-          "name": "isOsiApproved",
-          "Nature": "DataProperty",
-          "Range": "xsd:boolean",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/isOsiApproved",
-          "Domain": [
-            "License"
-          ]
-        }
-      },
-      "additionComment": {
-        "summary": "Identifies general comments about the LicenseAddition.",
-        "description": "An additionComment for a LicenseAddition describes general factual information\nabout the LicenseAddition. It should not contain information (or links to\ninformation) that includes any kind of interpretation about the meaning or\neffect of the License, even if written by the license addition's author.\n\nExamples of information for an additionComment may include the following:\n\n* If the LicenseAddition's identifier is deprecated, it may briefly explain the\n  reason for deprecation.\n* It may include the date of release, if identified, for LicenseAdditions with\n  multiple versions.\n* It may include links to other official language translations for the\n  LicenseAddition.\n* It may include a reference to the License(s) with which this LicenseAddition\n  is typically used.",
-        "metadata": {
-          "name": "additionComment",
-          "Nature": "DataProperty",
-          "Range": "xsd:string",
-          "Instantiability": "Concrete",
-          "Status": "Stable",
-          "id": "https://spdx.org/rdf/v3/Licensing/additionComment"
-        }
-      }
-    },
-    "vocabs": {}
   },
   "AI": {
     "name": "AI",
@@ -4437,5 +4368,94 @@
         }
       }
     }
+  },
+  "SimpleLicensing": {
+    "name": "SimpleLicensing",
+    "classes": {
+      "SimpleLicensingText": {
+        "summary": "A license or addition that is not listed on the SPDX License List.",
+        "description": "A SimpleLicensingText represents a License or Addition that is not listed on the SPDX License\nList at https://spdx.org/licenses, and is therefore defined by an SPDX data\ncreator.",
+        "metadata": {
+          "name": "SimpleLicensingText",
+          "SubclassOf": "/Core/Element",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/SimpleLicensing/SimpleLicensingText"
+        },
+        "properties": {
+          "licenseText": {
+            "type": "xsd:string",
+            "minCount": "1",
+            "maxCount": "1"
+          }
+        },
+        "externalPropertyRestrictions": {}
+      },
+      "LicenseExpression": {
+        "summary": "An SPDX Element containing an SPDX license expression string.",
+        "description": "Often a single license can be used to represent the licensing terms of a source code or binary file, but there are situations where a single license identifier is not sufficient. A common example is when software is offered under a choice of one or more licenses (e.g., GPL-2.0-only OR BSD-3-Clause). Another example is when a set of licenses is needed to represent a binary program constructed by compiling and linking two (or more) different source files each governed by different licenses (e.g., LGPL-2.1-only AND BSD-3-Clause).\n\nSPDX License Expressions provide a way for one to construct expressions that more accurately represent the licensing terms typically found in open source software source code. A license expression could be a single license identifier found on the SPDX License List; a user defined license reference denoted by the LicenseRef-idString; a license identifier combined with an SPDX exception; or some combination of license identifiers, license references and exceptions constructed using a small set of defined operators (e.g., AND, OR, WITH and +). We provide the definition of what constitutes a valid an SPDX License Expression in this section.",
+        "metadata": {
+          "name": "LicenseExpression",
+          "SubclassOf": "AnyLicenseInfo",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/SimpleLicensing/LicenseExpression"
+        },
+        "properties": {
+          "licenseExpression": {
+            "type": "xsd:string",
+            "minCount": "1",
+            "maxCount": "1"
+          }
+        },
+        "externalPropertyRestrictions": {}
+      },
+      "AnyLicenseInfo": {
+        "summary": "Abstract class representing a license combination consisting of one or more\nlicenses (optionally including additional text), which may be combined\naccording to the SPDX license expression syntax.",
+        "description": "An AnyLicenseInfo is used by licensing properties of software artifacts.\nIt can be a NoneLicense, a NoAssertionLicense,\nsingle license (either on the SPDX License List or a custom-defined license);\na single license with an \"or later\" operator applied; the foregoing with\nadditional text applied; or a set of licenses combined by applying \"AND\" and\n\"OR\" operators recursively.",
+        "metadata": {
+          "name": "AnyLicenseInfo",
+          "SubclassOf": "/Core/Element",
+          "Instantiability": "Abstract",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/SimpleLicensing/AnyLicenseInfo"
+        },
+        "properties": {},
+        "externalPropertyRestrictions": {}
+      }
+    },
+    "properties": {
+      "licenseText": {
+        "summary": "Identifies the full text of a License or Addition.",
+        "description": "A licenseText contains the plain text of the License or Addition,\nwithout templating or other similar markup.\n\nUsers of the licenseText for a License can apply the SPDX Matching Guidelines\nwhen comparing it to another text for matching purposes.",
+        "metadata": {
+          "name": "licenseText",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/SimpleLicensing/licenseText",
+          "Domain": [
+            "SimpleLicensingText"
+          ]
+        }
+      },
+      "licenseExpression": {
+        "summary": "A string in the license expression format.",
+        "description": "Often a single license can be used to represent the licensing terms of a source code or binary file, but there are situations where a single license identifier is not sufficient. A common example is when software is offered under a choice of one or more licenses (e.g., GPL-2.0-only OR BSD-3-Clause). Another example is when a set of licenses is needed to represent a binary program constructed by compiling and linking two (or more) different source files each governed by different licenses (e.g., LGPL-2.1-only AND BSD-3-Clause).\n\nSPDX License Expressions provide a way for one to construct expressions that more accurately represent the licensing terms typically found in open source software source code. A license expression could be a single license identifier found on the SPDX License List; a user defined license reference denoted by the LicenseRef-idString; a license identifier combined with an SPDX exception; or some combination of license identifiers, license references and exceptions constructed using a small set of defined operators (e.g., AND, OR, WITH and +). We provide the definition of what constitutes a valid an SPDX License Expression in this section.",
+        "metadata": {
+          "name": "licenseExpression",
+          "Nature": "DataProperty",
+          "Range": "xsd:string",
+          "Instantiability": "Concrete",
+          "Status": "Stable",
+          "id": "https://spdx.org/rdf/v3/SimpleLicensing/licenseExpression",
+          "Domain": [
+            "LicenseExpression"
+          ]
+        }
+      }
+    },
+    "vocabs": {}
   }
 }

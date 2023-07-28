@@ -23,9 +23,13 @@ class ProfileIdentifierType(Enum):
     """
     the element follows the Software profile specification
     """
-    LICENSING = auto()
+    SIMPLE_LICENSING = auto()
     """
-    the element follows the Licensing profile specification
+    the element follows the simple Licensing profile specification
+    """
+    EXPANDED_LICENSING = auto()
+    """
+    the element follows the expanded Licensing profile specification
     """
     SECURITY = auto()
     """
@@ -57,8 +61,10 @@ class ProfileIdentifierType(Enum):
             return "core"
         if self == ProfileIdentifierType.SOFTWARE:
             return "software"
-        if self == ProfileIdentifierType.LICENSING:
-            return "licensing"
+        if self == ProfileIdentifierType.SIMPLE_LICENSING:
+            return "simpleLicensing"
+        if self == ProfileIdentifierType.EXPANDED_LICENSING:
+            return "expandedLicensing"
         if self == ProfileIdentifierType.SECURITY:
             return "security"
         if self == ProfileIdentifierType.BUILD:
@@ -79,8 +85,10 @@ class ProfileIdentifierType(Enum):
             return ProfileIdentifierType.CORE
         if value == "software":
             return ProfileIdentifierType.SOFTWARE
-        if value == "licensing":
-            return ProfileIdentifierType.LICENSING
+        if value == "simpleLicensing":
+            return ProfileIdentifierType.SIMPLE_LICENSING
+        if value == "expandedLicensing":
+            return ProfileIdentifierType.EXPANDED_LICENSING
         if value == "security":
             return ProfileIdentifierType.SECURITY
         if value == "build":
