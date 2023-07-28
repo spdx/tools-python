@@ -71,6 +71,18 @@ PROP_LIST_CONVERTER_BODY = """
         prop_node = URIRef("{prop_id}")
         graph.add((node, prop_node, {prop_conversion_code}))"""
 
+PROP_DICT_CONVERTER_BODY = """
+    for key, value in obj.{prop_name}.items():
+        dict_node = BNode()
+        graph.add((dict_node, RDF.type, URIRef("https://spdx.org/rdf/v3/Core/DictionaryEntry")))
+        key_node = URIRef("https://spdx.org/rdf/v3/Core/key")
+        graph.add((dict_node, key_node, Literal(key, datatype="http://www.w3.org/2001/XMLSchema#string")))
+        if value is not None:
+            value_node = URIRef("https://spdx.org/rdf/v3/Core/value")
+            graph.add((dict_node, value_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
+        prop_node = URIRef("{prop_id}")
+        graph.add((node, prop_node, dict_node))"""
+
 VOCAB_CONVERTER_FUNC_BODY = """def {type_name}_to_rdf(obj, graph: Graph) -> Identifier:
     from .converter import enum_value_to_str
     name = enum_value_to_str(obj)
@@ -257,7 +269,12 @@ class GenModelToRdf:
             _, _, prop_name = full_prop_name.partition("/")
             is_list = prop.get("maxCount") != "1"
             prop_conversion_code = self.prop_conversion_code(prop["type"], namespace_name, model)
-            if is_list:
+            if "DictionaryEntry" in prop["type"]:
+                prop_code += PROP_DICT_CONVERTER_BODY.format(
+                    prop_name=prop_name_to_python(prop_name),
+                    prop_id=self.prop_name_to_id[full_prop_name],
+                )
+            elif is_list:
                 prop_code += PROP_LIST_CONVERTER_BODY.format(
                     prop_name=prop_name_to_python(prop_name),
                     prop_id=self.prop_name_to_id[full_prop_name],
