@@ -10,7 +10,7 @@
 from rdflib import Graph, URIRef, RDF, Literal, BNode
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
-from . import expanded_license, core, dataset, licensing, ai, security, build, software
+from . import expanded_licensing, core, dataset, ai, security, build, software, simple_licensing
 
 
 def package_to_rdf(obj, graph: Graph) -> Identifier:
@@ -139,11 +139,11 @@ def software_artifact_properties_to_rdf(node: Identifier, obj, graph: Graph):
     if obj.concluded_license is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/concludedLicense")
         value = obj.concluded_license
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Licensing/AnyLicenseInfo")))
     if obj.declared_license is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/declaredLicense")
         value = obj.declared_license
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Licensing/AnyLicenseInfo")))
     if obj.copyright_text is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Software/copyrightText")
         value = obj.copyright_text

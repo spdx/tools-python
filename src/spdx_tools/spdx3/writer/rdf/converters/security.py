@@ -10,7 +10,7 @@
 from rdflib import Graph, URIRef, RDF, Literal, BNode
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
-from . import expanded_license, core, dataset, licensing, ai, security, build, software
+from . import expanded_licensing, core, dataset, ai, security, build, software, simple_licensing
 
 
 def vex_not_affected_vuln_assessment_relationship_to_rdf(obj, graph: Graph) -> Identifier:

@@ -10,7 +10,7 @@
 from rdflib import Graph, URIRef, RDF, Literal, BNode
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
-from . import expanded_license, core, dataset, licensing, ai, security, build, software
+from . import expanded_licensing, core, dataset, ai, security, build, software, simple_licensing
 
 
 def positive_integer_range_to_rdf(obj, graph: Graph) -> Identifier:
@@ -54,9 +54,6 @@ def element_collection_properties_to_rdf(node: Identifier, obj, graph: Graph):
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.root_element:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/rootElement")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
-    for value in obj.namespaces:
-        prop_node = URIRef("https://spdx.org/rdf/v3/Core/namespaces")
         graph.add((node, prop_node, model_to_rdf(value, graph)))
     for value in obj.imports:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/imports")
@@ -157,10 +154,6 @@ def spdx_document_to_rdf(obj, graph: Graph) -> Identifier:
 
 def spdx_document_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
-    if obj.name is not None:
-        prop_node = URIRef("https://spdx.org/rdf/v3/Core/name")
-        value = obj.name
-        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
     core.bundle_properties_to_rdf(node, obj, graph)
 
 
@@ -178,29 +171,6 @@ def tool_to_rdf(obj, graph: Graph) -> Identifier:
 def tool_properties_to_rdf(node: Identifier, obj, graph: Graph):
     from .converter import model_to_rdf
     core.element_properties_to_rdf(node, obj, graph)
-
-
-def namespace_map_to_rdf(obj, graph: Graph) -> Identifier:
-    if '_spdx_id' in obj.__dict__:
-        element_node = URIRef(obj.spdx_id)
-    else:
-        element_node = BNode()
-    type_node = URIRef("https://spdx.org/rdf/v3/Core/NamespaceMap")
-    graph.add((element_node, RDF.type, type_node))
-    namespace_map_properties_to_rdf(element_node, obj, graph)
-    return element_node
-
-
-def namespace_map_properties_to_rdf(node: Identifier, obj, graph: Graph):
-    from .converter import model_to_rdf
-    if obj.prefix is not None:
-        prop_node = URIRef("https://spdx.org/rdf/v3/Core/prefix")
-        value = obj.prefix
-        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
-    if obj.namespace is not None:
-        prop_node = URIRef("https://spdx.org/rdf/v3/Core/namespace")
-        value = obj.namespace
-        graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#anyURI")))
 
 
 def creation_info_to_rdf(obj, graph: Graph) -> Identifier:
@@ -395,10 +365,6 @@ def element_properties_to_rdf(node: Identifier, obj, graph: Graph):
     for value in obj.external_identifier:
         prop_node = URIRef("https://spdx.org/rdf/v3/Core/externalIdentifier")
         graph.add((node, prop_node, model_to_rdf(value, graph)))
-    if obj.extension is not None:
-        prop_node = URIRef("https://spdx.org/rdf/v3/Core/extension")
-        value = obj.extension
-        graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/Extension")))
 
 
 def agent_to_rdf(obj, graph: Graph) -> Identifier:

@@ -10,7 +10,7 @@
 from rdflib import Graph, URIRef, RDF, Literal, BNode
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
-from . import expanded_license, core, dataset, licensing, ai, security, build, software
+from . import expanded_licensing, core, dataset, ai, security, build, software, simple_licensing
 
 
 def dataset_to_rdf(obj, graph: Graph) -> Identifier:
@@ -48,9 +48,16 @@ def dataset_properties_to_rdf(node: Identifier, obj, graph: Graph):
     for value in obj.data_preprocessing:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/dataPreprocessing")
         graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
-    for value in obj.sensor:
+    for key, value in obj.sensor.items():
+        dict_node = BNode()
+        graph.add((dict_node, RDF.type, URIRef("https://spdx.org/rdf/v3/Core/DictionaryEntry")))
+        key_node = URIRef("https://spdx.org/rdf/v3/Core/key")
+        graph.add((dict_node, key_node, Literal(key, datatype="http://www.w3.org/2001/XMLSchema#string")))
+        if value is not None:
+            value_node = URIRef("https://spdx.org/rdf/v3/Core/value")
+            graph.add((dict_node, value_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/sensor")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, dict_node))
     for value in obj.known_bias:
         prop_node = URIRef("https://spdx.org/rdf/v3/Dataset/knownBias")
         graph.add((node, prop_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))

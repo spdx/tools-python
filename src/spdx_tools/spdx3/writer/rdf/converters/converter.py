@@ -11,13 +11,21 @@ from rdflib import Graph, Literal, URIRef
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
 from spdx_tools.spdx3.model import HashAlgorithm
-from . import expanded_license, core, dataset, licensing, ai, security, build, software
+from . import expanded_licensing, core, dataset, ai, security, build, software, simple_licensing
 
 
 _CONVERTER_FUNCTIONS: Dict[str, Callable[[any, Graph], Identifier]] = {
-    "ExpandedLicense/ConjunctiveLicenseSet": expanded_license.conjunctive_license_set_to_rdf,
-    "ExpandedLicense/DisjunctiveLicenseSet": expanded_license.disjunctive_license_set_to_rdf,
-    "ExpandedLicense/ExtendableLicense": expanded_license.extendable_license_to_rdf,
+    "ExpandedLicensing/ListedLicense": expanded_licensing.listed_license_to_rdf,
+    "ExpandedLicensing/WithAdditionOperator": expanded_licensing.with_addition_operator_to_rdf,
+    "ExpandedLicensing/License": expanded_licensing.license_to_rdf,
+    "ExpandedLicensing/CustomLicenseAddition": expanded_licensing.custom_license_addition_to_rdf,
+    "ExpandedLicensing/ConjunctiveLicenseSet": expanded_licensing.conjunctive_license_set_to_rdf,
+    "ExpandedLicensing/LicenseAddition": expanded_licensing.license_addition_to_rdf,
+    "ExpandedLicensing/OrLaterOperator": expanded_licensing.or_later_operator_to_rdf,
+    "ExpandedLicensing/DisjunctiveLicenseSet": expanded_licensing.disjunctive_license_set_to_rdf,
+    "ExpandedLicensing/CustomLicense": expanded_licensing.custom_license_to_rdf,
+    "ExpandedLicensing/ListedLicenseException": expanded_licensing.listed_license_exception_to_rdf,
+    "ExpandedLicensing/ExtendableLicense": expanded_licensing.extendable_license_to_rdf,
     "Core/PositiveIntegerRange": core.positive_integer_range_to_rdf,
     "Core/ElementCollection": core.element_collection_to_rdf,
     "Core/ExternalReference": core.external_reference_to_rdf,
@@ -25,7 +33,6 @@ _CONVERTER_FUNCTIONS: Dict[str, Callable[[any, Graph], Identifier]] = {
     "Core/Bom": core.bom_to_rdf,
     "Core/SpdxDocument": core.spdx_document_to_rdf,
     "Core/Tool": core.tool_to_rdf,
-    "Core/NamespaceMap": core.namespace_map_to_rdf,
     "Core/CreationInfo": core.creation_info_to_rdf,
     "Core/Organization": core.organization_to_rdf,
     "Core/LifecycleScopedRelationship": core.lifecycle_scoped_relationship_to_rdf,
@@ -53,16 +60,6 @@ _CONVERTER_FUNCTIONS: Dict[str, Callable[[any, Graph], Identifier]] = {
     "Dataset/DatasetType": dataset.dataset_type_to_rdf,
     "Dataset/DatasetAvailabilityType": dataset.dataset_availability_type_to_rdf,
     "Dataset/ConfidentialityLevelType": dataset.confidentiality_level_type_to_rdf,
-    "Licensing/ListedLicense": licensing.listed_license_to_rdf,
-    "Licensing/WithAdditionOperator": licensing.with_addition_operator_to_rdf,
-    "Licensing/License": licensing.license_to_rdf,
-    "Licensing/CustomLicenseAddition": licensing.custom_license_addition_to_rdf,
-    "Licensing/LicenseAddition": licensing.license_addition_to_rdf,
-    "Licensing/OrLaterOperator": licensing.or_later_operator_to_rdf,
-    "Licensing/CustomLicense": licensing.custom_license_to_rdf,
-    "Licensing/LicenseExpression": licensing.license_expression_to_rdf,
-    "Licensing/ListedLicenseException": licensing.listed_license_exception_to_rdf,
-    "Licensing/AnyLicenseInfo": licensing.any_license_info_to_rdf,
     "AI/AIPackage": ai.a_ipackage_to_rdf,
     "AI/SafetyRiskAssessmentType": ai.safety_risk_assessment_type_to_rdf,
     "AI/PresenceType": ai.presence_type_to_rdf,
@@ -91,21 +88,22 @@ _CONVERTER_FUNCTIONS: Dict[str, Callable[[any, Graph], Identifier]] = {
     "Software/DependencyConditionalityType": software.dependency_conditionality_type_to_rdf,
     "Software/SoftwarePurpose": software.software_purpose_to_rdf,
     "Software/SoftwareDependencyLinkType": software.software_dependency_link_type_to_rdf,
-    "Software/SbomType": software.sbom_type_to_rdf
+    "Software/SbomType": software.sbom_type_to_rdf,
+    "SimpleLicensing/SimpleLicensingText": simple_licensing.simple_licensing_text_to_rdf,
+    "SimpleLicensing/LicenseExpression": simple_licensing.license_expression_to_rdf,
+    "SimpleLicensing/AnyLicenseInfo": simple_licensing.any_license_info_to_rdf
 }
 
 
 def module_to_namespace(module: str) -> Optional[str]:
     if not module.startswith("spdx_tools.spdx3.model"):
         return None
-    if module.startswith("spdx_tools.spdx3.model.expanded_license"):
-        return "ExpandedLicense"
+    if module.startswith("spdx_tools.spdx3.model.expanded_licensing"):
+        return "ExpandedLicensing"
     if module.startswith("spdx_tools.spdx3.model.core"):
         return "Core"
     if module.startswith("spdx_tools.spdx3.model.dataset"):
         return "Dataset"
-    if module.startswith("spdx_tools.spdx3.model.licensing"):
-        return "Licensing"
     if module.startswith("spdx_tools.spdx3.model.ai"):
         return "AI"
     if module.startswith("spdx_tools.spdx3.model.security"):
@@ -114,6 +112,8 @@ def module_to_namespace(module: str) -> Optional[str]:
         return "Build"
     if module.startswith("spdx_tools.spdx3.model.software"):
         return "Software"
+    if module.startswith("spdx_tools.spdx3.model.simple_licensing"):
+        return "SimpleLicensing"
     return "Core"
 
 

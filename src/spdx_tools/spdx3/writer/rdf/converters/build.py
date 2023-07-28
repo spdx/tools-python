@@ -10,7 +10,7 @@
 from rdflib import Graph, URIRef, RDF, Literal, BNode
 from rdflib.term import Identifier
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
-from . import expanded_license, core, dataset, licensing, ai, security, build, software
+from . import expanded_licensing, core, dataset, ai, security, build, software, simple_licensing
 
 
 def build_to_rdf(obj, graph: Graph) -> Identifier:
@@ -43,9 +43,16 @@ def build_properties_to_rdf(node: Identifier, obj, graph: Graph):
     for value in obj.config_source_digest:
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/configSourceDigest")
         graph.add((node, prop_node, model_to_rdf(value, graph)))
-    for value in obj.parameters:
+    for key, value in obj.parameters.items():
+        dict_node = BNode()
+        graph.add((dict_node, RDF.type, URIRef("https://spdx.org/rdf/v3/Core/DictionaryEntry")))
+        key_node = URIRef("https://spdx.org/rdf/v3/Core/key")
+        graph.add((dict_node, key_node, Literal(key, datatype="http://www.w3.org/2001/XMLSchema#string")))
+        if value is not None:
+            value_node = URIRef("https://spdx.org/rdf/v3/Core/value")
+            graph.add((dict_node, value_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/parameters")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, dict_node))
     if obj.build_start_time is not None:
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/buildStartTime")
         value = obj.build_start_time
@@ -54,9 +61,16 @@ def build_properties_to_rdf(node: Identifier, obj, graph: Graph):
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/buildEndTime")
         value = obj.build_end_time
         graph.add((node, prop_node, Literal(value, datatype="https://spdx.org/rdf/v3/Core/DateTime")))
-    for value in obj.environment:
+    for key, value in obj.environment.items():
+        dict_node = BNode()
+        graph.add((dict_node, RDF.type, URIRef("https://spdx.org/rdf/v3/Core/DictionaryEntry")))
+        key_node = URIRef("https://spdx.org/rdf/v3/Core/key")
+        graph.add((dict_node, key_node, Literal(key, datatype="http://www.w3.org/2001/XMLSchema#string")))
+        if value is not None:
+            value_node = URIRef("https://spdx.org/rdf/v3/Core/value")
+            graph.add((dict_node, value_node, Literal(value, datatype="http://www.w3.org/2001/XMLSchema#string")))
         prop_node = URIRef("https://spdx.org/rdf/v3/Build/environment")
-        graph.add((node, prop_node, model_to_rdf(value, graph)))
+        graph.add((node, prop_node, dict_node))
     core.element_properties_to_rdf(node, obj, graph)
 
 
