@@ -245,8 +245,11 @@ class GenModelToRdf:
         output_file.write(CLS_CONVERTER_FUNC_BODY.format(type_name=type_name, type_id=clazz["metadata"]["id"]))
 
         prop_code = ""
+        # ignore spdxId, as we'll use it implicitly for the RDF URI
+        # ignore extension as it is currently not fully specified and can't be mapped in a sensible way
+        ignored_props = ["spdxId", "extension"]
         for prop_name, prop in clazz["properties"].items():
-            if prop_name == "spdxId":
+            if prop_name in ignored_props:
                 continue
             if prop_name.startswith('/'):
                 prop_name = prop_name[1:]
