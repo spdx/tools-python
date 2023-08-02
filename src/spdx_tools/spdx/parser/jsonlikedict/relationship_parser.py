@@ -35,24 +35,26 @@ class RelationshipParser:
         document_describes: List[str] = delete_duplicates_from_list(input_doc_dict.get("documentDescribes", []))
         doc_spdx_id: Optional[str] = input_doc_dict.get("SPDXID")
 
+        existing_relationships_without_comments: List[Relationship] = self.get_all_relationships_without_comments(relationships)
         relationships.extend(
             parse_field_or_log_error(
                 self.logger,
                 document_describes,
                 lambda x: self.parse_document_describes(
-                    doc_spdx_id=doc_spdx_id, described_spdx_ids=x, existing_relationships=relationships
+                    doc_spdx_id=doc_spdx_id, described_spdx_ids=x, existing_relationships=existing_relationships_without_comments
                 ),
                 [],
             )
         )
 
         package_dicts: List[Dict] = input_doc_dict.get("packages", [])
+        existing_relationships_without_comments: List[Relationship] = self.get_all_relationships_without_comments(relationships)
 
         relationships.extend(
             parse_field_or_log_error(
                 self.logger,
                 package_dicts,
-                lambda x: self.parse_has_files(package_dicts=x, existing_relationships=relationships),
+                lambda x: self.parse_has_files(package_dicts=x, existing_relationships=existing_relationships_without_comments),
                 [],
             )
         )
@@ -151,13 +153,11 @@ class RelationshipParser:
     def check_if_relationship_exists(
         self, relationship: Relationship, existing_relationships: List[Relationship]
     ) -> bool:
-        existing_relationships_without_comments: List[Relationship] = self.get_all_relationships_without_comments(
-            existing_relationships
-        )
-        if relationship in existing_relationships_without_comments:
+        # assume existing relationships are stripped of comments
+        if relationship in existing_relationships:
             return True
         relationship_inverted: Relationship = self.invert_relationship(relationship)
-        if relationship_inverted in existing_relationships_without_comments:
+        if relationship_inverted in existing_relationships:
             return True
 
         return False
