@@ -34,6 +34,7 @@ def test_invalid_url(input_value):
         "git+https://git.myproject.org/MyProject.git",
         "git+http://git.myproject.org/MyProject",
         "git+ssh://git.myproject.org/MyProject.git",
+        "git+ssh://git@git.myproject.org/MyProject.git",
         "git+git://git.myproject.org/MyProject",
         "git+git@git.myproject.org:MyProject",
         "git://git.myproject.org/MyProject#src/somefile.c",
