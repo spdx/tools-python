@@ -36,7 +36,7 @@ class TestParseFromFile:
         doc = parser.parse_from_file(
             os.path.join(os.path.dirname(__file__), f"../../data/SPDX{format_name}Example-v2.3.spdx{extension}")
         )
-        assert type(doc) == Document
+        assert isinstance(doc, Document)
         assert len(doc.annotations) == 5
         assert len(doc.files) == 5
         assert len(doc.packages) == 4
@@ -48,7 +48,7 @@ class TestParseFromFile:
         doc = parser.parse_from_file(
             os.path.join(os.path.dirname(__file__), f"../../data/SPDX{format_name}Example-v2.2.spdx{extension}")
         )
-        assert type(doc) == Document
+        assert isinstance(doc, Document)
         assert len(doc.annotations) == 5
         assert len(doc.files) == 4
         assert len(doc.packages) == 4
