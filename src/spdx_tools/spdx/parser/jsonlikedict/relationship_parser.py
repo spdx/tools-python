@@ -125,6 +125,7 @@ class RelationshipParser:
     def parse_has_files(
         self, package_dicts: List[Dict], existing_relationships: List[Relationship]
     ) -> List[Relationship]:
+        # assume existing relationships are stripped of comments
         logger = Logger()
         contains_relationships = []
         for package in package_dicts:
