@@ -169,6 +169,7 @@ def test_parse_has_files():
 @pytest.mark.parametrize(
     "has_files,existing_relationships,contains_relationships",
     [
+        # pre-requisite for parse_has_files requires that comments in relationships are stripped
         (
             ["SPDXRef-File1", "SPDXRef-File2"],
             [
@@ -176,7 +177,6 @@ def test_parse_has_files():
                     spdx_element_id="SPDXRef-Package",
                     relationship_type=RelationshipType.CONTAINS,
                     related_spdx_element_id="SPDXRef-File1",
-                    comment="This relationship has a comment.",
                 ),
                 Relationship(
                     spdx_element_id="SPDXRef-File2",
