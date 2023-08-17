@@ -34,7 +34,7 @@ def test_invalid_json_str_to_enum(invalid_json_str, expected_message):
 def test_parse_field_or_no_assertion(input_str, expected_type):
     resulting_value = parse_field_or_no_assertion(input_str, lambda x: x)
 
-    assert type(resulting_value) == expected_type
+    assert isinstance(resulting_value, expected_type)
 
 
 @pytest.mark.parametrize(
@@ -43,4 +43,4 @@ def test_parse_field_or_no_assertion(input_str, expected_type):
 def test_parse_field_or_no_assertion_or_none(input_str, expected_type):
     resulting_value = parse_field_or_no_assertion_or_none(input_str, lambda x: x)
 
-    assert type(resulting_value) == expected_type
+    assert isinstance(resulting_value, expected_type)
