@@ -5,9 +5,9 @@ import os
 from unittest import TestCase
 
 import pytest
-from license_expression import get_spdx_licensing
 from rdflib import RDF, BNode, Graph, Literal, URIRef
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import (
     Actor,
     ActorType,
@@ -41,11 +41,11 @@ def test_package_parser():
     assert package.files_analyzed is True
     assert package.checksums == [Checksum(ChecksumAlgorithm.SHA1, "71c4025dd9897b364f3ebbb42c484ff43d00791c")]
     assert package.source_info == "sourceInfo"
-    assert package.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
-    assert package.license_declared == get_spdx_licensing().parse("MIT AND GPL-2.0")
+    assert package.license_concluded == spdx_licensing.parse("MIT AND GPL-2.0")
+    assert package.license_declared == spdx_licensing.parse("MIT AND GPL-2.0")
     TestCase().assertCountEqual(
         package.license_info_from_files,
-        [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"), SpdxNoAssertion()],
+        [spdx_licensing.parse("MIT"), spdx_licensing.parse("GPL-2.0"), SpdxNoAssertion()],
     )
     assert package.license_comment == "packageLicenseComment"
     assert package.copyright_text == "packageCopyrightText"

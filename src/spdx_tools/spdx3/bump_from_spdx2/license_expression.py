@@ -2,15 +2,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List, Union
-from license_expression import (
-    AND,
-    OR,
-    LicenseExpression,
-    LicenseSymbol,
-    LicenseWithExceptionSymbol,
-    get_spdx_licensing,
-)
+from license_expression import AND, OR, LicenseExpression, LicenseSymbol, LicenseWithExceptionSymbol
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx3.model.licensing import (
     AnyLicenseInfo,
     ConjunctiveLicenseSet,
@@ -61,7 +55,7 @@ def bump_license_expression(
             subject_addition=bump_license_exception(license_expression.exception_symbol, extracted_licensing_info),
         )
     if isinstance(license_expression, LicenseSymbol):
-        if not get_spdx_licensing().validate(license_expression).invalid_symbols:
+        if not spdx_licensing.validate(license_expression).invalid_symbols:
             return ListedLicense(license_expression.key, license_expression.obj, "blank")
         else:
             for licensing_info in extracted_licensing_info:
@@ -80,7 +74,7 @@ def bump_license_expression(
 def bump_license_exception(
     license_exception: LicenseSymbol, extracted_licensing_info: List[ExtractedLicensingInfo]
 ) -> LicenseAddition:
-    if not get_spdx_licensing().validate(license_exception).invalid_symbols:
+    if not spdx_licensing.validate(license_exception).invalid_symbols:
         return ListedLicenseException(license_exception.key, "", "")
     else:
         for licensing_info in extracted_licensing_info:

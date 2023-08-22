@@ -5,8 +5,7 @@ import logging
 from datetime import datetime
 from typing import List
 
-from license_expression import get_spdx_licensing
-
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import (
     Actor,
     ActorType,
@@ -65,9 +64,9 @@ package = Package(
         Checksum(ChecksumAlgorithm.SHA1, "d6a770ba38583ed4bb4525bd96e50461655d2758"),
         Checksum(ChecksumAlgorithm.MD5, "624c1abb3664f4b35547e7c73864ad24"),
     ],
-    license_concluded=get_spdx_licensing().parse("GPL-2.0-only OR MIT"),
-    license_info_from_files=[get_spdx_licensing().parse("GPL-2.0-only"), get_spdx_licensing().parse("MIT")],
-    license_declared=get_spdx_licensing().parse("GPL-2.0-only AND MIT"),
+    license_concluded=spdx_licensing.parse("GPL-2.0-only OR MIT"),
+    license_info_from_files=[spdx_licensing.parse("GPL-2.0-only"), spdx_licensing.parse("MIT")],
+    license_declared=spdx_licensing.parse("GPL-2.0-only AND MIT"),
     license_comment="license comment",
     copyright_text="Copyright 2022 Jane Doe",
     description="package description",
@@ -100,8 +99,8 @@ file1 = File(
         Checksum(ChecksumAlgorithm.SHA1, "d6a770ba38583ed4bb4525bd96e50461655d2758"),
         Checksum(ChecksumAlgorithm.MD5, "624c1abb3664f4b35547e7c73864ad24"),
     ],
-    license_concluded=get_spdx_licensing().parse("MIT"),
-    license_info_in_file=[get_spdx_licensing().parse("MIT")],
+    license_concluded=spdx_licensing.parse("MIT"),
+    license_info_in_file=[spdx_licensing.parse("MIT")],
     copyright_text="Copyright 2022 Jane Doe",
 )
 file2 = File(
@@ -110,7 +109,7 @@ file2 = File(
     checksums=[
         Checksum(ChecksumAlgorithm.SHA1, "d6a770ba38583ed4bb4525bd96e50461655d2759"),
     ],
-    license_concluded=get_spdx_licensing().parse("GPL-2.0-only"),
+    license_concluded=spdx_licensing.parse("GPL-2.0-only"),
 )
 
 # Assuming the package contains those two files, we create two CONTAINS relationships.

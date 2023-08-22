@@ -2,10 +2,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import Optional, Union
-from license_expression import LicenseExpression, get_spdx_licensing
+from license_expression import LicenseExpression
 from rdflib import RDF, Graph
 from rdflib.term import BNode, Identifier, Node, URIRef
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.rdf.graph_parsing_functions import get_value_from_graph, remove_prefix
 from spdx_tools.spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
@@ -19,7 +20,7 @@ def parse_license_expression(
 ) -> LicenseExpression:
     if not logger:
         logger = Logger()
-    spdx_licensing = get_spdx_licensing()
+
     expression = ""
     if license_expression_node.startswith(LICENSE_NAMESPACE):
         expression = remove_prefix(license_expression_node, LICENSE_NAMESPACE)

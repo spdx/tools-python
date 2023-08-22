@@ -2,8 +2,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import pytest
-from license_expression import get_spdx_licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import FileType, SpdxNoAssertion
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.tagvalue.parser import Parser
@@ -39,8 +39,8 @@ def test_parse_file():
     assert spdx_file.attribution_texts == [
         "Acknowledgements that might be required to be communicated in some contexts."
     ]
-    assert spdx_file.license_info_in_file == [get_spdx_licensing().parse("Apache-2.0"), SpdxNoAssertion()]
-    assert spdx_file.license_concluded == get_spdx_licensing().parse("Apache-2.0")
+    assert spdx_file.license_info_in_file == [spdx_licensing.parse("Apache-2.0"), SpdxNoAssertion()]
+    assert spdx_file.license_concluded == spdx_licensing.parse("Apache-2.0")
 
 
 def test_parse_invalid_file():

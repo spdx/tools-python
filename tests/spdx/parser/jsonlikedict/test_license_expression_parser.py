@@ -4,8 +4,8 @@
 from unittest import TestCase
 
 import pytest
-from license_expression import get_spdx_licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.license_expression_parser import LicenseExpressionParser
@@ -14,8 +14,8 @@ from spdx_tools.spdx.parser.jsonlikedict.license_expression_parser import Licens
 @pytest.mark.parametrize(
     "license_expression_str, expected_license",
     [
-        ("First License", get_spdx_licensing().parse("First License")),
-        ("Second License", get_spdx_licensing().parse("Second License")),
+        ("First License", spdx_licensing.parse("First License")),
+        ("Second License", spdx_licensing.parse("Second License")),
         ("NOASSERTION", SpdxNoAssertion()),
         ("NONE", SpdxNone()),
     ],
