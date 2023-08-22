@@ -4,9 +4,9 @@
 import os
 from unittest import TestCase
 
-from license_expression import get_spdx_licensing
 from rdflib import RDF, Graph
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.parser.rdf import rdf_parser
 from spdx_tools.spdx.parser.rdf.license_expression_parser import parse_license_expression
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
@@ -19,7 +19,7 @@ def test_license_expression_parser():
 
     license_expression = parse_license_expression(license_expression_node, graph, "https://some.namespace#")
 
-    assert license_expression == get_spdx_licensing().parse("GPL-2.0 AND MIT")
+    assert license_expression == spdx_licensing.parse("GPL-2.0 AND MIT")
 
 
 def test_license_expression_parser_with_coupled_licenses():
@@ -30,19 +30,19 @@ def test_license_expression_parser_with_coupled_licenses():
     packages_by_spdx_id = {package.spdx_id: package for package in doc.packages}
     files_by_spdx_id = {file.spdx_id: file for file in doc.files}
 
-    assert packages_by_spdx_id["SPDXRef-Package"].license_declared == get_spdx_licensing().parse(
+    assert packages_by_spdx_id["SPDXRef-Package"].license_declared == spdx_licensing.parse(
         "LGPL-2.0-only AND LicenseRef-3"
     )
-    assert packages_by_spdx_id["SPDXRef-Package"].license_concluded == get_spdx_licensing().parse(
+    assert packages_by_spdx_id["SPDXRef-Package"].license_concluded == spdx_licensing.parse(
         "LGPL-2.0-only OR LicenseRef-3"
     )
     TestCase().assertCountEqual(
         packages_by_spdx_id["SPDXRef-Package"].license_info_from_files,
         [
-            get_spdx_licensing().parse("GPL-2.0"),
-            get_spdx_licensing().parse("LicenseRef-1"),
-            get_spdx_licensing().parse("LicenseRef-2"),
+            spdx_licensing.parse("GPL-2.0"),
+            spdx_licensing.parse("LicenseRef-1"),
+            spdx_licensing.parse("LicenseRef-2"),
         ],
     )
 
-    assert files_by_spdx_id["SPDXRef-JenaLib"].license_concluded == get_spdx_licensing().parse("LicenseRef-1")
+    assert files_by_spdx_id["SPDXRef-JenaLib"].license_concluded == spdx_licensing.parse("LicenseRef-1")

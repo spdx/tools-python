@@ -3,8 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from beartype.typing import List, Optional, Union
-from license_expression import ExpressionError, ExpressionParseError, LicenseExpression, get_spdx_licensing
+from license_expression import ExpressionError, ExpressionParseError, LicenseExpression
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import Document, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
@@ -40,7 +41,7 @@ def validate_license_expression(
     validation_messages = []
     license_ref_ids: List[str] = [license_ref.license_id for license_ref in document.extracted_licensing_info]
 
-    for non_spdx_token in get_spdx_licensing().validate(license_expression).invalid_symbols:
+    for non_spdx_token in spdx_licensing.validate(license_expression).invalid_symbols:
         if non_spdx_token not in license_ref_ids:
             validation_messages.append(
                 ValidationMessage(
@@ -51,14 +52,14 @@ def validate_license_expression(
             )
 
     try:
-        get_spdx_licensing().parse(str(license_expression), validate=True, strict=True)
+        spdx_licensing.parse(str(license_expression), validate=True, strict=True)
     except ExpressionParseError as err:
         # This error is raised when an exception symbol is used as a license symbol and vice versa.
         # So far, it only catches the first such error in the provided string.
         validation_messages.append(ValidationMessage(f"{err}. for license_expression: {license_expression}", context))
     except ExpressionError:
         # This error is raised for invalid symbols within the license_expression, but it provides only a string of
-        # these. On the other hand, get_spdx_licensing().validate() gives an actual list of invalid symbols, so this is
+        # these. On the other hand, spdx_licensing.validate() gives an actual list of invalid symbols, so this is
         # handled above.
         pass
 

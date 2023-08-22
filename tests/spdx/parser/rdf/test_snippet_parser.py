@@ -5,9 +5,9 @@ import os
 from unittest import TestCase
 
 import pytest
-from license_expression import get_spdx_licensing
 from rdflib import RDF, BNode, Graph, Literal, URIRef
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.rdf.snippet_parser import parse_ranges, parse_snippet
@@ -26,10 +26,10 @@ def test_parse_snippet():
     assert snippet.file_spdx_id == "SPDXRef-File"
     assert snippet.byte_range == (1, 2)
     assert snippet.line_range == (3, 4)
-    assert snippet.license_concluded == get_spdx_licensing().parse("MIT AND GPL-2.0")
+    assert snippet.license_concluded == spdx_licensing.parse("MIT AND GPL-2.0")
     TestCase().assertCountEqual(
         snippet.license_info_in_snippet,
-        [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"), SpdxNoAssertion()],
+        [spdx_licensing.parse("MIT"), spdx_licensing.parse("GPL-2.0"), SpdxNoAssertion()],
     )
     assert snippet.license_comment == "snippetLicenseComment"
     assert snippet.copyright_text == "licenseCopyrightText"

@@ -2,16 +2,16 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import pytest
-from license_expression import get_spdx_licensing
 from rdflib import RDF, Graph, Literal, URIRef
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx_tools.spdx.writer.rdf.license_expression_writer import add_license_expression_to_graph
 
 
 def test_add_conjunctive_license_set_to_graph():
     graph = Graph()
-    license_expression = get_spdx_licensing().parse("MIT AND GPL-2.0")
+    license_expression = spdx_licensing.parse("MIT AND GPL-2.0")
 
     add_license_expression_to_graph(
         license_expression, graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, "https://namespace"
@@ -25,7 +25,7 @@ def test_add_conjunctive_license_set_to_graph():
 
 def test_add_disjunctive_license_set_to_graph():
     graph = Graph()
-    license_expression = get_spdx_licensing().parse("MIT OR GPL-2.0")
+    license_expression = spdx_licensing.parse("MIT OR GPL-2.0")
 
     add_license_expression_to_graph(
         license_expression, graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, "https://namespace"
@@ -49,7 +49,7 @@ def test_add_disjunctive_license_set_to_graph():
 )
 def test_license_exception_to_graph(license_with_exception, expected_triple):
     graph = Graph()
-    license_expression = get_spdx_licensing().parse(license_with_exception)
+    license_expression = spdx_licensing.parse(license_with_exception)
 
     add_license_expression_to_graph(
         license_expression, graph, URIRef("parentNode"), SPDX_NAMESPACE.licenseConcluded, "https://namespace"

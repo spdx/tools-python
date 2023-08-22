@@ -3,18 +3,11 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List, Union
 from boolean import Expression
-from license_expression import (
-    AND,
-    OR,
-    ExpressionInfo,
-    LicenseExpression,
-    LicenseSymbol,
-    LicenseWithExceptionSymbol,
-    get_spdx_licensing,
-)
+from license_expression import AND, OR, ExpressionInfo, LicenseExpression, LicenseSymbol, LicenseWithExceptionSymbol
 from rdflib import RDF, BNode, Graph, URIRef
 from rdflib.term import Literal, Node
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 
@@ -75,7 +68,7 @@ def add_license_expression_to_graph(
 
 
 def license_or_exception_is_on_spdx_licensing_list(license_symbol: LicenseSymbol) -> bool:
-    symbol_info: ExpressionInfo = get_spdx_licensing().validate(license_symbol)
+    symbol_info: ExpressionInfo = spdx_licensing.validate(license_symbol)
     return not symbol_info.errors
 
 

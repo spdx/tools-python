@@ -6,8 +6,9 @@ from typing import List
 from unittest import TestCase
 
 import pytest
-from license_expression import LicenseExpression, get_spdx_licensing
+from license_expression import LicenseExpression
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import Document, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.validation.license_expression_validator import (
     validate_license_expression,
@@ -29,7 +30,7 @@ FIXTURE_LICENSE_ID = extracted_licensing_info_fixture().license_id
 )
 def test_valid_license_expression(expression_string):
     document: Document = document_fixture()
-    license_expression: LicenseExpression = get_spdx_licensing().parse(expression_string)
+    license_expression: LicenseExpression = spdx_licensing.parse(expression_string)
     validation_messages: List[ValidationMessage] = validate_license_expression(
         license_expression, document, parent_id="SPDXRef-File"
     )
@@ -51,8 +52,8 @@ def test_none_and_no_assertion(expression):
     [
         [SpdxNone()],
         [SpdxNoAssertion()],
-        [get_spdx_licensing().parse("MIT and GPL-3.0-only"), get_spdx_licensing().parse(FIXTURE_LICENSE_ID)],
-        [SpdxNone(), get_spdx_licensing().parse("MIT"), SpdxNoAssertion()],
+        [spdx_licensing.parse("MIT and GPL-3.0-only"), spdx_licensing.parse(FIXTURE_LICENSE_ID)],
+        [SpdxNone(), spdx_licensing.parse("MIT"), SpdxNoAssertion()],
     ],
 )
 def test_valid_license_expressions(expression_list):
@@ -72,7 +73,7 @@ def test_valid_license_expressions(expression_list):
 )
 def test_invalid_license_expression_with_unknown_symbols(expression_string, unknown_symbols):
     document: Document = document_fixture()
-    license_expression: LicenseExpression = get_spdx_licensing().parse(expression_string)
+    license_expression: LicenseExpression = spdx_licensing.parse(expression_string)
     parent_id = "SPDXRef-File"
     context = ValidationContext(
         parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION, full_element=license_expression
@@ -125,7 +126,7 @@ def test_invalid_license_expression_with_unknown_symbols(expression_string, unkn
 )
 def test_invalid_license_expression_with_invalid_exceptions(expression_string, expected_message):
     document: Document = document_fixture()
-    license_expression: LicenseExpression = get_spdx_licensing().parse(expression_string)
+    license_expression: LicenseExpression = spdx_licensing.parse(expression_string)
     parent_id = "SPDXRef-File"
     context = ValidationContext(
         parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION, full_element=license_expression

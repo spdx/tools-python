@@ -3,8 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from datetime import datetime
 
-from license_expression import get_spdx_licensing
-
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
 from spdx_tools.spdx.model import (
     Actor,
@@ -88,7 +87,7 @@ def file_fixture(
     spdx_id="SPDXRef-File",
     checksums=None,
     file_types=None,
-    license_concluded=get_spdx_licensing().parse("MIT and GPL-2.0"),
+    license_concluded=spdx_licensing.parse("MIT and GPL-2.0"),
     license_info_in_file=None,
     license_comment="licenseComment",
     copyright_text="copyrightText",
@@ -100,7 +99,7 @@ def file_fixture(
     checksums = [checksum_fixture()] if checksums is None else checksums
     file_types = [FileType.TEXT] if file_types is None else file_types
     license_info_in_file = (
-        [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"), SpdxNoAssertion()]
+        [spdx_licensing.parse("MIT"), spdx_licensing.parse("GPL-2.0"), SpdxNoAssertion()]
         if license_info_in_file is None
         else license_info_in_file
     )
@@ -135,9 +134,9 @@ def package_fixture(
     checksums=None,
     homepage="https://homepage.com",
     source_info="sourceInfo",
-    license_concluded=get_spdx_licensing().parse("MIT and GPL-2.0"),
+    license_concluded=spdx_licensing.parse("MIT and GPL-2.0"),
     license_info_from_files=None,
-    license_declared=get_spdx_licensing().parse("MIT and GPL-2.0"),
+    license_declared=spdx_licensing.parse("MIT and GPL-2.0"),
     license_comment="packageLicenseComment",
     copyright_text="packageCopyrightText",
     summary="packageSummary",
@@ -152,7 +151,7 @@ def package_fixture(
 ) -> Package:
     checksums = [checksum_fixture()] if checksums is None else checksums
     license_info_from_files = (
-        [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"), SpdxNoAssertion()]
+        [spdx_licensing.parse("MIT"), spdx_licensing.parse("GPL-2.0"), SpdxNoAssertion()]
         if license_info_from_files is None
         else license_info_from_files
     )
@@ -208,7 +207,7 @@ def snippet_fixture(
     file_spdx_id="SPDXRef-File",
     byte_range=(1, 2),
     line_range=(3, 4),
-    license_concluded=get_spdx_licensing().parse("MIT and GPL-2.0"),
+    license_concluded=spdx_licensing.parse("MIT and GPL-2.0"),
     license_info_in_snippet=None,
     license_comment="snippetLicenseComment",
     copyright_text="licenseCopyrightText",
@@ -217,7 +216,7 @@ def snippet_fixture(
     attribution_texts=None,
 ) -> Snippet:
     license_info_in_snippet = (
-        [get_spdx_licensing().parse("MIT"), get_spdx_licensing().parse("GPL-2.0"), SpdxNone()]
+        [spdx_licensing.parse("MIT"), spdx_licensing.parse("GPL-2.0"), SpdxNone()]
         if license_info_in_snippet is None
         else license_info_in_snippet
     )

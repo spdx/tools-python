@@ -5,8 +5,8 @@ from datetime import datetime
 from unittest import TestCase
 
 import pytest
-from license_expression import get_spdx_licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
 from spdx_tools.spdx.model import ExternalPackageRef, ExternalPackageRefCategory, PackagePurpose, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
@@ -57,9 +57,9 @@ def test_parse_package():
     assert len(package.license_info_from_files) == 3
     TestCase().assertCountEqual(
         package.license_info_from_files,
-        [get_spdx_licensing().parse("Apache-1.0"), get_spdx_licensing().parse("Apache-2.0"), SpdxNone()],
+        [spdx_licensing.parse("Apache-1.0"), spdx_licensing.parse("Apache-2.0"), SpdxNone()],
     )
-    assert package.license_concluded == get_spdx_licensing().parse("LicenseRef-2.0 AND Apache-2.0")
+    assert package.license_concluded == spdx_licensing.parse("LicenseRef-2.0 AND Apache-2.0")
     assert package.files_analyzed is True
     assert package.comment == "Comment on the package."
     assert len(package.external_references) == 2

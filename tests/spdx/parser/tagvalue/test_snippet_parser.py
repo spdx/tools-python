@@ -4,8 +4,8 @@
 from unittest import TestCase
 
 import pytest
-from license_expression import get_spdx_licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.tagvalue.parser import Parser
@@ -41,7 +41,7 @@ def test_parse_snippet():
     assert snippet.copyright_text == " Copyright 2008-2010 John Smith "
     assert snippet.license_comment == "Some lic comment."
     assert snippet.file_spdx_id == "SPDXRef-DoapSource"
-    assert snippet.license_concluded == get_spdx_licensing().parse("Apache-2.0")
+    assert snippet.license_concluded == spdx_licensing.parse("Apache-2.0")
     assert snippet.license_info_in_snippet == [SpdxNoAssertion()]
     assert snippet.byte_range[0] == 310
     assert snippet.byte_range[1] == 420
