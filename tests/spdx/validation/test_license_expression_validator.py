@@ -15,9 +15,10 @@ from spdx_tools.spdx.validation.license_expression_validator import (
     validate_license_expressions,
 )
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
-from tests.spdx.fixtures import document_fixture, extracted_licensing_info_fixture
+from tests.spdx.fixtures import document_fixture, external_document_ref_fixture, extracted_licensing_info_fixture
 
 FIXTURE_LICENSE_ID = extracted_licensing_info_fixture().license_id
+EXTERNAL_DOCUMENT_ID = external_document_ref_fixture().document_ref_id
 
 
 @pytest.mark.parametrize(
@@ -26,6 +27,7 @@ FIXTURE_LICENSE_ID = extracted_licensing_info_fixture().license_id
         "MIT",
         FIXTURE_LICENSE_ID,
         f"GPL-2.0-only with GPL-CC-1.0 and {FIXTURE_LICENSE_ID} with 389-exception or Beerware",
+        f"{EXTERNAL_DOCUMENT_ID}:LicenseRef-007",
     ],
 )
 def test_valid_license_expression(expression_string):
@@ -125,6 +127,41 @@ def test_invalid_license_expression_with_unknown_symbols(expression_string, unkn
     ],
 )
 def test_invalid_license_expression_with_invalid_exceptions(expression_string, expected_message):
+    document: Document = document_fixture()
+    license_expression: LicenseExpression = spdx_licensing.parse(expression_string)
+    parent_id = "SPDXRef-File"
+    context = ValidationContext(
+        parent_id=parent_id, element_type=SpdxElementType.LICENSE_EXPRESSION, full_element=license_expression
+    )
+
+    validation_messages: List[ValidationMessage] = validate_license_expression(license_expression, document, parent_id)
+    expected_messages = [ValidationMessage(expected_message, context)]
+
+    assert validation_messages == expected_messages
+
+
+@pytest.mark.parametrize(
+    "expression_string, expected_message",
+    [
+        (
+            f"{EXTERNAL_DOCUMENT_ID}:LicenseRef-007:4",
+            f"Too many colons in license reference: {EXTERNAL_DOCUMENT_ID}:LicenseRef-007:4. "
+            "A license reference must only contain a single colon to "
+            "separate an external document reference from the license reference.",
+        ),
+        (
+            f"{EXTERNAL_DOCUMENT_ID}:unknown_license",
+            'A license reference must start with "LicenseRef-", but is: unknown_license '
+            f"in external license reference {EXTERNAL_DOCUMENT_ID}:unknown_license.",
+        ),
+        (
+            "DocumentRef-unknown:LicenseRef-1",
+            'Did not find the external document reference "DocumentRef-unknown" in the SPDX document. '
+            "From the external license reference DocumentRef-unknown:LicenseRef-1.",
+        ),
+    ],
+)
+def test_invalid_license_expression_with_external_reference(expression_string, expected_message):
     document: Document = document_fixture()
     license_expression: LicenseExpression = spdx_licensing.parse(expression_string)
     parent_id = "SPDXRef-File"
