@@ -1,5 +1,24 @@
 # Changelog
 
+## v0.8.1 (2023-08-24)
+
+### New features and changes
+
+* massive speed-up in the validation process of large SBOMs
+* validation now detects and checks license references from external documents
+* allow for userinfo in git+ssh download location
+* more efficient relationship parsing in JSON/YAML/XML
+
+### Contributors
+
+This release was made possible by the following contributors. Thank you very much!
+
+* Brian DeHamer @bdehamer
+* Brandon Lum @lumjjb
+* Maximilian Huber @maxhbr
+* Armin Tänzer @armintaenzertng
+
+
 ## v0.8.0 (2023-07-25)
 
 ### New features and changes
