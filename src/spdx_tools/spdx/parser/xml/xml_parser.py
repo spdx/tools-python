@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from typing import Optional
+
 import xmltodict
 from beartype.typing import Any, Dict
 
@@ -36,8 +38,8 @@ LIST_LIKE_FIELDS = [
 ]
 
 
-def parse_from_file(file_name: str) -> Document:
-    with open(file_name) as file:
+def parse_from_file(file_name: str, encoding: Optional[str] = None) -> Document:
+    with open(file_name, encoding=encoding) as file:
         parsed_xml: Dict = xmltodict.parse(file.read(), encoding="utf-8")
 
     input_doc_as_dict: Dict = _fix_list_like_fields(parsed_xml).get("Document")

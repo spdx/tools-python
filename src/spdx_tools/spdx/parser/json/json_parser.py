@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import json
+from typing import Optional
 
 from beartype.typing import Dict
 
@@ -9,8 +10,8 @@ from spdx_tools.spdx.model import Document
 from spdx_tools.spdx.parser.jsonlikedict.json_like_dict_parser import JsonLikeDictParser
 
 
-def parse_from_file(file_name: str) -> Document:
-    with open(file_name) as file:
+def parse_from_file(file_name: str, encoding: Optional[str] = None) -> Document:
+    with open(file_name, encoding=encoding) as file:
         input_doc_as_dict: Dict = json.load(file)
 
     return JsonLikeDictParser().parse(input_doc_as_dict)

@@ -1,6 +1,8 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
+from typing import Optional
+
 from beartype.typing import Any, Dict
 from rdflib import RDF, Graph
 
@@ -22,9 +24,9 @@ from spdx_tools.spdx.parser.rdf.snippet_parser import parse_snippet
 from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 
 
-def parse_from_file(file_name: str) -> Document:
+def parse_from_file(file_name: str, encoding: Optional[str] = None) -> Document:
     graph = Graph()
-    with open(file_name) as file:
+    with open(file_name, encoding=encoding) as file:
         graph.parse(file, format="xml")
 
     document: Document = translate_graph_to_document(graph)
