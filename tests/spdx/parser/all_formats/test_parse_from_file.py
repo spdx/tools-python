@@ -44,9 +44,22 @@ class TestParseFromFile:
         assert len(doc.relationships) == 13
         assert len(doc.extracted_licensing_info) == 5
 
-    def test_parse_json_with_2_2_example(self, parser, format_name, extension):
+    def test_parse_from_file_with_2_2_example(self, parser, format_name, extension):
         doc = parser.parse_from_file(
             os.path.join(os.path.dirname(__file__), f"../../data/SPDX{format_name}Example-v2.2.spdx{extension}")
+        )
+        assert isinstance(doc, Document)
+        assert len(doc.annotations) == 5
+        assert len(doc.files) == 4
+        assert len(doc.packages) == 4
+        assert len(doc.snippets) == 1
+        assert len(doc.relationships) == 11
+        assert len(doc.extracted_licensing_info) == 5
+
+    def test_parse_from_file_with_encoding_example(self, parser, format_name, extension):
+        doc = parser.parse_from_file(
+            os.path.join(os.path.dirname(__file__), f"../../data/SPDX{format_name}Example-UTF-16.spdx{extension}"),
+            "utf-16",
         )
         assert isinstance(doc, Document)
         assert len(doc.annotations) == 5
