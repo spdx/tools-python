@@ -427,7 +427,14 @@ class Parser:
         if "files_analyzed" in self.current_element:
             self.current_element["logger"].append(f"Multiple values for {p[1]} found. Line: {p.lineno(1)}")
             return
-        self.current_element["files_analyzed"] = p[2] in ["true", "True"]
+        if p[2] == "true":
+            self.current_element["files_analyzed"] = True
+        elif p[2] == "false":
+            self.current_element["files_analyzed"] = False
+        else:
+            self.current_element["logger"].append(
+                f'The value of FilesAnalyzed must be either "true" or "false", but is: {p[2]}'
+            )
 
     @grammar_rule("primary_package_purpose : PRIMARY_PACKAGE_PURPOSE LINE")
     def p_primary_package_purpose(self, p):
