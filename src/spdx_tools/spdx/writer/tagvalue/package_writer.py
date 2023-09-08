@@ -33,7 +33,7 @@ def write_package(package: Package, text_output: TextIO):
     write_actor("PackageOriginator", package.originator, text_output)
     write_value("PackageDownloadLocation", package.download_location, text_output)
 
-    write_value("FilesAnalyzed", package.files_analyzed, text_output)
+    write_value("FilesAnalyzed", str(package.files_analyzed).lower(), text_output)
     if package.verification_code:
         package_verification_code = get_package_verification_code_string(package.verification_code)
         write_value("PackageVerificationCode", package_verification_code, text_output)
