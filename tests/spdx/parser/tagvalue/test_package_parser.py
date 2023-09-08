@@ -22,7 +22,7 @@ def test_parse_package():
             "SPDXID: SPDXRef-Package",
             "PackageVersion: 1:22.36.1-8+deb11u1",
             "PackageDownloadLocation: http://example.com/test",
-            "FilesAnalyzed: True",
+            "FilesAnalyzed: true",
             "PackageSummary: <text>Test package</text>",
             "PackageSourceInfo: <text>Version 1.0 of test</text>",
             "PackageFileName: test-1.0.zip",
@@ -122,6 +122,12 @@ def test_parse_package():
             "Error while parsing Package: ['Error while parsing BuiltDate: Token did not "
             "match specified grammar rule. Line: 2', 'Error while parsing "
             "ValidUntilDate: Token did not match specified grammar rule. Line: 3']",
+        ),
+        (
+            f"SPDXID:{DOCUMENT_SPDX_ID}\nPackageName: TestPackage\nSPDXID:SPDXRef-Package\n"
+            "PackageDownloadLocation: download.com\nFilesAnalyzed: FALSE",
+            "Error while parsing Package: "
+            '[\'The value of FilesAnalyzed must be either "true" or "false", but is: FALSE\']',
         ),
     ],
 )
