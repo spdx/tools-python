@@ -27,7 +27,7 @@ def test_package_writer():
             call(f"PackageSupplier: Person: {package.supplier.name} ({package.supplier.email})\n"),
             call(f"PackageOriginator: Person: {package.originator.name} ({package.originator.email})\n"),
             call(f"PackageDownloadLocation: {package.download_location}\n"),
-            call("FilesAnalyzed: True\n"),
+            call("FilesAnalyzed: true\n"),
             call(f"PackageVerificationCode: {package.verification_code.value} (excludes: ./exclude.py)\n"),
             call("PackageChecksum: SHA1: 71c4025dd9897b364f3ebbb42c484ff43d00791c\n"),
             call(f"PackageHomePage: {package.homepage}\n"),
