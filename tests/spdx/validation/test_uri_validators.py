@@ -18,6 +18,8 @@ from spdx_tools.spdx.validation.uri_validators import validate_download_location
 )
 def test_valid_url(input_value):
     assert validate_url(input_value) == []
+    # URLs are also valid download locations:
+    assert validate_download_location(input_value) == []
 
 
 # TODO: more negative examples: https://github.com/spdx/tools-python/issues/377
@@ -92,7 +94,7 @@ def test_valid_package_download_location(input_value):
 )
 def test_invalid_package_download_location(input_value):
     assert validate_download_location(input_value) == [
-        f"must be a valid download location according to the specification, but is: {input_value}"
+        f"must be a valid URL or download location according to the specification, but is: {input_value}"
     ]
 
 

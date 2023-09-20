@@ -28,8 +28,8 @@ def validate_url(url: str) -> List[str]:
 
 
 def validate_download_location(location: str) -> List[str]:
-    if not re.match(download_location_pattern, location):
-        return [f"must be a valid download location according to the specification, but is: {location}"]
+    if not (validate_url(location) == [] or re.match(download_location_pattern, location)):
+        return [f"must be a valid URL or download location according to the specification, but is: {location}"]
 
     return []
 
