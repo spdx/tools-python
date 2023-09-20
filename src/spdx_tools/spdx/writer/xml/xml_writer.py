@@ -33,5 +33,5 @@ def write_document_to_file(
     converter: DocumentConverter = None,
     drop_duplicates: bool = True,
 ):
-    with open(file_name, "w") as out:
+    with open(file_name, "w", encoding="utf-8") as out:
         write_document_to_stream(document, out, validate, converter, drop_duplicates)
