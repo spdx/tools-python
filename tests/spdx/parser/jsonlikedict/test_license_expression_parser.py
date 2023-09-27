@@ -30,7 +30,14 @@ def test_parse_license_expression(license_expression_str, expected_license):
 @pytest.mark.parametrize(
     "invalid_license_expression,expected_message",
     [
-        (56, ["Error parsing LicenseExpression: expression must be a string and not: <class 'int'>: 56"]),
+        (56, ["Error parsing LicenseExpression: \"56\": expression must be a string and not: <class 'int'>"]),
+        (
+            "LGPL-2.1, GPL-2.0, GPL-3.0",
+            [
+                "Error parsing LicenseExpression: \"LGPL-2.1, GPL-2.0, GPL-3.0\": Invalid license key: the valid characters are: letters and numbers, underscore, dot, colon or hyphen signs and spaces: 'LGPL-2.1, GPL-2.0, GPL-3.0'"  # noqa: E501
+            ],
+        ),
+        ("Apache License (2.0)", ['Error parsing LicenseExpression: "Apache License (2.0)"']),
     ],
 )
 def test_parse_invalid_license_expression(invalid_license_expression, expected_message):
