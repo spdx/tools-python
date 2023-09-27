@@ -20,6 +20,9 @@ class LicenseExpressionParser:
         try:
             license_expression = Licensing().parse(license_expression_str)
         except ExpressionError as err:
-            raise SPDXParsingError([f"Error parsing LicenseExpression: {err.args[0]}: {license_expression_str}"])
+            err_msg = f'Error parsing LicenseExpression: "{license_expression_str}"'
+            if err.args:
+                err_msg += f": {err.args[0]}"
+            raise SPDXParsingError([err_msg])
 
         return license_expression

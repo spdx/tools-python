@@ -35,6 +35,26 @@ def test_cli_with_system_exit_code_0(options):
 @pytest.mark.parametrize(
     "options",
     [
+        (
+            "-i",
+            os.path.join(
+                os.path.dirname(__file__),
+                "data/invalid/spdx-trivy-vmware_log-intelligence-fluentd-sha256_086af034f561f343f633be9d9f9e95f65ae6c61b8ddb2c6755ef5bb25b40f53a.json",  # noqa: E501
+            ),
+        ),
+    ],
+)
+def test_cli_with_system_exit_code_1(options):
+    runner = CliRunner()
+
+    result = runner.invoke(main, options)
+
+    assert result.exit_code == 1
+
+
+@pytest.mark.parametrize(
+    "options",
+    [
         (),
         ("-i", os.path.join(os.path.dirname(__file__), "data/SPDXJSONExample-v2.3.spdx.json"), "--version"),
         ("-i", os.path.join(os.path.dirname(__file__), "data/SPDXJSONExample-v2.3.spdx.json"), "-o"),
