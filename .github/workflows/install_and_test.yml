@@ -33,6 +33,7 @@ jobs:
           python -m pip install --upgrade ./dist/*.whl
           python -m pip install pytest
           python -m pip install pyshacl
+          python -m pip install tzdata
           python -m pip install networkx
         shell: bash
       - name: Run tests
