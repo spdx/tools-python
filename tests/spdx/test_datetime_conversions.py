@@ -1,11 +1,26 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
 
 from spdx_tools.spdx.datetime_conversions import datetime_from_str, datetime_to_iso_string
+
+# The following is required as long as we support Python 3.8.x or
+# older.  Once Python 3.9 is the oldest version we support, we can
+# rely solely on the section which imports and uses zoneinfo.
+
+try:
+    # Python 3.9 and later
+    from zoneinfo import ZoneInfo
+
+    tz_nyc = ZoneInfo("America/New_York")
+except ImportError:
+    # Python 3.8 and earlier
+    from datetime import timedelta
+
+    tz_nyc = timezone(timedelta(hours=-4))
 
 
 def test_datetime_to_iso_string():
@@ -14,6 +29,16 @@ def test_datetime_to_iso_string():
 
 def test_datetime_to_iso_string_with_microseconds():
     assert datetime_to_iso_string(datetime(2022, 12, 13, 1, 2, 3, 666666)) == "2022-12-13T01:02:03Z"
+
+
+def test_utc_datetime_to_iso_string():
+    dt = datetime(2023, 10, 4, 1, 2, 3, tzinfo=timezone.utc)
+    assert datetime_to_iso_string(dt) == "2023-10-04T01:02:03Z"
+
+
+def test_local_datetime_to_iso_string():
+    dt = datetime(2023, 10, 4, 1, 2, 3, tzinfo=tz_nyc)
+    assert datetime_to_iso_string(dt) == "2023-10-04T05:02:03Z"
 
 
 def test_datetime_from_str():

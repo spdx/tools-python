@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from datetime import datetime
+from datetime import datetime, timezone
 
 
 def datetime_from_str(date_str: str) -> datetime:
@@ -16,6 +16,10 @@ def datetime_to_iso_string(date: datetime) -> str:
     """
     Return an ISO-8601 representation of a datetime object.
     """
+    if date.tzinfo is not None:
+        date = date.astimezone(timezone.utc)  # Convert aware datetimes to UTC
+        date = date.replace(tzinfo=None)  # Convert to naive datetime
+
     if date.microsecond != 0:
         date = date.replace(microsecond=0)  # SPDX does not support microseconds
 
