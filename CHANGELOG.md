@@ -1,5 +1,26 @@
 # Changelog
 
+## v0.8.2 (2023-10-12)
+
+### New features and changes
+
+* added optional encoding parameter for parsing files
+* fixed handling of the FilesAnalyzed field in Tag-Value format
+* fixed the validation of the DownloadLocation field
+* fixed the error handling while parsing license expressions
+* fixed output of timezone-sensitive datetimes
+* added code architecture documentation
+
+### Contributors
+
+This release was made possible by the following contributors. Thank you very much!
+
+* Christian Decker @chrisdecker1201
+* Jeff Licquia @licquia
+* Maximilian Huber @maxhbr
+* Armin Tänzer @armintaenzertng
+
+
 ## v0.8.1 (2023-08-24)
 
 ### New features and changes
