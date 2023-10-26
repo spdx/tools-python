@@ -6,6 +6,7 @@ __pycache__/
 /tmp/
 src/spdx_tools/spdx/parser/tagvalue/parsetab.py
 /.cache/
+tests/SPDX3_jsonld_test.jsonld
 
 .tox
 venv*

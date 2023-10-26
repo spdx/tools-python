@@ -10,6 +10,7 @@ from spdx_tools.spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx3.writer.console.payload_writer import write_payload as write_payload_to_console
 from spdx_tools.spdx3.writer.json_ld.json_ld_writer import write_payload
+from spdx_tools.spdx3.parser.json_ld.json_ld_parser import write_payload
 from spdx_tools.spdx.model.document import Document
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
@@ -40,19 +41,27 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
     To use, run: 'pyspdxtools3 --infile <input file name> -o -'
     """
     try:
-        document: Document = parse_file(infile)
+        if version in ["SPDX-2.2", "SPDX-2.3"]:
+            document: Document = parse_file(infile)
 
-        if not novalidation:
-            validation_messages: List[ValidationMessage] = validate_full_spdx_document(document, version)
-            if validation_messages:
-                print("The document is invalid. The following issues have been found:", file=sys.stderr)
-                for message in validation_messages:
-                    print(message.validation_message, file=sys.stderr)
-                sys.exit(1)
-            else:
-                print("The document is valid.", file=sys.stderr)
-        if outfile:
+            if not novalidation:
+                validation_messages: List[ValidationMessage] = validate_full_spdx_document(document, version)
+                if validation_messages:
+                    print("The document is invalid. The following issues have been found:", file=sys.stderr)
+                    for message in validation_messages:
+                        print(message.validation_message, file=sys.stderr)
+                    sys.exit(1)
+                else:
+                    print("The document is valid.", file=sys.stderr)
+
             payload: Payload = bump_spdx_document(document)
+        elif version in ["SPDX-3.0"]:
+            pass
+        else:
+            print(f"This tool only supports SPDX versions SPDX-2.2 and SPDX-2.3, but got: {version}", file=sys.stderr)
+            sys.exit(1)
+
+        if outfile:
             if outfile == "-":
                 write_payload_to_console(payload, sys.stdout)
             else:
