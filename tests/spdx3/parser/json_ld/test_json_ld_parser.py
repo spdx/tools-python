@@ -80,4 +80,6 @@ json_ld = """
 def test_json_ld_parser():
     payload = parse_from_string(json_ld)
     full_map = payload.get_full_map()
+
     assert len(full_map) == 5
+    assert full_map["https://some.namespace#spdxdocument159"].name == "Doc 159 - two File elements"

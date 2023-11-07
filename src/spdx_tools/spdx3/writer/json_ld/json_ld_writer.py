@@ -7,7 +7,6 @@ import os
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx3.writer.json_ld.json_ld_converter import convert_payload_to_json_ld_list_of_elements
 
-
 def write_payload(payload: Payload, file_name: str):
     element_list = convert_payload_to_json_ld_list_of_elements(payload)
 

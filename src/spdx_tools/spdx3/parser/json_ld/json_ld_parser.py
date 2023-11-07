@@ -162,7 +162,13 @@ class GraphToElementConverter:
 
     def getSubjectAsElement(self, subject: URIRef) -> Element:
         type_of_subject = self.getTypeOfSubject(subject)
-        # self.__debug_log_subject__(subject)
+
+        non_element_types = [
+            "https://spdx.org/rdf/v3/Core/CreationInfo"
+        ]
+        if type_of_subject in non_element_types:
+            return None
+
         match type_of_subject:
             case "https://spdx.org/rdf/v3/Core/SpdxDocument":
                 return self.handleSubjectOfTypeSpdxDocument(subject)
@@ -172,11 +178,9 @@ class GraphToElementConverter:
                 return self.handleSubjectOfTypeFile(subject)
             case "https://spdx.org/rdf/v3/Core/Relationship":
                 return self.handleSubjectOfTypeRelationship(subject)
-            case "https://spdx.org/rdf/v3/Core/CreationInfo":
-                return None
             case _:
-                print("ERR: unsupported type: ", type_of_subject)
-                self.__debug_log_subject__(subject)
+                # self.__debug_log_subject__(subject)
+                raise Exception(f"{subject} has unsupported type={type_of_subject}")
 
     def get_subjects(self) -> list[URIRef]:
         return list(self.graph.subjects(unique=True))
