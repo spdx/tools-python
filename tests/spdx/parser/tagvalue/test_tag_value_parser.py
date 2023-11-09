@@ -98,3 +98,41 @@ def test_document_with_mixed_values():
         "Element Package is not the current element in scope, probably the expected "
         "tag to start the element (PackageName) is missing. Line: 4"
     ]
+
+
+def test_faulty_license_expression():
+    parser = Parser()
+    document_str = "\n".join(
+        [
+            f"SPDXID:{DOCUMENT_SPDX_ID}",
+            "FileName: File with faulty license expression",
+            "SPDXID: SPDXRef-File",
+            "FileChecksum: SHA1: d6a770ba38583ed4bb4525bd96e50461655d2759",
+            "LicenseConcluded: LicenseRef-foo/bar",
+            "PackageName: Package with faulty license expression",
+            "SPDXID: SPDXRef-Package",
+            "PackageDownloadLocation: www.download.com",
+            "PackageLicenseConcluded: LicenseRef-bar/foo",
+            "SnippetSPDXID: SPDXRef-Snippet",
+            "SnippetName: Snippet with faulty license expression",
+            "SnippetLicenseConcluded: LicenseRef-foo/foo",
+        ]
+    )
+
+    with pytest.raises(SPDXParsingError) as err:
+        parser.parse(document_str)
+
+    assert err.value.get_messages() == [
+        'Error while parsing File: ["Error while parsing license expression: '
+        "LicenseRef-foo/bar: Invalid license key: the valid characters are: letters "
+        "and numbers, underscore, dot, colon or hyphen signs and spaces: "
+        "'LicenseRef-foo/bar'\"]",
+        'Error while parsing Package: ["Error while parsing license expression: '
+        "LicenseRef-bar/foo: Invalid license key: the valid characters are: letters "
+        "and numbers, underscore, dot, colon or hyphen signs and spaces: "
+        "'LicenseRef-bar/foo'\"]",
+        'Error while parsing Snippet: ["Error while parsing license expression: '
+        "LicenseRef-foo/foo: Invalid license key: the valid characters are: letters "
+        "and numbers, underscore, dot, colon or hyphen signs and spaces: "
+        "'LicenseRef-foo/foo'\"]",
+    ]
