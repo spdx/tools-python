@@ -14,7 +14,7 @@
 import re
 
 from beartype.typing import Any, Dict, List
-from license_expression import get_spdx_licensing
+from license_expression import ExpressionError, get_spdx_licensing
 from ply import yacc
 from ply.yacc import LRParser
 
@@ -233,7 +233,13 @@ class Parser:
 
     @grammar_rule("license_or_no_assertion_or_none : LINE")
     def p_license(self, p):
-        p[0] = get_spdx_licensing().parse(p[1])
+        try:
+            p[0] = get_spdx_licensing().parse(p[1])
+        except ExpressionError as err:
+            error_message = f"Error while parsing license expression: {p[1]}"
+            if err.args:
+                error_message += f": {err.args[0]}"
+            self.current_element["logger"].append(error_message)
 
     @grammar_rule("actor_or_no_assertion : PERSON_VALUE\n | ORGANIZATION_VALUE")
     def p_actor_values(self, p):
