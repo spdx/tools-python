@@ -2,12 +2,6 @@ Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: tools-python
 Source: https://github.com/spdx/tools-python
 
-Files:
-  tests/*.json
-  tests/*.xml
-Copyright: 2023 spdx contributors
-License: Apache-2.0
-
 Files: assets/*
 Copyright: 2023 spdx contributors
 License: Apache-2.0
