@@ -565,7 +565,7 @@
         "description": "PositiveIntegerRange is a tuple of two positive integers that define a range.\n\"begin\" must be less than or equal to \"end\".",
         "metadata": {
           "name": "PositiveIntegerRange",
-          "SubclassOf": "none",
+          "SubclassOf": "owl:Thing",
           "Instantiability": "Concrete",
           "Status": "Stable",
           "id": "https://spdx.org/rdf/v3/Core/PositiveIntegerRange"
@@ -618,7 +618,7 @@
         "description": "An External Reference points to a resource outside the scope of the SPDX-3.0 content\nthat provides additional characteristics of an Element.",
         "metadata": {
           "name": "ExternalReference",
-          "SubclassOf": "none",
+          "SubclassOf": "owl:Thing",
           "Instantiability": "Concrete",
           "Status": "Stable",
           "id": "https://spdx.org/rdf/v3/Core/ExternalReference"
@@ -889,7 +889,7 @@
         "description": "An Element is a representation of a fundamental concept either directly inherent\nto the Bill of Materials (BOM) domain or indirectly related to the BOM domain\nand necessary for contextually characterizing BOM concepts and relationships.\nWithin SPDX-3.0 structure this is the base class acting as a consistent,\nunifying, and interoperable foundation for all explicit\nand inter-relatable content objects.",
         "metadata": {
           "name": "Element",
-          "SubclassOf": "none",
+          "SubclassOf": "owl:Thing",
           "Instantiability": "Abstract",
           "Status": "Stable",
           "id": "https://spdx.org/rdf/v3/Core/Element"
@@ -1123,7 +1123,7 @@
         "description": "An External Map is a map of Element identifiers that are used within a Document\nbut defined external to that Document.\nThe external map provides details about the externally-defined Element\nsuch as its provenance, where to retrieve it, and how to verify its integrity.",
         "metadata": {
           "name": "ExternalMap",
-          "SubclassOf": "none",
+          "SubclassOf": "owl:Thing",
           "Instantiability": "Concrete",
           "Status": "Stable",
           "id": "https://spdx.org/rdf/v3/Core/ExternalMap"

@@ -92,7 +92,7 @@ def to_python_type(typename: str) -> str:
 
 def extract_parent_type(cls: dict, namespace: str) -> Optional[str]:
     parent_class = cls["metadata"].get("SubclassOf") or "none"
-    if parent_class == "none":
+    if parent_class == "none" or parent_class == "owl:Thing":
         return None
     return get_qualified_name(parent_class, namespace)
 
