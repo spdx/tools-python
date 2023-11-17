@@ -225,7 +225,7 @@ class GenModelToRdf:
         if not clazz:
             return True
         parent_class = clazz["metadata"].get("SubclassOf") or "none"
-        if parent_class == "none" or parent_class.startswith("xsd:"):
+        if parent_class == "none" or parent_class.startswith("xsd:") or parent_class.startswith("owl:"):
             return not clazz["properties"]
         return False
 
@@ -245,7 +245,7 @@ class GenModelToRdf:
 
     def handle_class(self, output_file: IO[str], clazz: dict, namespace_name: str, model: dict):
         parent_class = clazz["metadata"].get("SubclassOf")
-        if parent_class == "none":
+        if parent_class == "none" or parent_class == "owl:Thing":
             parent_class = None
         if parent_class == "xsd:string":
             return
