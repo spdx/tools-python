@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
-# SPDX-License-Identifier: Apache-2.0
+# SPDX-License-IdentifiedNode: Apache-2.0
 import json
 import os
-from rdflib import Graph, URIRef, Literal
+from rdflib import Graph, IdentifiedNode, Literal, IdentifiedNode, URIRef, BNode
 from rdflib.namespace import DC, DCTERMS, DOAP, FOAF, SKOS, OWL, RDF, RDFS, VOID, XMLNS, XSD
 from rdflib.term import bind
 from semantic_version import Version
@@ -38,10 +38,11 @@ class GraphToElementConverter:
         self.namespace_manager = graph.namespace_manager
         self.__debug_log_graph__()
 
+        # TODO: does that work?
         bind("https://spdx.org/rdf/v3/Core/DateTime", XSD.dateTime)
         bind("https://spdx.org/rdf/v3/Core/SemVer", XSD.string)
 
-    def n3(self, uri: URIRef) -> str:
+    def n3(self, uri: IdentifiedNode) -> str:
         return uri.n3(self.namespace_manager)
 
     def __debug_log_namespaces__(self):
@@ -57,7 +58,7 @@ class GraphToElementConverter:
         for subject, predicate, object in self.graph:
             print(f"DEBUG:   {self.n3(subject)} {self.n3(predicate)} {self.n3(object)}", )
 
-    def __debug_log_subject__(self, subject: URIRef):
+    def __debug_log_subject__(self, subject: IdentifiedNode):
         print("DEBUG: subject: ", subject)
         for predicate, object in self.graph.predicate_objects(subject=subject, unique=False):
             print(f"DEBUG:     {self.n3(predicate)} {self.n3(object)}")
@@ -65,43 +66,50 @@ class GraphToElementConverter:
     ####################################################################################################
     # low level functions
 
-    def getGraphValue(self, subject: URIRef, predicate: URIRef) -> str:
+    def genSpdxURIRef(self, name: str, namespace: str = "Core"):
+        return URIRef(f"https://spdx.org/rdf/v3/{namespace}/{name}")
+
+    def getGraphValueRaw(self, subject: IdentifiedNode, predicate: IdentifiedNode, isMandatory: bool = False) -> str:
         print("DEBUG: get for subject: ", subject, " and predicate: ", predicate)
         value = self.graph.value(subject, predicate)
+        if value is None:
+            if isMandatory:
+                raise Exception(f"no value for subject: {subject} and predicate: {predicate}")
+            return None
+        return value
+
+    def getGraphValue(self, subject: IdentifiedNode, predicate: IdentifiedNode, isMandatory: bool = False) -> str:
+        print("DEBUG: get for subject: ", subject, " and predicate: ", predicate)
+        value = self.getGraphValueRaw(subject, predicate, isMandatory=isMandatory)
         if value is None:
             return None
         return value.toPython()
 
-    def getGraphSpdxValue(self, subject: URIRef, namespace: str, name: str) -> str:
-        return self.getGraphValue(subject, URIRef(f"https://spdx.org/rdf/v3/{namespace}/{name}"))
+    def getGraphSpdxValue(self, subject: IdentifiedNode, namespace: str, name: str, isMandatory: bool = False) -> str:
+        return self.getGraphValue(subject, self.genSpdxURIRef(namespace=namespace, name=name), isMandatory=isMandatory)
 
-    def getGraphSpdxValueAsVersion(self, subject: URIRef, namespace: str, name: str) -> Version:
-        value = self.getGraphSpdxValue(subject, namespace, name)
-        if value is None:
-            raise Exception(f"no value for subject: {subject} and predicate: .../{namespace}/{name}")
+    def getGraphSpdxValueAsVersion(self, subject: IdentifiedNode, namespace: str, name: str) -> Version:
+        value = self.getGraphSpdxValue(subject, namespace, name, isMandatory=True)
         return Version(value)
 
-    def getGraphValues(self, subject: URIRef, predicate: URIRef) -> list[str]:
+    def getGraphSpdxValueAsDatetime(self, subject: IdentifiedNode, namespace: str, name: str) -> Version:
+        value = self.getGraphSpdxValue(subject, namespace, name, isMandatory=True)
+        return datetime_from_str(value)
+
+    def getGraphValues(self, subject: IdentifiedNode, predicate: IdentifiedNode) -> list[str]:
         return list(self.graph.objects(subject, predicate))
 
-    def getGraphSpdxValues(self, subject: URIRef, namespace: str, name: str) -> list[str]:
+    def getGraphSpdxValues(self, subject: IdentifiedNode, namespace: str, name: str) -> list[str]:
         return self.getGraphValues(subject, URIRef(f"https://spdx.org/rdf/v3/{namespace}/{name}"))
 
     ####################################################################################################
     # higher level functions
 
-    def getCreationInfo(self, subject: URIRef) -> CreationInfo:
+    def getCreationInfo(self, subject: IdentifiedNode) -> CreationInfo:
         self.__debug_log_subject__(subject)
-        # return CreationInfo(
-        #     spec_version=Version("3.0.0"),
-        #     created=datetime_from_str("2022-12-01T00:00:00Z"),
-        #     created_by=["TODO"],
-        #     profile=[], # TODO
-        #     data_license=self.getGraphSpdxValue(subject, "Core", "dataLicense"),
-        # )
         return CreationInfo(
             spec_version=self.getGraphSpdxValueAsVersion(subject, "Core", "specVersion"),
-            created=datetime_from_str(self.getGraphSpdxValue(subject, "Core", "created")),
+            created=self.getGraphSpdxValueAsDatetime(subject, "Core", "created"),
             created_by=self.getGraphSpdxValues(subject, "Core", "createdBy"),
             profile=[], # TODO
             data_license=self.getGraphSpdxValue(subject, "Core", "dataLicense"),
@@ -109,14 +117,14 @@ class GraphToElementConverter:
             # comment: Optional[str] = None,
         )
 
-    def getCreationInfoOfSubject(self, subject: URIRef) -> CreationInfo:
-        subject_of_creation_info = self.getGraphSpdxValue(subject, "Core", "creationInfo")
-        return self.getCreationInfo(subject_of_creation_info)
+    def getCreationInfoOfSubject(self, subject: IdentifiedNode) -> CreationInfo:
+        subject_of_creation_info = self.getGraphValueRaw(subject, self.genSpdxURIRef(namespace="Core", name="creationInfo"))
+        return self.getCreationInfo(BNode(subject_of_creation_info))
 
     ####################################################################################################
     # element handlers
 
-    def handleSubjectOfTypeSpdxDocument(self, subject: URIRef) -> Element:
+    def handleSubjectOfTypeSpdxDocument(self, subject: IdentifiedNode) -> Element:
         return SpdxDocument(
             spdx_id=subject.toPython(),
             name=self.getGraphSpdxValue(subject, "Core", "name"),
@@ -135,7 +143,7 @@ class GraphToElementConverter:
             # context: Optional[str] = None,
         )
 
-    def handleSubjectOfTypePackage(self, subject: URIRef) -> Element:
+    def handleSubjectOfTypePackage(self, subject: IdentifiedNode) -> Element:
         return Package(
             spdx_id=subject.toPython(),
             name=self.getGraphSpdxValue(subject, "Core", "name"),
@@ -167,7 +175,7 @@ class GraphToElementConverter:
             # source_info: Optional[str] = None,
         )
 
-    def handleSubjectOfTypeFile(self, subject: URIRef) -> Element:
+    def handleSubjectOfTypeFile(self, subject: IdentifiedNode) -> Element:
         return File(
             spdx_id = subject.toPython(),
             name = self.getGraphSpdxValue(subject, "Core","name"),
@@ -195,7 +203,7 @@ class GraphToElementConverter:
             # content_type: Optional[str] = None,
         )
 
-    def handleSubjectOfTypeRelationship(self, subject: URIRef) -> Element:
+    def handleSubjectOfTypeRelationship(self, subject: IdentifiedNode) -> Element:
         relationship_type_uri = self.getGraphSpdxValue(subject, "Core", "relationshipType")
         relationship_type = relationship_type_uri.split("/")[-1]
         relationship_type = RelationshipType[relationship_type.upper()]
@@ -207,12 +215,12 @@ class GraphToElementConverter:
             to=self.getGraphSpdxValues(subject, "Core", "to")
         )
 
-    def getTypeOfSubject(self, subject: URIRef) -> str:
+    def getTypeOfSubject(self, subject: IdentifiedNode) -> str:
         key_for_type = RDF.type
         type_of_subject = self.graph.value(subject, key_for_type)
         return type_of_subject.toPython()
 
-    def getSubjectAsElement(self, subject: URIRef) -> Element:
+    def getSubjectAsElement(self, subject: IdentifiedNode) -> Element:
         self.__debug_log_subject__(subject)
         type_of_subject = self.getTypeOfSubject(subject)
 
@@ -235,7 +243,7 @@ class GraphToElementConverter:
                 self.__debug_log_subject__(subject)
                 raise Exception(f"{subject} has unsupported type={type_of_subject}")
 
-    def get_subjects(self) -> list[URIRef]:
+    def get_subjects(self) -> list[IdentifiedNode]:
         return list(self.graph.subjects(unique=True))
 
 class JsonLDParser:
