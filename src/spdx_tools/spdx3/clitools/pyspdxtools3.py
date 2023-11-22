@@ -10,7 +10,7 @@ from spdx_tools.spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx3.writer.console.payload_writer import write_payload as write_payload_to_console
 from spdx_tools.spdx3.writer.json_ld.json_ld_writer import write_payload
-from spdx_tools.spdx3.parser.json_ld.json_ld_parser import write_payload
+from spdx_tools.spdx3.parser.json_ld.json_ld_parser import parse_from_file
 from spdx_tools.spdx.model.document import Document
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
@@ -56,9 +56,13 @@ def main(infile: str, outfile: str, version: str, novalidation: bool):
 
             payload: Payload = bump_spdx_document(document)
         elif version in ["SPDX-3.0"]:
-            pass
+            payload: Payload = parse_from_file(infile)
         else:
-            print(f"This tool only supports SPDX versions SPDX-2.2 and SPDX-2.3, but got: {version}", file=sys.stderr)
+            print(f"This tool only supports SPDX versions SPDX-2.2, SPDX-2.3 and SPDX-3.0, but got: {version}", file=sys.stderr)
+            sys.exit(1)
+
+        if payload == None:
+            print("failed to parse document")
             sys.exit(1)
 
         if outfile:
