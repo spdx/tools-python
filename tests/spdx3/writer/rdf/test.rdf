@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF
+  xmlns:software="https://spdx.org/rdf/v3/Software/"
+  xmlns:core="https://spdx.org/rdf/v3/Core/"
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+>
+  <core:Person rdf:about="https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com">
+    <core:creationInfo>
+      <core:CreationInfo rdf:nodeID="Nea842c850fcc4e29a98cdd3222ba349c">
+        <core:created rdf:datatype="https://spdx.org/rdf/v3/Core/DateTime">2022-12-24T00:00:00</core:created>
+        <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/licensing"/>
+        <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/software"/>
+        <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/core"/>
+        <core:dataLicense rdf:datatype="http://www.w3.org/2001/XMLSchema#string">https://spdx.org/licenses/CC0-1.0</core:dataLicense>
+        <core:createdBy rdf:resource="https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com"/>
+        <core:specVersion rdf:datatype="https://spdx.org/rdf/v3/Core/SemVer">3.0.0</core:specVersion>
+      </core:CreationInfo>
+    </core:creationInfo>
+    <core:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">annotatorName</core:name>
+    <core:externalIdentifier>
+      <core:ExternalIdentifier rdf:nodeID="N70344162af534b8dbfa7b990d5fb72d1">
+        <core:externalIdentifierType rdf:resource="https://spdx.org/rdf/v3/Core/ExternalIdentifierType/email"/>
+        <core:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">some@mail.com</core:identifier>
+      </core:ExternalIdentifier>
+    </core:externalIdentifier>
+  </core:Person>
+  <core:SpdxDocument rdf:about="https://some.namespace#SPDXRef-DOCUMENT">
+    <core:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">documentComment</core:comment>
+    <core:element>
+      <core:Person rdf:about="https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com">
+        <core:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">creatorName</core:name>
+        <core:creationInfo>
+          <core:CreationInfo rdf:nodeID="N8917bfa4962144e2bec99adf81f85ce1">
+            <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/licensing"/>
+            <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/software"/>
+            <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/core"/>
+            <core:specVersion rdf:datatype="https://spdx.org/rdf/v3/Core/SemVer">3.0.0</core:specVersion>
+            <core:dataLicense rdf:datatype="http://www.w3.org/2001/XMLSchema#string">https://spdx.org/licenses/CC0-1.0</core:dataLicense>
+            <core:createdBy rdf:resource="https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com"/>
+            <core:created rdf:datatype="https://spdx.org/rdf/v3/Core/DateTime">2022-12-01T00:00:00</core:created>
+          </core:CreationInfo>
+        </core:creationInfo>
+        <core:externalIdentifier>
+          <core:ExternalIdentifier rdf:nodeID="Nc4f4dc0d2ca648c89498d533a85a8f15">
+            <core:externalIdentifierType rdf:resource="https://spdx.org/rdf/v3/Core/ExternalIdentifierType/email"/>
+            <core:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">some@mail.com</core:identifier>
+          </core:ExternalIdentifier>
+        </core:externalIdentifier>
+      </core:Person>
+    </core:element>
+    <core:element>
+      <core:Person rdf:about="https://some.namespace#SPDXRef-Actor-originatorName-some@mail.com">
+        <core:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">originatorName</core:name>
+        <core:externalIdentifier>
+          <core:ExternalIdentifier rdf:nodeID="N51dfa86adff54dd881e64ad3963e72d9">
+            <core:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">some@mail.com</core:identifier>
+            <core:externalIdentifierType rdf:resource="https://spdx.org/rdf/v3/Core/ExternalIdentifierType/email"/>
+          </core:ExternalIdentifier>
+        </core:externalIdentifier>
+      </core:Person>
+    </core:element>
+    <core:element>
+      <software:Package rdf:about="https://some.namespace#SPDXRef-Package">
+        <core:validUntilTime rdf:datatype="https://spdx.org/rdf/v3/Core/DateTime">2022-11-03T00:00:00</core:validUntilTime>
+        <core:builtTime rdf:datatype="https://spdx.org/rdf/v3/Core/DateTime">2022-11-02T00:00:00</core:builtTime>
+        <software:downloadLocation rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">https://download.com</software:downloadLocation>
+        <core:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string">packageDescription</core:description>
+        <software:primaryPurpose rdf:resource="https://spdx.org/rdf/v3/Software/SoftwarePurpose/source"/>
+        <core:summary rdf:datatype="http://www.w3.org/2001/XMLSchema#string">packageSummary</core:summary>
+        <software:copyrightText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">packageCopyrightText</software:copyrightText>
+        <software:packageVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string">12.2</software:packageVersion>
+        <core:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">packageComment</core:comment>
+        <core:verifiedUsing>
+          <core:Hash rdf:nodeID="N25c4e110e966432abd7d53714e029b58">
+            <core:algorithm rdf:resource="https://spdx.org/rdf/v3/Core/HashAlgorithm/sha1"/>
+            <core:hashValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">71c4025dd9897b364f3ebbb42c484ff43d00791c</core:hashValue>
+          </core:Hash>
+        </core:verifiedUsing>
+        <software:sourceInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string">sourceInfo</software:sourceInfo>
+        <software:attributionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">packageAttributionText</software:attributionText>
+        <core:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">packageName</core:name>
+        <core:releaseTime rdf:datatype="https://spdx.org/rdf/v3/Core/DateTime">2022-11-01T00:00:00</core:releaseTime>
+        <core:suppliedBy>
+          <core:Person rdf:about="https://some.namespace#SPDXRef-Actor-supplierName-some@mail.com">
+            <core:externalIdentifier>
+              <core:ExternalIdentifier rdf:nodeID="N78744d1f666641bb96b146e1e3f3b2e3">
+                <core:identifier rdf:datatype="http://www.w3.org/2001/XMLSchema#string">some@mail.com</core:identifier>
+                <core:externalIdentifierType rdf:resource="https://spdx.org/rdf/v3/Core/ExternalIdentifierType/email"/>
+              </core:ExternalIdentifier>
+            </core:externalIdentifier>
+            <core:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">supplierName</core:name>
+          </core:Person>
+        </core:suppliedBy>
+        <software:homePage rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">https://homepage.com</software:homePage>
+        <core:originatedBy rdf:resource="https://some.namespace#SPDXRef-Actor-originatorName-some@mail.com"/>
+      </software:Package>
+    </core:element>
+    <core:element>
+      <core:Relationship rdf:about="https://some.namespace#SPDXRef-Relationship-0">
+        <core:to>
+          <software:File rdf:about="https://some.namespace#SPDXRef-File">
+            <core:verifiedUsing>
+              <core:Hash rdf:nodeID="Nbd901717c5ae4165a9d9956e87ddf042">
+                <core:algorithm rdf:resource="https://spdx.org/rdf/v3/Core/HashAlgorithm/sha1"/>
+                <core:hashValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">71c4025dd9897b364f3ebbb42c484ff43d00791c</core:hashValue>
+              </core:Hash>
+            </core:verifiedUsing>
+            <software:attributionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fileAttributionText</software:attributionText>
+            <software:copyrightText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">copyrightText</software:copyrightText>
+            <core:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">fileComment</core:comment>
+            <core:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">./fileName.py</core:name>
+          </software:File>
+        </core:to>
+        <core:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">relationshipComment</core:comment>
+        <core:from rdf:resource="https://some.namespace#SPDXRef-DOCUMENT"/>
+        <core:relationshipType rdf:resource="https://spdx.org/rdf/v3/Core/RelationshipType/describes"/>
+      </core:Relationship>
+    </core:element>
+    <core:element>
+      <core:Annotation rdf:about="https://some.namespace#SPDXRef-Annotation-0">
+        <core:annotationType rdf:resource="https://spdx.org/rdf/v3/Core/AnnotationType/review"/>
+        <core:subject rdf:resource="https://some.namespace#SPDXRef-File"/>
+        <core:creationInfo>
+          <core:CreationInfo rdf:nodeID="N38ba44234e1a45738094031e04c317e3">
+            <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/core"/>
+            <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/licensing"/>
+            <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/software"/>
+            <core:created rdf:datatype="https://spdx.org/rdf/v3/Core/DateTime">2022-12-24T00:00:00</core:created>
+            <core:createdBy rdf:resource="https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com"/>
+            <core:specVersion rdf:datatype="https://spdx.org/rdf/v3/Core/SemVer">3.0.0</core:specVersion>
+            <core:dataLicense rdf:datatype="http://www.w3.org/2001/XMLSchema#string">https://spdx.org/licenses/CC0-1.0</core:dataLicense>
+          </core:CreationInfo>
+        </core:creationInfo>
+        <core:statement rdf:datatype="http://www.w3.org/2001/XMLSchema#string">annotationComment</core:statement>
+      </core:Annotation>
+    </core:element>
+    <core:element>
+      <software:Snippet rdf:about="https://some.namespace#SPDXRef-Snippet">
+        <software:lineRange>
+          <core:PositiveIntegerRange rdf:nodeID="N7baf8c842f734547b07d928cd5f5c24e">
+            <core:begin rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">3</core:begin>
+            <core:end rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">4</core:end>
+          </core:PositiveIntegerRange>
+        </software:lineRange>
+        <software:byteRange>
+          <core:PositiveIntegerRange rdf:nodeID="N6854e72e4aea408cbf3295bec945727d">
+            <core:end rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">2</core:end>
+            <core:begin rdf:datatype="http://www.w3.org/2001/XMLSchema#positiveInteger">1</core:begin>
+          </core:PositiveIntegerRange>
+        </software:byteRange>
+        <software:attributionText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">snippetAttributionText</software:attributionText>
+        <software:copyrightText rdf:datatype="http://www.w3.org/2001/XMLSchema#string">licenseCopyrightText</software:copyrightText>
+        <core:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">snippetName</core:name>
+        <core:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string">snippetComment</core:comment>
+      </software:Snippet>
+    </core:element>
+    <core:element rdf:resource="https://some.namespace#SPDXRef-Actor-supplierName-some@mail.com"/>
+    <core:element rdf:resource="https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com"/>
+    <core:element rdf:resource="https://some.namespace#SPDXRef-File"/>
+    <core:creationInfo>
+      <core:CreationInfo rdf:nodeID="N391e90eecd304f0bb71521a60f531bb8">
+        <core:specVersion rdf:datatype="https://spdx.org/rdf/v3/Core/SemVer">3.0.0</core:specVersion>
+        <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/core"/>
+        <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/licensing"/>
+        <core:profile rdf:resource="https://spdx.org/rdf/v3/Core/ProfileIdentifierType/software"/>
+        <core:dataLicense rdf:datatype="http://www.w3.org/2001/XMLSchema#string">https://spdx.org/licenses/CC0-1.0</core:dataLicense>
+        <core:created rdf:datatype="https://spdx.org/rdf/v3/Core/DateTime">2022-12-01T00:00:00</core:created>
+        <core:createdBy rdf:resource="https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com"/>
+      </core:CreationInfo>
+    </core:creationInfo>
+    <core:name rdf:datatype="http://www.w3.org/2001/XMLSchema#string">documentName</core:name>
+    <core:rootElement rdf:resource="https://some.namespace#SPDXRef-File"/>
+    <core:imports>
+      <core:ExternalMap rdf:nodeID="Nc4886e61b4bd428ba88c8ac48c6c705f">
+        <core:externalId rdf:datatype="http://www.w3.org/2001/XMLSchema#anyURI">DocumentRef-external:SPDXRef-DOCUMENT</core:externalId>
+        <core:verifiedUsing>
+          <core:Hash rdf:nodeID="N2719b53a43964746824d6af9ca283ed7">
+            <core:hashValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string">71c4025dd9897b364f3ebbb42c484ff43d00791c</core:hashValue>
+            <core:algorithm rdf:resource="https://spdx.org/rdf/v3/Core/HashAlgorithm/sha1"/>
+          </core:Hash>
+        </core:verifiedUsing>
+      </core:ExternalMap>
+    </core:imports>
+  </core:SpdxDocument>
+</rdf:RDF>

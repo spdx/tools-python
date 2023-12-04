@@ -17,7 +17,6 @@ class CreationInfo:
     spec_version: Version
     created: datetime
     created_by: List[str]  # SPDXID of Agents
-    profile: List[ProfileIdentifierType]
     data_license: Optional[str] = "CC0-1.0"
     created_using: List[str] = field(default_factory=list)  # SPDXID of Tools
     comment: Optional[str] = None
@@ -27,7 +26,6 @@ class CreationInfo:
         spec_version: Version,
         created: datetime,
         created_by: List[str],
-        profile: List[ProfileIdentifierType],
         data_license: Optional[str] = "CC0-1.0",
         created_using: List[str] = None,
         comment: Optional[str] = None,
