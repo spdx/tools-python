@@ -14,9 +14,13 @@
 # limitations under the License.
 import logging
 import sys
+from json import JSONDecodeError
+from xml.parsers.expat import ExpatError
+from xml.sax import SAXParseException
 
 import click
 from beartype.typing import List
+from yaml.scanner import ScannerError
 
 from spdx_tools.spdx.graph_generation import export_graph_from_document
 from spdx_tools.spdx.model import Document
@@ -111,6 +115,22 @@ def main(infile: str, outfile: str, version: str, novalidation: bool, graph: boo
             + [message for message in err.get_messages()]
         )
         logging.error(log_string)
+        sys.exit(1)
+
+    except JSONDecodeError as err:
+        logging.error(f"Invalid JSON provided: {err.args[0]}")
+        sys.exit(1)
+
+    except ScannerError as err:
+        logging.error("Invalid YAML provided: " + "\n".join([str(arg) for arg in err.args]))
+        sys.exit(1)
+
+    except ExpatError as err:
+        logging.error(f"Invalid XML provided: {err.args[0]}")
+        sys.exit(1)
+
+    except SAXParseException as err:
+        logging.error(f"Invalid RDF-XML provided: {str(err)}")
         sys.exit(1)
 
     except FileNotFoundError as err:
