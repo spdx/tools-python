@@ -16,3 +16,6 @@ class PositiveIntegerRange:
         end: int,
     ):
         check_types_and_set_values(self, locals())
+
+    def __str__(self):
+        return f"{self.begin}:{self.end}"
