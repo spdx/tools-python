@@ -81,3 +81,6 @@ class Document:
         relationships = [] if relationships is None else relationships
         extracted_licensing_info = [] if extracted_licensing_info is None else extracted_licensing_info
         check_types_and_set_values(self, locals())
+
+    def __hash__(self):
+        return id(self)
