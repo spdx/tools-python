@@ -49,9 +49,12 @@ def create_document_without_duplicates(document: Document) -> Document:
 
 
 def create_list_without_duplicates(list_with_potential_duplicates: List[Any]) -> List[Any]:
+    seen_elements = set()
     list_without_duplicates = []
+
     for element in list_with_potential_duplicates:
-        if element not in list_without_duplicates:
+        if element not in seen_elements:
+            seen_elements.add(element)
             list_without_duplicates.append(element)
 
     return list_without_duplicates
