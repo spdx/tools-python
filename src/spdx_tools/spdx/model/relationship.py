@@ -73,6 +73,3 @@ class Relationship:
         comment: Optional[str] = None,
     ):
         check_types_and_set_values(self, locals())
-
-    def __hash__(self):
-        return hash("{} -> {} ({})".format(self.spdx_element_id, str(self.related_spdx_element_id), str(self.relationship_type)))

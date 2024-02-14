@@ -10,6 +10,7 @@ from functools import cache
 
 from spdx_tools.spdx.document_utils import get_contained_spdx_element_ids
 from spdx_tools.spdx.model import Document, File
+from spdx_tools.spdx.model.document import document_cache
 
 
 def is_valid_internal_spdx_id(spdx_id: str) -> bool:
@@ -24,13 +25,13 @@ def is_spdx_id_present_in_files(spdx_id: str, files: List[File]) -> bool:
     return spdx_id in [file.spdx_id for file in files]
 
 
-@cache
+# @cache
 def is_spdx_id_present_in_document(spdx_id: str, document: Document) -> bool:
     all_spdx_ids_in_document: Set[str] = get_set_of_all_spdx_ids(document)
 
     return spdx_id in all_spdx_ids_in_document
 
-@cache
+@document_cache
 def get_set_of_all_spdx_ids(document: Document) -> Set[str]:
     return set(get_list_of_all_spdx_ids(document))
 

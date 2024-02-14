@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from dataclasses import field
+from dataclasses import field, astuple
 from datetime import datetime
 
 from beartype.typing import List, Optional
@@ -82,5 +82,17 @@ class Document:
         extracted_licensing_info = [] if extracted_licensing_info is None else extracted_licensing_info
         check_types_and_set_values(self, locals())
 
-    def __hash__(self):
-        return id(self)
+
+def document_cache(func):
+    cache = {}
+
+    def cached_function(document: Document):
+        key = id(document)
+        if key in cache.keys():
+            return cache[key]
+        else:
+            value = func(document)
+            cache[key] = value
+            return value
+    
+    return cached_function
