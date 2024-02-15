@@ -24,5 +24,6 @@ class SoftwarePurpose(Enum):
     OPERATING_SYSTEM = auto()
     OTHER = auto()
     PATCH = auto()
+    REQUIREMENT = auto()
     SOURCE = auto()
     TEST = auto()
