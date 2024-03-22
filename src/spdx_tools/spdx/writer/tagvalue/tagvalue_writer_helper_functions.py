@@ -83,7 +83,9 @@ def scan_relationships(
     files_by_spdx_id = {file.spdx_id: file for file in files}
     packages_spdx_ids = [package.spdx_id for package in packages]
     for relationship in relationships:
-        if (
+        if relationship.related_spdx_element_id in [SpdxNoAssertion(), SpdxNone()]:
+            relationships_to_write.append(relationship)
+        elif (
             relationship.relationship_type == RelationshipType.CONTAINS
             and relationship.spdx_element_id in packages_spdx_ids
             and relationship.related_spdx_element_id in files_by_spdx_id.keys()
