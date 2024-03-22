@@ -22,6 +22,6 @@ def write_value(tag: str, value: Optional[Union[bool, str, dict, list, Enum]], o
 
 def write_and_possibly_indent(text: str, indent: bool, out: TextIO):
     if indent:
-        out.write(f"\t{text}\n")
+        out.write(f"  {text}\n")
     else:
         out.write(f"{text}\n")
