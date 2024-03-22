@@ -488,7 +488,7 @@ class Parser:
 
     # parsing methods for annotation
 
-    @grammar_rule("annotator : ANNOTATOR PERSON_VALUE\n| TOOL_VALUE\n| ORGANIZATION_VALUE")
+    @grammar_rule("annotator : ANNOTATOR PERSON_VALUE\n| ANNOTATOR TOOL_VALUE\n| ANNOTATOR ORGANIZATION_VALUE")
     def p_annotator(self, p):
         self.initialize_new_current_element(Annotation)
         set_value(p, self.current_element, method_to_apply=ActorParser.parse_actor)

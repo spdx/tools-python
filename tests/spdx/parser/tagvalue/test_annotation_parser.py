@@ -34,6 +34,28 @@ def test_parse_annotation():
     assert annotation.spdx_id == DOCUMENT_SPDX_ID
 
 
+def test_parse_annotation_with_organization_as_annotator():
+    parser = Parser()
+    annotation_str = "\n".join(
+        [
+            "Annotator: Organization: some-organization",
+            "AnnotationDate: 2010-01-29T18:30:22Z",
+            "AnnotationComment: <text>Document level annotation</text>",
+            "AnnotationType: OTHER",
+            f"SPDXREF: {DOCUMENT_SPDX_ID}",
+        ]
+    )
+    document = parser.parse("\n".join([DOCUMENT_STR, annotation_str]))
+    assert document is not None
+    assert len(document.annotations) == 1
+    annotation = document.annotations[0]
+    assert annotation.annotator.name == "some-organization"
+    assert annotation.annotation_date == datetime(2010, 1, 29, 18, 30, 22)
+    assert annotation.annotation_comment == "Document level annotation"
+    assert annotation.annotation_type == AnnotationType.OTHER
+    assert annotation.spdx_id == DOCUMENT_SPDX_ID
+
+
 @pytest.mark.parametrize(
     "annotation_str, expected_message",
     [
