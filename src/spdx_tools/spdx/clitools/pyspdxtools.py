@@ -113,6 +113,10 @@ def main(infile: str, outfile: str, version: str, novalidation: bool, graph: boo
         logging.error(log_string)
         sys.exit(1)
 
+    except FileNotFoundError as err:
+        logging.error(f"{err.strerror}: {err.filename}")
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
