@@ -1,10 +1,14 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from dataclasses import dataclass
+from dataclasses import dataclass, astuple
 
 from beartype import beartype
 from beartype.roar import BeartypeCallHintException
+
+
+def freeze_dataclass_with_properties_list(items):
+    return {astuple(itm) for itm in items}
 
 
 def dataclass_with_properties(cls):
