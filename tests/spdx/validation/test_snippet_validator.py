@@ -8,14 +8,16 @@ from unittest import TestCase
 import pytest
 
 from spdx_tools.spdx.validation.snippet_validator import validate_snippet, validate_snippet_within_document
+from spdx_tools.spdx.validation.spdx_id_validators import get_all_spdx_ids
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import document_fixture, snippet_fixture
 
 
 def test_valid_snippet():
+    document = document_fixture()
     snippet = snippet_fixture()
     validation_messages: List[ValidationMessage] = validate_snippet_within_document(
-        snippet, "SPDX-2.3", document_fixture()
+        snippet, "SPDX-2.3", document, get_all_spdx_ids(document)
     )
 
     assert validation_messages == []
@@ -43,8 +45,9 @@ def test_valid_snippet():
     ],
 )
 def test_invalid_ranges(snippet_input, expected_message):
+    document = document_fixture()
     validation_messages: List[ValidationMessage] = validate_snippet_within_document(
-        snippet_input, "SPDX-2.3", document_fixture()
+        snippet_input, "SPDX-2.3", document, get_all_spdx_ids(document)
     )
 
     expected = ValidationMessage(
