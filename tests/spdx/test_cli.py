@@ -42,6 +42,7 @@ def test_cli_with_system_exit_code_0(options):
                 "data/invalid/spdx-trivy-vmware_log-intelligence-fluentd-sha256_086af034f561f343f633be9d9f9e95f65ae6c61b8ddb2c6755ef5bb25b40f53a.json",  # noqa: E501
             ),
         ),
+        ("-i", "non_existent_file.spdx"),
     ],
 )
 def test_cli_with_system_exit_code_1(options):
