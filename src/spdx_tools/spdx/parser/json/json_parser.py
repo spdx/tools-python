@@ -13,4 +13,7 @@ def parse_from_file(file_name: str, encoding: str = "utf-8") -> Document:
     with open(file_name, encoding=encoding) as file:
         input_doc_as_dict: Dict = json.load(file)
 
+    if 'sbom' in input_doc_as_dict.keys():
+        input_doc_as_dict = input_doc_as_dict.get("sbom", {})
+
     return JsonLikeDictParser().parse(input_doc_as_dict)
