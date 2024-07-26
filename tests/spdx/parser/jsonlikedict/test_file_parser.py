@@ -4,8 +4,8 @@
 from unittest import TestCase
 
 import pytest
-from license_expression import Licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, FileType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import parse_list_of_elements
@@ -82,10 +82,10 @@ def test_parse_file(copyright_text, expected_copyright_text):
             "IBM Corporation",
         ],
     )
-    assert file.license_concluded == Licensing().parse("(LGPL-2.0-only OR LicenseRef-2)")
+    assert file.license_concluded == spdx_licensing.parse("(LGPL-2.0-only OR LicenseRef-2)")
     TestCase().assertCountEqual(
         file.license_info_in_file,
-        [Licensing().parse("GPL-2.0-only"), Licensing().parse("LicenseRef-2"), SpdxNoAssertion()],
+        [spdx_licensing.parse("GPL-2.0-only"), spdx_licensing.parse("LicenseRef-2"), SpdxNoAssertion()],
     )
     assert (
         file.license_comment == "The concluded license was taken from the package level that the file was included in."
