@@ -7,8 +7,8 @@ from unittest import mock
 from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
-from license_expression import Licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.jsonschema.annotation_converter import AnnotationConverter
 from spdx_tools.spdx.jsonschema.package_converter import PackageConverter
 from spdx_tools.spdx.jsonschema.package_properties import PackageProperty
@@ -123,9 +123,9 @@ def test_successful_conversion(converter: PackageConverter):
         checksums=[Checksum(ChecksumAlgorithm.SHA1, "sha1"), Checksum(ChecksumAlgorithm.BLAKE2B_256, "blake")],
         homepage="homepage",
         source_info="sourceInfo",
-        license_concluded=Licensing().parse("MIT and GPL-2.0"),
-        license_info_from_files=[Licensing().parse("MIT"), Licensing().parse("GPL-2.0")],
-        license_declared=Licensing().parse("MIT or GPL-2.0 "),
+        license_concluded=spdx_licensing.parse("MIT and GPL-2.0"),
+        license_info_from_files=[spdx_licensing.parse("MIT"), spdx_licensing.parse("GPL-2.0")],
+        license_declared=spdx_licensing.parse("MIT or GPL-2.0 "),
         license_comment="licenseComment",
         copyright_text="copyrightText",
         summary="summary",
@@ -168,9 +168,9 @@ def test_successful_conversion(converter: PackageConverter):
         ],
         converter.json_property_name(PackageProperty.HOMEPAGE): "homepage",
         converter.json_property_name(PackageProperty.SOURCE_INFO): "sourceInfo",
-        converter.json_property_name(PackageProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0",
-        converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES): ["MIT", "GPL-2.0"],
-        converter.json_property_name(PackageProperty.LICENSE_DECLARED): "MIT OR GPL-2.0",
+        converter.json_property_name(PackageProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0-only",
+        converter.json_property_name(PackageProperty.LICENSE_INFO_FROM_FILES): ["MIT", "GPL-2.0-only"],
+        converter.json_property_name(PackageProperty.LICENSE_DECLARED): "MIT OR GPL-2.0-only",
         converter.json_property_name(PackageProperty.LICENSE_COMMENTS): "licenseComment",
         converter.json_property_name(PackageProperty.COPYRIGHT_TEXT): "copyrightText",
         converter.json_property_name(PackageProperty.SUMMARY): "summary",

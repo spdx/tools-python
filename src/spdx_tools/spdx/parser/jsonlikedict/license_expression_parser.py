@@ -2,8 +2,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import Union
-from license_expression import ExpressionError, LicenseExpression, Licensing
+from license_expression import ExpressionError, LicenseExpression
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 
@@ -18,7 +19,7 @@ class LicenseExpressionParser:
                 return SpdxNone()
 
         try:
-            license_expression = Licensing().parse(license_expression_str)
+            license_expression = spdx_licensing.parse(license_expression_str)
         except ExpressionError as err:
             err_msg = f'Error parsing LicenseExpression: "{license_expression_str}"'
             if err.args:

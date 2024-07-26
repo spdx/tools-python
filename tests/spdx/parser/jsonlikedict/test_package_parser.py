@@ -5,8 +5,8 @@ from datetime import datetime
 from unittest import TestCase
 
 import pytest
-from license_expression import Licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import (
     Actor,
     ActorType,
@@ -173,17 +173,17 @@ def test_parse_package(
     )
     assert package.homepage == expected_homepage
     assert package.source_info == "uses glibc-2_11-branch from git://sourceware.org/git/glibc.git."
-    assert package.license_concluded == Licensing().parse("(LGPL-2.0-only OR LicenseRef-3)")
+    assert package.license_concluded == spdx_licensing.parse("(LGPL-2.0-only OR LicenseRef-3)")
     TestCase().assertCountEqual(
         package.license_info_from_files,
         [
-            Licensing().parse("GPL-2.0-only"),
-            Licensing().parse("LicenseRef-2"),
-            Licensing().parse("LicenseRef-1"),
+            spdx_licensing.parse("GPL-2.0-only"),
+            spdx_licensing.parse("LicenseRef-2"),
+            spdx_licensing.parse("LicenseRef-1"),
             SpdxNoAssertion(),
         ],
     )
-    assert package.license_declared == Licensing().parse("(LGPL-2.0-only AND LicenseRef-3)")
+    assert package.license_declared == spdx_licensing.parse("(LGPL-2.0-only AND LicenseRef-3)")
     assert (
         package.license_comment
         == "The license for this project changed with the release of version x.y.  The version of the project included"

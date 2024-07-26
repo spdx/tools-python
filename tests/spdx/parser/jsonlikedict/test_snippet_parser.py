@@ -4,8 +4,8 @@
 from unittest import TestCase
 
 import pytest
-from license_expression import Licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.snippet_parser import SnippetParser
@@ -65,8 +65,8 @@ def test_parse_snippet(copyright_text, expected_copyright_text):
     assert snippet.byte_range == (310, 420)
     assert snippet.line_range == (5, 23)
     assert snippet.file_spdx_id == "SPDXRef-DoapSource"
-    assert snippet.license_info_in_snippet == [Licensing().parse("GPL-2.0-only"), SpdxNoAssertion()]
-    assert snippet.license_concluded == Licensing().parse("GPL-2.0-only")
+    assert snippet.license_info_in_snippet == [spdx_licensing.parse("GPL-2.0-only"), SpdxNoAssertion()]
+    assert snippet.license_concluded == spdx_licensing.parse("GPL-2.0-only")
     assert snippet.attribution_texts == ["Some example attibution text."]
 
 

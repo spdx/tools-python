@@ -6,8 +6,9 @@ from datetime import datetime
 from unittest import mock
 
 import pytest
-from license_expression import LicenseExpression, Licensing
+from license_expression import LicenseExpression
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm, Package, PackagePurpose, SpdxNoAssertion, SpdxNone
 
 
@@ -30,7 +31,7 @@ def test_correct_initialization(actor, verif_code, checksum, ext_ref):
         "homepage",
         "source_info",
         None,
-        [Licensing().parse("license and expression"), SpdxNoAssertion()],
+        [spdx_licensing.parse("license and expression"), SpdxNoAssertion()],
         SpdxNone(),
         "comment on license",
         "copyright",
@@ -57,7 +58,7 @@ def test_correct_initialization(actor, verif_code, checksum, ext_ref):
     assert package.homepage == "homepage"
     assert package.source_info == "source_info"
     assert package.license_concluded is None
-    assert package.license_info_from_files == [Licensing().parse("license and expression"), SpdxNoAssertion()]
+    assert package.license_info_from_files == [spdx_licensing.parse("license and expression"), SpdxNoAssertion()]
     assert package.license_declared == SpdxNone()
     assert package.license_comment == "comment on license"
     assert package.copyright_text == "copyright"
