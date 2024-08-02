@@ -212,11 +212,14 @@ class Parser:
     def p_unknown_tag(self, p):
         self.logger.append(f"Unknown tag provided in line {p.lineno(1)}")
 
-    @grammar_rule("text_or_line : TEXT")
+    @grammar_rule("text_or_line : TEXT\n line_or_no_assertion_or_none : TEXT")
     def p_text(self, p):
         p[0] = str_from_text(p[1])
 
-    @grammar_rule("text_or_line : LINE\n line_or_no_assertion : LINE\nline_or_no_assertion_or_none : text_or_line")
+    @grammar_rule(
+        "text_or_line : LINE\n line_or_no_assertion : LINE\nline_or_no_assertion_or_none : LINE\n"
+        "text_or_line : NO_ASSERTION\n text_or_line : NONE"
+    )
     def p_line(self, p):
         p[0] = p[1]
 

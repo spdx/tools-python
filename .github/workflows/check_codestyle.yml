@@ -24,6 +24,9 @@ jobs:
         exclude: # see https://github.com/actions/runner-images/issues/9770#issuecomment-2085623315
           - python-version: "3.7"
             os: macos-latest
+        include:
+          - python-version: "3.7"
+            os: macos-13
 
     steps:
       - uses: actions/checkout@v3

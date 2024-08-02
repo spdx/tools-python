@@ -83,6 +83,26 @@ def test_parse_package():
     assert package.valid_until_date == datetime(2022, 1, 1, 12)
 
 
+def test_parse_package_with_no_assertion_as_source_info():
+    parser = Parser()
+    package_str = "\n".join(
+        [
+            "PackageName: Test",
+            "SPDXID: SPDXRef-Package",
+            "PackageDownloadLocation: http://example.com/test",
+            "FilesAnalyzed: true",
+            "PackageSummary: <text>Test package</text>",
+            "PackageSourceInfo: NOASSERTION",
+        ]
+    )
+    document = parser.parse("\n".join([DOCUMENT_STR, package_str]))
+    assert document is not None
+    package = document.packages[0]
+    assert package.name == "Test"
+    assert package.spdx_id == "SPDXRef-Package"
+    assert package.source_info == "NOASSERTION"
+
+
 @pytest.mark.parametrize(
     "package_str, expected_message",
     [
