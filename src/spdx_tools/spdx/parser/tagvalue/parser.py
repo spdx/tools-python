@@ -180,7 +180,7 @@ class Parser:
         "file_comment : FILE_COMMENT text_or_line\n "
         "file_license_concluded : FILE_LICENSE_CONCLUDED license_or_no_assertion_or_none\n "
         "package_name : PKG_NAME LINE\n description : PKG_DESCRIPTION text_or_line\n "
-        "summary : PKG_SUMMARY text_or_line\n source_info : PKG_SOURCE_INFO text_or_line\n "
+        "summary : PKG_SUMMARY text_or_line\n source_info : PKG_SOURCE_INFO text_or_line_including_no_assertion\n "
         "homepage : PKG_HOMEPAGE line_or_no_assertion_or_none\n "
         "download_location : PKG_DOWNLOAD_LOCATION line_or_no_assertion_or_none\n "
         "originator : PKG_ORIGINATOR actor_or_no_assertion\n supplier : PKG_SUPPLIER actor_or_no_assertion\n "
@@ -216,7 +216,11 @@ class Parser:
     def p_text(self, p):
         p[0] = str_from_text(p[1])
 
-    @grammar_rule("text_or_line : LINE\n line_or_no_assertion : LINE\nline_or_no_assertion_or_none : text_or_line")
+    @grammar_rule(
+        "text_or_line : LINE\n line_or_no_assertion : LINE\nline_or_no_assertion_or_none : text_or_line\n"
+        "text_or_line_including_no_assertion : text_or_line\ntext_or_line_including_no_assertion : NO_ASSERTION\n"
+        "text_or_line_including_no_assertion : NONE"
+    )
     def p_line(self, p):
         p[0] = p[1]
 
