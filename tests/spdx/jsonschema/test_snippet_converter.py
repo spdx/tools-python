@@ -7,8 +7,8 @@ from unittest import mock
 from unittest.mock import MagicMock, NonCallableMagicMock
 
 import pytest
-from license_expression import Licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.jsonschema.annotation_converter import AnnotationConverter
 from spdx_tools.spdx.jsonschema.snippet_converter import SnippetConverter
 from spdx_tools.spdx.jsonschema.snippet_properties import SnippetProperty
@@ -72,8 +72,8 @@ def test_successful_conversion(converter: SnippetConverter):
         file_spdx_id=file_spdx_id,
         byte_range=(1, 2),
         line_range=(3, 4),
-        license_concluded=Licensing().parse("MIT and GPL-2.0"),
-        license_info_in_snippet=[Licensing().parse("MIT"), Licensing().parse("GPL-2.0")],
+        license_concluded=spdx_licensing.parse("MIT and GPL-2.0"),
+        license_info_in_snippet=[spdx_licensing.parse("MIT"), spdx_licensing.parse("GPL-2.0")],
         license_comment="licenseComment",
         copyright_text="copyrightText",
         comment="comment",
@@ -98,8 +98,8 @@ def test_successful_conversion(converter: SnippetConverter):
         converter.json_property_name(SnippetProperty.COMMENT): "comment",
         converter.json_property_name(SnippetProperty.COPYRIGHT_TEXT): "copyrightText",
         converter.json_property_name(SnippetProperty.LICENSE_COMMENTS): "licenseComment",
-        converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0",
-        converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS): ["MIT", "GPL-2.0"],
+        converter.json_property_name(SnippetProperty.LICENSE_CONCLUDED): "MIT AND GPL-2.0-only",
+        converter.json_property_name(SnippetProperty.LICENSE_INFO_IN_SNIPPETS): ["MIT", "GPL-2.0-only"],
         converter.json_property_name(SnippetProperty.NAME): "name",
         converter.json_property_name(SnippetProperty.RANGES): [
             {

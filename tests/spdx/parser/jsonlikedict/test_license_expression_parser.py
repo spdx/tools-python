@@ -16,6 +16,8 @@ from spdx_tools.spdx.parser.jsonlikedict.license_expression_parser import Licens
     [
         ("First License", spdx_licensing.parse("First License")),
         ("Second License", spdx_licensing.parse("Second License")),
+        ("Apache-1.1", spdx_licensing.parse("Apache-1.1")),
+        ("Zlib", spdx_licensing.parse("zlib")),
         ("NOASSERTION", SpdxNoAssertion()),
         ("NONE", SpdxNone()),
     ],
@@ -34,7 +36,8 @@ def test_parse_license_expression(license_expression_str, expected_license):
         (
             "LGPL-2.1, GPL-2.0, GPL-3.0",
             [
-                "Error parsing LicenseExpression: \"LGPL-2.1, GPL-2.0, GPL-3.0\": Invalid license key: the valid characters are: letters and numbers, underscore, dot, colon or hyphen signs and spaces: 'LGPL-2.1, GPL-2.0, GPL-3.0'"  # noqa: E501
+                # the error message we receive from the license_expression library somehow cuts off the last license
+                "Error parsing LicenseExpression: \"LGPL-2.1, GPL-2.0, GPL-3.0\": Invalid license key: the valid characters are: letters and numbers, underscore, dot, colon or hyphen signs and spaces: 'LGPL-2.1, GPL-2.0,'"  # noqa: E501
             ],
         ),
         ("Apache License (2.0)", ['Error parsing LicenseExpression: "Apache License (2.0)"']),

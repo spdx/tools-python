@@ -6,8 +6,8 @@ from typing import List
 from unittest import TestCase
 
 import pytest
-from license_expression import Licensing
 
+from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
 from spdx_tools.spdx.model import Relationship, RelationshipType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.validation.package_validator import validate_package, validate_package_within_document
@@ -45,7 +45,7 @@ def test_valid_package():
         (
             package_fixture(
                 files_analyzed=False,
-                license_info_from_files=[Licensing().parse("some_license")],
+                license_info_from_files=[spdx_licensing.parse("some_license")],
                 verification_code=None,
             ),
             "license_info_from_files must be None if files_analyzed is False, but is: [LicenseSymbol('some_license', "
