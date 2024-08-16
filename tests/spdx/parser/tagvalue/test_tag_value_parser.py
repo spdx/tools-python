@@ -6,7 +6,7 @@
 import pytest
 
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
-from spdx_tools.spdx.model import Relationship, RelationshipType
+from spdx_tools.spdx.model import Relationship, RelationshipType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.tagvalue.parser import Parser
 from tests.spdx.parser.tagvalue.test_creation_info_parser import DOCUMENT_STR
@@ -136,3 +136,29 @@ def test_faulty_license_expression():
         "and numbers, underscore, dot, colon or hyphen signs and spaces: "
         "'LicenseRef-foo/foo'\"]",
     ]
+
+
+def test_parse_none_or_no_assertion_as_text():
+    parser = Parser()
+    document_str = "\n".join(
+        [
+            DOCUMENT_STR,
+            "PackageName: Test",
+            "SPDXID: SPDXRef-Package",
+            "PackageDownloadLocation: http://example.com/test",
+            "FilesAnalyzed: true",
+            "PackageSummary: NONE",
+            "PackageSourceInfo: NOASSERTION",
+            "PackageLicenseConcluded: NONE",
+            "PackageLicenseDeclared: NOASSERTION",
+        ]
+    )
+    document = parser.parse(document_str)
+    assert document is not None
+    package = document.packages[0]
+    assert package.name == "Test"
+    assert package.spdx_id == "SPDXRef-Package"
+    assert package.source_info == "NOASSERTION"
+    assert package.summary == "NONE"
+    assert package.license_concluded == SpdxNone()
+    assert package.license_declared == SpdxNoAssertion()
