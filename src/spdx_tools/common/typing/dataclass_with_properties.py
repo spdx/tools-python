@@ -1,12 +1,14 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from typing import dataclass_transform
 
 from beartype import beartype
 from beartype.roar import BeartypeCallHintException
 
 
+@dataclass_transform(field_specifiers=(field,))
 def dataclass_with_properties(cls):
     """Decorator to generate a dataclass with properties out of the class' value:type list.
     Their getters and setters will be subjected to the @typechecked decorator to ensure type conformity."""
