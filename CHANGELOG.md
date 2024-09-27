@@ -1,5 +1,33 @@
 # Changelog
 
+## v0.8.3 (2024-09-27)
+
+### New features and changes
+
+* tag-value parser:
+  * fixed license expression error handling
+  * fixed parsing Tool or Organization as annotator
+  * allow "NONE" and "NOASSERTION" as strings for fields requiring text
+* CLI tool:
+  * shortened the output of the FileNotFoundError
+  * now catches decoding errors while parsing
+* fixed tag-value output when the ID of a related SPDX element is "NONE" or "NOASSERTION"
+* spdx3:
+  * added REQUIREMENT type to software_purpose
+  * unindent creation information in element_writer
+* internal:
+  * replaced remaining occurrences of Licensing() with spdx_licensing
+  * fixed CI not working for Python 3.7 on latest MacOS
+
+### Contributors
+
+This release was made possible by the following contributors. Thank you very much!
+
+* Stanislav Pankevich @stanislaw
+* Meret Behrens @meretp
+* Maximilian Huber @maxhbr
+* Armin Tänzer @armintaenzertng
+
 ## v0.8.2 (2023-10-12)
 
 ### New features and changes
