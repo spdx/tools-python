@@ -18,6 +18,7 @@ bazaar_pattern = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)"
 download_location_pattern = (
     "^(((" + supported_download_repos + "\\+)?" + url_pattern + ")|" + git_pattern + "|" + bazaar_pattern + ")$"
 )
+compiled_pattern = re.compile(download_location_pattern, re.IGNORECASE)
 
 
 def validate_url(url: str) -> List[str]:
@@ -28,7 +29,7 @@ def validate_url(url: str) -> List[str]:
 
 
 def validate_download_location(location: str) -> List[str]:
-    if not (validate_url(location) == [] or re.match(download_location_pattern, location)):
+    if not (validate_url(location) == [] or compiled_pattern.match(location)):
         return [f"must be a valid URL or download location according to the specification, but is: {location}"]
 
     return []
