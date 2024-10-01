@@ -86,7 +86,11 @@ class PackageConverter(TypedConverter[Package]):
         elif package_property == PackageProperty.PACKAGE_VERIFICATION_CODE:
             return apply_if_present(self.package_verification_code_converter.convert, package.verification_code)
         elif package_property == PackageProperty.PRIMARY_PACKAGE_PURPOSE:
-            return package.primary_package_purpose.name if package.primary_package_purpose is not None else None
+            return (
+                package.primary_package_purpose.name.replace("_", "-")
+                if package.primary_package_purpose is not None
+                else None
+            )
         elif package_property == PackageProperty.RELEASE_DATE:
             return apply_if_present(datetime_to_iso_string, package.release_date)
         elif package_property == PackageProperty.SOURCE_INFO:
