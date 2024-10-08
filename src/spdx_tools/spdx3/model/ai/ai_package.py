@@ -32,7 +32,7 @@ class AIPackage(Package):
     hyperparameter: Dict[str, Optional[str]] = field(default_factory=dict)
     model_data_preprocessing: List[str] = field(default_factory=list)
     model_explainability: List[str] = field(default_factory=list)
-    sensitive_personal_information: Optional[bool] = None
+    use_sensitive_personal_information: Optional[bool] = None
     metric_decision_threshold: Dict[str, Optional[str]] = field(default_factory=dict)
     metric: Dict[str, Optional[str]] = field(default_factory=dict)
     domain: List[str] = field(default_factory=list)
@@ -78,7 +78,7 @@ class AIPackage(Package):
         hyperparameter: Dict[str, Optional[str]] = None,
         model_data_preprocessing: List[str] = None,
         model_explainability: List[str] = None,
-        sensitive_personal_information: Optional[bool] = None,
+        use_sensitive_personal_information: Optional[bool] = None,
         metric_decision_threshold: Dict[str, Optional[str]] = None,
         metric: Dict[str, Optional[str]] = None,
         domain: List[str] = None,

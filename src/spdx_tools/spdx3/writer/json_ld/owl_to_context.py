@@ -17,8 +17,8 @@ import os.path
 # },
 
 PROPERTIES_WITH_ENUM_RANGE = [
-    "safetyRiskAssessment",
-    "sensitivePersonalInformation",
+    "hasSensitivePersonalInformation",
+    "useSensitivePersonalInformation",
     "annotationType",
     "externalIdentifierType",
     "externalReferenceType",
@@ -36,11 +36,13 @@ PROPERTIES_WITH_ENUM_RANGE = [
     "sbomType",
     "softwareLinkage",
     "purpose",
+    "safetyRiskAssessment",
+
 ]
 
 REFERENCE_PROPERTY_TYPES = [
-    "core:Element",
     "core:Agent",
+    "core:Element",
 ]
 
 

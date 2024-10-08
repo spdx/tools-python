@@ -18,7 +18,7 @@ class Build(Element):
     config_source_entrypoint: List[str] = field(default_factory=list)
     config_source_uri: List[str] = field(default_factory=list)
     config_source_digest: List[Hash] = field(default_factory=list)
-    parameters: Dict[str, str] = field(default_factory=dict)
+    parameter: Dict[str, str] = field(default_factory=dict)
     build_start_time: Optional[datetime] = None
     build_end_time: Optional[datetime] = None
     environment: Dict[str, str] = field(default_factory=dict)
@@ -40,7 +40,7 @@ class Build(Element):
         config_source_entrypoint: List[str] = None,
         config_source_uri: List[str] = None,
         config_source_digest: List[Hash] = None,
-        parameters: Dict[str, str] = None,
+        parameter: Dict[str, str] = None,
         build_start_time: Optional[datetime] = None,
         build_end_time: Optional[datetime] = None,
         environment: Dict[str, str] = None,
@@ -51,7 +51,7 @@ class Build(Element):
         config_source_entrypoint = [] if config_source_entrypoint is None else config_source_entrypoint
         config_source_uri = [] if config_source_uri is None else config_source_uri
         config_source_digest = [] if config_source_digest is None else config_source_digest
-        parameters = {} if parameters is None else parameters
+        parameter = {} if parameter is None else parameter
         environment = {} if environment is None else environment
 
         check_types_and_set_values(self, locals())

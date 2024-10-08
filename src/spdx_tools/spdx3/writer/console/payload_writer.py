@@ -16,7 +16,7 @@ from spdx_tools.spdx3.model import (
 )
 from spdx_tools.spdx3.model.ai import AIPackage
 from spdx_tools.spdx3.model.build import Build
-from spdx_tools.spdx3.model.dataset import Dataset
+from spdx_tools.spdx3.model.dataset import DatasetPackage
 from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet, SoftwareDependencyRelationship
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx3.writer.console.agent_writer import write_agent
@@ -53,7 +53,7 @@ MAP_CLASS_TO_WRITE_METHOD = {
     SoftwareAgent: write_agent,
     Tool: write_tool,
     AIPackage: write_ai_package,
-    Dataset: write_dataset,
+    DatasetPackage: write_dataset_package,
     Build: write_build,
 }
 

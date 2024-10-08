@@ -47,7 +47,7 @@ class DatasetAvailabilityType(Enum):
 
 
 @dataclass_with_properties
-class Dataset(Package):
+class DatasetPackage(Package):
     dataset_type: List[DatasetType] = None
     data_collection_process: Optional[str] = None
     intended_use: Optional[str] = None
@@ -56,7 +56,7 @@ class Dataset(Package):
     data_preprocessing: List[str] = field(default_factory=list)
     sensor: Dict[str, Optional[str]] = field(default_factory=dict)
     known_bias: List[str] = field(default_factory=list)
-    sensitive_personal_information: Optional[bool] = None
+    has_sensitive_personal_information: Optional[bool] = None
     anonymization_method_used: List[str] = field(default_factory=list)
     confidentiality_level: Optional[ConfidentialityLevelType] = None
     dataset_update_mechanism: Optional[str] = None
@@ -100,7 +100,7 @@ class Dataset(Package):
         data_preprocessing: List[str] = None,
         sensor: Dict[str, Optional[str]] = None,
         known_bias: List[str] = None,
-        sensitive_personal_information: Optional[bool] = None,
+        has_sensitive_personal_information: Optional[bool] = None,
         anonymization_method_used: List[str] = None,
         confidentiality_level: Optional[ConfidentialityLevelType] = None,
         dataset_update_mechanism: Optional[str] = None,

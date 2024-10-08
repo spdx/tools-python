@@ -37,7 +37,7 @@ from spdx_tools.spdx3.model.ai.ai_package import AIPackage, SafetyRiskAssessment
 from spdx_tools.spdx3.model.build import Build
 from spdx_tools.spdx3.model.dataset.dataset import (
     ConfidentialityLevelType,
-    Dataset,
+    DatasetPackage,
     DatasetAvailabilityType,
     DatasetType,
 )
@@ -366,7 +366,7 @@ AIPACKAGE_DICT = {
     "hyperparameter": {"aIPackageHypParaKey": "aIPackageHypParaValue"},
     "model_data_preprocessing": ["aImodelDataPreprocessing"],
     "model_explainability": ["aImodelExplainability"],
-    "sensitive_personal_information": True,
+    "use_sensitive_personal_information": True,
     "metric_decision_threshold": {"metricDecisionThresholdKey": "metricDecisionThresholdValue"},
     "metric": {"aIMetricKey": "aIMetricValue"},
     "domain": ["aIDomain"],
@@ -419,7 +419,7 @@ DATASET_DICT = {
     "data_preprocessing": ["DataPreprocessing"],
     "sensor": {"SensorKey": "SensorValue"},
     "known_bias": ["DatasetKnownBias"],
-    "sensitive_personal_information": True,
+    "has_sensitive_personal_information": True,
     "anonymization_method_used": ["DatasetAnonymizationMethodUsed"],
     "confidentiality_level": ConfidentialityLevelType.CLEAR,
     "dataset_update_mechanism": "DatasetUpdateMechanism",
@@ -432,7 +432,7 @@ BUILD_DICT = {
     "config_source_entrypoint": ["ConfigSourceEntrypoint"],
     "config_source_uri": ["ConfigSourceURI"],
     "config_source_digest": [hash_fixture()],
-    "parameters": {"parameter": "value"},
+    "parameter": {"parameter": "value"},
     "build_start_time": datetime(2015, 4, 4),
     "build_end_time": datetime(2015, 4, 5),
     "environment": {"environment_param": "environment_value"},
@@ -524,7 +524,7 @@ FIXTURE_DICTS = {
         LIFECYCLE_SCOPED_RELATIONSHIP_DICT,
         SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT,
     ],
-    Dataset: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT, DATASET_DICT],
+    DatasetPackage: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT, DATASET_DICT],
     Build: [ELEMENT_DICT, BUILD_DICT],
 }
 
