@@ -60,7 +60,7 @@ The implementation is based on the descriptive Markdown files in the repository 
 As always you should work in a virtualenv (venv). You can install a local clone
 of this repo with `yourenv/bin/pip install .` or install it from PyPI
 (check for the [newest release](https://pypi.org/project/spdx-tools/#history) and install it like
-`yourenv/bin/pip install spdx-tools==0.8.0a2`). Note that on Windows it would be `Scripts`
+`yourenv/bin/pip install spdx-tools==0.8.3`). Note that on Windows it would be `Scripts`
 instead of `bin`.
 
 ## How to use
@@ -72,7 +72,7 @@ instead of `bin`.
     - Use `pyspdxtools -i <filename>` where `<filename>` is the location of the file. The input format is inferred automatically from the file ending.
 
     - If you are using a source distribution, try running:
-      `pyspdxtools -i tests/data/SPDXJSONExample-v2.3.spdx.json`
+      `pyspdxtools -i tests/spdx/data/SPDXJSONExample-v2.3.spdx.json`
 
 2. **CONVERTING** (for converting one format to another):
 
@@ -80,10 +80,10 @@ instead of `bin`.
       and `<output_file>` is the location of the output file. The input and output formats are inferred automatically from the file endings.
 
     - If you are using a source distribution, try running:
-      `pyspdxtools -i tests/data/SPDXJSONExample-v2.3.spdx.json -o output.tag`
+      `pyspdxtools -i tests/spdx/data/SPDXJSONExample-v2.3.spdx.json -o output.tag`
 
     - If you want to skip the validation process, provide the `--novalidation` flag, like so:
-      `pyspdxtools -i tests/data/SPDXJSONExample-v2.3.spdx.json -o output.tag --novalidation`
+      `pyspdxtools -i tests/spdx/data/SPDXJSONExample-v2.3.spdx.json -o output.tag --novalidation`
   (use this with caution: note that undetected invalid documents may lead to unexpected behavior of the tool)
 
     - For help use `pyspdxtools --help`
@@ -91,14 +91,14 @@ instead of `bin`.
 3. **GRAPH GENERATION** (optional feature)
 
     - This feature generates a graph representing all elements in the SPDX document and their connections based on the provided
-      relationships. The graph can be rendered to a picture. Below is an example for the file `tests/data/SPDXJSONExample-v2.3.spdx.json`:
+      relationships. The graph can be rendered to a picture. Below is an example for the file `tests/spdx/data/SPDXJSONExample-v2.3.spdx.json`:
       ![SPDXJSONExample-v2.3.spdx.png](assets/SPDXJSONExample-v2.3.spdx.png)
 
     - Make sure you install the optional dependencies `networkx` and `pygraphviz`. To do so run `pip install ".[graph_generation]"`.
     - Use `pyspdxtools -i <input_file> --graph -o <output_file>` where `<output_file>` is an output file name with valid format for `pygraphviz` (check
       the documentation [here](https://pygraphviz.github.io/documentation/stable/reference/agraph.html#pygraphviz.AGraph.draw)).
     - If you are using a source distribution, try running
-      `pyspdxtools -i tests/data/SPDXJSONExample-v2.3.spdx.json --graph -o SPDXJSONExample-v2.3.spdx.png` to generate
+      `pyspdxtools -i tests/spdx/data/SPDXJSONExample-v2.3.spdx.json --graph -o SPDXJSONExample-v2.3.spdx.png` to generate
       a png with an overview of the structure of the example file.
 
 ### Library usage
