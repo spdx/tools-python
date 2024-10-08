@@ -19,7 +19,7 @@
     "Person": "core:Person",
     "SoftwareAgent": "core:SoftwareAgent",
     "SpdxDocument": "core:SpdxDocument",
-    "Dataset": "dataset:Dataset",
+    "DatasetPackage": "dataset:DatasetPackage",
     "ConjunctiveLicenseSet": "licensing:ConjunctiveLicenseSet",
     "CustomLicense": "licensing:CustomLicense",
     "CustomLicenseAddition": "licensing:CustomLicenseAddition",
@@ -46,7 +46,7 @@
     "SoftwareDependencyRelationship": "software:SoftwareDependencyRelationship",
     "autonomyType": {
         "@id": "ai:autonomyType",
-        "@type": "ai:PresenceType"
+        "@type": "core:PresenceType"
     },
     "domain": {
         "@id": "ai:domain",
@@ -95,11 +95,11 @@
             "@vocab": "ai:SafetyRiskAssessmentType/"
         }
     },
-    "sensitivePersonalInformation": {
-        "@id": "dataset:sensitivePersonalInformation",
+    "useSensitivePersonalInformation": {
+        "@id": "ai:useSensitivePersonalInformation",
         "@type": "@vocab",
         "@context": {
-            "@vocab": "dataset:PresenceType/"
+            "@vocab": "core:PresenceType/"
         }
     },
     "standardCompliance": {
@@ -407,6 +407,13 @@
     "datasetUpdateMechanism": {
         "@id": "dataset:datasetUpdateMechanism",
         "@type": "xsd:string"
+    },
+    "hasSensitivePersonalInformation": {
+        "@id": "dataset:hasSensitivePersonalInformation",
+        "@type": "@vocab",
+        "@context": {
+            "@vocab": "core:PresenceType/"
+        }
     },
     "intendedUse": {
         "@id": "dataset:intendedUse",
@@ -721,7 +728,7 @@
     "SsvcDecisionType": "security:SsvcDecisionType",
     "VulnAssessmentRelationship": "security:VulnAssessmentRelationship",
     "SoftwareDependencyLinkType": "software:SoftwareDependencyLinkType",
-    "PresenceType": "ai:PresenceType",
+    "PresenceType": "core:PresenceType",
     "DatasetAvailabilityType": "dataset:DatasetAvailabilityType",
     "LicenseField": "licensing:LicenseField",
     "VexJustificationType": "security:VexJustificationType",

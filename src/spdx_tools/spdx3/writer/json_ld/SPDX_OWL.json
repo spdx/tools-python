@@ -263,9 +263,9 @@
           "sh:class": {
             "@id": "core:DictionaryEntry"
           },
-          "sh:name": "parameters",
+          "sh:name": "parameter",
           "sh:path": {
-            "@id": "build:parameters"
+            "@id": "build:parameter"
           }
         },
         {
@@ -2320,7 +2320,7 @@
         "sh:maxCount": 1,
         "sh:name": "contentType",
         "sh:path": {
-          "@id": "software:contentType"
+          "@id": "core:contentType"
         }
       }
     },
@@ -3874,15 +3874,6 @@
       "rdfs:comment": "A contentIdentifier is TODO",
       "rdfs:range": {
         "@id": "xsd:anyURI"
-      },
-      "ns0:term_status": "Stable"
-    },
-    {
-      "@id": "software:contentType",
-      "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "This field is a reasonable estimation of the content type of the Element, from a creator perspective.\nContent type is intrinsic to the Element, independent of how the Element is being used.",
-      "rdfs:range": {
-        "@id": "core:MediaType"
       },
       "ns0:term_status": "Stable"
     },
