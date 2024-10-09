@@ -560,8 +560,8 @@
         "@id": "software:byteRange",
         "@type": "core:PositiveIntegerRange"
     },
-    "concludedLicense": {
-        "@id": "software:concludedLicense",
+    "hasConcludedLicense": {
+        "@id": "software:hasConcludedLicense",
         "@type": "licensing:LicenseField"
     },
     "conditionality": {
@@ -583,8 +583,8 @@
         "@id": "software:copyrightText",
         "@type": "xsd:string"
     },
-    "declaredLicense": {
-        "@id": "software:declaredLicense",
+    "hasDeclaredLicense": {
+        "@id": "software:hasDeclaredLicense",
         "@type": "licensing:LicenseField"
     },
     "downloadLocation": {

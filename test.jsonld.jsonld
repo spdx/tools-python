@@ -554,8 +554,8 @@
       "@id": "software:byteRange",
       "@type": "core:PositiveIntegerRange"
     },
-    "concludedLicense": {
-      "@id": "software:concludedLicense",
+    "hasConcludedLicense": {
+      "@id": "software:hasConcludedLicense",
       "@type": "licensing:LicenseField"
     },
     "conditionality": {
@@ -577,8 +577,8 @@
       "@id": "software:copyrightText",
       "@type": "xsd:string"
     },
-    "declaredLicense": {
-      "@id": "software:declaredLicense",
+    "hasDeclaredLicense": {
+      "@id": "software:hasDeclaredLicense",
       "@type": "licensing:LicenseField"
     },
     "downloadLocation": {
@@ -688,8 +688,8 @@
       "@id": "core:creationInfo",
       "@type": "core:CreationInfo"
     },
-    "import": {
-      "@id": "core:import",
+    "imports": {
+      "@id": "core:imports",
       "@type": "core:ExternalMap"
     },
     "namespaces": {
@@ -879,7 +879,7 @@
           "namespace": "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301#"
         }
       ],
-      "import": [
+      "imports": [
         {
           "@type": "ExternalMap",
           "externalId": "DocumentRef-spdx-tool-1.2:SPDXRef-DOCUMENT",
