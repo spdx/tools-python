@@ -698,8 +698,8 @@
         "@id": "core:imports",
         "@type": "core:ExternalMap"
     },
-    "namespaces": {
-        "@id": "core:namespaces",
+    "namespace": {
+        "@id": "core:namespace",
         "@type": "core:NamespaceMap"
     },
     "severity": {

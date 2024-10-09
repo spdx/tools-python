@@ -7,7 +7,7 @@ from datetime import datetime
 from beartype.typing import Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx_tools.spdx3.model import Relationship
+from spdx_tools.spdx3.model.core import Relationship
 
 
 @dataclass_with_properties

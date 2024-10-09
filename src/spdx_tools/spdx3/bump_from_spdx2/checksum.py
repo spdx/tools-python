@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from spdx_tools.spdx3.model import Hash, HashAlgorithm
+from spdx_tools.spdx3.model.core import Hash, HashAlgorithm
 from spdx_tools.spdx.model.checksum import Checksum as Spdx2_Checksum
 from spdx_tools.spdx.model.checksum import ChecksumAlgorithm
 

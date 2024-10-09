@@ -6,7 +6,7 @@ from typing import Any, Dict, Type
 
 from semantic_version import Version
 
-from spdx_tools.spdx3.model import (
+from spdx_tools.spdx3.model.core import (
     Agent,
     Annotation,
     AnnotationType,
@@ -80,7 +80,7 @@ specified unless relevant for the test."""
 
 
 def creation_info_fixture(
-    spec_version=Version("3.0.0"),
+    spec_version=Version("3.0.1"),
     created=datetime(2022, 12, 1),
     created_by=None,
     created_using=None,
@@ -237,8 +237,8 @@ ANNOTATION_DICT = {
 ELEMENT_COLLECTION_DICT = {
     "element": ["https://spdx.test/tools-python/collection_element"],
     "root_element": ["https://spdx.test/tools-python/collection_root_element"],
-    "namespaces": [namespace_map_fixture()],
-    "imports": [external_map_fixture()],
+    "namespace": [namespace_map_fixture()],
+    "import": [external_map_fixture()],
 }
 
 BUNDLE_DICT = {
@@ -356,7 +356,7 @@ VEX_FIXED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "relationship_type": RelationshipType.FIXED_IN,
 }
 
-AIPACKAGE_DICT = {
+AI_PACKAGE_DICT = {
     "energy_consumption": "energyConsumption",
     "standard_compliance": ["standardCompliance"],
     "limitation": "aIPackageLimitation",
@@ -410,7 +410,7 @@ SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT = {
     "conditionality": DependencyConditionalityType.OTHER,
 }
 
-DATASET_DICT = {
+DATASET_PACKAGE_DICT = {
     "dataset_type": [DatasetType.OTHER],
     "data_collection_process": "DatasetDataCollectionProcess",
     "intended_use": "DatasetIntendedUse",
@@ -514,7 +514,7 @@ FIXTURE_DICTS = {
         VEX_UNDER_INVESTIGATION_VULN_ASSESSMENT_RELATIONSHIP_DICT,
     ],
     Vulnerability: [ELEMENT_DICT, VULNERABILITY_DICT],
-    AIPackage: [AIPACKAGE_DICT, PACKAGE_DICT, ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT],
+    AIPackage: [AI_PACKAGE_DICT, PACKAGE_DICT, ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT],
     File: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, FILE_DICT],
     Package: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT],
     Snippet: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, SNIPPET_DICT],
@@ -524,7 +524,7 @@ FIXTURE_DICTS = {
         LIFECYCLE_SCOPED_RELATIONSHIP_DICT,
         SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT,
     ],
-    DatasetPackage: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT, DATASET_DICT],
+    DatasetPackage: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT, DATASET_PACKAGE_DICT],
     Build: [ELEMENT_DICT, BUILD_DICT],
 }
 

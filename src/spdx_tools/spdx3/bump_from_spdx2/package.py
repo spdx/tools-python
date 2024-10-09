@@ -7,7 +7,7 @@ from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import (
+from spdx_tools.spdx3.model.core import (
     ExternalIdentifier,
     ExternalIdentifierType,
     ExternalMap,
@@ -115,19 +115,19 @@ def bump_package(
 
 
 external_ref_type_map = {
+    "advisory": ExternalReferenceType.SECURITY_ADVISORY,
+    "bower": None,
     "cpe22Type": ExternalIdentifierType.CPE22,
     "cpe23Type": ExternalIdentifierType.CPE23,
-    "advisory": ExternalReferenceType.SECURITY_ADVISORY,
     "fix": ExternalReferenceType.SECURITY_FIX,
-    "url": None,
-    "swid": ExternalIdentifierType.SWID,
+    "gitoid": ExternalIdentifierType.GITOID,
     "maven-central": None,
     "npm": None,
     "nuget": None,
-    "bower": None,
-    "purl": ExternalIdentifierType.PURL,
+    "purl": ExternalIdentifierType.PACKAGE_URL,
     "swh": ExternalIdentifierType.SWHID,
-    "gitoid": ExternalIdentifierType.GITOID,
+    "swid": ExternalIdentifierType.SWID,
+    "url": ExternalIdentifierType.URL_SCHEME,
 }
 
 

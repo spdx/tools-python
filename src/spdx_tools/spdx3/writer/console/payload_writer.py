@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import TextIO
 
-from spdx_tools.spdx3.model import (
+from spdx_tools.spdx3.model.core import (
     Annotation,
     Bom,
     Bundle,
@@ -19,13 +19,13 @@ from spdx_tools.spdx3.model.build import Build
 from spdx_tools.spdx3.model.dataset import DatasetPackage
 from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet, SoftwareDependencyRelationship
 from spdx_tools.spdx3.payload import Payload
-from spdx_tools.spdx3.writer.console.agent_writer import write_agent
+from spdx_tools.spdx3.writer.console.core.agent_writer import write_agent
 from spdx_tools.spdx3.writer.console.ai.ai_package_writer import write_ai_package
 from spdx_tools.spdx3.writer.console.annotation_writer import write_annotation
 from spdx_tools.spdx3.writer.console.bom_writer import write_bom
 from spdx_tools.spdx3.writer.console.build.build_writer import write_build
 from spdx_tools.spdx3.writer.console.bundle_writer import write_bundle
-from spdx_tools.spdx3.writer.console.dataset.dataset_writer import write_dataset
+from spdx_tools.spdx3.writer.console.dataset.dataset_package_writer import write_dataset_package
 from spdx_tools.spdx3.writer.console.relationship_writer import write_relationship
 from spdx_tools.spdx3.writer.console.software.file_writer import write_file
 from spdx_tools.spdx3.writer.console.software.package_writer import write_package

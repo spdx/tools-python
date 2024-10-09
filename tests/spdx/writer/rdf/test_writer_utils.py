@@ -7,7 +7,7 @@ from spdx_tools.spdx.writer.rdf.writer_utils import add_namespace_to_spdx_id
 
 
 @pytest.mark.parametrize(
-    "spdx_id,namespace,external_namespaces,expected",
+    "spdx_id,namespace,external_namespace,expected",
     [
         ("SPDXRef-File", "docNamespace", {}, "docNamespace#SPDXRef-File"),
         (

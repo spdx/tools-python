@@ -414,9 +414,9 @@
           "sh:class": {
             "@id": "core:NamespaceMap"
           },
-          "sh:name": "namespaces",
+          "sh:name": "namespace",
           "sh:path": {
-            "@id": "core:namespaces"
+            "@id": "core:namespace"
           }
         },
         {
@@ -2978,9 +2978,9 @@
           "sh:class": {
             "@id": "core:NamespaceMap"
           },
-          "sh:name": "namespaces",
+          "sh:name": "namespace",
           "sh:path": {
-            "@id": "core:namespaces"
+            "@id": "core:namespace"
           }
         },
         {
@@ -4159,9 +4159,9 @@
           "sh:class": {
             "@id": "core:NamespaceMap"
           },
-          "sh:name": "namespaces",
+          "sh:name": "namespace",
           "sh:path": {
-            "@id": "core:namespaces"
+            "@id": "core:namespace"
           }
         },
         {
@@ -4493,7 +4493,7 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "core:namespaces",
+      "@id": "core:namespace",
       "@type": "owl:DatatypeProperty",
       "rdfs:comment": "This field provides a NamespaceMap applicable to an ElementCollection.",
       "rdfs:range": {

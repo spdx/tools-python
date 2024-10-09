@@ -5,7 +5,7 @@ from typing import Optional
 
 from beartype.typing import List
 
-from spdx_tools.spdx3.model import CreationInfo, ExternalIdentifier, ExternalIdentifierType, Organization, Person, Tool
+from spdx_tools.spdx3.model.core import CreationInfo, ExternalIdentifier, ExternalIdentifierType, Organization, Person, Tool
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.actor import Actor as Spdx2_Actor
 from spdx_tools.spdx.model.actor import ActorType
@@ -15,7 +15,7 @@ def bump_actor(
     spdx2_actor: Spdx2_Actor, payload: Payload, document_namespace: str, creation_info: Optional[CreationInfo] = None
 ) -> str:
     name: str = spdx2_actor.name
-    email: str = spdx2_actor.email
+    email: str = spdx2_actor.email if spdx2_actor.email is not None else ""
     actor_type: ActorType = spdx2_actor.actor_type
 
     external_identifiers: List[ExternalIdentifier] = []

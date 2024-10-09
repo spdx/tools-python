@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 
 from spdx_tools.spdx3.bump_from_spdx2.file import bump_file
-from spdx_tools.spdx3.model import Hash, HashAlgorithm
+from spdx_tools.spdx3.model.core import Hash, HashAlgorithm
 from spdx_tools.spdx3.model.software import File
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.file import File as Spdx2_File

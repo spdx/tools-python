@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx_tools.spdx3.model import (
+from spdx_tools.spdx3.model.core import (
     Agent,
     Annotation,
     Bom,

@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from spdx_tools.spdx3.bump_from_spdx2.relationship import bump_relationship, bump_relationships
-from spdx_tools.spdx3.model import Relationship, RelationshipCompleteness, RelationshipType
+from spdx_tools.spdx3.model.core import Relationship, RelationshipCompleteness, RelationshipType
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import RelationshipType as Spdx2_RelationshipType
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone

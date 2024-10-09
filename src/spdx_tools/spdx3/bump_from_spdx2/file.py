@@ -5,7 +5,7 @@ from beartype.typing import List
 
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import ExternalMap
+from spdx_tools.spdx3.model.core import ExternalMap
 from spdx_tools.spdx3.model.software import File
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import ExternalDocumentRef, SpdxNoAssertion

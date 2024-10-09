@@ -20,7 +20,7 @@
     "Person": "core:Person",
     "SoftwareAgent": "core:SoftwareAgent",
     "SpdxDocument": "core:SpdxDocument",
-    "DatasetPackage": "dataset:DatasetPackage",
+    "Dataset": "dataset:Dataset",
     "ConjunctiveLicenseSet": "licensing:ConjunctiveLicenseSet",
     "CustomLicense": "licensing:CustomLicense",
     "CustomLicenseAddition": "licensing:CustomLicenseAddition",
@@ -47,7 +47,7 @@
     "SoftwareDependencyRelationship": "software:SoftwareDependencyRelationship",
     "autonomyType": {
       "@id": "ai:autonomyType",
-      "@type": "core:PresenceType"
+      "@type": "ai:PresenceType"
     },
     "domain": {
       "@id": "ai:domain",
@@ -96,6 +96,13 @@
         "@vocab": "ai:SafetyRiskAssessmentType/"
       }
     },
+    "sensitivePersonalInformation": {
+      "@id": "dataset:sensitivePersonalInformation",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "dataset:PresenceType/"
+      }
+    },
     "standardCompliance": {
       "@id": "ai:standardCompliance",
       "@type": "xsd:string"
@@ -103,13 +110,6 @@
     "typeOfModel": {
       "@id": "ai:typeOfModel",
       "@type": "xsd:string"
-    },
-    "useSensitivePersonalInformation": {
-      "@id": "ai:useSensitivePersonalInformation",
-      "@type": "@vocab",
-      "@context": {
-        "@vocab": "core:PresenceType/"
-      }
     },
     "buildEndTime": {
       "@id": "build:buildEndTime",
@@ -143,8 +143,8 @@
       "@id": "build:environment",
       "@type": "core:DictionaryEntry"
     },
-    "parameter": {
-      "@id": "build:parameter",
+    "parameters": {
+      "@id": "build:parameters",
       "@type": "core:DictionaryEntry"
     },
     "Artifact": "core:Artifact",
@@ -408,13 +408,6 @@
     "datasetUpdateMechanism": {
       "@id": "dataset:datasetUpdateMechanism",
       "@type": "xsd:string"
-    },
-    "hasSensitivePersonalInformation": {
-      "@id": "dataset:hasSensitivePersonalInformation",
-      "@type": "@vocab",
-      "@context": {
-        "@vocab": "core:PresenceType/"
-      }
     },
     "intendedUse": {
       "@id": "dataset:intendedUse",
@@ -729,7 +722,7 @@
     "SsvcDecisionType": "security:SsvcDecisionType",
     "VulnAssessmentRelationship": "security:VulnAssessmentRelationship",
     "SoftwareDependencyLinkType": "software:SoftwareDependencyLinkType",
-    "PresenceType": "core:PresenceType",
+    "PresenceType": "ai:PresenceType",
     "DatasetAvailabilityType": "dataset:DatasetAvailabilityType",
     "LicenseField": "licensing:LicenseField",
     "VexJustificationType": "security:VexJustificationType",

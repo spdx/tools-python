@@ -6,7 +6,7 @@ from unittest import TestCase
 import pytest
 
 from spdx_tools.spdx3.bump_from_spdx2.package import bump_package
-from spdx_tools.spdx3.model import ExternalIdentifier, ExternalIdentifierType, ExternalReference, ExternalReferenceType
+from spdx_tools.spdx3.model.core import ExternalIdentifier, ExternalIdentifierType, ExternalReference, ExternalReferenceType
 from spdx_tools.spdx3.model.software import Package
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import SpdxNoAssertion

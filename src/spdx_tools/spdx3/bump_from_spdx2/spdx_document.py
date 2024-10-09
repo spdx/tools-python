@@ -7,7 +7,7 @@ from spdx_tools.spdx3.bump_from_spdx2.file import bump_file
 from spdx_tools.spdx3.bump_from_spdx2.package import bump_package
 from spdx_tools.spdx3.bump_from_spdx2.relationship import bump_relationships
 from spdx_tools.spdx3.bump_from_spdx2.snippet import bump_snippet
-from spdx_tools.spdx3.model import CreationInfo, SpdxDocument
+from spdx_tools.spdx3.model.core import CreationInfo, SpdxDocument
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import RelationshipType
 from spdx_tools.spdx.model.document import Document as Spdx2_Document
