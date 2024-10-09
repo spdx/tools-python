@@ -13,9 +13,9 @@ from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import wri
 def write_collection(collection: ElementCollection, text_output: TextIO):
     write_element_properties(collection, text_output)
     text_output.write(f"elements: {', '.join(collection.element)}\n")
-    write_optional_heading(collection.namespaces, "# Namespaces\n", text_output)
-    for namespace_map in collection.namespaces:
+    write_optional_heading(collection.namespace, "# Namespace\n", text_output)
+    for namespace_map in collection.namespace:
         write_namespace_map(namespace_map, text_output)
-    write_optional_heading(collection.imports, "# Imports\n", text_output)
-    for external_map in collection.imports:
+    write_optional_heading(collection.import_, "# Import\n", text_output)
+    for external_map in collection.import_:
         write_external_map(external_map, text_output)

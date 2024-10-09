@@ -40,7 +40,7 @@ def test_bump_external_elements():
     )
     payload: Payload = bump_spdx_document(spdx2_document)
 
-    expected_imports = [
+    expected_import_ = [
         ExternalMap(external_id=package_id, defining_document=full_external_doc_id),
         ExternalMap(external_id=file_id, defining_document=full_external_doc_id),
         ExternalMap(external_id=snippet_id, defining_document=full_external_doc_id),
@@ -52,4 +52,4 @@ def test_bump_external_elements():
     assert f"{external_doc_uri}#SPDXRef-File" in payload.get_full_map()
     assert f"{external_doc_uri}#SPDXRef-Snippet" in payload.get_full_map()
 
-    TestCase().assertCountEqual(spdx_document.imports, expected_imports)
+    TestCase().assertCountEqual(spdx_document.import_, expected_import_)

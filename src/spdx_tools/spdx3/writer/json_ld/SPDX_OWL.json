@@ -423,9 +423,9 @@
           "sh:class": {
             "@id": "core:ExternalMap"
           },
-          "sh:name": "imports",
+          "sh:name": "import",
           "sh:path": {
-            "@id": "core:imports"
+            "@id": "core:import"
           }
         }
       ]
@@ -2959,9 +2959,9 @@
           "sh:class": {
             "@id": "core:ExternalMap"
           },
-          "sh:name": "imports",
+          "sh:name": "import",
           "sh:path": {
-            "@id": "core:imports"
+            "@id": "core:import"
           }
         },
         {
@@ -4168,9 +4168,9 @@
           "sh:class": {
             "@id": "core:ExternalMap"
           },
-          "sh:name": "imports",
+          "sh:name": "import",
           "sh:path": {
-            "@id": "core:imports"
+            "@id": "core:import"
           }
         },
         {
@@ -4484,9 +4484,9 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "core:imports",
+      "@id": "core:import",
       "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "Imports provides an ExternalMap of Element identifiers that are used within a document\nbut defined external to that document.",
+      "rdfs:comment": "Import provides an ExternalMap of Element identifiers that are used within a document\nbut defined external to that document.",
       "rdfs:range": {
         "@id": "core:ExternalMap"
       },

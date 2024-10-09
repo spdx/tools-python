@@ -694,21 +694,18 @@
         "@id": "core:creationInfo",
         "@type": "core:CreationInfo"
     },
-    "imports": {
-        "@id": "core:imports",
+    "import": {
+        "@id": "core:import",
         "@type": "core:ExternalMap"
-    },
-    "namespace": {
-        "@id": "core:namespace",
-        "@type": "core:NamespaceMap"
     },
     "severity": {
         "@id": "security:severity",
-        "@type": "xsd:string"
+        "@type": "security:CvssSeverityType"
     },
     "SoftwareArtifact": "software:SoftwareArtifact",
     "AnnotationType": "core:AnnotationType",
     "CreationInfo": "core:CreationInfo",
+    "CvssSeverityType": "security:CvssSeverityType",
     "ExternalMap": "core:ExternalMap",
     "IntegrityMethod": "core:IntegrityMethod",
     "NamespaceMap": "core:NamespaceMap",

@@ -13,13 +13,13 @@ from tests.spdx.fixtures import checksum_fixture, creation_info_fixture, externa
 def test_bump_external_document_ref():
     checksum = checksum_fixture()
     external_document_ref = ExternalDocumentRef("DocumentRef-external", "https://external.uri", checksum)
-    namespace_map, imports = bump_external_document_ref(external_document_ref)
+    namespace_map, import_ = bump_external_document_ref(external_document_ref)
 
     assert namespace_map.prefix == "DocumentRef-external"
     assert namespace_map.namespace == "https://external.uri#"
 
-    assert imports.external_id == "DocumentRef-external:SPDXRef-DOCUMENT"
-    assert imports.verified_using == [bump_checksum(checksum)]
+    assert import_.external_id == "DocumentRef-external:SPDXRef-DOCUMENT"
+    assert import_.verified_using == [bump_checksum(checksum)]
 
 
 def test_bump_multiple_external_document_refs():

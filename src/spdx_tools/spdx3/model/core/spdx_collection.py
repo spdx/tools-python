@@ -16,8 +16,8 @@ class ElementCollection(Element):
     # the __init__ method still raises an error if required fields are not set
     element: List[str] = field(default_factory=list)
     root_element: List[str] = field(default_factory=list)
-    namespaces: List[NamespaceMap] = field(default_factory=list)
-    imports: List[ExternalMap] = field(default_factory=list)
+    namespace: List[NamespaceMap] = field(default_factory=list)
+    import_: List[ExternalMap] = field(default_factory=list)
 
     @abstractmethod
     def __init__(self):

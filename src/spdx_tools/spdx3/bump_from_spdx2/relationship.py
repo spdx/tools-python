@@ -222,7 +222,7 @@ def determine_completeness_and_to(
 ) -> Tuple[Optional[RelationshipCompleteness], List[str]]:
     if isinstance(related_spdx_element_id, SpdxNoAssertion):
         completeness = RelationshipCompleteness.NOASSERTION
-        to = []
+        to: List[str] = []
     elif isinstance(related_spdx_element_id, SpdxNone):
         completeness = RelationshipCompleteness.COMPLETE
         to = []

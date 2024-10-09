@@ -35,9 +35,9 @@ class VexAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: List[IntegrityMethod] = None,
-        external_reference: List[ExternalReference] = None,
-        external_identifier: List[ExternalIdentifier] = None,
+        verified_using: List[IntegrityMethod] = [],
+        external_reference: List[ExternalReference] = [],
+        external_identifier: List[ExternalIdentifier] = [],
         extension: Optional[str] = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
@@ -50,10 +50,10 @@ class VexAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         vex_version: Optional[str] = None,
         status_notes: Optional[str] = None,
         action_statement: Optional[str] = None,
-        action_statement_time: List[datetime] = None,
+        action_statement_time: List[datetime] = [],
     ):
-        verified_using = [] if verified_using is None else verified_using
-        external_reference = [] if external_reference is None else external_reference
-        external_identifier = [] if external_identifier is None else external_identifier
-        action_statement_time = [] if action_statement_time is None else action_statement_time
+        verified_using = [] if not verified_using else verified_using
+        external_reference = [] if not external_reference else external_reference
+        external_identifier = [] if not external_identifier else external_identifier
+        action_statement_time = [] if not action_statement_time else action_statement_time
         check_types_and_set_values(self, locals())

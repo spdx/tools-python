@@ -688,8 +688,8 @@
       "@id": "core:creationInfo",
       "@type": "core:CreationInfo"
     },
-    "imports": {
-      "@id": "core:imports",
+    "import": {
+      "@id": "core:import",
       "@type": "core:ExternalMap"
     },
     "namespaces": {
@@ -879,7 +879,7 @@
           "namespace": "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301#"
         }
       ],
-      "imports": [
+      "import": [
         {
           "@type": "ExternalMap",
           "externalId": "DocumentRef-spdx-tool-1.2:SPDXRef-DOCUMENT",

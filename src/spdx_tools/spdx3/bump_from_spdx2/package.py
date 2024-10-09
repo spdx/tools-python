@@ -28,11 +28,11 @@ def bump_package(
     payload: Payload,
     document_namespace: str,
     external_document_refs: List[ExternalDocumentRef],
-    imports: List[ExternalMap],
+    import_: List[ExternalMap],
 ):
     spdx_id = get_full_element_spdx_id(spdx2_package, document_namespace, external_document_refs)
     if ":" in spdx2_package.spdx_id:
-        imports.append(
+        import_.append(
             ExternalMap(
                 external_id=spdx2_package.spdx_id,
                 defining_document=f"{spdx2_package.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",

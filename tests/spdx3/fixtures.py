@@ -88,9 +88,9 @@ def creation_info_fixture(
     data_license="CC0-1.0",
     comment="creationInfoComment",
 ) -> CreationInfo:
-    created_by = ["https://spdx.test/tools-python/creation_info_created_by"] if created_by is None else created_by
+    created_by = ["https://spdx.test/tools-python/creation_info_created_by"] if not created_by else created_by
     created_using = (
-        ["https://spdx.test/tools-python/creation_info_created_using"] if created_using is None else created_using
+        ["https://spdx.test/tools-python/creation_info_created_using"] if not created_using else created_using
     )
     profile = (
         [ProfileIdentifierType.CORE, ProfileIdentifierType.SOFTWARE, ProfileIdentifierType.LICENSING]
@@ -135,7 +135,7 @@ def external_reference_fixture(
     content_type="externalReferenceContentType",
     comment="externalReferenceComment",
 ) -> ExternalReference:
-    locator = ["org.apache.tomcat:tomcat:9.0.0.M4"] if locator is None else locator
+    locator = ["org.apache.tomcat:tomcat:9.0.0.M4"] if not locator else locator
     return ExternalReference(
         external_reference_type=external_reference_type, locator=locator, content_type=content_type, comment=comment
     )
@@ -155,7 +155,7 @@ def external_map_fixture(
     location_hint="https://spdx.test/tools-python/external_map_location_hint",
     defining_document="https://spdx.test/tools-python/defining_document",
 ) -> ExternalMap:
-    verified_using = [hash_fixture()] if verified_using is None else verified_using
+    verified_using = [hash_fixture()] if not verified_using else verified_using
     return ExternalMap(
         external_id=external_id,
         verified_using=verified_using,
@@ -185,7 +185,7 @@ def listed_license_fixture(
     list_version_added="2.1",
     deprecated_version="2.2",
 ):
-    see_also = ["https://see.also/license"] if see_also is None else see_also
+    see_also = ["https://see.also/license"] if not see_also else see_also
     return ListedLicense(
         license_id=license_id,
         license_name=license_name,

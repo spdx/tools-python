@@ -52,8 +52,8 @@ class LifecycleScopedRelationship(Relationship):
         end_time: Optional[datetime] = None,
         scope: Optional[LifecycleScopeType] = None,
     ):
-        to = [] if to is None else to
-        verified_using = [] if verified_using is None else verified_using
-        external_reference = [] if external_reference is None else external_reference
-        external_identifier = [] if external_identifier is None else external_identifier
+        to = [] if not to else to
+        verified_using = [] if not verified_using else verified_using
+        external_reference = [] if not external_reference else external_reference
+        external_identifier = [] if not external_identifier else external_identifier
         check_types_and_set_values(self, locals())

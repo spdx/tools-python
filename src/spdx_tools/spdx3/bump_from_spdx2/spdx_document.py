@@ -39,7 +39,7 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
             payload,
             document_namespace,
             document.creation_info.external_document_refs,
-            spdx_document.imports,
+            spdx_document.import_,
         )
 
     for spdx2_file in document.files:
@@ -48,7 +48,7 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
             payload,
             document_namespace,
             document.creation_info.external_document_refs,
-            spdx_document.imports,
+            spdx_document.import_,
         )
 
     for spdx2_snippet in document.snippets:
@@ -57,7 +57,7 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
             payload,
             document_namespace,
             document.creation_info.external_document_refs,
-            spdx_document.imports,
+            spdx_document.import_,
         )
 
     bump_relationships(document.relationships, payload, document_namespace)

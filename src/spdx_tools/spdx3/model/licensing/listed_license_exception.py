@@ -19,12 +19,12 @@ class ListedLicenseException(LicenseAddition):
         addition_name: str,
         addition_text: str,
         addition_comment: Optional[str] = None,
-        see_also: List[str] = None,
+        see_also: List[str] = [],
         standard_addition_template: Optional[str] = None,
         is_deprecated_addition_id: Optional[bool] = None,
         obsoleted_by: Optional[str] = None,
         list_version_added: Optional[str] = None,
         deprecated_version: Optional[str] = None,
     ):
-        see_also = [] if see_also is None else see_also
+        see_also = [] if not see_also else see_also
         check_types_and_set_values(self, locals())

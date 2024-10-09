@@ -12,5 +12,5 @@ class ProfileIdentifierType(Enum):
     BUILD = auto()
     AI = auto()
     DATASET = auto()
-    USAGE = auto()
+    USAGE = auto()  # Not present in v3.0.1
     EXTENSION = auto()

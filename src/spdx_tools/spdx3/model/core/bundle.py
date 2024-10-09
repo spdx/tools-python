@@ -42,5 +42,5 @@ class Bundle(ElementCollection):
         external_reference = [] if not external_reference else external_reference
         external_identifier = [] if not external_identifier else external_identifier
         namespace = [] if not namespace else namespace
-        import_ = [] if import_ is None else import_
+        import_ = [] if not import_  else import_
         check_types_and_set_values(self, locals())

@@ -44,9 +44,9 @@ class VexNotAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: List[IntegrityMethod] = None,
-        external_reference: List[ExternalReference] = None,
-        external_identifier: List[ExternalIdentifier] = None,
+        verified_using: List[IntegrityMethod] = [],
+        external_reference: List[ExternalReference] = [],
+        external_identifier: List[ExternalIdentifier] = [],
         extension: Optional[str] = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
@@ -62,7 +62,7 @@ class VexNotAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         impact_statement: Optional[str] = None,
         impact_statement_time: Optional[datetime] = None,
     ):
-        verified_using = [] if verified_using is None else verified_using
-        external_reference = [] if external_reference is None else external_reference
-        external_identifier = [] if external_identifier is None else external_identifier
+        verified_using = [] if not verified_using else verified_using
+        external_reference = [] if not external_reference else external_reference
+        external_identifier = [] if not external_identifier else external_identifier
         check_types_and_set_values(self, locals())
