@@ -508,157 +508,157 @@
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/altDownloadLocation",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/altDownloadLocation",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/altWebPage",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/altWebPage",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/binaryArtifact",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/binaryArtifact",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/buildMeta",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/buildMeta",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/buildSystem",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/buildSystem",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/chat",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/chat",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/documentation",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/documentation",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/funding",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/funding",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/issueTracker",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/issueTracker",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/license",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/license",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/mailingList",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/mailingList",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/metrics",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/metrics",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/other",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/other",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/releaseHistory",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/releaseHistory",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/releaseNotes",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/releaseNotes",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/securityAdvisory",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/securityAdvisory",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/securityFix",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/securityFix",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/securityOther",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/securityOther",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/socialMedia",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/socialMedia",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/sourceArtifact",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/sourceArtifact",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/support",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/support",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
-      "@id": "https://spdx.org/rdf/Core/ExternalReferenceType/vcs",
+      "@id": "https://spdx.org/rdf/Core/ExternalRefType/vcs",
       "@type": [
         "owl:NamedIndividual",
-        "core:ExternalReferenceType"
+        "core:ExternalRefType"
       ]
     },
     {
@@ -1856,7 +1856,7 @@
         "owl:Class",
         "sh:NodeShape"
       ],
-      "rdfs:comment": "A CvssV2VulnAssessmentRelationship relationship describes the determined score and vector of a vulnerability using version 2.0 of the Common Vulnerability Scoring System\n(CVSS) as defined on [https://www.first.org/cvss/v2/guide](https://www.first.org/cvss/v2/guide). It is intented to communicate the results of using a CVSS calculator.\n\n**Constraints**\n\n- The value of severity must be one of 'low', 'medium' or 'high'\n- The relationship type must be set to hasAssessmentFor.\n\n**Syntax**\n\n```json\n{\n  \"@type\": \"CvssV2VulnAssessmentRelationship\",\n  \"@id\": \"urn:spdx.dev:cvssv2-cve-2020-28498\",\n  \"relationshipType\": \"hasAssessmentFor\",\n  \"score\": 4.3,\n  \"vector\": \"(AV:N/AC:M/Au:N/C:P/I:N/A:N)\",\n  \"severity\": \"low\",\n  \"from\": \"urn:spdx.dev:vuln-cve-2020-28498\",\n  \"to\": [\"urn:product-acme-application-1.3\"],\n  \"assessedElement\": \"urn:npm-elliptic-6.5.2\",\n  \"externalReferences\": [\n    {\n      \"@type\": \"ExternalReference\",\n      \"externalReferenceType\": \"securityAdvisory\",\n      \"locator\": \"https://nvd.nist.gov/vuln/detail/CVE-2020-28498\"\n    },\n    {\n      \"@type\": \"ExternalReference\",\n      \"externalReferenceType\": \"securityAdvisory\",\n      \"locator\": \"https://snyk.io/vuln/SNYK-JS-ELLIPTIC-1064899\"\n    },\n    {\n      \"@type\": \"ExternalReference\",\n      \"externalReferenceType\": \"securityFix\",\n      \"locator\": \"https://github.com/indutny/elliptic/commit/441b742\"\n    }\n  ],\n  \"suppliedBy\": [\"urn:spdx.dev:agent-my-security-vendor\"],\n  \"publishedTime\": \"2023-05-06T10:06:13Z\"\n},\n{\n  \"@type\": \"Relationship\",\n  \"@id\": \"urn:spdx.dev:vulnAgentRel-1\",  \n  \"relationshipType\": \"publishedBy\",  \n  \"from\": \"urn:spdx.dev:cvssv2-cve-2020-28498\",\n  \"to\": [\"urn:spdx.dev:agent-snyk\"],\n  \"startTime\": \"2021-03-08T16:06:50Z\"\n}\n```",
+      "rdfs:comment": "A CvssV2VulnAssessmentRelationship relationship describes the determined score and vector of a vulnerability using version 2.0 of the Common Vulnerability Scoring System\n(CVSS) as defined on [https://www.first.org/cvss/v2/guide](https://www.first.org/cvss/v2/guide). It is intented to communicate the results of using a CVSS calculator.\n\n**Constraints**\n\n- The value of severity must be one of 'low', 'medium' or 'high'\n- The relationship type must be set to hasAssessmentFor.\n\n**Syntax**\n\n```json\n{\n  \"@type\": \"CvssV2VulnAssessmentRelationship\",\n  \"@id\": \"urn:spdx.dev:cvssv2-cve-2020-28498\",\n  \"relationshipType\": \"hasAssessmentFor\",\n  \"score\": 4.3,\n  \"vector\": \"(AV:N/AC:M/Au:N/C:P/I:N/A:N)\",\n  \"severity\": \"low\",\n  \"from\": \"urn:spdx.dev:vuln-cve-2020-28498\",\n  \"to\": [\"urn:product-acme-application-1.3\"],\n  \"assessedElement\": \"urn:npm-elliptic-6.5.2\",\n  \"externalRef\": [\n    {\n      \"@type\": \"ExternalRef\",\n      \"externalRefType\": \"securityAdvisory\",\n      \"locator\": \"https://nvd.nist.gov/vuln/detail/CVE-2020-28498\"\n    },\n    {\n      \"@type\": \"ExternalRef\",\n      \"externalRefType\": \"securityAdvisory\",\n      \"locator\": \"https://snyk.io/vuln/SNYK-JS-ELLIPTIC-1064899\"\n    },\n    {\n      \"@type\": \"ExternalRef\",\n      \"externalRefType\": \"securityFix\",\n      \"locator\": \"https://github.com/indutny/elliptic/commit/441b742\"\n    }\n  ],\n  \"suppliedBy\": [\"urn:spdx.dev:agent-my-security-vendor\"],\n  \"publishedTime\": \"2023-05-06T10:06:13Z\"\n},\n{\n  \"@type\": \"Relationship\",\n  \"@id\": \"urn:spdx.dev:vulnAgentRel-1\",  \n  \"relationshipType\": \"publishedBy\",  \n  \"from\": \"urn:spdx.dev:cvssv2-cve-2020-28498\",\n  \"to\": [\"urn:spdx.dev:agent-snyk\"],\n  \"startTime\": \"2021-03-08T16:06:50Z\"\n}\n```",
       "rdfs:subClassOf": {
         "@id": "security:VulnAssessmentRelationship"
       },
@@ -1901,7 +1901,7 @@
         "owl:Class",
         "sh:NodeShape"
       ],
-      "rdfs:comment": "A CvssV3VulnAssessmentRelationship relationship describes the determined score,\nseverity, and vector of a vulnerability using version 3.1 of the Common\nVulnerability Scoring System (CVSS) as defined on \n[https://www.first.org/cvss/v3.1/specification-document](https://www.first.org/cvss/v3.1/specification-document). It is intented to communicate the results of using a CVSS calculator.\n\n**Constraints**\n\n- The value of severity must be one of 'none', 'low', 'medium', 'high' or 'critical'.\n- Absence of the property shall be interpreted as 'none'.\n- The relationship type must be set to hasAssessmentFor.\n\n**Syntax**\n\n```json\n{\n  \"@type\": \"CvssV3VulnAssessmentRelationship\",\n  \"@id\": \"urn:spdx.dev:cvssv3-cve-2020-28498\",\n  \"relationshipType\": \"hasAssessmentFor\",\n  \"severity\": \"medium\",\n  \"score\": 6.8,\n  \"vector\": \"CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N\",\n  \"from\": \"urn:spdx.dev:vuln-cve-2020-28498\",\n  \"to\": [\"urn:product-acme-application-1.3\"],\n  \"assessedElement\": \"urn:npm-elliptic-6.5.2\",\n  \"externalReferences\": [\n    {\n      \"@type\": \"ExternalReference\",\n      \"externalReferenceType\": \"securityAdvisory\",\n      \"locator\": \"https://nvd.nist.gov/vuln/detail/CVE-2020-28498\"\n    },\n    {\n      \"@type\": \"ExternalReference\",\n      \"externalReferenceType\": \"securityAdvisory\",\n      \"locator\": \"https://snyk.io/vuln/SNYK-JS-ELLIPTIC-1064899\"\n    },\n    {\n      \"@type\": \"ExternalReference\",\n      \"externalReferenceType\": \"securityFix\",\n      \"locator\": \"https://github.com/indutny/elliptic/commit/441b742\"\n    }\n  ],\n  \"suppliedBy\": [\"urn:spdx.dev:agent-my-security-vendor\"],\n  \"publishedTime\": \"2023-05-06T10:06:13Z\"\n},\n{\n  \"@type\": \"Relationship\",\n  \"@id\": \"urn:spdx.dev:vulnAgentRel-1\",\n  \"relationshipType\": \"publishedBy\",\n  \"from\": \"urn:spdx.dev:cvssv3-cve-2020-28498\",\n  \"to\": \"urn:spdx.dev:agent-snyk\",\n  \"startTime\": \"2021-03-08T16:06:50Z\"\n}\n```",
+      "rdfs:comment": "A CvssV3VulnAssessmentRelationship relationship describes the determined score,\nseverity, and vector of a vulnerability using version 3.1 of the Common\nVulnerability Scoring System (CVSS) as defined on \n[https://www.first.org/cvss/v3.1/specification-document](https://www.first.org/cvss/v3.1/specification-document). It is intended to communicate the results of using a CVSS calculator.\n\n**Constraints**\n\n- The value of severity must be one of 'none', 'low', 'medium', 'high' or 'critical'.\n- Absence of the property shall be interpreted as 'none'.\n- The relationship type must be set to hasAssessmentFor.\n\n**Syntax**\n\n```json\n{\n  \"@type\": \"CvssV3VulnAssessmentRelationship\",\n  \"@id\": \"urn:spdx.dev:cvssv3-cve-2020-28498\",\n  \"relationshipType\": \"hasAssessmentFor\",\n  \"severity\": \"medium\",\n  \"score\": 6.8,\n  \"vector\": \"CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N\",\n  \"from\": \"urn:spdx.dev:vuln-cve-2020-28498\",\n  \"to\": [\"urn:product-acme-application-1.3\"],\n  \"assessedElement\": \"urn:npm-elliptic-6.5.2\",\n  \"externalRef\": [\n    {\n      \"@type\": \"ExternalRef\",\n      \"externalRefType\": \"securityAdvisory\",\n      \"locator\": \"https://nvd.nist.gov/vuln/detail/CVE-2020-28498\"\n    },\n    {\n      \"@type\": \"ExternalRef\",\n      \"externalRefType\": \"securityAdvisory\",\n      \"locator\": \"https://snyk.io/vuln/SNYK-JS-ELLIPTIC-1064899\"\n    },\n    {\n      \"@type\": \"ExternalRef\",\n      \"externalRefType\": \"securityFix\",\n      \"locator\": \"https://github.com/indutny/elliptic/commit/441b742\"\n    }\n  ],\n  \"suppliedBy\": [\"urn:spdx.dev:agent-my-security-vendor\"],\n  \"publishedTime\": \"2023-05-06T10:06:13Z\"\n},\n{\n  \"@type\": \"Relationship\",\n  \"@id\": \"urn:spdx.dev:vulnAgentRel-1\",\n  \"relationshipType\": \"publishedBy\",\n  \"from\": \"urn:spdx.dev:cvssv3-cve-2020-28498\",\n  \"to\": \"urn:spdx.dev:agent-snyk\",\n  \"startTime\": \"2021-03-08T16:06:50Z\"\n}\n```",
       "rdfs:subClassOf": {
         "@id": "security:VulnAssessmentRelationship"
       },
@@ -2229,7 +2229,7 @@
         "owl:Class",
         "sh:NodeShape"
       ],
-      "rdfs:comment": "Specifies a vulnerability and its associated information.\n\n**Syntax**\n\n```json\n{\n  \"@type\": \"Vulnerability\",\n  \"@id\": \"urn:spdx.dev:vuln-1\",\n  \"summary\": \"Use of a Broken or Risky Cryptographic Algorithm\",\n  \"description\": \"The npm package `elliptic` before version 6.5.4 are vulnerable to Cryptographic Issues via the secp256k1 implementation in elliptic/ec/key.js. There is no check to confirm that the public key point passed into the derive function actually exists on the secp256k1 curve. This results in the potential for the private key used in this implementation to be revealed after a number of ECDH operations are performed.\",      \n  \"modified\": \"2021-03-08T16:02:43Z\",\n  \"published\": \"2021-03-08T16:06:50Z\",\n  \"externalIdentifiers\": [\n    {\n      \"@type\": \"ExternalIdentifier\",\n      \"externalIdentifierType\": \"cve\",\n      \"identifier\": \"CVE-2020-2849\",\n      \"identifierLocator\": [\n        \"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-28498\",\n        \"https://www.cve.org/CVERecord?id=CVE-2020-28498\"\n      ],\n      \"issuingAuthority\": \"urn:spdx.dev:agent-cve.org\"\n    },\n    {\n      \"type\": \"ExternalIdentifier\",\n      \"externalIdentifierType\": \"securityOther\",\n      \"identifier\": \"GHSA-r9p9-mrjm-926w\",\n      \"identifierLocator\": \"https://github.com/advisories/GHSA-r9p9-mrjm-926w\"\n    },\n    {\n      \"type\": \"ExternalIdentifier\",\n      \"externalIdentifierType\": \"securityOther\",\n      \"identifier\": \"SNYK-JS-ELLIPTIC-1064899\",\n      \"identifierLocator\": \"https://security.snyk.io/vuln/SNYK-JS-ELLIPTIC-1064899\"\n    }\n  ],\n  \"externalReferences\": [\n    {\n        \"@type\": \"ExternalReference\",\n        \"externalReferenceType\": \"securityAdvisory\",\n        \"locator\": \"https://nvd.nist.gov/vuln/detail/CVE-2020-28498\"\n    },\n    {\n      \"@type\": \"ExternalReference\",\n      \"externalReferenceType\": \"securityAdvisory\",\n      \"locator\": \"https://ubuntu.com/security/CVE-2020-28498\"\n    },\n    {\n      \"@type\": \"ExternalReference\",\n      \"externalReferenceType\": \"securityOther\",\n      \"locator\": \"https://github.com/indutny/elliptic/pull/244/commits\"\n    },\n    {\n      \"@type\": \"ExternalReference\",\n      \"externalReferenceType\": \"securityOther\",\n      \"locator\": \"https://github.com/christianlundkvist/blog/blob/master/2020_05_26_secp256k1_twist_attacks/secp256k1_twist_attacks.md\"\n    }\n  ]\n},\n{\n  \"@type\": \"Relationship\",\n  \"@id\": \"urn:spdx.dev:vulnRelationship-1\",\n  \"relationshipType\": \"hasAssociatedVulnerability\",\n  \"from\": \"urn:npm-elliptic-6.5.2\",\n  \"to\": [\"urn:spdx.dev:vuln-1\"],\n  \"startTime\": \"2021-03-08T16:06:50Z\"\n},\n{\n  \"@type\": \"Relationship\",\n  \"@id\": \"urn:spdx.dev:vulnAgentRel-1\",  \n  \"relationshipType\": \"publishedBy\",  \n  \"from\": \"urn:spdx.dev:vuln-1\",\n  \"to\": [\"urn:spdx.dev:agent-snyk\"],\n  \"startTime\": \"2021-03-08T16:06:50Z\"\n}\n```",
+      "rdfs:comment": "Specifies a vulnerability and its associated information.\n\n**Syntax**\n\n```json\n{\n  \"@type\": \"Vulnerability\",\n  \"@id\": \"urn:spdx.dev:vuln-1\",\n  \"summary\": \"Use of a Broken or Risky Cryptographic Algorithm\",\n  \"description\": \"The npm package `elliptic` before version 6.5.4 are vulnerable to Cryptographic Issues via the secp256k1 implementation in elliptic/ec/key.js. There is no check to confirm that the public key point passed into the derive function actually exists on the secp256k1 curve. This results in the potential for the private key used in this implementation to be revealed after a number of ECDH operations are performed.\",      \n  \"modified\": \"2021-03-08T16:02:43Z\",\n  \"published\": \"2021-03-08T16:06:50Z\",\n  \"externalIdentifiers\": [\n    {\n      \"@type\": \"ExternalIdentifier\",\n      \"externalIdentifierType\": \"cve\",\n      \"identifier\": \"CVE-2020-2849\",\n      \"identifierLocator\": [\n        \"https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2020-28498\",\n        \"https://www.cve.org/CVERecord?id=CVE-2020-28498\"\n      ],\n      \"issuingAuthority\": \"urn:spdx.dev:agent-cve.org\"\n    },\n    {\n      \"type\": \"ExternalIdentifier\",\n      \"externalIdentifierType\": \"securityOther\",\n      \"identifier\": \"GHSA-r9p9-mrjm-926w\",\n      \"identifierLocator\": \"https://github.com/advisories/GHSA-r9p9-mrjm-926w\"\n    },\n    {\n      \"type\": \"ExternalIdentifier\",\n      \"externalIdentifierType\": \"securityOther\",\n      \"identifier\": \"SNYK-JS-ELLIPTIC-1064899\",\n      \"identifierLocator\": \"https://security.snyk.io/vuln/SNYK-JS-ELLIPTIC-1064899\"\n    }\n  ],\n  \"externalRef\": [\n    {\n        \"@type\": \"ExternalRef\",\n        \"externalRefType\": \"securityAdvisory\",\n        \"locator\": \"https://nvd.nist.gov/vuln/detail/CVE-2020-28498\"\n    },\n    {\n      \"@type\": \"ExternalRef\",\n      \"externalRefType\": \"securityAdvisory\",\n      \"locator\": \"https://ubuntu.com/security/CVE-2020-28498\"\n    },\n    {\n      \"@type\": \"ExternalRef\",\n      \"externalRefType\": \"securityOther\",\n      \"locator\": \"https://github.com/indutny/elliptic/pull/244/commits\"\n    },\n    {\n      \"@type\": \"ExternalRef\",\n      \"externalRefType\": \"securityOther\",\n      \"locator\": \"https://github.com/christianlundkvist/blog/blob/master/2020_05_26_secp256k1_twist_attacks/secp256k1_twist_attacks.md\"\n    }\n  ]\n},\n{\n  \"@type\": \"Relationship\",\n  \"@id\": \"urn:spdx.dev:vulnRelationship-1\",\n  \"relationshipType\": \"hasAssociatedVulnerability\",\n  \"from\": \"urn:npm-elliptic-6.5.2\",\n  \"to\": [\"urn:spdx.dev:vuln-1\"],\n  \"startTime\": \"2021-03-08T16:06:50Z\"\n},\n{\n  \"@type\": \"Relationship\",\n  \"@id\": \"urn:spdx.dev:vulnAgentRel-1\",  \n  \"relationshipType\": \"publishedBy\",  \n  \"from\": \"urn:spdx.dev:vuln-1\",\n  \"to\": [\"urn:spdx.dev:agent-snyk\"],\n  \"startTime\": \"2021-03-08T16:06:50Z\"\n}\n```",
       "rdfs:subClassOf": {
         "@id": "core:Element"
       },
@@ -3185,20 +3185,20 @@
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "core:externalReference",
+      "@id": "core:externalRef",
       "@type": "owl:ObjectProperty",
       "rdfs:comment": "This field points to a resource outside the scope of the SPDX-3.0 content\nthat provides additional characteristics of an Element.",
       "rdfs:range": {
-        "@id": "core:ExternalReference"
+        "@id": "core:ExternalRef"
       },
       "ns0:term_status": "Stable"
     },
     {
-      "@id": "core:externalReferenceType",
+      "@id": "core:externalRefType",
       "@type": "owl:DatatypeProperty",
-      "rdfs:comment": "An externalReferenceType specifies the type of the external reference.",
+      "rdfs:comment": "An externalRefType specifies the type of the external reference.",
       "rdfs:range": {
-        "@id": "core:ExternalReferenceType"
+        "@id": "core:ExternalRefType"
       },
       "ns0:term_status": "Stable"
     },
@@ -4061,7 +4061,7 @@
       ]
     },
     {
-      "@id": "core:ExternalReference",
+      "@id": "core:ExternalRef",
       "@type": [
         "owl:Class",
         "sh:NodeShape"
@@ -4071,12 +4071,12 @@
       "sh:property": [
         {
           "sh:class": {
-            "@id": "core:ExternalReferenceType"
+            "@id": "core:ExternalRefType"
           },
           "sh:maxCount": 1,
-          "sh:name": "externalReferenceType",
+          "sh:name": "externalRefType",
           "sh:path": {
-            "@id": "core:externalReferenceType"
+            "@id": "core:externalRefType"
           }
         },
         {
@@ -5361,11 +5361,11 @@
         },
         {
           "sh:class": {
-            "@id": "core:ExternalReference"
+            "@id": "core:ExternalRef"
           },
-          "sh:name": "externalReference",
+          "sh:name": "externalRef",
           "sh:path": {
-            "@id": "core:externalReference"
+            "@id": "core:externalRef"
           }
         },
         {
@@ -5400,7 +5400,7 @@
       ]
     },
     {
-      "@id": "core:ExternalReferenceType",
+      "@id": "core:ExternalRefType",
       "@type": "owl:Class",
       "rdfs:comment": "ExteralReferenceType specifies the type of an external reference.",
       "ns0:term_status": "Stable"

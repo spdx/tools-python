@@ -72,7 +72,7 @@ def test_create_document_without_duplicates():
             package_fixture(
                 checksums=[checksum_fixture(), checksum_fixture()],
                 license_info_from_files=[SpdxNoAssertion(), SpdxNoAssertion()],
-                external_references=[external_package_ref_fixture(), external_package_ref_fixture()],
+                external_ref=[external_package_ref_fixture(), external_package_ref_fixture()],
                 attribution_texts=["duplicated text", "duplicated text"],
             )
         ],
@@ -103,7 +103,7 @@ def test_create_document_without_duplicates():
             package_fixture(
                 checksums=[checksum_fixture()],
                 license_info_from_files=[SpdxNoAssertion()],
-                external_references=[external_package_ref_fixture()],
+                external_ref=[external_package_ref_fixture()],
                 attribution_texts=["duplicated text"],
             )
         ],

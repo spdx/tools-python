@@ -206,7 +206,7 @@ def test_null_values(converter: PackageConverter):
         comment=None,
         attribution_texts=[],
         checksums=[],
-        external_references=[],
+        external_ref=[],
         license_info_from_files=[],
     )
 

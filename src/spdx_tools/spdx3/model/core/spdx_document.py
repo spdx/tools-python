@@ -10,7 +10,7 @@ from spdx_tools.spdx3.model.core import (
     CreationInfo,
     ExternalIdentifier,
     ExternalMap,
-    ExternalReference,
+    ExternalRef,
     IntegrityMethod,
     NamespaceMap,
 )
@@ -32,7 +32,7 @@ class SpdxDocument(Bundle):
         description: Optional[str] = None,
         comment: Optional[str] = None,
         verified_using: List[IntegrityMethod] = [],
-        external_reference: List[ExternalReference] = [],
+        external_ref: List[ExternalRef] = [],
         external_identifier: List[ExternalIdentifier] = [],
         extension: Optional[str] = None,
         namespace: List[NamespaceMap] = [],
@@ -40,7 +40,7 @@ class SpdxDocument(Bundle):
         context: Optional[str] = None,
     ):
         verified_using = [] if not verified_using else verified_using
-        external_reference = [] if not external_reference else external_reference
+        external_ref = [] if not external_ref else external_ref
         external_identifier = [] if not external_identifier else external_identifier
         namespace = [] if not namespace else namespace
         import_ = [] if not import_ else import_

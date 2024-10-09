@@ -5,7 +5,7 @@ from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.core import Bundle
 from spdx_tools.spdx3.writer.console.console import write_value
-from spdx_tools.spdx3.writer.console.core.spdx_collection_writer import write_collection
+from spdx_tools.spdx3.writer.console.core import write_collection
 
 
 def write_bundle(bundle: Bundle, text_output: TextIO, heading: bool = True):

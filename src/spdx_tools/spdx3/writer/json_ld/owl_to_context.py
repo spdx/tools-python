@@ -21,7 +21,7 @@ PROPERTIES_WITH_ENUM_RANGE = [
     "useSensitivePersonalInformation",
     "annotationType",
     "externalIdentifierType",
-    "externalReferenceType",
+    "externalRefType",
     "algorithm",
     "scope",
     "profile",

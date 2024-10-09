@@ -11,8 +11,8 @@ from spdx_tools.spdx3.model.core import (
     ExternalIdentifier,
     ExternalIdentifierType,
     ExternalMap,
-    ExternalReference,
-    ExternalReferenceType,
+    ExternalRef,
+    ExternalRefType,
 )
 from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 from spdx_tools.spdx3.payload import Payload
@@ -78,7 +78,7 @@ def bump_package(
         if exactly_one_purl_without_comment and spdx2_external_ref.reference_type == "purl":
             continue
         id_or_ref = bump_external_package_ref(spdx2_external_ref)
-        if isinstance(id_or_ref, ExternalReference):
+        if isinstance(id_or_ref, ExternalRef):
             external_reference.append(id_or_ref)
         elif isinstance(id_or_ref, ExternalIdentifier):
             external_identifier.append(id_or_ref)
@@ -115,11 +115,11 @@ def bump_package(
 
 
 external_ref_type_map = {
-    "advisory": ExternalReferenceType.SECURITY_ADVISORY,
+    "advisory": ExternalRefType.SECURITY_ADVISORY,
     "bower": None,
     "cpe22Type": ExternalIdentifierType.CPE22,
     "cpe23Type": ExternalIdentifierType.CPE23,
-    "fix": ExternalReferenceType.SECURITY_FIX,
+    "fix": ExternalRefType.SECURITY_FIX,
     "gitoid": ExternalIdentifierType.GITOID,
     "maven-central": None,
     "npm": None,
@@ -133,7 +133,7 @@ external_ref_type_map = {
 
 def bump_external_package_ref(
     spdx2_external_ref: ExternalPackageRef,
-) -> Optional[Union[ExternalReference, ExternalIdentifier]]:
+) -> Optional[Union[ExternalRef, ExternalIdentifier]]:
     reference_type = spdx2_external_ref.reference_type
     locator = spdx2_external_ref.locator
     comment = spdx2_external_ref.comment
@@ -149,7 +149,9 @@ def bump_external_package_ref(
 
     id_or_ref_type = external_ref_type_map[reference_type]
 
-    if isinstance(id_or_ref_type, ExternalReferenceType):
-        return ExternalReference(id_or_ref_type, [locator], None, comment)
+    if isinstance(id_or_ref_type, ExternalRefType):
+        return ExternalRef(id_or_ref_type, [locator], None, comment)
     elif isinstance(id_or_ref_type, ExternalIdentifierType):
         return ExternalIdentifier(id_or_ref_type, locator, comment)
+
+    return None

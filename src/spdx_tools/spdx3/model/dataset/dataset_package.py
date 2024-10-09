@@ -9,26 +9,31 @@ from beartype.typing import Dict, List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model.core import (
+    CreationInfo,
+    ExternalIdentifier,
+    ExternalRef,
+    IntegrityMethod,
+)
 from spdx_tools.spdx3.model.licensing import LicenseField
 from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 
 
 class DatasetType(Enum):
-    STRUCTURED = auto()
-    NUMERIC = auto()
-    TEXT = auto()
+    AUDIO = auto()
     CATEGORICAL = auto()
     GRAPH = auto()
+    IMAGE = auto()
+    NO_ASSERTION = auto()
+    NUMERIC = auto()
+    OTHER = auto()
+    SENSOR = auto()
+    STRUCTURED = auto()
+    SYNTACTIC = auto()
+    TEXT = auto()
     TIMESERIES = auto()
     TIMESTAMP = auto()
-    SENSOR = auto()
-    IMAGE = auto()
-    SYNTACTIC = auto()
-    AUDIO = auto()
     VIDEO = auto()
-    OTHER = auto()
-    NO_ASSERTION = auto()
 
 
 class ConfidentialityLevelType(Enum):
@@ -39,16 +44,16 @@ class ConfidentialityLevelType(Enum):
 
 
 class DatasetAvailabilityType(Enum):
-    DIRECT_DOWNLOAD = auto()
-    SCRAPING_SCRIPT = auto()
-    QUERY = auto()
     CLICKTHROUGH = auto()
+    DIRECT_DOWNLOAD = auto()
+    QUERY = auto()
     REGISTRATION = auto()
+    SCRAPING_SCRIPT = auto()
 
 
 @dataclass_with_properties
 class DatasetPackage(Package):
-    dataset_type: List[DatasetType] = None
+    dataset_type: List[DatasetType] = []
     data_collection_process: Optional[str] = None
     intended_use: Optional[str] = None
     dataset_size: Optional[int] = None
@@ -77,7 +82,7 @@ class DatasetPackage(Package):
         description: Optional[str] = None,
         comment: Optional[str] = None,
         verified_using: List[IntegrityMethod] = [],
-        external_reference: List[ExternalReference] = [],
+        external_ref: List[ExternalRef] = [],
         external_identifier: List[ExternalIdentifier] = [],
         extension: Optional[str] = None,
         supplied_by: List[str] = [],
@@ -107,7 +112,7 @@ class DatasetPackage(Package):
         dataset_availability: Optional[DatasetAvailabilityType] = None,
     ):
         verified_using = [] if not verified_using else verified_using
-        external_reference = [] if not external_reference else external_reference
+        external_ref = [] if not external_ref else external_ref
         external_identifier = [] if not external_identifier else external_identifier
         originated_by = [] if not originated_by else originated_by
         additional_purpose = [] if not additional_purpose else additional_purpose
@@ -116,5 +121,7 @@ class DatasetPackage(Package):
         data_preprocessing = [] if not data_preprocessing else data_preprocessing
         sensor = {} if not sensor else sensor
         known_bias = [] if not known_bias else known_bias
-        anonymization_method_used = [] if not anonymization_method_used else anonymization_method_used
+        anonymization_method_used = (
+            [] if not anonymization_method_used else anonymization_method_used
+        )
         check_types_and_set_values(self, locals())

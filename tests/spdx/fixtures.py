@@ -142,7 +142,7 @@ def package_fixture(
     summary="packageSummary",
     description="packageDescription",
     comment="packageComment",
-    external_references=None,
+    external_ref=None,
     attribution_texts=None,
     primary_package_purpose=PackagePurpose.SOURCE,
     release_date=datetime(2022, 11, 1),
@@ -155,7 +155,7 @@ def package_fixture(
         if license_info_from_files is None
         else license_info_from_files
     )
-    external_references = [external_package_ref_fixture()] if external_references is None else external_references
+    external_ref = [external_package_ref_fixture()] if external_ref is None else external_ref
     attribution_texts = ["packageAttributionText"] if attribution_texts is None else attribution_texts
     return Package(
         spdx_id=spdx_id,
@@ -178,7 +178,7 @@ def package_fixture(
         summary=summary,
         description=description,
         comment=comment,
-        external_references=external_references,
+        external_references=external_ref,
         attribution_texts=attribution_texts,
         primary_package_purpose=primary_package_purpose,
         release_date=release_date,

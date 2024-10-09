@@ -8,7 +8,7 @@ from beartype.typing import Dict, List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import CreationInfo, Element, ExternalIdentifier, ExternalReference, Hash, IntegrityMethod
+from spdx_tools.spdx3.model.core import CreationInfo, Element, ExternalIdentifier, ExternalRef, Hash, IntegrityMethod
 
 
 @dataclass_with_properties
@@ -33,7 +33,7 @@ class Build(Element):
         description: Optional[str] = None,
         comment: Optional[str] = None,
         verified_using: List[IntegrityMethod] = [],
-        external_reference: List[ExternalReference] = [],
+        external_ref: List[ExternalRef] = [],
         external_identifier: List[ExternalIdentifier] = [],
         extension: Optional[str] = None,
         build_id: Optional[str] = None,
@@ -46,7 +46,7 @@ class Build(Element):
         environment: Dict[str, str] = {},
     ):
         verified_using = [] if not verified_using else verified_using
-        external_reference = [] if not external_reference else external_reference
+        external_ref = [] if not external_ref else external_ref
         external_identifier = [] if not external_identifier else external_identifier
         config_source_entrypoint = [] if not config_source_entrypoint else config_source_entrypoint
         config_source_uri = [] if not config_source_uri else config_source_uri

@@ -7,12 +7,15 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model.core import (
+    CreationInfo,
+    ExternalIdentifier,
+    ExternalRef,
+    IntegrityMethod,
+    PositiveIntegerRange,
+)
 from spdx_tools.spdx3.model.licensing import LicenseField
-from spdx_tools.spdx3.model.positive_integer_range import PositiveIntegerRange
-from spdx_tools.spdx3.model.software import SoftwarePurpose
-from spdx_tools.spdx3.model.software.software_artifact import SoftwareArtifact
-
+from spdx_tools.spdx3.model.software import SoftwareArtifact, SoftwarePurpose
 
 @dataclass_with_properties
 class Snippet(SoftwareArtifact):
@@ -28,7 +31,7 @@ class Snippet(SoftwareArtifact):
         description: Optional[str] = None,
         comment: Optional[str] = None,
         verified_using: List[IntegrityMethod] = [],
-        external_reference: List[ExternalReference] = [],
+        external_ref: List[ExternalRef] = [],
         external_identifier: List[ExternalIdentifier] = [],
         extension: Optional[str] = None,
         originated_by: List[str] = [],
@@ -48,7 +51,7 @@ class Snippet(SoftwareArtifact):
         line_range: Optional[PositiveIntegerRange] = None,
     ):
         verified_using = [] if not verified_using else verified_using
-        external_reference = [] if not external_reference else external_reference
+        external_ref = [] if not external_ref else external_ref
         external_identifier = [] if not external_identifier else external_identifier
         originated_by = [] if not originated_by else originated_by
         supplied_by = [] if not supplied_by else supplied_by

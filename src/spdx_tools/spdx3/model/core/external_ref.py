@@ -10,7 +10,7 @@ from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_pr
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
 
-class ExternalReferenceType(Enum):
+class ExternalRefType(Enum):
     ALT_DOWNLOAD_LOCATION = auto()
     ALT_WEB_PAGE = auto()
     BINARY_ARTIFACT = auto()
@@ -59,15 +59,15 @@ class ExternalReferenceType(Enum):
 
 
 @dataclass_with_properties
-class ExternalReference:
-    external_reference_type: Optional[ExternalReferenceType] = None
+class ExternalRef:
+    external_ref_type: Optional[ExternalRefType] = None
     locator: List[str] = field(default_factory=list)
     content_type: Optional[str] = None  # placeholder for MediaType
     comment: Optional[str] = None
 
     def __init__(
         self,
-        external_reference_type: Optional[ExternalReferenceType] = None,
+        external_ref_type: Optional[ExternalRefType] = None,
         locator: List[str] = [],
         content_type: Optional[str] = None,
         comment: Optional[str] = None,

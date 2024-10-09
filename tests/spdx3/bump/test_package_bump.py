@@ -6,7 +6,7 @@ from unittest import TestCase
 import pytest
 
 from spdx_tools.spdx3.bump_from_spdx2.package import bump_package
-from spdx_tools.spdx3.model.core import ExternalIdentifier, ExternalIdentifierType, ExternalReference, ExternalReferenceType
+from spdx_tools.spdx3.model.core import ExternalIdentifier, ExternalIdentifierType, ExternalRef, ExternalRefType
 from spdx_tools.spdx3.model.software import Package
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import SpdxNoAssertion
@@ -34,7 +34,7 @@ def test_bump_package(originator, expected_originator, supplier, expected_suppli
     spdx2_package: Spdx2_Package = package_fixture(
         originator=originator,
         supplier=supplier,
-        external_references=[
+        external_ref=[
             ExternalPackageRef(
                 ExternalPackageRefCategory.SECURITY, "advisory", "advisory_locator", "advisory_comment"
             ),
@@ -49,8 +49,8 @@ def test_bump_package(originator, expected_originator, supplier, expected_suppli
     assert isinstance(package, Package)
     assert package.spdx_id == expected_new_package_id
     assert package.package_version == spdx2_package.version
-    assert package.external_reference == [
-        ExternalReference(ExternalReferenceType.SECURITY_ADVISORY, ["advisory_locator"], None, "advisory_comment")
+    assert package.external_ref == [
+        ExternalRef(ExternalRefType.SECURITY_ADVISORY, ["advisory_locator"], None, "advisory_comment")
     ]
     assert package.external_identifier == [
         ExternalIdentifier(ExternalIdentifierType.SWHID, "swh_locator", "swh_comment")
@@ -72,7 +72,7 @@ def test_bump_of_single_purl_without_comment():
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
-        external_references=[
+        external_ref=[
             ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", None),
         ]
     )
@@ -82,7 +82,7 @@ def test_bump_of_single_purl_without_comment():
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url == "purl_locator"
-    assert package.external_reference == []
+    assert package.external_ref == []
     assert package.external_identifier == []
 
 
@@ -90,7 +90,7 @@ def test_bump_of_single_purl_with_comment():
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
-        external_references=[
+        external_ref=[
             ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", "purl_comment"),
         ]
     )
@@ -100,7 +100,7 @@ def test_bump_of_single_purl_with_comment():
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
-    assert package.external_reference == []
+    assert package.external_ref == []
     assert package.external_identifier == [
         ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "purl_comment")
     ]
@@ -110,7 +110,7 @@ def test_bump_of_multiple_purls():
     payload = Payload()
     document_namespace = "https://doc.namespace"
     spdx2_package: Spdx2_Package = package_fixture(
-        external_references=[
+        external_ref=[
             ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", "comment"),
             ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator2", None),
         ]
@@ -121,7 +121,7 @@ def test_bump_of_multiple_purls():
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
-    assert package.external_reference == []
+    assert package.external_ref == []
     TestCase().assertCountEqual(
         package.external_identifier,
         [

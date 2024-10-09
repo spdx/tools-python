@@ -25,25 +25,27 @@ from spdx_tools.spdx3.model.software import (
     SoftwareDependencyRelationship,
 )
 from spdx_tools.spdx3.payload import Payload
-from spdx_tools.spdx3.writer.console.ai.ai_package_writer import write_ai_package
-from spdx_tools.spdx3.writer.console.build.build_writer import write_build
-from spdx_tools.spdx3.writer.console.bundle_writer import write_bundle
-from spdx_tools.spdx3.writer.console.core.agent_writer import write_agent
-from spdx_tools.spdx3.writer.console.core.annotation_writer import write_annotation
-from spdx_tools.spdx3.writer.console.core.bom_writer import write_bom
-from spdx_tools.spdx3.writer.console.dataset.dataset_package_writer import (
+from spdx_tools.spdx3.writer.console.ai import write_ai_package
+from spdx_tools.spdx3.writer.console.build import write_build
+from spdx_tools.spdx3.writer.console.core import (
+    write_agent,
+    write_annotation,
+    write_bom,
+    write_bundle,
+    write_relationship,
+    write_spdx_document,
+    write_tool,
+)
+from spdx_tools.spdx3.writer.console.dataset import (
     write_dataset_package,
 )
-from spdx_tools.spdx3.writer.console.relationship_writer import write_relationship
-from spdx_tools.spdx3.writer.console.software.file_writer import write_file
-from spdx_tools.spdx3.writer.console.software.package_writer import write_package
-from spdx_tools.spdx3.writer.console.software.sbom_writer import write_sbom
-from spdx_tools.spdx3.writer.console.software.snippet_writer import write_snippet
-from spdx_tools.spdx3.writer.console.software.software_dependency_relationship_writer import (
+from spdx_tools.spdx3.writer.console.software import (
+    write_file,
+    write_package,
+    write_sbom,
+    write_snippet,
     write_software_dependency_relationship,
 )
-from spdx_tools.spdx3.writer.console.spdx_document_writer import write_spdx_document
-from spdx_tools.spdx3.writer.console.tool_writer import write_tool
 
 MAP_CLASS_TO_WRITE_METHOD = {
     AIPackage: write_ai_package,

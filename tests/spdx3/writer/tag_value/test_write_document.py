@@ -7,7 +7,7 @@ from datetime import datetime
 from semantic_version import Version
 
 from spdx_tools.spdx3.model.core import CreationInfo, ProfileIdentifierType, SpdxDocument
-from spdx_tools.spdx3.writer.console.core.spdx_document_writer import write_spdx_document
+from spdx_tools.spdx3.writer.console.core import write_spdx_document
 
 
 def test_render_creation_info():

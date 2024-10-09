@@ -14,9 +14,9 @@ from spdx_tools.spdx3.model.core.external_identifier import (
     ExternalIdentifierType,
 )
 from spdx_tools.spdx3.model.core.external_map import ExternalMap
-from spdx_tools.spdx3.model.core.external_reference import (
-    ExternalReference,
-    ExternalReferenceType,
+from spdx_tools.spdx3.model.core.external_ref import (
+    ExternalRef,
+    ExternalRefType,
 )
 from spdx_tools.spdx3.model.core.hash import Hash, HashAlgorithm
 from spdx_tools.spdx3.model.core.integrity_method import IntegrityMethod
@@ -27,6 +27,7 @@ from spdx_tools.spdx3.model.core.lifecycle_scoped_relationship import (
 from spdx_tools.spdx3.model.core.namespace_map import NamespaceMap
 from spdx_tools.spdx3.model.core.organization import Organization
 from spdx_tools.spdx3.model.core.person import Person
+from spdx_tools.spdx3.model.core.positive_integer_range import PositiveIntegerRange
 from spdx_tools.spdx3.model.core.profile_identifier import ProfileIdentifierType
 from spdx_tools.spdx3.model.core.relationship import (
     Relationship,
@@ -37,7 +38,6 @@ from spdx_tools.spdx3.model.core.software_agent import SoftwareAgent
 from spdx_tools.spdx3.model.core.spdx_collection import ElementCollection
 from spdx_tools.spdx3.model.core.spdx_document import SpdxDocument
 from spdx_tools.spdx3.model.core.tool import Tool
-
 
 __all__ = [
     "Agent",
@@ -51,8 +51,8 @@ __all__ = [
     "ExternalIdentifier",
     "ExternalIdentifierType",
     "ExternalMap",
-    "ExternalReference",
-    "ExternalReferenceType",
+    "ExternalRef",
+    "ExternalRefType",
     "Hash",
     "HashAlgorithm",
     "IntegrityMethod",
@@ -61,6 +61,7 @@ __all__ = [
     "NamespaceMap",
     "Organization",
     "Person",
+    "PositiveIntegerRange",
     "ProfileIdentifierType",
     "Relationship",
     "RelationshipType",

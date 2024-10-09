@@ -4,7 +4,7 @@
 from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.core import Agent, Organization, Person, SoftwareAgent
-from spdx_tools.spdx3.writer.console.core.element_writer import write_element_properties
+from spdx_tools.spdx3.writer.console.core import write_element_properties
 
 
 def write_agent(agent: Agent, text_output: TextIO, heading: bool = True):

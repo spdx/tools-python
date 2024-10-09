@@ -6,6 +6,8 @@ from typing import Any, Dict, Type
 
 from semantic_version import Version
 
+from spdx_tools.spdx3.model.ai import AIPackage, SafetyRiskAssessmentType
+from spdx_tools.spdx3.model.build import Build
 from spdx_tools.spdx3.model.core import (
     Agent,
     Annotation,
@@ -16,8 +18,8 @@ from spdx_tools.spdx3.model.core import (
     ExternalIdentifier,
     ExternalIdentifierType,
     ExternalMap,
-    ExternalReference,
-    ExternalReferenceType,
+    ExternalRef,
+    ExternalRefType,
     Hash,
     HashAlgorithm,
     LifecycleScopedRelationship,
@@ -25,6 +27,7 @@ from spdx_tools.spdx3.model.core import (
     NamespaceMap,
     Organization,
     Person,
+    PositiveIntegerRange,
     ProfileIdentifierType,
     Relationship,
     RelationshipCompleteness,
@@ -33,9 +36,7 @@ from spdx_tools.spdx3.model.core import (
     SpdxDocument,
     Tool,
 )
-from spdx_tools.spdx3.model.ai.ai_package import AIPackage, SafetyRiskAssessmentType
-from spdx_tools.spdx3.model.build import Build
-from spdx_tools.spdx3.model.dataset.dataset import (
+from spdx_tools.spdx3.model.dataset import (
     ConfidentialityLevelType,
     DatasetPackage,
     DatasetAvailabilityType,
@@ -47,7 +48,6 @@ from spdx_tools.spdx3.model.licensing import (
     ListedLicense,
     ListedLicenseException,
 )
-from spdx_tools.spdx3.model.positive_integer_range import PositiveIntegerRange
 from spdx_tools.spdx3.model.security import (
     CvssV2VulnAssessmentRelationship,
     CvssV3VulnAssessmentRelationship,
@@ -88,12 +88,22 @@ def creation_info_fixture(
     data_license="CC0-1.0",
     comment="creationInfoComment",
 ) -> CreationInfo:
-    created_by = ["https://spdx.test/tools-python/creation_info_created_by"] if not created_by else created_by
+    created_by = (
+        ["https://spdx.test/tools-python/creation_info_created_by"]
+        if not created_by
+        else created_by
+    )
     created_using = (
-        ["https://spdx.test/tools-python/creation_info_created_using"] if not created_using else created_using
+        ["https://spdx.test/tools-python/creation_info_created_using"]
+        if not created_using
+        else created_using
     )
     profile = (
-        [ProfileIdentifierType.CORE, ProfileIdentifierType.SOFTWARE, ProfileIdentifierType.LICENSING]
+        [
+            ProfileIdentifierType.CORE,
+            ProfileIdentifierType.SOFTWARE,
+            ProfileIdentifierType.LICENSING,
+        ]
         if profile is None
         else profile
     )
@@ -129,15 +139,18 @@ def external_identifier_fixture(
     )
 
 
-def external_reference_fixture(
-    external_reference_type=ExternalReferenceType.OTHER,
+def external_ref_fixture(
+    external_ref_type=ExternalRefType.OTHER,
     locator=None,
-    content_type="externalReferenceContentType",
-    comment="externalReferenceComment",
-) -> ExternalReference:
+    content_type="externalRefContentType",
+    comment="externalRefComment",
+) -> ExternalRef:
     locator = ["org.apache.tomcat:tomcat:9.0.0.M4"] if not locator else locator
-    return ExternalReference(
-        external_reference_type=external_reference_type, locator=locator, content_type=content_type, comment=comment
+    return ExternalRef(
+        external_ref_type=external_ref_type,
+        locator=locator,
+        content_type=content_type,
+        comment=comment,
     )
 
 
@@ -165,7 +178,8 @@ def external_map_fixture(
 
 
 def namespace_map_fixture(
-    prefix="namespaceMapPrefix", namespace="https://spdx.test/tools-python/namespace_map_namespace"
+    prefix="namespaceMapPrefix",
+    namespace="https://spdx.test/tools-python/namespace_map_namespace",
 ) -> NamespaceMap:
     return NamespaceMap(prefix=prefix, namespace=namespace)
 
@@ -211,7 +225,7 @@ ELEMENT_DICT = {
     "description": "elementDescription",
     "comment": "elementComment",
     "verified_using": [hash_fixture()],
-    "external_reference": [external_reference_fixture()],
+    "external_ref": [external_ref_fixture()],
     "external_identifier": [external_identifier_fixture()],
     "extension": "extensionPlaceholder",
 }
@@ -367,7 +381,9 @@ AI_PACKAGE_DICT = {
     "model_data_preprocessing": ["aImodelDataPreprocessing"],
     "model_explainability": ["aImodelExplainability"],
     "use_sensitive_personal_information": True,
-    "metric_decision_threshold": {"metricDecisionThresholdKey": "metricDecisionThresholdValue"},
+    "metric_decision_threshold": {
+        "metricDecisionThresholdKey": "metricDecisionThresholdValue"
+    },
     "metric": {"aIMetricKey": "aIMetricValue"},
     "domain": ["aIDomain"],
     "autonomy_type": True,
@@ -403,7 +419,10 @@ PACKAGE_DICT = {
     "source_info": "sourceInfo",
 }
 
-SNIPPET_DICT = {"byte_range": PositiveIntegerRange(1024, 2048), "line_range": PositiveIntegerRange(1, 4)}
+SNIPPET_DICT = {
+    "byte_range": PositiveIntegerRange(1024, 2048),
+    "line_range": PositiveIntegerRange(1, 4),
+}
 
 SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT = {
     "software_linkage": SoftwareDependencyLinkType.OTHER,
@@ -445,7 +464,11 @@ FIXTURE_DICTS = {
     SoftwareAgent: [ELEMENT_DICT],
     Tool: [ELEMENT_DICT],
     Relationship: [ELEMENT_DICT, RELATIONSHIP_DICT],
-    LifecycleScopedRelationship: [ELEMENT_DICT, RELATIONSHIP_DICT, LIFECYCLE_SCOPED_RELATIONSHIP_DICT],
+    LifecycleScopedRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        LIFECYCLE_SCOPED_RELATIONSHIP_DICT,
+    ],
     Annotation: [ELEMENT_DICT, ANNOTATION_DICT],
     Bundle: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT],
     SpdxDocument: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT],
@@ -514,7 +537,13 @@ FIXTURE_DICTS = {
         VEX_UNDER_INVESTIGATION_VULN_ASSESSMENT_RELATIONSHIP_DICT,
     ],
     Vulnerability: [ELEMENT_DICT, VULNERABILITY_DICT],
-    AIPackage: [AI_PACKAGE_DICT, PACKAGE_DICT, ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT],
+    AIPackage: [
+        AI_PACKAGE_DICT,
+        PACKAGE_DICT,
+        ELEMENT_DICT,
+        ARTIFACT_DICT,
+        SOFTWARE_ARTIFACT_DICT,
+    ],
     File: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, FILE_DICT],
     Package: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT],
     Snippet: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, SNIPPET_DICT],
@@ -524,7 +553,13 @@ FIXTURE_DICTS = {
         LIFECYCLE_SCOPED_RELATIONSHIP_DICT,
         SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT,
     ],
-    DatasetPackage: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT, DATASET_PACKAGE_DICT],
+    DatasetPackage: [
+        ELEMENT_DICT,
+        ARTIFACT_DICT,
+        SOFTWARE_ARTIFACT_DICT,
+        PACKAGE_DICT,
+        DATASET_PACKAGE_DICT,
+    ],
     Build: [ELEMENT_DICT, BUILD_DICT],
 }
 
@@ -534,7 +569,9 @@ def fixture_factory(clazz: Type[Any], **kwargs) -> Any:
 
     for key in kwargs.keys():
         if key not in fixture_dict.keys():
-            raise ValueError(f"Provided property name {key} is not part of {clazz.__name__}.")
+            raise ValueError(
+                f"Provided property name {key} is not part of {clazz.__name__}."
+            )
         else:
             fixture_dict[key] = kwargs[key]
 
@@ -552,6 +589,8 @@ def get_fixture_dict(clazz: Type[Any]) -> Dict[str, Any]:
         fixture_dict.update(property_dict)
 
     if "spdx_id" in fixture_dict.keys():
-        fixture_dict["spdx_id"] = f"https://spdx.test/tools-python/{clazz.__name__}_fixture"
+        fixture_dict["spdx_id"] = (
+            f"https://spdx.test/tools-python/{clazz.__name__}_fixture"
+        )
 
     return fixture_dict

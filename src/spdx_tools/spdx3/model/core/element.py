@@ -7,7 +7,7 @@ from dataclasses import field
 from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx_tools.spdx3.model.core import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model.core import CreationInfo, ExternalIdentifier, ExternalRef, IntegrityMethod
 
 
 @dataclass_with_properties
@@ -19,7 +19,7 @@ class Element(ABC):
     description: Optional[str] = None
     comment: Optional[str] = None
     verified_using: List[IntegrityMethod] = field(default_factory=list)
-    external_reference: List[ExternalReference] = field(default_factory=list)
+    external_ref: List[ExternalRef] = field(default_factory=list)
     external_identifier: List[ExternalIdentifier] = field(default_factory=list)
     extension: Optional[str] = None  # placeholder for extension
 
