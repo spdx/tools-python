@@ -75,7 +75,7 @@ def test_relationships_bump_with_setting_completeness():
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-2") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-2",
         f"{document_namespace}#{relationships[2].spdx_element_id}",
-        RelationshipType.SPECIFICATION_FOR,
+        RelationshipType.HAS_SPECIFICATION,
         [],
         completeness=RelationshipCompleteness.COMPLETE,
     )

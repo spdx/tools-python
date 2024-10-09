@@ -39,7 +39,7 @@ class RelationshipType(Enum):
     HAS_CONCLUDED_LICENSE = auto()
     HAS_DATA_FILE = auto()
     HAS_DECLARED_LICENSE = auto()
-    HAS_DELETED_FILe = auto()
+    HAS_DELETED_FILE = auto()
     HAS_DEPENDENCY_MANIFEST = auto()
     HAS_DISTRIBUTION_ARTIFACT = auto()
     HAS_DOCUMENTATION = auto()
