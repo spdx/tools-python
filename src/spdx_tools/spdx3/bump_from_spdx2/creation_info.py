@@ -37,7 +37,7 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         "part of licensing profile, " "https://github.com/spdx/spdx-3-model/issues/131",
     )
     creation_info = CreationInfo(
-        spec_version=Version("3.0.1"),
+        spec_version=Version(3, 0, 1),
         created=spdx2_creation_info.created,
         created_by=[],
         profile=[ProfileIdentifierType.CORE, ProfileIdentifierType.SOFTWARE, ProfileIdentifierType.LICENSING],

@@ -13,7 +13,8 @@ def write_payload(payload: Payload, file_name: str):
 
     # this will be obsolete as soon as the context is publicly available under some URI
     with open(os.path.join(os.path.dirname(__file__), "context.json"), "r") as infile:
-        context = json.load(infile)
+        data = json.load(infile)
+        context = data.get("@context")
 
     complete_dict = {"@context": context, "@graph": element_list}
 

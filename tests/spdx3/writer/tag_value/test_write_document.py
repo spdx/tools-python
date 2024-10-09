@@ -12,7 +12,7 @@ from spdx_tools.spdx3.writer.console.core import write_spdx_document
 
 def test_render_creation_info():
     fake_datetime = datetime(year=2024, month=1, day=1)
-    spec_version = Version("3.0.1")
+    spec_version = Version(3, 0, 1)
     creation_info = CreationInfo(
         spec_version=spec_version,
         created=fake_datetime,

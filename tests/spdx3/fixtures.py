@@ -80,7 +80,7 @@ specified unless relevant for the test."""
 
 
 def creation_info_fixture(
-    spec_version=Version("3.0.1"),
+    spec_version=Version(3, 0, 1),
     created=datetime(2022, 12, 1),
     created_by=None,
     created_using=None,
