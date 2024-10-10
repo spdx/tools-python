@@ -5,16 +5,17 @@ Process to produce context file and a serialization example:
 1. Run
 
     ```sh
-    spec-parser --gen-md --gen-refs --gen-rdf ../spdx-3-model/model
+    python spec-parser/main.py spdx-3-model/model parser_output
     ```
 
-    - spdx-3-model (commit: 6cb4316, last commit where spec-parser is able to run)
-    - spec-parser (main with commits from PR 44, 45)
+    - spdx-3-model (main; where v3.0.1 development happens)
+    - spec-parser (main)
 
-2. Convert the generated `spec-parser/md_generated/model.ttl` to a json-ld file using <https://frogcat.github.io/ttl2jsonld/demo/>.
-3. Convert owl to context using `convert_spdx_owl_to_jsonld_context("SPDX_OWL.json")`.
-4. Place the generated `context.json` in `spdx_tools/spdx3/writer/jsonld/`.
-5. To generate the jsonld from the testfile run
+2. Convert the generated `parser_output/rdf/spdx-model.ttl` to a JSON-LD file
+    using <https://frogcat.github.io/ttl2jsonld/demo/>.
+3. Convert OWL to context using `owl_to_context.py`.
+4. Place the generated `context.json` in `src/spdx_tools/spdx3/writer/json_ld/`.
+5. To generate the JSON-LD from the test file, run:
 
     ```sh
     pyspdxtools3 -i  ./tests/spdx/data/SPDXJSONExample-v2.3.spdx.json -o example_with_context
