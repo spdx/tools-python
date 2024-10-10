@@ -5,7 +5,7 @@
 Beneath the top-level package `spdx_tools` you will find three sub-packages:
 
 - `spdx`, which contains the code to create, parse, write and validate SPDX documents of versions 2.2 and 2.3
-- `spdx3`, which will contain the same feature set for versions 3.x once they are released
+- `spdx3`, which will contain the same feature set for versions 3.x
 - `common`, which contains code that is shared between the different versions, such as type-checking and `spdx_licensing`.
 
 ## `spdx`
@@ -117,7 +117,7 @@ That is, if an empty list is returned, the document is valid.
 
 ## `spdx3`
 
-Due to the SPDX-3 model still being in development, this package is still a work in progress.
+This package is still a work in progress.
 However, as the basic building blocks of parsing, writing, creation and validation are still important in the new version,
 the `spdx3` package is planned to be structured similarly to the `spdx` package.
 
