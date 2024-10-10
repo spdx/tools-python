@@ -3,7 +3,10 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import TextIO
 
-from spdx_tools.spdx3.model import (
+from spdx_tools.spdx3.model.ai import AIPackage
+from spdx_tools.spdx3.model.build import Build
+from spdx_tools.spdx3.model.dataset import DatasetPackage
+from spdx_tools.spdx3.model.core import (
     Annotation,
     Bom,
     Bundle,
@@ -14,47 +17,54 @@ from spdx_tools.spdx3.model import (
     SpdxDocument,
     Tool,
 )
-from spdx_tools.spdx3.model.ai import AIPackage
-from spdx_tools.spdx3.model.build import Build
-from spdx_tools.spdx3.model.dataset import Dataset
-from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet, SoftwareDependencyRelationship
+from spdx_tools.spdx3.model.software import (
+    File,
+    Package,
+    Sbom,
+    Snippet,
+    SoftwareDependencyRelationship,
+)
 from spdx_tools.spdx3.payload import Payload
-from spdx_tools.spdx3.writer.console.agent_writer import write_agent
-from spdx_tools.spdx3.writer.console.ai.ai_package_writer import write_ai_package
-from spdx_tools.spdx3.writer.console.annotation_writer import write_annotation
-from spdx_tools.spdx3.writer.console.bom_writer import write_bom
-from spdx_tools.spdx3.writer.console.build.build_writer import write_build
-from spdx_tools.spdx3.writer.console.bundle_writer import write_bundle
-from spdx_tools.spdx3.writer.console.dataset.dataset_writer import write_dataset
-from spdx_tools.spdx3.writer.console.relationship_writer import write_relationship
-from spdx_tools.spdx3.writer.console.software.file_writer import write_file
-from spdx_tools.spdx3.writer.console.software.package_writer import write_package
-from spdx_tools.spdx3.writer.console.software.sbom_writer import write_sbom
-from spdx_tools.spdx3.writer.console.software.snippet_writer import write_snippet
-from spdx_tools.spdx3.writer.console.software.software_dependency_relationship_writer import (
+from spdx_tools.spdx3.writer.console.ai import write_ai_package
+from spdx_tools.spdx3.writer.console.build import write_build
+from spdx_tools.spdx3.writer.console.core import (
+    write_agent,
+    write_annotation,
+    write_bom,
+    write_bundle,
+    write_relationship,
+    write_spdx_document,
+    write_tool,
+)
+from spdx_tools.spdx3.writer.console.dataset import (
+    write_dataset_package,
+)
+from spdx_tools.spdx3.writer.console.software import (
+    write_file,
+    write_package,
+    write_sbom,
+    write_snippet,
     write_software_dependency_relationship,
 )
-from spdx_tools.spdx3.writer.console.spdx_document_writer import write_spdx_document
-from spdx_tools.spdx3.writer.console.tool_writer import write_tool
 
 MAP_CLASS_TO_WRITE_METHOD = {
-    Annotation: write_annotation,
-    Relationship: write_relationship,
-    SoftwareDependencyRelationship: write_software_dependency_relationship,
-    Bundle: write_bundle,
-    SpdxDocument: write_spdx_document,
-    Bom: write_bom,
-    File: write_file,
-    Package: write_package,
-    Snippet: write_snippet,
-    Sbom: write_sbom,
-    Person: write_agent,
-    Organization: write_agent,
-    SoftwareAgent: write_agent,
-    Tool: write_tool,
     AIPackage: write_ai_package,
-    Dataset: write_dataset,
+    Annotation: write_annotation,
+    Bom: write_bom,
     Build: write_build,
+    Bundle: write_bundle,
+    DatasetPackage: write_dataset_package,
+    File: write_file,
+    Organization: write_agent,
+    Package: write_package,
+    Person: write_agent,
+    Relationship: write_relationship,
+    Sbom: write_sbom,
+    Snippet: write_snippet,
+    SoftwareAgent: write_agent,
+    SoftwareDependencyRelationship: write_software_dependency_relationship,
+    SpdxDocument: write_spdx_document,
+    Tool: write_tool,
 }
 
 

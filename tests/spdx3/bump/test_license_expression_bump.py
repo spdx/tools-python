@@ -5,7 +5,7 @@ import pytest
 from license_expression import LicenseExpression
 
 from spdx_tools.common.spdx_licensing import spdx_licensing
-from spdx_tools.spdx3.bump_from_spdx2.license_expression import (
+from spdx_tools.spdx3.bump_from_spdx2 import (
     bump_license_expression,
     bump_license_expression_or_none_or_no_assertion,
 )

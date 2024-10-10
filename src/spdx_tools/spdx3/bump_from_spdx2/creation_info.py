@@ -4,13 +4,17 @@
 from beartype.typing import List
 from semantic_version import Version
 
+from spdx_tools.spdx.model.actor import ActorType
+from spdx_tools.spdx.model.document import CreationInfo as Spdx2_CreationInfo
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.external_document_ref import bump_external_document_ref
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import CreationInfo, ProfileIdentifierType, SpdxDocument
+from spdx_tools.spdx3.model.core import (
+    CreationInfo,
+    ProfileIdentifierType,
+    SpdxDocument,
+)
 from spdx_tools.spdx3.payload import Payload
-from spdx_tools.spdx.model.actor import ActorType
-from spdx_tools.spdx.model.document import CreationInfo as Spdx2_CreationInfo
 
 
 def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload) -> SpdxDocument:
@@ -29,15 +33,15 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         if spdx2_creation_info.external_document_refs
         else ([], [])
     )
-    namespaces = list(namespaces)
-    imports = list(imports)
+    namespaces = list(namespaces)  # namespaces from spdx2
+    imports = list(imports)  # imports from spdx2
     print_missing_conversion(
         "creation_info.license_list_version",
         0,
         "part of licensing profile, " "https://github.com/spdx/spdx-3-model/issues/131",
     )
     creation_info = CreationInfo(
-        spec_version=Version("3.0.0"),
+        spec_version=Version(major=3, minor=0, patch=1),
         created=spdx2_creation_info.created,
         created_by=[],
         profile=[ProfileIdentifierType.CORE, ProfileIdentifierType.SOFTWARE, ProfileIdentifierType.LICENSING],
@@ -74,6 +78,6 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         comment=spdx2_creation_info.document_comment,
         element=[],
         root_element=[],
-        imports=imports,
-        namespaces=namespaces,
+        import_=imports,
+        namespace=namespaces,
     )

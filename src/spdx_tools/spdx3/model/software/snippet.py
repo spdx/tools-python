@@ -7,11 +7,15 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
-from spdx_tools.spdx3.model.licensing import LicenseField
-from spdx_tools.spdx3.model.positive_integer_range import PositiveIntegerRange
-from spdx_tools.spdx3.model.software import SoftwarePurpose
-from spdx_tools.spdx3.model.software.software_artifact import SoftwareArtifact
+
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_ref import ExternalRef
+from ..core.integrity_method import IntegrityMethod
+from ..core.positive_integer_range import PositiveIntegerRange
+from ..licensing.license_field import LicenseField
+from .software_artifact import SoftwareArtifact
+from .software_purpose import SoftwarePurpose
 
 
 @dataclass_with_properties
@@ -27,19 +31,19 @@ class Snippet(SoftwareArtifact):
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: List[IntegrityMethod] = None,
-        external_reference: List[ExternalReference] = None,
-        external_identifier: List[ExternalIdentifier] = None,
+        verified_using: List[IntegrityMethod] = [],
+        external_ref: List[ExternalRef] = [],
+        external_identifier: List[ExternalIdentifier] = [],
         extension: Optional[str] = None,
-        originated_by: List[str] = None,
-        supplied_by: List[str] = None,
+        originated_by: List[str] = [],
+        supplied_by: List[str] = [],
         built_time: Optional[datetime] = None,
         release_time: Optional[datetime] = None,
         valid_until_time: Optional[datetime] = None,
-        standard: List[str] = None,
+        standard: List[str] = [],
         content_identifier: Optional[str] = None,
         primary_purpose: Optional[SoftwarePurpose] = None,
-        additional_purpose: List[SoftwarePurpose] = None,
+        additional_purpose: List[SoftwarePurpose] = [],
         concluded_license: Optional[LicenseField] = None,
         declared_license: Optional[LicenseField] = None,
         copyright_text: Optional[str] = None,
@@ -47,11 +51,11 @@ class Snippet(SoftwareArtifact):
         byte_range: Optional[PositiveIntegerRange] = None,
         line_range: Optional[PositiveIntegerRange] = None,
     ):
-        verified_using = [] if verified_using is None else verified_using
-        external_reference = [] if external_reference is None else external_reference
-        external_identifier = [] if external_identifier is None else external_identifier
-        originated_by = [] if originated_by is None else originated_by
-        supplied_by = [] if supplied_by is None else supplied_by
-        standard = [] if standard is None else standard
-        additional_purpose = [] if additional_purpose is None else additional_purpose
+        verified_using = [] if not verified_using else verified_using
+        external_ref = [] if not external_ref else external_ref
+        external_identifier = [] if not external_identifier else external_identifier
+        originated_by = [] if not originated_by else originated_by
+        supplied_by = [] if not supplied_by else supplied_by
+        standard = [] if not standard else standard
+        additional_purpose = [] if not additional_purpose else additional_purpose
         check_types_and_set_values(self, locals())

@@ -23,7 +23,7 @@ def test_correct_initialization(actor, ext_ref):
         "creator_comment",
         "CC0-1.1",
         [ext_ref, ext_ref],
-        Version(6, 3),
+        Version(major=6, minor=3),
         "doc_comment",
     )
     assert creation_info.spdx_version == "version"
@@ -35,7 +35,7 @@ def test_correct_initialization(actor, ext_ref):
     assert creation_info.creator_comment == "creator_comment"
     assert creation_info.data_license == "CC0-1.1"
     assert creation_info.external_document_refs == [ext_ref, ext_ref]
-    assert creation_info.license_list_version == Version(6, 3)
+    assert creation_info.license_list_version == Version(major=6, minor=3)
     assert creation_info.document_comment == "doc_comment"
 
 

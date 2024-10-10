@@ -3,8 +3,11 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum, convert_checksum_algorithm_to_hash_algorithm
-from spdx_tools.spdx3.model import HashAlgorithm
+from spdx_tools.spdx3.bump_from_spdx2 import (
+    bump_checksum,
+    convert_checksum_algorithm_to_hash_algorithm,
+)
+from spdx_tools.spdx3.model.core import HashAlgorithm
 from spdx_tools.spdx.model.checksum import ChecksumAlgorithm
 from tests.spdx.fixtures import checksum_fixture
 
@@ -36,7 +39,7 @@ def test_bump_checksum():
         (ChecksumAlgorithm.MD4, HashAlgorithm.MD4),
         (ChecksumAlgorithm.MD5, HashAlgorithm.MD5),
         (ChecksumAlgorithm.MD6, HashAlgorithm.MD6),
-        (ChecksumAlgorithm.ADLER32, HashAlgorithm.OTHER),
+        (ChecksumAlgorithm.ADLER32, HashAlgorithm.ADLER32),
     ],
 )
 def test_bump_checksum_algorithm(checksum_algorithm, expected_hash_algorithm):

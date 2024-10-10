@@ -49,7 +49,7 @@ def test_parse_creation_info():
             Actor(ActorType.PERSON, "Jane Doe"),
         ],
     )
-    assert creation_info.license_list_version == Version(3, 7)
+    assert creation_info.license_list_version == Version(major=3, minor=7)
     assert creation_info.external_document_refs == [
         ExternalDocumentRef(
             document_ref_id="DocumentRef-spdx-tool-1.2",

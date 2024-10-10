@@ -4,9 +4,8 @@
 
 from unittest import TestCase
 
-from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
-from spdx_tools.spdx3.model import ExternalMap
+from spdx_tools.spdx3.bump_from_spdx2 import bump_checksum, bump_spdx_document
+from spdx_tools.spdx3.model.core import ExternalMap
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import ExternalDocumentRef
 from spdx_tools.spdx.model.document import Document as Spdx2_Document
@@ -40,7 +39,7 @@ def test_bump_external_elements():
     )
     payload: Payload = bump_spdx_document(spdx2_document)
 
-    expected_imports = [
+    expected_import_ = [
         ExternalMap(external_id=package_id, defining_document=full_external_doc_id),
         ExternalMap(external_id=file_id, defining_document=full_external_doc_id),
         ExternalMap(external_id=snippet_id, defining_document=full_external_doc_id),
@@ -52,4 +51,4 @@ def test_bump_external_elements():
     assert f"{external_doc_uri}#SPDXRef-File" in payload.get_full_map()
     assert f"{external_doc_uri}#SPDXRef-Snippet" in payload.get_full_map()
 
-    TestCase().assertCountEqual(spdx_document.imports, expected_imports)
+    TestCase().assertCountEqual(spdx_document.import_, expected_import_)

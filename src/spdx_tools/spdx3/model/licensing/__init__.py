@@ -15,3 +15,20 @@ from .no_assertion_license import NoAssertionLicense
 from .none_license import NoneLicense
 from .or_later_operator import OrLaterOperator
 from .with_addition_operator import WithAdditionOperator
+
+__all__ = [
+    "AnyLicenseInfo",
+    "ConjunctiveLicenseSet",
+    "CustomLicense",
+    "CustomLicenseAddition",
+    "DisjunctiveLicenseSet",
+    "License",
+    "LicenseAddition",
+    "LicenseField",
+    "ListedLicense",
+    "ListedLicenseException",
+    "NoAssertionLicense",
+    "NoneLicense",
+    "OrLaterOperator",
+    "WithAdditionOperator",
+]

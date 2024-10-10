@@ -6,13 +6,13 @@ from datetime import datetime
 
 from semantic_version import Version
 
-from spdx_tools.spdx3.model import CreationInfo, ProfileIdentifierType, SpdxDocument
-from spdx_tools.spdx3.writer.console.spdx_document_writer import write_spdx_document
+from spdx_tools.spdx3.model.core import CreationInfo, ProfileIdentifierType, SpdxDocument
+from spdx_tools.spdx3.writer.console.core import write_spdx_document
 
 
 def test_render_creation_info():
     fake_datetime = datetime(year=2024, month=1, day=1)
-    spec_version = Version("3.0.0")
+    spec_version = Version(major=3, minor=0, patch=1)
     creation_info = CreationInfo(
         spec_version=spec_version,
         created=fake_datetime,
@@ -36,7 +36,7 @@ def test_render_creation_info():
 SPDXID: SPDXRef-FOO
 name: BAR
 # Creation Information
-  specVersion: 3.0.0
+  specVersion: 3.0.1
   created: 2024-01-01T00:00:00Z
   profile: SOFTWARE
   data license: CC0-1.0

@@ -6,7 +6,12 @@ from enum import Enum
 from beartype.typing import Optional, TextIO, Union
 
 
-def write_value(tag: str, value: Optional[Union[bool, str, dict, list, Enum]], out: TextIO, indent: bool = False):
+def write_value(
+    tag: str,
+    value: Optional[Union[bool, str, dict, list, Enum]],
+    out: TextIO,
+    indent: bool = False,
+):
     """This function is duplicated from spdx_tools.spdx.writer.tagvalue.tag_value_writer_helper_functions
     and slightly adapted to make indentation of output possible."""
     if not value:

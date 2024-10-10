@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx_tools.spdx3.model import (
+from spdx_tools.spdx3.model.core import (
     Agent,
     Annotation,
     Bom,
@@ -17,7 +17,7 @@ from spdx_tools.spdx3.model import (
 )
 from spdx_tools.spdx3.model.ai import AIPackage
 from spdx_tools.spdx3.model.build import Build
-from spdx_tools.spdx3.model.dataset import Dataset
+from spdx_tools.spdx3.model.dataset import DatasetPackage
 from spdx_tools.spdx3.model.licensing import (
     CustomLicense,
     CustomLicenseAddition,
@@ -42,37 +42,37 @@ from tests.spdx3.model.model_test_utils import InvalidTypeClass, get_property_na
 
 CLASS_LIST = [
     Agent,
-    Person,
-    Organization,
-    SoftwareAgent,
+    AIPackage,
     Annotation,
-    Relationship,
-    LifecycleScopedRelationship,
+    Build,
     Bundle,
     Bom,
-    SpdxDocument,
-    ListedLicense,
     CustomLicense,
-    ListedLicenseException,
     CustomLicenseAddition,
     CvssV2VulnAssessmentRelationship,
     CvssV3VulnAssessmentRelationship,
+    DatasetPackage,
     EpssVulnAssessmentRelationship,
     ExploitCatalogVulnAssessmentRelationship,
+    File,
+    LifecycleScopedRelationship,
+    ListedLicense,
+    ListedLicenseException,
+    Organization,
+    Package,
+    Person,
+    Relationship,
+    Sbom,
+    Snippet,
+    SoftwareAgent,
+    SoftwareDependencyRelationship,
+    SpdxDocument,
     SsvcVulnAssessmentRelationship,
     VexAffectedVulnAssessmentRelationship,
     VexFixedVulnAssessmentRelationship,
     VexNotAffectedVulnAssessmentRelationship,
     VexUnderInvestigationVulnAssessmentRelationship,
     Vulnerability,
-    File,
-    Package,
-    Snippet,
-    Sbom,
-    SoftwareDependencyRelationship,
-    Dataset,
-    AIPackage,
-    Build,
 ]
 
 

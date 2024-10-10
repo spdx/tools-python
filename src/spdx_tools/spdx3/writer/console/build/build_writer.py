@@ -5,8 +5,7 @@ from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.build import Build
 from spdx_tools.spdx3.writer.console.console import write_value
-from spdx_tools.spdx3.writer.console.element_writer import write_element_properties
-from spdx_tools.spdx3.writer.console.hash_writer import write_hash
+from spdx_tools.spdx3.writer.console.core.element_writer import write_element_properties, write_hash
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_optional_heading
 
 
