@@ -12,6 +12,7 @@ def write_payload(payload: Payload, file_name: str):
     element_list = convert_payload_to_json_ld_list_of_elements(payload)
 
     # this will be obsolete as soon as the context is publicly available under some URI
+    # Use the context file from https://spdx.github.io/spdx-spec/v3.0.1/serializations/#json-ld-context-file
     with open(os.path.join(os.path.dirname(__file__), "context.json"), "r") as infile:
         data = json.load(infile)
         context = data.get("@context")
