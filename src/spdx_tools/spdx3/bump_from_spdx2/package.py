@@ -44,11 +44,11 @@ def bump_package(
     if isinstance(spdx2_package.supplier, Spdx2_Actor):
         supplied_by_spdx_id = [bump_actor(spdx2_package.supplier, payload, document_namespace)]
     else:
-        supplied_by_spdx_id = None
+        supplied_by_spdx_id = []
     if isinstance(spdx2_package.originator, Spdx2_Actor):
         originated_by_spdx_id = [bump_actor(spdx2_package.originator, payload, document_namespace)]
     else:
-        originated_by_spdx_id = None
+        originated_by_spdx_id = []
     print_missing_conversion("package2.files_analyzed", 0, "https://github.com/spdx/spdx-3-model/issues/84")
     print_missing_conversion(
         "package2.verification_code", 1, "of IntegrityMethod, https://github.com/spdx/spdx-3-model/issues/85"
@@ -65,10 +65,10 @@ def bump_package(
         "and missing definition of license profile",
     )
 
-    external_reference = []
+    external_ref = []
     external_identifier = []
     purl_refs = [
-        external_ref for external_ref in spdx2_package.external_references if external_ref.reference_type == "purl"
+        purl_ref for purl_ref in spdx2_package.external_references if purl_ref.reference_type == "purl"
     ]
     exactly_one_purl_without_comment = len(purl_refs) == 1 and purl_refs[0].comment is None
     package_url = None
@@ -79,7 +79,7 @@ def bump_package(
             continue
         id_or_ref = bump_external_package_ref(spdx2_external_ref)
         if isinstance(id_or_ref, ExternalRef):
-            external_reference.append(id_or_ref)
+            external_ref.append(id_or_ref)
         elif isinstance(id_or_ref, ExternalIdentifier):
             external_identifier.append(id_or_ref)
 
@@ -95,7 +95,7 @@ def bump_package(
             description=spdx2_package.description,
             comment=spdx2_package.comment,
             verified_using=integrity_methods,
-            external_reference=external_reference,
+            external_ref=external_ref,
             external_identifier=external_identifier,
             originated_by=originated_by_spdx_id,
             supplied_by=supplied_by_spdx_id,

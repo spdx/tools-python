@@ -20,12 +20,12 @@ from spdx_tools.spdx3.model.core import (
 
 
 class SBOMType(Enum):
-    DESIGN = auto()
-    SOURCE = auto()
+    ANALYZED = auto()
     BUILD = auto()
     DEPLOYED = auto()
+    DESIGN = auto()
     RUNTIME = auto()
-    ANALYZED = auto()
+    SOURCE = auto()
 
 
 @dataclass_with_properties

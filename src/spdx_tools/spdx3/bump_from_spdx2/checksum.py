@@ -16,6 +16,4 @@ def bump_checksum(spdx2_checksum: Spdx2_Checksum) -> Hash:
 def convert_checksum_algorithm_to_hash_algorithm(checksum_algorithm: ChecksumAlgorithm) -> HashAlgorithm:
     if checksum_algorithm.name.startswith("BLAKE"):
         return HashAlgorithm[checksum_algorithm.name.replace("_", "")]
-    if checksum_algorithm == ChecksumAlgorithm.ADLER32:
-        return HashAlgorithm.OTHER
     return HashAlgorithm[checksum_algorithm.name]

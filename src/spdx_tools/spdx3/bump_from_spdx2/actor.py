@@ -14,6 +14,7 @@ from spdx_tools.spdx.model.actor import ActorType
 def bump_actor(
     spdx2_actor: Spdx2_Actor, payload: Payload, document_namespace: str, creation_info: Optional[CreationInfo] = None
 ) -> str:
+    spdx_id: str
     name: str = spdx2_actor.name
     email: str = spdx2_actor.email if spdx2_actor.email is not None else ""
     actor_type: ActorType = spdx2_actor.actor_type
@@ -22,9 +23,9 @@ def bump_actor(
     name_without_whitespace = "".join(name.split())
     if email:
         external_identifiers.append(ExternalIdentifier(ExternalIdentifierType.EMAIL, email))
-        spdx_id: str = f"{document_namespace}#SPDXRef-Actor-{name_without_whitespace}-{email}"
+        spdx_id = f"{document_namespace}#SPDXRef-Actor-{name_without_whitespace}-{email}"
     else:
-        spdx_id: str = f"{document_namespace}#SPDXRef-Actor-{name_without_whitespace}"
+        spdx_id = f"{document_namespace}#SPDXRef-Actor-{name_without_whitespace}"
 
     if spdx_id in payload.get_full_map():  # the agent/tool already exists, so we don't need to create a new one
         return spdx_id
