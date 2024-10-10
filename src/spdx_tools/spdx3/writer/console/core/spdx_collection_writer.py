@@ -4,14 +4,11 @@
 from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.core import ElementCollection
-from spdx_tools.spdx3.writer.console.core import (
-    write_element_properties,
-    write_external_map,
-    write_namespace_map,
-)
-from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import (
-    write_optional_heading,
-)
+from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_optional_heading
+
+from .element_writer import write_element_properties
+from .external_map_writer import write_external_map
+from .namespace_map_writer import write_namespace_map
 
 
 def write_collection(collection: ElementCollection, text_output: TextIO):

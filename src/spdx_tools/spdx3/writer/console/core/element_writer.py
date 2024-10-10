@@ -5,13 +5,13 @@ from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.core import Element
 from spdx_tools.spdx3.writer.console.console import write_value
-from spdx_tools.spdx3.writer.console.core import (
-    write_creation_info,
-    write_external_identifier,
-    write_external_ref,
-    write_hash,
-)
+
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_optional_heading
+
+from .creation_info_writer import write_creation_info
+from .external_identifier_writer import write_external_identifier
+from .external_ref_writer import write_external_ref
+from .hash_writer import write_hash
 
 
 def write_element_properties(element: Element, text_output: TextIO):

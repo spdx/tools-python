@@ -8,18 +8,22 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import CreationInfo, Element, ExternalIdentifier, ExternalRef, IntegrityMethod
 
+from .creation_info import CreationInfo
+from .element import Element
+from .external_identifier import ExternalIdentifier
+from .external_ref import ExternalRef
+from .integrity_method import IntegrityMethod
 
 class AnnotationType(Enum):
-    REVIEW = auto()
     OTHER = auto()
+    REVIEW = auto()
 
 
 @dataclass_with_properties
 class Annotation(Element):
     annotation_type: AnnotationType = None
-    subject: str = None
+    subject: str = ""
     content_type: List[str] = field(default_factory=list)  # placeholder for MediaType
     statement: Optional[str] = None
 

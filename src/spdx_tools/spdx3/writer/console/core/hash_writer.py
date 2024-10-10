@@ -5,7 +5,7 @@ from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.core import Hash
 from spdx_tools.spdx3.writer.console.console import write_value
-from spdx_tools.spdx3.writer.console.core import write_integrity_method
+from spdx_tools.spdx3.writer.console.core.integrity_method_writer import write_integrity_method
 
 
 def write_hash(hash_object: Hash, text_output: TextIO, heading: bool, indent: bool = True):

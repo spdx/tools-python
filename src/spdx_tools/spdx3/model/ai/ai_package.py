@@ -9,14 +9,14 @@ from beartype.typing import Dict, List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import (
-    CreationInfo,
-    ExternalIdentifier,
-    ExternalRef,
-    IntegrityMethod,
-)
-from spdx_tools.spdx3.model.licensing import LicenseField
-from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
+
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_ref import ExternalRef
+from ..core.integrity_method import IntegrityMethod
+from ..licensing.license_field import LicenseField
+from ..software.package import Package
+from ..software.software_purpose import SoftwarePurpose
 
 
 class SafetyRiskAssessmentType(Enum):
@@ -72,7 +72,7 @@ class AIPackage(Package):
         copyright_text: Optional[str] = None,
         attribution_text: Optional[str] = None,
         package_url: Optional[str] = None,
-        homepage: Optional[str] = None,
+        home_page: Optional[str] = None,
         source_info: Optional[str] = None,
         energy_consumption: Optional[str] = None,
         standard_compliance: List[str] = [],
@@ -103,5 +103,5 @@ class AIPackage(Package):
         model_explainability = [] if not model_explainability else model_explainability
         metric_decision_threshold = {} if not metric_decision_threshold else metric_decision_threshold
         metric = {} if not metric else metric
-        domain = [] if not not domain else domain
+        domain = [] if not domain else domain
         check_types_and_set_values(self, locals())

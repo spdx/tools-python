@@ -4,7 +4,7 @@
 from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.core import SpdxDocument
-from spdx_tools.spdx3.writer.console.core import write_bundle
+from spdx_tools.spdx3.writer.console.core.bundle_writer import write_bundle
 
 
 def write_spdx_document(spdx_document: SpdxDocument, text_output: TextIO):

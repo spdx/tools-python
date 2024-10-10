@@ -34,5 +34,5 @@ def test_bump_multiple_external_document_refs():
     )
     spdx_document = bump_creation_info(creation_info, payload)
 
-    assert len(spdx_document.imports) == 2
-    assert len(spdx_document.namespaces) == 2
+    assert len(spdx_document.import_) == 2
+    assert len(spdx_document.namespace) == 2

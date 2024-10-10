@@ -1,0 +1,230 @@
+{
+  "@context": null,
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com",
+      "creationInfo": {
+        "@type": "CreationInfo",
+        "specVersion": "3.0.1",
+        "created": "2022-12-01T00:00:00Z",
+        "createdBy": [
+          "https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "creatorName",
+      "externalIdentifier": [
+        {
+          "@type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "some@mail.com"
+        }
+      ]
+    },
+    {
+      "@type": "SpdxDocument",
+      "@id": "https://some.namespace#SPDXRef-DOCUMENT",
+      "creationInfo": {
+        "@type": "CreationInfo",
+        "specVersion": "3.0.1",
+        "created": "2022-12-01T00:00:00Z",
+        "createdBy": [
+          "https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "documentName",
+      "comment": "documentComment",
+      "element": [
+        "https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com",
+        "https://some.namespace#SPDXRef-Actor-supplierName-some@mail.com",
+        "https://some.namespace#SPDXRef-Actor-originatorName-some@mail.com",
+        "https://some.namespace#SPDXRef-Package",
+        "https://some.namespace#SPDXRef-File",
+        "https://some.namespace#SPDXRef-Snippet",
+        "https://some.namespace#SPDXRef-Relationship-0",
+        "https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com",
+        "https://some.namespace#SPDXRef-Annotation-0"
+      ],
+      "rootElement": [
+        "https://some.namespace#SPDXRef-File"
+      ],
+      "namespace": [
+        {
+          "@type": "NamespaceMap",
+          "prefix": "DocumentRef-external",
+          "namespace": "https://namespace.com#"
+        }
+      ],
+      "import": [
+        {
+          "@type": "ExternalMap",
+          "externalId": "DocumentRef-external:SPDXRef-DOCUMENT",
+          "verifiedUsing": [
+            {
+              "@type": "Hash",
+              "algorithm": "sha1",
+              "hashValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://some.namespace#SPDXRef-Actor-supplierName-some@mail.com",
+      "name": "supplierName",
+      "externalIdentifier": [
+        {
+          "@type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "some@mail.com"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://some.namespace#SPDXRef-Actor-originatorName-some@mail.com",
+      "name": "originatorName",
+      "externalIdentifier": [
+        {
+          "@type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "some@mail.com"
+        }
+      ]
+    },
+    {
+      "@type": "Package",
+      "@id": "https://some.namespace#SPDXRef-Package",
+      "name": "packageName",
+      "summary": "packageSummary",
+      "description": "packageDescription",
+      "comment": "packageComment",
+      "verifiedUsing": [
+        {
+          "@type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
+        }
+      ],
+      "builtTime": "2022-11-02T00:00:00Z",
+      "originatedBy": [
+        "https://some.namespace#SPDXRef-Actor-originatorName-some@mail.com"
+      ],
+      "releaseTime": "2022-11-01T00:00:00Z",
+      "suppliedBy": [
+        "https://some.namespace#SPDXRef-Actor-supplierName-some@mail.com"
+      ],
+      "validUntilTime": "2022-11-03T00:00:00Z",
+      "primaryPurpose": "source",
+      "copyrightText": "packageCopyrightText",
+      "attributionText": "packageAttributionText",
+      "packageVersion": "12.2",
+      "downloadLocation": "https://download.com",
+      "homePage": "https://homepage.com",
+      "sourceInfo": "sourceInfo"
+    },
+    {
+      "@type": "File",
+      "@id": "https://some.namespace#SPDXRef-File",
+      "name": "./fileName.py",
+      "comment": "fileComment",
+      "verifiedUsing": [
+        {
+          "@type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
+        }
+      ],
+      "copyrightText": "copyrightText",
+      "attributionText": "fileAttributionText"
+    },
+    {
+      "@type": "Snippet",
+      "@id": "https://some.namespace#SPDXRef-Snippet",
+      "name": "snippetName",
+      "comment": "snippetComment",
+      "copyrightText": "licenseCopyrightText",
+      "attributionText": "snippetAttributionText",
+      "byteRange": {
+        "@type": "PositiveIntegerRange",
+        "begin": 1,
+        "end": 2
+      },
+      "lineRange": {
+        "@type": "PositiveIntegerRange",
+        "begin": 3,
+        "end": 4
+      }
+    },
+    {
+      "@type": "Relationship",
+      "@id": "https://some.namespace#SPDXRef-Relationship-0",
+      "comment": "relationshipComment",
+      "from": "https://some.namespace#SPDXRef-DOCUMENT",
+      "to": [
+        "https://some.namespace#SPDXRef-File"
+      ],
+      "relationshipType": "describes"
+    },
+    {
+      "@type": "Person",
+      "@id": "https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com",
+      "creationInfo": {
+        "@type": "CreationInfo",
+        "specVersion": "3.0.1",
+        "created": "2022-12-24T00:00:00Z",
+        "createdBy": [
+          "https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "annotatorName",
+      "externalIdentifier": [
+        {
+          "@type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "some@mail.com"
+        }
+      ]
+    },
+    {
+      "@type": "Annotation",
+      "@id": "https://some.namespace#SPDXRef-Annotation-0",
+      "creationInfo": {
+        "@type": "CreationInfo",
+        "specVersion": "3.0.1",
+        "created": "2022-12-24T00:00:00Z",
+        "createdBy": [
+          "https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "annotationType": "review",
+      "subject": "https://some.namespace#SPDXRef-File",
+      "statement": "annotationComment"
+    }
+  ]
+}

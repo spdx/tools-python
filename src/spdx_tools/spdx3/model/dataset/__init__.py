@@ -5,10 +5,12 @@ from .dataset_package import (
     ConfidentialityLevelType,
     DatasetAvailabilityType,
     DatasetPackage,
+    DatasetType,
 )
 
 __all__ = [
     "ConfidentialityLevelType",
     "DatasetAvailabilityType",
     "DatasetPackage",
+    "DatasetType",
 ]

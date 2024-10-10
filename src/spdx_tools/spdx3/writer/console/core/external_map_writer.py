@@ -5,7 +5,7 @@ from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.core import ExternalMap
 from spdx_tools.spdx3.writer.console.console import write_value
-from spdx_tools.spdx3.writer.console.core import write_hash
+from spdx_tools.spdx3.writer.console.core.hash_writer import write_hash
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import write_optional_heading
 
 

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List, Tuple
 
-from . import bump_checksum
+from .checksum import bump_checksum
 from ..model.core import ExternalMap, Hash, NamespaceMap
 from ...spdx.model.external_document_ref import ExternalDocumentRef
 

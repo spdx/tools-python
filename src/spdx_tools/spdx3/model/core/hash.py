@@ -7,7 +7,8 @@ from beartype.typing import Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import IntegrityMethod
+
+from .integrity_method import IntegrityMethod
 
 
 class HashAlgorithm(Enum):

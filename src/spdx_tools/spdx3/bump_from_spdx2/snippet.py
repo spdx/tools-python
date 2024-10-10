@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List
 
-from . import bump_positive_integer_range, print_missing_conversion
+from .message import print_missing_conversion
+from .positive_integer_range import bump_positive_integer_range
 from ..model.core import ExternalMap
 from ..model.software import Snippet
 from ..payload import Payload

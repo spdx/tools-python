@@ -80,7 +80,7 @@ specified unless relevant for the test."""
 
 
 def creation_info_fixture(
-    spec_version=Version(3, 0, 1),
+    spec_version=Version(major=3, minor=0, patch=1),
     created=datetime(2022, 12, 1),
     created_by=None,
     created_using=None,
@@ -252,7 +252,7 @@ ELEMENT_COLLECTION_DICT = {
     "element": ["https://spdx.test/tools-python/collection_element"],
     "root_element": ["https://spdx.test/tools-python/collection_root_element"],
     "namespace": [namespace_map_fixture()],
-    "import": [external_map_fixture()],
+    "import_": [external_map_fixture()],
 }
 
 BUNDLE_DICT = {
@@ -415,7 +415,7 @@ PACKAGE_DICT = {
     "package_version": "packageVersion",
     "download_location": "https://spdx.test/tools-python/downloadPackage",
     "package_url": "https://spdx.test/tools-python/package",
-    "homepage": "https://spdx.test/tools-python/homepage",
+    "home_page": "https://spdx.test/tools-python/homePage",
     "source_info": "sourceInfo",
 }
 
@@ -538,11 +538,11 @@ FIXTURE_DICTS = {
     ],
     Vulnerability: [ELEMENT_DICT, VULNERABILITY_DICT],
     AIPackage: [
-        AI_PACKAGE_DICT,
-        PACKAGE_DICT,
         ELEMENT_DICT,
         ARTIFACT_DICT,
         SOFTWARE_ARTIFACT_DICT,
+        PACKAGE_DICT,
+        AI_PACKAGE_DICT,
     ],
     File: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, FILE_DICT],
     Package: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT],

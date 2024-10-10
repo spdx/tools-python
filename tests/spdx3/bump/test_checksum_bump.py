@@ -39,7 +39,7 @@ def test_bump_checksum():
         (ChecksumAlgorithm.MD4, HashAlgorithm.MD4),
         (ChecksumAlgorithm.MD5, HashAlgorithm.MD5),
         (ChecksumAlgorithm.MD6, HashAlgorithm.MD6),
-        (ChecksumAlgorithm.ADLER32, HashAlgorithm.OTHER),
+        (ChecksumAlgorithm.ADLER32, HashAlgorithm.ADLER32),
     ],
 )
 def test_bump_checksum_algorithm(checksum_algorithm, expected_hash_algorithm):

@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 from copy import deepcopy
 
-from . import bump_actor, print_missing_conversion
+from .actor import bump_actor
+from .message import print_missing_conversion
 from ..model.core import Annotation, AnnotationType, CreationInfo
 from ..payload import Payload
 from ...spdx.model.actor import ActorType

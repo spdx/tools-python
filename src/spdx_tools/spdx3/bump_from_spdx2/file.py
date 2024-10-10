@@ -3,7 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List
 
-from . import bump_checksum, print_missing_conversion
+from .checksum import bump_checksum
+from .message import print_missing_conversion
 from ..model.core import ExternalMap
 from ..model.software import File
 from ..payload import Payload

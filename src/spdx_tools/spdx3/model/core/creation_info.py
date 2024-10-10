@@ -9,7 +9,7 @@ from semantic_version import Version
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import ProfileIdentifierType
+from .profile_identifier import ProfileIdentifierType
 
 
 @dataclass_with_properties

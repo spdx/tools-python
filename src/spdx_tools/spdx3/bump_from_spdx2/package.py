@@ -3,7 +3,10 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List, Optional, Union
 
-from . import bump_actor, bump_checksum, handle_no_assertion_or_none, print_missing_conversion
+from .actor import bump_actor
+from .bump_utils import handle_no_assertion_or_none
+from .checksum import bump_checksum
+from .message import print_missing_conversion
 from ..model.core import (
     ExternalIdentifier,
     ExternalIdentifierType,
@@ -96,7 +99,7 @@ def bump_package(
             summary=spdx2_package.summary,
             description=spdx2_package.description,
             comment=spdx2_package.comment,
-            verified_using=integrity_methods,
+            verified_using=integrity_methods,  # need SPDX 2 Hash -> SPDX 3 IntegrityMethod conversion here
             external_ref=external_ref,
             external_identifier=external_identifier,
             originated_by=originated_by_spdx_id,
@@ -108,7 +111,7 @@ def bump_package(
             package_version=spdx2_package.version,
             download_location=download_location,
             package_url=package_url,
-            homepage=spdx2_package.homepage,
+            home_page=spdx2_package.homepage,
             source_info=spdx2_package.source_info,
             copyright_text=copyright_text,
             attribution_text=", ".join(spdx2_package.attribution_texts),

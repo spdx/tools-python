@@ -5,12 +5,12 @@ from enum import Enum, auto
 
 
 class ProfileIdentifierType(Enum):
+    AI = auto()
+    BUILD = auto()
     CORE = auto()
-    SOFTWARE = auto()
+    DATASET = auto()
+    EXTENSION = auto()
     LICENSING = auto()
     SECURITY = auto()
-    BUILD = auto()
-    AI = auto()
-    DATASET = auto()
+    SOFTWARE = auto()
     USAGE = auto()  # Not present in v3.0.1
-    EXTENSION = auto()

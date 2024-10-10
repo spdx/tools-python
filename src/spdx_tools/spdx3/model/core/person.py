@@ -5,8 +5,12 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import Agent, CreationInfo, ExternalIdentifier, ExternalRef, IntegrityMethod
 
+from .agent import Agent
+from .creation_info import CreationInfo
+from .external_identifier import ExternalIdentifier
+from .external_ref import ExternalRef
+from .integrity_method import IntegrityMethod
 
 @dataclass_with_properties
 class Person(Agent):

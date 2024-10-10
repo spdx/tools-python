@@ -8,16 +8,13 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import (
-    CreationInfo,
-    ExternalIdentifier,
-    ExternalRef,
-    IntegrityMethod,
-    LifecycleScopedRelationship,
-    LifecycleScopeType,
-    RelationshipCompleteness,
-    RelationshipType,
-)
+
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_ref import ExternalRef
+from ..core.integrity_method import IntegrityMethod
+from ..core.lifecycle_scoped_relationship import LifecycleScopedRelationship, LifecycleScopeType
+from ..core.relationship import RelationshipCompleteness, RelationshipType
 
 
 class SoftwareDependencyLinkType(Enum):

@@ -3,7 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.licensing import AnyLicenseInfo, License
+
+from .any_license_info import AnyLicenseInfo
+from .license import License
 
 @dataclass_with_properties
 class OrLaterOperator(AnyLicenseInfo):

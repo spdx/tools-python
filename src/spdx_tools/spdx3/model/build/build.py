@@ -8,12 +8,18 @@ from beartype.typing import Dict, List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import CreationInfo, Element, ExternalIdentifier, ExternalRef, Hash, IntegrityMethod
+
+from ..core.creation_info import CreationInfo
+from ..core.element import Element
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_ref import ExternalRef
+from ..core.hash import Hash
+from ..core.integrity_method import IntegrityMethod
 
 
 @dataclass_with_properties
 class Build(Element):
-    build_type: str = None
+    build_type: str = ""
     build_id: Optional[str] = None
     config_source_entrypoint: List[str] = field(default_factory=list)
     config_source_uri: List[str] = field(default_factory=list)

@@ -7,9 +7,14 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.core import CreationInfo, ExternalIdentifier, ExternalRef, IntegrityMethod
-from spdx_tools.spdx3.model.licensing import LicenseField
-from spdx_tools.spdx3.model.software import SoftwareArtifact, SoftwarePurpose
+
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_ref import ExternalRef
+from ..core.integrity_method import IntegrityMethod
+from ..licensing.license_field import LicenseField
+from .software_artifact import SoftwareArtifact
+from .software_purpose import SoftwarePurpose
 
 
 @dataclass_with_properties
@@ -17,7 +22,7 @@ class Package(SoftwareArtifact):
     package_version: Optional[str] = None
     download_location: Optional[str] = None  # anyURI
     package_url: Optional[str] = None  # anyURI
-    homepage: Optional[str] = None  # anyURI
+    home_page: Optional[str] = None  # anyURI
     source_info: Optional[str] = None
 
     def __init__(
@@ -48,7 +53,7 @@ class Package(SoftwareArtifact):
         package_version: Optional[str] = None,
         download_location: Optional[str] = None,
         package_url: Optional[str] = None,
-        homepage: Optional[str] = None,
+        home_page: Optional[str] = None,
         source_info: Optional[str] = None,
     ):
         verified_using = [] if not verified_using else verified_using

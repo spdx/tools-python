@@ -6,7 +6,7 @@ from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.core import LifecycleScopedRelationship
 from spdx_tools.spdx3.writer.console.console import write_value
-from spdx_tools.spdx3.writer.console.core import write_relationship
+from spdx_tools.spdx3.writer.console.core.relationship_writer import write_relationship
 
 
 def write_lifecycle_scoped_relationship(

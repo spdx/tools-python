@@ -5,7 +5,7 @@ from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.dataset import DatasetPackage
 from spdx_tools.spdx3.writer.console.console import write_value
-from spdx_tools.spdx3.writer.console.software import write_package
+from spdx_tools.spdx3.writer.console.software.package_writer import write_package
 
 
 def write_dataset_package(datasetPackage: DatasetPackage, text_output: TextIO):

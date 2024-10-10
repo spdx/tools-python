@@ -7,8 +7,10 @@ from dataclasses import field
 from beartype.typing import List
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx_tools.spdx3.model.core import Element, ExternalMap, NamespaceMap
 
+from .element import Element
+from .external_map import ExternalMap
+from .namespace_map import NamespaceMap
 
 @dataclass_with_properties
 class ElementCollection(Element):
