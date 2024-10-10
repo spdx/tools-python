@@ -3,24 +3,26 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List, Optional, Union
 
-from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
-from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
-from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model.core import (
+from . import bump_actor, bump_checksum, handle_no_assertion_or_none, print_missing_conversion
+from ..model.core import (
     ExternalIdentifier,
     ExternalIdentifierType,
     ExternalMap,
     ExternalRef,
     ExternalRefType,
 )
-from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
-from spdx_tools.spdx3.payload import Payload
-from spdx_tools.spdx.model import Actor as Spdx2_Actor
-from spdx_tools.spdx.model import ExternalDocumentRef, SpdxNoAssertion
-from spdx_tools.spdx.model.package import ExternalPackageRef
-from spdx_tools.spdx.model.package import Package as Spdx2_Package
-from spdx_tools.spdx.spdx_element_utils import get_full_element_spdx_id
+from ..model.software import Package, SoftwarePurpose
+from ..payload import Payload
+from ...spdx.model import (
+    Actor as Spdx2_Actor,
+    ExternalDocumentRef,
+    SpdxNoAssertion,
+)
+from ...spdx.model.package import (
+    ExternalPackageRef,
+    Package as Spdx2_Package,
+)
+from ...spdx.spdx_element_utils import get_full_element_spdx_id
 
 
 def bump_package(

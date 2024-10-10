@@ -3,8 +3,8 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import Optional, Union
 
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from ...spdx.model.spdx_no_assertion import SpdxNoAssertion
+from ...spdx.model.spdx_none import SpdxNone
 
 
 def handle_no_assertion_or_none(field: Union[SpdxNone, SpdxNoAssertion, str], field_name: str) -> Optional[str]:

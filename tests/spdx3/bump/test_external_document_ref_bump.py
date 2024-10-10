@@ -2,9 +2,11 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.bump_from_spdx2.creation_info import bump_creation_info
-from spdx_tools.spdx3.bump_from_spdx2.external_document_ref import bump_external_document_ref
+from spdx_tools.spdx3.bump_from_spdx2 import (
+    bump_checksum,
+    bump_creation_info,
+    bump_external_document_ref,
+)
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import ExternalDocumentRef
 from tests.spdx.fixtures import checksum_fixture, creation_info_fixture, external_document_ref_fixture

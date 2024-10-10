@@ -5,10 +5,10 @@ from typing import Optional
 
 from beartype.typing import List
 
-from spdx_tools.spdx3.model.core import CreationInfo, ExternalIdentifier, ExternalIdentifierType, Organization, Person, Tool
-from spdx_tools.spdx3.payload import Payload
-from spdx_tools.spdx.model.actor import Actor as Spdx2_Actor
-from spdx_tools.spdx.model.actor import ActorType
+from ..model.core import CreationInfo, ExternalIdentifier, ExternalIdentifierType, Organization, Person, Tool
+from ..payload import Payload
+from ...spdx.model.actor import Actor as Spdx2_Actor
+from ...spdx.model.actor import ActorType
 
 
 def bump_actor(

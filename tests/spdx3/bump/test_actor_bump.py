@@ -6,7 +6,7 @@ from datetime import datetime
 import pytest
 from semantic_version import Version
 
-from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
+from spdx_tools.spdx3.bump_from_spdx2 import bump_actor
 from spdx_tools.spdx3.model.core import (
     CreationInfo,
     ExternalIdentifier,

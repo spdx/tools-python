@@ -6,32 +6,32 @@ import sys
 
 from beartype.typing import Dict, List, Optional, Tuple, Union
 
-from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model.core import (
+from . import print_missing_conversion
+from ..model.core import (
     LifecycleScopeType,
     Relationship,
     RelationshipCompleteness,
     RelationshipType,
 )
-from spdx_tools.spdx3.model.software import (
+from ..model.software import (
     DependencyConditionalityType,
     SoftwareDependencyLinkType,
     SoftwareDependencyRelationship,
 )
-from spdx_tools.spdx3.payload import Payload
-from spdx_tools.spdx.model.relationship import Relationship as Spdx2_Relationship
-from spdx_tools.spdx.model.relationship import (
+from ..payload import Payload
+from ...spdx.model.relationship import (
+    Relationship as Spdx2_Relationship,
     RelationshipType as Spdx2_RelationshipType,
 )
-from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
-from spdx_tools.spdx.model.spdx_none import SpdxNone
+from ...spdx.model.spdx_no_assertion import SpdxNoAssertion
+from ...spdx.model.spdx_none import SpdxNone
 
 # bump relationship type, map each relationship type to the corresponding class in 3.0,
 # the relationship type, other arguments and if swapped
 relationship_mapping: Dict[
     Spdx2_RelationshipType,
     Tuple[
-        Union[Relationship, SoftwareDependencyRelationship],
+        Union[type[Relationship], type[SoftwareDependencyRelationship]],
         RelationshipType,
         Dict[
             str,
@@ -336,6 +336,16 @@ def bump_relationship(
     if relationship_class == SoftwareDependencyRelationship:
         from_element = spdx2_relationship.spdx_element_id
 
+        software_linkage = (
+            SoftwareDependencyLinkType(parameters.get("linkage"))
+            if parameters.get("linkage")
+            else None
+        )
+        conditionality = (
+            DependencyConditionalityType(parameters.get("conditionality"))
+            if parameters.get("conditionality")
+            else None
+        )
         return SoftwareDependencyRelationship(
             spdx_id,
             f"{document_namespace}#{from_element}",
@@ -344,8 +354,8 @@ def bump_relationship(
             comment=spdx2_relationship.comment,
             completeness=completeness,
             scope=parameters.get("scope"),
-            software_linkage=parameters.get("linkage"),
-            conditionality=parameters.get("conditionality"),
+            software_linkage=software_linkage,
+            conditionality=conditionality,
         )
 
     return Relationship(

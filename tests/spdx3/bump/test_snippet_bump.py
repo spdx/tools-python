@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from spdx_tools.spdx3.bump_from_spdx2.snippet import bump_snippet
+from spdx_tools.spdx3.bump_from_spdx2 import bump_snippet
 from spdx_tools.spdx3.model.software import Snippet
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.snippet import Snippet as Spdx2_Snippet
