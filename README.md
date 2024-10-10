@@ -29,7 +29,8 @@ This library implements SPDX parsers, convertors, validators and handlers in Pyt
 - PyPI: <https://pypi.python.org/pypi/spdx-tools>
 - Browse the API: <https://spdx.github.io/tools-python>
 
-Important updates regarding this library are shared via the SPDX tech mailing list: <https://lists.spdx.org/g/Spdx-tech>.
+Important updates regarding this library are shared via
+the SPDX tech mailing list: <https://lists.spdx.org/g/Spdx-tech>.
 
 ## License
 
@@ -39,9 +40,10 @@ Important updates regarding this library are shared via the SPDX tech mailing li
 
 - API to create and manipulate SPDX v2.2 and v2.3 documents
 - Parse, convert, create and validate SPDX files
-- supported formats: Tag/Value, RDF, JSON, YAML, XML
-- visualize the structure of a SPDX document by creating an `AGraph`. Note: This is an optional feature and requires
-additional installation of optional dependencies
+- Supported formats: Tag/Value, RDF, JSON, YAML, XML
+- Visualize the structure of a SPDX document by creating an `AGraph`.
+  Note: This is an optional feature and requires
+  additional installation of optional dependencies
 
 ## Experimental support for SPDX 3.0
 
@@ -50,7 +52,11 @@ additional installation of optional dependencies
 - Serialize to JSON-LD
 
 See [Quickstart to SPDX 3.0](#quickstart-to-spdx-30) below.
-The implementation is based on the descriptive Markdown files in the repository <https://github.com/spdx/spdx-3-model> (latest commit: a5372a3c145dbdfc1381fc1f791c68889aafc7ff).
+The implementation is based on the descriptive Markdown files in the repository
+<https://github.com/spdx/spdx-3-model>
+(commit: a5372a3c145dbdfc1381fc1f791c68889aafc7ff).
+The latest SPDX 3.0 model is available at
+<https://spdx.github.io/spdx-spec/v3.0/serializations/>.
 
 ## Installation
 
