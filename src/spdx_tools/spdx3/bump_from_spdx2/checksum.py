@@ -1,11 +1,9 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from ..model.core import Hash, HashAlgorithm
-from ...spdx.model.checksum import (
-    Checksum as Spdx2_Checksum,
-    ChecksumAlgorithm,
-)
+from spdx_tools.spdx.model.checksum import Checksum as Spdx2_Checksum
+from spdx_tools.spdx.model.checksum import ChecksumAlgorithm
+from spdx_tools.spdx3.model.core import Hash, HashAlgorithm
 
 
 def bump_checksum(spdx2_checksum: Spdx2_Checksum) -> Hash:

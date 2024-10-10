@@ -6,25 +6,23 @@ import sys
 
 from beartype.typing import Dict, List, Optional, Tuple, Union
 
-from . import print_missing_conversion
-from ..model.core import (
+from spdx_tools.spdx.model.relationship import Relationship as Spdx2_Relationship
+from spdx_tools.spdx.model.relationship import RelationshipType as Spdx2_RelationshipType
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
+from spdx_tools.spdx3.model.core import (
     LifecycleScopeType,
     Relationship,
     RelationshipCompleteness,
     RelationshipType,
 )
-from ..model.software import (
+from spdx_tools.spdx3.model.software import (
     DependencyConditionalityType,
     SoftwareDependencyLinkType,
     SoftwareDependencyRelationship,
 )
-from ..payload import Payload
-from ...spdx.model.relationship import (
-    Relationship as Spdx2_Relationship,
-    RelationshipType as Spdx2_RelationshipType,
-)
-from ...spdx.model.spdx_no_assertion import SpdxNoAssertion
-from ...spdx.model.spdx_none import SpdxNone
+from spdx_tools.spdx3.payload import Payload
 
 # bump relationship type, map each relationship type to the corresponding class in 3.0,
 # the relationship type, other arguments and if swapped

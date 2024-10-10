@@ -1,7 +1,10 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from . import (
+from spdx_tools.spdx.model import RelationshipType
+from spdx_tools.spdx.model.document import Document as Spdx2_Document
+from spdx_tools.spdx.model.relationship_filters import filter_by_type_and_origin
+from spdx_tools.spdx3.bump_from_spdx2 import (
     bump_annotation,
     bump_creation_info,
     bump_file,
@@ -9,11 +12,8 @@ from . import (
     bump_relationships,
     bump_snippet,
 )
-from ..model.core import CreationInfo, SpdxDocument
-from ..payload import Payload
-from ...spdx.model import RelationshipType
-from ...spdx.model.document import Document as Spdx2_Document
-from ...spdx.model.relationship_filters import filter_by_type_and_origin
+from spdx_tools.spdx3.model.core import CreationInfo, SpdxDocument
+from spdx_tools.spdx3.payload import Payload
 
 """ We want to implement a bump_from_spdx2 from the data model in src.spdx to the data model in src.spdx3.
     As there are many fundamental differences between these version we want each bump_from_spdx2 method to take
