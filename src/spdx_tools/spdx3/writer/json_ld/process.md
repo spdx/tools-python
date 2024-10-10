@@ -1,5 +1,10 @@
 # Workflow
 
+Official SPDX v3.0 serialization documentation and context file
+are available at: <https://spdx.github.io/spdx-spec/v3.0/serializations/>
+
+## Manually generate context file
+
 Process to produce context file and a serialization example:
 
 1. Run
@@ -20,8 +25,6 @@ Process to produce context file and a serialization example:
     ```sh
     pyspdxtools3 -i  ./tests/spdx/data/SPDXJSONExample-v2.3.spdx.json -o example_with_context
     ```
-
-## Manually
 
 ## Known limitations
 
