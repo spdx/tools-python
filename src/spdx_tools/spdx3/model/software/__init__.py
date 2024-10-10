@@ -1,17 +1,17 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from spdx_tools.spdx3.model.software.file import File
-from spdx_tools.spdx3.model.software.package import Package
-from spdx_tools.spdx3.model.software.sbom import Sbom, SBOMType
-from spdx_tools.spdx3.model.software.snippet import Snippet
-from spdx_tools.spdx3.model.software.software_artifact import SoftwareArtifact
-from spdx_tools.spdx3.model.software.software_dependency_relationship import (
+from .file import File
+from .package import Package
+from .sbom import Sbom, SBOMType
+from .snippet import Snippet
+from .software_artifact import SoftwareArtifact
+from .software_dependency_relationship import (
     DependencyConditionalityType,
     SoftwareDependencyLinkType,
     SoftwareDependencyRelationship,
 )
-from spdx_tools.spdx3.model.software.software_purpose import SoftwarePurpose
+from .software_purpose import SoftwarePurpose
 
 __all__ = [
     "DependencyConditionalityType",
