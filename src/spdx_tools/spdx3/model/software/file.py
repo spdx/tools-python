@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 from datetime import datetime
+from enum import Enum, auto
 
 from beartype.typing import List, Optional
 
@@ -16,6 +17,10 @@ from ..licensing.license_field import LicenseField
 from .software_artifact import SoftwareArtifact
 from .software_purpose import SoftwarePurpose
 
+
+class FileKindType(Enum):
+    DIRECTORY = auto()
+    FILE = auto()
 
 @dataclass_with_properties
 class File(SoftwareArtifact):
@@ -47,6 +52,7 @@ class File(SoftwareArtifact):
         copyright_text: Optional[str] = None,
         attribution_text: Optional[str] = None,
         content_type: Optional[str] = None,
+        file_kind: Optional[FileKindType] = None,
     ):
         verified_using = [] if not verified_using else verified_using
         external_ref = [] if not external_ref else external_ref

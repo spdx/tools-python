@@ -64,7 +64,7 @@ def test_relationships_bump_with_setting_completeness():
         RelationshipType.DESCRIBES,
         [],
         comment=relationships[0].comment,
-        completeness=RelationshipCompleteness.NOASSERTION,
+        completeness=RelationshipCompleteness.NO_ASSERTION,
     )
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-1") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-1",

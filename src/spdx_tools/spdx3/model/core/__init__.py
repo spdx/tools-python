@@ -28,6 +28,7 @@ from .namespace_map import NamespaceMap
 from .organization import Organization
 from .person import Person
 from .positive_integer_range import PositiveIntegerRange
+from .presence_type import PresenceType
 from .profile_identifier import ProfileIdentifierType
 from .relationship import (
     Relationship,
@@ -37,6 +38,7 @@ from .relationship import (
 from .software_agent import SoftwareAgent
 from .spdx_collection import ElementCollection
 from .spdx_document import SpdxDocument
+from .support_type import SupportType
 from .tool import Tool
 
 __all__ = [
@@ -48,6 +50,7 @@ __all__ = [
     "Bundle",
     "CreationInfo",
     "Element",
+    "ElementCollection",
     "ExternalIdentifier",
     "ExternalIdentifierType",
     "ExternalMap",
@@ -62,12 +65,13 @@ __all__ = [
     "Organization",
     "Person",
     "PositiveIntegerRange",
+    "PresenceType",
     "ProfileIdentifierType",
     "Relationship",
-    "RelationshipType",
     "RelationshipCompleteness",
+    "RelationshipType",
     "SoftwareAgent",
-    "ElementCollection",
     "SpdxDocument",
+    "SupportType",
     "Tool",
 ]

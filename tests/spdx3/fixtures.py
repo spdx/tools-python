@@ -68,7 +68,7 @@ from spdx_tools.spdx3.model.software import (
     File,
     Package,
     Sbom,
-    SBOMType,
+    SbomType,
     Snippet,
     SoftwareDependencyLinkType,
     SoftwareDependencyRelationship,
@@ -260,7 +260,7 @@ BUNDLE_DICT = {
 }
 
 SBOM_DICT = {
-    "sbom_type": [SBOMType.BUILD],
+    "sbom_type": [SbomType.BUILD],
 }
 
 LICENSE_DICT = {

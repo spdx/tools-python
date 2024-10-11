@@ -370,7 +370,7 @@ def determine_completeness_and_to(
     related_spdx_element_id: Union[str, SpdxNone, SpdxNoAssertion],
 ) -> Tuple[Optional[RelationshipCompleteness], List[str]]:
     if isinstance(related_spdx_element_id, SpdxNoAssertion):
-        completeness = RelationshipCompleteness.NOASSERTION
+        completeness = RelationshipCompleteness.NO_ASSERTION
         to: List[str] = []
     elif isinstance(related_spdx_element_id, SpdxNone):
         completeness = RelationshipCompleteness.COMPLETE

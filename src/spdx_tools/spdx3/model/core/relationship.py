@@ -82,7 +82,7 @@ class RelationshipType(Enum):
 class RelationshipCompleteness(Enum):
     COMPLETE = auto()
     INCOMPLETE = auto()
-    NOASSERTION = auto()
+    NO_ASSERTION = auto()
 
 
 @dataclass_with_properties

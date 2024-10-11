@@ -18,7 +18,7 @@ from ..core.integrity_method import IntegrityMethod
 from ..core.namespace_map import NamespaceMap
 
 
-class SBOMType(Enum):
+class SbomType(Enum):
     ANALYZED = auto()
     BUILD = auto()
     DEPLOYED = auto()
@@ -29,7 +29,7 @@ class SBOMType(Enum):
 
 @dataclass_with_properties
 class Sbom(Bom):
-    sbom_type: List[SBOMType] = field(default_factory=list)
+    sbom_type: List[SbomType] = field(default_factory=list)
 
     # We overwrite the super-__init__ as check_types_and_set_values()
     # takes care of all fields (including inherited ones).
@@ -50,7 +50,7 @@ class Sbom(Bom):
         namespace: List[NamespaceMap] = [],
         import_: List[ExternalMap] = [],
         context: Optional[str] = None,
-        sbom_type: List[SBOMType] = [],
+        sbom_type: List[SbomType] = [],
     ):
         verified_using = [] if not verified_using else verified_using
         external_ref = [] if not external_ref else external_ref
