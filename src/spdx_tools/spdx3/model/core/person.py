@@ -12,6 +12,7 @@ from .external_identifier import ExternalIdentifier
 from .external_ref import ExternalRef
 from .integrity_method import IntegrityMethod
 
+
 @dataclass_with_properties
 class Person(Agent):
     def __init__(

@@ -8,7 +8,7 @@ from .bom import Bom
 from .bundle import Bundle
 from .creation_info import CreationInfo
 from .element import Element
-
+from .element_collection import ElementCollection
 from .external_identifier import (
     ExternalIdentifier,
     ExternalIdentifierType,
@@ -32,11 +32,10 @@ from .presence_type import PresenceType
 from .profile_identifier import ProfileIdentifierType
 from .relationship import (
     Relationship,
-    RelationshipType,
     RelationshipCompleteness,
+    RelationshipType,
 )
 from .software_agent import SoftwareAgent
-from .spdx_collection import ElementCollection
 from .spdx_document import SpdxDocument
 from .support_type import SupportType
 from .tool import Tool

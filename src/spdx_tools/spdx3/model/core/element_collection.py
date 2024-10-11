@@ -12,6 +12,7 @@ from .element import Element
 from .external_map import ExternalMap
 from .namespace_map import NamespaceMap
 
+
 @dataclass_with_properties
 class ElementCollection(Element):
     # due to the inheritance we need to make all fields non-default in the __annotation__,

@@ -7,12 +7,13 @@ from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_pr
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
 from .creation_info import CreationInfo
+from .element_collection import ElementCollection
 from .external_identifier import ExternalIdentifier
 from .external_map import ExternalMap
 from .external_ref import ExternalRef
 from .integrity_method import IntegrityMethod
 from .namespace_map import NamespaceMap
-from .spdx_collection import ElementCollection
+from .profile_identifier import ProfileIdentifierType
 
 
 @dataclass_with_properties
@@ -36,6 +37,7 @@ class Bundle(ElementCollection):
         namespace: List[NamespaceMap] = [],
         import_: List[ExternalMap] = [],
         context: Optional[str] = None,
+        profile_conformance: List[ProfileIdentifierType] = [],
     ):
         verified_using = [] if not verified_using else verified_using
         external_ref = [] if not external_ref else external_ref

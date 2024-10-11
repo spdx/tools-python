@@ -15,6 +15,7 @@ from .external_ref import ExternalRef
 from .integrity_method import IntegrityMethod
 from .relationship import Relationship, RelationshipCompleteness, RelationshipType
 
+
 class LifecycleScopeType(Enum):
     BUILD = auto()
     DESIGN = auto()

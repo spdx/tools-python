@@ -8,6 +8,7 @@ from datetime import datetime
 from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
+
 from .element import Element
 
 

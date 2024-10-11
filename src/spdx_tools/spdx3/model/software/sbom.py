@@ -16,6 +16,7 @@ from ..core.external_map import ExternalMap
 from ..core.external_ref import ExternalRef
 from ..core.integrity_method import IntegrityMethod
 from ..core.namespace_map import NamespaceMap
+from ..core.profile_identifier import ProfileIdentifierType
 
 
 class SbomType(Enum):
@@ -51,6 +52,7 @@ class Sbom(Bom):
         import_: List[ExternalMap] = [],
         context: Optional[str] = None,
         sbom_type: List[SbomType] = [],
+        profile_conformance: List[ProfileIdentifierType] = [],
     ):
         verified_using = [] if not verified_using else verified_using
         external_ref = [] if not external_ref else external_ref

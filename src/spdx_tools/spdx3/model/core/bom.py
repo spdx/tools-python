@@ -13,6 +13,8 @@ from .external_map import ExternalMap
 from .external_ref import ExternalRef
 from .integrity_method import IntegrityMethod
 from .namespace_map import NamespaceMap
+from .profile_identifier import ProfileIdentifierType
+
 
 @dataclass_with_properties
 class Bom(Bundle):
@@ -36,6 +38,7 @@ class Bom(Bundle):
         namespace: List[NamespaceMap] = [],
         import_: List[ExternalMap] = [],
         context: Optional[str] = None,
+        profile_conformance: List[ProfileIdentifierType] = [],
     ):
         verified_using = [] if not verified_using else verified_using
         external_ref = [] if not external_ref else external_ref

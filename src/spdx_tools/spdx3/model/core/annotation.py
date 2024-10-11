@@ -15,6 +15,7 @@ from .external_identifier import ExternalIdentifier
 from .external_ref import ExternalRef
 from .integrity_method import IntegrityMethod
 
+
 class AnnotationType(Enum):
     OTHER = auto()
     REVIEW = auto()
