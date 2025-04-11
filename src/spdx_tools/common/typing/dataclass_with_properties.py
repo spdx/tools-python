@@ -4,7 +4,7 @@
 from dataclasses import dataclass
 
 from beartype import beartype
-from beartype.roar import BeartypeCallHintException
+from beartype.roar import BeartypeCallHintParamViolation
 
 
 def dataclass_with_properties(cls):
@@ -30,7 +30,7 @@ def make_setter(field_name, field_type):
     def set_field_with_error_conversion(self, value: field_type):
         try:
             set_field(self, value)
-        except BeartypeCallHintException as err:
+        except BeartypeCallHintParamViolation as err:
             error_message: str = f"SetterError {self.__class__.__name__}: {err}"
 
             # As setters are created dynamically, their argument name is always "value". We replace it by the
