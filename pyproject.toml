@@ -16,14 +16,13 @@ classifiers = [
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
     "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
 ]
 urls = { Homepage = "https://github.com/spdx/tools-python" }
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 dependencies = ["click", "pyyaml", "xmltodict", "rdflib", "beartype", "uritools", "license_expression", "ply", "semantic_version"]
 dynamic = ["version"]
 
