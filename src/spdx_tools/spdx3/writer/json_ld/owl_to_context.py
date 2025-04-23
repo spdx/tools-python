@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import json
-import os.path
+from importlib import resources
 
 # current workflow: markdown files + spec_parser -> model.ttl -> convert to json_ld: SPDX_OWL.json ->
 # use the function below to generate context.json
@@ -108,8 +108,11 @@ def convert_spdx_owl_to_jsonld_context(spdx_owl: str = "SPDX_OWL.json"):
         else:
             print(f"unknown node_type: {node_type}")
 
-    with open(os.path.join(os.path.dirname(__file__), "context.json"), "w") as infile:
-        json.dump(context_dict, infile)
+    with resources.as_file(
+        resources.files("spdx_tools.spdx3.writer.json_ld").joinpath("context.json")
+    ) as context_path:
+        with open(context_path, "w", encoding="utf-8") as outfile:
+            json.dump(context_dict, outfile)
 
 
 if __name__ == "__main__":
