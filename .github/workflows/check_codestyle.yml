@@ -29,9 +29,13 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Installation
-        run: pip install ".[code_style]"
+        run: |
+          pip install reuse
+          pip install ".[code_style]"
       - name: Check code with isort
         run: |
           isort src tests --check
           black src tests --check
           flake8 src tests
+      - name: Check license headers with reuse
+        run: reuse lint
