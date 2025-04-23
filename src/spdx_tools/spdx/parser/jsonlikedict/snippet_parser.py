@@ -127,7 +127,7 @@ class SnippetParser:
 
     @staticmethod
     def convert_range_from_str(
-        _range: Tuple[Union[int, str], Union[int, str]]
+        _range: Tuple[Union[int, str], Union[int, str]],
     ) -> Tuple[Union[int, str], Union[int, str]]:
         # XML does not support integers, so we have to convert from string (if possible)
         if not _range:
