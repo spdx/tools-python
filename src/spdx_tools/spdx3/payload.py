@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import Dict
 
-from spdx_tools.spdx3.model import Element
+from spdx_tools.spdx3.model.core import Element
 
 
 class Payload:

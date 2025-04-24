@@ -4,7 +4,7 @@
 from beartype.typing import TextIO
 
 from spdx_tools.spdx3.model.software import Sbom
-from spdx_tools.spdx3.writer.console.bom_writer import write_bom
+from spdx_tools.spdx3.writer.console.core.bom_writer import write_bom
 
 
 def write_sbom(sbom: Sbom, text_output: TextIO):

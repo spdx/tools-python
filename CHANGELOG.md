@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.8.x (not yet released)
+
+* spdx3: Update model to v3.0.1
+
 ## v0.8.3 (2024-09-27)
 
 ### New features and changes

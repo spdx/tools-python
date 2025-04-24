@@ -7,7 +7,7 @@ import pytest
 from spdx_tools.spdx.model import Version
 
 
-@pytest.mark.parametrize("input_string,expected", [("1.2", Version(1, 2)), ("12.345", Version(12, 345))])
+@pytest.mark.parametrize("input_string,expected", [("1.2", Version(major=1, minor=2)), ("12.345", Version(major=12, minor=345))])
 def test_version_from_string(input_string, expected):
     assert Version.is_valid_version_string(input_string)
     version: Version = Version.from_string(input_string)

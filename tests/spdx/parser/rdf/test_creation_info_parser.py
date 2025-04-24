@@ -33,7 +33,7 @@ def test_parse_creation_info():
     assert creation_info.created == datetime(2022, 12, 1, 0, 0)
     assert creation_info.creator_comment == "creatorComment"
     assert creation_info.data_license == "CC0-1.0"
-    assert creation_info.license_list_version == Version(3, 19)
+    assert creation_info.license_list_version == Version(major=3, minor=19)
     assert creation_info.document_comment == "documentComment"
 
 

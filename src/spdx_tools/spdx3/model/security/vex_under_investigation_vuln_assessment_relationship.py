@@ -7,15 +7,14 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model import (
-    CreationInfo,
-    ExternalIdentifier,
-    ExternalReference,
-    IntegrityMethod,
-    RelationshipCompleteness,
-)
-from spdx_tools.spdx3.model.security.vex_vuln_assessment_relationship import VexVulnAssessmentRelationship
 from spdx_tools.spdx.model import RelationshipType
+
+from ..core.creation_info import CreationInfo
+from ..core.external_identifier import ExternalIdentifier
+from ..core.external_ref import ExternalRef
+from ..core.integrity_method import IntegrityMethod
+from ..core.relationship import RelationshipCompleteness
+from ..security.vex_vuln_assessment_relationship import VexVulnAssessmentRelationship
 
 
 @dataclass_with_properties
@@ -31,9 +30,9 @@ class VexUnderInvestigationVulnAssessmentRelationship(VexVulnAssessmentRelations
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: List[IntegrityMethod] = None,
-        external_reference: List[ExternalReference] = None,
-        external_identifier: List[ExternalIdentifier] = None,
+        verified_using: List[IntegrityMethod] = [],
+        external_ref: List[ExternalRef] = [],
+        external_identifier: List[ExternalIdentifier] = [],
         extension: Optional[str] = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
@@ -46,7 +45,7 @@ class VexUnderInvestigationVulnAssessmentRelationship(VexVulnAssessmentRelations
         vex_version: Optional[str] = None,
         status_notes: Optional[str] = None,
     ):
-        verified_using = [] if verified_using is None else verified_using
-        external_reference = [] if external_reference is None else external_reference
-        external_identifier = [] if external_identifier is None else external_identifier
+        verified_using = [] if not verified_using else verified_using
+        external_ref = [] if not external_ref else external_ref
+        external_identifier = [] if not external_identifier else external_identifier
         check_types_and_set_values(self, locals())

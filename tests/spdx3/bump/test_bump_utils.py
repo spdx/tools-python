@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
+from spdx_tools.spdx3.bump_from_spdx2 import handle_no_assertion_or_none
 from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
 from spdx_tools.spdx.model.spdx_none import SpdxNone
 

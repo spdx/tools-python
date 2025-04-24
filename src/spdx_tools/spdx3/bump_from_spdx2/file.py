@@ -3,14 +3,14 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List
 
-from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import ExternalMap
-from spdx_tools.spdx3.model.software import File
-from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import ExternalDocumentRef, SpdxNoAssertion
 from spdx_tools.spdx.model.file import File as Spdx2_File
 from spdx_tools.spdx.spdx_element_utils import get_full_element_spdx_id
+from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
+from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
+from spdx_tools.spdx3.model.core import ExternalMap
+from spdx_tools.spdx3.model.software import File
+from spdx_tools.spdx3.payload import Payload
 
 
 def bump_file(
@@ -18,11 +18,11 @@ def bump_file(
     payload: Payload,
     document_namespace: str,
     external_document_refs: List[ExternalDocumentRef],
-    imports: List[ExternalMap],
+    import_: List[ExternalMap],
 ):
     spdx_id = get_full_element_spdx_id(spdx2_file, document_namespace, external_document_refs)
     if ":" in spdx2_file.spdx_id:
-        imports.append(
+        import_.append(
             ExternalMap(
                 external_id=spdx2_file.spdx_id,
                 defining_document=f"{spdx2_file.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",

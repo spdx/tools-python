@@ -3,12 +3,12 @@
 # SPDX-License-Identifier: Apache-2.0
 from copy import deepcopy
 
-from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
-from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import Annotation, AnnotationType, CreationInfo
-from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.actor import ActorType
 from spdx_tools.spdx.model.annotation import Annotation as Spdx2_Annotation
+from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
+from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
+from spdx_tools.spdx3.model.core import Annotation, AnnotationType, CreationInfo
+from spdx_tools.spdx3.payload import Payload
 
 
 def bump_annotation(

@@ -5,8 +5,8 @@ from unittest import TestCase
 
 import pytest
 
-from spdx_tools.spdx3.bump_from_spdx2.package import bump_package
-from spdx_tools.spdx3.model import ExternalIdentifier, ExternalIdentifierType, ExternalReference, ExternalReferenceType
+from spdx_tools.spdx3.bump_from_spdx2 import bump_package
+from spdx_tools.spdx3.model.core import ExternalIdentifier, ExternalIdentifierType, ExternalRef, ExternalRefType
 from spdx_tools.spdx3.model.software import Package
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import SpdxNoAssertion
@@ -49,8 +49,8 @@ def test_bump_package(originator, expected_originator, supplier, expected_suppli
     assert isinstance(package, Package)
     assert package.spdx_id == expected_new_package_id
     assert package.package_version == spdx2_package.version
-    assert package.external_reference == [
-        ExternalReference(ExternalReferenceType.SECURITY_ADVISORY, ["advisory_locator"], None, "advisory_comment")
+    assert package.external_ref == [
+        ExternalRef(ExternalRefType.SECURITY_ADVISORY, ["advisory_locator"], None, "advisory_comment")
     ]
     assert package.external_identifier == [
         ExternalIdentifier(ExternalIdentifierType.SWHID, "swh_locator", "swh_comment")
@@ -59,7 +59,7 @@ def test_bump_package(originator, expected_originator, supplier, expected_suppli
     assert package.package_version == spdx2_package.version
     assert package.originated_by == expected_originator
     assert package.supplied_by == expected_supplier
-    assert package.homepage == spdx2_package.homepage
+    assert package.home_page == spdx2_package.homepage
     assert package.source_info == spdx2_package.source_info
     assert package.built_time == spdx2_package.built_date
     assert package.release_time == spdx2_package.release_date
@@ -82,7 +82,7 @@ def test_bump_of_single_purl_without_comment():
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url == "purl_locator"
-    assert package.external_reference == []
+    assert package.external_ref == []
     assert package.external_identifier == []
 
 
@@ -100,9 +100,9 @@ def test_bump_of_single_purl_with_comment():
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
-    assert package.external_reference == []
+    assert package.external_ref == []
     assert package.external_identifier == [
-        ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "purl_comment")
+        ExternalIdentifier(ExternalIdentifierType.PACKAGE_URL, "purl_locator", "purl_comment")
     ]
 
 
@@ -121,11 +121,11 @@ def test_bump_of_multiple_purls():
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
-    assert package.external_reference == []
+    assert package.external_ref == []
     TestCase().assertCountEqual(
         package.external_identifier,
         [
-            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "comment"),
-            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator2", None),
+            ExternalIdentifier(ExternalIdentifierType.PACKAGE_URL, "purl_locator", "comment"),
+            ExternalIdentifier(ExternalIdentifierType.PACKAGE_URL, "purl_locator2", None),
         ],
     )

@@ -7,9 +7,10 @@ from dataclasses import field
 from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
-from spdx_tools.spdx3.model import Artifact
-from spdx_tools.spdx3.model.licensing import LicenseField
-from spdx_tools.spdx3.model.software import SoftwarePurpose
+
+from ..core.artifact import Artifact
+from ..licensing.license_field import LicenseField
+from .software_purpose import SoftwarePurpose
 
 
 @dataclass_with_properties

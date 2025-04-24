@@ -60,7 +60,7 @@ def creation_info_fixture(
     creator_comment="creatorComment",
     data_license="CC0-1.0",
     external_document_refs=None,
-    license_list_version=Version(3, 19),
+    license_list_version=Version(major=3, minor=19),
     document_comment="documentComment",
 ) -> CreationInfo:
     creators = [actor_fixture(name="creatorName")] if creators is None else creators

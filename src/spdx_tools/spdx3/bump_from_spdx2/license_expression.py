@@ -5,6 +5,7 @@ from beartype.typing import List, Union
 from license_expression import AND, OR, LicenseExpression, LicenseSymbol, LicenseWithExceptionSymbol
 
 from spdx_tools.common.spdx_licensing import spdx_licensing
+from spdx_tools.spdx.model import ExtractedLicensingInfo, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx3.model.licensing import (
     AnyLicenseInfo,
     ConjunctiveLicenseSet,
@@ -20,7 +21,6 @@ from spdx_tools.spdx3.model.licensing import (
     NoneLicense,
     WithAdditionOperator,
 )
-from spdx_tools.spdx.model import ExtractedLicensingInfo, SpdxNoAssertion, SpdxNone
 
 
 def bump_license_expression_or_none_or_no_assertion(

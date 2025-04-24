@@ -3,24 +3,24 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List, Optional, Union
 
-from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
-from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
-from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import (
-    ExternalIdentifier,
-    ExternalIdentifierType,
-    ExternalMap,
-    ExternalReference,
-    ExternalReferenceType,
-)
-from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
-from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import Actor as Spdx2_Actor
 from spdx_tools.spdx.model import ExternalDocumentRef, SpdxNoAssertion
 from spdx_tools.spdx.model.package import ExternalPackageRef
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
 from spdx_tools.spdx.spdx_element_utils import get_full_element_spdx_id
+from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
+from spdx_tools.spdx3.bump_from_spdx2.bump_utils import handle_no_assertion_or_none
+from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
+from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
+from spdx_tools.spdx3.model.core import (
+    ExternalIdentifier,
+    ExternalIdentifierType,
+    ExternalMap,
+    ExternalRef,
+    ExternalRefType,
+)
+from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
+from spdx_tools.spdx3.payload import Payload
 
 
 def bump_package(
@@ -28,11 +28,11 @@ def bump_package(
     payload: Payload,
     document_namespace: str,
     external_document_refs: List[ExternalDocumentRef],
-    imports: List[ExternalMap],
+    import_: List[ExternalMap],
 ):
     spdx_id = get_full_element_spdx_id(spdx2_package, document_namespace, external_document_refs)
     if ":" in spdx2_package.spdx_id:
-        imports.append(
+        import_.append(
             ExternalMap(
                 external_id=spdx2_package.spdx_id,
                 defining_document=f"{spdx2_package.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",
@@ -44,11 +44,11 @@ def bump_package(
     if isinstance(spdx2_package.supplier, Spdx2_Actor):
         supplied_by_spdx_id = [bump_actor(spdx2_package.supplier, payload, document_namespace)]
     else:
-        supplied_by_spdx_id = None
+        supplied_by_spdx_id = []
     if isinstance(spdx2_package.originator, Spdx2_Actor):
         originated_by_spdx_id = [bump_actor(spdx2_package.originator, payload, document_namespace)]
     else:
-        originated_by_spdx_id = None
+        originated_by_spdx_id = []
     print_missing_conversion("package2.files_analyzed", 0, "https://github.com/spdx/spdx-3-model/issues/84")
     print_missing_conversion(
         "package2.verification_code", 1, "of IntegrityMethod, https://github.com/spdx/spdx-3-model/issues/85"
@@ -65,10 +65,10 @@ def bump_package(
         "and missing definition of license profile",
     )
 
-    external_reference = []
+    external_ref = []
     external_identifier = []
     purl_refs = [
-        external_ref for external_ref in spdx2_package.external_references if external_ref.reference_type == "purl"
+        purl_ref for purl_ref in spdx2_package.external_references if purl_ref.reference_type == "purl"
     ]
     exactly_one_purl_without_comment = len(purl_refs) == 1 and purl_refs[0].comment is None
     package_url = None
@@ -78,8 +78,8 @@ def bump_package(
         if exactly_one_purl_without_comment and spdx2_external_ref.reference_type == "purl":
             continue
         id_or_ref = bump_external_package_ref(spdx2_external_ref)
-        if isinstance(id_or_ref, ExternalReference):
-            external_reference.append(id_or_ref)
+        if isinstance(id_or_ref, ExternalRef):
+            external_ref.append(id_or_ref)
         elif isinstance(id_or_ref, ExternalIdentifier):
             external_identifier.append(id_or_ref)
 
@@ -94,8 +94,8 @@ def bump_package(
             summary=spdx2_package.summary,
             description=spdx2_package.description,
             comment=spdx2_package.comment,
-            verified_using=integrity_methods,
-            external_reference=external_reference,
+            verified_using=integrity_methods,  # need SPDX 2 Hash -> SPDX 3 IntegrityMethod conversion here
+            external_ref=external_ref,
             external_identifier=external_identifier,
             originated_by=originated_by_spdx_id,
             supplied_by=supplied_by_spdx_id,
@@ -106,7 +106,7 @@ def bump_package(
             package_version=spdx2_package.version,
             download_location=download_location,
             package_url=package_url,
-            homepage=spdx2_package.homepage,
+            home_page=spdx2_package.homepage,
             source_info=spdx2_package.source_info,
             copyright_text=copyright_text,
             attribution_text=", ".join(spdx2_package.attribution_texts),
@@ -115,25 +115,25 @@ def bump_package(
 
 
 external_ref_type_map = {
+    "advisory": ExternalRefType.SECURITY_ADVISORY,
+    "bower": None,
     "cpe22Type": ExternalIdentifierType.CPE22,
     "cpe23Type": ExternalIdentifierType.CPE23,
-    "advisory": ExternalReferenceType.SECURITY_ADVISORY,
-    "fix": ExternalReferenceType.SECURITY_FIX,
-    "url": None,
-    "swid": ExternalIdentifierType.SWID,
+    "fix": ExternalRefType.SECURITY_FIX,
+    "gitoid": ExternalIdentifierType.GITOID,
     "maven-central": None,
     "npm": None,
     "nuget": None,
-    "bower": None,
-    "purl": ExternalIdentifierType.PURL,
+    "purl": ExternalIdentifierType.PACKAGE_URL,
     "swh": ExternalIdentifierType.SWHID,
-    "gitoid": ExternalIdentifierType.GITOID,
+    "swid": ExternalIdentifierType.SWID,
+    "url": ExternalIdentifierType.URL_SCHEME,
 }
 
 
 def bump_external_package_ref(
     spdx2_external_ref: ExternalPackageRef,
-) -> Optional[Union[ExternalReference, ExternalIdentifier]]:
+) -> Optional[Union[ExternalRef, ExternalIdentifier]]:
     reference_type = spdx2_external_ref.reference_type
     locator = spdx2_external_ref.locator
     comment = spdx2_external_ref.comment
@@ -149,7 +149,9 @@ def bump_external_package_ref(
 
     id_or_ref_type = external_ref_type_map[reference_type]
 
-    if isinstance(id_or_ref_type, ExternalReferenceType):
-        return ExternalReference(id_or_ref_type, [locator], None, comment)
+    if isinstance(id_or_ref_type, ExternalRefType):
+        return ExternalRef(id_or_ref_type, [locator], None, comment)
     elif isinstance(id_or_ref_type, ExternalIdentifierType):
         return ExternalIdentifier(id_or_ref_type, locator, comment)
+
+    return None
