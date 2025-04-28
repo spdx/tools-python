@@ -141,12 +141,12 @@ Starting a Changelog.
 
 * Dropped Python 2 support. Python >= 3.6 is now required.
 * Added `pyspdxtools_convertor` and `pyspdxtools_parser` CLI scripts. See [the readme](README.md) for usage instructions.
-* Updated the tools to support SPDX versions up to 2.3 and to conform with the specification. Apart from many bugfixes 
+* Updated the tools to support SPDX versions up to 2.3 and to conform with the specification. Apart from many bugfixes
   and new properties, some of the more significant changes include:
-    * Support for multiple packages per document
-    * Support for multiple checksums for packages and files
-    * Support for files outside a package
-* **Note**: Validation was updated to follow the 2.3 specification. Since there is currently no support for 
+  * Support for multiple packages per document
+  * Support for multiple checksums for packages and files
+  * Support for files outside a package
+* **Note**: Validation was updated to follow the 2.3 specification. Since there is currently no support for
   version-specific handling, some details may be handled incorrectly for documents using lower
   versions. The changes are mostly restricted to properties becoming optional and new property values becoming
   available, and should be of limited impact. See https://spdx.github.io/spdx-spec/v2.3/diffs-from-previous-editions/
