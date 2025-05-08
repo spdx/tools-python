@@ -3,8 +3,12 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx_tools.spdx.jsonschema.external_package_ref_converter import ExternalPackageRefConverter
-from spdx_tools.spdx.jsonschema.external_package_ref_properties import ExternalPackageRefProperty
+from spdx_tools.spdx.jsonschema.external_package_ref_converter import (
+    ExternalPackageRefConverter,
+)
+from spdx_tools.spdx.jsonschema.external_package_ref_properties import (
+    ExternalPackageRefProperty,
+)
 from spdx_tools.spdx.model import ExternalPackageRef, ExternalPackageRefCategory
 
 
@@ -23,7 +27,9 @@ def converter() -> ExternalPackageRefConverter:
     ],
 )
 def test_json_property_names(
-    converter: ExternalPackageRefConverter, external_package_ref_property: ExternalPackageRefProperty, expected: str
+    converter: ExternalPackageRefConverter,
+    external_package_ref_property: ExternalPackageRefProperty,
+    expected: str,
 ):
     assert converter.json_property_name(external_package_ref_property) == expected
 
@@ -43,7 +49,7 @@ def test_successful_conversion(converter: ExternalPackageRefConverter):
 
     assert converted_dict == {
         converter.json_property_name(ExternalPackageRefProperty.COMMENT): "comment",
-        converter.json_property_name(ExternalPackageRefProperty.REFERENCE_CATEGORY): "PACKAGE_MANAGER",
+        converter.json_property_name(ExternalPackageRefProperty.REFERENCE_CATEGORY): "PACKAGE-MANAGER",
         converter.json_property_name(ExternalPackageRefProperty.REFERENCE_LOCATOR): "locator",
         converter.json_property_name(ExternalPackageRefProperty.REFERENCE_TYPE): "type",
     }

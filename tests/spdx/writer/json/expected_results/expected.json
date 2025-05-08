@@ -88,7 +88,7 @@
             "externalRefs": [
                 {
                     "comment": "externalPackageRefComment",
-                    "referenceCategory": "PACKAGE_MANAGER",
+                    "referenceCategory": "PACKAGE-MANAGER",
                     "referenceLocator": "org.apache.tomcat:tomcat:9.0.0.M4",
                     "referenceType": "maven-central"
                 }

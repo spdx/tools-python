@@ -4,7 +4,9 @@
 from beartype.typing import Any, Type
 
 from spdx_tools.spdx.jsonschema.converter import TypedConverter
-from spdx_tools.spdx.jsonschema.external_package_ref_properties import ExternalPackageRefProperty
+from spdx_tools.spdx.jsonschema.external_package_ref_properties import (
+    ExternalPackageRefProperty,
+)
 from spdx_tools.spdx.jsonschema.json_property import JsonProperty
 from spdx_tools.spdx.model import Document, ExternalPackageRef
 
@@ -19,7 +21,7 @@ class ExternalPackageRefConverter(TypedConverter[ExternalPackageRef]):
         if external_ref_property == ExternalPackageRefProperty.COMMENT:
             return external_ref.comment
         elif external_ref_property == ExternalPackageRefProperty.REFERENCE_CATEGORY:
-            return external_ref.category.name
+            return external_ref.category.name.replace("_", "-")  # bugfix to match the spdx spec
         elif external_ref_property == ExternalPackageRefProperty.REFERENCE_LOCATOR:
             return external_ref.locator
         elif external_ref_property == ExternalPackageRefProperty.REFERENCE_TYPE:
