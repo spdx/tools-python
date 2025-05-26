@@ -218,7 +218,7 @@ def bump_relationship(
 
 
 def determine_completeness_and_to(
-    related_spdx_element_id: Union[str, SpdxNone, SpdxNoAssertion]
+    related_spdx_element_id: Union[str, SpdxNone, SpdxNoAssertion],
 ) -> Tuple[Optional[RelationshipCompleteness], List[str]]:
     if isinstance(related_spdx_element_id, SpdxNoAssertion):
         completeness = RelationshipCompleteness.NOASSERTION
