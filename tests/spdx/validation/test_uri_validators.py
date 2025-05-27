@@ -14,6 +14,7 @@ from spdx_tools.spdx.validation.uri_validators import validate_download_location
         "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82...",
         "http://some.url",
         "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
+        "http://some.url",
     ],
 )
 def test_valid_url(input_value):

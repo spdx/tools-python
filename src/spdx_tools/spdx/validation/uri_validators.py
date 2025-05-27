@@ -22,7 +22,7 @@ download_location_pattern = (
 
 def validate_url(url: str) -> List[str]:
     if not re.match(url_pattern, url):
-        return [f"must be a valid URL, but is: {url}"]
+        return [f"must be a valid URL, but is 01: {url}"]
 
     return []
 
