@@ -107,6 +107,7 @@ def test_invalid_package_download_location(input_value):
         "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82...",
         "h://someweirdtest^?",
         "https://some.uri that goes on!?",
+        "HTTPS://ANURIINCAPITALS.ORG",
     ],
 )
 def test_valid_uri(input_value):
