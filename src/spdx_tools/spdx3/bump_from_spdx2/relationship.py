@@ -37,12 +37,13 @@ relationship_mapping: Dict[
         {
             "scope": LifecycleScopeType.BUILD,
             "linkage": SoftwareDependencyLinkType.TOOL,
+            "swap": True,
         },
     ),
     Spdx2_RelationshipType.BUILD_TOOL_OF: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {"scope": LifecycleScopeType.BUILD, "linkage": SoftwareDependencyLinkType.TOOL},
+        {"scope": LifecycleScopeType.BUILD, "linkage": SoftwareDependencyLinkType.TOOL, "swap": True},
     ),
     Spdx2_RelationshipType.CONTAINED_BY: (Relationship, RelationshipType.CONTAINS, {"swap": True}),
     Spdx2_RelationshipType.CONTAINS: (
@@ -55,7 +56,7 @@ relationship_mapping: Dict[
     Spdx2_RelationshipType.DEPENDENCY_MANIFEST_OF: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {},
+        {"swap": True},
     ),  # "expect purpose has been set to manifest"
     Spdx2_RelationshipType.DEPENDENCY_OF: (
         SoftwareDependencyRelationship,
@@ -74,12 +75,12 @@ relationship_mapping: Dict[
     Spdx2_RelationshipType.DEV_DEPENDENCY_OF: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {"scope": LifecycleScopeType.DEVELOPMENT},
+        {"scope": LifecycleScopeType.DEVELOPMENT, "swap": True},
     ),
     Spdx2_RelationshipType.DEV_TOOL_OF: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {"scope": LifecycleScopeType.DEVELOPMENT, "linkage": SoftwareDependencyLinkType.TOOL},
+        {"scope": LifecycleScopeType.DEVELOPMENT, "linkage": SoftwareDependencyLinkType.TOOL, "swap": True},
     ),
     Spdx2_RelationshipType.DISTRIBUTION_ARTIFACT: (None, None, {}),  # not defined yet, purpose?
     Spdx2_RelationshipType.DOCUMENTATION_OF: (Relationship, RelationshipType.DOCUMENTATION, {}),
@@ -105,10 +106,10 @@ relationship_mapping: Dict[
     Spdx2_RelationshipType.OPTIONAL_DEPENDENCY_OF: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {"conditionality": DependencyConditionalityType.OPTIONAL},
+        {"conditionality": DependencyConditionalityType.OPTIONAL, "swap": True},
     ),
     Spdx2_RelationshipType.OTHER: (Relationship, RelationshipType.OTHER, {}),
-    Spdx2_RelationshipType.PACKAGE_OF: (SoftwareDependencyRelationship, RelationshipType.DEPENDS_ON, {}),
+    Spdx2_RelationshipType.PACKAGE_OF: (SoftwareDependencyRelationship, RelationshipType.DEPENDS_ON, "swap": True),
     Spdx2_RelationshipType.PATCH_APPLIED: (Relationship, RelationshipType.PATCH, {"swap": True}),
     Spdx2_RelationshipType.PATCH_FOR: (Relationship, RelationshipType.PATCH, {}),
     Spdx2_RelationshipType.PREREQUISITE_FOR: (
@@ -119,29 +120,29 @@ relationship_mapping: Dict[
     Spdx2_RelationshipType.PROVIDED_DEPENDENCY_OF: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {"scope": LifecycleScopeType.BUILD, "conditionality": DependencyConditionalityType.PROVIDED},
+        {"scope": LifecycleScopeType.BUILD, "conditionality": DependencyConditionalityType.PROVIDED, "swap": True},
     ),
     Spdx2_RelationshipType.RUNTIME_DEPENDENCY_OF: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {"scope": LifecycleScopeType.RUNTIME},
+        {"scope": LifecycleScopeType.RUNTIME, "swap": True},
     ),
     Spdx2_RelationshipType.STATIC_LINK: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {"linkage": SoftwareDependencyLinkType.STATIC},
+        {"linkage": SoftwareDependencyLinkType.STATIC, "swap": True},
     ),
     Spdx2_RelationshipType.TEST_CASE_OF: (Relationship, RelationshipType.TEST_CASE, {}),
     Spdx2_RelationshipType.TEST_DEPENDENCY_OF: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {"scope": LifecycleScopeType.TEST},
+        {"scope": LifecycleScopeType.TEST, "swap": True},
     ),
     Spdx2_RelationshipType.TEST_OF: (Relationship, RelationshipType.TEST, {}),
     Spdx2_RelationshipType.TEST_TOOL_OF: (
         SoftwareDependencyRelationship,
         RelationshipType.DEPENDS_ON,
-        {"scope": LifecycleScopeType.TEST, "linkage": SoftwareDependencyLinkType.TOOL},
+        {"scope": LifecycleScopeType.TEST, "linkage": SoftwareDependencyLinkType.TOOL, "swap": True},
     ),
     Spdx2_RelationshipType.VARIANT_OF: (Relationship, RelationshipType.VARIANT, {}),
     Spdx2_RelationshipType.REQUIREMENT_DESCRIPTION_FOR: (Relationship, RelationshipType.REQUIREMENT_FOR, {}),
