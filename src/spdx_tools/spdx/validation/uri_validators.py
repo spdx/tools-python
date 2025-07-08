@@ -12,6 +12,8 @@ url_pattern = (
     "\\/\\/|ftp:\\/\\/)?([\\w\\-.!~*'()%;:&=+$,]+@)?[a-z0-9]+([\\-\\.]{1}[a-z0-9]+){0,100}\\.[a-z]{2,5}"
     "(:[0-9]{1,5})?(\\/.*)?"
 )
+url_pattern_ignore_case = re.compile(url_pattern, re.IGNORECASE)
+
 supported_download_repos: str = "(git|hg|svn|bzr)"
 git_pattern = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-]+)"
 bazaar_pattern = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)"
@@ -22,7 +24,7 @@ compiled_pattern = re.compile(download_location_pattern, re.IGNORECASE)
 
 
 def validate_url(url: str) -> List[str]:
-    if not re.match(url_pattern, url):
+    if not url_pattern_ignore_case.match(url):
         return [f"must be a valid URL, but is: {url}"]
 
     return []
