@@ -15,7 +15,7 @@ intention prior to creating a patch.
 
 ## Development process
 
-We use the GitHub flow that is described here: https://guides.github.com/introduction/flow/
+We use the GitHub flow that is described here: <https://guides.github.com/introduction/flow/>
 
 Here's the process to make changes to the codebase:
 
@@ -30,15 +30,19 @@ Here's the process to make changes to the codebase:
    and optionally follow the further steps described to sync your fork and the original repository.
 
 4. Create a new branch in your fork and set up environment:
+
    ```sh
    git checkout -b fix-or-improve-something
    python -m venv ./venv
    ./venv/bin/activate
    pip install -e ".[development]"
    ```
-   Note: By using the group `[development]` for the installation, all dependencies (including optional ones) will be 
-   installed. This way we make sure that all tests are executed. 
+
+   Note: By using the group `[development]` for the installation, all dependencies (including optional ones) will be
+   installed. This way we make sure that all tests are executed.
+
 5. Make some changes and commit them to the branch:
+
    ```sh
    git commit --signoff -m 'description of my changes'
    ```
@@ -49,27 +53,33 @@ Here's the process to make changes to the codebase:
    of [the Developer Certificate of Origin](https://developercertificate.org/). Git has utilities for signing off on
    commits: `git commit -s` or `--signoff` signs a current commit, and `git rebase --signoff <revision-range>`
    retroactively signs a range of past commits.
+
 6. Test your changes:
+
    ```sh
    pytest -vvs # in the repo root
    ```
 
-7. Check your code style. When opening a pull request, your changes will automatically be checked with `isort`, `black` 
-   and `flake8` to make sure your changes fit with the rest of the code style. 
+7. Check your code style. When opening a pull request, your changes will automatically be checked with `isort`, `black`
+   and `flake8` to make sure your changes fit with the rest of the code style.
+
     ```sh
    # run the following commands in the repo root
-   isort src tests 
+   isort src tests
    black src tests
-   flake8 src tests 
+   flake8 src tests
    ```
-   `black` and `isort` will automatically format the code and sort the imports. The configuration for these linters 
+
+   `black` and `isort` will automatically format the code and sort the imports. The configuration for these linters
    can be found in the `pyproject.toml`. `flake8` lists all problems found which then need to be resolved manually.
    The configuration for the linter can be found in the `.flake8` file.
 
 8. Push the branch to your fork on GitHub:
+
    ```sh
    git push origin fix-or-improve-something
    ```
+
 9. Make a pull request on GitHub.
 10. Continue making more changes and commits on the branch, with `git commit --signoff` and `git push`.
 11. When done, write a comment on the PR asking for a code review.
@@ -77,6 +87,7 @@ Here's the process to make changes to the codebase:
     possible, or with `squash`.
 13. The temporary branch on GitHub should be deleted (there is a button for deleting it).
 14. Delete the local branch as well:
+
     ```sh
     git checkout master
     git pull -p
@@ -84,11 +95,11 @@ Here's the process to make changes to the codebase:
     git branch -d fix-or-improve-something
     ```
 
-# How to run tests
+## How to run tests
 
 The tests framework is using pytest:
 
-```
+```sh
 pip install pytest
 pytest -vvs
 ```
