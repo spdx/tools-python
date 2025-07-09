@@ -17,30 +17,31 @@ import os.path
 # },
 
 PROPERTIES_WITH_ENUM_RANGE = [
-    "safetyRiskAssessment",
-    "sensitivePersonalInformation",
-    "annotationType",
-    "externalIdentifierType",
-    "externalReferenceType",
     "algorithm",
-    "scope",
-    "profile",
+    "annotationType",
+    "catalogType",
     "completeness",
-    "relationshipType",
+    "conditionality",
     "confidentialityLevel",
     "datasetAvailability",
     "decisionType",
+    "externalIdentifierType",
+    "externalRefType",
+    "hasSensitivePersonalInformation",
     "justificationType",
-    "catalogType",
-    "conditionality",
-    "sbomType",
-    "softwareLinkage",
+    "profile",
     "purpose",
+    "relationshipType",
+    "safetyRiskAssessment",
+    "sbomType",
+    "scope",
+    "softwareLinkage",
+    "useSensitivePersonalInformation",
 ]
 
 REFERENCE_PROPERTY_TYPES = [
-    "core:Element",
     "core:Agent",
+    "core:Element",
 ]
 
 
@@ -71,19 +72,21 @@ def convert_spdx_owl_to_jsonld_context(spdx_owl: str = "SPDX_OWL.json"):
                 if name == "profile":
                     # FIXME: since the allowed values for the profile enum collide with
                     # our namespaces, we need to explicitly remap their meaning in the context
+                    VERSION = "3.0.1"
+                    PROFILE_IRI_PREFIX = f"https://spdx.org/rdf/{VERSION}/terms/Core/ProfileIdentifierType"
                     context_dict[name] = {
                         "@id": node["@id"],
                         "@type": "@vocab",
                         "@context": {
-                            "core": "https://spdx.org/rdf/Core/ProfileIdentifierType/core",
-                            "software": "https://spdx.org/rdf/Core/ProfileIdentifierType/software",
-                            "licensing": "https://spdx.org/rdf/Core/ProfileIdentifierType/licensing",
-                            "security": "https://spdx.org/rdf/Core/ProfileIdentifierType/security",
-                            "build": "https://spdx.org/rdf/Core/ProfileIdentifierType/build",
-                            "ai": "https://spdx.org/rdf/Core/ProfileIdentifierType/ai",
-                            "dataset": "https://spdx.org/rdf/Core/ProfileIdentifierType/dataset",
-                            "usage": "https://spdx.org/rdf/Core/ProfileIdentifierType/usage",
-                            "extension": "https://spdx.org/rdf/Core/ProfileIdentifierType/extension",
+                            "ai": f"{PROFILE_IRI_PREFIX}/ai",
+                            "build": f"{PROFILE_IRI_PREFIX}/build",
+                            "core": f"{PROFILE_IRI_PREFIX}/core",
+                            "dataset": f"{PROFILE_IRI_PREFIX}/dataset",
+                            "extension": f"{PROFILE_IRI_PREFIX}/extension",
+                            "licensing": f"{PROFILE_IRI_PREFIX}/licensing",
+                            "security": f"{PROFILE_IRI_PREFIX}/security",
+                            "software": f"{PROFILE_IRI_PREFIX}/software",
+                            "usage": f"{PROFILE_IRI_PREFIX}/usage",
                         },
                     }
                 else:

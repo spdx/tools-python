@@ -4,7 +4,7 @@
 
 import pytest
 
-from spdx_tools.spdx3.model import ExternalMap
+from spdx_tools.spdx3.model.core import ExternalMap
 from tests.spdx3.fixtures import external_map_fixture, hash_fixture
 from tests.spdx3.model.model_test_utils import get_property_names
 

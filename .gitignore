@@ -41,3 +41,4 @@ pip-log.txt
 .coverage.*
 nosetests.xml
 htmlcov
+dummy_path

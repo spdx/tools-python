@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import pytest
 
-from spdx_tools.spdx3.model import Hash, HashAlgorithm
+from spdx_tools.spdx3.model.core import Hash, HashAlgorithm
 from tests.spdx3.fixtures import hash_fixture
 from tests.spdx3.model.model_test_utils import get_property_names
 

@@ -3,9 +3,9 @@
 # SPDX-License-Identifier: Apache-2.0
 from beartype.typing import List, Tuple
 
-from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
-from spdx_tools.spdx3.model import ExternalMap, Hash, NamespaceMap
 from spdx_tools.spdx.model.external_document_ref import ExternalDocumentRef
+from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
+from spdx_tools.spdx3.model.core import ExternalMap, Hash, NamespaceMap
 
 
 def bump_external_document_ref(external_document_ref: ExternalDocumentRef) -> Tuple[NamespaceMap, ExternalMap]:

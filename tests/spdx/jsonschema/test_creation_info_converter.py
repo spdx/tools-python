@@ -38,7 +38,7 @@ def test_successful_conversion(converter: CreationInfoConverter):
 
     converted_dict = converter.convert(
         creation_info_fixture(
-            creators=creators, created=created, creator_comment="comment", license_list_version=Version(1, 2)
+            creators=creators, created=created, creator_comment="comment", license_list_version=Version(major=1, minor=2)
         )
     )
 

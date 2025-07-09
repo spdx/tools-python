@@ -6,7 +6,7 @@ from datetime import datetime
 import pytest
 from semantic_version import Version
 
-from spdx_tools.spdx3.model import CreationInfo, ProfileIdentifierType
+from spdx_tools.spdx3.model.core import CreationInfo, ProfileIdentifierType
 from tests.spdx3.fixtures import creation_info_fixture
 from tests.spdx3.model.model_test_utils import get_property_names
 
@@ -17,7 +17,7 @@ def test_correct_initialization():
     for property_name in get_property_names(CreationInfo):
         assert getattr(creation_info, property_name) is not None
 
-    assert creation_info.spec_version == Version("3.0.0")
+    assert creation_info.spec_version == Version(major=3, minor=0, patch=1)
     assert creation_info.created == datetime(2022, 12, 1)
     assert creation_info.created_by == ["https://spdx.test/tools-python/creation_info_created_by"]
     assert creation_info.created_using == ["https://spdx.test/tools-python/creation_info_created_using"]

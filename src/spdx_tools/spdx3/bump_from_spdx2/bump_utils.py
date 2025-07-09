@@ -15,3 +15,5 @@ def handle_no_assertion_or_none(field: Union[SpdxNone, SpdxNoAssertion, str], fi
         return None
     if isinstance(field, str):
         return field
+
+    return None

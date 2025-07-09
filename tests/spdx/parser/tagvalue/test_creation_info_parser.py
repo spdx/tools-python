@@ -52,7 +52,7 @@ def test_parse_creation_info():
     )
     assert creation_info.creator_comment == "Sample Comment \nwith multiple \nlines."
     assert creation_info.created == datetime(2010, 2, 3)
-    assert creation_info.license_list_version == Version(3, 17)
+    assert creation_info.license_list_version == Version(major=3, minor=17)
     assert creation_info.external_document_refs == [
         ExternalDocumentRef(
             "DocumentRef-spdx-tool-1.2",

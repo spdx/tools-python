@@ -7,8 +7,7 @@ from enum import Enum
 from beartype.typing import Any, List
 from semantic_version import Version
 
-from spdx_tools.spdx3.model.creation_info import CreationInfo
-from spdx_tools.spdx3.model.hash import Hash
+from spdx_tools.spdx3.model.core import CreationInfo, Hash
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.casing_tools import snake_case_to_camel_case
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string

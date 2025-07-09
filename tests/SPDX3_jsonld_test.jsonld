@@ -1,0 +1,1016 @@
+{
+  "@context": {
+    "dcterms": "http://purl.org/dc/terms/",
+    "ns1": "https://spdx.org/rdf/3.0.1/terms/Core/",
+    "ns2": "https://spdx.org/rdf/3.0.1/terms/Software/",
+    "ns3": "https://spdx.org/rdf/3.0.1/terms/Dataset/",
+    "ns4": "https://spdx.org/rdf/3.0.1/terms/AI/",
+    "ns5": "https://spdx.org/rdf/3.0.1/terms/Security/",
+    "ns6": "https://spdx.org/rdf/3.0.1/terms/ExpandedLicensing/",
+    "ns7": "http://spdx.invalid./",
+    "omg-ann": "https://www.omg.org/spec/Commons/AnnotationVocabulary/",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "sh": "http://www.w3.org/ns/shacl#",
+    "spdx": "https://spdx.org/rdf/3.0.1/terms/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "AIPackage": "ns4:AIPackage",
+    "//spdx.org/rdf/3.0.1/terms/Build/Build": "https://spdx.org/rdf/3.0.1/terms/Build/Build",
+    "Annotation": "ns1:Annotation",
+    "LifecycleScopedRelationship": "ns1:LifecycleScopedRelationship",
+    "PackageVerificationCode": "ns1:PackageVerificationCode",
+    "Person": "ns1:Person",
+    "SoftwareAgent": "ns1:SoftwareAgent",
+    "SpdxDocument": "ns1:SpdxDocument",
+    "DatasetPackage": "ns3:DatasetPackage",
+    "ConjunctiveLicenseSet": "ns6:ConjunctiveLicenseSet",
+    "CustomLicense": "ns6:CustomLicense",
+    "CustomLicenseAddition": "ns6:CustomLicenseAddition",
+    "DisjunctiveLicenseSet": "ns6:DisjunctiveLicenseSet",
+    "ListedLicense": "ns6:ListedLicense",
+    "ListedLicenseException": "ns6:ListedLicenseException",
+    "OrLaterOperator": "ns6:OrLaterOperator",
+    "WithAdditionOperator": "ns6:WithAdditionOperator",
+    "//spdx.org/rdf/3.0.1/terms/Extension/CdxPropertiesExtension": "https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertiesExtension",
+    "CvssV2VulnAssessmentRelationship": "ns5:CvssV2VulnAssessmentRelationship",
+    "CvssV3VulnAssessmentRelationship": "ns5:CvssV3VulnAssessmentRelationship",
+    "CvssV4VulnAssessmentRelationship": "ns5:CvssV4VulnAssessmentRelationship",
+    "EpssVulnAssessmentRelationship": "ns5:EpssVulnAssessmentRelationship",
+    "ExploitCatalogVulnAssessmentRelationship": "ns5:ExploitCatalogVulnAssessmentRelationship",
+    "SsvcVulnAssessmentRelationship": "ns5:SsvcVulnAssessmentRelationship",
+    "VexAffectedVulnAssessmentRelationship": "ns5:VexAffectedVulnAssessmentRelationship",
+    "VexFixedVulnAssessmentRelationship": "ns5:VexFixedVulnAssessmentRelationship",
+    "VexNotAffectedVulnAssessmentRelationship": "ns5:VexNotAffectedVulnAssessmentRelationship",
+    "VexUnderInvestigationVulnAssessmentRelationship": "ns5:VexUnderInvestigationVulnAssessmentRelationship",
+    "Vulnerability": "ns5:Vulnerability",
+    "//spdx.org/rdf/3.0.1/terms/SimpleLicensing/LicenseExpression": "https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/LicenseExpression",
+    "//spdx.org/rdf/3.0.1/terms/SimpleLicensing/SimpleLicensingText": "https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/SimpleLicensingText",
+    "Sbom": "ns2:Sbom",
+    "Snippet": "ns2:Snippet",
+    "autonomyType": {
+      "@id": "ns4:autonomyType",
+      "@type": "ns1:PresenceType"
+    },
+    "domain": {
+      "@id": "ns4:domain",
+      "@type": "xsd:string"
+    },
+    "energyConsumption": {
+      "@id": "ns4:energyConsumption",
+      "@type": "ns4:EnergyConsumption"
+    },
+    "energyQuantity": {
+      "@id": "ns4:energyQuantity",
+      "@type": "xsd:decimal"
+    },
+    "energyUnit": {
+      "@id": "ns4:energyUnit",
+      "@type": "ns4:EnergyUnitType"
+    },
+    "finetuningEnergyConsumption": {
+      "@id": "ns4:finetuningEnergyConsumption",
+      "@type": "ns4:EnergyConsumptionDescription"
+    },
+    "hyperparameter": {
+      "@id": "ns4:hyperparameter",
+      "@type": "ns1:DictionaryEntry"
+    },
+    "inferenceEnergyConsumption": {
+      "@id": "ns4:inferenceEnergyConsumption",
+      "@type": "ns4:EnergyConsumptionDescription"
+    },
+    "informationAboutApplication": {
+      "@id": "ns4:informationAboutApplication",
+      "@type": "xsd:string"
+    },
+    "informationAboutTraining": {
+      "@id": "ns4:informationAboutTraining",
+      "@type": "xsd:string"
+    },
+    "limitation": {
+      "@id": "ns4:limitation",
+      "@type": "xsd:string"
+    },
+    "metric": {
+      "@id": "ns4:metric",
+      "@type": "ns1:DictionaryEntry"
+    },
+    "metricDecisionThreshold": {
+      "@id": "ns4:metricDecisionThreshold",
+      "@type": "ns1:DictionaryEntry"
+    },
+    "modelDataPreprocessing": {
+      "@id": "ns4:modelDataPreprocessing",
+      "@type": "xsd:string"
+    },
+    "modelExplainability": {
+      "@id": "ns4:modelExplainability",
+      "@type": "xsd:string"
+    },
+    "safetyRiskAssessment": {
+      "@id": "ns4:safetyRiskAssessment",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns4:SafetyRiskAssessmentType/"
+      }
+    },
+    "standardCompliance": {
+      "@id": "ns4:standardCompliance",
+      "@type": "xsd:string"
+    },
+    "trainingEnergyConsumption": {
+      "@id": "ns4:trainingEnergyConsumption",
+      "@type": "ns4:EnergyConsumptionDescription"
+    },
+    "typeOfModel": {
+      "@id": "ns4:typeOfModel",
+      "@type": "xsd:string"
+    },
+    "useSensitivePersonalInformation": {
+      "@id": "ns4:useSensitivePersonalInformation",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns1:PresenceType/"
+      }
+    },
+    "//spdx.org/rdf/3.0.1/terms/Build/buildEndTime": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Build/buildEndTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Build/buildId": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Build/buildId",
+      "@type": "xsd:string"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Build/buildStartTime": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Build/buildStartTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Build/buildType": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Build/buildType",
+      "@type": "xsd:anyURI"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Build/configSourceDigest": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Build/configSourceDigest",
+      "@type": "ns1:Hash"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Build/configSourceEntrypoint": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Build/configSourceEntrypoint",
+      "@type": "xsd:string"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Build/configSourceUri": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Build/configSourceUri",
+      "@type": "xsd:anyURI"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Build/environment": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Build/environment",
+      "@type": "ns1:DictionaryEntry"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Build/parameter": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Build/parameter",
+      "@type": "ns1:DictionaryEntry"
+    },
+    "Bom": "ns1:Bom",
+    "Bundle": "ns1:Bundle",
+    "Organization": "ns1:Organization",
+    "annotationType": {
+      "@id": "ns1:annotationType",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns1:AnnotationType/"
+      }
+    },
+    "beginIntegerRange": {
+      "@id": "ns1:beginIntegerRange",
+      "@type": "xsd:positiveInteger"
+    },
+    "builtTime": {
+      "@id": "ns1:builtTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "completeness": {
+      "@id": "ns1:completeness",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns1:RelationshipCompleteness/"
+      }
+    },
+    "context": {
+      "@id": "ns1:context",
+      "@type": "xsd:string"
+    },
+    "created": {
+      "@id": "ns1:created",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "createdBy": {
+      "@id": "ns1:createdBy",
+      "@type": "ns1:Agent"
+    },
+    "createdUsing": {
+      "@id": "ns1:createdUsing",
+      "@type": "ns1:Tool"
+    },
+    "creationInfo": {
+      "@id": "ns1:creationInfo",
+      "@type": "ns1:CreationInfo"
+    },
+    "dataLicense": {
+      "@id": "ns1:dataLicense",
+      "@type": "https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"
+    },
+    "definingArtifact": {
+      "@id": "ns1:definingArtifact",
+      "@type": "ns1:Artifact"
+    },
+    "description": {
+      "@id": "ns1:description",
+      "@type": "xsd:string"
+    },
+    "element": {
+      "@id": "ns1:element",
+      "@type": "ns1:Element"
+    },
+    "endIntegerRange": {
+      "@id": "ns1:endIntegerRange",
+      "@type": "xsd:positiveInteger"
+    },
+    "endTime": {
+      "@id": "ns1:endTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "extension": {
+      "@id": "ns1:extension",
+      "@type": "https://spdx.org/rdf/3.0.1/terms/Extension/Extension"
+    },
+    "externalIdentifier": {
+      "@id": "ns1:externalIdentifier",
+      "@type": "ns1:ExternalIdentifier"
+    },
+    "externalIdentifierType": {
+      "@id": "ns1:externalIdentifierType",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns1:ExternalIdentifierType/"
+      }
+    },
+    "externalRef": {
+      "@id": "ns1:externalRef",
+      "@type": "ns1:ExternalRef"
+    },
+    "externalRefType": {
+      "@id": "ns1:externalRefType",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns1:ExternalRefType/"
+      }
+    },
+    "externalSpdxId": {
+      "@id": "ns1:externalSpdxId",
+      "@type": "xsd:anyURI"
+    },
+    "from": {
+      "@id": "ns1:from",
+      "@type": "ns1:Element"
+    },
+    "identifier": {
+      "@id": "ns1:identifier",
+      "@type": "xsd:string"
+    },
+    "identifierLocator": {
+      "@id": "ns1:identifierLocator",
+      "@type": "xsd:anyURI"
+    },
+    "import": {
+      "@id": "ns1:import",
+      "@type": "ns1:ExternalMap"
+    },
+    "issuingAuthority": {
+      "@id": "ns1:issuingAuthority",
+      "@type": "xsd:string"
+    },
+    "key": {
+      "@id": "ns1:key",
+      "@type": "xsd:string"
+    },
+    "locationHint": {
+      "@id": "ns1:locationHint",
+      "@type": "xsd:anyURI"
+    },
+    "locator": {
+      "@id": "ns5:locator",
+      "@type": "xsd:anyURI"
+    },
+    "name": {
+      "@id": "ns1:name",
+      "@type": "xsd:string"
+    },
+    "namespace": {
+      "@id": "ns1:namespace",
+      "@type": "xsd:anyURI"
+    },
+    "namespaceMap": {
+      "@id": "ns1:namespaceMap",
+      "@type": "ns1:NamespaceMap"
+    },
+    "originatedBy": {
+      "@id": "ns1:originatedBy",
+      "@type": "ns1:Agent"
+    },
+    "packageVerificationCodeExcludedFile": {
+      "@id": "ns1:packageVerificationCodeExcludedFile",
+      "@type": "xsd:string"
+    },
+    "prefix": {
+      "@id": "ns1:prefix",
+      "@type": "xsd:string"
+    },
+    "profileConformance": {
+      "@id": "ns1:profileConformance",
+      "@type": "ns1:ProfileIdentifierType"
+    },
+    "relationshipType": {
+      "@id": "ns1:relationshipType",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns1:RelationshipType/"
+      }
+    },
+    "releaseTime": {
+      "@id": "ns1:releaseTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "rootElement": {
+      "@id": "ns1:rootElement",
+      "@type": "ns1:Element"
+    },
+    "scope": {
+      "@id": "ns1:scope",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns1:LifecycleScopeType/"
+      }
+    },
+    "specVersion": {
+      "@id": "ns1:specVersion",
+      "@type": "xsd:string"
+    },
+    "standardName": {
+      "@id": "ns1:standardName",
+      "@type": "xsd:string"
+    },
+    "startTime": {
+      "@id": "ns1:startTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "statement": {
+      "@id": "ns1:statement",
+      "@type": "xsd:string"
+    },
+    "subject": {
+      "@id": "ns1:subject",
+      "@type": "ns1:Element"
+    },
+    "summary": {
+      "@id": "ns1:summary",
+      "@type": "xsd:string"
+    },
+    "supportLevel": {
+      "@id": "ns1:supportLevel",
+      "@type": "ns1:SupportType"
+    },
+    "to": {
+      "@id": "ns1:to",
+      "@type": "ns1:Element"
+    },
+    "validUntilTime": {
+      "@id": "ns1:validUntilTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "value": {
+      "@id": "ns1:value",
+      "@type": "xsd:string"
+    },
+    "anonymizationMethodUsed": {
+      "@id": "ns3:anonymizationMethodUsed",
+      "@type": "xsd:string"
+    },
+    "confidentialityLevel": {
+      "@id": "ns3:confidentialityLevel",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns3:ConfidentialityLevelType/"
+      }
+    },
+    "dataCollectionProcess": {
+      "@id": "ns3:dataCollectionProcess",
+      "@type": "xsd:string"
+    },
+    "dataPreprocessing": {
+      "@id": "ns3:dataPreprocessing",
+      "@type": "xsd:string"
+    },
+    "datasetAvailability": {
+      "@id": "ns3:datasetAvailability",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns3:DatasetAvailabilityType/"
+      }
+    },
+    "datasetNoise": {
+      "@id": "ns3:datasetNoise",
+      "@type": "xsd:string"
+    },
+    "datasetSize": {
+      "@id": "ns3:datasetSize",
+      "@type": "xsd:nonNegativeInteger"
+    },
+    "datasetType": {
+      "@id": "ns3:datasetType",
+      "@type": "ns3:DatasetType"
+    },
+    "datasetUpdateMechanism": {
+      "@id": "ns3:datasetUpdateMechanism",
+      "@type": "xsd:string"
+    },
+    "hasSensitivePersonalInformation": {
+      "@id": "ns3:hasSensitivePersonalInformation",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns1:PresenceType/"
+      }
+    },
+    "intendedUse": {
+      "@id": "ns3:intendedUse",
+      "@type": "xsd:string"
+    },
+    "knownBias": {
+      "@id": "ns3:knownBias",
+      "@type": "xsd:string"
+    },
+    "sensor": {
+      "@id": "ns3:sensor",
+      "@type": "ns1:DictionaryEntry"
+    },
+    "additionText": {
+      "@id": "ns6:additionText",
+      "@type": "xsd:string"
+    },
+    "isDeprecatedAdditionId": {
+      "@id": "ns6:isDeprecatedAdditionId",
+      "@type": "xsd:boolean"
+    },
+    "isDeprecatedLicenseId": {
+      "@id": "ns6:isDeprecatedLicenseId",
+      "@type": "xsd:boolean"
+    },
+    "isFsfLibre": {
+      "@id": "ns6:isFsfLibre",
+      "@type": "xsd:boolean"
+    },
+    "isOsiApproved": {
+      "@id": "ns6:isOsiApproved",
+      "@type": "xsd:boolean"
+    },
+    "standardAdditionTemplate": {
+      "@id": "ns6:standardAdditionTemplate",
+      "@type": "xsd:string"
+    },
+    "standardLicenseHeader": {
+      "@id": "ns6:standardLicenseHeader",
+      "@type": "xsd:string"
+    },
+    "standardLicenseTemplate": {
+      "@id": "ns6:standardLicenseTemplate",
+      "@type": "xsd:string"
+    },
+    "subjectAddition": {
+      "@id": "ns6:subjectAddition",
+      "@type": "ns6:LicenseAddition"
+    },
+    "subjectExtendableLicense": {
+      "@id": "ns6:subjectExtendableLicense",
+      "@type": "ns6:ExtendableLicense"
+    },
+    "subjectLicense": {
+      "@id": "ns6:subjectLicense",
+      "@type": "ns6:License"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Extension/cdxPropName": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Extension/cdxPropName",
+      "@type": "xsd:string"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Extension/cdxPropValue": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Extension/cdxPropValue",
+      "@type": "xsd:string"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Extension/cdxProperty": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/Extension/cdxProperty",
+      "@type": "https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertyEntry"
+    },
+    "actionStatement": {
+      "@id": "ns5:actionStatement",
+      "@type": "xsd:string"
+    },
+    "actionStatementTime": {
+      "@id": "ns5:actionStatementTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "assessedElement": {
+      "@id": "ns5:assessedElement",
+      "@type": "ns1:Element"
+    },
+    "catalogType": {
+      "@id": "ns5:catalogType",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns5:ExploitCatalogType/"
+      }
+    },
+    "decisionType": {
+      "@id": "ns5:decisionType",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns5:SsvcDecisionType/"
+      }
+    },
+    "exploited": {
+      "@id": "ns5:exploited",
+      "@type": "xsd:boolean"
+    },
+    "impactStatement": {
+      "@id": "ns5:impactStatement",
+      "@type": "xsd:string"
+    },
+    "impactStatementTime": {
+      "@id": "ns5:impactStatementTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "justificationType": {
+      "@id": "ns5:justificationType",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns5:VexJustificationType/"
+      }
+    },
+    "percentile": {
+      "@id": "ns5:percentile",
+      "@type": "xsd:decimal"
+    },
+    "probability": {
+      "@id": "ns5:probability",
+      "@type": "xsd:decimal"
+    },
+    "statusNotes": {
+      "@id": "ns5:statusNotes",
+      "@type": "xsd:string"
+    },
+    "vexVersion": {
+      "@id": "ns5:vexVersion",
+      "@type": "xsd:string"
+    },
+    "//spdx.org/rdf/3.0.1/terms/SimpleLicensing/customIdToUri": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/customIdToUri",
+      "@type": "ns1:DictionaryEntry"
+    },
+    "//spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseExpression": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseExpression",
+      "@type": "xsd:string"
+    },
+    "//spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseListVersion": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseListVersion",
+      "@type": "xsd:string"
+    },
+    "additionalPurpose": {
+      "@id": "ns2:additionalPurpose",
+      "@type": "ns2:SoftwarePurpose"
+    },
+    "attributionText": {
+      "@id": "ns2:attributionText",
+      "@type": "xsd:string"
+    },
+    "byteRange": {
+      "@id": "ns2:byteRange",
+      "@type": "ns1:PositiveIntegerRange"
+    },
+    "contentIdentifier": {
+      "@id": "ns2:contentIdentifier",
+      "@type": "ns2:ContentIdentifier"
+    },
+    "contentIdentifierType": {
+      "@id": "ns2:contentIdentifierType",
+      "@type": "ns2:ContentIdentifierType"
+    },
+    "contentIdentifierValue": {
+      "@id": "ns2:contentIdentifierValue",
+      "@type": "xsd:anyURI"
+    },
+    "copyrightText": {
+      "@id": "ns2:copyrightText",
+      "@type": "xsd:string"
+    },
+    "downloadLocation": {
+      "@id": "ns2:downloadLocation",
+      "@type": "xsd:anyURI"
+    },
+    "fileKind": {
+      "@id": "ns2:fileKind",
+      "@type": "ns2:FileKindType"
+    },
+    "homePage": {
+      "@id": "ns2:homePage",
+      "@type": "xsd:anyURI"
+    },
+    "lineRange": {
+      "@id": "ns2:lineRange",
+      "@type": "ns1:PositiveIntegerRange"
+    },
+    "packageUrl": {
+      "@id": "ns2:packageUrl",
+      "@type": "xsd:anyURI"
+    },
+    "packageVersion": {
+      "@id": "ns2:packageVersion",
+      "@type": "xsd:string"
+    },
+    "primaryPurpose": {
+      "@id": "ns2:primaryPurpose",
+      "@type": "ns2:SoftwarePurpose"
+    },
+    "sbomType": {
+      "@id": "ns2:sbomType",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns2:SbomType/"
+      }
+    },
+    "snippetFromFile": {
+      "@id": "ns2:snippetFromFile",
+      "@type": "ns2:File"
+    },
+    "sourceInfo": {
+      "@id": "ns2:sourceInfo",
+      "@type": "xsd:string"
+    },
+    "EnergyConsumption": "ns4:EnergyConsumption",
+    "CreationInfo": "ns1:CreationInfo",
+    "ElementCollection": "ns1:ElementCollection",
+    "ExternalIdentifier": "ns1:ExternalIdentifier",
+    "ExternalMap": "ns1:ExternalMap",
+    "ExternalRef": "ns1:ExternalRef",
+    "Hash": "ns1:Hash",
+    "NamespaceMap": "ns1:NamespaceMap",
+    "Relationship": "ns1:Relationship",
+    "Tool": "ns1:Tool",
+    "algorithm": {
+      "@id": "ns1:algorithm",
+      "@type": "@vocab",
+      "@context": {
+        "@vocab": "ns1:HashAlgorithm/"
+      }
+    },
+    "hashValue": {
+      "@id": "ns1:hashValue",
+      "@type": "xsd:string"
+    },
+    "suppliedBy": {
+      "@id": "ns1:suppliedBy",
+      "@type": "ns1:Agent"
+    },
+    "verifiedUsing": {
+      "@id": "ns1:verifiedUsing",
+      "@type": "ns1:IntegrityMethod"
+    },
+    "IndividualLicensingInfo": "ns6:IndividualLicensingInfo",
+    "deprecatedVersion": {
+      "@id": "ns6:deprecatedVersion",
+      "@type": "xsd:string"
+    },
+    "licenseXml": {
+      "@id": "ns6:licenseXml",
+      "@type": "xsd:string"
+    },
+    "listVersionAdded": {
+      "@id": "ns6:listVersionAdded",
+      "@type": "xsd:string"
+    },
+    "member": {
+      "@id": "ns6:member",
+      "@type": "https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo"
+    },
+    "obsoletedBy": {
+      "@id": "ns6:obsoletedBy",
+      "@type": "xsd:string"
+    },
+    "seeAlso": {
+      "@id": "ns6:seeAlso",
+      "@type": "xsd:anyURI"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Extension/CdxPropertyEntry": "https://spdx.org/rdf/3.0.1/terms/Extension/CdxPropertyEntry",
+    "modifiedTime": {
+      "@id": "ns5:modifiedTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "publishedTime": {
+      "@id": "ns5:publishedTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "severity": {
+      "@id": "ns5:severity",
+      "@type": "ns5:CvssSeverityType"
+    },
+    "withdrawnTime": {
+      "@id": "ns5:withdrawnTime",
+      "@type": "xsd:dateTimeStamp"
+    },
+    "//spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText": {
+      "@id": "https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/licenseText",
+      "@type": "xsd:string"
+    },
+    "ContentIdentifier": "ns2:ContentIdentifier",
+    "File": "ns2:File",
+    "Package": "ns2:Package",
+    "contentType": {
+      "@id": "ns1:contentType",
+      "@type": "xsd:string"
+    },
+    "//spdx.org/rdf/3.0.1/terms/Extension/Extension": "https://spdx.org/rdf/3.0.1/terms/Extension/Extension",
+    "score": {
+      "@id": "ns5:score",
+      "@type": "xsd:decimal"
+    },
+    "vectorString": {
+      "@id": "ns5:vectorString",
+      "@type": "xsd:string"
+    },
+    "SoftwareArtifact": "ns2:SoftwareArtifact",
+    "AnnotationType": "ns1:AnnotationType",
+    "Artifact": "ns1:Artifact",
+    "PositiveIntegerRange": "ns1:PositiveIntegerRange",
+    "ExtendableLicense": "ns6:ExtendableLicense",
+    "License": "ns6:License",
+    "LicenseAddition": "ns6:LicenseAddition",
+    "ExploitCatalogType": "ns5:ExploitCatalogType",
+    "VexVulnAssessmentRelationship": "ns5:VexVulnAssessmentRelationship",
+    "ContentIdentifierType": "ns2:ContentIdentifierType",
+    "FileKindType": "ns2:FileKindType",
+    "EnergyUnitType": "ns4:EnergyUnitType",
+    "RelationshipCompleteness": "ns1:RelationshipCompleteness",
+    "comment": {
+      "@id": "ns1:comment",
+      "@type": "xsd:string"
+    },
+    "EnergyConsumptionDescription": "ns4:EnergyConsumptionDescription",
+    "SafetyRiskAssessmentType": "ns4:SafetyRiskAssessmentType",
+    "IntegrityMethod": "ns1:IntegrityMethod",
+    "ConfidentialityLevelType": "ns3:ConfidentialityLevelType",
+    "SsvcDecisionType": "ns5:SsvcDecisionType",
+    "DatasetAvailabilityType": "ns3:DatasetAvailabilityType",
+    "VexJustificationType": "ns5:VexJustificationType",
+    "VulnAssessmentRelationship": "ns5:VulnAssessmentRelationship",
+    "LifecycleScopeType": "ns1:LifecycleScopeType",
+    "CvssSeverityType": "ns5:CvssSeverityType",
+    "SbomType": "ns2:SbomType",
+    "PresenceType": "ns1:PresenceType",
+    "SupportType": "ns1:SupportType",
+    "Agent": "ns1:Agent",
+    "//spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo": "https://spdx.org/rdf/3.0.1/terms/SimpleLicensing/AnyLicenseInfo",
+    "AbstractClass": "ns7:AbstractClass",
+    "ProfileIdentifierType": "ns1:ProfileIdentifierType",
+    "ExternalIdentifierType": "ns1:ExternalIdentifierType",
+    "DictionaryEntry": "ns1:DictionaryEntry",
+    "DatasetType": "ns3:DatasetType",
+    "Element": "ns1:Element",
+    "HashAlgorithm": "ns1:HashAlgorithm",
+    "SoftwarePurpose": "ns2:SoftwarePurpose",
+    "ExternalRefType": "ns1:ExternalRefType",
+    "RelationshipType": "ns1:RelationshipType"
+  },
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": "https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com",
+      "creationInfo": {
+        "@type": "CreationInfo",
+        "specVersion": "3.0.1",
+        "created": "2022-12-01T00:00:00Z",
+        "createdBy": [
+          "https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "creatorName",
+      "externalIdentifier": [
+        {
+          "@type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "some@mail.com"
+        }
+      ]
+    },
+    {
+      "@type": "SpdxDocument",
+      "@id": "https://some.namespace#SPDXRef-DOCUMENT",
+      "creationInfo": {
+        "@type": "CreationInfo",
+        "specVersion": "3.0.1",
+        "created": "2022-12-01T00:00:00Z",
+        "createdBy": [
+          "https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "documentName",
+      "comment": "documentComment",
+      "element": [
+        "https://some.namespace#SPDXRef-Actor-creatorName-some@mail.com",
+        "https://some.namespace#SPDXRef-Actor-supplierName-some@mail.com",
+        "https://some.namespace#SPDXRef-Actor-originatorName-some@mail.com",
+        "https://some.namespace#SPDXRef-Package",
+        "https://some.namespace#SPDXRef-File",
+        "https://some.namespace#SPDXRef-Snippet",
+        "https://some.namespace#SPDXRef-Relationship-0",
+        "https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com",
+        "https://some.namespace#SPDXRef-Annotation-0"
+      ],
+      "rootElement": [
+        "https://some.namespace#SPDXRef-File"
+      ],
+      "namespace": [
+        {
+          "@type": "NamespaceMap",
+          "prefix": "DocumentRef-external",
+          "namespace": "https://namespace.com#"
+        }
+      ],
+      "import": [
+        {
+          "@type": "ExternalMap",
+          "externalId": "DocumentRef-external:SPDXRef-DOCUMENT",
+          "verifiedUsing": [
+            {
+              "@type": "Hash",
+              "algorithm": "sha1",
+              "hashValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://some.namespace#SPDXRef-Actor-supplierName-some@mail.com",
+      "name": "supplierName",
+      "externalIdentifier": [
+        {
+          "@type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "some@mail.com"
+        }
+      ]
+    },
+    {
+      "@type": "Person",
+      "@id": "https://some.namespace#SPDXRef-Actor-originatorName-some@mail.com",
+      "name": "originatorName",
+      "externalIdentifier": [
+        {
+          "@type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "some@mail.com"
+        }
+      ]
+    },
+    {
+      "@type": "Package",
+      "@id": "https://some.namespace#SPDXRef-Package",
+      "name": "packageName",
+      "summary": "packageSummary",
+      "description": "packageDescription",
+      "comment": "packageComment",
+      "verifiedUsing": [
+        {
+          "@type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
+        }
+      ],
+      "builtTime": "2022-11-02T00:00:00Z",
+      "originatedBy": [
+        "https://some.namespace#SPDXRef-Actor-originatorName-some@mail.com"
+      ],
+      "releaseTime": "2022-11-01T00:00:00Z",
+      "suppliedBy": [
+        "https://some.namespace#SPDXRef-Actor-supplierName-some@mail.com"
+      ],
+      "validUntilTime": "2022-11-03T00:00:00Z",
+      "primaryPurpose": "source",
+      "copyrightText": "packageCopyrightText",
+      "attributionText": "packageAttributionText",
+      "packageVersion": "12.2",
+      "downloadLocation": "https://download.com",
+      "homePage": "https://homepage.com",
+      "sourceInfo": "sourceInfo"
+    },
+    {
+      "@type": "File",
+      "@id": "https://some.namespace#SPDXRef-File",
+      "name": "./fileName.py",
+      "comment": "fileComment",
+      "verifiedUsing": [
+        {
+          "@type": "Hash",
+          "algorithm": "sha1",
+          "hashValue": "71c4025dd9897b364f3ebbb42c484ff43d00791c"
+        }
+      ],
+      "copyrightText": "copyrightText",
+      "attributionText": "fileAttributionText"
+    },
+    {
+      "@type": "Snippet",
+      "@id": "https://some.namespace#SPDXRef-Snippet",
+      "name": "snippetName",
+      "comment": "snippetComment",
+      "copyrightText": "licenseCopyrightText",
+      "attributionText": "snippetAttributionText",
+      "byteRange": {
+        "@type": "PositiveIntegerRange",
+        "begin": 1,
+        "end": 2
+      },
+      "lineRange": {
+        "@type": "PositiveIntegerRange",
+        "begin": 3,
+        "end": 4
+      }
+    },
+    {
+      "@type": "Relationship",
+      "@id": "https://some.namespace#SPDXRef-Relationship-0",
+      "comment": "relationshipComment",
+      "from": "https://some.namespace#SPDXRef-DOCUMENT",
+      "to": [
+        "https://some.namespace#SPDXRef-File"
+      ],
+      "relationshipType": "describes"
+    },
+    {
+      "@type": "Person",
+      "@id": "https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com",
+      "creationInfo": {
+        "@type": "CreationInfo",
+        "specVersion": "3.0.1",
+        "created": "2022-12-24T00:00:00Z",
+        "createdBy": [
+          "https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "name": "annotatorName",
+      "externalIdentifier": [
+        {
+          "@type": "ExternalIdentifier",
+          "externalIdentifierType": "email",
+          "identifier": "some@mail.com"
+        }
+      ]
+    },
+    {
+      "@type": "Annotation",
+      "@id": "https://some.namespace#SPDXRef-Annotation-0",
+      "creationInfo": {
+        "@type": "CreationInfo",
+        "specVersion": "3.0.1",
+        "created": "2022-12-24T00:00:00Z",
+        "createdBy": [
+          "https://some.namespace#SPDXRef-Actor-annotatorName-some@mail.com"
+        ],
+        "profile": [
+          "core",
+          "software",
+          "licensing"
+        ],
+        "dataLicense": "https://spdx.org/licenses/CC0-1.0"
+      },
+      "annotationType": "review",
+      "subject": "https://some.namespace#SPDXRef-File",
+      "statement": "annotationComment"
+    }
+  ]
+}

@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 import sys
 
-from spdx_tools.spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
+from spdx_tools.spdx3.bump_from_spdx2 import bump_spdx_document
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx3.writer.console.payload_writer import write_payload
 from spdx_tools.spdx.model.actor import ActorType

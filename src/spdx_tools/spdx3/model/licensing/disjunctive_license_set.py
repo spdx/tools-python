@@ -5,7 +5,8 @@ from beartype.typing import List
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model.licensing.any_license_info import AnyLicenseInfo
+
+from .any_license_info import AnyLicenseInfo
 
 
 @dataclass_with_properties
