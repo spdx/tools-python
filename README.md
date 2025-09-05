@@ -21,6 +21,8 @@ The main features of v0.8 are:
   stable at this point, as the spec is still evolving. SPDX3-related code is contained in a separate subpackage "spdx3" 
   and its use is optional. We do not recommend using it in production code yet.
 
+Note that v0.8 only supports **writing**, not **reading** SPDX 3.0 documents.
+See [#760](https://github.com/spdx/tools-python/issues/760) for details.
 
 # Information
 
