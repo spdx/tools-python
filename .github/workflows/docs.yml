@@ -7,6 +7,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -44,4 +45,4 @@ jobs:
     steps:
       - id: deployment
         name: Deploy docs to GitHub pages
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v4
