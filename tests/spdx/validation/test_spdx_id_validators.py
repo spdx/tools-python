@@ -8,6 +8,7 @@ import pytest
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
 from spdx_tools.spdx.validation.spdx_id_validators import (
     get_list_of_all_spdx_ids,
+    get_all_spdx_ids,
     is_external_doc_ref_present_in_document,
     is_spdx_id_present_in_document,
     is_valid_external_doc_ref_id,
@@ -90,7 +91,7 @@ def test_list_of_all_spdx_ids():
 
 @pytest.mark.parametrize("spdx_id", ["DocumentRef-external:SPDXRef-File", "SPDXRef-Package"])
 def test_valid_spdx_id(spdx_id):
-    validation_messages = validate_spdx_id(spdx_id, DOCUMENT)
+    validation_messages = validate_spdx_id(spdx_id, DOCUMENT, get_all_spdx_ids(DOCUMENT))
 
     assert validation_messages == []
 
@@ -140,7 +141,7 @@ def test_valid_spdx_id(spdx_id):
     ],
 )
 def test_invalid_spdx_id(spdx_id, expected_messages):
-    validation_messages = validate_spdx_id(spdx_id, DOCUMENT)
+    validation_messages = validate_spdx_id(spdx_id, DOCUMENT, get_all_spdx_ids(DOCUMENT))
 
     TestCase().assertCountEqual(validation_messages, expected_messages)
 
@@ -150,23 +151,23 @@ def test_invalid_spdx_id(spdx_id, expected_messages):
     ["DocumentRef-external:SPDXRef-File", DOCUMENT_SPDX_ID, "SPDXRef-File1", "SPDXRef-Package1", "SPDXRef-Snippet1"],
 )
 def test_valid_spdx_id_with_check_document(spdx_id):
-    validation_messages = validate_spdx_id(spdx_id, DOCUMENT, check_document=True)
+    validation_messages = validate_spdx_id(spdx_id, DOCUMENT, get_all_spdx_ids(DOCUMENT), check_document=True)
     assert validation_messages == []
 
 
 def test_invalid_spdx_id_with_check_document():
-    validation_messages = validate_spdx_id("SPDXRef-Filet", DOCUMENT, check_document=True)
+    validation_messages = validate_spdx_id("SPDXRef-Filet", DOCUMENT, get_all_spdx_ids(DOCUMENT), check_document=True)
     assert validation_messages == ['did not find the referenced spdx_id "SPDXRef-Filet" in the SPDX document']
 
 
 @pytest.mark.parametrize("spdx_id", ["DocumentRef-external:SPDXRef-File", "SPDXRef-File1"])
 def test_valid_spdx_id_with_check_files(spdx_id):
-    validation_messages = validate_spdx_id(spdx_id, DOCUMENT, check_files=True)
+    validation_messages = validate_spdx_id(spdx_id, DOCUMENT, get_all_spdx_ids(DOCUMENT), check_files=True)
     assert validation_messages == []
 
 
 def test_invalid_spdx_id_with_check_files():
-    validation_messages = validate_spdx_id("SPDXRef-Package1", DOCUMENT, check_files=True)
+    validation_messages = validate_spdx_id("SPDXRef-Package1", DOCUMENT, get_all_spdx_ids(DOCUMENT), check_files=True)
     assert validation_messages == [
         'did not find the referenced spdx_id "SPDXRef-Package1" in the SPDX document\'s files'
     ]

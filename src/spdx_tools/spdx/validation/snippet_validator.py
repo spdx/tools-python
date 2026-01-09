@@ -2,14 +2,14 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from beartype.typing import List, Optional
+from beartype.typing import List, Optional, Set
 
 from spdx_tools.spdx.model import Document, Snippet
 from spdx_tools.spdx.validation.license_expression_validator import (
     validate_license_expression,
     validate_license_expressions,
 )
-from spdx_tools.spdx.validation.spdx_id_validators import validate_spdx_id
+from spdx_tools.spdx.validation.spdx_id_validators import validate_spdx_id, get_all_spdx_ids
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
@@ -17,18 +17,19 @@ def validate_snippets(
     snippets: List[Snippet], spdx_version: str, document: Optional[Document] = None
 ) -> List[ValidationMessage]:
     validation_messages = []
+    all_spdx_ids: Set[str] = get_all_spdx_ids(document)
     if document:
         for snippet in snippets:
-            validation_messages.extend(validate_snippet_within_document(snippet, spdx_version, document))
+            validation_messages.extend(validate_snippet_within_document(snippet, spdx_version, document, all_spdx_ids))
     else:
         for snippet in snippets:
-            validation_messages.extend(validate_snippet(snippet, spdx_version))
+            validation_messages.extend(validate_snippet(snippet, spdx_version, all_spdx_ids))
 
     return validation_messages
 
 
 def validate_snippet_within_document(
-    snippet: Snippet, spdx_version: str, document: Document
+    snippet: Snippet, spdx_version: str, document: Document, all_spdx_ids: Set[str]
 ) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(
@@ -38,11 +39,11 @@ def validate_snippet_within_document(
         full_element=snippet,
     )
 
-    messages: List[str] = validate_spdx_id(snippet.spdx_id, document)
+    messages: List[str] = validate_spdx_id(snippet.spdx_id, document, all_spdx_ids)
     for message in messages:
         validation_messages.append(ValidationMessage(message, context))
 
-    messages: List[str] = validate_spdx_id(snippet.file_spdx_id, document, check_files=True)
+    messages: List[str] = validate_spdx_id(snippet.file_spdx_id, document, all_spdx_ids, check_files=True)
     for message in messages:
         validation_messages.append(ValidationMessage(message, context))
 
