@@ -9,35 +9,57 @@ maintainers = [
     { name = "Philippe Ombredanne", email = "pombredanne@gmail.com" },
     { name = "SPDX group at the Linux Foundation and others" },
 ]
-license = { text = "Apache-2.0" }
+license = "Apache-2.0"
 description = "SPDX parser and tools."
 readme = "README.md"
 classifiers = [
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
     "Intended Audience :: System Administrators",
-    "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3.8",
-    "Programming Language :: Python :: 3.9",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Software Development :: Documentation",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
 ]
-urls = { Homepage = "https://github.com/spdx/tools-python" }
-requires-python = ">=3.8"
-dependencies = ["click", "pyyaml", "xmltodict", "rdflib", "beartype", "uritools", "license_expression", "ply", "semantic_version"]
+requires-python = ">=3.10"
+dependencies = [
+    "beartype",
+    "click",
+    "license_expression",
+    "ply",
+    "pyyaml",
+    "rdflib",
+    "semantic_version",
+    "uritools",
+    "xmltodict",
+]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-test = ["pytest", "pyshacl", "tzdata"]
-code_style = ["isort", "black", "flake8"]
-graph_generation = ["pygraphviz", "networkx"]
-development = ["black", "flake8", "isort", "networkx", "pytest", "pyshacl"]
+test = ["pyshacl", "pytest", "tzdata"]
+code_style = ["black", "flake8", "isort"]
+graph_generation = ["networkx", "pygraphviz"]
+development = ["black", "flake8", "isort", "networkx", "pyshacl", "pytest"]
 
 [project.scripts]
 pyspdxtools = "spdx_tools.spdx.clitools.pyspdxtools:main"
 pyspdxtools3 = "spdx_tools.spdx3.clitools.pyspdxtools3:main"
 
+[project.urls]
+Homepage = "https://github.com/spdx/tools-python"
+Documentation = "https://spdx.github.io/tools-python/"
+Repository = "https://github.com/spdx/tools-python.git"
+Issues = "https://github.com/spdx/tools-python/issues"
+Changelog = "https://github.com/spdx/tools-python/blob/main/CHANGELOG.md"
+
 [tool.setuptools]
-zip-safe = false  # because of the uses of __file__: https://github.com/spdx/tools-python/issues/257
 include-package-data = true
 
 [tool.setuptools.packages.find]
