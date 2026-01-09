@@ -19,7 +19,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: '3.14'
       - name: Install dependencies
         run: |
           sudo apt-get install graphviz-dev
@@ -28,7 +28,7 @@ jobs:
       - name: Generate docs
         run: pdoc spdx_tools -o docs/
       - name: Upload docs as artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs/
 

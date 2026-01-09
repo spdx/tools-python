@@ -12,5 +12,5 @@ def write_relationship(relationship: Relationship, text_output: TextIO, heading:
     if heading:
         text_output.write("## Relationship\n")
     write_element_properties(relationship, text_output)
-    for property_name in relationship.__annotations__.keys():
+    for property_name in Relationship.__annotations__.keys():
         write_value(property_name, getattr(relationship, property_name), text_output)

@@ -14,6 +14,7 @@ from spdx_tools.spdx.validation.uri_validators import validate_download_location
         "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82...",
         "http://some.url",
         "http://ftp.gnu.org/gnu/glibc/glibc-ports-2.15.tar.gz",
+        "HTTP://SOME.URL",
     ],
 )
 def test_valid_url(input_value):
@@ -79,6 +80,7 @@ def test_invalid_url(input_value):
         "bzr+https://bzr.myproject.org/MyProject/trunk@2019",
         "bzr+http://bzr.myproject.org/MyProject/trunk@v1.0",
         "bzr+https://bzr.myproject.org/MyProject/trunk@2019#src/somefile.c",
+        "BZR+HTTPS://BZR.MYPROJECT.ORG/MYPROJECT/TRUNK@2019#SRC/SOMEFILE.C",
     ],
 )
 def test_valid_package_download_location(input_value):
@@ -106,6 +108,7 @@ def test_invalid_package_download_location(input_value):
         "https://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82...",
         "h://someweirdtest^?",
         "https://some.uri that goes on!?",
+        "HTtPS://SOME.URI With CAPITALS",
     ],
 )
 def test_valid_uri(input_value):
