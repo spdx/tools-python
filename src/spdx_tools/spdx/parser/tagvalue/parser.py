@@ -92,6 +92,7 @@ class Parser:
         self.lex = SPDXLexer()
         self.lex.build(reflags=re.UNICODE)
         self.yacc = yacc.yacc(module=self, **kwargs)
+        self._relationship_hashes = set()
 
     @grammar_rule("start : start attrib ")
     def p_start_start_attrib(self, p):
@@ -603,6 +604,8 @@ class Parser:
             )
             return
         package_spdx_id = self.elements_built["packages"][-1].spdx_id
-        relationship = Relationship(package_spdx_id, RelationshipType.CONTAINS, file_spdx_id)
-        if relationship not in self.elements_built.setdefault("relationships", []):
+        h = package_spdx_id + "CONTAINS" + file_spdx_id
+        if h not in self._relationship_hashes:
+            self._relationship_hashes.add(h)
+            relationship = Relationship(package_spdx_id, RelationshipType.CONTAINS, file_spdx_id)
             self.elements_built["relationships"].append(relationship)
