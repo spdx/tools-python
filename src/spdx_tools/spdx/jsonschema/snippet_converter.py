@@ -23,7 +23,7 @@ class SnippetConverter(TypedConverter[Snippet]):
         return super().json_property_name(snippet_property)
 
     def _get_property_value(
-        self, snippet: Snippet, snippet_property: SnippetProperty, document: Document = None
+        self, snippet: Snippet, snippet_property: SnippetProperty, document: Document | None = None
     ) -> Any:
         if snippet_property == SnippetProperty.SPDX_ID:
             return snippet.spdx_id

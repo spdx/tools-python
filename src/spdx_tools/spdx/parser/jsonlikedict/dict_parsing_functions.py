@@ -19,7 +19,7 @@ def parse_field_or_log_error(
     logger: Logger,
     field: Any,
     parsing_method: Callable = lambda x: x,
-    default: Any = None,
+    default: Any | None = None,
     field_is_list: bool = False,
 ) -> Any:
     if not field:

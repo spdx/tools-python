@@ -37,7 +37,7 @@ class ExternalIdentifier:
         external_identifier_type: ExternalIdentifierType,
         identifier: str,
         comment: Optional[str] = None,
-        identifier_locator: List[str] = None,
+        identifier_locator: List[str] | None = None,
         issuing_authority: Optional[str] = None,
     ):
         identifier_locator = [] if identifier_locator is None else identifier_locator

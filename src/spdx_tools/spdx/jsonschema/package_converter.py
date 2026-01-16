@@ -33,7 +33,7 @@ class PackageConverter(TypedConverter[Package]):
         return super().json_property_name(package_property)
 
     def _get_property_value(
-        self, package: Package, package_property: PackageProperty, document: Document = None
+        self, package: Package, package_property: PackageProperty, document: Document | None = None
     ) -> Any:
         if package_property == PackageProperty.SPDX_ID:
             return package.spdx_id

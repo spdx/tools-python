@@ -9,7 +9,7 @@ from spdx_tools.spdx3.model import Element
 class Payload:
     _spdx_id_map: Dict[str, Element]
 
-    def __init__(self, spdx_id_map: Dict[str, Element] = None):
+    def __init__(self, spdx_id_map: Dict[str, Element] | None = None):
         self._spdx_id_map = spdx_id_map if spdx_id_map else {}
 
     def add_element(self, element: Element):

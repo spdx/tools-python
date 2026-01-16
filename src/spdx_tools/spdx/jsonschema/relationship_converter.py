@@ -11,7 +11,7 @@ from spdx_tools.spdx.model import Document, Relationship
 
 class RelationshipConverter(TypedConverter[Relationship]):
     def _get_property_value(
-        self, relationship: Relationship, relationship_property: RelationshipProperty, document: Document = None
+        self, relationship: Relationship, relationship_property: RelationshipProperty, document: Document | None = None
     ) -> Any:
         if relationship_property == RelationshipProperty.SPDX_ELEMENT_ID:
             return relationship.spdx_element_id

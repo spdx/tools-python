@@ -15,7 +15,7 @@ class ExtractedLicensingInfoConverter(TypedConverter[ExtractedLicensingInfo]):
         self,
         extracted_licensing_info: ExtractedLicensingInfo,
         extracted_licensing_info_property: ExtractedLicensingInfoProperty,
-        document: Document = None,
+        document: Document | None = None,
     ) -> Any:
         if extracted_licensing_info_property == ExtractedLicensingInfoProperty.COMMENT:
             return extracted_licensing_info.comment

@@ -16,7 +16,7 @@ class CustomLicenseAddition(LicenseAddition):
         addition_name: str,
         addition_text: str,
         addition_comment: Optional[str] = None,
-        see_also: List[str] = None,
+        see_also: List[str] | None = None,
         standard_addition_template: Optional[str] = None,
         is_deprecated_addition_id: Optional[bool] = None,
         obsoleted_by: Optional[str] = None,

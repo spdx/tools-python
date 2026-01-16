@@ -14,7 +14,7 @@ def write_document_to_stream(
     document: Document,
     stream: IO[str],
     validate: bool = True,
-    converter: DocumentConverter = None,
+    converter: DocumentConverter | None = None,
     drop_duplicates: bool = True,
 ):
     """
@@ -31,7 +31,7 @@ def write_document_to_file(
     document: Document,
     file_name: str,
     validate: bool = True,
-    converter: DocumentConverter = None,
+    converter: DocumentConverter | None = None,
     drop_duplicates: bool = True,
 ):
     with open(file_name, "w", encoding="utf-8") as out:

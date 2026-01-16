@@ -33,11 +33,11 @@ class Annotation(Element):
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: List[IntegrityMethod] = None,
-        external_reference: List[ExternalReference] = None,
-        external_identifier: List[ExternalIdentifier] = None,
+        verified_using: List[IntegrityMethod] | None = None,
+        external_reference: List[ExternalReference] | None = None,
+        external_identifier: List[ExternalIdentifier] | None = None,
         extension: Optional[str] = None,
-        content_type: List[str] = None,
+        content_type: List[str] | None = None,
         statement: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using

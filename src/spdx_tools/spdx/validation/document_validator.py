@@ -16,7 +16,7 @@ from spdx_tools.spdx.validation.spdx_id_validators import get_list_of_all_spdx_i
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
-def validate_full_spdx_document(document: Document, spdx_version: str = None) -> List[ValidationMessage]:
+def validate_full_spdx_document(document: Document, spdx_version: str | None = None) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
 
     # SPDX version validation has to happen here because subsequent validators rely on it

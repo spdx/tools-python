@@ -44,14 +44,14 @@ class Sbom(Bom):
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: List[IntegrityMethod] = None,
-        external_reference: List[ExternalReference] = None,
-        external_identifier: List[ExternalIdentifier] = None,
+        verified_using: List[IntegrityMethod] | None = None,
+        external_reference: List[ExternalReference] | None = None,
+        external_identifier: List[ExternalIdentifier] | None = None,
         extension: Optional[str] = None,
-        namespaces: List[NamespaceMap] = None,
-        imports: List[ExternalMap] = None,
+        namespaces: List[NamespaceMap] | None = None,
+        imports: List[ExternalMap] | None = None,
         context: Optional[str] = None,
-        sbom_type: List[SBOMType] = None,
+        sbom_type: List[SBOMType] | None = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference

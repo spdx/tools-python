@@ -14,7 +14,7 @@ class ExternalPackageRefConverter(TypedConverter[ExternalPackageRef]):
         self,
         external_ref: ExternalPackageRef,
         external_ref_property: ExternalPackageRefProperty,
-        document: Document = None,
+        document: Document | None = None,
     ) -> Any:
         if external_ref_property == ExternalPackageRefProperty.COMMENT:
             return external_ref.comment

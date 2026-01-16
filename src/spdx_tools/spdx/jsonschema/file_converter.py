@@ -25,7 +25,7 @@ class FileConverter(TypedConverter[File]):
             return "SPDXID"
         return super().json_property_name(file_property)
 
-    def _get_property_value(self, file: Any, file_property: FileProperty, document: Document = None) -> Any:
+    def _get_property_value(self, file: Any, file_property: FileProperty, document: Document | None = None) -> Any:
         if file_property == FileProperty.SPDX_ID:
             return file.spdx_id
         elif file_property == FileProperty.ANNOTATIONS:

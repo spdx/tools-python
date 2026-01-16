@@ -12,7 +12,7 @@ from spdx_tools.spdx.model import Annotation, Document
 
 class AnnotationConverter(TypedConverter[Annotation]):
     def _get_property_value(
-        self, annotation: Annotation, annotation_property: AnnotationProperty, document: Document = None
+        self, annotation: Annotation, annotation_property: AnnotationProperty, document: Document | None = None
     ) -> Any:
         if annotation_property == AnnotationProperty.ANNOTATION_DATE:
             return datetime_to_iso_string(annotation.annotation_date)

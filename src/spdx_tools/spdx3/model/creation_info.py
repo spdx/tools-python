@@ -29,7 +29,7 @@ class CreationInfo:
         created_by: List[str],
         profile: List[ProfileIdentifierType],
         data_license: Optional[str] = "CC0-1.0",
-        created_using: List[str] = None,
+        created_using: List[str] | None = None,
         comment: Optional[str] = None,
     ):
         created_using = [] if created_using is None else created_using

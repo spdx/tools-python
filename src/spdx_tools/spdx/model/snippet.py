@@ -32,12 +32,12 @@ class Snippet:
         byte_range: Tuple[int, int],
         line_range: Optional[Tuple[int, int]] = None,
         license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
-        license_info_in_snippet: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+        license_info_in_snippet: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] | None = None,
         license_comment: Optional[str] = None,
         copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
         comment: Optional[str] = None,
         name: Optional[str] = None,
-        attribution_texts: List[str] = None,
+        attribution_texts: List[str] | None = None,
     ):
         attribution_texts = [] if attribution_texts is None else attribution_texts
         license_info_in_snippet = [] if license_info_in_snippet is None else license_info_in_snippet
