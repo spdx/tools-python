@@ -1,21 +1,16 @@
-graft data
 graft examples
-graft spdx
+graft src
 graft tests
 
 prune src/spdx_tools.egg-info
 
-include spdx/licenses.json
-include README.md
-include CHANGELOG.rst
-include LICENSE
-include MANIFEST.in
-include setup.py
-include setup.cfg
 include .gitignore
-include MANIFEST.in
-include .travis.yml
-include circle.yml
-include appveyor.yml
+include README.md
+include CHANGELOG.md
+include CONTRIBUTING.md
+include DOCUMENTATION.md
+include LICENSE
+include setup.py
+include pyproject.toml
 
-global-exclude *.py[co] __pycache__ *.*~
+global-exclude *.py[co] __pycache__ *.*~ .DS_Store .pytest_cache .mypy_cache
