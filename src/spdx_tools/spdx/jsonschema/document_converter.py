@@ -50,7 +50,7 @@ class DocumentConverter(TypedConverter[Document]):
         return super().json_property_name(document_property)
 
     def _get_property_value(
-        self, document: Document, document_property: DocumentProperty, _document: Document = None
+        self, document: Document, document_property: DocumentProperty, _document: Document | None = None
     ) -> Any:
         if document_property == DocumentProperty.SPDX_ID:
             return document.creation_info.spdx_id

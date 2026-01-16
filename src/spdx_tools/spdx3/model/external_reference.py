@@ -61,7 +61,7 @@ class ExternalReference:
     def __init__(
         self,
         external_reference_type: Optional[ExternalReferenceType] = None,
-        locator: List[str] = None,
+        locator: List[str] | None = None,
         content_type: Optional[str] = None,
         comment: Optional[str] = None,
     ):

@@ -45,7 +45,7 @@ class CreationInfo:
         created: datetime,
         creator_comment: Optional[str] = None,
         data_license: str = "CC0-1.0",
-        external_document_refs: List[ExternalDocumentRef] = None,
+        external_document_refs: List[ExternalDocumentRef] | None = None,
         license_list_version: Optional[Version] = None,
         document_comment: Optional[str] = None,
     ):
@@ -67,12 +67,12 @@ class Document:
     def __init__(
         self,
         creation_info: CreationInfo,
-        packages: List[Package] = None,
-        files: List[File] = None,
-        snippets: List[Snippet] = None,
-        annotations: List[Annotation] = None,
-        relationships: List[Relationship] = None,
-        extracted_licensing_info: List[ExtractedLicensingInfo] = None,
+        packages: List[Package] | None = None,
+        files: List[File] | None = None,
+        snippets: List[Snippet] | None = None,
+        annotations: List[Annotation] | None = None,
+        relationships: List[Relationship] | None = None,
+        extracted_licensing_info: List[ExtractedLicensingInfo] | None = None,
     ):
         packages = [] if packages is None else packages
         files = [] if files is None else files

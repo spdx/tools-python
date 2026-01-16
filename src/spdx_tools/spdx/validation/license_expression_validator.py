@@ -29,7 +29,7 @@ def validate_license_expression(
     license_expression: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]],
     document: Document,
     parent_id: str,
-    context: ValidationContext = None,
+    context: ValidationContext | None = None,
 ) -> List[ValidationMessage]:
     if license_expression in [SpdxNoAssertion(), SpdxNone(), None]:
         return []

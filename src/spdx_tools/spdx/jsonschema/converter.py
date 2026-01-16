@@ -33,7 +33,7 @@ class TypedConverter(ABC, Generic[T]):
     """
 
     @abstractmethod
-    def _get_property_value(self, instance: T, json_property: JsonProperty, document: Document = None) -> Any:
+    def _get_property_value(self, instance: T, json_property: JsonProperty, document: Document | None = None) -> Any:
         raise NotImplementedError(MISSING_IMPLEMENTATION_MESSAGE)
 
     @abstractmethod
@@ -50,7 +50,7 @@ class TypedConverter(ABC, Generic[T]):
     def requires_full_document(self) -> bool:
         return False
 
-    def convert(self, instance: T, document: Document = None) -> Dict:
+    def convert(self, instance: T, document: Document | None = None) -> Dict:
         if not isinstance(instance, self.get_data_model_type()):
             raise TypeError(
                 f"Converter of type {self.__class__} can only convert objects of type "

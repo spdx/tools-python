@@ -35,9 +35,9 @@ class VexAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        verified_using: List[IntegrityMethod] = None,
-        external_reference: List[ExternalReference] = None,
-        external_identifier: List[ExternalIdentifier] = None,
+        verified_using: List[IntegrityMethod] | None = None,
+        external_reference: List[ExternalReference] | None = None,
+        external_identifier: List[ExternalIdentifier] | None = None,
         extension: Optional[str] = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
@@ -50,7 +50,7 @@ class VexAffectedVulnAssessmentRelationship(VexVulnAssessmentRelationship):
         vex_version: Optional[str] = None,
         status_notes: Optional[str] = None,
         action_statement: Optional[str] = None,
-        action_statement_time: List[datetime] = None,
+        action_statement_time: List[datetime] | None = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference

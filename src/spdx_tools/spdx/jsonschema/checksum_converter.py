@@ -17,7 +17,7 @@ class ChecksumConverter(TypedConverter[Checksum]):
         return ChecksumProperty
 
     def _get_property_value(
-        self, checksum: Checksum, checksum_property: ChecksumProperty, _document: Document = None
+        self, checksum: Checksum, checksum_property: ChecksumProperty, _document: Document | None = None
     ) -> str:
         if checksum_property == ChecksumProperty.ALGORITHM:
             return algorithm_to_json_string(checksum.algorithm)

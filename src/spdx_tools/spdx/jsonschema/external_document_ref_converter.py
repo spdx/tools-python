@@ -20,7 +20,7 @@ class ExternalDocumentRefConverter(TypedConverter[ExternalDocumentRef]):
         self,
         external_document_ref: ExternalDocumentRef,
         external_document_ref_property: ExternalDocumentRefProperty,
-        _document: Document = None,
+        _document: Document | None = None,
     ) -> Any:
         if external_document_ref_property == ExternalDocumentRefProperty.EXTERNAL_DOCUMENT_ID:
             return external_document_ref.document_ref_id

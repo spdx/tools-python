@@ -33,7 +33,7 @@ class PackageVerificationCode:
     value: str
     excluded_files: List[str] = field(default_factory=list)
 
-    def __init__(self, value: str, excluded_files: List[str] = None):
+    def __init__(self, value: str, excluded_files: List[str] | None = None):
         excluded_files = [] if excluded_files is None else excluded_files
         check_types_and_set_values(self, locals())
 
@@ -109,19 +109,19 @@ class Package:
         originator: Optional[Union[Actor, SpdxNoAssertion]] = None,
         files_analyzed: bool = True,
         verification_code: Optional[PackageVerificationCode] = None,
-        checksums: List[Checksum] = None,
+        checksums: List[Checksum] | None = None,
         homepage: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
         source_info: Optional[str] = None,
         license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
-        license_info_from_files: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+        license_info_from_files: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] | None = None,
         license_declared: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
         license_comment: Optional[str] = None,
         copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
         comment: Optional[str] = None,
-        external_references: List[ExternalPackageRef] = None,
-        attribution_texts: List[str] = None,
+        external_references: List[ExternalPackageRef] | None = None,
+        attribution_texts: List[str] | None = None,
         primary_package_purpose: Optional[PackagePurpose] = None,
         release_date: Optional[datetime] = None,
         built_date: Optional[datetime] = None,

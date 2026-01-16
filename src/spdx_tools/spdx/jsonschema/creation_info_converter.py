@@ -19,7 +19,7 @@ class CreationInfoConverter(TypedConverter[CreationInfo]):
         return CreationInfoProperty
 
     def _get_property_value(
-        self, creation_info: CreationInfo, creation_info_property: CreationInfoProperty, _document: Document = None
+        self, creation_info: CreationInfo, creation_info_property: CreationInfoProperty, _document: Document | None = None
     ) -> Any:
         if creation_info_property == CreationInfoProperty.CREATED:
             return datetime_to_iso_string(creation_info.created)

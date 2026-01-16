@@ -20,7 +20,7 @@ class ExternalMap:
     def __init__(
         self,
         external_id: str,
-        verified_using: List[IntegrityMethod] = None,
+        verified_using: List[IntegrityMethod] | None = None,
         location_hint: Optional[str] = None,
         defining_document: Optional[str] = None,
     ):

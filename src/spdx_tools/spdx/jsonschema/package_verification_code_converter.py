@@ -14,7 +14,7 @@ class PackageVerificationCodeConverter(TypedConverter[PackageVerificationCode]):
         self,
         verification_code: PackageVerificationCode,
         verification_code_property: PackageVerificationCodeProperty,
-        document: Document = None,
+        document: Document | None = None,
     ) -> Any:
         if verification_code_property == PackageVerificationCodeProperty.PACKAGE_VERIFICATION_CODE_EXCLUDED_FILES:
             return verification_code.excluded_files or None
