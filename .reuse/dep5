@@ -1,0 +1,24 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: tools-python
+Source: https://github.com/spdx/tools-python
+
+Files: assets/*
+Copyright: 2023 spdx contributors
+License: Apache-2.0
+
+Files: *.md
+Copyright: 2023 spdx contributors
+License: Apache-2.0
+
+Files:
+  tests/*.json
+  tests/*.xml
+Copyright: 2023 spdx contributors
+License: Apache-2.0
+
+Files:
+  src/spdx_tools/spdx3/writer/json_ld/model.ttl
+  src/spdx_tools/spdx3/writer/json_ld/SPDX_OWL.json
+  src/spdx_tools/spdx3/writer/json_ld/context.json
+Copyright: 2023 spdx contributors
+License: Community-Spec-1.0
