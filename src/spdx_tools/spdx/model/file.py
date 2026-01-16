@@ -51,15 +51,15 @@ class File:
         name: str,
         spdx_id: str,
         checksums: List[Checksum],
-        file_types: List[FileType] = None,
+        file_types: List[FileType] | None = None,
         license_concluded: Optional[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
-        license_info_in_file: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] = None,
+        license_info_in_file: List[Union[LicenseExpression, SpdxNoAssertion, SpdxNone]] | None = None,
         license_comment: Optional[str] = None,
         copyright_text: Optional[Union[str, SpdxNoAssertion, SpdxNone]] = None,
-        comment: str = None,
+        comment: str | None = None,
         notice: Optional[str] = None,
-        contributors: List[str] = None,
-        attribution_texts: List[str] = None,
+        contributors: List[str] | None = None,
+        attribution_texts: List[str] | None = None,
     ):
         file_types = [] if file_types is None else file_types
         license_info_in_file = [] if license_info_in_file is None else license_info_in_file

@@ -24,7 +24,7 @@ def parse_literal(
     subject: Node,
     predicate: Node,
     parsing_method: Callable = lambda x: x.strip(),
-    default: Any = None,
+    default: Any | None = None,
 ):
     value = get_unique_value(logger, graph, subject, predicate, default)
     if not value:
@@ -33,7 +33,7 @@ def parse_literal(
 
 
 def apply_parsing_method_or_log_error(
-    logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(), default: Any = None
+    logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(), default: Any | None = None
 ):
     try:
         return parsing_method(value)
@@ -50,14 +50,14 @@ def parse_literal_or_no_assertion_or_none(
     subject: Node,
     predicate: Node,
     parsing_method: Callable = lambda x: x.strip(),
-    default: Any = None,
+    default: Any | None = None,
 ):
     value = get_unique_value(logger, graph, subject, predicate, default)
     return get_correctly_typed_value(logger, value, parsing_method, default)
 
 
 def get_correctly_typed_value(
-    logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(), default: Any = None
+    logger: Logger, value: Any, parsing_method: Callable = lambda x: x.strip(), default: Any | None = None
 ):
     if not value:
         return default

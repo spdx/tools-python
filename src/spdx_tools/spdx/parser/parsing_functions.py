@@ -18,7 +18,7 @@ def construct_or_raise_parsing_error(object_to_construct: Any, args_for_construc
     return constructed_object
 
 
-def raise_parsing_error_if_logger_has_messages(logger: Logger, parsed_object_name: str = None):
+def raise_parsing_error_if_logger_has_messages(logger: Logger, parsed_object_name: str | None = None):
     if logger.has_messages():
         if parsed_object_name:
             raise SPDXParsingError([f"Error while parsing {parsed_object_name}: {logger.get_messages()}"])
