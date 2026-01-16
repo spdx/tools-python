@@ -1,5 +1,28 @@
 # Changelog
 
+## v0.8.4 (2026-01-16)
+
+### New features and changes
+
+* change supported Python versions:
+  * add support for Python 3.14
+  * dropped support for Python 3.7, 3.8, 3.9 (which all have reached their end-of-life)
+* fixes
+  * download location URIs are not case sensitive anymore 
+  * removed some control characters from JSON SPDX
+  * remove usages of `__file__` to make the project zip-safe
+* fixes to `README.md` and `process.md`
+
+### Contributors
+
+This release was made possible by the following contributors. Thank you very much!
+
+* @zbleness
+* @clabbenius
+* Oliver Benjamin @oli-ben
+* Arthit Suriyawongkul @bact
+* Armin Tänzer @armintaenzertng
+
 ## v0.8.3 (2024-09-27)
 
 ### New features and changes
