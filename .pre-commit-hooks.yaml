@@ -1,0 +1,7 @@
+- id: pyspdxtools
+  name: pyspdxtools
+  entry: pyspdxtools
+  language: python
+  types: [json]
+  require_serial: true
+  args: [--infile]
