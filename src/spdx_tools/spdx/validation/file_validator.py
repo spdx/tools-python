@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from beartype.typing import List, Optional
+from beartype.typing import List, Optional, Set
 
 from spdx_tools.spdx.model import ChecksumAlgorithm, Document, File
 from spdx_tools.spdx.validation.checksum_validator import validate_checksums
@@ -10,7 +10,7 @@ from spdx_tools.spdx.validation.license_expression_validator import (
     validate_license_expression,
     validate_license_expressions,
 )
-from spdx_tools.spdx.validation.spdx_id_validators import validate_spdx_id
+from spdx_tools.spdx.validation.spdx_id_validators import validate_spdx_id, get_all_spdx_ids
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
 
@@ -19,8 +19,9 @@ def validate_files(
 ) -> List[ValidationMessage]:
     validation_messages = []
     if document:
+        all_spdx_ids: Set[str] = get_all_spdx_ids(document)
         for file in files:
-            validation_messages.extend(validate_file_within_document(file, spdx_version, document))
+            validation_messages.extend(validate_file_within_document(file, spdx_version, document, all_spdx_ids))
     else:
         for file in files:
             validation_messages.extend(validate_file(file, spdx_version))
@@ -28,7 +29,9 @@ def validate_files(
     return validation_messages
 
 
-def validate_file_within_document(file: File, spdx_version: str, document: Document) -> List[ValidationMessage]:
+def validate_file_within_document(
+        file: File, spdx_version: str, document: Document, all_spdx_ids: Set[str]
+) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(
         spdx_id=file.spdx_id,
@@ -37,8 +40,8 @@ def validate_file_within_document(file: File, spdx_version: str, document: Docum
         full_element=file,
     )
 
-    for message in validate_spdx_id(file.spdx_id, document):
-        validation_messages.append(ValidationMessage(message, context))
+    for message in validate_spdx_id(file.spdx_id, document, all_spdx_ids):
+        validation_messages.append(ValidationMessage(message, context, all_spdx_ids))
 
     validation_messages.extend(validate_license_expression(file.license_concluded, document, file.spdx_id))
 
