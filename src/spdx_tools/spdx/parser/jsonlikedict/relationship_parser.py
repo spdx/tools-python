@@ -1,9 +1,12 @@
 # SPDX-FileCopyrightText: 2022 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from beartype.typing import Dict, List, Optional
+from dataclasses import astuple
+
+from beartype.typing import Dict, List, Optional, Set
 
 from spdx_tools.common.typing.constructor_type_errors import ConstructorTypeErrors
+from spdx_tools.common.typing.dataclass_with_properties import freeze_dataclass_with_properties_list
 from spdx_tools.spdx.model import Relationship, RelationshipType
 from spdx_tools.spdx.parser.error import SPDXParsingError
 from spdx_tools.spdx.parser.jsonlikedict.dict_parsing_functions import (
@@ -35,9 +38,12 @@ class RelationshipParser:
         document_describes: List[str] = delete_duplicates_from_list(input_doc_dict.get("documentDescribes", []))
         doc_spdx_id: Optional[str] = input_doc_dict.get("SPDXID")
 
-        existing_relationships_without_comments: List[Relationship] = self.get_all_relationships_without_comments(
-            relationships
-        )
+        relationship_hash = lambda r: hash("{} -> {} ({})" \
+                .format(r.spdx_element_id,
+                        str(r.related_spdx_element_id),
+                        str(r.relationship_type)))
+        existing_relationships_without_comments: Set[Relationship] = freeze_dataclass_with_properties_list(
+                self.get_all_relationships_without_comments(relationships))
         relationships.extend(
             parse_field_or_log_error(
                 self.logger,
@@ -52,9 +58,6 @@ class RelationshipParser:
         )
 
         package_dicts: List[Dict] = input_doc_dict.get("packages", [])
-        existing_relationships_without_comments: List[Relationship] = self.get_all_relationships_without_comments(
-            relationships
-        )
 
         relationships.extend(
             parse_field_or_log_error(
@@ -110,7 +113,7 @@ class RelationshipParser:
         return relationship_type
 
     def parse_document_describes(
-        self, doc_spdx_id: str, described_spdx_ids: List[str], existing_relationships: List[Relationship]
+        self, doc_spdx_id: str, described_spdx_ids: List[str], existing_relationships: Set[Relationship]
     ) -> List[Relationship]:
         logger = Logger()
         describes_relationships = []
@@ -131,10 +134,11 @@ class RelationshipParser:
         return describes_relationships
 
     def parse_has_files(
-        self, package_dicts: List[Dict], existing_relationships: List[Relationship]
+        self, package_dicts: List[Dict], existing_relationships: Set[Relationship]
     ) -> List[Relationship]:
         # assume existing relationships are stripped of comments
         logger = Logger()
+
         contains_relationships = []
         for package in package_dicts:
             package_spdx_id: Optional[str] = package.get("SPDXID")
@@ -160,13 +164,13 @@ class RelationshipParser:
         return contains_relationships
 
     def check_if_relationship_exists(
-        self, relationship: Relationship, existing_relationships: List[Relationship]
+        self, relationship: Relationship, existing_relationships: Set[Relationship]
     ) -> bool:
         # assume existing relationships are stripped of comments
-        if relationship in existing_relationships:
+        if astuple(relationship) in existing_relationships:
             return True
         relationship_inverted: Relationship = self.invert_relationship(relationship)
-        if relationship_inverted in existing_relationships:
+        if astuple(relationship_inverted) in existing_relationships:
             return True
 
         return False
