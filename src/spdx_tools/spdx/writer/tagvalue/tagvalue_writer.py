@@ -73,11 +73,7 @@ def write_document(document: Document, text_output: TextIO):
         write_separator(text_output)
         if package.spdx_id in contained_files_by_package_id:
             for file in contained_files_by_package_id[package.spdx_id]:
-                if file.spdx_id in already_written_file_ids:
-                    relationships_to_write.append(
-                        Relationship(package.spdx_id, RelationshipType.CONTAINS, file.spdx_id)
-                    )
-                else:
+                if file.spdx_id not in already_written_file_ids:
                     write_file(file, text_output)
                     write_separator(text_output)
                     if file.spdx_id in file_ids_with_contained_snippets:
@@ -88,6 +84,8 @@ def write_document(document: Document, text_output: TextIO):
                             with_separator=True,
                         )
                     already_written_file_ids.append(file.spdx_id)
+
+                relationships_to_write.append(Relationship(package.spdx_id, RelationshipType.CONTAINS, file.spdx_id))
 
     write_optional_heading(document.extracted_licensing_info, "## License Information\n", text_output)
     write_list_of_elements(
