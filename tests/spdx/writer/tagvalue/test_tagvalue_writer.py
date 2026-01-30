@@ -132,6 +132,8 @@ def test_correct_order_of_elements():
             call("PackageDownloadLocation: \n"),
             call("FilesAnalyzed: true\n"),
             call("\n"),
+            call('## Relationships\n'),
+            call('Relationship: SPDXRef-Package-A CONTAINS SPDXRef-File-B\n'),
             call("\n"),
         ]
     )
@@ -215,6 +217,7 @@ def test_same_file_in_multiple_packages():
             call("## Relationships\n"),
             call("Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package-A\n"),
             call("Relationship: SPDXRef-DOCUMENT DESCRIBES SPDXRef-Package-B\n"),
+            call("Relationship: SPDXRef-Package-A CONTAINS SPDXRef-File\n"),
             call("Relationship: SPDXRef-Package-B CONTAINS SPDXRef-File\n"),
             call("\n"),
         ]
