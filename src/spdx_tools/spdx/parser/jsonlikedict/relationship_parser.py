@@ -104,7 +104,7 @@ class RelationshipParser:
     @staticmethod
     def parse_relationship_type(relationship_type_str: str) -> RelationshipType:
         try:
-            relationship_type = RelationshipType[json_str_to_enum_name(relationship_type_str)]
+            relationship_type = RelationshipType[json_str_to_enum_name(relationship_type_str, False)]
         except KeyError:
             raise SPDXParsingError([f"Invalid RelationshipType: {relationship_type_str}"])
         return relationship_type
