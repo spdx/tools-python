@@ -1,6 +1,19 @@
 # Changelog
 
-## v0.8.4 (2026-01-16)
+## v0.8.5 (2026-03-13)
+
+### New features and changes
+
+* clean up `pyproject.toml` and `MANIFEST.in`, remove `appveyor.yml`
+* make code conformant with PEP 484
+
+### Contributors
+
+This release was made possible by the following contributors. Thank you very much!
+
+* Arthit Suriyawongkul @bact
+
+## v0.8.4 (2026-01-16) (unreleased)
 
 ### New features and changes
 
