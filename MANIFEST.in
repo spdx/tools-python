@@ -1,16 +1,1 @@
-graft examples
-graft src
-graft tests
-
 prune src/spdx_tools.egg-info
-
-include .gitignore
-include README.md
-include CHANGELOG.md
-include CONTRIBUTING.md
-include DOCUMENTATION.md
-include LICENSE
-include setup.py
-include pyproject.toml
-
-global-exclude *.py[co] __pycache__ *.*~ .DS_Store .pytest_cache .mypy_cache

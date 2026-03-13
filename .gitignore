@@ -1,43 +1,45 @@
+# Build outputs
+/build/
+/dist*/
+*.egg-info/
+/.eggs/
+src/spdx_tools/spdx/parser/tagvalue/parsetab.py
+
+# Python cache
 __pycache__/
 *.py[cod]
 *.out
-/build/
-/dist*/
-/tmp/
-src/spdx_tools/spdx/parser/tagvalue/parsetab.py
-/.cache/
 
+# Virtual environments
+.python-version
 .tox
 venv*
-
-# virtualenv
 /bin
+/include
+/Include
 /lib
 /Lib
 /local
 /local/
-/.eggs/
-*.egg-info/
-/Include
-/include
-/pip-selfcheck.json
-.Python
 /share/
 
 # IDEs
+.idea
 .project
 .pydevproject
-.idea
-org.eclipse.core.resources.prefs
 .vscode
-.pytest_cache
+org.eclipse.core.resources.prefs
 
-# Installer logs
-pip-log.txt
-
-# Unit test / coverage reports
+# Testing and type checking
 .cache
 .coverage
 .coverage.*
-nosetests.xml
+.mypy_cache
+.pytest_cache
 htmlcov
+
+# OS temporary files
+*.*~
+._*
+.DS_Store
+/tmp/
