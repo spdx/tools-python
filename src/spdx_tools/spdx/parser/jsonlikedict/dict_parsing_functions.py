@@ -9,10 +9,13 @@ from spdx_tools.spdx.parser.logger import Logger
 from spdx_tools.spdx.parser.parsing_functions import raise_parsing_error_if_logger_has_messages
 
 
-def json_str_to_enum_name(json_str: str) -> str:
+def json_str_to_enum_name(json_str: str, convert_to_upper: bool = True) -> str:
     if not isinstance(json_str, str):
         raise SPDXParsingError([f"Type for enum must be str not {type(json_str).__name__}"])
-    return json_str.replace("-", "_").upper()
+    enum_name = json_str.replace("-", "_")
+    if convert_to_upper:
+        enum_name = enum_name.upper()
+    return enum_name
 
 
 def parse_field_or_log_error(

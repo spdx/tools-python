@@ -193,7 +193,7 @@ class PackageParser:
     @staticmethod
     def parse_external_ref_category(external_ref_category_str: str) -> ExternalPackageRefCategory:
         try:
-            external_ref_category = ExternalPackageRefCategory[json_str_to_enum_name(external_ref_category_str)]
+            external_ref_category = ExternalPackageRefCategory[json_str_to_enum_name(external_ref_category_str, False)]
         except KeyError:
             raise SPDXParsingError([f"Invalid ExternalPackageRefCategory: {external_ref_category_str}"])
 
@@ -213,6 +213,6 @@ class PackageParser:
     @staticmethod
     def parse_primary_package_purpose(primary_package_purpose: str) -> PackagePurpose:
         try:
-            return PackagePurpose[json_str_to_enum_name(primary_package_purpose)]
+            return PackagePurpose[json_str_to_enum_name(primary_package_purpose, False)]
         except KeyError:
             raise SPDXParsingError([f"Invalid PrimaryPackagePurpose: {primary_package_purpose}"])
