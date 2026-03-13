@@ -43,10 +43,22 @@ def test_local_datetime_to_iso_string():
 
 def test_datetime_from_str():
     date_str = "2010-03-04T05:45:11Z"
+    assert datetime_from_str(date_str) == datetime(2010, 3, 4, 5, 45, 11)
 
-    date = datetime_from_str(date_str)
+    date_str = "2010-03-04T05:45:11.0Z"
+    assert datetime_from_str(date_str) == datetime(2010, 3, 4, 5, 45, 11)
 
-    assert date == datetime(2010, 3, 4, 5, 45, 11)
+    # implicit notation
+    date_str = "2010-03-04T05:45:11.1Z"
+    assert datetime_from_str(date_str) == datetime(2010, 3, 4, 5, 45, 11, 100000)
+
+    # explicity notation
+    date_str = "2010-03-04T05:45:11.123456Z"
+    assert datetime_from_str(date_str) == datetime(2010, 3, 4, 5, 45, 11, 123456)
+
+    # truncation of nano seconds
+    date_str = "2010-03-04T05:45:11.1234567Z"
+    assert datetime_from_str(date_str) == datetime(2010, 3, 4, 5, 45, 11, 123456)
 
 
 @pytest.mark.parametrize(
