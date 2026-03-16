@@ -9,13 +9,15 @@ import pytest
 
 from spdx_tools.spdx.model import Checksum, ChecksumAlgorithm
 from spdx_tools.spdx.validation.file_validator import validate_file, validate_file_within_document
+from spdx_tools.spdx.validation.spdx_id_validators import get_all_spdx_ids
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import document_fixture, file_fixture
 
 
 def test_valid_file():
     file = file_fixture()
-    validation_messages: List[ValidationMessage] = validate_file_within_document(file, "SPDX-2.3", document_fixture())
+    document = document_fixture()
+    validation_messages: List[ValidationMessage] = validate_file_within_document(file, "SPDX-2.3", document, get_all_spdx_ids(document))
 
     assert validation_messages == []
 
@@ -36,8 +38,9 @@ def test_valid_file():
     ],
 )
 def test_invalid_file(file_input, spdx_id, expected_message):
+    document = document_fixture()
     validation_messages: List[ValidationMessage] = validate_file_within_document(
-        file_input, "SPDX-2.3", document_fixture()
+        file_input, "SPDX-2.3", document, get_all_spdx_ids(document)
     )
 
     expected = ValidationMessage(

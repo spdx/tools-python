@@ -2,7 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 
-from beartype.typing import List, Optional
+from beartype.typing import List, Optional, Set
 
 from spdx_tools.spdx.model import Document, File, Package, Relationship, RelationshipType
 from spdx_tools.spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target
@@ -14,7 +14,7 @@ from spdx_tools.spdx.validation.license_expression_validator import (
     validate_license_expressions,
 )
 from spdx_tools.spdx.validation.package_verification_code_validator import validate_verification_code
-from spdx_tools.spdx.validation.spdx_id_validators import validate_spdx_id
+from spdx_tools.spdx.validation.spdx_id_validators import validate_spdx_id, get_all_spdx_ids
 from spdx_tools.spdx.validation.uri_validators import validate_download_location, validate_url
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 
@@ -23,9 +23,10 @@ def validate_packages(
     packages: List[Package], spdx_version: str, document: Optional[Document] = None
 ) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
+    all_spdx_ids: Set[str] = get_all_spdx_ids(document)
     if document:
         for package in packages:
-            validation_messages.extend(validate_package_within_document(package, spdx_version, document))
+            validation_messages.extend(validate_package_within_document(package, spdx_version, document, all_spdx_ids))
     else:
         for package in packages:
             validation_messages.extend(validate_package(package, spdx_version))
@@ -34,7 +35,7 @@ def validate_packages(
 
 
 def validate_package_within_document(
-    package: Package, spdx_version: str, document: Document
+    package: Package, spdx_version: str, document: Document, all_spdx_ids: Set[str]
 ) -> List[ValidationMessage]:
     validation_messages: List[ValidationMessage] = []
     context = ValidationContext(
@@ -44,7 +45,7 @@ def validate_package_within_document(
         full_element=package,
     )
 
-    for message in validate_spdx_id(package.spdx_id, document):
+    for message in validate_spdx_id(package.spdx_id, document, all_spdx_ids):
         validation_messages.append(ValidationMessage(message, context))
 
     if not package.files_analyzed:

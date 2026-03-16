@@ -9,16 +9,18 @@ import pytest
 
 from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
-from spdx_tools.spdx.model import Relationship, RelationshipType, SpdxNoAssertion, SpdxNone
+from spdx_tools.spdx.model import Document, Relationship, RelationshipType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.validation.package_validator import validate_package, validate_package_within_document
+from spdx_tools.spdx.validation.spdx_id_validators import get_all_spdx_ids
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import document_fixture, file_fixture, package_fixture, package_verification_code_fixture
 
 
 def test_valid_package():
+    document: Document = document_fixture()
     package = package_fixture()
     validation_messages: List[ValidationMessage] = validate_package_within_document(
-        package, "SPDX-2.3", document_fixture()
+        package, "SPDX-2.3", document, get_all_spdx_ids(document)
     )
 
     assert validation_messages == []
@@ -54,8 +56,9 @@ def test_valid_package():
     ],
 )
 def test_invalid_package(package_input, expected_message):
+    document: Document = document_fixture(relationships=[])
     validation_messages: List[ValidationMessage] = validate_package_within_document(
-        package_input, "SPDX-2.3", document_fixture(relationships=[])
+        package_input, "SPDX-2.3", document, get_all_spdx_ids(document)
     )
 
     expected = ValidationMessage(
@@ -85,7 +88,7 @@ def test_valid_package_with_contains(relationships):
     )
     package = package_fixture(files_analyzed=False, verification_code=None, license_info_from_files=[])
 
-    validation_messages: List[ValidationMessage] = validate_package_within_document(package, "SPDX-2.3", document)
+    validation_messages: List[ValidationMessage] = validate_package_within_document(package, "SPDX-2.3", document, get_all_spdx_ids(document))
 
     assert validation_messages == []
 
@@ -114,7 +117,7 @@ def test_invalid_package_with_contains(relationships):
         full_element=package,
     )
 
-    validation_messages: List[ValidationMessage] = validate_package_within_document(package, "SPDX-2.3", document)
+    validation_messages: List[ValidationMessage] = validate_package_within_document(package, "SPDX-2.3", document, get_all_spdx_ids(document))
 
     assert validation_messages == [
         ValidationMessage(
