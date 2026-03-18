@@ -4,7 +4,11 @@
 
 import pytest
 
-from spdx_tools.spdx.validation.uri_validators import validate_download_location, validate_uri, validate_url
+from spdx_tools.spdx.validation.uri_validators import (
+    validate_download_location,
+    validate_uri,
+    validate_url,
+)
 
 
 @pytest.mark.parametrize(
@@ -81,6 +85,7 @@ def test_invalid_url(input_value):
         "bzr+http://bzr.myproject.org/MyProject/trunk@v1.0",
         "bzr+https://bzr.myproject.org/MyProject/trunk@2019#src/somefile.c",
         "BZR+HTTPS://BZR.MYPROJECT.ORG/MYPROJECT/TRUNK@2019#SRC/SOMEFILE.C",
+        "git+git@github.com:zephyrproject-rtos/CMSIS_6@06d952b6713a2ca41c9224a62075e4059402a151-off",
     ],
 )
 def test_valid_package_download_location(input_value):
@@ -118,7 +123,8 @@ def test_valid_uri(input_value):
 
 
 @pytest.mark.parametrize(
-    "input_value", ["/invalid/uri", "http//uri", "http://some#uri", "some/uri", "some weird test"]
+    "input_value",
+    ["/invalid/uri", "http//uri", "http://some#uri", "some/uri", "some weird test"],
 )
 def test_invalid_uri(input_value):
     message = validate_uri(input_value)
@@ -128,7 +134,10 @@ def test_invalid_uri(input_value):
     ]
 
 
-@pytest.mark.parametrize("input_value", ["://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82..."])
+@pytest.mark.parametrize(
+    "input_value",
+    ["://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82..."],
+)
 @pytest.mark.skip(
     "validate_uri() seems to invalidate URIs without scheme, so it does not run into this case. But I'm not sure yet "
     "if this covers all scheme-less examples."

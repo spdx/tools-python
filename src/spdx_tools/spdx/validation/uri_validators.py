@@ -15,7 +15,7 @@ url_pattern = (
 url_pattern_ignore_case = re.compile(url_pattern, re.IGNORECASE)
 
 supported_download_repos: str = "(git|hg|svn|bzr)"
-git_pattern = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-]+)"
+git_pattern = "(git\\+git@[a-zA-Z0-9\\.\\-]+:[a-zA-Z0-9/\\\\.@\\-_]+)"
 bazaar_pattern = "(bzr\\+lp:[a-zA-Z0-9\\.\\-]+)"
 download_location_pattern = (
     "^(((" + supported_download_repos + "\\+)?" + url_pattern + ")|" + git_pattern + "|" + bazaar_pattern + ")$"
