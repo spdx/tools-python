@@ -2,6 +2,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import re
+import warnings
 from datetime import datetime, timezone
 
 
@@ -14,13 +15,12 @@ def datetime_from_str(date_str: str) -> datetime:
 
     # Based on the https://www.w3.org/TR/xmlschema11-2/#dateTimeStamp
     # The secondFrag allows fractional second notation as well.
-    # normalize to micro seconds so that we can use %f with strptime
-    date_str = re.sub(r"\.(\d{1,6})\d*Z$", r".\1Z", date_str)
+    # truncate the microsecond part
+    date_str = re.sub(r"\.\d*Z$", "Z", date_str)
     warnings.warn(
-        "Invalid date format. Expected YYYY-MM-DDThh:mm:ssZ "
-        "Sub-second fractions have been discarded",
+        "Invalid date format. Expected YYYY-MM-DDThh:mm:ssZ. Sub-second fractions have been discarded.",
         category=UserWarning,
-        stacklevel=2
+        stacklevel=2,
     )
     return datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")  # raises ValueError if format does not match
 
