@@ -10,18 +10,18 @@ def datetime_from_str(date_str: str) -> datetime:
     if not isinstance(date_str, str):
         raise TypeError(f"Could not convert str to datetime, invalid type: {type(date_str).__name__}")
 
-    if "." not in date_str:
-        return datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")  # raises ValueError if format does not match
+    truncated_date_str = re.sub(r"\.\d*Z$", "Z", date_str)
+    if truncated_date_str != date_str:
+        # Based on the https://www.w3.org/TR/xmlschema11-2/#dateTimeStamp
+        # The secondFrag allows fractional second notation as well.
+        # truncate the microsecond part
+        warnings.warn(
+            "Invalid date format. Expected YYYY-MM-DDThh:mm:ssZ. Sub-second fractions have been discarded.",
+            category=UserWarning,
+            stacklevel=2,
+        )
+        date_str = truncated_date_str
 
-    # Based on the https://www.w3.org/TR/xmlschema11-2/#dateTimeStamp
-    # The secondFrag allows fractional second notation as well.
-    # truncate the microsecond part
-    date_str = re.sub(r"\.\d*Z$", "Z", date_str)
-    warnings.warn(
-        "Invalid date format. Expected YYYY-MM-DDThh:mm:ssZ. Sub-second fractions have been discarded.",
-        category=UserWarning,
-        stacklevel=2,
-    )
     return datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")  # raises ValueError if format does not match
 
 
