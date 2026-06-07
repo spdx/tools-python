@@ -51,6 +51,10 @@ def test_valid_package():
             "license_info_from_files must be None if files_analyzed is False, but is: [LicenseSymbol('some_license', "
             "is_exception=False)]",
         ),
+        (
+            package_fixture(files_analyzed=True, verification_code=None),
+            "verification_code is mandatory when files_analyzed is True",
+        ),
     ],
 )
 def test_invalid_package(package_input, expected_message):

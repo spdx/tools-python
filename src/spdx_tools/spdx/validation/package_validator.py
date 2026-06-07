@@ -131,6 +131,10 @@ def validate_package(
             )
         else:
             validation_messages.extend(validate_verification_code(verification_code, package.spdx_id))
+    elif package.files_analyzed:
+        validation_messages.append(
+            ValidationMessage("verification_code is mandatory when files_analyzed is True", context)
+        )
 
     validation_messages.extend(validate_checksums(package.checksums, package.spdx_id, spdx_version))
 
