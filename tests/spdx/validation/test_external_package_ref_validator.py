@@ -27,6 +27,18 @@ from spdx_tools.spdx.validation.validation_message import SpdxElementType, Valid
     [
         (ExternalPackageRefCategory.SECURITY, "cpe22Type", "cpe:/o:canonical:ubuntu_linux:10.04:-:lts"),
         (ExternalPackageRefCategory.SECURITY, "cpe23Type", "cpe:2.3:o:canonical:ubuntu_linux:10.04:-:lts:*:*:*:*:*"),
+        # a "+" in the version (#796) must be accepted without being backslash-escaped
+        (
+            ExternalPackageRefCategory.SECURITY,
+            "cpe23Type",
+            "cpe:2.3:a:ahmed_h.:spdx-tools:0.8.3.dev1+g8050fd9c:*:*:*:*:*:*:*",
+        ),
+        # a "+" in the product name (#796)
+        (
+            ExternalPackageRefCategory.SECURITY,
+            "cpe23Type",
+            "cpe:2.3:a:debian_gcc_maintainers:libstdc++6:12.2.0-9:*:*:*:*:*:*:*",
+        ),
         (ExternalPackageRefCategory.SECURITY, "advisory", "https://nvd.nist.gov/vuln/detail/CVE-2020-28498"),
         (ExternalPackageRefCategory.SECURITY, "fix", "https://github.com/indutny/elliptic/commit/441b7428"),
         (
