@@ -1,5 +1,12 @@
 # Changelog
 
+## (unreleased)
+
+### New features and changes
+
+* experimental SPDX 3.0 support, built on the `spdx-python-model` bindings:
+  * read a SPDX 3 JSON-LD file into memory via `spdx_tools.spdx3.parser.parse_file`
+
 ## v0.8.5 (2026-03-13)
 
 ### New features and changes

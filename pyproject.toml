@@ -37,6 +37,7 @@ dependencies = [
     "pyyaml",
     "rdflib",
     "semantic_version",
+    "spdx-python-model>=0.0.6",
     "uritools",
     "xmltodict",
 ]
@@ -44,9 +45,9 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 test = ["pyshacl", "pytest", "tzdata"]
-code_style = ["black", "flake8", "isort"]
+code_style = ["black", "flake8", "isort", "mypy"]
 graph_generation = ["networkx", "pygraphviz"]
-development = ["black", "flake8", "isort", "networkx", "pyshacl", "pytest"]
+development = ["black", "flake8", "isort", "mypy", "networkx", "pyshacl", "pytest"]
 
 [project.scripts]
 pyspdxtools = "spdx_tools.spdx.clitools.pyspdxtools:main"
@@ -58,6 +59,32 @@ Documentation = "https://spdx.github.io/tools-python/"
 Repository = "https://github.com/spdx/tools-python.git"
 Issues = "https://github.com/spdx/tools-python/issues"
 Changelog = "https://github.com/spdx/tools-python/blob/main/CHANGELOG.md"
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+mypy_path = "src"
+explicit_package_bases = true
+# The new SPDX 3 code is fully typed and checked under --strict.
+# The legacy SPDX 2 modules are not strict-clean yet and are out of scope here;
+# they are excluded below so they don't mask issues in the new code.
+files = [
+    "src/spdx_tools/spdx3/formats.py",
+    "src/spdx_tools/spdx3/object_set.py",
+    "src/spdx_tools/spdx3/parser",
+]
+
+# spdx-python-model ships a py.typed marker but its generated bindings expose
+# many attributes as Any; this keeps strict checks meaningful without noise.
+[[tool.mypy.overrides]]
+module = ["spdx_python_model.*"]
+ignore_missing_imports = true
+
+# Pre-existing SPDX 2 code imported by the new modules (e.g. SPDXParsingError)
+# is not yet strict-typed; do not fail the new-code check on it.
+[[tool.mypy.overrides]]
+module = ["spdx_tools.spdx.*"]
+ignore_errors = true
 
 [tool.setuptools]
 include-package-data = true
@@ -78,6 +105,7 @@ release = "clean --all sdist --formats=gztar bdist_wheel"
 
 [tool.black]
 line-length = 119
+target-version = ["py310", "py311", "py312", "py313", "py314"]
 include = "(^/src/.*.py|^/tests/.*.py)"
 
 [tool.isort]
