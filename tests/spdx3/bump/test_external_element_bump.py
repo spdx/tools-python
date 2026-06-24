@@ -36,15 +36,15 @@ def test_bump_external_elements():
         ),
         packages=[package_fixture(spdx_id=package_id)],
         files=[file_fixture(spdx_id=file_id)],
-        snippets=[snippet_fixture(spdx_id=snippet_id)],
+        snippets=[snippet_fixture(spdx_id=snippet_id, file_spdx_id=file_id)],
     )
     payload: Payload = bump_spdx_document(spdx2_document)
 
     expected_imports = [
-        ExternalMap(external_id=package_id, defining_document=full_external_doc_id),
-        ExternalMap(external_id=file_id, defining_document=full_external_doc_id),
-        ExternalMap(external_id=snippet_id, defining_document=full_external_doc_id),
-        ExternalMap(external_id=full_external_doc_id, verified_using=[bump_checksum(checksum_fixture())]),
+        ExternalMap(external_spdx_id=package_id, defining_artifact=full_external_doc_id),
+        ExternalMap(external_spdx_id=file_id, defining_artifact=full_external_doc_id),
+        ExternalMap(external_spdx_id=snippet_id, defining_artifact=full_external_doc_id),
+        ExternalMap(external_spdx_id=full_external_doc_id, verified_using=[bump_checksum(checksum_fixture())]),
     ]
     spdx_document = payload.get_element(f"{document_namespace}#SPDXRef-DOCUMENT")
 

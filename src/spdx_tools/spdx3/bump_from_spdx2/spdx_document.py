@@ -40,7 +40,10 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
             document_namespace,
             document.creation_info.external_document_refs,
             spdx_document.imports,
+            creation_info,
         )
+
+    file_id_map = {}
 
     for spdx2_file in document.files:
         bump_file(
@@ -49,18 +52,24 @@ def bump_spdx_document(document: Spdx2_Document) -> Payload:
             document_namespace,
             document.creation_info.external_document_refs,
             spdx_document.imports,
+            creation_info,
         )
+        file_id_map[spdx2_file.spdx_id] = spdx2_file
 
     for spdx2_snippet in document.snippets:
         bump_snippet(
             spdx2_snippet,
+            file_id_map[spdx2_snippet.file_spdx_id],
             payload,
             document_namespace,
             document.creation_info.external_document_refs,
             spdx_document.imports,
+            creation_info,
         )
 
-    bump_relationships(document.relationships, payload, document_namespace)
+    # TODO add bump licenses
+
+    bump_relationships(document.relationships, payload, document_namespace, creation_info)
 
     for counter, spdx2_annotation in enumerate(document.annotations):
         bump_annotation(spdx2_annotation, payload, creation_info, document_namespace, counter)

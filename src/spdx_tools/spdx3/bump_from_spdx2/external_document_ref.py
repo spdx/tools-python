@@ -12,6 +12,6 @@ def bump_external_document_ref(external_document_ref: ExternalDocumentRef) -> Tu
     verified_using: List[Hash] = [bump_checksum(external_document_ref.checksum)]
 
     return NamespaceMap(external_document_ref.document_ref_id, external_document_ref.document_uri + "#"), ExternalMap(
-        external_id=f"{external_document_ref.document_ref_id}:SPDXRef-DOCUMENT",
+        external_spdx_id=f"{external_document_ref.document_ref_id}:SPDXRef-DOCUMENT",
         verified_using=verified_using,
     )

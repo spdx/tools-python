@@ -20,6 +20,7 @@ from spdx_tools.spdx3.model import (
     ExternalReferenceType,
     Hash,
     HashAlgorithm,
+    IntegrityMethod,
     LifecycleScopedRelationship,
     LifecycleScopeType,
     NamespaceMap,
@@ -34,23 +35,35 @@ from spdx_tools.spdx3.model import (
     Tool,
 )
 from spdx_tools.spdx3.model.ai.ai_package import AIPackage, SafetyRiskAssessmentType
+from spdx_tools.spdx3.model.ai.energy_consumption import EnergyConsumption
+from spdx_tools.spdx3.model.ai.energy_consumption_description import EnergyConsumptionDescription
+from spdx_tools.spdx3.model.ai.energy_unit_type import EnergyUnitType
+from spdx_tools.spdx3.model.artifact import SupportType
 from spdx_tools.spdx3.model.build import Build
-from spdx_tools.spdx3.model.dataset.dataset import (
+from spdx_tools.spdx3.model.dataset.dataset_package import (
     ConfidentialityLevelType,
-    Dataset,
     DatasetAvailabilityType,
+    DatasetPackage,
     DatasetType,
 )
-from spdx_tools.spdx3.model.licensing import (
+from spdx_tools.spdx3.model.expandedlicensing import (
     CustomLicense,
     CustomLicenseAddition,
     ListedLicense,
     ListedLicenseException,
 )
+from spdx_tools.spdx3.model.expandedlicensing.conjunctive_license_set import ConjunctiveLicenseSet
+from spdx_tools.spdx3.model.expandedlicensing.disjunctive_license_set import DisjunctiveLicenseSet
+from spdx_tools.spdx3.model.expandedlicensing.or_later_operator import OrLaterOperator
+from spdx_tools.spdx3.model.expandedlicensing.with_addition_operator import WithAdditionOperator
+from spdx_tools.spdx3.model.extension.cdx_properties_extension import CdxPropertiesExtension
+from spdx_tools.spdx3.model.extension.cdx_property_entry import CdxPropertyEntry
 from spdx_tools.spdx3.model.positive_integer_range import PositiveIntegerRange
+from spdx_tools.spdx3.model.presence_type import PresenceType
 from spdx_tools.spdx3.model.security import (
     CvssV2VulnAssessmentRelationship,
     CvssV3VulnAssessmentRelationship,
+    CvssV4VulnAssessmentRelationship,
     EpssVulnAssessmentRelationship,
     ExploitCatalogType,
     ExploitCatalogVulnAssessmentRelationship,
@@ -63,46 +76,39 @@ from spdx_tools.spdx3.model.security import (
     VexUnderInvestigationVulnAssessmentRelationship,
     Vulnerability,
 )
+from spdx_tools.spdx3.model.security.cvss_severity_type import CvssSeverityType
+from spdx_tools.spdx3.model.simplelicensing.license_expression import LicenseExpression
+from spdx_tools.spdx3.model.simplelicensing.simple_licensing_text import SimpleLicensingText
 from spdx_tools.spdx3.model.software import (
-    DependencyConditionalityType,
     File,
     Package,
     Sbom,
-    SBOMType,
+    SbomType,
     Snippet,
-    SoftwareDependencyLinkType,
-    SoftwareDependencyRelationship,
     SoftwarePurpose,
 )
+from spdx_tools.spdx3.model.software.content_identifier import ContentIdentifier, ContentIdentifierType
+from spdx_tools.spdx3.model.software.file import FileKindType
 
 """Utility methods to create data model instances. All properties have valid defaults, so they don't need to be
 specified unless relevant for the test."""
 
 
 def creation_info_fixture(
-    spec_version=Version("3.0.0"),
+    spec_version=Version("3.0.1"),
     created=datetime(2022, 12, 1),
     created_by=None,
     created_using=None,
-    profile=None,
-    data_license="CC0-1.0",
     comment="creationInfoComment",
 ) -> CreationInfo:
     created_by = ["https://spdx.test/tools-python/creation_info_created_by"] if created_by is None else created_by
     created_using = (
         ["https://spdx.test/tools-python/creation_info_created_using"] if created_using is None else created_using
     )
-    profile = (
-        [ProfileIdentifierType.CORE, ProfileIdentifierType.SOFTWARE, ProfileIdentifierType.LICENSING]
-        if profile is None
-        else profile
-    )
     return CreationInfo(
         spec_version=spec_version,
         created=created,
         created_by=created_by,
-        profile=profile,
-        data_license=data_license,
         created_using=created_using,
         comment=comment,
     )
@@ -132,7 +138,7 @@ def external_identifier_fixture(
 def external_reference_fixture(
     external_reference_type=ExternalReferenceType.OTHER,
     locator=None,
-    content_type="externalReferenceContentType",
+    content_type="text/plain",
     comment="externalReferenceComment",
 ) -> ExternalReference:
     locator = ["org.apache.tomcat:tomcat:9.0.0.M4"] if locator is None else locator
@@ -151,16 +157,16 @@ def hash_fixture(
 
 def external_map_fixture(
     external_id="https://spdx.test/tools-python/external_map_external_id",
-    verified_using=None,
+    verified_using: list[IntegrityMethod] | None = None,
     location_hint="https://spdx.test/tools-python/external_map_location_hint",
-    defining_document="https://spdx.test/tools-python/defining_document",
+    defining_artifact="https://spdx.test/tools-python/defining_artifact",
 ) -> ExternalMap:
     verified_using = [hash_fixture()] if verified_using is None else verified_using
     return ExternalMap(
-        external_id=external_id,
+        external_spdx_id=external_id,
         verified_using=verified_using,
         location_hint=location_hint,
-        defining_document=defining_document,
+        defining_artifact=defining_artifact,
     )
 
 
@@ -170,36 +176,25 @@ def namespace_map_fixture(
     return NamespaceMap(prefix=prefix, namespace=namespace)
 
 
-def listed_license_fixture(
-    license_id="https://spdx.test/tools-python/license_id",
-    license_name="license name",
-    license_text="license text",
-    license_comment="license comment",
-    see_also=None,
-    is_osi_approved=True,
-    is_fsf_libre=True,
-    standard_license_header="license header",
-    standard_license_template="license template",
-    is_deprecated_license_id=True,
-    obsoleted_by="https://spdx.test/tools-python/obsoleted_by_license_id",
-    list_version_added="2.1",
-    deprecated_version="2.2",
-):
-    see_also = ["https://see.also/license"] if see_also is None else see_also
-    return ListedLicense(
-        license_id=license_id,
-        license_name=license_name,
-        license_text=license_text,
-        license_comment=license_comment,
-        see_also=see_also,
-        is_osi_approved=is_osi_approved,
-        is_fsf_libre=is_fsf_libre,
-        standard_license_header=standard_license_header,
-        standard_license_template=standard_license_template,
-        is_deprecated_license_id=is_deprecated_license_id,
-        obsoleted_by=obsoleted_by,
-        list_version_added=list_version_added,
-        deprecated_version=deprecated_version,
+def energy_consumption_description_fixture(
+    energy_quantity=100.0,
+    energy_unit=EnergyUnitType.MEGAJOULE,
+) -> EnergyConsumptionDescription:
+    return EnergyConsumptionDescription(
+        energy_quantity=energy_quantity,
+        energy_unit=energy_unit,
+    )
+
+
+def energy_consumption_fixture(
+    finetuning_energy_consumption=[energy_consumption_description_fixture()],
+    inference_energy_consumption=[energy_consumption_description_fixture()],
+    training_energy_consumption=[energy_consumption_description_fixture()],
+) -> EnergyConsumption:
+    return EnergyConsumption(
+        finetuning_energy_consumption=finetuning_energy_consumption,
+        inference_energy_consumption=inference_energy_consumption,
+        training_energy_consumption=training_energy_consumption,
     )
 
 
@@ -213,7 +208,7 @@ ELEMENT_DICT = {
     "verified_using": [hash_fixture()],
     "external_reference": [external_reference_fixture()],
     "external_identifier": [external_identifier_fixture()],
-    "extension": "extensionPlaceholder",
+    "extension": [CdxPropertiesExtension(cdx_property=[CdxPropertyEntry("exampleName", "exampleValue")])],
 }
 
 RELATIONSHIP_DICT = {
@@ -230,15 +225,14 @@ LIFECYCLE_SCOPED_RELATIONSHIP_DICT = {"scope": LifecycleScopeType.DESIGN}
 ANNOTATION_DICT = {
     "annotation_type": AnnotationType.OTHER,
     "subject": "https://spdx.test/tools-python/annotation_subject",
-    "content_type": ["annotationContent"],
+    "content_type": "text/plain",
     "statement": "annotationStatement",
 }
 
 ELEMENT_COLLECTION_DICT = {
     "element": ["https://spdx.test/tools-python/collection_element"],
     "root_element": ["https://spdx.test/tools-python/collection_root_element"],
-    "namespaces": [namespace_map_fixture()],
-    "imports": [external_map_fixture()],
+    "profile_conformance": [ProfileIdentifierType.CORE],
 }
 
 BUNDLE_DICT = {
@@ -246,14 +240,11 @@ BUNDLE_DICT = {
 }
 
 SBOM_DICT = {
-    "sbom_type": [SBOMType.BUILD],
+    "sbom_type": [SbomType.BUILD],
 }
 
 LICENSE_DICT = {
-    "license_id": "https://spdx.test/tools-python/license_id",
-    "license_name": "license name",
     "license_text": "license text",
-    "license_comment": "license comment",
     "see_also": ["https://see.also/license"],
     "is_osi_approved": True,
     "is_fsf_libre": True,
@@ -261,6 +252,7 @@ LICENSE_DICT = {
     "standard_license_template": "license template",
     "is_deprecated_license_id": True,
     "obsoleted_by": "https://spdx.test/tools-python/obsoleted_by_license_id",
+    "license_xml": "<license>license xml</license>",
 }
 
 LISTED_LICENSE_DICT = {
@@ -269,19 +261,23 @@ LISTED_LICENSE_DICT = {
 }
 
 LICENSE_ADDITION_DICT = {
-    "addition_id": "https://spdx.test/tools-python/addition_id",
-    "addition_name": "addition name",
     "addition_text": "addition text",
-    "addition_comment": "addition comment",
+    "is_deprecated_addition_id": True,
+    "license_xml": "<license>license xml</license>",
+    "obsoleted_by": "https://spdx.test/tools-python/obsoleted_by_addition_id",
     "see_also": ["https://see.also/addition"],
     "standard_addition_template": "addition template",
-    "is_deprecated_addition_id": True,
-    "obsoleted_by": "https://spdx.test/tools-python/obsoleted_by_addition_id",
 }
 
 LISTED_LICENSE_EXCEPTION_DICT = {
     "list_version_added": "2.1",
     "deprecated_version": "2.2",
+}
+
+LICENSE_EXPRESSION_DICT = {
+    "custom_id_to_uri": {"CustomLicenseRef-1": "https://custom.license/1"},
+    "license_expression": "(MIT AND CustomLicenseRef-1)",
+    "license_list_version": Version("3.19.0"),
 }
 
 VULNERABILITY_DICT = {
@@ -299,27 +295,28 @@ VULN_ASSESSMENT_RELATIONSHIP_DICT = {
 }
 
 CVSS_V2_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
-    "score": "4.3",
-    "severity": "low",
-    "vector": "(AV:N/AC:M/Au:N/C:P/I:N/A:N)",
+    "score": 4.3,
+    "vector_string": "(AV:N/AC:M/Au:N/C:P/I:N/A:N)",
     "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
 }
 
 CVSS_V3_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
-    "score": "6.8",
-    "severity": "medium",
-    "vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N",
+    "score": 6.8,
+    "severity": CvssSeverityType.MEDIUM,
+    "vector_string": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:N/A:N",
+    "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
+}
+
+CVSS_V4_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "score": 6.8,
+    "severity": CvssSeverityType.MEDIUM,
+    "vector_string": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:N/SA:N",
     "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
 }
 
 EPSS_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
-    "probability": 80,
-    "severity": "high",
-    "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
-}
-
-SSVC_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
-    "decision_type": SsvcDecisionType.ACT,
+    "percentile": 0.9,
+    "probability": 0.8,
     "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
 }
 
@@ -330,6 +327,11 @@ EXPLOIT_CATALOG_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
 }
 
+SSVC_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "decision_type": SsvcDecisionType.ACT,
+    "relationship_type": RelationshipType.HAS_ASSESSMENT_FOR,
+}
+
 VEX_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "vex_version": "v4.2",
     "status_notes": "some status notes",
@@ -337,8 +339,12 @@ VEX_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
 
 VEX_AFFECTED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "action_statement": "Upgrade to version 1.4 of ACME application.",
-    "action_statement_time": [datetime(2015, 10, 15)],
+    "action_statement_time": datetime(2015, 10, 15),
     "relationship_type": RelationshipType.AFFECTS,
+}
+
+VEX_FIXED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
+    "relationship_type": RelationshipType.FIXED_IN,
 }
 
 VEX_NOT_AFFECTED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
@@ -352,12 +358,19 @@ VEX_UNDER_INVESTIGATION_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
     "relationship_type": RelationshipType.UNDER_INVESTIGATION_FOR,
 }
 
-VEX_FIXED_VULN_ASSESSMENT_RELATIONSHIP_DICT = {
-    "relationship_type": RelationshipType.FIXED_IN,
+ENERGY_CONSUMPTION_DESCRIPTION_DICT = {
+    "energy_quantity": 100.0,
+    "energy_unit": EnergyUnitType.MEGAJOULE,
+}
+
+ENERGY_CONSUMPTION_DICT = {
+    "finetuning_energy_consumption": [energy_consumption_description_fixture()],
+    "inference_energy_consumption": [energy_consumption_description_fixture()],
+    "training_energy_consumption": [energy_consumption_description_fixture()],
 }
 
 AIPACKAGE_DICT = {
-    "energy_consumption": "energyConsumption",
+    "energy_consumption": energy_consumption_fixture(),
     "standard_compliance": ["standardCompliance"],
     "limitation": "aIPackageLimitation",
     "type_of_model": ["typeOfModel"],
@@ -366,48 +379,51 @@ AIPACKAGE_DICT = {
     "hyperparameter": {"aIPackageHypParaKey": "aIPackageHypParaValue"},
     "model_data_preprocessing": ["aImodelDataPreprocessing"],
     "model_explainability": ["aImodelExplainability"],
-    "sensitive_personal_information": True,
+    "use_sensitive_personal_information": PresenceType.YES,
     "metric_decision_threshold": {"metricDecisionThresholdKey": "metricDecisionThresholdValue"},
     "metric": {"aIMetricKey": "aIMetricValue"},
     "domain": ["aIDomain"],
-    "autonomy_type": True,
+    "autonomy_type": PresenceType.YES,
     "safety_risk_assessment": SafetyRiskAssessmentType.LOW,
 }
 
 ARTIFACT_DICT = {
     "originated_by": ["https://spdx.test/tools-python/originatedBy"],
-    "supplied_by": ["https://spdx.test/tools-python/suppliedBy"],
+    "supplied_by": "https://spdx.test/tools-python/suppliedBy",
     "built_time": datetime(2004, 1, 1),
     "release_time": datetime(2005, 1, 1),
     "valid_until_time": datetime(2006, 1, 1),
-    "standard": ["https://spdx.test/tools-python/standard"],
+    "standard_name": ["aStandard"],
+    "support_level": [SupportType.SUPPORT],
 }
 
 SOFTWARE_ARTIFACT_DICT = {
-    "content_identifier": "https://spdx.test/tools-python/contentIdentifier",
+    "content_identifier": [
+        ContentIdentifier(ContentIdentifierType.GITOID, "gitoid:blob:sha1:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c65")
+    ],
     "primary_purpose": SoftwarePurpose.SOURCE,
     "additional_purpose": [SoftwarePurpose.OTHER],
-    "concluded_license": listed_license_fixture(),
-    "declared_license": listed_license_fixture(),
     "copyright_text": "copyrightText",
-    "attribution_text": "attributionText",
+    "attribution_text": ["attributionText"],
 }
 
-FILE_DICT = {"content_type": "fileContentType"}
+FILE_DICT = {
+    "content_type": "text/spdx",
+    "file_kind": FileKindType.FILE,
+}
 
 PACKAGE_DICT = {
     "package_version": "packageVersion",
     "download_location": "https://spdx.test/tools-python/downloadPackage",
     "package_url": "https://spdx.test/tools-python/package",
-    "homepage": "https://spdx.test/tools-python/homepage",
+    "home_page": "https://spdx.test/tools-python/homepage",
     "source_info": "sourceInfo",
 }
 
-SNIPPET_DICT = {"byte_range": PositiveIntegerRange(1024, 2048), "line_range": PositiveIntegerRange(1, 4)}
-
-SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT = {
-    "software_linkage": SoftwareDependencyLinkType.OTHER,
-    "conditionality": DependencyConditionalityType.OTHER,
+SNIPPET_DICT = {
+    "byte_range": PositiveIntegerRange(1024, 2048),
+    "line_range": PositiveIntegerRange(1, 4),
+    "snippet_from_file": "https://spdx.test/tools-python/snippetFromFile",
 }
 
 DATASET_DICT = {
@@ -419,7 +435,7 @@ DATASET_DICT = {
     "data_preprocessing": ["DataPreprocessing"],
     "sensor": {"SensorKey": "SensorValue"},
     "known_bias": ["DatasetKnownBias"],
-    "sensitive_personal_information": True,
+    "has_sensitive_personal_information": PresenceType.NO,
     "anonymization_method_used": ["DatasetAnonymizationMethodUsed"],
     "confidentiality_level": ConfidentialityLevelType.CLEAR,
     "dataset_update_mechanism": "DatasetUpdateMechanism",
@@ -432,10 +448,58 @@ BUILD_DICT = {
     "config_source_entrypoint": ["ConfigSourceEntrypoint"],
     "config_source_uri": ["ConfigSourceURI"],
     "config_source_digest": [hash_fixture()],
-    "parameters": {"parameter": "value"},
+    "parameter": {"parameter": "value"},
     "build_start_time": datetime(2015, 4, 4),
     "build_end_time": datetime(2015, 4, 5),
     "environment": {"environment_param": "environment_value"},
+}
+
+SPDX_DOCUMENT_DICT = {
+    "namespace_map": [namespace_map_fixture()],
+    "imports": [external_map_fixture()],
+    "data_license": "https://spdx.test/tools-python/license_id",
+}
+
+INTEGRITY_METHOD_DICT = {
+    "comment": "integrityMethodComment",
+}
+
+CONTENT_IDENTIFIER_DICT = {
+    "content_identifier_type": ContentIdentifierType.GITOID,
+    "content_identifier_value": "gitoid:blob:sha1:261eeb9e9f8b2b4b0d119366dda99c6fd7d35c65",
+}
+
+PACKAGE_VERIFICATION_CODE_DICT = {
+    "algorithm": HashAlgorithm.SHA1,
+    "hash_value": "71c4025dd9897b364f3ebbb42c484ff43d00791c",
+    "package_verification_code_excluded_file": ["excludedFile1", "excludedFile2"],
+}
+
+SIMPLE_LICENSING_TEXT_DICT = {
+    "license_text": "This is a simple license text.",
+}
+
+CONJUNCTIVE_LICENSE_SET_DICT = {
+    "member": [
+        "https://spdx.test/tools-python/license_id_1",
+        "https://spdx.test/tools-python/license_id_2",
+    ]
+}
+
+DISJUNCTIVE_LICENSE_SET_DICT = {
+    "member": [
+        "https://spdx.test/tools-python/license_id_1",
+        "https://spdx.test/tools-python/license_id_2",
+    ]
+}
+
+OR_LATER_OPERATOR_DICT = {
+    "subject_license": "https://spdx.test/tools-python/license_id_1",
+}
+
+WITH_ADDITION_OPERATOR_DICT = {
+    "subject_addition": "https://spdx.test/tools-python/license_id_1",
+    "subject_extendable_license": "https://spdx.test/tools-python/license_id_2",
 }
 
 FIXTURE_DICTS = {
@@ -448,13 +512,18 @@ FIXTURE_DICTS = {
     LifecycleScopedRelationship: [ELEMENT_DICT, RELATIONSHIP_DICT, LIFECYCLE_SCOPED_RELATIONSHIP_DICT],
     Annotation: [ELEMENT_DICT, ANNOTATION_DICT],
     Bundle: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT],
-    SpdxDocument: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT],
+    SpdxDocument: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, SPDX_DOCUMENT_DICT],
     Bom: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT],
     Sbom: [ELEMENT_DICT, ELEMENT_COLLECTION_DICT, BUNDLE_DICT, SBOM_DICT],
-    ListedLicense: [LICENSE_DICT, LISTED_LICENSE_DICT],
-    CustomLicense: [LICENSE_DICT],
-    ListedLicenseException: [LICENSE_ADDITION_DICT, LISTED_LICENSE_EXCEPTION_DICT],
-    CustomLicenseAddition: [LICENSE_ADDITION_DICT],
+    ListedLicense: [ELEMENT_DICT, LICENSE_DICT, LISTED_LICENSE_DICT],
+    CustomLicense: [ELEMENT_DICT, LICENSE_DICT],
+    ListedLicenseException: [ELEMENT_DICT, LICENSE_ADDITION_DICT, LISTED_LICENSE_EXCEPTION_DICT],
+    CustomLicenseAddition: [ELEMENT_DICT, LICENSE_ADDITION_DICT],
+    LicenseExpression: [ELEMENT_DICT, LICENSE_EXPRESSION_DICT],
+    ConjunctiveLicenseSet: [ELEMENT_DICT, CONJUNCTIVE_LICENSE_SET_DICT],
+    DisjunctiveLicenseSet: [ELEMENT_DICT, DISJUNCTIVE_LICENSE_SET_DICT],
+    OrLaterOperator: [ELEMENT_DICT, OR_LATER_OPERATOR_DICT],
+    WithAdditionOperator: [ELEMENT_DICT, WITH_ADDITION_OPERATOR_DICT],
     CvssV2VulnAssessmentRelationship: [
         ELEMENT_DICT,
         RELATIONSHIP_DICT,
@@ -466,6 +535,12 @@ FIXTURE_DICTS = {
         RELATIONSHIP_DICT,
         VULN_ASSESSMENT_RELATIONSHIP_DICT,
         CVSS_V3_VULN_ASSESSMENT_RELATIONSHIP_DICT,
+    ],
+    CvssV4VulnAssessmentRelationship: [
+        ELEMENT_DICT,
+        RELATIONSHIP_DICT,
+        VULN_ASSESSMENT_RELATIONSHIP_DICT,
+        CVSS_V4_VULN_ASSESSMENT_RELATIONSHIP_DICT,
     ],
     EpssVulnAssessmentRelationship: [
         ELEMENT_DICT,
@@ -513,19 +588,14 @@ FIXTURE_DICTS = {
         VEX_VULN_ASSESSMENT_RELATIONSHIP_DICT,
         VEX_UNDER_INVESTIGATION_VULN_ASSESSMENT_RELATIONSHIP_DICT,
     ],
-    Vulnerability: [ELEMENT_DICT, VULNERABILITY_DICT],
+    Vulnerability: [ELEMENT_DICT, ARTIFACT_DICT, VULNERABILITY_DICT],
     AIPackage: [AIPACKAGE_DICT, PACKAGE_DICT, ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT],
     File: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, FILE_DICT],
     Package: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT],
     Snippet: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, SNIPPET_DICT],
-    SoftwareDependencyRelationship: [
-        ELEMENT_DICT,
-        RELATIONSHIP_DICT,
-        LIFECYCLE_SCOPED_RELATIONSHIP_DICT,
-        SOFTWARE_DEPENDENCY_RELATIONSHIP_DICT,
-    ],
-    Dataset: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT, DATASET_DICT],
+    DatasetPackage: [ELEMENT_DICT, ARTIFACT_DICT, SOFTWARE_ARTIFACT_DICT, PACKAGE_DICT, DATASET_DICT],
     Build: [ELEMENT_DICT, BUILD_DICT],
+    SimpleLicensingText: [ELEMENT_DICT, SIMPLE_LICENSING_TEXT_DICT],
 }
 
 

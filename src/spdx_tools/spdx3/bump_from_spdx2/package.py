@@ -14,6 +14,7 @@ from spdx_tools.spdx3.model import (
     ExternalReference,
     ExternalReferenceType,
 )
+from spdx_tools.spdx3.model.creation_info import CreationInfo
 from spdx_tools.spdx3.model.software import Package, SoftwarePurpose
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import Actor as Spdx2_Actor
@@ -29,24 +30,24 @@ def bump_package(
     document_namespace: str,
     external_document_refs: List[ExternalDocumentRef],
     imports: List[ExternalMap],
+    creation_info: CreationInfo,
 ):
     spdx_id = get_full_element_spdx_id(spdx2_package, document_namespace, external_document_refs)
     if ":" in spdx2_package.spdx_id:
         imports.append(
             ExternalMap(
-                external_id=spdx2_package.spdx_id,
-                defining_document=f"{spdx2_package.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",
+                external_spdx_id=spdx2_package.spdx_id,
+                defining_artifact=f"{spdx2_package.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",
             )
         )
-
     download_location = handle_no_assertion_or_none(spdx2_package.download_location, "package.download_location")
     print_missing_conversion("package2.file_name", 0, "https://github.com/spdx/spdx-3-model/issues/83")
     if isinstance(spdx2_package.supplier, Spdx2_Actor):
-        supplied_by_spdx_id = [bump_actor(spdx2_package.supplier, payload, document_namespace)]
+        supplied_by_spdx_id = bump_actor(spdx2_package.supplier, payload, document_namespace, creation_info)
     else:
         supplied_by_spdx_id = None
     if isinstance(spdx2_package.originator, Spdx2_Actor):
-        originated_by_spdx_id = [bump_actor(spdx2_package.originator, payload, document_namespace)]
+        originated_by_spdx_id = [bump_actor(spdx2_package.originator, payload, document_namespace, creation_info)]
     else:
         originated_by_spdx_id = None
     print_missing_conversion("package2.files_analyzed", 0, "https://github.com/spdx/spdx-3-model/issues/84")
@@ -106,10 +107,11 @@ def bump_package(
             package_version=spdx2_package.version,
             download_location=download_location,
             package_url=package_url,
-            homepage=spdx2_package.homepage,
+            home_page=spdx2_package.homepage,
             source_info=spdx2_package.source_info,
             copyright_text=copyright_text,
-            attribution_text=", ".join(spdx2_package.attribution_texts),
+            attribution_text=[", ".join(spdx2_package.attribution_texts)],
+            creation_info=creation_info,
         )
     )
 
@@ -125,7 +127,7 @@ external_ref_type_map = {
     "npm": None,
     "nuget": None,
     "bower": None,
-    "purl": ExternalIdentifierType.PURL,
+    "purl": ExternalIdentifierType.PACKAGE_URL,
     "swh": ExternalIdentifierType.SWHID,
     "gitoid": ExternalIdentifierType.GITOID,
 }

@@ -6,6 +6,7 @@ from beartype.typing import List
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
 from spdx_tools.spdx3.model import ExternalMap
+from spdx_tools.spdx3.model.creation_info import CreationInfo
 from spdx_tools.spdx3.model.software import File
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import ExternalDocumentRef, SpdxNoAssertion
@@ -19,13 +20,14 @@ def bump_file(
     document_namespace: str,
     external_document_refs: List[ExternalDocumentRef],
     imports: List[ExternalMap],
+    creation_info: CreationInfo,
 ):
     spdx_id = get_full_element_spdx_id(spdx2_file, document_namespace, external_document_refs)
     if ":" in spdx2_file.spdx_id:
         imports.append(
             ExternalMap(
-                external_id=spdx2_file.spdx_id,
-                defining_document=f"{spdx2_file.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",
+                external_spdx_id=spdx2_file.spdx_id,
+                defining_artifact=f"{spdx2_file.spdx_id.split(':')[0]}:SPDXRef-DOCUMENT",
             )
         )
 
@@ -51,6 +53,7 @@ def bump_file(
             comment=spdx2_file.comment,
             verified_using=integrity_methods,
             copyright_text=copyright_text,
-            attribution_text=", ".join(spdx2_file.attribution_texts),
+            attribution_text=[", ".join(spdx2_file.attribution_texts)],
+            creation_info=creation_info,
         )
     )

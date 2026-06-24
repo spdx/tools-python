@@ -17,13 +17,17 @@ from spdx_tools.spdx3.model import (
 )
 from spdx_tools.spdx3.model.ai import AIPackage
 from spdx_tools.spdx3.model.build import Build
-from spdx_tools.spdx3.model.dataset import Dataset
-from spdx_tools.spdx3.model.licensing import (
+from spdx_tools.spdx3.model.dataset import DatasetPackage
+from spdx_tools.spdx3.model.expandedlicensing import (
     CustomLicense,
     CustomLicenseAddition,
     ListedLicense,
     ListedLicenseException,
 )
+from spdx_tools.spdx3.model.expandedlicensing.conjunctive_license_set import ConjunctiveLicenseSet
+from spdx_tools.spdx3.model.expandedlicensing.disjunctive_license_set import DisjunctiveLicenseSet
+from spdx_tools.spdx3.model.expandedlicensing.or_later_operator import OrLaterOperator
+from spdx_tools.spdx3.model.expandedlicensing.with_addition_operator import WithAdditionOperator
 from spdx_tools.spdx3.model.security import (
     CvssV2VulnAssessmentRelationship,
     CvssV3VulnAssessmentRelationship,
@@ -36,7 +40,11 @@ from spdx_tools.spdx3.model.security import (
     VexUnderInvestigationVulnAssessmentRelationship,
     Vulnerability,
 )
-from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet, SoftwareDependencyRelationship
+from spdx_tools.spdx3.model.security.cvss_v4_vuln_assessment_relationship import CvssV4VulnAssessmentRelationship
+from spdx_tools.spdx3.model.simplelicensing.license_expression import LicenseExpression
+from spdx_tools.spdx3.model.simplelicensing.simple_licensing_text import SimpleLicensingText
+from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet
+from spdx_tools.spdx3.model.tool import Tool
 from tests.spdx3.fixtures import fixture_factory, get_fixture_dict
 from tests.spdx3.model.model_test_utils import InvalidTypeClass, get_property_names
 
@@ -55,8 +63,14 @@ CLASS_LIST = [
     CustomLicense,
     ListedLicenseException,
     CustomLicenseAddition,
+    LicenseExpression,
+    ConjunctiveLicenseSet,
+    DisjunctiveLicenseSet,
+    OrLaterOperator,
+    WithAdditionOperator,
     CvssV2VulnAssessmentRelationship,
     CvssV3VulnAssessmentRelationship,
+    CvssV4VulnAssessmentRelationship,
     EpssVulnAssessmentRelationship,
     ExploitCatalogVulnAssessmentRelationship,
     SsvcVulnAssessmentRelationship,
@@ -69,10 +83,11 @@ CLASS_LIST = [
     Package,
     Snippet,
     Sbom,
-    SoftwareDependencyRelationship,
-    Dataset,
+    DatasetPackage,
     AIPackage,
     Build,
+    SimpleLicensingText,
+    Tool,
 ]
 
 

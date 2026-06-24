@@ -10,7 +10,6 @@ from rdflib.term import Node
 
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
-from spdx_tools.spdx.rdfschema.namespace import SPDX_NAMESPACE
 from spdx_tools.spdx.validation.spdx_id_validators import is_valid_internal_spdx_id
 
 
@@ -28,7 +27,7 @@ def add_literal_or_no_assertion_or_none(value: Any, graph: Graph, parent: Node, 
     if value is None:
         return
     if isinstance(value, SpdxNone):
-        graph.add((parent, predicate, SPDX_NAMESPACE.none))
+        graph.add((parent, predicate, Literal(str(value))))
         return
     add_literal_or_no_assertion(value, graph, parent, predicate)
 
@@ -37,7 +36,7 @@ def add_literal_or_no_assertion(value: Any, graph: Graph, parent: Node, predicat
     if value is None:
         return
     if isinstance(value, SpdxNoAssertion):
-        graph.add((parent, predicate, SPDX_NAMESPACE.noassertion))
+        graph.add((parent, predicate, Literal(str(value))))
         return
     add_optional_literal(value, graph, parent, predicate)
 

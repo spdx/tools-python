@@ -13,15 +13,16 @@ from spdx_tools.spdx3.model import (
     ExternalReference,
     IntegrityMethod,
     RelationshipCompleteness,
+    RelationshipType,
 )
+from spdx_tools.spdx3.model.extension.extension import Extension
 from spdx_tools.spdx3.model.security.vuln_assessment_relationship import VulnAssessmentRelationship
-from spdx_tools.spdx.model import RelationshipType
 
 
 @dataclass_with_properties
 class EpssVulnAssessmentRelationship(VulnAssessmentRelationship):
-    probability: int = None
-    severity: Optional[str] = None
+    percentile: float | int = None  # A decimal number between 0 and 1 inclusive
+    probability: float | int = None  # A decimal number between 0 and 1 inclusive
 
     def __init__(
         self,
@@ -29,8 +30,9 @@ class EpssVulnAssessmentRelationship(VulnAssessmentRelationship):
         from_element: str,
         relationship_type: RelationshipType,
         to: List[str],
-        probability: int,
-        creation_info: Optional[CreationInfo] = None,
+        percentile: float | int,
+        probability: float | int,
+        creation_info: CreationInfo,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
@@ -38,7 +40,7 @@ class EpssVulnAssessmentRelationship(VulnAssessmentRelationship):
         verified_using: List[IntegrityMethod] | None = None,
         external_reference: List[ExternalReference] | None = None,
         external_identifier: List[ExternalIdentifier] | None = None,
-        extension: Optional[str] = None,
+        extension: List[Extension] | None = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
@@ -47,9 +49,9 @@ class EpssVulnAssessmentRelationship(VulnAssessmentRelationship):
         supplied_by: Optional[str] = None,
         modified_time: Optional[datetime] = None,
         withdrawn_time: Optional[datetime] = None,
-        severity: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
+        extension = [] if extension is None else extension
         check_types_and_set_values(self, locals())

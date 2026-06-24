@@ -7,7 +7,7 @@ from semantic_version import Version
 from spdx_tools.spdx3.bump_from_spdx2.actor import bump_actor
 from spdx_tools.spdx3.bump_from_spdx2.external_document_ref import bump_external_document_ref
 from spdx_tools.spdx3.bump_from_spdx2.message import print_missing_conversion
-from spdx_tools.spdx3.model import CreationInfo, ProfileIdentifierType, SpdxDocument
+from spdx_tools.spdx3.model import CreationInfo, SpdxDocument
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model.actor import ActorType
 from spdx_tools.spdx.model.document import CreationInfo as Spdx2_CreationInfo
@@ -37,11 +37,9 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         "part of licensing profile, " "https://github.com/spdx/spdx-3-model/issues/131",
     )
     creation_info = CreationInfo(
-        spec_version=Version("3.0.0"),
+        spec_version=Version("3.0.1"),
         created=spdx2_creation_info.created,
         created_by=[],
-        profile=[ProfileIdentifierType.CORE, ProfileIdentifierType.SOFTWARE, ProfileIdentifierType.LICENSING],
-        data_license="https://spdx.org/licenses/" + spdx2_creation_info.data_license,
     )
 
     # due to creators having a creation_info themselves which inherits from the document's one,
@@ -75,5 +73,5 @@ def bump_creation_info(spdx2_creation_info: Spdx2_CreationInfo, payload: Payload
         element=[],
         root_element=[],
         imports=imports,
-        namespaces=namespaces,
+        namespace_map=namespaces,
     )

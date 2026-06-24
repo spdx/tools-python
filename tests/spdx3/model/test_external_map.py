@@ -15,15 +15,15 @@ def test_correct_initialization():
     for property_name in get_property_names(ExternalMap):
         assert getattr(external_map, property_name) is not None
 
-    assert external_map.external_id == "https://spdx.test/tools-python/external_map_external_id"
+    assert external_map.external_spdx_id == "https://spdx.test/tools-python/external_map_external_id"
     assert external_map.verified_using == [hash_fixture()]
     assert external_map.location_hint == "https://spdx.test/tools-python/external_map_location_hint"
-    assert external_map.defining_document == "https://spdx.test/tools-python/defining_document"
+    assert external_map.defining_artifact == "https://spdx.test/tools-python/defining_artifact"
 
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        ExternalMap(234, None, ["location  hints"])
+        ExternalMap(234, None, ["location  hints"])  # type: ignore  # intentionally incorrect
 
     assert len(err.value.args[0]) == 2
     for error in err.value.args[0]:

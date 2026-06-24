@@ -7,12 +7,12 @@ from spdx_tools.common.typing.type_checks import check_types_and_set_values
 
 @dataclass_with_properties
 class PositiveIntegerRange:
-    begin: int
-    end: int
+    begin_integer_range: int
+    end_integer_range: int
 
     def __init__(
         self,
-        begin: int,
-        end: int,
+        begin_integer_range: int,
+        end_integer_range: int,
     ):
         check_types_and_set_values(self, locals())

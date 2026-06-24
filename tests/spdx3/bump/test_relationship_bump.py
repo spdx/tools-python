@@ -6,18 +6,21 @@ from spdx_tools.spdx3.model import Relationship, RelationshipCompleteness, Relat
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import RelationshipType as Spdx2_RelationshipType
 from spdx_tools.spdx.model import SpdxNoAssertion, SpdxNone
+from tests.spdx3.fixtures import creation_info_fixture
 from tests.spdx.fixtures import relationship_fixture
 
 
 def test_relationship_bump():
     spdx2_relationship = relationship_fixture()
     document_namespace = "https://doc.namespace"
-    relationship = bump_relationship(spdx2_relationship, document_namespace, 1)
+    creation_info = creation_info_fixture()
+    relationship = bump_relationship(spdx2_relationship, document_namespace, 1, creation_info)
 
     assert relationship == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-1",
         f"{document_namespace}#{spdx2_relationship.spdx_element_id}",
         RelationshipType.DESCRIBES,
+        creation_info,
         [f"{document_namespace}#{spdx2_relationship.related_spdx_element_id}"],
         comment=spdx2_relationship.comment,
     )
@@ -30,12 +33,14 @@ def test_relationships_bump():
     ]
     payload = Payload()
     document_namespace = "https://doc.namespace"
-    bump_relationships(relationships, payload, document_namespace)
+    creation_info = creation_info_fixture()
+    bump_relationships(relationships, payload, document_namespace, creation_info)
 
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-1") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-1",
         f"{document_namespace}#{relationships[0].spdx_element_id}",
         RelationshipType.DESCRIBES,
+        creation_info,
         [
             f"{document_namespace}#{relationships[0].related_spdx_element_id}",
             f"{document_namespace}#{relationships[1].related_spdx_element_id}",
@@ -55,28 +60,31 @@ def test_relationships_bump_with_setting_completeness():
     ]
     payload = Payload()
     document_namespace = "https://doc.namespace"
-    bump_relationships(relationships, payload, document_namespace)
+    creation_info = creation_info_fixture()
+    bump_relationships(relationships, payload, document_namespace, creation_info)
 
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-0") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-0",
         f"{document_namespace}#{relationships[0].spdx_element_id}",
         RelationshipType.DESCRIBES,
-        [],
+        creation_info,
         comment=relationships[0].comment,
-        completeness=RelationshipCompleteness.NOASSERTION,
+        completeness=RelationshipCompleteness.NO_ASSERTION,
     )
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-1") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-1",
         f"{document_namespace}#{relationships[1].spdx_element_id}",
         RelationshipType.DESCRIBES,
+        creation_info,
         [f"{document_namespace}#{relationships[1].related_spdx_element_id}"],
         comment=relationships[1].comment,
     )
     assert payload.get_element(f"{document_namespace}#SPDXRef-Relationship-2") == Relationship(
         f"{document_namespace}#SPDXRef-Relationship-2",
-        f"{document_namespace}#{relationships[2].spdx_element_id}",
-        RelationshipType.SPECIFICATION_FOR,
-        [],
+        "NoneElement",
+        RelationshipType.HAS_SPECIFICATION,
+        creation_info,
+        [f"{document_namespace}#{relationships[2].spdx_element_id}"],
         completeness=RelationshipCompleteness.COMPLETE,
     )
 
@@ -90,7 +98,8 @@ def test_undefined_relationship_bump(capsys):
     ]
     payload = Payload()
     document_namespace = "https://doc.namespace"
-    bump_relationships(relationships, payload, document_namespace)
+    creation_info = creation_info_fixture()
+    bump_relationships(relationships, payload, document_namespace, creation_info)
 
     captured = capsys.readouterr()
     assert (

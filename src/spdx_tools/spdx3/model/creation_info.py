@@ -9,7 +9,6 @@ from semantic_version import Version
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
-from spdx_tools.spdx3.model import ProfileIdentifierType
 
 
 @dataclass_with_properties
@@ -17,8 +16,6 @@ class CreationInfo:
     spec_version: Version
     created: datetime
     created_by: List[str]  # SPDXID of Agents
-    profile: List[ProfileIdentifierType]
-    data_license: Optional[str] = "CC0-1.0"
     created_using: List[str] = field(default_factory=list)  # SPDXID of Tools
     comment: Optional[str] = None
 
@@ -27,8 +24,6 @@ class CreationInfo:
         spec_version: Version,
         created: datetime,
         created_by: List[str],
-        profile: List[ProfileIdentifierType],
-        data_license: Optional[str] = "CC0-1.0",
         created_using: List[str] | None = None,
         comment: Optional[str] = None,
     ):

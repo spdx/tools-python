@@ -21,7 +21,7 @@ def test_correct_initialization():
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        Hash("SHA1", 345)
+        Hash("SHA1", 345)  # type: ignore  # intentionally incorrect
 
     assert len(err.value.args[0]) == 2
     for error in err.value.args[0]:

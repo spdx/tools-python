@@ -12,6 +12,7 @@ from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import SpdxNoAssertion
 from spdx_tools.spdx.model.package import ExternalPackageRef, ExternalPackageRefCategory
 from spdx_tools.spdx.model.package import Package as Spdx2_Package
+from tests.spdx3.fixtures import creation_info_fixture
 from tests.spdx.fixtures import actor_fixture, package_fixture
 
 
@@ -22,10 +23,10 @@ from tests.spdx.fixtures import actor_fixture, package_fixture
             actor_fixture(name="originatorName"),
             ["https://doc.namespace#SPDXRef-Actor-originatorName-some@mail.com"],
             actor_fixture(name="supplierName"),
-            ["https://doc.namespace#SPDXRef-Actor-supplierName-some@mail.com"],
+            "https://doc.namespace#SPDXRef-Actor-supplierName-some@mail.com",
         ),
-        (None, [], None, []),
-        (SpdxNoAssertion(), [], SpdxNoAssertion(), []),
+        (None, [], None, None),
+        (SpdxNoAssertion(), [], SpdxNoAssertion(), None),
     ],
 )
 def test_bump_package(originator, expected_originator, supplier, expected_supplier):
@@ -41,9 +42,10 @@ def test_bump_package(originator, expected_originator, supplier, expected_suppli
             ExternalPackageRef(ExternalPackageRefCategory.PERSISTENT_ID, "swh", "swh_locator", "swh_comment"),
         ],
     )
+    creation_info = creation_info_fixture()
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, document_namespace, [], [])
+    bump_package(spdx2_package, payload, document_namespace, [], [], creation_info)
     package = payload.get_element(expected_new_package_id)
 
     assert isinstance(package, Package)
@@ -59,13 +61,16 @@ def test_bump_package(originator, expected_originator, supplier, expected_suppli
     assert package.package_version == spdx2_package.version
     assert package.originated_by == expected_originator
     assert package.supplied_by == expected_supplier
-    assert package.homepage == spdx2_package.homepage
+    assert package.home_page == spdx2_package.homepage
     assert package.source_info == spdx2_package.source_info
     assert package.built_time == spdx2_package.built_date
     assert package.release_time == spdx2_package.release_date
     assert package.valid_until_time == spdx2_package.valid_until_date
     assert package.copyright_text == spdx2_package.copyright_text
-    assert package.attribution_text == spdx2_package.attribution_texts[0]
+    assert package.attribution_text == spdx2_package.attribution_texts
+    assert package.creation_info == creation_info
+
+    # check for license relationships as those not part of the package directly
 
 
 def test_bump_of_single_purl_without_comment():
@@ -76,9 +81,10 @@ def test_bump_of_single_purl_without_comment():
             ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", None),
         ]
     )
+    creation_info = creation_info_fixture()
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, document_namespace, [], [])
+    bump_package(spdx2_package, payload, document_namespace, [], [], creation_info)
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url == "purl_locator"
@@ -94,15 +100,16 @@ def test_bump_of_single_purl_with_comment():
             ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator", "purl_comment"),
         ]
     )
+    creation_info = creation_info_fixture()
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, document_namespace, [], [])
+    bump_package(spdx2_package, payload, document_namespace, [], [], creation_info)
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
     assert package.external_reference == []
     assert package.external_identifier == [
-        ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "purl_comment")
+        ExternalIdentifier(ExternalIdentifierType.PACKAGE_URL, "purl_locator", "purl_comment")
     ]
 
 
@@ -115,9 +122,10 @@ def test_bump_of_multiple_purls():
             ExternalPackageRef(ExternalPackageRefCategory.PACKAGE_MANAGER, "purl", "purl_locator2", None),
         ]
     )
+    creation_info = creation_info_fixture()
     expected_new_package_id = f"{document_namespace}#{spdx2_package.spdx_id}"
 
-    bump_package(spdx2_package, payload, document_namespace, [], [])
+    bump_package(spdx2_package, payload, document_namespace, [], [], creation_info)
     package = payload.get_element(expected_new_package_id)
 
     assert package.package_url is None
@@ -125,7 +133,7 @@ def test_bump_of_multiple_purls():
     TestCase().assertCountEqual(
         package.external_identifier,
         [
-            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator", "comment"),
-            ExternalIdentifier(ExternalIdentifierType.PURL, "purl_locator2", None),
+            ExternalIdentifier(ExternalIdentifierType.PACKAGE_URL, "purl_locator", "comment"),
+            ExternalIdentifier(ExternalIdentifierType.PACKAGE_URL, "purl_locator2", None),
         ],
     )

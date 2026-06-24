@@ -18,7 +18,7 @@ def test_bump_external_document_ref():
     assert namespace_map.prefix == "DocumentRef-external"
     assert namespace_map.namespace == "https://external.uri#"
 
-    assert imports.external_id == "DocumentRef-external:SPDXRef-DOCUMENT"
+    assert imports.external_spdx_id == "DocumentRef-external:SPDXRef-DOCUMENT"
     assert imports.verified_using == [bump_checksum(checksum)]
 
 
@@ -33,4 +33,4 @@ def test_bump_multiple_external_document_refs():
     spdx_document = bump_creation_info(creation_info, payload)
 
     assert len(spdx_document.imports) == 2
-    assert len(spdx_document.namespaces) == 2
+    assert len(spdx_document.namespace_map) == 2

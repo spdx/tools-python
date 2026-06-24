@@ -3,6 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from .cvss_v2_vuln_assessment_relationship import CvssV2VulnAssessmentRelationship
 from .cvss_v3_vuln_assessment_relationship import CvssV3VulnAssessmentRelationship
+from .cvss_v4_vuln_assessment_relationship import CvssV4VulnAssessmentRelationship
 from .epss_vuln_assessment_relationship import EpssVulnAssessmentRelationship
 from .exploit_catalog_vuln_assessment_relationship import ExploitCatalogVulnAssessmentRelationship, ExploitCatalogType
 from .ssvc_vuln_assessment_relationship import SsvcVulnAssessmentRelationship, SsvcDecisionType
@@ -16,3 +17,4 @@ from .vex_under_investigation_vuln_assessment_relationship import VexUnderInvest
 from .vex_vuln_assessment_relationship import VexVulnAssessmentRelationship
 from .vuln_assessment_relationship import VulnAssessmentRelationship
 from .vulnerability import Vulnerability
+from .cvss_severity_type import CvssSeverityType
