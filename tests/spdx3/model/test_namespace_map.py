@@ -20,7 +20,7 @@ def test_correct_initialization():
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        NamespaceMap(34, ["list of namespaces"])
+        NamespaceMap(34, ["list of namespaces"])  # type: ignore  # intentionally incorrect
 
     assert len(err.value.args[0]) == 2
     for error in err.value.args[0]:

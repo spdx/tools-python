@@ -10,77 +10,75 @@ from beartype.typing import List, Optional
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.common.typing.type_checks import check_types_and_set_values
 from spdx_tools.spdx3.model import CreationInfo, Element, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model.extension.extension import Extension
 
 
 class RelationshipType(Enum):
     AFFECTS = auto()
-    AMENDS = auto()
-    ANCESTOR = auto()
+    AMENDED_BY = auto()
+    ANCESTOR_OF = auto()
     AVAILABLE_FROM = auto()
-    BUILD_DEPENDENCY = auto()
-    BUILD_TOOL = auto()
-    COORDINATED_BY = auto()
+    CONFIGURES = auto()
     CONTAINS = auto()
-    CONFIG_OF = auto()
-    COPY = auto()
-    DATA_FILE = auto()
-    DEPENDENCY_MANIFEST = auto()
+    COORDINATED_BY = auto()
+    COPIED_TO = auto()
+    DELEGATED_TO = auto()
     DEPENDS_ON = auto()
-    DESCENDANT = auto()
+    DESCENDANT_OF = auto()
     DESCRIBES = auto()
-    DEV_DEPENDENCY = auto()
-    DEV_TOOL = auto()
-    DISTRIBUTION_ARTIFACT = auto()
-    DOCUMENTATION = auto()
     DOES_NOT_AFFECT = auto()
-    DYNAMIC_LINK = auto()
-    EXAMPLE = auto()
-    EVIDENCE_FOR = auto()
-    EXPANDED_FROM_ARCHIVE = auto()
+    EXPANDS_TO = auto()
     EXPLOIT_CREATED_BY = auto()
-    FILE_ADDED = auto()
-    FILE_DELETED = auto()
-    FILE_MODIFIED = auto()
     FIXED_BY = auto()
     FIXED_IN = auto()
     FOUND_BY = auto()
     GENERATES = auto()
+    HAS_ADDED_FILE = auto()
     HAS_ASSESSMENT_FOR = auto()
     HAS_ASSOCIATED_VULNERABILITY = auto()
-    HOST_OF = auto()
-    INPUT_OF = auto()
+    HAS_CONCLUDED_LICENSE = auto()
+    HAS_DATA_FILE = auto()
+    HAS_DECLARED_LICENSE = auto()
+    HAS_DELETED_FILE = auto()
+    HAS_DEPENDENCY_MANIFEST = auto()
+    HAS_DISTRIBUTION_ARTIFACT = auto()
+    HAS_DOCUMENTATION = auto()
+    HAS_DYNAMIC_LINK = auto()
+    HAS_EVIDENCE = auto()
+    HAS_EXAMPLE = auto()
+    HAS_HOST = auto()
+    HAS_INPUT = auto()
+    HAS_METADATA = auto()
+    HAS_OPTIONAL_COMPONENT = auto()
+    HAS_OPTIONAL_DEPENDENCY = auto()
+    HAS_OUTPUT = auto()
+    HAS_PREREQUISITE = auto()
+    HAS_PROVIDED_DEPENDENCY = auto()
+    HAS_REQUIREMENT = auto()
+    HAS_SPECIFICATION = auto()
+    HAS_STATIC_LINK = auto()
+    HAS_TEST = auto()
+    HAS_TEST_CASE = auto()
+    HAS_VARIANT = auto()
     INVOKED_BY = auto()
-    METAFILE = auto()
-    ON_BEHALF_OF = auto()
-    OPTIONAL_COMPONENT = auto()
-    OPTIONAL_DEPENDENCY = auto()
+    MODIFIED_BY = auto()
     OTHER = auto()
-    OUTPUT_OF = auto()
-    PACKAGES = auto()
-    PATCH = auto()
-    PREREQUISITE = auto()
-    PROVIDED_DEPENDENCY = auto()
+    PACKAGED_BY = auto()
+    PATCHED_BY = auto()
     PUBLISHED_BY = auto()
     REPORTED_BY = auto()
     REPUBLISHED_BY = auto()
-    REQUIREMENT_FOR = auto()
-    RUNTIME_DEPENDENCY = auto()
-    SPECIFICATION_FOR = auto()
-    STATIC_LINK = auto()
-    TEST = auto()
-    TEST_CASE = auto()
-    TEST_DEPENDENCY = auto()
-    TEST_TOOL = auto()
+    SERIALIZED_IN_ARTIFACT = auto()
     TESTED_ON = auto()
     TRAINED_ON = auto()
     UNDER_INVESTIGATION_FOR = auto()
-    VARIANT = auto()
+    USES_TOOL = auto()
 
 
 class RelationshipCompleteness(Enum):
     INCOMPLETE = auto()
     COMPLETE = auto()
-    NOASSERTION = auto()
+    NO_ASSERTION = auto()
 
 
 @dataclass_with_properties
@@ -99,8 +97,8 @@ class Relationship(Element):
         spdx_id: str,
         from_element: str,
         relationship_type: RelationshipType,
+        creation_info: CreationInfo,
         to: List[str] | None = None,
-        creation_info: Optional[CreationInfo] = None,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
@@ -108,7 +106,7 @@ class Relationship(Element):
         verified_using: List[IntegrityMethod] | None = None,
         external_reference: List[ExternalReference] | None = None,
         external_identifier: List[ExternalIdentifier] | None = None,
-        extension: Optional[str] = None,
+        extension: List[Extension] | None = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
@@ -117,4 +115,5 @@ class Relationship(Element):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
+        extension = [] if extension is None else extension
         check_types_and_set_values(self, locals())

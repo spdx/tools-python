@@ -20,3 +20,8 @@ class Payload:
 
     def get_full_map(self) -> Dict[str, Element]:
         return self._spdx_id_map
+
+    def get_elements_of_type(self, element_type: type) -> Dict[str, Element]:
+        return {
+            spdx_id: element for spdx_id, element in self._spdx_id_map.items() if isinstance(element, element_type)
+        }

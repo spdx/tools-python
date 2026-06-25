@@ -27,7 +27,8 @@ def test_correct_initialization():
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        ExternalIdentifier("CPE22", ["identifier", "another_identifier"], 34, "locator", True)
+        # intentionally incorrect
+        ExternalIdentifier("CPE22", ["identifier", "another_identifier"], 34, "locator", True)  # type: ignore
 
     assert len(err.value.args[0]) == 5
     for error in err.value.args[0]:

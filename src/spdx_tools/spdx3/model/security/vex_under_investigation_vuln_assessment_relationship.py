@@ -13,9 +13,10 @@ from spdx_tools.spdx3.model import (
     ExternalReference,
     IntegrityMethod,
     RelationshipCompleteness,
+    RelationshipType,
 )
+from spdx_tools.spdx3.model.extension.extension import Extension
 from spdx_tools.spdx3.model.security.vex_vuln_assessment_relationship import VexVulnAssessmentRelationship
-from spdx_tools.spdx.model import RelationshipType
 
 
 @dataclass_with_properties
@@ -26,7 +27,7 @@ class VexUnderInvestigationVulnAssessmentRelationship(VexVulnAssessmentRelations
         from_element: str,
         relationship_type: RelationshipType,
         to: List[str],
-        creation_info: Optional[CreationInfo] = None,
+        creation_info: CreationInfo,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
@@ -34,7 +35,7 @@ class VexUnderInvestigationVulnAssessmentRelationship(VexVulnAssessmentRelations
         verified_using: List[IntegrityMethod] | None = None,
         external_reference: List[ExternalReference] | None = None,
         external_identifier: List[ExternalIdentifier] | None = None,
-        extension: Optional[str] = None,
+        extension: List[Extension] | None = None,
         completeness: Optional[RelationshipCompleteness] = None,
         start_time: Optional[datetime] = None,
         end_time: Optional[datetime] = None,
@@ -49,4 +50,5 @@ class VexUnderInvestigationVulnAssessmentRelationship(VexVulnAssessmentRelations
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
+        extension = [] if extension is None else extension
         check_types_and_set_values(self, locals())

@@ -16,13 +16,13 @@ def test_correct_initialization():
 
     assert external_reference.external_reference_type == ExternalReferenceType.OTHER
     assert external_reference.locator == ["org.apache.tomcat:tomcat:9.0.0.M4"]
-    assert external_reference.content_type == "externalReferenceContentType"
+    assert external_reference.content_type == "text/plain"
     assert external_reference.comment == "externalReferenceComment"
 
 
 def test_invalid_initialization():
     with pytest.raises(TypeError) as err:
-        ExternalReference("OTHER", "a URI", 34, True)
+        ExternalReference("OTHER", "a URI", 34, True)  # type: ignore  # intentionally incorrect
 
     assert len(err.value.args[0]) == 4
     for error in err.value.args[0]:

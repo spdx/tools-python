@@ -10,7 +10,7 @@ from spdx_tools.spdx.writer.tagvalue.tagvalue_writer_helper_functions import wri
 
 
 def write_external_map(external_map: ExternalMap, text_output: TextIO):
-    write_value("external_id", external_map.external_id, text_output)
+    write_value("external_id", external_map.external_spdx_id, text_output)
     write_optional_heading(external_map.verified_using, "verified using\n", text_output)
     for integrity_method in external_map.verified_using:
         # for now Hash is the only child class of the abstract class IntegrityMethod,

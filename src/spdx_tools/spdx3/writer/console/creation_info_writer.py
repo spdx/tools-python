@@ -16,6 +16,4 @@ def write_creation_info(creation_info: CreationInfo, text_output: TextIO, indent
         write_value("created by", created_by, text_output, indent)
     for created_using in creation_info.created_using:
         write_value("created using", created_using, text_output, indent)
-    write_value("profile", [profile.name for profile in creation_info.profile], text_output, indent)
-    write_value("data license", creation_info.data_license, text_output, indent)
     write_value("comment", creation_info.comment, text_output, indent)

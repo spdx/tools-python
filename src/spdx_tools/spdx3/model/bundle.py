@@ -9,11 +9,11 @@ from spdx_tools.spdx3.model import (
     CreationInfo,
     ElementCollection,
     ExternalIdentifier,
-    ExternalMap,
     ExternalReference,
     IntegrityMethod,
-    NamespaceMap,
+    ProfileIdentifierType,
 )
+from spdx_tools.spdx3.model.extension.extension import Extension
 
 
 @dataclass_with_properties
@@ -25,7 +25,7 @@ class Bundle(ElementCollection):
         spdx_id: str,
         element: List[str],
         root_element: List[str],
-        creation_info: Optional[CreationInfo] = None,
+        creation_info: CreationInfo,
         name: Optional[str] = None,
         summary: Optional[str] = None,
         description: Optional[str] = None,
@@ -33,14 +33,13 @@ class Bundle(ElementCollection):
         verified_using: List[IntegrityMethod] | None = None,
         external_reference: List[ExternalReference] | None = None,
         external_identifier: List[ExternalIdentifier] | None = None,
-        extension: Optional[str] = None,
-        namespaces: List[NamespaceMap] | None = None,
-        imports: List[ExternalMap] | None = None,
+        extension: List[Extension] | None = None,
+        profile_conformance: List[ProfileIdentifierType] | None = None,
         context: Optional[str] = None,
     ):
         verified_using = [] if verified_using is None else verified_using
         external_reference = [] if external_reference is None else external_reference
         external_identifier = [] if external_identifier is None else external_identifier
-        namespaces = [] if namespaces is None else namespaces
-        imports = [] if imports is None else imports
+        profile_conformance = [] if profile_conformance is None else profile_conformance
+        extension = [] if extension is None else extension
         check_types_and_set_values(self, locals())

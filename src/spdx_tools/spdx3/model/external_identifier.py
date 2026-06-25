@@ -16,7 +16,7 @@ class ExternalIdentifierType(Enum):
     CVE = auto()
     EMAIL = auto()
     GITOID = auto()
-    PURL = auto()
+    PACKAGE_URL = auto()
     SECURITY_OTHER = auto()
     SWHID = auto()
     SWID = auto()

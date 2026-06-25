@@ -8,12 +8,13 @@ from beartype.typing import List, Optional
 
 from spdx_tools.common.typing.dataclass_with_properties import dataclass_with_properties
 from spdx_tools.spdx3.model import CreationInfo, ExternalIdentifier, ExternalReference, IntegrityMethod
+from spdx_tools.spdx3.model.extension.extension import Extension
 
 
 @dataclass_with_properties
 class Element(ABC):
     spdx_id: str  # IRI
-    creation_info: Optional[CreationInfo] = None
+    creation_info: CreationInfo
     name: Optional[str] = None
     summary: Optional[str] = None
     description: Optional[str] = None
@@ -21,7 +22,7 @@ class Element(ABC):
     verified_using: List[IntegrityMethod] = field(default_factory=list)
     external_reference: List[ExternalReference] = field(default_factory=list)
     external_identifier: List[ExternalIdentifier] = field(default_factory=list)
-    extension: Optional[str] = None  # placeholder for extension
+    extension: List[Extension] = field(default_factory=list)
 
     @abstractmethod
     def __init__(self):

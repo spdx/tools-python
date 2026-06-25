@@ -1,8 +1,6 @@
 # SPDX-FileCopyrightText: 2023 spdx contributors
 #
 # SPDX-License-Identifier: Apache-2.0
-from typing import Optional
-
 from beartype.typing import List
 
 from spdx_tools.spdx3.model import CreationInfo, ExternalIdentifier, ExternalIdentifierType, Organization, Person, Tool
@@ -12,7 +10,7 @@ from spdx_tools.spdx.model.actor import ActorType
 
 
 def bump_actor(
-    spdx2_actor: Spdx2_Actor, payload: Payload, document_namespace: str, creation_info: Optional[CreationInfo] = None
+    spdx2_actor: Spdx2_Actor, payload: Payload, document_namespace: str, creation_info: CreationInfo
 ) -> str:
     name: str = spdx2_actor.name
     email: str = spdx2_actor.email

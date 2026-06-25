@@ -11,12 +11,13 @@ from spdx_tools.spdx3.model import IntegrityMethod
 
 
 class HashAlgorithm(Enum):
+    ADLER32 = auto()
     BLAKE2B256 = auto()
     BLAKE2B384 = auto()
     BLAKE2B512 = auto()
     BLAKE3 = auto()
-    CRYSTALS_KYBER = auto()
     CRYSTALS_DILITHIUM = auto()
+    CRYSTALS_KYBER = auto()
     FALCON = auto()
     MD2 = auto()
     MD4 = auto()
@@ -26,15 +27,12 @@ class HashAlgorithm(Enum):
     SHA1 = auto()
     SHA224 = auto()
     SHA256 = auto()
+    SHA384 = auto()
     SHA3_224 = auto()
     SHA3_256 = auto()
     SHA3_384 = auto()
     SHA3_512 = auto()
-    SHA384 = auto()
     SHA512 = auto()
-    SPDXPVCSHA1 = auto()
-    SPDXPVCSHA256 = auto()
-    SPHINCS_PLUS = auto()
 
 
 @dataclass_with_properties

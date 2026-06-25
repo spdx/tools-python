@@ -2,24 +2,18 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 import json
-from importlib import resources
 
+from spdx_python_model.bindings.v3_0_1 import JSONLDSerializer
+
+from spdx_tools.spdx3.binding.spdx3_to_shacl_converter import Spdx3ToSHACLConverter
 from spdx_tools.spdx3.payload import Payload
-from spdx_tools.spdx3.writer.json_ld.json_ld_converter import (
-    convert_payload_to_json_ld_list_of_elements,
-)
 
 
 def write_payload(payload: Payload, file_name: str):
-    element_list = convert_payload_to_json_ld_list_of_elements(payload)
+    converter = Spdx3ToSHACLConverter()
+    shacl_payload = converter.convert(payload)
+    serializer = JSONLDSerializer()
+    json_str = serializer.serialize_data(shacl_payload)
 
-    # this will be obsolete as soon as the context is publicly available under some URI
-    # Note: 3.0.1 context is now available at
-    # https://spdx.org/rdf/3.0.1/spdx-context.jsonld
-    with resources.files("spdx_tools.spdx3.writer.json_ld").joinpath("context.json").open("r") as infile:
-        context = json.load(infile)
-
-    complete_dict = {"@context": context, "@graph": element_list}
-
-    with open(file_name + ".jsonld", "w", encoding="utf-8") as out:
-        json.dump(complete_dict, out, indent=2)
+    with open(file_name + ".jsonld", "w") as out:
+        json.dump(json_str, out, indent=2)

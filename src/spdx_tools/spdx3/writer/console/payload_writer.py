@@ -16,8 +16,9 @@ from spdx_tools.spdx3.model import (
 )
 from spdx_tools.spdx3.model.ai import AIPackage
 from spdx_tools.spdx3.model.build import Build
-from spdx_tools.spdx3.model.dataset import Dataset
-from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet, SoftwareDependencyRelationship
+from spdx_tools.spdx3.model.dataset import DatasetPackage
+from spdx_tools.spdx3.model.simplelicensing.license_expression import LicenseExpression
+from spdx_tools.spdx3.model.software import File, Package, Sbom, Snippet
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx3.writer.console.agent_writer import write_agent
 from spdx_tools.spdx3.writer.console.ai.ai_package_writer import write_ai_package
@@ -27,20 +28,17 @@ from spdx_tools.spdx3.writer.console.build.build_writer import write_build
 from spdx_tools.spdx3.writer.console.bundle_writer import write_bundle
 from spdx_tools.spdx3.writer.console.dataset.dataset_writer import write_dataset
 from spdx_tools.spdx3.writer.console.relationship_writer import write_relationship
+from spdx_tools.spdx3.writer.console.simplelicensing.license_expression_writer import write_license_expression
 from spdx_tools.spdx3.writer.console.software.file_writer import write_file
 from spdx_tools.spdx3.writer.console.software.package_writer import write_package
 from spdx_tools.spdx3.writer.console.software.sbom_writer import write_sbom
 from spdx_tools.spdx3.writer.console.software.snippet_writer import write_snippet
-from spdx_tools.spdx3.writer.console.software.software_dependency_relationship_writer import (
-    write_software_dependency_relationship,
-)
 from spdx_tools.spdx3.writer.console.spdx_document_writer import write_spdx_document
 from spdx_tools.spdx3.writer.console.tool_writer import write_tool
 
 MAP_CLASS_TO_WRITE_METHOD = {
     Annotation: write_annotation,
     Relationship: write_relationship,
-    SoftwareDependencyRelationship: write_software_dependency_relationship,
     Bundle: write_bundle,
     SpdxDocument: write_spdx_document,
     Bom: write_bom,
@@ -53,8 +51,9 @@ MAP_CLASS_TO_WRITE_METHOD = {
     SoftwareAgent: write_agent,
     Tool: write_tool,
     AIPackage: write_ai_package,
-    Dataset: write_dataset,
+    DatasetPackage: write_dataset,
     Build: write_build,
+    LicenseExpression: write_license_expression,
 }
 
 

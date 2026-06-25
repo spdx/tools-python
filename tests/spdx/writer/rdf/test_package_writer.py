@@ -6,6 +6,8 @@ from rdflib import DOAP, RDF, RDFS, XSD, Graph, Literal, URIRef
 
 from spdx_tools.spdx.datetime_conversions import datetime_to_iso_string
 from spdx_tools.spdx.model import ExternalPackageRefCategory
+from spdx_tools.spdx.model.spdx_no_assertion import SpdxNoAssertion
+from spdx_tools.spdx.model.spdx_none import SpdxNone
 from spdx_tools.spdx.rdfschema.namespace import LICENSE_NAMESPACE, SPDX_NAMESPACE
 from spdx_tools.spdx.writer.rdf.package_writer import (
     add_external_package_ref_to_graph,
@@ -96,3 +98,19 @@ def test_external_package_ref_to_graph(external_reference, ref_type, category):
     assert (None, SPDX_NAMESPACE.referenceType, ref_type) in graph
     assert (None, SPDX_NAMESPACE.referenceLocator, Literal(external_reference.locator)) in graph
     assert (None, RDFS.comment, Literal(external_reference.comment)) in graph
+
+
+@pytest.mark.parametrize(
+    "download_location_value",
+    [
+        "https://download.com",
+        SpdxNone(),
+        SpdxNoAssertion(),
+    ],
+)
+def test_download_location_values(download_location_value):
+    graph = Graph()
+    package = package_fixture()
+    package.download_location = download_location_value
+    add_package_to_graph(package, graph, "docNamespace", {})
+    assert (None, SPDX_NAMESPACE.downloadLocation, Literal(package.download_location)) in graph

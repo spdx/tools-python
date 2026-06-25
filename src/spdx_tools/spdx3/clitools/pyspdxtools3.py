@@ -24,7 +24,7 @@ from spdx_tools.spdx.validation.validation_message import ValidationMessage
     "--outfile",
     "-o",
     help="The file to write the converted document to (write a dash for output to stdout or omit for no conversion)."
-    "For now only a prototype serialization to json-ld is available. The provided file will therefore be extended "
+    "For now only serialization to json-ld is available. The provided file will therefore be extended "
     "with `.jsonld`.",
 )
 @click.option(
@@ -35,8 +35,7 @@ from spdx_tools.spdx.validation.validation_message import ValidationMessage
 @click.option("--novalidation", is_flag=True, help="Don't validate the provided document.")
 def main(infile: str, outfile: str, version: str, novalidation: bool):
     """
-    CLI-tool to parse and validate a SPDX 2.x document and migrate it into the prototype of SPDX 3.0. As there is no
-    definition for a serialization yet output can only be written to stdout.
+    CLI-tool to parse and validate a SPDX 2.x document and migrate it into SPDX 3.0.1.
     To use, run: 'pyspdxtools3 --infile <input file name> -o -'
     """
     try:
