@@ -8,10 +8,11 @@ from re import Pattern
 
 
 class Version:
-    VERSION_REGEX: Pattern = re.compile(r"^(\d+)\.(\d+)$")
+    VERSION_REGEX: Pattern = re.compile(r"^(\d+)\.(\d+)(?:\.(\d+))?$")
 
     major: int
     minor: int
+    patch: int | None
 
     @classmethod
     def is_valid_version_string(cls, value: str) -> bool:
@@ -25,16 +26,21 @@ class Version:
             raise ValueError(f"{value} is not a valid version string")
 
         match = cls.VERSION_REGEX.match(value)
-        return cls(int(match.group(1)), int(match.group(2)))
+        major = int(match.group(1))
+        minor = int(match.group(2))
+        patch = int(match.group(3)) if match.group(3) else None
+        return cls(major, minor, patch)
 
-    def __init__(self, major: int, minor: int):
+    def __init__(self, major: int, minor: int, patch: int | None = None):
         self.major = major
         self.minor = minor
+        self.patch = patch
 
     def __str__(self):
-        return f"{self.major}.{self.minor}"
+        patch_suffix = f".{self.patch}" if self.patch is not None else ""
+        return f"{self.major}.{self.minor}{patch_suffix}"
 
     def __eq__(self, other):
         if not isinstance(other, Version):
             return False
-        return self.major == other.major and self.minor == other.minor
+        return self.major == other.major and self.minor == other.minor and self.patch == other.patch
