@@ -4,12 +4,15 @@
 
 from unittest import TestCase
 
+import pytest
+
 from spdx_tools.spdx3.bump_from_spdx2.checksum import bump_checksum
 from spdx_tools.spdx3.bump_from_spdx2.spdx_document import bump_spdx_document
 from spdx_tools.spdx3.model import ExternalMap
 from spdx_tools.spdx3.payload import Payload
 from spdx_tools.spdx.model import ExternalDocumentRef
 from spdx_tools.spdx.model.document import Document as Spdx2_Document
+from spdx_tools.spdx.spdx_element_utils import get_full_element_spdx_id
 from tests.spdx.fixtures import (
     checksum_fixture,
     creation_info_fixture,
@@ -53,3 +56,17 @@ def test_bump_external_elements():
     assert f"{external_doc_uri}#SPDXRef-Snippet" in payload.get_full_map()
 
     TestCase().assertCountEqual(spdx_document.imports, expected_imports)
+
+
+def test_bump_external_element_with_malformed_spdx_id():
+    """An spdx_id with more than one colon must raise a clear error instead of
+    crashing with an unpack ValueError from split(":")."""
+    document_namespace = document_fixture().creation_info.document_namespace
+    malformed_id = "DocumentRef-external:SPDXRef-Package:extra"
+
+    with pytest.raises(ValueError, match="must not contain more than one colon"):
+        get_full_element_spdx_id(
+            package_fixture(spdx_id=malformed_id),
+            document_namespace,
+            [ExternalDocumentRef("DocumentRef-external", "https://external-document.uri", checksum_fixture())],
+        )
