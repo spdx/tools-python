@@ -68,3 +68,17 @@ def test_parse_invalid_file():
         "Error while parsing File: ['Invalid FileType: SOUCE. Line 3', 'Error while "
         "parsing FileChecksum: Token did not match specified grammar rule. Line: 5']"
     ]
+
+
+def test_parse_file_uppercase_checksum_raises():
+    # An uppercase checksum value used to silently produce Checksum(SHA1, "")
+    # instead of raising; the lexer must reject it as a grammar error.
+    file_str = "\n".join(
+        [
+            "FileName: f",
+            "SPDXID: SPDXRef-File",
+            "FileChecksum: SHA1: D6A770BA38583ED4BB4525BD96E50461655D2758",
+        ]
+    )
+    with pytest.raises(SPDXParsingError):
+        Parser().parse("\n".join([DOCUMENT_STR, file_str]))
