@@ -138,3 +138,32 @@ def test_parse_invalid_package(package_str, expected_message):
         parser.parse(package_str)
 
     assert expected_message in err.value.get_messages()[0]
+
+
+@pytest.mark.parametrize(
+    "excludes_str, expected_excluded_files",
+    [
+        # What our own tag-value writer emits.
+        ("./package.spdx ./excluded.txt", ["./package.spdx", "./excluded.txt"]),
+        # What this parser has always split on.
+        ("./package.spdx,./excluded.txt", ["./package.spdx", "./excluded.txt"]),
+        ("./package.spdx, ./excluded.txt", ["./package.spdx", "./excluded.txt"]),
+        ("./package.spdx", ["./package.spdx"]),
+    ],
+)
+def test_parse_package_verification_code_excluded_files(excludes_str, expected_excluded_files):
+    parser = Parser()
+    package_str = "\n".join(
+        [
+            "PackageName: Test",
+            "SPDXID: SPDXRef-Package",
+            "PackageDownloadLocation: http://example.com/test",
+            f"PackageVerificationCode: d6a770ba38583ed4bb4525bd96e50461655d2758 (excludes: {excludes_str})",
+        ]
+    )
+    document = parser.parse("\n".join([DOCUMENT_STR, package_str]))
+
+    assert document is not None
+    verification_code = document.packages[0].verification_code
+    assert verification_code.value == "d6a770ba38583ed4bb4525bd96e50461655d2758"
+    assert verification_code.excluded_files == expected_excluded_files

@@ -426,7 +426,15 @@ class Parser:
         value = match.group(verif_code_code_grp)
         excluded_files = None
         if match.group(verif_code_exc_files_grp):
-            excluded_files = match.group(verif_code_exc_files_grp).split(",")
+            # The specification only ever shows one excluded file and does not say how
+            # several are separated. Accept both spellings in use: commas, which this
+            # parser has always split on, and whitespace, which is what our own
+            # tag-value writer emits.
+            excluded_files = [
+                file_name
+                for file_name in re.split(r"[,\s]+", match.group(verif_code_exc_files_grp).strip())
+                if file_name
+            ] or None
         self.current_element["verification_code"] = PackageVerificationCode(value, excluded_files)
 
     @grammar_rule("files_analyzed : PKG_FILES_ANALYZED LINE")
