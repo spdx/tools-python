@@ -23,7 +23,12 @@ from spdx_tools.spdx.model import (
 )
 from spdx_tools.spdx.parser.tagvalue import tagvalue_parser
 from spdx_tools.spdx.writer.tagvalue.tagvalue_writer import write_document, write_document_to_file
-from tests.spdx.fixtures import checksum_fixture, document_fixture
+from tests.spdx.fixtures import (
+    checksum_fixture,
+    document_fixture,
+    package_fixture,
+    package_verification_code_fixture,
+)
 
 
 @pytest.fixture
@@ -40,6 +45,23 @@ def test_write_tag_value(temporary_file_path: str):
 
     parsed_document = tagvalue_parser.parse_from_file(temporary_file_path)
 
+    assert parsed_document == document
+
+
+def test_write_tag_value_with_several_excluded_files(temporary_file_path: str):
+    """The writer joins the excluded files with a space, so the parser has to read
+    them back the same way. With one excluded file, which is all the specification
+    shows and all the fixture has, the two agree by accident."""
+    excluded_files = ["./package.spdx", "./excluded.txt", "./third.bin"]
+    document = document_fixture(
+        packages=[package_fixture(verification_code=package_verification_code_fixture(excluded_files=excluded_files))]
+    )
+
+    write_document_to_file(document, temporary_file_path, False)
+
+    parsed_document = tagvalue_parser.parse_from_file(temporary_file_path)
+
+    assert parsed_document.packages[0].verification_code.excluded_files == excluded_files
     assert parsed_document == document
 
 
