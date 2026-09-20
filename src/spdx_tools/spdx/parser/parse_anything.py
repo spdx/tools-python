@@ -27,6 +27,9 @@ def parse_file(file_name: str, encoding: str = "utf-8") -> Document:
         )
 
     input_format = file_name_to_format(file_name)
+    if input_format == FileFormat.TAG_VALUE and file_name.endswith(".spdx"):
+        input_format = _resolve_ambiguous_spdx_extension(file_name, encoding)
+
     if input_format == FileFormat.RDF_XML:
         return rdf_parser.parse_from_file(file_name, encoding)
     elif input_format == FileFormat.TAG_VALUE:
@@ -37,3 +40,21 @@ def parse_file(file_name: str, encoding: str = "utf-8") -> Document:
         return xml_parser.parse_from_file(file_name, encoding)
     elif input_format == FileFormat.YAML:
         return yaml_parser.parse_from_file(file_name, encoding)
+
+
+def _resolve_ambiguous_spdx_extension(file_name: str, encoding: str) -> FileFormat:
+    """A bare ".spdx" extension is ambiguous: this project's own convention is tag-value, but some
+    third-party pipelines (e.g. Yocto/OpenEmbedded SBOM generation followed by post-processing
+    tools) write JSON content to a file ending in plain ".spdx" instead of ".spdx.json". Feeding
+    JSON into the tag-value parser doesn't fail loudly: its error recovery silently discards every
+    line it can't tokenize, so the creation info ends up empty and construction fails with a
+    confusing "missing N required positional arguments" TypeError instead of a useful message
+    (see #890). Peek at the first non-blank character to tell the two formats apart before
+    dispatching, without changing detection for the unambiguous ".tag" extension or for writing.
+    """
+    with open(file_name, encoding=encoding) as spdx_file:
+        for line in spdx_file:
+            stripped = line.strip()
+            if stripped:
+                return FileFormat.JSON if stripped[0] == "{" else FileFormat.TAG_VALUE
+    return FileFormat.TAG_VALUE
