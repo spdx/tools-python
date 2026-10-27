@@ -111,6 +111,9 @@ def validate_package(
             spdx_id=package.spdx_id, element_type=SpdxElementType.PACKAGE, full_element=package
         )
 
+    if package.name is None or not str(package.name).strip():
+        validation_messages.append(ValidationMessage("package name is mandatory and cannot be empty", context))
+
     download_location = package.download_location
     if isinstance(download_location, str):
         for message in validate_download_location(download_location):

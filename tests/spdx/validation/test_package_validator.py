@@ -154,3 +154,15 @@ def test_v2_2mandatory_fields():
     expected = [ValidationMessage(f"{field} is mandatory in SPDX-2.2", context) for field in mandatory_fields]
 
     TestCase().assertCountEqual(validation_messages, expected)
+
+
+@pytest.mark.parametrize("invalid_name", ["", "   ", "\t\n"])
+def test_invalid_package_name(invalid_name):
+    package = package_fixture(name=invalid_name)
+    validation_messages = validate_package(package, "SPDX-2.3")
+
+    context = ValidationContext(spdx_id=package.spdx_id, element_type=SpdxElementType.PACKAGE, full_element=package)
+    expected = [ValidationMessage("package name is mandatory and cannot be empty", context)]
+
+    assert validation_messages == expected
+
