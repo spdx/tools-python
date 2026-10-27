@@ -25,6 +25,11 @@ EXTERNAL_DOCUMENT_ID = external_document_ref_fixture().document_ref_id
     "expression_string",
     [
         "MIT",
+        "Apache-1.0+",
+        "Apache-2.0+",
+        f"{FIXTURE_LICENSE_ID}+",
+        f"{EXTERNAL_DOCUMENT_ID}:LicenseRef-007+",
+        "Apache-1.0+ or MIT",
         FIXTURE_LICENSE_ID,
         f"GPL-2.0-only with GPL-CC-1.0 and {FIXTURE_LICENSE_ID} with 389-exception or Beerware",
         f"{EXTERNAL_DOCUMENT_ID}:LicenseRef-007",
@@ -71,6 +76,8 @@ def test_valid_license_expressions(expression_list):
     [
         (f"{FIXTURE_LICENSE_ID} or LicenseRef-22", ["LicenseRef-22"]),
         ("nope with 389-exception and _.- or LicenseRef-10", ["nope", "_.-", "LicenseRef-10"]),
+        ("InvalidLicense+", ["InvalidLicense+"]),
+        ("LLVM-exception+", ["LLVM-exception+"]),
     ],
 )
 def test_invalid_license_expression_with_unknown_symbols(expression_string, unknown_symbols):

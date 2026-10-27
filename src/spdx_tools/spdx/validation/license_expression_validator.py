@@ -43,8 +43,16 @@ def validate_license_expression(
     license_ref_ids: List[str] = [license_ref.license_id for license_ref in document.extracted_licensing_info]
 
     for non_spdx_token in spdx_licensing.validate(license_expression).invalid_symbols:
-        if ":" in non_spdx_token:
-            split_token: List[str] = non_spdx_token.split(":")
+        token = non_spdx_token
+        if token.endswith("+"):
+            base_token = token[:-1]
+            known_sym = spdx_licensing.known_symbols.get(base_token)
+            if known_sym and not getattr(known_sym, "is_exception", False):
+                continue
+            token = base_token
+
+        if ":" in token:
+            split_token: List[str] = token.split(":")
             if len(split_token) != 2:
                 validation_messages.append(
                     ValidationMessage(
@@ -72,7 +80,7 @@ def validate_license_expression(
                         )
                     )
 
-        elif non_spdx_token not in license_ref_ids:
+        elif token not in license_ref_ids:
             validation_messages.append(
                 ValidationMessage(
                     f"Unrecognized license reference: {non_spdx_token}. license_expression must only use IDs from the "
