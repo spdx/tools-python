@@ -4,9 +4,10 @@
 
 from beartype.typing import List, Optional
 
-from spdx_tools.spdx.model import Document, File, Package, Relationship, RelationshipType
+from spdx_tools.spdx.model import Actor, ActorType, Document, File, Package, Relationship, RelationshipType
 from spdx_tools.spdx.model.relationship_filters import filter_by_type_and_origin, filter_by_type_and_target
 from spdx_tools.spdx.spdx_element_utils import get_element_type_from_spdx_id
+from spdx_tools.spdx.validation.actor_validator import validate_actor
 from spdx_tools.spdx.validation.checksum_validator import validate_checksums
 from spdx_tools.spdx.validation.external_package_ref_validator import validate_external_package_refs
 from spdx_tools.spdx.validation.license_expression_validator import (
@@ -120,6 +121,28 @@ def validate_package(
     if isinstance(homepage, str):
         for message in validate_url(homepage):
             validation_messages.append(ValidationMessage("homepage " + message, context))
+
+    if isinstance(package.supplier, Actor):
+        if package.supplier.actor_type == ActorType.TOOL:
+            validation_messages.append(
+                ValidationMessage(
+                    f"package supplier must not be of actor type TOOL, but is: {package.supplier}",
+                    context,
+                )
+            )
+        else:
+            validation_messages.extend(validate_actor(package.supplier, package.spdx_id))
+
+    if isinstance(package.originator, Actor):
+        if package.originator.actor_type == ActorType.TOOL:
+            validation_messages.append(
+                ValidationMessage(
+                    f"package originator must not be of actor type TOOL, but is: {package.originator}",
+                    context,
+                )
+            )
+        else:
+            validation_messages.extend(validate_actor(package.originator, package.spdx_id))
 
     verification_code = package.verification_code
     if verification_code:

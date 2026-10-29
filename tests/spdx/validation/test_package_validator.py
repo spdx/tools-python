@@ -9,7 +9,7 @@ import pytest
 
 from spdx_tools.common.spdx_licensing import spdx_licensing
 from spdx_tools.spdx.constants import DOCUMENT_SPDX_ID
-from spdx_tools.spdx.model import Relationship, RelationshipType, SpdxNoAssertion, SpdxNone
+from spdx_tools.spdx.model import Actor, ActorType, Relationship, RelationshipType, SpdxNoAssertion, SpdxNone
 from spdx_tools.spdx.validation.package_validator import validate_package, validate_package_within_document
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import document_fixture, file_fixture, package_fixture, package_verification_code_fixture
@@ -154,3 +154,42 @@ def test_v2_2mandatory_fields():
     expected = [ValidationMessage(f"{field} is mandatory in SPDX-2.2", context) for field in mandatory_fields]
 
     TestCase().assertCountEqual(validation_messages, expected)
+
+
+@pytest.mark.parametrize(
+    "actor_field, actor_type_name",
+    [
+        ("supplier", "supplier"),
+        ("originator", "originator"),
+    ],
+)
+def test_invalid_package_actor_tool(actor_field, actor_type_name):
+    tool_actor = Actor(actor_type=ActorType.TOOL, name="ToolName")
+    package = package_fixture(**{actor_field: tool_actor})
+    validation_messages = validate_package(package, "SPDX-2.3")
+
+    context = ValidationContext(spdx_id=package.spdx_id, element_type=SpdxElementType.PACKAGE, full_element=package)
+    expected = [
+        ValidationMessage(
+            f"package {actor_type_name} must not be of actor type TOOL, but is: Tool: ToolName",
+            context,
+        )
+    ]
+
+    assert validation_messages == expected
+
+
+@pytest.mark.parametrize(
+    "actor",
+    [
+        Actor(actor_type=ActorType.PERSON, name="Jane Doe", email="jane@example.com"),
+        Actor(actor_type=ActorType.ORGANIZATION, name="Acme Corp"),
+        SpdxNoAssertion(),
+        None,
+    ],
+)
+def test_valid_package_supplier_and_originator(actor):
+    package = package_fixture(supplier=actor, originator=actor)
+    validation_messages = validate_package(package, "SPDX-2.3")
+
+    assert validation_messages == []
