@@ -91,6 +91,8 @@ class Parser:
         self.elements_built = dict()
         self.lex = SPDXLexer()
         self.lex.build(reflags=re.UNICODE)
+        kwargs.setdefault("write_tables", False)
+        kwargs.setdefault("debug", False)
         self.yacc = yacc.yacc(module=self, **kwargs)
 
     @grammar_rule("start : start attrib ")

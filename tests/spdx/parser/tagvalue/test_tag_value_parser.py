@@ -162,3 +162,20 @@ def test_parse_none_or_no_assertion_as_text():
     assert package.summary == "NONE"
     assert package.license_concluded == SpdxNone()
     assert package.license_declared == SpdxNoAssertion()
+
+
+def test_parser_init_does_not_write_tables(monkeypatch):
+    import builtins
+
+    orig_open = builtins.open
+
+    def mock_open(file, *args, **kwargs):
+        mode = args[0] if args else kwargs.get("mode", "r")
+        if str(file).endswith(("parsetab.py", "parser.out")) and any(m in mode for m in ("w", "a", "+")):
+            raise OSError(30, "Read-only file system")
+        return orig_open(file, *args, **kwargs)
+
+    monkeypatch.setattr(builtins, "open", mock_open)
+    parser = Parser()
+    assert parser is not None
+
