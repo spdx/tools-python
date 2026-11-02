@@ -285,7 +285,10 @@ class Parser:
 
     @grammar_rule("ext_doc_ref : EXT_DOC_REF LINE")
     def p_external_document_ref(self, p):
-        external_doc_ref_regex = re.compile(r"(.*)(\s*SHA1:\s*[a-f0-9]{40})")
+        external_doc_ref_regex = re.compile(
+            r"(.*)(\s*(?:ADLER32|BLAKE2b-256|BLAKE2b-384|BLAKE2b-512|BLAKE3|MD2|MD4|MD5|MD6|SHA1|SHA224|SHA256|"
+            r"SHA384|SHA512|SHA3-256|SHA3-384|SHA3-512):\s*[a-f0-9]*)"
+        )
         external_doc_ref_match = external_doc_ref_regex.match(p[2])
         if not external_doc_ref_match:
             self.creation_info["logger"].append(

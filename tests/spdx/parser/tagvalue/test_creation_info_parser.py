@@ -62,6 +62,37 @@ def test_parse_creation_info():
     ]
 
 
+def test_parse_external_document_ref_with_sha256_checksum():
+    document_str = "\n".join(
+        [
+            "SPDXVersion: SPDX-2.3",
+            "DataLicense: CC0-1.0",
+            "DocumentName: Sample_Document-V2.3",
+            f"SPDXID: {DOCUMENT_SPDX_ID}",
+            "DocumentNamespace: https://spdx.org/spdxdocs/spdx-example-444504E0-4F89-41D3-9A0C-0305E82C3301",
+            "ExternalDocumentRef: DocumentRef-spdx-tool-1.2 "
+            "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301 "
+            "SHA256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "Creator: Person: Bob (bob@example.com)",
+            "Created: 2010-02-03T00:00:00Z",
+        ]
+    )
+    parser = Parser()
+    document = parser.parse(document_str)
+    assert document is not None
+    creation_info = document.creation_info
+    assert creation_info.external_document_refs == [
+        ExternalDocumentRef(
+            "DocumentRef-spdx-tool-1.2",
+            "http://spdx.org/spdxdocs/spdx-tools-v1.2-3F2504E0-4F89-41D3-9A0C-0305E82C3301",
+            Checksum(
+                ChecksumAlgorithm.SHA256,
+                "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            ),
+        )
+    ]
+
+
 @pytest.mark.parametrize(
     "document_str, expected_message",
     (
@@ -110,7 +141,7 @@ def test_parse_creation_info():
                 "Error while parsing CreationInfo: ['Multiple values for LicenseListVersion found. Line: 2']",
             ),
             (
-                "ExternalDocumentRef: Document_ref document_uri SHA1: afded",
+                "ExternalDocumentRef: Document_ref document_uri MD7: afded",
                 "Error while parsing CreationInfo: [\"Error while parsing ExternalDocumentRef: Couldn't match "
                 'Checksum. Line: 1"]',
             ),
