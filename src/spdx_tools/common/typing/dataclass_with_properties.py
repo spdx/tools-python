@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 from dataclasses import dataclass
 
-from beartype import beartype
+from beartype import BeartypeConf, beartype
 from beartype.roar import BeartypeCallHintParamViolation
 
 
@@ -23,7 +23,7 @@ def dataclass_with_properties(cls):
 def make_setter(field_name, field_type):
     """helper method to avoid late binding when generating functions in a for loop"""
 
-    @beartype
+    @beartype(conf=BeartypeConf(is_color=False))
     def set_field(self, value: field_type):
         setattr(self, f"_{field_name}", value)
 
