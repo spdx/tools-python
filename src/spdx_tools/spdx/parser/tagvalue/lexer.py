@@ -139,7 +139,7 @@ class SPDXLexer:
 
     @TOKEN(
         r":\s*(ADLER32|BLAKE2b-256|BLAKE2b-384|BLAKE2b-512|BLAKE3|MD2|MD4|MD5|MD6|SHA1|SHA224|SHA256|SHA384|SHA512|"
-        r"SHA3-256|SHA3-384|SHA3-512):\s*([a-f0-9]*)"
+        r"SHA3-256|SHA3-384|SHA3-512):\s*([a-f0-9]+)"
     )
     def t_CHECKSUM(self, t):
         t.value = t.value[1:].strip()
