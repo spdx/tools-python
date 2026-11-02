@@ -40,7 +40,14 @@ def get_full_element_spdx_id(
     if ":" not in element.spdx_id:
         return f"{document_namespace}#{element.spdx_id}"
 
-    external_id, local_id = element.spdx_id.split(":")
+    split_id = element.spdx_id.split(":")
+    if len(split_id) > 2:
+        raise ValueError(
+            f"spdx_id must not contain more than one colon in order to separate the external document "
+            f"reference id from the internal SPDX id, but is: {element.spdx_id}"
+        )
+
+    external_id, local_id = split_id
     external_uri = None
     for entry in external_document_refs:
         if entry.document_ref_id == external_id:
