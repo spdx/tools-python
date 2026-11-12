@@ -15,8 +15,20 @@ def validate_extracted_licensing_infos(
     extracted_licensing_infos: Optional[List[ExtractedLicensingInfo]],
 ) -> List[ValidationMessage]:
     validation_messages = []
+    seen_license_ids = set()
     for extracted_licensing_info in extracted_licensing_infos:
         validation_messages.extend(validate_extracted_licensing_info(extracted_licensing_info))
+        license_id = extracted_licensing_info.license_id
+        if license_id and license_id in seen_license_ids:
+            validation_messages.append(
+                ValidationMessage(
+                    f"license_id must be unique within the document, but is repeated: {license_id}",
+                    ValidationContext(
+                        element_type=SpdxElementType.EXTRACTED_LICENSING_INFO, full_element=extracted_licensing_info
+                    ),
+                )
+            )
+        seen_license_ids.add(license_id)
 
     return validation_messages
 
