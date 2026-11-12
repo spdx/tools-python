@@ -11,7 +11,14 @@ from spdx_tools.spdx.model import CreationInfo, Document, Relationship, Relation
 from spdx_tools.spdx.parser.parse_anything import parse_file
 from spdx_tools.spdx.validation.document_validator import validate_full_spdx_document
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
-from tests.spdx.fixtures import creation_info_fixture, document_fixture, file_fixture, package_fixture, snippet_fixture
+from tests.spdx.fixtures import (
+    creation_info_fixture,
+    document_fixture,
+    extracted_licensing_info_fixture,
+    file_fixture,
+    package_fixture,
+    snippet_fixture,
+)
 
 
 def test_valid_document():
@@ -19,6 +26,34 @@ def test_valid_document():
     validation_messages: List[ValidationMessage] = validate_full_spdx_document(document)
 
     assert validation_messages == []
+
+
+@pytest.mark.parametrize(
+    "license_id, expected_message",
+    [
+        ("LicenseRef-1", "license_id must be unique within the document, but is repeated: LicenseRef-1"),
+        ("LicenseRef-2", None),
+    ],
+)
+def test_document_extracted_licensing_info_unique_ids(license_id, expected_message):
+    extracted_licensing_info = extracted_licensing_info_fixture(license_id=license_id, extracted_text="different text")
+    document = document_fixture(
+        extracted_licensing_info=[extracted_licensing_info_fixture(), extracted_licensing_info]
+    )
+    validation_messages = validate_full_spdx_document(document)
+
+    expected = []
+    if expected_message:
+        expected.append(
+            ValidationMessage(
+                expected_message,
+                ValidationContext(
+                    element_type=SpdxElementType.EXTRACTED_LICENSING_INFO, full_element=extracted_licensing_info
+                ),
+            )
+        )
+
+    assert validation_messages == expected
 
 
 def test_spdx_lite_validation():

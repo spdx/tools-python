@@ -6,7 +6,10 @@ from typing import List
 
 import pytest
 
-from spdx_tools.spdx.validation.extracted_licensing_info_validator import validate_extracted_licensing_info
+from spdx_tools.spdx.validation.extracted_licensing_info_validator import (
+    validate_extracted_licensing_info,
+    validate_extracted_licensing_infos,
+)
 from spdx_tools.spdx.validation.validation_message import SpdxElementType, ValidationContext, ValidationMessage
 from tests.spdx.fixtures import extracted_licensing_info_fixture
 
@@ -16,6 +19,33 @@ def test_valid_extracted_licensing_info():
     validation_messages: List[ValidationMessage] = validate_extracted_licensing_info(extracted_licensing_info)
 
     assert validation_messages == []
+
+
+@pytest.mark.parametrize(
+    "license_id, expected_message",
+    [
+        ("LicenseRef-1", "license_id must be unique within the document, but is repeated: LicenseRef-1"),
+        ("LicenseRef-2", None),
+    ],
+)
+def test_extracted_licensing_infos_unique_ids(license_id, expected_message):
+    extracted_licensing_info = extracted_licensing_info_fixture(license_id=license_id, extracted_text="different text")
+    validation_messages = validate_extracted_licensing_infos(
+        [extracted_licensing_info_fixture(), extracted_licensing_info]
+    )
+
+    expected = []
+    if expected_message:
+        expected.append(
+            ValidationMessage(
+                expected_message,
+                ValidationContext(
+                    element_type=SpdxElementType.EXTRACTED_LICENSING_INFO, full_element=extracted_licensing_info
+                ),
+            )
+        )
+
+    assert validation_messages == expected
 
 
 # TODO: tests for licenses not on the SPDX License list (i.e. they must provide id, name and cross-references)
